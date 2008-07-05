@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+Menu definition file. 
+
+Edit this file to customise the application menu.
+
+Commands that don't exist won't be shown in the menu.
+
+DO NOT DELETE THIS FILE!!!
+-->
+<MenuMap>
+	<Menu name="File">
+		<Command name="connect" />
+		<Command name="mkdstore" />
+		<Separator/>
+		<Command name="quit" />
+	</Menu>
+	<Menu name="Tools">
+		<SubMenu name="FDO">
+			<Command name="regprovider" />
+			<Command name="unregprovider" />
+			<Command name="listproviders" />
+		</SubMenu>
+		<Command name="extload" />
+	</Menu>
+	<Menu name="Express">
+		<SubMenu name="Connect">
+			<Command name="sdfconnect" />
+			<Command name="shpconnect" />
+		</SubMenu>
+		<SubMenu name="Create">
+			<Command name="sdfcreate" />
+			<Command name="shpcreate" />
+		</SubMenu>
+		<SubMenu name="Bulk Copy">
+			<Command name="sdf2sdf" />
+			<Command name="shp2shp" />
+			<Command name="sdf2shp" />
+			<Command name="shp2sdf" /> 
+		</SubMenu>
+	</Menu>
+	<Menu name="Help">
+		<Command name="help" />
+		<Command name="about" />
+	</Menu>
+</MenuMap>
