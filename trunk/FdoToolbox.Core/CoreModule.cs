@@ -9,6 +9,7 @@ using FdoToolbox.Core.Forms;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Schema;
+using OSGeo.FDO.Common.Io;
 
 namespace FdoToolbox.Core
 {
@@ -44,6 +45,8 @@ namespace FdoToolbox.Core
         public const string CMD_HELP = "help";
         public const string CMD_LOADTASK = "loadtask";
         public const string CMD_SAVETASK = "savetask";
+        public const string CMD_SAVECONN = "saveconn";
+        public const string CMD_LOADCONN = "loadconn";
 
         #endregion
 
@@ -170,9 +173,8 @@ namespace FdoToolbox.Core
         [Command(CoreModule.CMD_LOADSCHEMA, "Load Schema")]
         public void LoadSchema()
         {
-            string name = string.Empty;
-            IConnection conn = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection(ref name);
-            if (conn == null)
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            if (connInfo == null)
                 AppConsole.WriteLine("Please select the active connection from the Object Explorer before invoking this command");
 
             OpenFileDialog diag = new OpenFileDialog();
@@ -182,20 +184,20 @@ namespace FdoToolbox.Core
                 FeatureSchemaCollection schemas = null;
                 try
                 {
-                    using (IDescribeSchema cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                    using (IDescribeSchema cmd = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
                     {
                         schemas = cmd.Execute();
                         schemas.ReadXml(diag.FileName);
                         foreach (FeatureSchema schema in schemas)
                         {
-                            using (IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
+                            using (IApplySchema apply = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
                             {
                                 apply.FeatureSchema = schema;
                                 apply.Execute();
                             }
                         }
-                        AppConsole.Alert("Load schemas", "Schemas loaded into connection " + name);
-                        HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(name);
+                        AppConsole.Alert("Load schemas", "Schemas loaded into connection " + connInfo.Name);
+                        HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
                     }
                 }
                 catch (OSGeo.FDO.Common.Exception ex)
@@ -208,9 +210,8 @@ namespace FdoToolbox.Core
         [Command(CoreModule.CMD_SAVESCHEMA, "Save Schema")]
         public void SaveSchema()
         {
-            string name = string.Empty;
-            IConnection conn = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection(ref name);
-            if (conn == null)
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            if (connInfo == null)
                 AppConsole.WriteLine("Please select the active connection from the Object Explorer before invoking this command");
 
             SaveFileDialog diag = new SaveFileDialog();
@@ -218,7 +219,7 @@ namespace FdoToolbox.Core
             diag.Filter = "XML files (*.xml)|*.xml";
             if (diag.ShowDialog() == DialogResult.OK)
             {
-                using (IDescribeSchema cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                using (IDescribeSchema cmd = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
                 {
                     using (FeatureSchemaCollection schemas = cmd.Execute())
                     {
@@ -232,17 +233,16 @@ namespace FdoToolbox.Core
         [Command(CoreModule.CMD_MANSCHEMA, "Manage Schemas")]
         public void ManageSchema()
         {
-            string name = string.Empty;
-            IConnection conn = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection(ref name);
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
             
             //Must've been invoked from console
-            if (conn == null)
+            if (connInfo == null)
                 AppConsole.WriteLine("Please select the connection to manage from the Object Explorer before invoking this command");
 
-            SchemaMgrCtl ctl = new SchemaMgrCtl(conn);
+            SchemaMgrCtl ctl = new SchemaMgrCtl(connInfo.Connection);
             ctl.OnSchemasApplied += delegate
             {
-                HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(name);
+                HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
             };
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
             
@@ -316,14 +316,13 @@ namespace FdoToolbox.Core
         [Command(CoreModule.CMD_DATAPREVIEW, "Data Preview")]
         public void DataPreview()
         {
-            string name = string.Empty;
-            IConnection conn = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection(ref name);
-            if (conn == null)
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            if (connInfo == null)
             {
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            BaseDocumentCtl ctl = new DataPreviewCtl(conn);
+            BaseDocumentCtl ctl = new DataPreviewCtl(connInfo.Connection);
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
@@ -361,6 +360,46 @@ namespace FdoToolbox.Core
             {
                 TaskLoader.SaveTask(task, diag.FileName);
                 AppConsole.WriteLine("Task saved to {0}", diag.FileName);
+            }
+        }
+
+        [Command(CoreModule.CMD_LOADCONN, "Load Connection")]
+        public void LoadConnection()
+        {
+            OpenFileDialog diag = new OpenFileDialog();
+            diag.Title = "Load connection information";
+            diag.Filter = "Connection information (*.xml)|*.xml";
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                ConnectionInfo connInfo = ConnLoader.LoadConnection(diag.FileName);
+                IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connInfo.Name);
+                if (conn != null)
+                {
+                    AppConsole.Write("A connection named {0} already exists. ", connInfo.Name);
+                    connInfo.Name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
+                    AppConsole.WriteLine("Attempting to load as {0} instead", connInfo.Name);
+                }
+                HostApplication.Instance.ConnectionManager.AddConnection(connInfo.Name, connInfo.Connection);
+                AppConsole.WriteLine("Connection loaded from {0}", diag.FileName);
+            }
+        }
+
+        [Command(CoreModule.CMD_SAVECONN, "Save Connection")]
+        public void SaveConnection()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            if (connInfo == null)
+            {
+                AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
+                return;
+            }
+            SaveFileDialog diag = new SaveFileDialog();
+            diag.Title = "Save connection information";
+            diag.Filter = "Connection information (*.xml)|*.xml";
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                ConnLoader.SaveConnection(connInfo, diag.FileName);
+                AppConsole.WriteLine("Connection saved to {0}", diag.FileName);
             }
         }
     }

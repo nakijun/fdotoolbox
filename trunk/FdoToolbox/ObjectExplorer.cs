@@ -141,19 +141,19 @@ namespace FdoToolbox
             get { return this; }
         }
 
-        public OSGeo.FDO.Connections.IConnection GetSelectedConnection(ref string name)
-        {
-            TreeNode connNode = mTreeView.SelectedNode;
-            if (connNode == null || connNode.Level != 1)
-            {
-                return null;
-            }
-            else
-            {
-                name = connNode.Name;
-                return HostApplication.Instance.ConnectionManager.GetConnection(connNode.Name);
-            }
-        }
+        //public OSGeo.FDO.Connections.IConnection GetSelectedConnection(ref string name)
+        //{
+        //    TreeNode connNode = mTreeView.SelectedNode;
+        //    if (connNode == null || connNode.Level != 1)
+        //    {
+        //        return null;
+        //    }
+        //    else
+        //    {
+        //        name = connNode.Name;
+        //        return HostApplication.Instance.ConnectionManager.GetConnection(connNode.Name);
+        //    }
+        //}
 
         public ITask GetSelectedTask()
         {
@@ -302,6 +302,34 @@ namespace FdoToolbox
         private void SaveTask_Click(object sender, EventArgs e)
         {
             HostApplication.Instance.ExecuteCommand(CoreModule.CMD_SAVETASK);
+        }
+
+        public ConnectionInfo GetSelectedConnection()
+        {
+            TreeNode connNode = mTreeView.SelectedNode;
+            if (connNode == null || connNode.Level != 1)
+            {
+                return null;
+            }
+            else
+            {
+                string name = connNode.Name;
+                IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connNode.Name);
+                if (conn != null)
+                    return new ConnectionInfo(name, conn);
+                else
+                    return null;
+            }
+        }
+
+        private void LoadConnection_Click(object sender, EventArgs e)
+        {
+            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_LOADCONN);
+        }
+
+        private void SaveConnection_Click(object sender, EventArgs e)
+        {
+            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_SAVECONN);
         }
     }
 }

@@ -98,32 +98,32 @@ namespace FdoToolbox.Core
         private static void SaveBulkCopy(BulkCopyTask task, string configFile)
         {
             //TODO: Do something more elegant.
-            string configTemplate = @"
-            <?xml version=""1.0""?>
-            <BulkCopyTask name=""{0}"">
-                <BulkCopySource>
-                    <Provider>{1}</Provider>
-                    <ConnectionString>{2}</ConnectionString>
-                    <FeatureSchema>{3}</FeatureSchema>
-                    <Class>{4}</Class>
-                </BulkCopySource>
-                <BulkCopyTarget>
-                    <Provider>{5}</Provider>
-                    <ConnectionString>{6}</ConnectionString>
-                    <FeatureSchema>{7}</FeatureSchema>
-                    <Class>{8}</Class>
-                </BulkCopyTarget>
-                <PropertyMappings>
-                    {9}
-                </PropertyMappings>
-                <BulkCopyOptions>
-                    <CoerceDataTypes>{10}</CoerceDataTypes>
-                    <FeatureLimit>{11}</FeatureLimit>
-                    <DeleteSourceBeforeCopy>{12}</DeleteSourceBeforeCopy>
-                    <TransformCoordinates>{13}</TransformCoordinates>
-                </BulkCopyOptions>
-            </BulkCopyTask>
-            ";
+            string configTemplate =
+@"<?xml version=""1.0""?>
+<BulkCopyTask name=""{0}"">
+    <BulkCopySource>
+        <Provider>{1}</Provider>
+        <ConnectionString>{2}</ConnectionString>
+        <FeatureSchema>{3}</FeatureSchema>
+        <Class>{4}</Class>
+    </BulkCopySource>
+    <BulkCopyTarget>
+        <Provider>{5}</Provider>
+        <ConnectionString>{6}</ConnectionString>
+        <FeatureSchema>{7}</FeatureSchema>
+        <Class>{8}</Class>
+    </BulkCopyTarget>
+    <PropertyMappings>
+        {9}
+    </PropertyMappings>
+    <BulkCopyOptions>
+        <CoerceDataTypes>{10}</CoerceDataTypes>
+        <FeatureLimit>{11}</FeatureLimit>
+        <DeleteSourceBeforeCopy>{12}</DeleteSourceBeforeCopy>
+        <TransformCoordinates>{13}</TransformCoordinates>
+    </BulkCopyOptions>
+</BulkCopyTask>
+";
             string mappingsXml = string.Empty;
             foreach (string srcPropName in task.Source.SourcePropertyNames)
             {
