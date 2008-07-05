@@ -1,0 +1,5 @@
+#summary System requirements for FDO Toolbox
+
+FDO Toolbox requires the following components be already installed:
+  * Microsoft .net Framework 2.0 (http://www.microsoft.com/downloads/details.aspx?FamilyID=0856EACB-4362-4B0D-8EDD-AAB15C5E04F5&displaylang=en)
+  * Microsoft Visual C++ 2005 SP1 Runtime Library (http://www.microsoft.com/downloads/details.aspx?FamilyID=200b2fd9-ae1a-4a14-984d-389c36f85647&displaylang=en)
