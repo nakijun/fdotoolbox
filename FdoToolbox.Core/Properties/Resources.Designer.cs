@@ -166,6 +166,36 @@ namespace FdoToolbox.Core.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;!-- 
+        ///Menu definition file. 
+        ///
+        ///Edit this file to customise the application menu.
+        ///
+        ///Commands that don&apos;t exist won&apos;t be shown in the menu.
+        ///
+        ///DO NOT DELETE THIS FILE!!!
+        ///--&gt;
+        ///&lt;MenuMap&gt;
+        ///	&lt;Menu name=&quot;File&quot;&gt;
+        ///		&lt;Command name=&quot;connect&quot; /&gt;
+        ///		&lt;Command name=&quot;mkdstore&quot; /&gt;
+        ///		&lt;Separator/&gt;
+        ///		&lt;Command name=&quot;quit&quot; /&gt;
+        ///	&lt;/Menu&gt;
+        ///	&lt;Menu name=&quot;Tools&quot;&gt;
+        ///		&lt;SubMenu name=&quot;FDO&quot;&gt;
+        ///			&lt;Command name=&quot;regprovider&quot; /&gt;
+        ///			&lt;Command name=&quot;unregprovider&quot; /&gt;
+        ///			&lt;Command name=&quot;listproviders [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MenuMap {
+            get {
+                return ResourceManager.GetString("MenuMap", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap package {
             get {
                 object obj = ResourceManager.GetObject("package", resourceCulture);

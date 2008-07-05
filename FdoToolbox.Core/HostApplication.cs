@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Xml;
 using FdoToolbox.Core.Forms;
 using System.Reflection;
+using System.IO;
 
 namespace FdoToolbox.Core
 {
@@ -144,8 +145,14 @@ namespace FdoToolbox.Core
                     AppConsole.Err.TextColor = System.Drawing.Color.Red;
 
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
+                    if (!File.Exists(Path.Combine(this.AppPath, "MenuMap.xml")))
+                    {
+                        AppConsole.WriteLine("MenuMap.xml not found. Restoring backup copy");
+                        File.WriteAllText(Path.Combine(this.AppPath, "MenuMap.xml"), Properties.Resources.MenuMap);
+                        AppConsole.WriteLine("MenuMap.xml restored");
+                    }
+                    
                     AppConsole.WriteLine("Loading modules");
-
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
 
