@@ -15,9 +15,8 @@ namespace FdoToolbox.Core
         /// If a connection node is selected, returns the
         /// underlying connection object
         /// </summary>
-        /// <param name="name">The registered name of this connection</param>
         /// <returns></returns>
-        IConnection GetSelectedConnection(ref string name);
+        ConnectionInfo GetSelectedConnection();
 
         //Tasks
 

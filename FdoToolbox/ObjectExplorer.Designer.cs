@@ -38,6 +38,7 @@ namespace FdoToolbox
             this.sDFToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.sHPToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.customToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadASavedConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxTasks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newTaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bulkCopyToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +68,7 @@ namespace FdoToolbox
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxSelectedConnection = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.dataPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageSchemasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,7 +77,7 @@ namespace FdoToolbox
             this.loadSchemasFromXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxConnections.SuspendLayout();
             this.ctxTasks.SuspendLayout();
             this.ctxModules.SuspendLayout();
@@ -88,9 +90,10 @@ namespace FdoToolbox
             // ctxConnections
             // 
             this.ctxConnections.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newDataConnectionToolStripMenuItem});
+            this.newDataConnectionToolStripMenuItem,
+            this.loadASavedConnectionToolStripMenuItem});
             this.ctxConnections.Name = "ctxConnections";
-            this.ctxConnections.Size = new System.Drawing.Size(190, 26);
+            this.ctxConnections.Size = new System.Drawing.Size(208, 48);
             // 
             // newDataConnectionToolStripMenuItem
             // 
@@ -100,7 +103,7 @@ namespace FdoToolbox
             this.customToolStripMenuItem2});
             this.newDataConnectionToolStripMenuItem.Image = global::FdoToolbox.Properties.Resources.database_connect;
             this.newDataConnectionToolStripMenuItem.Name = "newDataConnectionToolStripMenuItem";
-            this.newDataConnectionToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.newDataConnectionToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.newDataConnectionToolStripMenuItem.Text = "New Data Connection";
             // 
             // sDFToolStripMenuItem2
@@ -123,6 +126,14 @@ namespace FdoToolbox
             this.customToolStripMenuItem2.Size = new System.Drawing.Size(121, 22);
             this.customToolStripMenuItem2.Text = "Custom";
             this.customToolStripMenuItem2.Click += new System.EventHandler(this.ConnectGeneric_Click);
+            // 
+            // loadASavedConnectionToolStripMenuItem
+            // 
+            this.loadASavedConnectionToolStripMenuItem.Image = global::FdoToolbox.Properties.Resources.folder;
+            this.loadASavedConnectionToolStripMenuItem.Name = "loadASavedConnectionToolStripMenuItem";
+            this.loadASavedConnectionToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.loadASavedConnectionToolStripMenuItem.Text = "Load a Saved Connection";
+            this.loadASavedConnectionToolStripMenuItem.Click += new System.EventHandler(this.LoadConnection_Click);
             // 
             // ctxTasks
             // 
@@ -374,20 +385,20 @@ namespace FdoToolbox
             this.deleteToolStripMenuItem,
             this.saveToolStripMenuItem});
             this.ctxSelectedTask.Name = "ctxSelectedTask";
-            this.ctxSelectedTask.Size = new System.Drawing.Size(153, 114);
+            this.ctxSelectedTask.Size = new System.Drawing.Size(125, 92);
             // 
             // executeToolStripMenuItem
             // 
             this.executeToolStripMenuItem.Image = global::FdoToolbox.Properties.Resources.application_go;
             this.executeToolStripMenuItem.Name = "executeToolStripMenuItem";
-            this.executeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.executeToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.executeToolStripMenuItem.Text = "Execute";
             this.executeToolStripMenuItem.Click += new System.EventHandler(this.ExecuteTask_Click);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.editToolStripMenuItem.Text = "Edit";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.EditTask_Click);
             // 
@@ -395,22 +406,31 @@ namespace FdoToolbox
             // 
             this.deleteToolStripMenuItem.Image = global::FdoToolbox.Properties.Resources.cross;
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteTask_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Image = global::FdoToolbox.Properties.Resources.disk;
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveTask_Click);
             // 
             // ctxSelectedConnection
             // 
             this.ctxSelectedConnection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.dataPreviewToolStripMenuItem,
             this.manageSchemasToolStripMenuItem,
+            this.saveConnectionToolStripMenuItem,
             this.toolStripSeparator2,
             this.saveSchemasToXMLToolStripMenuItem,
             this.loadSchemasFromXMLToolStripMenuItem,
             this.toolStripSeparator4,
             this.removeToolStripMenuItem});
             this.ctxSelectedConnection.Name = "ctxSelectedConnection";
-            this.ctxSelectedConnection.Size = new System.Drawing.Size(209, 126);
+            this.ctxSelectedConnection.Size = new System.Drawing.Size(209, 170);
             // 
             // dataPreviewToolStripMenuItem
             // 
@@ -461,13 +481,13 @@ namespace FdoToolbox
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveSelectedConnection_Click);
             // 
-            // saveToolStripMenuItem
+            // saveConnectionToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.Image = global::FdoToolbox.Properties.Resources.disk;
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveTask_Click);
+            this.saveConnectionToolStripMenuItem.Image = global::FdoToolbox.Properties.Resources.disk;
+            this.saveConnectionToolStripMenuItem.Name = "saveConnectionToolStripMenuItem";
+            this.saveConnectionToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.saveConnectionToolStripMenuItem.Text = "Save Connection";
+            this.saveConnectionToolStripMenuItem.Click += new System.EventHandler(this.SaveConnection_Click);
             // 
             // ObjectExplorer
             // 
@@ -537,5 +557,7 @@ namespace FdoToolbox
         private System.Windows.Forms.ToolStripMenuItem dataPreviewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadTaskToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadASavedConnectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveConnectionToolStripMenuItem;
     }
 }
