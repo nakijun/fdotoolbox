@@ -138,6 +138,7 @@ namespace FdoToolbox.Core.Controls
             this.txtFilter.Name = "txtFilter";
             this.txtFilter.Size = new System.Drawing.Size(162, 20);
             this.txtFilter.TabIndex = 7;
+            this.txtFilter.Leave += new System.EventHandler(this.txtFilter_Leave);
             // 
             // label5
             // 
