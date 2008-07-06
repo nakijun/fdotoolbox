@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ObjectExplorer>
+	<Toolbar>
+		<Menu name="New" resource="page_white">
+			<SubMenu name="Connection" resource="database_connect">
+				<Command name="sdfconnect" displayName="SDF" />
+				<Command name="shpconnect" displayName="SHP" />
+				<Command name="connect" displayName="Custom" />
+			</SubMenu>
+			<SubMenu name="Task" resource="application_go">
+				<Command name="createbcp" />
+			</SubMenu>
+			<SubMenu name="Data Source" resource="database">
+				<Command name="sdfcreate" displayName="SDF" />
+				<Command name="shpcreate" displayName="SHP" />
+				<Command name="mkdstore" displayName="Custom" />
+			</SubMenu>
+		</Menu>
+		<Command name="extload" />
+	</Toolbar>
+	<ContextMenus>
+		<Connections>
+			<Menu name="New Connection" resource="database_connect">
+				<Command name="sdfconnect" displayName="SDF" />
+				<Command name="shpconnect" displayName="SHP" />
+				<Command name="connect" displayName="Custom" />
+			</Menu>
+			<Command name="loadconn" />
+		</Connections>
+		<Tasks>
+			<Menu name="New" resource="application_go">
+				<Command name="createbcp" />
+			</Menu>
+			<Command name="loadtask" />
+		</Tasks>
+		<Modules>
+			<Command name="extload" />
+		</Modules>
+		<SelectedConnection>
+			<Command name="datapreview" />
+			<Command name="manschema" />
+			<Command name="saveconn" />
+			<Separator/>
+			<Command name="saveschema" />
+			<Command name="loadschema" />
+			<Separator/>
+			<Command name="removeconn" />
+		</SelectedConnection>
+		<SelectedTask>
+			<Command name="exectask" />
+			<Command name="edittask" />
+			<Command name="deletetask" />
+			<Command name="savetask" />
+		</SelectedTask>
+		<SelectedModule>
+			<Command name="modinfo" />
+		</SelectedModule>
+	</ContextMenus>
+</ObjectExplorer>

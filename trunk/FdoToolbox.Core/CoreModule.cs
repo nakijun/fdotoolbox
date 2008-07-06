@@ -47,6 +47,7 @@ namespace FdoToolbox.Core
         public const string CMD_SAVETASK = "savetask";
         public const string CMD_SAVECONN = "saveconn";
         public const string CMD_LOADCONN = "loadconn";
+        public const string CMD_REMOVECONN = "removeconn";
 
         #endregion
 
@@ -70,7 +71,7 @@ namespace FdoToolbox.Core
 
         public override void Cleanup() { }
 
-        [Command(CoreModule.CMD_ABOUT, "About", Description = "About this application")]
+        [Command(CoreModule.CMD_ABOUT, "About", Description = "About this application", ImageResourceName = "information")]
         public void About()
         {
             HostApplication.Instance.About();
@@ -82,13 +83,13 @@ namespace FdoToolbox.Core
             HostApplication.Instance.Quit();
         }
 
-        [Command(CoreModule.CMD_CONNECT, "Connect to Data", Description = "Creates a connection to an FDO-supported data source using the generic connection dialog")]
+        [Command(CoreModule.CMD_CONNECT, "Connect to Data", Description = "Creates a connection to an FDO-supported data source using the generic connection dialog", ImageResourceName = "database_connect")]
         public void DataConnect()
         {
             HostApplication.Instance.Shell.ShowDocumentWindow(new GenericConnectCtl());
         }
 
-        [Command(CoreModule.CMD_EXTLOAD, "Load Extension", Description = "Loads a custom extension", ShortcutKeys = Keys.F2)]
+        [Command(CoreModule.CMD_EXTLOAD, "Load Extension", Description = "Loads a custom extension", ImageResourceName = "plugin", ShortcutKeys = Keys.F2)]
         public void LoadExtension()
         {
             OpenFileDialog diag = new OpenFileDialog();
@@ -114,7 +115,7 @@ namespace FdoToolbox.Core
             System.GC.Collect();
         }
 
-        [Command(CoreModule.CMD_CREATEDATASTORE, "Create Data Store", Description = "Creates a new FDO data store")]
+        [Command(CoreModule.CMD_CREATEDATASTORE, "Create Data Store", Description = "Creates a new FDO data store", ImageResourceName = "database")]
         public void CreateDataStore()
         {
             HostApplication.Instance.Shell.ShowDocumentWindow(new GenericCreateDataStoreCtl());
@@ -170,7 +171,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_LOADSCHEMA, "Load Schema")]
+        [Command(CoreModule.CMD_LOADSCHEMA, "Load Schema", ImageResourceName = "folder")]
         public void LoadSchema()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -207,7 +208,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_SAVESCHEMA, "Save Schema")]
+        [Command(CoreModule.CMD_SAVESCHEMA, "Save Schema", ImageResourceName = "disk")]
         public void SaveSchema()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -230,7 +231,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_MANSCHEMA, "Manage Schemas")]
+        [Command(CoreModule.CMD_MANSCHEMA, "Manage Schemas", ImageResourceName = "chart_organisation")]
         public void ManageSchema()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -248,13 +249,13 @@ namespace FdoToolbox.Core
             
         }
 
-        [Command(CoreModule.CMD_HELP, "Help", "Show the help documentation")]
+        [Command(CoreModule.CMD_HELP, "Help", "Show the help documentation", ImageResourceName = "help")]
         public void ShowHelp()
         {
             AppConsole.Alert("Help", "Help documentation is currently unavailable");
         }
 
-        [Command(CoreModule.CMD_MODINFO, "Module Information", "Display information about a loaded module")]
+        [Command(CoreModule.CMD_MODINFO, "Module Information", "Display information about a loaded module", ImageResourceName = "information")]
         public void ModuleInfo()
         {
             IModule mod = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedModule();
@@ -269,7 +270,7 @@ namespace FdoToolbox.Core
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
-        [Command(CoreModule.CMD_CREATEBCP, "Create Bulk Copy")]
+        [Command(CoreModule.CMD_CREATEBCP, "Create Bulk Copy", Description = "Create a new Bulk Copy Task", ImageResourceName = "table_go")]
         public void CreateBulkCopy()
         {
             if (HostApplication.Instance.ConnectionManager.GetConnectionNames().Count < 2)
@@ -287,7 +288,7 @@ namespace FdoToolbox.Core
             throw new NotImplementedException();
         }
 
-        [Command(CoreModule.CMD_EXECUTETASK, "Execute Task")]
+        [Command(CoreModule.CMD_EXECUTETASK, "Execute Task", ImageResourceName = "application_go")]
         public void ExecuteTask()
         {
             ITask task = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedTask();
@@ -300,7 +301,7 @@ namespace FdoToolbox.Core
             new TaskProgressDlg(task).Run();
         }
 
-        [Command(CoreModule.CMD_DELETETASK, "Delete Task")]
+        [Command(CoreModule.CMD_DELETETASK, "Delete Task", ImageResourceName = "cross")]
         public void DeleteTask()
         {
             ITask task = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedTask();
@@ -313,7 +314,7 @@ namespace FdoToolbox.Core
             AppConsole.WriteLine("Task Deleted: {0}", task.Name);
         }
 
-        [Command(CoreModule.CMD_DATAPREVIEW, "Data Preview")]
+        [Command(CoreModule.CMD_DATAPREVIEW, "Data Preview", ImageResourceName = "zoom")]
         public void DataPreview()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -326,7 +327,7 @@ namespace FdoToolbox.Core
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
-        [Command(CoreModule.CMD_LOADTASK, "Load Task")]
+        [Command(CoreModule.CMD_LOADTASK, "Load Task", ImageResourceName = "folder")]
         public void LoadTask()
         {
             OpenFileDialog diag = new OpenFileDialog();
@@ -344,7 +345,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_SAVETASK, "Save Task")]
+        [Command(CoreModule.CMD_SAVETASK, "Save Task", ImageResourceName = "disk")]
         public void SaveTask()
         {
             ITask task = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedTask();
@@ -363,7 +364,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_LOADCONN, "Load Connection")]
+        [Command(CoreModule.CMD_LOADCONN, "Load Connection", ImageResourceName = "folder")]
         public void LoadConnection()
         {
             OpenFileDialog diag = new OpenFileDialog();
@@ -384,7 +385,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_SAVECONN, "Save Connection")]
+        [Command(CoreModule.CMD_SAVECONN, "Save Connection", ImageResourceName = "disk")]
         public void SaveConnection()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -401,6 +402,13 @@ namespace FdoToolbox.Core
                 ConnLoader.SaveConnection(connInfo, diag.FileName);
                 AppConsole.WriteLine("Connection saved to {0}", diag.FileName);
             }
+        }
+
+        [Command(CoreModule.CMD_REMOVECONN, "Remove Connection", ImageResourceName = "cross")]
+        public void RemoveConnection()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            HostApplication.Instance.ConnectionManager.RemoveConnection(connInfo.Name);
         }
     }
 }
