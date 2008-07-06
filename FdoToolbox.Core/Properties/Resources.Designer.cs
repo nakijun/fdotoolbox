@@ -96,6 +96,13 @@ namespace FdoToolbox.Core.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap chart_organisation {
+            get {
+                object obj = ResourceManager.GetObject("chart_organisation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap chart_organisation_add {
             get {
                 object obj = ResourceManager.GetObject("chart_organisation_add", resourceCulture);
@@ -152,9 +159,23 @@ namespace FdoToolbox.Core.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap help {
+            get {
+                object obj = ResourceManager.GetObject("help", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap image {
             get {
                 object obj = ResourceManager.GetObject("image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap information {
+            get {
+                object obj = ResourceManager.GetObject("information", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -193,6 +214,28 @@ namespace FdoToolbox.Core.Properties {
         internal static string MenuMap {
             get {
                 return ResourceManager.GetString("MenuMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;ObjectExplorer&gt;
+        ///	&lt;Toolbar&gt;
+        ///		&lt;Menu name=&quot;New&quot; resource=&quot;page_white&quot;&gt;
+        ///			&lt;SubMenu name=&quot;Connection&quot; resource=&quot;database_connect&quot;&gt;
+        ///				&lt;Command name=&quot;sdfconnect&quot; displayName=&quot;SDF&quot; /&gt;
+        ///				&lt;Command name=&quot;shpconnect&quot; displayName=&quot;SHP&quot; /&gt;
+        ///				&lt;Command name=&quot;connect&quot; displayName=&quot;Custom&quot; /&gt;
+        ///			&lt;/SubMenu&gt;
+        ///			&lt;SubMenu name=&quot;Task&quot; resource=&quot;application_go&quot;&gt;
+        ///				&lt;Command name=&quot;createbcp&quot; /&gt;
+        ///			&lt;/SubMenu&gt;
+        ///			&lt;SubMenu name=&quot;Data Source&quot; resource=&quot;database&quot;&gt;
+        ///				&lt;Comma [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string OEMenuMap {
+            get {
+                return ResourceManager.GetString("OEMenuMap", resourceCulture);
             }
         }
         

@@ -9,8 +9,12 @@ namespace FdoToolbox.Core
 {
     public interface IObjectExplorer : IFormWrapper
     {
-        //Connections
-
+        /// <summary>
+        /// Initialize the object explorer menus
+        /// </summary>
+        /// <param name="menuMapFile"></param>
+        void InitializeMenus(string menuMapFile);
+        
         /// <summary>
         /// If a connection node is selected, returns the
         /// underlying connection object
@@ -18,16 +22,12 @@ namespace FdoToolbox.Core
         /// <returns></returns>
         ConnectionInfo GetSelectedConnection();
 
-        //Tasks
-
         /// <summary>
         /// If a task node is selected, returns the
         /// underlying task object
         /// </summary>
         /// <returns></returns>
         ITask GetSelectedTask();
-
-        //Modules
 
         /// <summary>
         /// If a module node is selected, returns the

@@ -23,10 +23,10 @@ namespace FdoToolbox.Core
 
         private HostApplication()
         {
+            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             _moduleMgr = new ModuleMgr();
             _connMgr = new ConnectionMgr();
             _taskMgr = new TaskManager();
-            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
         }
 
         private void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
@@ -82,12 +82,26 @@ namespace FdoToolbox.Core
 
         private void InitMenus()
         {
-            //Parse Menu Map
-            string file = "MenuMap.xml";
-            if (!System.IO.File.Exists(file))
+            AppConsole.WriteLine("Initializing Object Explorer menus");
+            string oefile = "OEMenuMap.xml";
+            if (!File.Exists(Path.Combine(this.AppPath, oefile)))
             {
-                //Create from embedded resource
+                AppConsole.WriteLine("{0} not found. Restoring backup copy", oefile);
+                File.WriteAllText(Path.Combine(this.AppPath, oefile), Properties.Resources.OEMenuMap);
+                AppConsole.WriteLine("{0} restored", oefile);
             }
+            Shell.ObjectExplorer.InitializeMenus(oefile);
+            AppConsole.WriteLine("Object Explorer menus initialized");
+            
+            AppConsole.WriteLine("Initializing main menu");
+            string file = "MenuMap.xml";
+            if (!File.Exists(Path.Combine(this.AppPath, file)))
+            {
+                AppConsole.WriteLine("{0} not found. Restoring backup copy", file);
+                File.WriteAllText(Path.Combine(this.AppPath, file), Properties.Resources.MenuMap);
+                AppConsole.WriteLine("{0} restored", file);
+            }
+            //Parse Menu Map
             XmlDocument doc = new XmlDocument();
             doc.Load(file);
 
@@ -98,7 +112,7 @@ namespace FdoToolbox.Core
                 Shell.MainMenu.Items.Add(menu);
             }
 
-            AppConsole.WriteLine("Menus initialized");
+            AppConsole.WriteLine("Main Menu initialized");
         }
 
         private void Cleanup()
@@ -145,13 +159,6 @@ namespace FdoToolbox.Core
                     AppConsole.Err.TextColor = System.Drawing.Color.Red;
 
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
-                    if (!File.Exists(Path.Combine(this.AppPath, "MenuMap.xml")))
-                    {
-                        AppConsole.WriteLine("MenuMap.xml not found. Restoring backup copy");
-                        File.WriteAllText(Path.Combine(this.AppPath, "MenuMap.xml"), Properties.Resources.MenuMap);
-                        AppConsole.WriteLine("MenuMap.xml restored");
-                    }
-                    
                     AppConsole.WriteLine("Loading modules");
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
@@ -161,7 +168,7 @@ namespace FdoToolbox.Core
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Initialization Error");
+                    MessageBox.Show(ex.ToString(), "Initialization Error");
                     Application.Exit();
                 }
 

@@ -179,6 +179,12 @@
     <Content Include="MenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="OEMenuMap.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\chart_organisation.png" />
+    <None Include="Resources\help.png" />
+    <None Include="Resources\information.png" />
     <None Include="Resources\table_delete.png" />
     <None Include="Resources\table_add.png" />
     <None Include="Resources\table_edit.png" />

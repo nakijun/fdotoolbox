@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text;
@@ -42,6 +43,17 @@ namespace FdoToolbox.Core
         {
             get { return _ShortcutKeys; }
             set { _ShortcutKeys = value; }
+        }
+
+        private string _ImageResourceName;
+
+        /// <summary>
+        /// The name of the image resource to associate with this command
+        /// </summary>
+        public string ImageResourceName
+        {
+            get { return _ImageResourceName; }
+            set { _ImageResourceName = value; }
         }
 	
 

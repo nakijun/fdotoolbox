@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace FdoToolbox.Core
 {
@@ -47,6 +48,12 @@ namespace FdoToolbox.Core
                         attr.Description,
                         (CommandExecuteHandler)Delegate.CreateDelegate(typeof(CommandExecuteHandler), this, method)
                     );
+                    if (!string.IsNullOrEmpty(attr.ImageResourceName))
+                    {
+                        object resource = Properties.Resources.ResourceManager.GetObject(attr.ImageResourceName);
+                        if (resource != null)
+                            cmd.CommandImage = (Image)resource;
+                    }
                     cmd.ShortcutKeys = attr.ShortcutKeys;
                     AddCommand(cmd);
                 }
