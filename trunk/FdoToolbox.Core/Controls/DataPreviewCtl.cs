@@ -11,6 +11,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands.Feature;
 using OSGeo.FDO.Commands.SQL;
 using OSGeo.FDO.Geometry;
+using OSGeo.FDO.Filter;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -54,6 +55,11 @@ namespace FdoToolbox.Core.Controls
 
         private void btnQuery_Click(object sender, EventArgs e)
         {
+            if (!CheckValidFilter())
+            {
+                AppConsole.Alert("Error", "Invalid filter. Please correct");
+                return;
+            }
             bool isStandard = (cmbQueryMethod.SelectedIndex == 0);
             if (isStandard)
             {
@@ -202,6 +208,32 @@ namespace FdoToolbox.Core.Controls
             ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
             if(classDef != null)
                 this.Title = "Data Preview - " + classDef.Name;
+        }
+
+        private bool CheckValidFilter()
+        {
+            bool valid = false;
+            try
+            {
+                if (!string.IsNullOrEmpty(txtFilter.Text))
+                {
+                    Filter filter = Filter.Parse(txtFilter.Text);
+                }
+                valid = true;
+            }
+            catch (OSGeo.FDO.Common.Exception)
+            {
+                valid = false;
+            }
+            return valid;
+        }
+
+        private void txtFilter_Leave(object sender, EventArgs e)
+        {
+            if (!CheckValidFilter())
+            {
+                AppConsole.Alert("Error", "Invalid filter. Please correct");
+            }
         }
     }
 }
