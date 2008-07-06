@@ -21,6 +21,7 @@
       * Feature Limit
 
 === Future ===
+ * Console Mode
  * Raster Provider support
  * KML support
  * Expression Editor
