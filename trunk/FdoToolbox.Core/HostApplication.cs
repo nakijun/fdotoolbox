@@ -58,7 +58,8 @@ namespace FdoToolbox.Core
                 {
                     string cmdName = node.Attributes["name"].Value;
                     Command cmd = ModuleManager.GetCommand(cmdName);
-                    if (cmd != null)
+                   
+                    if (cmd != null && (cmd.InvocationType != CommandInvocationType.Console))
                     {
                         ToolStripMenuItem tsi = new ToolStripMenuItem();
                         tsi.Name = cmd.Name;
@@ -159,7 +160,7 @@ namespace FdoToolbox.Core
                 {
                     _shell = shell;
                     _shell.Title = this.Name;
-                    _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(ExecuteCommand);
+                    _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
 
                     //Set streams for Application Console
                     AppConsole.In = new ConsoleInputStream(_shell.ConsoleWindow.InputTextBox);
@@ -190,7 +191,7 @@ namespace FdoToolbox.Core
         /// Execute a command in the global namespace
         /// </summary>
         /// <param name="cmdName"></param>
-        public void ExecuteCommand(string cmdName)
+        public void ExecuteCommand(string cmdName, bool fromConsole)
         {
             Command cmd = this.ModuleManager.GetCommand(cmdName);
             if (cmd == null)
@@ -201,7 +202,30 @@ namespace FdoToolbox.Core
             {
                 try
                 {
-                    cmd.Execute();
+                    if (fromConsole)
+                    {
+                        //Must not be CommandInvocationType.UI
+                        if (cmd.InvocationType != CommandInvocationType.UI)
+                        {
+                            cmd.Execute();
+                        }
+                        else
+                        {
+                            AppConsole.Err.WriteLine("Command cannot be invoked in this mode");
+                        }
+                    }
+                    else
+                    {
+                        //Must not be CommandInvocationType.Console
+                        if (cmd.InvocationType != CommandInvocationType.Console)
+                        {
+                            cmd.Execute();
+                        }
+                        else
+                        {
+                            AppConsole.Err.WriteLine("Command cannot be invoked in this mode");
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

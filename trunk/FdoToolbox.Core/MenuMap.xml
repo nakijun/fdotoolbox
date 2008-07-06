@@ -4,7 +4,8 @@ Menu definition file.
 
 Edit this file to customise the application menu.
 
-Commands that don't exist won't be shown in the menu.
+Commands that don't exist or cannot be executed from the user interface 
+won't be shown in the menu.
 
 DO NOT DELETE THIS FILE!!!
 -->
@@ -19,7 +20,6 @@ DO NOT DELETE THIS FILE!!!
 		<SubMenu name="FDO">
 			<Command name="regprovider" />
 			<Command name="unregprovider" />
-			<Command name="listproviders" />
 		</SubMenu>
 		<Command name="extload" />
 	</Menu>

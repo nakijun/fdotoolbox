@@ -252,7 +252,7 @@ namespace FdoToolbox
                     case "Command":
                         string cmdName = node.Attributes["name"].Value;
                         Command cmd = HostApplication.Instance.ModuleManager.GetCommand(cmdName);
-                        if (cmd != null)
+                        if (cmd != null && (cmd.InvocationType != CommandInvocationType.Console))
                         {
                             if (tstrip != null)
                                 tstrip.Items.Add(CreateMenuItem(cmd, node));

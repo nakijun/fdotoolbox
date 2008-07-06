@@ -48,6 +48,7 @@ namespace FdoToolbox.Core
                         attr.Description,
                         (CommandExecuteHandler)Delegate.CreateDelegate(typeof(CommandExecuteHandler), this, method)
                     );
+                    cmd.InvocationType = attr.InvocationType;
                     if (!string.IsNullOrEmpty(attr.ImageResourceName))
                     {
                         object resource = Properties.Resources.ResourceManager.GetObject(attr.ImageResourceName);
