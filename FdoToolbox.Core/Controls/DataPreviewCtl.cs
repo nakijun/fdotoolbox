@@ -217,7 +217,7 @@ namespace FdoToolbox.Core.Controls
             {
                 if (!string.IsNullOrEmpty(txtFilter.Text))
                 {
-                    Filter filter = Filter.Parse(txtFilter.Text);
+                    using (Filter filter = Filter.Parse(txtFilter.Text)) { }
                 }
                 valid = true;
             }
