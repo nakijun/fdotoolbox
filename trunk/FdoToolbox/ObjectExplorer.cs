@@ -91,7 +91,6 @@ namespace FdoToolbox
                 classNode.ImageIndex = classNode.SelectedImageIndex = IMG_IDX_CLASS;
                 classNode.ToolTipText = string.Format("Type: {0}", classDef.ClassType);
 
-                //GetPropertyNodes(classDef, classNode);
                 schemaNode.Nodes.Add(classNode);
             }
         }
@@ -216,16 +215,6 @@ namespace FdoToolbox
             XmlNode selTaskCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedTask");
             XmlNode moduleCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/Modules");
             XmlNode selModuleCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedModule");
-
-            /*
-            mToolStrip.Items.Clear();
-            ctxConnections.Items.Clear();
-            ctxModules.Items.Clear();
-            ctxSelectedConnection.Items.Clear();
-            ctxSelectedModule.Items.Clear();
-            ctxSelectedTask.Items.Clear();
-            ctxTasks.Items.Clear();
-            */
 
             ProcessMenuNode(mToolStrip, toolbarNode);
             ProcessMenuNode(ctxConnections, connCtxNode);
