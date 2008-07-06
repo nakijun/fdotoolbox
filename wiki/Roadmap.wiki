@@ -28,3 +28,4 @@
  * Extra Bulk Copy options
       * Property Value Mappings
  * Chainable tasks
+ * MapGuide Enterprise/Open Source integration
