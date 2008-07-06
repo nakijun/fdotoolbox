@@ -10,16 +10,21 @@ using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands.Feature;
 using OSGeo.FDO.Commands.SQL;
+using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core.Controls
 {
     public partial class DataPreviewCtl : BaseDocumentCtl
     {
+        private FgfGeometryFactory _GeomFactory;
+
         internal DataPreviewCtl()
         {
             InitializeComponent();
             cmbQueryMethod.SelectedIndex = 0;
             cmbLimit.SelectedIndex = 0;
+            _GeomFactory = new FgfGeometryFactory();
+            this.Disposed += delegate { _GeomFactory.Dispose(); };
         }
 
         public DataPreviewCtl(IConnection conn)
@@ -169,7 +174,10 @@ namespace FdoToolbox.Core.Controls
                     }
                     else if (geomDef != null)
                     {
-                        row[geomDef.Name] = reader.GetGeometry(geomDef.Name);
+                        using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(reader.GetGeometry(geomDef.Name)))
+                        {
+                            row[geomDef.Name] = geom.Text;
+                        }
                     }
                 }
                 else
