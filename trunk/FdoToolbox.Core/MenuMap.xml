@@ -24,15 +24,15 @@ DO NOT DELETE THIS FILE!!!
 		<Command name="extload" />
 	</Menu>
 	<Menu name="Express">
-		<SubMenu name="Connect">
-			<Command name="sdfconnect" />
-			<Command name="shpconnect" />
+		<SubMenu name="Connect" resource="database_connect">
+			<Command name="sdfconnect" displayName="SDF" />
+			<Command name="shpconnect" displayName="SHP" />
 		</SubMenu>
-		<SubMenu name="Create">
-			<Command name="sdfcreate" />
-			<Command name="shpcreate" />
+		<SubMenu name="Create" resource="database_add">
+			<Command name="sdfcreate" displayName="SDF" />
+			<Command name="shpcreate" displayName="SHP" />
 		</SubMenu>
-		<SubMenu name="Bulk Copy">
+		<SubMenu name="Bulk Copy" resource="table_go">
 			<Command name="sdf2sdf" />
 			<Command name="shp2shp" />
 			<Command name="sdf2shp" />
