@@ -182,6 +182,7 @@
     <Content Include="OEMenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\database_add.png" />
     <None Include="Resources\chart_organisation.png" />
     <None Include="Resources\help.png" />
     <None Include="Resources\information.png" />

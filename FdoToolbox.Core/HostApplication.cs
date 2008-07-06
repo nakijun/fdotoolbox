@@ -6,6 +6,7 @@ using System.Xml;
 using FdoToolbox.Core.Forms;
 using System.Reflection;
 using System.IO;
+using System.Drawing;
 
 namespace FdoToolbox.Core
 {
@@ -46,6 +47,12 @@ namespace FdoToolbox.Core
                 if (node.Name == "SubMenu")
                 {
                     item = CreateSubMenu(node.Attributes["name"].Value, node.ChildNodes);
+                    if (node.Attributes["resource"] != null)
+                    {
+                        object resource = Properties.Resources.ResourceManager.GetObject(node.Attributes["resource"].Value);
+                        if (resource != null)
+                            item.Image = (Image)resource;
+                    }
                 }
                 else if(node.Name == "Command")
                 {
@@ -63,6 +70,8 @@ namespace FdoToolbox.Core
                         {
                             cmd.Execute();
                         };
+                        if (node.Attributes["displayName"] != null)
+                            tsi.Text = node.Attributes["displayName"].Value;    
                         item = tsi;
                     }
                     else

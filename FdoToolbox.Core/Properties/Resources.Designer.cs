@@ -131,6 +131,13 @@ namespace FdoToolbox.Core.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap database_add {
+            get {
+                object obj = ResourceManager.GetObject("database_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap database_connect {
             get {
                 object obj = ResourceManager.GetObject("database_connect", resourceCulture);
