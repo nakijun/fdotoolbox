@@ -121,7 +121,7 @@ namespace FdoToolbox.Core
             HostApplication.Instance.Shell.ShowDocumentWindow(new GenericCreateDataStoreCtl());
         }
 
-        [Command(CoreModule.CMD_CMDLIST, "List Commands", "List all available commands")]
+        [Command(CoreModule.CMD_CMDLIST, "List Commands", "List all available commands", InvocationType = CommandInvocationType.Console)]
         public void CommandList()
         {
             ICollection<string> cmdNames = HostApplication.Instance.ModuleManager.GetCommandNames();
@@ -151,7 +151,7 @@ namespace FdoToolbox.Core
             new UnregProviderDlg().ShowDialog();
         }
 
-        [Command(CoreModule.CMD_LISTPROVIDERS, "List Providers In Console", "Display all installed providers in the console")]
+        [Command(CoreModule.CMD_LISTPROVIDERS, "List Providers In Console", "Display all installed providers in the console", InvocationType = CommandInvocationType.Console)]
         public void ListProviders()
         {
             using (ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders())
@@ -208,7 +208,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_SAVESCHEMA, "Save Schema", ImageResourceName = "disk")]
+        [Command(CoreModule.CMD_SAVESCHEMA, "Save Schema", ImageResourceName = "disk", InvocationType = CommandInvocationType.UI)]
         public void SaveSchema()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -231,7 +231,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_MANSCHEMA, "Manage Schemas", ImageResourceName = "chart_organisation")]
+        [Command(CoreModule.CMD_MANSCHEMA, "Manage Schemas", ImageResourceName = "chart_organisation", InvocationType = CommandInvocationType.UI)]
         public void ManageSchema()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -255,7 +255,7 @@ namespace FdoToolbox.Core
             AppConsole.Alert("Help", "Help documentation is currently unavailable");
         }
 
-        [Command(CoreModule.CMD_MODINFO, "Module Information", "Display information about a loaded module", ImageResourceName = "information")]
+        [Command(CoreModule.CMD_MODINFO, "Module Information", "Display information about a loaded module", ImageResourceName = "information", InvocationType = CommandInvocationType.UI)]
         public void ModuleInfo()
         {
             IModule mod = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedModule();
@@ -282,13 +282,13 @@ namespace FdoToolbox.Core
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
-        [Command(CoreModule.CMD_EDITTASK, "Edit Task")]
+        [Command(CoreModule.CMD_EDITTASK, "Edit Task", InvocationType = CommandInvocationType.UI)]
         public void EditTask()
         {
             throw new NotImplementedException();
         }
 
-        [Command(CoreModule.CMD_EXECUTETASK, "Execute Task", ImageResourceName = "application_go")]
+        [Command(CoreModule.CMD_EXECUTETASK, "Execute Task", ImageResourceName = "application_go", InvocationType = CommandInvocationType.UI)]
         public void ExecuteTask()
         {
             ITask task = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedTask();
@@ -301,7 +301,7 @@ namespace FdoToolbox.Core
             new TaskProgressDlg(task).Run();
         }
 
-        [Command(CoreModule.CMD_DELETETASK, "Delete Task", ImageResourceName = "cross")]
+        [Command(CoreModule.CMD_DELETETASK, "Delete Task", ImageResourceName = "cross", InvocationType = CommandInvocationType.UI)]
         public void DeleteTask()
         {
             ITask task = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedTask();
@@ -314,7 +314,7 @@ namespace FdoToolbox.Core
             AppConsole.WriteLine("Task Deleted: {0}", task.Name);
         }
 
-        [Command(CoreModule.CMD_DATAPREVIEW, "Data Preview", ImageResourceName = "zoom")]
+        [Command(CoreModule.CMD_DATAPREVIEW, "Data Preview", ImageResourceName = "zoom", InvocationType = CommandInvocationType.UI)]
         public void DataPreview()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -345,7 +345,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_SAVETASK, "Save Task", ImageResourceName = "disk")]
+        [Command(CoreModule.CMD_SAVETASK, "Save Task", ImageResourceName = "disk", InvocationType = CommandInvocationType.UI)]
         public void SaveTask()
         {
             ITask task = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedTask();
@@ -385,7 +385,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_SAVECONN, "Save Connection", ImageResourceName = "disk")]
+        [Command(CoreModule.CMD_SAVECONN, "Save Connection", ImageResourceName = "disk", InvocationType = CommandInvocationType.UI)]
         public void SaveConnection()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -404,10 +404,15 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_REMOVECONN, "Remove Connection", ImageResourceName = "cross")]
+        [Command(CoreModule.CMD_REMOVECONN, "Remove Connection", ImageResourceName = "cross", InvocationType = CommandInvocationType.UI)]
         public void RemoveConnection()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            if (connInfo == null)
+            {
+                AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
+                return;
+            }
             HostApplication.Instance.ConnectionManager.RemoveConnection(connInfo.Name);
         }
     }

@@ -40,7 +40,7 @@ namespace FdoToolbox.Core
 
         private Image _CmdImage;
 
-        [DisplayName("Image")]
+        [DisplayName("Icon")]
         public Image CommandImage
         {
             get { return _CmdImage; }
@@ -55,10 +55,19 @@ namespace FdoToolbox.Core
             get { return _ShortcutKeys; }
             set { _ShortcutKeys = value; }
         }
-	
 
+        private CommandInvocationType _InvocationType;
+
+        [DisplayName("Invocation Mode")]
+        public CommandInvocationType InvocationType
+        {
+            get { return _InvocationType; }
+            set { _InvocationType = value; }
+        }
+	
         public Command(string name, string display, string description, CommandExecuteHandler execMethod)
         {
+            this.InvocationType = CommandInvocationType.All;
             this.Name = name;
             this.DisplayName = display;
             this.Description = description;
@@ -81,6 +90,13 @@ namespace FdoToolbox.Core
                 this.OnExecute();
             }
         }
+    }
+
+    public enum CommandInvocationType : int
+    {
+        Console = 1,
+        UI = 2,
+        All = 3
     }
 
     public delegate void CommandExecuteHandler();

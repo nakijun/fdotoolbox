@@ -55,6 +55,14 @@ namespace FdoToolbox.Core
             get { return _ImageResourceName; }
             set { _ImageResourceName = value; }
         }
+
+        private CommandInvocationType _InvcationType;
+
+        public CommandInvocationType InvocationType
+        {
+            get { return _InvcationType; }
+            set { _InvcationType = value; }
+        }
 	
 
         /// <summary>
@@ -63,6 +71,7 @@ namespace FdoToolbox.Core
         /// <param name="name">The name of the command</param>
         public CommandAttribute(string name, string displayName)
         {
+            this.InvocationType = CommandInvocationType.All;
             this.Name = name;
             this.DisplayName = displayName;
         }
@@ -74,6 +83,7 @@ namespace FdoToolbox.Core
         /// <param name="displayName">The display name of the command (Shown in menus)</param>
         public CommandAttribute(string name, string displayName, string description)
         {
+            this.InvocationType = CommandInvocationType.All;
             this.Name = name;
             this.DisplayName = displayName;
             this.Description = description;
