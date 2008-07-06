@@ -142,20 +142,6 @@ namespace FdoToolbox
             get { return this; }
         }
 
-        //public OSGeo.FDO.Connections.IConnection GetSelectedConnection(ref string name)
-        //{
-        //    TreeNode connNode = mTreeView.SelectedNode;
-        //    if (connNode == null || connNode.Level != 1)
-        //    {
-        //        return null;
-        //    }
-        //    else
-        //    {
-        //        name = connNode.Name;
-        //        return HostApplication.Instance.ConnectionManager.GetConnection(connNode.Name);
-        //    }
-        //}
-
         public ITask GetSelectedTask()
         {
             TreeNode node = mTreeView.SelectedNode;
@@ -184,56 +170,6 @@ namespace FdoToolbox
             }
         }
 
-        private void LoadModule_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_EXTLOAD);
-        }
-
-        private void ConnectSDF_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(ExpressModule.CMD_SDFCONNECT);
-        }
-
-        private void ConnectSHP_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(ExpressModule.CMD_SHPCONNECT);
-        }
-
-        private void ConnectGeneric_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_CONNECT);
-        }
-
-        private void CreateSDF_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(ExpressModule.CMD_SDFCREATE);
-        }
-
-        private void CreateSHP_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(ExpressModule.CMD_SHPCREATE);
-        }
-
-        private void CreateCustom_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_CREATEDATASTORE);
-        }
-
-        private void CreateBulkCopy_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_CREATEBCP);
-        }
-
-        private void CreateJoin_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void RemoveSelectedConnection_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_REMOVECONN);
-        }
-
         private void TreeView_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -242,63 +178,12 @@ namespace FdoToolbox
             }
         }
 
-        private void ManageSchemas_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_MANSCHEMA);
-        }
-
-
         public void RefreshConnection(string name)
         {
             TreeNode node = GetConnectionsNode().Nodes[name];
             Debug.Assert(node != null);
             node.Nodes.Clear();
             GetSchemaNodes(node);
-        }
-
-        private void SaveSchemas_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_SAVESCHEMA);
-        }
-
-        private void LoadSchemas_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_LOADSCHEMA);
-        }
-
-        private void ModuleInfo_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_MODINFO);
-        }
-
-        private void DeleteTask_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_DELETETASK);
-        }
-
-        private void ExecuteTask_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_EXECUTETASK);
-        }
-
-        private void EditTask_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_EDITTASK);
-        }
-
-        private void DataPreview_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_DATAPREVIEW);
-        }
-
-        private void LoadTask_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_LOADTASK);
-        }
-
-        private void SaveTask_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_SAVETASK);
         }
 
         public ConnectionInfo GetSelectedConnection()
@@ -319,16 +204,6 @@ namespace FdoToolbox
             }
         }
 
-        private void LoadConnection_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_LOADCONN);
-        }
-
-        private void SaveConnection_Click(object sender, EventArgs e)
-        {
-            HostApplication.Instance.ExecuteCommand(CoreModule.CMD_SAVECONN);
-        }
-
         public void InitializeMenus(string menuMapFile)
         {
             XmlDocument doc = new XmlDocument();
@@ -342,6 +217,7 @@ namespace FdoToolbox
             XmlNode moduleCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/Modules");
             XmlNode selModuleCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedModule");
 
+            /*
             mToolStrip.Items.Clear();
             ctxConnections.Items.Clear();
             ctxModules.Items.Clear();
@@ -349,6 +225,7 @@ namespace FdoToolbox
             ctxSelectedModule.Items.Clear();
             ctxSelectedTask.Items.Clear();
             ctxTasks.Items.Clear();
+            */
 
             ProcessMenuNode(mToolStrip, toolbarNode);
             ProcessMenuNode(ctxConnections, connCtxNode);
