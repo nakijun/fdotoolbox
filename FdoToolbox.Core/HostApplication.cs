@@ -170,6 +170,12 @@ namespace FdoToolbox.Core
 
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
                     AppConsole.WriteLine("Loading modules");
+
+                    ModuleManager.ModuleLoaded += delegate(IModule module)
+                    {
+                        AppConsole.WriteLine("Module loaded: {0}", module.Name);
+                    };
+                    
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
 

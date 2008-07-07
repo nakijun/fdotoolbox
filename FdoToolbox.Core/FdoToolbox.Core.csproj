@@ -162,6 +162,12 @@
     <Compile Include="Forms\SpatialContextPicker.Designer.cs">
       <DependentUpon>SpatialContextPicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\StringInputDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StringInputDlg.Designer.cs">
+      <DependentUpon>StringInputDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\TaskProgressDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -299,6 +305,10 @@
     <EmbeddedResource Include="Forms\SpatialContextPicker.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SpatialContextPicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StringInputDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>StringInputDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TaskProgressDlg.resx">
       <SubType>Designer</SubType>

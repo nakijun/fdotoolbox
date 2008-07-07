@@ -23,7 +23,6 @@ namespace FdoToolbox.Core
             if (conn.ConnectionState != ConnectionState.ConnectionState_Open)
                 conn.Open();
             _ConnectionDict.Add(name, conn);
-            AppConsole.WriteLine("New connection added: {0}", name);
             if (this.ConnectionAdded != null)
                 this.ConnectionAdded(name);
         }
@@ -38,7 +37,6 @@ namespace FdoToolbox.Core
                 
                 _ConnectionDict.Remove(name);
                 conn.Dispose();
-                AppConsole.WriteLine("Connection removed: {0}", name);
                 if (this.ConnectionRemoved != null)
                     this.ConnectionRemoved(name);
             }
@@ -73,6 +71,37 @@ namespace FdoToolbox.Core
                 _ConnectionDict[name].Dispose();
             }
             _ConnectionDict.Clear();
+        }
+
+        public void RenameConnection(string oldName, string newName)
+        {
+            if (!_ConnectionDict.ContainsKey(oldName))
+                throw new ArgumentException("The connection to be renamed could not be found: " + oldName);
+            if (_ConnectionDict.ContainsKey(newName))
+                throw new ArgumentException("Cannot rename connection " + oldName + " to " + newName + " as a connection of that name already exists");
+
+            IConnection conn = _ConnectionDict[oldName];
+            _ConnectionDict.Remove(oldName);
+            _ConnectionDict.Add(newName, conn);
+            if (this.ConnectionRenamed != null)
+                this.ConnectionRenamed(oldName, newName);
+        }
+
+        public event ConnectionRenamedEventHandler ConnectionRenamed;
+
+        public bool CanRenameConnection(string oldName, string newName, ref string reason)
+        {
+            if (!_ConnectionDict.ContainsKey(oldName))
+            {
+                reason = "The connection to be renamed could not be found: " + oldName;
+                return false;
+            }
+            if (_ConnectionDict.ContainsKey(newName))
+            {
+                reason = "Cannot rename connection " + oldName + " to " + newName + " as a connection of that name already exists";
+                return false;
+            }
+            return true;
         }
     }
 }

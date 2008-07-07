@@ -24,8 +24,15 @@ namespace FdoToolbox
             HostApplication.Instance.ModuleManager.ModuleUnloaded += new ModuleEventHandler(OnModuleUnloaded);
             HostApplication.Instance.ConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnConnectionAdded);
             HostApplication.Instance.ConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnConnectionRemoved);
+            HostApplication.Instance.ConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
             HostApplication.Instance.TaskManager.TaskAdded += new TaskEventHandler(OnTaskAdded);
             HostApplication.Instance.TaskManager.TaskRemoved += new TaskEventHandler(OnTaskRemoved);
+        }
+
+        void OnConnectionRenamed(string oldName, string newName)
+        {
+            TreeNode node = GetConnectionsNode().Nodes[oldName];
+            node.Name = node.Text = newName;
         }
 
         void OnTaskRemoved(string name)
