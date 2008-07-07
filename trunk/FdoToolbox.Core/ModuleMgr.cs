@@ -51,7 +51,6 @@ namespace FdoToolbox.Core
                 else
                     _GlobalNamespace.Add(name, module.GetCommand(name));
             }
-            AppConsole.WriteLine("Module loaded: {0}", module.Name);
             if (this.ModuleLoaded != null)
                 this.ModuleLoaded(module);
         }

@@ -50,6 +50,8 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="datapreview" />
 			<Command name="manschema" />
 			<Command name="mansc" />
+			<Separator/>
+			<Command name="renameconn" />
 			<Command name="saveconn" />
 			<Separator/>
 			<Command name="saveschema" />

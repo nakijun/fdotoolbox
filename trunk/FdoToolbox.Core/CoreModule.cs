@@ -49,6 +49,7 @@ namespace FdoToolbox.Core
         public const string CMD_LOADCONN = "loadconn";
         public const string CMD_REMOVECONN = "removeconn";
         public const string CMD_MANAGESPATIALCONTEXTS = "mansc";
+        public const string CMD_RENAMECONNECTION = "renameconn";
 
         #endregion
 
@@ -67,6 +68,22 @@ namespace FdoToolbox.Core
             HostApplication.Instance.OnAppInitialized += delegate
             {
                 AppConsole.WriteLine("Type \"{0}\" for a list of all available commands", CMD_CMDLIST);
+            };
+            HostApplication.Instance.TaskManager.TaskRemoved += delegate(string name)
+            {
+                AppConsole.WriteLine("Task Deleted: {0}", name);
+            };
+            HostApplication.Instance.ConnectionManager.ConnectionRemoved += delegate(string name)
+            {
+                AppConsole.WriteLine("Connection removed: {0}", name);
+            };
+            HostApplication.Instance.ConnectionManager.ConnectionAdded += delegate(string name)
+            {
+                AppConsole.WriteLine("New connection added: {0}", name);
+            };
+            HostApplication.Instance.ConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
+            {
+                AppConsole.WriteLine("Connection {0} renamed to {1}", oldName, newName);
             };
         }
 
@@ -312,7 +329,7 @@ namespace FdoToolbox.Core
                 return;
             }
             HostApplication.Instance.TaskManager.RemoveTask(task.Name);
-            AppConsole.WriteLine("Task Deleted: {0}", task.Name);
+            
         }
 
         [Command(CoreModule.CMD_DATAPREVIEW, "Data Preview", ImageResourceName = "zoom", InvocationType = CommandInvocationType.UI)]
@@ -428,6 +445,27 @@ namespace FdoToolbox.Core
             }
             SpatialContextCtl ctl = new SpatialContextCtl(connInfo.Connection);
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+        }
+
+        [Command(CoreModule.CMD_RENAMECONNECTION, "Rename Connection", InvocationType = CommandInvocationType.UI)]
+        public void RenameConnection()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            if (connInfo == null)
+            {
+                AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
+                return;
+            }
+            string oldName = connInfo.Name;
+            string newName = StringInputDlg.GetInput("Rename Connection", "Enter the new name for the connection", oldName);
+            if (!string.IsNullOrEmpty(newName) && oldName != newName)
+            {
+                string reason = string.Empty;
+                if (HostApplication.Instance.ConnectionManager.CanRenameConnection(oldName, newName, ref reason))
+                    HostApplication.Instance.ConnectionManager.RenameConnection(oldName, newName);
+                else
+                    AppConsole.Alert("Error", reason);
+            }
         }
     }
 }
