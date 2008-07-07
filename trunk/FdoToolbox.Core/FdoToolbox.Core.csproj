@@ -115,6 +115,12 @@
     <Compile Include="Controls\SchemaMgrCtl.Designer.cs">
       <DependentUpon>SchemaMgrCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SpatialContextCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SpatialContextCtl.Designer.cs">
+      <DependentUpon>SpatialContextCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="CoreModule.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="ExpressModule.cs" />
@@ -143,6 +149,18 @@
     </Compile>
     <Compile Include="Forms\SchemaInfoDlg.Designer.cs">
       <DependentUpon>SchemaInfoDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpatialContextInfoDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpatialContextInfoDlg.Designer.cs">
+      <DependentUpon>SpatialContextInfoDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpatialContextPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpatialContextPicker.Designer.cs">
+      <DependentUpon>SpatialContextPicker.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TaskProgressDlg.cs">
       <SubType>Form</SubType>
@@ -176,6 +194,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SpatialContextInfo.cs" />
     <Compile Include="TaskLoader.cs" />
     <Compile Include="TaskManager.cs" />
   </ItemGroup>
@@ -253,6 +272,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>SchemaMgrCtl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SpatialContextCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SpatialContextCtl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AboutDialog.cs</DependentUpon>
@@ -268,6 +291,14 @@
     <EmbeddedResource Include="Forms\SchemaInfoDlg.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SchemaInfoDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpatialContextInfoDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SpatialContextInfoDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpatialContextPicker.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SpatialContextPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TaskProgressDlg.resx">
       <SubType>Designer</SubType>

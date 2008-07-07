@@ -48,6 +48,7 @@ namespace FdoToolbox.Core
         public const string CMD_SAVECONN = "saveconn";
         public const string CMD_LOADCONN = "loadconn";
         public const string CMD_REMOVECONN = "removeconn";
+        public const string CMD_MANAGESPATIALCONTEXTS = "mansc";
 
         #endregion
 
@@ -414,6 +415,19 @@ namespace FdoToolbox.Core
                 return;
             }
             HostApplication.Instance.ConnectionManager.RemoveConnection(connInfo.Name);
+        }
+
+        [Command(CoreModule.CMD_MANAGESPATIALCONTEXTS, "Manage Spatial Contexts", InvocationType = CommandInvocationType.UI)]
+        public void SpatialContextInfo()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            if (connInfo == null)
+            {
+                AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
+                return;
+            }
+            SpatialContextCtl ctl = new SpatialContextCtl(connInfo.Connection);
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
     }
 }

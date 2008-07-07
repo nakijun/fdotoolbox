@@ -77,5 +77,10 @@ namespace FdoToolbox.Core
             if (writeToConsole)
                 Out.WriteLine(message);
         }
+
+        public static bool Confirm(string title, string text)
+        {
+            return MessageBox.Show(text, title, MessageBoxButtons.YesNo) == DialogResult.Yes;
+        }
     }
 }

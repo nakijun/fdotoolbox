@@ -20,7 +20,7 @@ DO NOT DELETE THIS FILE!!!
 			<SubMenu name="Task" resource="application_go">
 				<Command name="createbcp" />
 			</SubMenu>
-			<SubMenu name="Data Source" resource="database">
+			<SubMenu name="Data Store" resource="database">
 				<Command name="sdfcreate" displayName="SDF" />
 				<Command name="shpcreate" displayName="SHP" />
 				<Command name="mkdstore" displayName="Custom" />
@@ -49,6 +49,7 @@ DO NOT DELETE THIS FILE!!!
 		<SelectedConnection>
 			<Command name="datapreview" />
 			<Command name="manschema" />
+			<Command name="mansc" />
 			<Command name="saveconn" />
 			<Separator/>
 			<Command name="saveschema" />
