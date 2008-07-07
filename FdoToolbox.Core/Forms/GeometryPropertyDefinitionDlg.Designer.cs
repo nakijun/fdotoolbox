@@ -46,6 +46,7 @@ namespace FdoToolbox.Core.Forms
             this.chkMeasure = new System.Windows.Forms.CheckBox();
             this.chkElevation = new System.Windows.Forms.CheckBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.btnPickContext = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
@@ -141,6 +142,7 @@ namespace FdoToolbox.Core.Forms
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnPickContext);
             this.groupBox2.Controls.Add(this.txtSpatialContext);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
@@ -160,7 +162,7 @@ namespace FdoToolbox.Core.Forms
             this.txtSpatialContext.Location = new System.Drawing.Point(156, 97);
             this.txtSpatialContext.Multiline = true;
             this.txtSpatialContext.Name = "txtSpatialContext";
-            this.txtSpatialContext.Size = new System.Drawing.Size(219, 48);
+            this.txtSpatialContext.Size = new System.Drawing.Size(189, 48);
             this.txtSpatialContext.TabIndex = 6;
             // 
             // label4
@@ -186,7 +188,7 @@ namespace FdoToolbox.Core.Forms
             this.chkGeometryTypes.FormattingEnabled = true;
             this.chkGeometryTypes.Location = new System.Drawing.Point(156, 42);
             this.chkGeometryTypes.Name = "chkGeometryTypes";
-            this.chkGeometryTypes.Size = new System.Drawing.Size(220, 49);
+            this.chkGeometryTypes.Size = new System.Drawing.Size(189, 49);
             this.chkGeometryTypes.TabIndex = 3;
             // 
             // chkReadOnly
@@ -222,6 +224,16 @@ namespace FdoToolbox.Core.Forms
             // errorProvider
             // 
             this.errorProvider.ContainerControl = this;
+            // 
+            // btnPickContext
+            // 
+            this.btnPickContext.Location = new System.Drawing.Point(352, 98);
+            this.btnPickContext.Name = "btnPickContext";
+            this.btnPickContext.Size = new System.Drawing.Size(24, 23);
+            this.btnPickContext.TabIndex = 7;
+            this.btnPickContext.Text = "...";
+            this.btnPickContext.UseVisualStyleBackColor = true;
+            this.btnPickContext.Click += new System.EventHandler(this.btnPickContext_Click);
             // 
             // GeometryPropertyDefinitionDlg
             // 
@@ -263,5 +275,6 @@ namespace FdoToolbox.Core.Forms
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckedListBox chkGeometryTypes;
         private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.Button btnPickContext;
     }
 }

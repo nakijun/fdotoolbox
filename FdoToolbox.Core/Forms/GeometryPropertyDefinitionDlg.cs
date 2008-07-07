@@ -21,7 +21,7 @@ namespace FdoToolbox.Core.Forms
             InitializeComponent();
             _BoundConnection = conn;
             _Definition = new GeometricPropertyDefinition(txtName.Text, txtDescription.Text);
-
+            
             Array gtypes = Enum.GetValues(typeof(GeometricType));
             foreach (object val in gtypes)
             {
@@ -33,8 +33,26 @@ namespace FdoToolbox.Core.Forms
             : this(conn)
         {
             _Definition = def;
+            txtDescription.Text = def.Description;
+            txtName.Text = def.Name;
+            txtSpatialContext.Text = def.SpatialContextAssociation;
+            chkElevation.Checked = def.HasElevation;
+            chkMeasure.Checked = def.HasMeasure;
+            chkReadOnly.Checked = def.ReadOnly;
+            chkSystem.Checked = def.IsSystem;
+            chkGeometryTypes.ClearSelected();
+            if ((def.GeometryTypes & (int)GeometricType.GeometricType_All) == (int)GeometricType.GeometricType_All)
+                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_All), true);
+            if ((def.GeometryTypes & (int)GeometricType.GeometricType_Curve) == (int)GeometricType.GeometricType_Curve)
+                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_Curve), true);
+            if ((def.GeometryTypes & (int)GeometricType.GeometricType_Point) == (int)GeometricType.GeometricType_Point)
+                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_Point), true);
+            if ((def.GeometryTypes & (int)GeometricType.GeometricType_Solid) == (int)GeometricType.GeometricType_Solid)
+                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_Solid), true);
+            if ((def.GeometryTypes & (int)GeometricType.GeometricType_Surface) == (int)GeometricType.GeometricType_Surface)
+                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_Surface), true);    
         }
-
+ 
         public static GeometricPropertyDefinition NewGeometryProperty(IConnection conn)
         {
             GeometryPropertyDefinitionDlg dlg = new GeometryPropertyDefinitionDlg(conn);
@@ -83,6 +101,13 @@ namespace FdoToolbox.Core.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
+        }
+
+        private void btnPickContext_Click(object sender, EventArgs e)
+        {
+            string name = SpatialContextPicker.GetName(_BoundConnection);
+            if (!string.IsNullOrEmpty(name))
+                txtSpatialContext.Text = name;
         }
     }
 }

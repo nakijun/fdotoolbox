@@ -65,7 +65,7 @@ namespace FdoToolbox.Core.Controls
             networkLinkClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_NetworkLinkClass) >= 0;
 
             //Schema modification
-            btnDeleteSchema.Visible = btnDeleteClass.Visible = btnEditClass.Visible = _BoundConnection.SchemaCapabilities.SupportsSchemaModification;
+            btnDeleteSchema.Visible = btnDeleteClass.Visible = _BoundConnection.SchemaCapabilities.SupportsSchemaModification;
         }
 
         private FeatureSchemaCollection _Schemas;
@@ -145,7 +145,10 @@ namespace FdoToolbox.Core.Controls
         private void btnEditClass_Click(object sender, EventArgs e)
         {
             ClassDefinition classDef = (ClassDefinition)lstClasses.SelectedItem;
-            EditClass(classDef);
+            if (classDef.Capabilities.SupportsWrite)
+                EditClass(classDef);
+            else
+                AppConsole.Alert("Error", "Selected class is read-only and cannot be edited");
         }
 
         private void EditClass(ClassDefinition classDef)
