@@ -36,12 +36,15 @@ namespace FdoToolbox.Core.Controls
 {
     public partial class DataPreviewCtl : BaseDocumentCtl
     {
+        const int TAB_STANDARD = 0;
+        const int TAB_AGGREGATE = 1;
+        const int TAB_SQL = 2;
+
         private FgfGeometryFactory _GeomFactory;
 
         internal DataPreviewCtl()
         {
             InitializeComponent();
-            cmbQueryMethod.SelectedIndex = 0;
             cmbLimit.SelectedIndex = 0;
             _GeomFactory = new FgfGeometryFactory();
             this.Disposed += delegate { _GeomFactory.Dispose(); };
@@ -51,6 +54,15 @@ namespace FdoToolbox.Core.Controls
             : this()
         {
             _BoundConnection = conn;
+            ToggleUI();
+        }
+
+        private void ToggleUI()
+        {
+            if (!_BoundConnection.ConnectionCapabilities.SupportsSQL())
+                tabQueryMode.TabPages.RemoveAt(TAB_SQL);
+            if (!Array.Exists<int>(_BoundConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates; }))
+                tabQueryMode.TabPages.RemoveAt(TAB_AGGREGATE);
         }
 
         private IConnection _BoundConnection;
@@ -65,75 +77,70 @@ namespace FdoToolbox.Core.Controls
             base.OnLoad(e);
         }
 
-        private void cmbQueryMethod_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnQuery_Click(object sender, EventArgs e)
         {
-            bool isStandard = (cmbQueryMethod.SelectedIndex == 0);
-            grpStandard.Enabled = isStandard;
-            grpSQL.Enabled = !isStandard;
+            switch (tabQueryMode.SelectedIndex)
+            {
+                case TAB_STANDARD:
+                    QueryStandard();
+                    break;
+                case TAB_AGGREGATE:
+                    QueryAggregate();
+                    break;
+                case TAB_SQL:
+                    QuerySQL();
+                    break;
+            }
         }
 
-        private void btnQuery_Click(object sender, EventArgs e)
+        private void QuerySQL()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void QueryAggregate()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void QueryStandard()
         {
             if (!CheckValidFilter())
             {
                 AppConsole.Alert("Error", "Invalid filter. Please correct");
                 return;
             }
-            bool isStandard = (cmbQueryMethod.SelectedIndex == 0);
-            if (isStandard)
+            int limit = Convert.ToInt32(cmbLimit.SelectedItem.ToString());
+            using (ISelect select = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
             {
-                int limit = Convert.ToInt32(cmbLimit.SelectedItem.ToString());
-                using (ISelect select = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
+                try
                 {
-                    try
+                    ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
+                    if (classDef != null)
                     {
-                        ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
-                        if (classDef != null)
+                        select.SetFeatureClassName(classDef.Name);
+                        if (!string.IsNullOrEmpty(txtFilter.Text))
+                            select.SetFilter(txtFilter.Text);
+                        using (IFeatureReader reader = select.Execute())
                         {
-                            select.SetFeatureClassName(classDef.Name);
-                            if (!string.IsNullOrEmpty(txtFilter.Text))
-                                select.SetFilter(txtFilter.Text);
-                            using (IFeatureReader reader = select.Execute())
+                            DataTable table = new DataTable(cmbClass.SelectedItem.ToString());
+                            int count = 0;
+                            PrepareGrid(table, reader.GetClassDefinition());
+                            while (reader.ReadNext() && count < limit)
                             {
-                                DataTable table = new DataTable(cmbClass.SelectedItem.ToString());
-                                int count = 0;
-                                PrepareGrid(table, reader.GetClassDefinition());
-                                while (reader.ReadNext() && count < limit)
-                                {
-                                    ProcessReader(table, reader);
-                                    count++;
-                                }
-                                reader.Close();
-                                grdPreview.DataSource = table;
+                                ProcessReader(table, reader);
+                                count++;
                             }
+                            reader.Close();
+                            grdPreview.DataSource = table;
                         }
                     }
-                    catch (OSGeo.FDO.Common.Exception ex)
-                    {
-                        AppConsole.Alert("Error", ex.Message);
-                        AppConsole.WriteException(ex);
-                    }
                 }
-            }
-            else
-            {
-                throw new NotImplementedException();
-                /*
-                int limit = Convert.ToInt32(cmbLimit.SelectedItem.ToString());
-                using (ISQLCommand select = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand) as ISQLCommand)
+                catch (OSGeo.FDO.Common.Exception ex)
                 {
-                    select.SQLStatement = txtSQL.Text;
-                    using (ISQLDataReader reader = select.ExecuteReader())
-                    {
-                        ClearGrid();
-                        while (reader.ReadNext())
-                        {
-                            ProcessSQLReader(reader);
-                        }
-                        reader.Close();
-                    }
+                    AppConsole.Alert("Error", ex.Message);
+                    AppConsole.WriteException(ex);
                 }
-                 */
             }
         }
 
@@ -253,6 +260,11 @@ namespace FdoToolbox.Core.Controls
             {
                 AppConsole.Alert("Error", "Invalid filter. Please correct");
             }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            grdPreview.DataSource = null;
         }
     }
 }
