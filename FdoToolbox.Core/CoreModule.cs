@@ -88,22 +88,6 @@ namespace FdoToolbox.Core
             {
                 AppConsole.WriteLine("Type \"{0}\" for a list of all available commands", CMD_CMDLIST);
             };
-            HostApplication.Instance.TaskManager.TaskRemoved += delegate(string name)
-            {
-                AppConsole.WriteLine("Task Deleted: {0}", name);
-            };
-            HostApplication.Instance.ConnectionManager.ConnectionRemoved += delegate(string name)
-            {
-                AppConsole.WriteLine("Connection removed: {0}", name);
-            };
-            HostApplication.Instance.ConnectionManager.ConnectionAdded += delegate(string name)
-            {
-                AppConsole.WriteLine("New connection added: {0}", name);
-            };
-            HostApplication.Instance.ConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
-            {
-                AppConsole.WriteLine("Connection {0} renamed to {1}", oldName, newName);
-            };
         }
 
         public override void Cleanup() { }
