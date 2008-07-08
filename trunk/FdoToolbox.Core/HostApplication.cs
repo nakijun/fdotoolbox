@@ -190,26 +190,7 @@ namespace FdoToolbox.Core
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
                     AppConsole.WriteLine("Loading modules");
 
-                    ModuleManager.ModuleLoaded += delegate(IModule module)
-                    {
-                        AppConsole.WriteLine("Module loaded: {0}", module.Name);
-                    };
-                    TaskManager.TaskRemoved += delegate(string name)
-                    {
-                        AppConsole.WriteLine("Task Deleted: {0}", name);
-                    };
-                    ConnectionManager.ConnectionRemoved += delegate(string name)
-                    {
-                        AppConsole.WriteLine("Connection removed: {0}", name);
-                    };
-                    ConnectionManager.ConnectionAdded += delegate(string name)
-                    {
-                        AppConsole.WriteLine("New connection added: {0}", name);
-                    };
-                    ConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
-                    {
-                        AppConsole.WriteLine("Connection {0} renamed to {1}", oldName, newName);
-                    };
+                    InitMessageHandlers();
 
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
@@ -226,6 +207,30 @@ namespace FdoToolbox.Core
                 if (this.OnAppInitialized != null)
                     this.OnAppInitialized(this, EventArgs.Empty);
             }
+        }
+
+        private void InitMessageHandlers()
+        {
+            ModuleManager.ModuleLoaded += delegate(IModule module)
+            {
+                AppConsole.WriteLine("Module loaded: {0}", module.Name);
+            };
+            TaskManager.TaskRemoved += delegate(string name)
+            {
+                AppConsole.WriteLine("Task Deleted: {0}", name);
+            };
+            ConnectionManager.ConnectionRemoved += delegate(string name)
+            {
+                AppConsole.WriteLine("Connection removed: {0}", name);
+            };
+            ConnectionManager.ConnectionAdded += delegate(string name)
+            {
+                AppConsole.WriteLine("New connection added: {0}", name);
+            };
+            ConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
+            {
+                AppConsole.WriteLine("Connection {0} renamed to {1}", oldName, newName);
+            };
         }
 
         /// <summary>
