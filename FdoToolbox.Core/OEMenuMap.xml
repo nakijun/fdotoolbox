@@ -15,6 +15,7 @@ DO NOT DELETE THIS FILE!!!
 			<SubMenu name="Connection" resource="database_connect">
 				<Command name="sdfconnect" displayName="SDF" />
 				<Command name="shpconnect" displayName="SHP" />
+				<Command name="shpdirconnect" displayName="SHP (directory)" />
 				<Command name="connect" displayName="Custom" />
 			</SubMenu>
 			<SubMenu name="Task" resource="application_go">
@@ -33,6 +34,7 @@ DO NOT DELETE THIS FILE!!!
 			<Menu name="New Connection" resource="database_connect">
 				<Command name="sdfconnect" displayName="SDF" />
 				<Command name="shpconnect" displayName="SHP" />
+				<Command name="shpdirconnect" displayName="SHP (directory)" />
 				<Command name="connect" displayName="Custom" />
 			</Menu>
 			<Command name="loadconn" />
