@@ -45,6 +45,7 @@ namespace FdoToolbox.Core
 
         public const string CMD_SDFCONNECT = "sdfconnect";
         public const string CMD_SHPCONNECT = "shpconnect";
+        public const string CMD_SHPDIRCONNECT = "shpdirconnect";
         public const string CMD_SDFCREATE = "sdfcreate";
         public const string CMD_SHPCREATE = "shpcreate";
         public const string CMD_SDF2SDF = "sdf2sdf";
@@ -163,6 +164,18 @@ namespace FdoToolbox.Core
                         conn.Close();
                     }
                 }
+            }
+        }
+
+        [Command(ExpressModule.CMD_SHPDIRCONNECT, "Connect to SHP (directory)", "Connect to a directory of SHP files")]
+        public void ShpDirConnect()
+        {
+            IConnection conn = ExpressUtility.CreateSHPDirectoryConnection();
+            if (conn != null)
+            {
+                IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
+                string name = mgr.CreateUniqueName();
+                mgr.AddConnection(name, conn);
             }
         }
 

@@ -65,6 +65,21 @@ namespace FdoToolbox.Core
             return conn;
         }
 
+        public static IConnection CreateSHPDirectoryConnection()
+        {
+            IConnection conn = null;
+            FolderBrowserDialog diag = new FolderBrowserDialog();
+            diag.Description = "Select the directory that contains the SHP files";
+            diag.ShowNewFolderButton = false;
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                string connStr = string.Format("DefaultFileLocation={0}", diag.SelectedPath);
+                conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SHP");
+                conn.ConnectionString = connStr;
+            }
+            return conn;
+        }
+
         public static bool CreateSDF(string fileName)
         {
             if (System.IO.File.Exists(fileName))

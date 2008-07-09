@@ -27,6 +27,7 @@ DO NOT DELETE THIS FILE!!!
 		<SubMenu name="Connect" resource="database_connect">
 			<Command name="sdfconnect" displayName="SDF" />
 			<Command name="shpconnect" displayName="SHP" />
+			<Command name="shpdirconnect" displayName="SHP (directory)" />
 		</SubMenu>
 		<SubMenu name="Create" resource="database_add">
 			<Command name="sdfcreate" displayName="SDF" />
