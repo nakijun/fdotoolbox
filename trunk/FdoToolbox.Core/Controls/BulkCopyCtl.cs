@@ -73,21 +73,10 @@ namespace FdoToolbox.Core.Controls
         public BulkCopyCtl()
         {
             InitializeComponent();
+            this.Title = "Bulk Copy";
             ctxTargetClasses = new ContextMenuStrip();
             cmbSrcConn.DataSource = new List<string>(HostApplication.Instance.ConnectionManager.GetConnectionNames());
             cmbDestConn.DataSource = new List<string>(HostApplication.Instance.ConnectionManager.GetConnectionNames());
-        }
-
-        public override string Title
-        {
-            get
-            {
-                return "Bulk Copy Task";
-            }
-            set
-            {
-                base.Title = value;
-            }
         }
 
         private void cmbSrcConn_SelectedIndexChanged(object sender, EventArgs e)

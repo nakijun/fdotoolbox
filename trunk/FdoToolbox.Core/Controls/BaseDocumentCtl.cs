@@ -36,16 +36,19 @@ namespace FdoToolbox.Core.Controls
             InitializeComponent();
         }
 
+        private string _Title;
+
         public virtual string Title
         {
-            get { return ""; }
+            get { return _Title; }
             set
             {
+                _Title = value;
                 if (this.ParentForm != null)
                 {
-                    this.ParentForm.Text = value;
+                    this.ParentForm.Text = _Title;
                     if (this.OnSetTabText != null)
-                        this.OnSetTabText(value);
+                        this.OnSetTabText(_Title);
                 }
             }
         }

@@ -47,6 +47,7 @@ namespace FdoToolbox.Core.Controls
         internal SpatialContextCtl()
         {
             InitializeComponent();
+            this.Title = "Spatial Context Management";
             _GeomFactory = new FgfGeometryFactory();
             _bsContexts = new BindingSource();
             _bsContexts.DataSource = new List<SpatialContextInfo>();
@@ -121,18 +122,6 @@ namespace FdoToolbox.Core.Controls
             }
             info.IsActive = reader.IsActive();
             return info;
-        }
-
-        public override string Title
-        {
-            get
-            {
-                return "Spatial Context Management";
-            }
-            set
-            {
-                base.Title = value;
-            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)

@@ -32,14 +32,7 @@ namespace FdoToolbox.Core.Controls
         internal ModuleInfoCtl()
         {
             InitializeComponent();
-        }
-
-        public override string Title
-        {
-            get
-            {
-                return "Module Information - " + _module.Name;
-            }
+            this.Title = "Module Information";
         }
 
         private IModule _module;

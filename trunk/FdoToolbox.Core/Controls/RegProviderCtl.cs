@@ -35,15 +35,8 @@ namespace FdoToolbox.Core.Controls
         public RegProviderCtl()
         {
             InitializeComponent();
+            this.Title = "Register Provider";
             openFileDialog.InitialDirectory = HostApplication.Instance.AppPath;
-        }
-
-        public override string Title
-        {
-            get
-            {
-                return "Register Provider";
-            }
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)

@@ -37,6 +37,7 @@ namespace FdoToolbox.Core.Controls
         {
             InitializeComponent();
             InitializeGrid();
+            this.Title = "New Data Store";
             StringCollection providerNames = new StringCollection();
             using (ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders())
             {
@@ -46,14 +47,6 @@ namespace FdoToolbox.Core.Controls
                 }
             }
             cmbProvider.DataSource = providerNames;
-        }
-
-        public override string Title
-        {
-            get
-            {
-                return "New Data Connection";
-            }
         }
 
         private void cmbProvider_SelectedIndexChanged(object sender, EventArgs e)

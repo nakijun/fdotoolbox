@@ -29,7 +29,7 @@ namespace FdoToolbox.Core.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Classes");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Classes");
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -214,10 +214,10 @@ namespace FdoToolbox.Core.Controls
             this.mTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mTreeView.Location = new System.Drawing.Point(3, 16);
             this.mTreeView.Name = "mTreeView";
-            treeNode2.Name = "NODE_CLASSES";
-            treeNode2.Text = "Classes";
+            treeNode1.Name = "NODE_CLASSES";
+            treeNode1.Text = "Classes";
             this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.mTreeView.Size = new System.Drawing.Size(265, 264);
             this.mTreeView.TabIndex = 0;
             this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mTreeView_MouseDown);
