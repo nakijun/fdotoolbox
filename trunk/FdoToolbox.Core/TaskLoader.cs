@@ -79,7 +79,7 @@ namespace FdoToolbox.Core
                 
                 bool copySpatialContexts = Convert.ToBoolean(optionNode.SelectSingleNode("CopySpatialContexts").InnerText);
                 bool coerceDataTypes = Convert.ToBoolean(optionNode.SelectSingleNode("CoerceDataTypes").InnerText);
-
+                
                 IConnection srcConn = FeatureAccessManager.GetConnectionManager().CreateConnection(srcProvider);
                 IConnection destConn = FeatureAccessManager.GetConnectionManager().CreateConnection(destProvider);
 

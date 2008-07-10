@@ -46,21 +46,20 @@ namespace FdoToolbox.Core.Controls
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mTreeView = new System.Windows.Forms.TreeView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.chkCoerceDataTypes = new System.Windows.Forms.CheckBox();
+            this.chkCopySpatialContexts = new System.Windows.Forms.CheckBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.chkCoerceDataTypes = new System.Windows.Forms.CheckBox();
-            this.chkCopySpatialContexts = new System.Windows.Forms.CheckBox();
-            this.chkApplySchema = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.grpSource.SuspendLayout();
             this.grpTarget.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -243,6 +242,41 @@ namespace FdoToolbox.Core.Controls
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Bulk Copy Options";
             // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.chkCoerceDataTypes);
+            this.panel1.Controls.Add(this.chkCopySpatialContexts);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 16);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(240, 106);
+            this.panel1.TabIndex = 0;
+            // 
+            // chkCoerceDataTypes
+            // 
+            this.chkCoerceDataTypes.AutoSize = true;
+            this.chkCoerceDataTypes.Enabled = false;
+            this.chkCoerceDataTypes.Location = new System.Drawing.Point(8, 36);
+            this.chkCoerceDataTypes.Name = "chkCoerceDataTypes";
+            this.chkCoerceDataTypes.Size = new System.Drawing.Size(155, 17);
+            this.chkCoerceDataTypes.TabIndex = 5;
+            this.chkCoerceDataTypes.Text = "Coerce Source Data Types";
+            this.toolTip.SetToolTip(this.chkCoerceDataTypes, "If source/target properties are of different types, the conver the source data ty" +
+                    "pe to the target\'s data type");
+            this.chkCoerceDataTypes.UseVisualStyleBackColor = true;
+            // 
+            // chkCopySpatialContexts
+            // 
+            this.chkCopySpatialContexts.AutoSize = true;
+            this.chkCopySpatialContexts.Location = new System.Drawing.Point(8, 13);
+            this.chkCopySpatialContexts.Name = "chkCopySpatialContexts";
+            this.chkCopySpatialContexts.Size = new System.Drawing.Size(129, 17);
+            this.chkCopySpatialContexts.TabIndex = 4;
+            this.chkCopySpatialContexts.Text = "Copy Spatial Contexts";
+            this.toolTip.SetToolTip(this.chkCopySpatialContexts, "Copy spatial contexts defined in the source connection to the target connection");
+            this.chkCopySpatialContexts.UseVisualStyleBackColor = true;
+            // 
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -269,57 +303,6 @@ namespace FdoToolbox.Core.Controls
             // 
             this.errorProvider.ContainerControl = this;
             // 
-            // panel1
-            // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.chkCoerceDataTypes);
-            this.panel1.Controls.Add(this.chkCopySpatialContexts);
-            this.panel1.Controls.Add(this.chkApplySchema);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 16);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(240, 106);
-            this.panel1.TabIndex = 0;
-            // 
-            // chkCoerceDataTypes
-            // 
-            this.chkCoerceDataTypes.AutoSize = true;
-            this.chkCoerceDataTypes.Enabled = false;
-            this.chkCoerceDataTypes.Location = new System.Drawing.Point(7, 49);
-            this.chkCoerceDataTypes.Name = "chkCoerceDataTypes";
-            this.chkCoerceDataTypes.Size = new System.Drawing.Size(155, 17);
-            this.chkCoerceDataTypes.TabIndex = 5;
-            this.chkCoerceDataTypes.Text = "Coerce Source Data Types";
-            this.toolTip.SetToolTip(this.chkCoerceDataTypes, "If source/target properties are of different types, the conver the source data ty" +
-                    "pe to the target\'s data type");
-            this.chkCoerceDataTypes.UseVisualStyleBackColor = true;
-            // 
-            // chkCopySpatialContexts
-            // 
-            this.chkCopySpatialContexts.AutoSize = true;
-            this.chkCopySpatialContexts.Enabled = false;
-            this.chkCopySpatialContexts.Location = new System.Drawing.Point(8, 26);
-            this.chkCopySpatialContexts.Name = "chkCopySpatialContexts";
-            this.chkCopySpatialContexts.Size = new System.Drawing.Size(129, 17);
-            this.chkCopySpatialContexts.TabIndex = 4;
-            this.chkCopySpatialContexts.Text = "Copy Spatial Contexts";
-            this.toolTip.SetToolTip(this.chkCopySpatialContexts, "Copy spatial contexts defined in the source connection to the target connection");
-            this.chkCopySpatialContexts.UseVisualStyleBackColor = true;
-            // 
-            // chkApplySchema
-            // 
-            this.chkApplySchema.AutoSize = true;
-            this.chkApplySchema.Checked = true;
-            this.chkApplySchema.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkApplySchema.Location = new System.Drawing.Point(8, 3);
-            this.chkApplySchema.Name = "chkApplySchema";
-            this.chkApplySchema.Size = new System.Drawing.Size(230, 17);
-            this.chkApplySchema.TabIndex = 3;
-            this.chkApplySchema.Text = "Apply Schema on target (ignores mappings)";
-            this.toolTip.SetToolTip(this.chkApplySchema, "If checked, will apply the entire source schema to the target (mappings are ignor" +
-                    "ed)");
-            this.chkApplySchema.UseVisualStyleBackColor = true;
-            // 
             // BulkCopyCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -341,9 +324,9 @@ namespace FdoToolbox.Core.Controls
             this.grpTarget.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -373,6 +356,5 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox chkCoerceDataTypes;
         private System.Windows.Forms.CheckBox chkCopySpatialContexts;
-        private System.Windows.Forms.CheckBox chkApplySchema;
     }
 }
