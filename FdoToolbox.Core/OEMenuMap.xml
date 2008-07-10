@@ -49,6 +49,8 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="extload" />
 		</Modules>
 		<SelectedConnection>
+			<Command name="refreshconn" />
+			<Separator/>
 			<Command name="datapreview" />
 			<Command name="manschema" />
 			<Command name="mansc" />
