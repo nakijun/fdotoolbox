@@ -201,6 +201,7 @@ namespace FdoToolbox.Core
 
             OpenFileDialog diag = new OpenFileDialog();
             diag.Title = "Load schemas from XML";
+            diag.Filter = "Feature Schema Definition (*.schema)|*.schema";
             if (diag.ShowDialog() == DialogResult.OK)
             {
                 FeatureSchemaCollection schemas = null;
@@ -238,7 +239,7 @@ namespace FdoToolbox.Core
 
             SaveFileDialog diag = new SaveFileDialog();
             diag.Title = "Save schemas to XML";
-            diag.Filter = "XML files (*.xml)|*.xml";
+            diag.Filter = "Feature Schema Definition (*.schema)|*.schema";
             if (diag.ShowDialog() == DialogResult.OK)
             {
                 using (IDescribeSchema cmd = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
@@ -353,7 +354,7 @@ namespace FdoToolbox.Core
         {
             OpenFileDialog diag = new OpenFileDialog();
             diag.Title = "Load Task";
-            diag.Filter = "Task Definition (*.xml)|*.xml";
+            diag.Filter = "Task Definition (*.task)|*.task";
             diag.Multiselect = false;
             if (diag.ShowDialog() == DialogResult.OK)
             {
@@ -377,7 +378,7 @@ namespace FdoToolbox.Core
             }
             SaveFileDialog diag = new SaveFileDialog();
             diag.Title = "Save Task";
-            diag.Filter = "Task Definition (*.xml)|*.xml";
+            diag.Filter = "Task Definition (*.task)|*.task";
             if (diag.ShowDialog() == DialogResult.OK)
             {
                 TaskLoader.SaveTask(task, diag.FileName);
@@ -390,7 +391,7 @@ namespace FdoToolbox.Core
         {
             OpenFileDialog diag = new OpenFileDialog();
             diag.Title = "Load connection information";
-            diag.Filter = "Connection information (*.xml)|*.xml";
+            diag.Filter = "Connection information (*.conn)|*.conn";
             if (diag.ShowDialog() == DialogResult.OK)
             {
                 ConnectionInfo connInfo = ConnLoader.LoadConnection(diag.FileName);
@@ -417,7 +418,7 @@ namespace FdoToolbox.Core
             }
             SaveFileDialog diag = new SaveFileDialog();
             diag.Title = "Save connection information";
-            diag.Filter = "Connection information (*.xml)|*.xml";
+            diag.Filter = "Connection information (*.conn)|*.conn";
             if (diag.ShowDialog() == DialogResult.OK)
             {
                 ConnLoader.SaveConnection(connInfo, diag.FileName);
