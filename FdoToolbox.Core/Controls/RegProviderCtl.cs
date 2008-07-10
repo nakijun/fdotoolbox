@@ -35,6 +35,7 @@ namespace FdoToolbox.Core.Controls
         public RegProviderCtl()
         {
             InitializeComponent();
+            openFileDialog.InitialDirectory = HostApplication.Instance.AppPath;
         }
 
         public override string Title

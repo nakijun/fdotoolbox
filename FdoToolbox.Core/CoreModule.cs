@@ -114,6 +114,7 @@ namespace FdoToolbox.Core
         public void LoadExtension()
         {
             OpenFileDialog diag = new OpenFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Load Extension Module";
             diag.Filter = ".net Assembly (*.dll)|*.dll";
             diag.Multiselect = false;
@@ -200,6 +201,7 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the active connection from the Object Explorer before invoking this command");
 
             OpenFileDialog diag = new OpenFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Load schemas from XML";
             diag.Filter = "Feature Schema Definition (*.schema)|*.schema";
             if (diag.ShowDialog() == DialogResult.OK)
@@ -238,6 +240,7 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the active connection from the Object Explorer before invoking this command");
 
             SaveFileDialog diag = new SaveFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Save schemas to XML";
             diag.Filter = "Feature Schema Definition (*.schema)|*.schema";
             if (diag.ShowDialog() == DialogResult.OK)
@@ -353,6 +356,7 @@ namespace FdoToolbox.Core
         public void LoadTask()
         {
             OpenFileDialog diag = new OpenFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Load Task";
             diag.Filter = "Task Definition (*.task)|*.task";
             diag.Multiselect = false;
@@ -377,6 +381,7 @@ namespace FdoToolbox.Core
                 return;
             }
             SaveFileDialog diag = new SaveFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Save Task";
             diag.Filter = "Task Definition (*.task)|*.task";
             if (diag.ShowDialog() == DialogResult.OK)
@@ -390,6 +395,7 @@ namespace FdoToolbox.Core
         public void LoadConnection()
         {
             OpenFileDialog diag = new OpenFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Load connection information";
             diag.Filter = "Connection information (*.conn)|*.conn";
             if (diag.ShowDialog() == DialogResult.OK)
@@ -417,6 +423,7 @@ namespace FdoToolbox.Core
                 return;
             }
             SaveFileDialog diag = new SaveFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Save connection information";
             diag.Filter = "Connection information (*.conn)|*.conn";
             if (diag.ShowDialog() == DialogResult.OK)
