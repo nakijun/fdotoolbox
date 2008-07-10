@@ -276,6 +276,7 @@ namespace FdoToolbox.Core.Controls
             this.chkCopySpatialContexts.Text = "Copy Spatial Contexts";
             this.toolTip.SetToolTip(this.chkCopySpatialContexts, "Copy spatial contexts defined in the source connection to the target connection");
             this.chkCopySpatialContexts.UseVisualStyleBackColor = true;
+            this.chkCopySpatialContexts.CheckedChanged += new System.EventHandler(this.chkCopySpatialContexts_CheckedChanged);
             // 
             // btnSave
             // 
