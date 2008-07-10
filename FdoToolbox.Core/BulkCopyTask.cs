@@ -121,7 +121,7 @@ namespace FdoToolbox.Core
                     else
                         schema = UpdateTargetSchema(schema, classesToCopy);
                 }
-                SendMessage("Applying schema for target");
+                SendMessage("Applying schema for target (this may take a while)");
                 apply.FeatureSchema = schema;
                 apply.Execute();
                 SendMessage("Target Schema Applied");
