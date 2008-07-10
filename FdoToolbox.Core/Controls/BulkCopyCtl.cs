@@ -93,7 +93,7 @@ namespace FdoToolbox.Core.Controls
                 }
                 else
                 {
-                    btnSave.Enabled = false;
+                    btnSave.Enabled = true;
                     cmbSrcSchema.DataSource = schemas;
                 }
             }
@@ -107,7 +107,12 @@ namespace FdoToolbox.Core.Controls
             {
                 FeatureSchemaCollection schemas = cmd.Execute();
                 cmbDestSchema.DataSource = schemas;
-                chkApplySchema.Checked = (schemas.Count == 0);
+                if (schemas.Count == 0)
+                {
+                    AppConsole.Alert("Warning", "There are no schemas in the target connection. If you save this task, all source classes will be copied");
+                    ctxTargetClasses.Items.Clear();
+                    ResetClassNodes();
+                }
             }
         }
 
@@ -159,26 +164,23 @@ namespace FdoToolbox.Core.Controls
         {
             ctxTargetClasses.Items.Clear();
             ResetClassNodes();
-            if (!chkApplySchema.Checked)
-            {
-                FeatureSchema schema = cmbDestSchema.SelectedItem as FeatureSchema;
-                if (schema != null)
-                {   
-                    foreach (ClassDefinition classDef in schema.Classes)
+            FeatureSchema schema = cmbDestSchema.SelectedItem as FeatureSchema;
+            if (schema != null)
+            {   
+                foreach (ClassDefinition classDef in schema.Classes)
+                {
+                    ToolStripItem tsi = new ToolStripMenuItem();
+                    string className = classDef.Name;
+                    tsi.Name = className;
+                    tsi.Text = "Map class to: " + className;
+                    tsi.Click += delegate(object obj, EventArgs evt)
                     {
-                        ToolStripItem tsi = new ToolStripMenuItem();
-                        string className = classDef.Name;
-                        tsi.Name = className;
-                        tsi.Text = "Map class to: " + className;
-                        tsi.Click += delegate(object obj, EventArgs evt)
-                        {
-                            TreeNode classNode = mTreeView.SelectedNode;
-                            classNode.Tag = className;
-                            classNode.Text = classNode.Name + " (=> " + className + ")";
-                            ResetPropertyNodes(classNode, tsi.Name);
-                        };
-                        ctxTargetClasses.Items.Add(tsi);
-                    }
+                        TreeNode classNode = mTreeView.SelectedNode;
+                        classNode.Tag = className;
+                        classNode.Text = classNode.Name + " (=> " + className + ")";
+                        ResetPropertyNodes(classNode, tsi.Name);
+                    };
+                    ctxTargetClasses.Items.Add(tsi);
                 }
             }
         }
@@ -374,7 +376,6 @@ namespace FdoToolbox.Core.Controls
                     HostApplication.Instance.ConnectionManager.GetConnection(destConnName)
                 )
             );
-            options.ApplySchemaToTarget = chkApplySchema.Checked;
             options.CoerceDataTypes = chkCoerceDataTypes.Checked;
             options.CopySpatialContexts = chkCopySpatialContexts.Checked;
             foreach (TreeNode classNode in GetRootNode().Nodes)
@@ -404,8 +405,10 @@ namespace FdoToolbox.Core.Controls
                 }
             }
             options.SourceSchemaName = (cmbSrcSchema.SelectedItem as FeatureSchema).Name;
-            if(!options.ApplySchemaToTarget) 
-                options.TargetSchemaName = (cmbDestSchema.SelectedItem as FeatureSchema).Name;
+            FeatureSchema destSchema = (cmbDestSchema.SelectedItem as FeatureSchema);
+            if (destSchema != null)
+                options.TargetSchemaName = destSchema.Name;
+           
             BulkCopyTask task = new BulkCopyTask(txtName.Text, options);
             HostApplication.Instance.TaskManager.AddTask(task);
             this.Close();

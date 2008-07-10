@@ -33,6 +33,7 @@ using OSGeo.FDO.Filter;
 using System.Diagnostics;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Common.Io;
+using OSGeo.FDO.Commands.SpatialContext;
 #region overview
 /*
  * Bulk Copy overview
@@ -101,33 +102,51 @@ namespace FdoToolbox.Core
 
             ClassCollection srcClasses;
             ClassCopyOptions[] classesToCopy;
-            ValidateBulkCopyOptions(srcConn, out srcClasses, out classesToCopy);
-            int classesCopied = 1;
-            using (IApplySchema apply = destConn.CreateCommand(CommandType.CommandType_ApplySchema) as IApplySchema)
+            ValidateBulkCopyOptions(srcConn, destConn, out srcClasses, out classesToCopy);
+            
+            //If target schema is undefined, create it
+            if (_Options.ApplySchemaToTarget)
             {
-                FeatureSchema schema = null;
-                //Try to find the target schema of the given name and update it
-                //otherwise create it
-                using (IDescribeSchema desc = destConn.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                using (IApplySchema apply = destConn.CreateCommand(CommandType.CommandType_ApplySchema) as IApplySchema)
                 {
-                    FeatureSchemaCollection schemas = desc.Execute();
-                    foreach (FeatureSchema fs in schemas)
-                    {
-                        if (fs.Name == _Options.TargetSchemaName)
-                            schema = fs;
-                    }
-                    if (_Options.ApplySchemaToTarget || schema == null)
-                        schema = CreateTargetSchema(_Options.SourceSchemaName, srcConn);
-                    else
-                        schema = UpdateTargetSchema(schema, classesToCopy);
+                    SendMessage("Applying schema for target (this may take a while)");
+                    apply.FeatureSchema = CreateTargetSchema(_Options.SourceSchemaName, srcConn);
+                    apply.Execute();
+                    SendMessage("Target Schema Applied");
                 }
-                SendMessage("Applying schema for target (this may take a while)");
-                apply.FeatureSchema = schema;
-                apply.Execute();
-                SendMessage("Target Schema Applied");
+            }
+            if (_Options.CopySpatialContexts)
+            {
+                SendMessage("Copying spatial contexts to destination");
+                using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+                {
+                    using (ISpatialContextReader reader = cmd.Execute())
+                    {
+                        while (reader.ReadNext())
+                        {
+                            using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
+                            {
+                                string name = reader.GetName();
+                                SendMessage("Copying spatial context: " + name);
+                                create.CoordinateSystem = reader.GetCoordinateSystem();
+                                create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
+                                create.Description = reader.GetDescription();
+                                create.Extent = reader.GetExtent();
+                                create.ExtentType = reader.GetExtentType();
+                                create.Name = name;
+                                create.UpdateExisting = true;
+                                create.XYTolerance = reader.GetXYTolerance();
+                                create.ZTolerance = reader.GetZTolerance();
+
+                                create.Execute();
+                            }
+                        }
+                    }
+                }
             }
             SendMessage("Begin bulk copy of classes");
             int total = 0;
+            int classesCopied = 1;
             foreach (ClassCopyOptions copyOpts in classesToCopy)
             {
                 int copied = 0;
@@ -235,19 +254,20 @@ namespace FdoToolbox.Core
         /// Validates the options supplied for this bulk copy task
         /// </summary>
         /// <param name="srcConn">The source connection</param>
+        /// <param name="destConn">The target connection</param>
         /// <param name="srcClasses">The classes to be copied</param>
         /// <param name="classesToCopy">The copy options for each specified class</param>
-        private void ValidateBulkCopyOptions(IConnection srcConn, out ClassCollection srcClasses, out ClassCopyOptions[] classesToCopy)
+        private void ValidateBulkCopyOptions(IConnection srcConn, IConnection destConn, out ClassCollection srcClasses, out ClassCopyOptions[] classesToCopy)
         {
             //Validate each source class copy option specified.
             SendMessage("Validating Bulk Copy Options");
 
             if (string.IsNullOrEmpty(_Options.SourceSchemaName))
                 throw new BulkCopyException("Source schema name not defined");
-            
+
             if (!Array.Exists<int>(_Options.Target.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)CommandType.CommandType_ApplySchema; }))
                 throw new BulkCopyException("Target connection does not support IApplySchema");
-            
+
             //Get source schema classes
             srcClasses = null;
             using (IDescribeSchema desc = srcConn.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
@@ -304,60 +324,6 @@ namespace FdoToolbox.Core
             }
             SendMessage("Validation Completed");
         }
-
-        private FeatureSchema UpdateTargetSchema(FeatureSchema targetSchema, ClassCopyOptions[] classesToCopy)
-        {
-            SendMessage("Updating target schema");
-            //for each copy option, we want to verify that the target properties
-            //exist in the target class, otherwise we will create the new property
-            //in that class, thereby updating it.
-            foreach (ClassCopyOptions copyOpts in classesToCopy)
-            {
-                //See if target class exists
-                int idx = targetSchema.Classes.IndexOf(copyOpts.TargetClassName);
-                //Class not found. Create it
-                if (idx < 0)
-                {
-                    ClassDefinition sourceDef = copyOpts.SourceClassDefinition;
-                    ClassDefinition newDef = null;
-                    switch (sourceDef.ClassType)
-                    {
-                        case ClassType.ClassType_Class:
-                            break;
-                        case ClassType.ClassType_FeatureClass:
-                            break;
-                        case ClassType.ClassType_NetworkClass:
-                            break;
-                        case ClassType.ClassType_NetworkLayerClass:
-                            break;
-                        case ClassType.ClassType_NetworkLinkClass:
-                            break;
-                        case ClassType.ClassType_NetworkNodeClass:
-                            break;
-                    }
-                    if(newDef != null)
-                        targetSchema.Classes.Add(newDef);
-                }
-                else //Class found. Update it
-                {
-                    ClassDefinition classDef = targetSchema.Classes[idx];
-                    foreach (string srcPropName in copyOpts.PropertyNames)
-                    {
-                        string targetName = copyOpts.GetTargetPropertyName(srcPropName);
-                        int pidx = classDef.Properties.IndexOf(targetName);
-                        //Property not found. Create it and add to class
-                        if (pidx < 0)
-                        {
-                            classDef.Properties.Add(copyOpts.GetPropertyDefinition(srcPropName));
-                            //TODO: See if it is also an identity property
-                        }
-                    }
-                }
-                
-            }
-            return targetSchema;
-        }
-
 
         private int ProcessReader(ClassDefinition classDef, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
         {
@@ -508,12 +474,12 @@ namespace FdoToolbox.Core
 
         /// <summary>
         /// If true, the mappings are ignored and the full source schema
-        /// will be applied to the target
+        /// will be applied to the target. Is only true if the target
+        /// schema is undefined
         /// </summary>
         public bool ApplySchemaToTarget
         {
-            get { return _ApplySchemaToTarget; }
-            set { _ApplySchemaToTarget = value; }
+            get { return string.IsNullOrEmpty(this.TargetSchemaName); }
         }
 
         /// <summary>
