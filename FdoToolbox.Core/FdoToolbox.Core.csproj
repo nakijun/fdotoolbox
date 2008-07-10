@@ -205,12 +205,15 @@
     <Compile Include="TaskManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BulkCopyTask.xml" />
+    <Content Include="ClassMapping.xml" />
     <Content Include="MenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="OEMenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="PropertyMapping.xml" />
     <None Include="Resources\database_add.png" />
     <None Include="Resources\chart_organisation.png" />
     <None Include="Resources\help.png" />

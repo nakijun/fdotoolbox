@@ -1,0 +1,8 @@
+﻿<Mapping>
+	<DeleteTarget>{0}</DeleteTarget>
+	<SourceClass>{1}</SourceClass>
+	<TargetClass>{2}</TargetClass>
+	<Properties>
+		{3}
+	</Properties>
+</Mapping>

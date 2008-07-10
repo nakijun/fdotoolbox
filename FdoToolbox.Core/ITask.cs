@@ -31,6 +31,7 @@ namespace FdoToolbox.Core
 
         event TaskPercentageEventHandler OnItemProcessed;
         event TaskProgressMessageEventHandler OnTaskMessage;
+        event TaskProgressMessageEventHandler OnLogTaskMessage;
     }
 
     public delegate void TaskPercentageEventHandler(int pc);

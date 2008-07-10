@@ -41,4 +41,11 @@ namespace FdoToolbox.Core
         public BulkCopyException(string msg) : base(msg) { }
         public BulkCopyException(string msg, Exception inner) : base(msg, inner) { }
     }
+
+    public class TaskLoaderException : Exception
+    {
+        public TaskLoaderException() : base() { }
+        public TaskLoaderException(string msg) : base(msg) { }
+        public TaskLoaderException(string msg, Exception inner) : base(msg, inner) { }
+    }
 }

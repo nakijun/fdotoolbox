@@ -24,6 +24,10 @@ using System.Xml;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.ClientServices;
 using System.Windows.Forms;
+using OSGeo.FDO.Schema;
+using OSGeo.FDO.Commands.Schema;
+using OSGeo.FDO;
+using OSGeo.FDO.Runtime;
 
 namespace FdoToolbox.Core
 {
@@ -58,23 +62,23 @@ namespace FdoToolbox.Core
         {
             string srcName = HostApplication.Instance.ConnectionManager.CreateUniqueName();
             string destName = HostApplication.Instance.ConnectionManager.CreateUniqueName();
-
+            
             try
             {
-                XmlNode sourceNode = doc.SelectSingleNode("//BulkCopyTask/BulkCopySource");
-                XmlNode targetNode = doc.SelectSingleNode("//BulkCopyTask/BulkCopyTarget");
+                XmlNode sourceNode = doc.SelectSingleNode("//BulkCopyTask/Source");
+                XmlNode targetNode = doc.SelectSingleNode("//BulkCopyTask/Target");
                 XmlNode optionNode = doc.SelectSingleNode("//BulkCopyTask/BulkCopyOptions");
-                XmlNode mappingsNode = doc.SelectSingleNode("//BulkCopyTask/PropertyMappings");
-
+                
                 string srcProvider = sourceNode.SelectSingleNode("Provider").InnerText;
                 string srcConnStr = sourceNode.SelectSingleNode("ConnectionString").InnerText;
-                string srcSchema = sourceNode.SelectSingleNode("FeatureSchema").InnerText;
-                string srcClass = sourceNode.SelectSingleNode("Class").InnerText;
-
+                string srcSchema = sourceNode.SelectSingleNode("Schema").InnerText;
+                
                 string destProvider = targetNode.SelectSingleNode("Provider").InnerText;
                 string destConnStr = targetNode.SelectSingleNode("ConnectionString").InnerText;
-                string destSchema = targetNode.SelectSingleNode("FeatureSchema").InnerText;
-                string destClass = targetNode.SelectSingleNode("Class").InnerText;
+                string destSchema = targetNode.SelectSingleNode("Schema").InnerText;
+                
+                bool copySpatialContexts = Convert.ToBoolean(optionNode.SelectSingleNode("CopySpatialContexts").InnerText);
+                bool coerceDataTypes = Convert.ToBoolean(optionNode.SelectSingleNode("CoerceDataTypes").InnerText);
 
                 IConnection srcConn = FeatureAccessManager.GetConnectionManager().CreateConnection(srcProvider);
                 IConnection destConn = FeatureAccessManager.GetConnectionManager().CreateConnection(destProvider);
@@ -82,30 +86,54 @@ namespace FdoToolbox.Core
                 srcConn.ConnectionString = srcConnStr;
                 destConn.ConnectionString = destConnStr;
 
-                HostApplication.Instance.ConnectionManager.AddConnection(srcName, srcConn);
-                HostApplication.Instance.ConnectionManager.AddConnection(destName, destConn);
+                IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
 
-                string name = "BCP" + DateTime.Now.ToShortDateString();
-                BulkCopySource bcpSource = new BulkCopySource(new ConnectionInfo(srcName, srcConn), srcSchema, srcClass);
-                BulkCopyTarget bcpTarget = new BulkCopyTarget(new ConnectionInfo(destName, destConn), destSchema, destClass);
-                BulkCopyTask bcp = new BulkCopyTask(name, bcpSource, bcpTarget);
+                mgr.AddConnection(srcName, srcConn);
+                mgr.AddConnection(destName, destConn);
 
-                XmlNodeList mappingNodes = doc.SelectNodes("//BulkCopyTask/PropertyMappings/Mapping");
-                if (mappingNodes != null)
+                string name = "BCP" + DateTime.Now.ToFileTimeUtc();
+
+                ConnectionInfo srcConnInfo = new ConnectionInfo(srcName, srcConn);
+                ConnectionInfo destConnInfo = new ConnectionInfo(destName, destConn);
+
+                BulkCopyOptions options = new BulkCopyOptions(srcConnInfo, destConnInfo);
+                options.SourceSchemaName = srcSchema;
+                options.TargetSchemaName = destSchema;
+                options.CoerceDataTypes = coerceDataTypes;
+                options.CopySpatialContexts = copySpatialContexts;
+
+                FeatureSchemaCollection schemas = null;
+                using (IDescribeSchema desc = srcConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
                 {
-                    foreach (XmlNode mappingNode in mappingNodes)
-                    {
-                        bcp.Source.AddMapping(mappingNode.Attributes["source"].Value, mappingNode.Attributes["target"].Value);
-                    }
+                    schemas = desc.Execute();
                 }
 
-                bcpTarget.DeleteBeforeCopy = Convert.ToBoolean(optionNode.SelectSingleNode("DeleteSourceBeforeCopy").InnerText);
-                bcpSource.FeatureLimit = Convert.ToInt32(optionNode.SelectSingleNode("FeatureLimit").InnerText);
-                bcp.TransformCoordinates = Convert.ToBoolean(optionNode.SelectSingleNode("TransformCoordinates").InnerText);
-                bcp.CoerceDataTypes = Convert.ToBoolean(optionNode.SelectSingleNode("CoerceDataTypes").InnerText);
-                return bcp;
+                XmlNodeList classMappingNodeList = doc.SelectNodes("//BulkCopyTask/ClassMappings/Mapping");
+                foreach (XmlNode classMappingNode in classMappingNodeList)
+                {
+                    bool deleteTarget = Convert.ToBoolean(classMappingNode.SelectSingleNode("DeleteTarget").InnerText);
+                    string src = classMappingNode.SelectSingleNode("SourceClass").InnerText;
+                    string target = classMappingNode.SelectSingleNode("TargetClass").InnerText;
+
+                    ClassDefinition classDef = FindClass(schemas, src);
+                    if (classDef == null)
+                        throw new TaskLoaderException("Unable to find SourceClass " + src);
+                    ClassCopyOptions copt = new ClassCopyOptions(classDef);
+                    copt.TargetClassName = target;
+                    copt.DeleteClassData = deleteTarget;
+
+                    XmlNodeList propertyMappingList = classMappingNode.SelectNodes("Properties/PropertyMapping");
+                    foreach (XmlNode propertyNode in propertyMappingList)
+                    {
+                        string sourceProperty = propertyNode.SelectSingleNode("SourceProperty").InnerText;
+                        string targetProperty = propertyNode.SelectSingleNode("TargetProperty").InnerText;
+                        copt.AddProperty(GetPropertyDefinition(classDef, sourceProperty), targetProperty);
+                    }
+                    options.AddClassCopyOption(copt);
+                }
+                return new BulkCopyTask(name, options);
             }
-            catch (Exception ex)
+            catch (OSGeo.FDO.Common.Exception ex)
             {
                 AppConsole.WriteException(ex);
                 HostApplication.Instance.ConnectionManager.RemoveConnection(srcName);
@@ -114,62 +142,60 @@ namespace FdoToolbox.Core
             }
         }
 
+        private static PropertyDefinition GetPropertyDefinition(ClassDefinition classDef, string sourceProperty)
+        {
+            int idx = classDef.Properties.IndexOf(sourceProperty);
+            if (idx < 0)
+                return null;
+            return classDef.Properties[idx];
+        }
+
+        private static ClassDefinition FindClass(FeatureSchemaCollection schemas, string className)
+        {
+            foreach (FeatureSchema schema in schemas)
+            {
+                int idx = schema.Classes.IndexOf(className);
+                if (idx >= 0)
+                    return schema.Classes[idx];
+            }
+            return null;
+        }
+
         private static void SaveBulkCopy(BulkCopyTask task, string configFile)
         {
-            //TODO: Do something more elegant.
-            string configTemplate =
-@"<?xml version=""1.0""?>
-<BulkCopyTask name=""{0}"">
-    <BulkCopySource>
-        <Provider>{1}</Provider>
-        <ConnectionString>{2}</ConnectionString>
-        <FeatureSchema>{3}</FeatureSchema>
-        <Class>{4}</Class>
-    </BulkCopySource>
-    <BulkCopyTarget>
-        <Provider>{5}</Provider>
-        <ConnectionString>{6}</ConnectionString>
-        <FeatureSchema>{7}</FeatureSchema>
-        <Class>{8}</Class>
-    </BulkCopyTarget>
-    <PropertyMappings>
-        {9}
-    </PropertyMappings>
-    <BulkCopyOptions>
-        <CoerceDataTypes>{10}</CoerceDataTypes>
-        <FeatureLimit>{11}</FeatureLimit>
-        <DeleteSourceBeforeCopy>{12}</DeleteSourceBeforeCopy>
-        <TransformCoordinates>{13}</TransformCoordinates>
-    </BulkCopyOptions>
-</BulkCopyTask>
-";
-            string mappingsXml = string.Empty;
-            foreach (string srcPropName in task.Source.SourcePropertyNames)
+            ClassCopyOptions[] cOptions = task.Options.GetClassCopyOptions();
+            string classMappingXml = string.Empty;
+            foreach (ClassCopyOptions copt in cOptions)
             {
-                mappingsXml += string.Format("<Mapping source=\"{0}\" target=\"{1}\" />", srcPropName, task.Source.GetTargetPropertyName(srcPropName));
+                bool delete = false;
+                string srcClass = copt.ClassName;
+                string destClass = copt.TargetClassName;
+                string mappingsXml = string.Empty;
+                foreach (string propertyName in copt.PropertyNames)
+                {
+                    string targetPropertyName = copt.GetTargetPropertyName(propertyName);
+                    mappingsXml += string.Format(Properties.Resources.PropertyMapping, propertyName, targetPropertyName) + "\n";
+                }
+                classMappingXml += string.Format(Properties.Resources.ClassMapping, delete, srcClass, destClass, mappingsXml) + "\n";
             }
-            string xml = string.Format(
-                configTemplate,
+            string configXml = string.Format(
+                Properties.Resources.BulkCopyTask,
                 task.Name,
-                task.Source.ConnInfo.Connection.ConnectionInfo.ProviderName,
-                task.Source.ConnInfo.Connection.ConnectionString,
-                task.Source.SchemaName,
-                task.Source.ClassName,
-                task.Target.ConnInfo.Connection.ConnectionInfo.ProviderName,
-                task.Target.ConnInfo.Connection.ConnectionString,
-                task.Target.SchemaName,
-                task.Target.ClassName,
-                mappingsXml,
-                task.CoerceDataTypes,
-                task.Source.FeatureLimit,
-                task.Target.DeleteBeforeCopy,
-                task.TransformCoordinates);
-
+                task.Options.Source.Connection.ConnectionInfo.ProviderName,
+                task.Options.Source.Connection.ConnectionString,
+                task.Options.SourceSchemaName,
+                task.Options.Target.Connection.ConnectionInfo.ProviderName,
+                task.Options.Target.Connection.ConnectionString,
+                task.Options.TargetSchemaName,
+                classMappingXml,
+                task.Options.CopySpatialContexts,
+                task.Options.CoerceDataTypes
+            );
             System.IO.File.Delete(configFile);
             using (XmlTextWriter writer = new XmlTextWriter(configFile, Encoding.UTF8))
             {
                 writer.Formatting = Formatting.Indented;
-                writer.WriteRaw(xml);
+                writer.WriteRaw(configXml);
                 writer.Close();
             }
         }

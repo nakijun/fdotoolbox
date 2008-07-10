@@ -96,6 +96,34 @@ namespace FdoToolbox.Core.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;BulkCopyTask name=&quot;{0}&quot;&gt;
+        ///	&lt;Source&gt;
+        ///		&lt;Provider&gt;{1}&lt;/Provider&gt;
+        ///		&lt;ConnectionString&gt;{2}&lt;/ConnectionString&gt;
+        ///		&lt;Schema&gt;{3}&lt;/Schema&gt;
+        ///	&lt;/Source&gt;
+        ///	&lt;Target&gt;
+        ///		&lt;Provider&gt;{4}&lt;/Provider&gt;
+        ///		&lt;ConnectionString&gt;{5}&lt;/ConnectionString&gt;
+        ///		&lt;Schema&gt;{6}&lt;/Schema&gt;
+        ///	&lt;/Target&gt;
+        ///	&lt;ClassMappings&gt;
+        ///		{7}
+        ///	&lt;/ClassMappings&gt;
+        ///	&lt;BulkCopyOptions&gt;
+        ///		&lt;CopySpatialContexts&gt;{8}&lt;/CopySpatialContexts&gt;
+        ///		&lt;CoerceDataTypes&gt;{9}&lt;/CoerceDataTypes&gt;
+        ///	&lt;/BulkCopyOptions&gt;
+        ///&lt;/BulkCopyTask&gt;.
+        /// </summary>
+        internal static string BulkCopyTask {
+            get {
+                return ResourceManager.GetString("BulkCopyTask", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap chart_organisation {
             get {
                 object obj = ResourceManager.GetObject("chart_organisation", resourceCulture);
@@ -114,6 +142,22 @@ namespace FdoToolbox.Core.Properties {
             get {
                 object obj = ResourceManager.GetObject("chart_organisation_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Mapping&gt;
+        ///	&lt;DeleteTarget&gt;{0}&lt;/DeleteTarget&gt;
+        ///	&lt;SourceClass&gt;{1}&lt;/SourceClass&gt;
+        ///	&lt;TargetClass&gt;{2}&lt;/TargetClass&gt;
+        ///	&lt;Properties&gt;
+        ///		{3}
+        ///	&lt;/Properties&gt;
+        ///&lt;/Mapping&gt;.
+        /// </summary>
+        internal static string ClassMapping {
+            get {
+                return ResourceManager.GetString("ClassMapping", resourceCulture);
             }
         }
         
@@ -201,7 +245,8 @@ namespace FdoToolbox.Core.Properties {
         ///
         ///Edit this file to customise the application menu.
         ///
-        ///Commands that don&apos;t exist won&apos;t be shown in the menu.
+        ///Commands that don&apos;t exist or cannot be executed from the user interface 
+        ///won&apos;t be shown in the menu.
         ///
         ///DO NOT DELETE THIS FILE!!!
         ///--&gt;
@@ -215,8 +260,7 @@ namespace FdoToolbox.Core.Properties {
         ///	&lt;Menu name=&quot;Tools&quot;&gt;
         ///		&lt;SubMenu name=&quot;FDO&quot;&gt;
         ///			&lt;Command name=&quot;regprovider&quot; /&gt;
-        ///			&lt;Command name=&quot;unregprovider&quot; /&gt;
-        ///			&lt;Command name=&quot;listproviders [rest of string was truncated]&quot;;.
+        ///			&lt;Command name=&quot;un [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MenuMap {
             get {
@@ -226,19 +270,22 @@ namespace FdoToolbox.Core.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;!-- 
+        ///Object Explorer menu definition file. 
+        ///
+        ///Edit this file to customise the Object Explorer menus.
+        ///
+        ///Commands that don&apos;t exist or cannot be executed from the user interface 
+        ///won&apos;t be shown in the menu.
+        ///
+        ///DO NOT DELETE THIS FILE!!!
+        ///--&gt;
         ///&lt;ObjectExplorer&gt;
         ///	&lt;Toolbar&gt;
         ///		&lt;Menu name=&quot;New&quot; resource=&quot;page_white&quot;&gt;
         ///			&lt;SubMenu name=&quot;Connection&quot; resource=&quot;database_connect&quot;&gt;
         ///				&lt;Command name=&quot;sdfconnect&quot; displayName=&quot;SDF&quot; /&gt;
-        ///				&lt;Command name=&quot;shpconnect&quot; displayName=&quot;SHP&quot; /&gt;
-        ///				&lt;Command name=&quot;connect&quot; displayName=&quot;Custom&quot; /&gt;
-        ///			&lt;/SubMenu&gt;
-        ///			&lt;SubMenu name=&quot;Task&quot; resource=&quot;application_go&quot;&gt;
-        ///				&lt;Command name=&quot;createbcp&quot; /&gt;
-        ///			&lt;/SubMenu&gt;
-        ///			&lt;SubMenu name=&quot;Data Source&quot; resource=&quot;database&quot;&gt;
-        ///				&lt;Comma [rest of string was truncated]&quot;;.
+        ///				&lt;Command name=&quot;shpconnect&quot; displayNa [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string OEMenuMap {
             get {
@@ -271,6 +318,18 @@ namespace FdoToolbox.Core.Properties {
             get {
                 object obj = ResourceManager.GetObject("plugin_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;PropertyMapping&gt;
+        ///	&lt;SourceProperty&gt;{0}&lt;/SourceProperty&gt;
+        ///	&lt;TargetProperty&gt;{1}&lt;/TargetProperty&gt;
+        ///&lt;/PropertyMapping&gt;.
+        /// </summary>
+        internal static string PropertyMapping {
+            get {
+                return ResourceManager.GetString("PropertyMapping", resourceCulture);
             }
         }
         
