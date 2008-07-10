@@ -480,7 +480,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_REFRESHCONN, "Refresh Connection", Description = "Refresh the selected connection", InvocationType = CommandInvocationType.UI, ImageResourceName = "page_resource")]
+        [Command(CoreModule.CMD_REFRESHCONN, "Refresh Connection", Description = "Refresh the selected connection", InvocationType = CommandInvocationType.UI, ImageResourceName = "page_refresh")]
         public void RefreshConnection()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
