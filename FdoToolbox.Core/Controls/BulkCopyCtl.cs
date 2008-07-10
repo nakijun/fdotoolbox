@@ -430,5 +430,18 @@ namespace FdoToolbox.Core.Controls
         {
             this.Title = "Bulk Copy - " + txtName.Text;
         }
+
+        private void chkCopySpatialContexts_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCopySpatialContexts.Checked)
+            {
+                string connName = cmbDestConn.SelectedItem.ToString();
+                IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connName);
+                if (!conn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
+                {
+                    AppConsole.Alert("Warning", "The target connection does not support multiple spatial contexts\nWhen the bulk copy begins you will be prompted for the spatial context to copy\nThe target spatial context and any data stored in that context will also be destroyed!");
+                }
+            }
+        }
     }
 }

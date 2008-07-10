@@ -34,6 +34,7 @@ using System.Diagnostics;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Common.Io;
 using OSGeo.FDO.Commands.SpatialContext;
+using FdoToolbox.Core.Forms;
 #region overview
 /*
  * Bulk Copy overview
@@ -69,6 +70,8 @@ using OSGeo.FDO.Commands.SpatialContext;
 #endregion
 namespace FdoToolbox.Core
 {
+    public delegate string GetSpatialContextNameMethod(IConnection conn);
+
     public class BulkCopyTask : ITask
     {
         private BulkCopyOptions _Options;
@@ -77,6 +80,24 @@ namespace FdoToolbox.Core
         {
             _Name = name;
             _Options = options;
+            this.SpatialContextPickerMethod += new GetSpatialContextNameMethod(GetSourceSpatialContext);
+        }
+
+        private string GetSourceSpatialContext(IConnection conn)
+        {
+            return SpatialContextPicker.GetName(conn);
+        }
+
+        private GetSpatialContextNameMethod _GetSpatialContextMethod;
+
+        /// <summary>
+        /// Method that returns the name of the chosen spatial context.
+        /// Defaults to prompting a user with a SpatialContextPicker
+        /// </summary>
+        public GetSpatialContextNameMethod SpatialContextPickerMethod
+        {
+            get { return _GetSpatialContextMethod; }
+            set { _GetSpatialContextMethod = value; }
         }
 
         public BulkCopyOptions Options
@@ -117,32 +138,7 @@ namespace FdoToolbox.Core
             }
             if (_Options.CopySpatialContexts)
             {
-                SendMessage("Copying spatial contexts to destination");
-                using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
-                {
-                    using (ISpatialContextReader reader = cmd.Execute())
-                    {
-                        while (reader.ReadNext())
-                        {
-                            using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
-                            {
-                                string name = reader.GetName();
-                                SendMessage("Copying spatial context: " + name);
-                                create.CoordinateSystem = reader.GetCoordinateSystem();
-                                create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                                create.Description = reader.GetDescription();
-                                create.Extent = reader.GetExtent();
-                                create.ExtentType = reader.GetExtentType();
-                                create.Name = name;
-                                create.UpdateExisting = true;
-                                create.XYTolerance = reader.GetXYTolerance();
-                                create.ZTolerance = reader.GetZTolerance();
-
-                                create.Execute();
-                            }
-                        }
-                    }
-                }
+                CopySpatialContexts(srcConn, destConn);
             }
             SendMessage("Begin bulk copy of classes");
             int total = 0;
@@ -221,6 +217,94 @@ namespace FdoToolbox.Core
             watch.Stop();
             SendMessage("Bulk Copy Completed in " + watch.ElapsedMilliseconds + "ms");
             AppConsole.Alert("Bulk Copy", total + " features copied in " + watch.ElapsedMilliseconds + "ms");
+        }
+
+        private void CopySpatialContexts(IConnection srcConn, IConnection destConn)
+        {
+            SendMessage("Copying spatial contexts to destination");
+            if (!destConn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
+            {
+                if (this.SpatialContextPickerMethod != null)
+                {
+                    SendMessage("Prompting user for source spatial context");
+                    string contextName = this.SpatialContextPickerMethod(srcConn);
+                    //Get source spatial context 
+                    using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+                    {
+                        using (ISpatialContextReader reader = cmd.Execute())
+                        {
+                            while (reader.ReadNext())
+                            {
+                                if (reader.GetName() == contextName)
+                                {
+                                    SendMessage("Found source spatial context");
+                                    List<string> deleteList = new List<string>();
+                                    using (IGetSpatialContexts targetContexts = destConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+                                    {
+                                        using (ISpatialContextReader targetReader = targetContexts.Execute())
+                                        {
+                                            while (targetReader.ReadNext())
+                                            {
+                                                deleteList.Add(targetReader.GetName());
+                                            }
+                                        }
+                                    }
+                                    SendMessage("Deleting all target spatial contexts");
+                                    foreach (string contextToDelete in deleteList)
+                                    {
+                                        using (IDestroySpatialContext destroy = destConn.CreateCommand(CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
+                                        {
+                                            destroy.Name = contextToDelete;
+                                            destroy.Execute();
+                                        }
+                                    }
+                                    SendMessage("Copying selected spatial context to target");
+                                    using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
+                                    {
+                                        create.CoordinateSystem = reader.GetCoordinateSystem();
+                                        create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
+                                        create.Description = reader.GetDescription();
+                                        create.Extent = reader.GetExtent();
+                                        create.ExtentType = reader.GetExtentType();
+                                        create.Name = reader.GetName();
+                                        create.XYTolerance = reader.GetXYTolerance();
+                                        create.ZTolerance = reader.GetZTolerance();
+                                        create.Execute();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+                {
+                    using (ISpatialContextReader reader = cmd.Execute())
+                    {
+                        while (reader.ReadNext())
+                        {
+                            using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
+                            {
+                                string name = reader.GetName();
+                                SendMessage("Copying spatial context: " + name);
+                                create.CoordinateSystem = reader.GetCoordinateSystem();
+                                create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
+                                create.Description = reader.GetDescription();
+                                create.Extent = reader.GetExtent();
+                                create.ExtentType = reader.GetExtentType();
+                                create.Name = name;
+                                create.UpdateExisting = true;
+                                create.XYTolerance = reader.GetXYTolerance();
+                                create.ZTolerance = reader.GetZTolerance();
+
+                                create.Execute();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private FeatureSchema CreateTargetSchema(string sourceSchemaName, IConnection srcConn)
@@ -456,6 +540,12 @@ namespace FdoToolbox.Core
 
         private bool _CopySpatialContexts;
 
+        /// <summary>
+        /// If true copies all source spatial contexts from the source to the
+        /// target. If the target does not support multiple spatial contexts,
+        /// then the target spatial context will be overwritten by the context
+        /// of the user's choice.
+        /// </summary>
         public bool CopySpatialContexts
         {
             get { return _CopySpatialContexts; }
