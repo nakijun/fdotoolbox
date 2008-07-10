@@ -63,7 +63,9 @@ DO NOT DELETE THIS FILE!!!
 		</SelectedConnection>
 		<SelectedTask>
 			<Command name="exectask" />
+			<!--
 			<Command name="edittask" />
+			-->
 			<Command name="deletetask" />
 			<Command name="savetask" />
 		</SelectedTask>

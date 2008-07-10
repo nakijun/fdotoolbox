@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<BulkCopyTask name="{0}">
+	<Source>
+		<Provider>{1}</Provider>
+		<ConnectionString>{2}</ConnectionString>
+		<Schema>{3}</Schema>
+	</Source>
+	<Target>
+		<Provider>{4}</Provider>
+		<ConnectionString>{5}</ConnectionString>
+		<Schema>{6}</Schema>
+	</Target>
+	<ClassMappings>
+		{7}
+	</ClassMappings>
+	<BulkCopyOptions>
+		<CopySpatialContexts>{8}</CopySpatialContexts>
+		<CoerceDataTypes>{9}</CoerceDataTypes>
+	</BulkCopyOptions>
+</BulkCopyTask>

@@ -43,9 +43,15 @@ namespace FdoToolbox.Core.Forms
             this.Text = (task.TaskType == TaskType.BulkCopy) ? "Bulk Copy in progress" : "Database join in progress";
             _Task.OnTaskMessage += new TaskProgressMessageEventHandler(OnTaskMessage);
             _Task.OnItemProcessed += new TaskPercentageEventHandler(OnItemProcessed);
+            _Task.OnLogTaskMessage += new TaskProgressMessageEventHandler(OnLogTaskMessage);
             bgWorker.DoWork += new DoWorkEventHandler(DoWork);
             bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(WorkerCompleted);
             bgWorker.ProgressChanged += new ProgressChangedEventHandler(ProgressChanged);
+        }
+
+        void OnLogTaskMessage(string msg)
+        {
+            AppConsole.WriteLine("[{0}]: {1}", _Task.TaskType, msg);
         }
 
         void ProgressChanged(object sender, ProgressChangedEventArgs e)
