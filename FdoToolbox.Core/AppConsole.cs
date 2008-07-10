@@ -82,7 +82,7 @@ namespace FdoToolbox.Core
 
         public static void WriteException(Exception ex)
         {
-            Err.WriteLine(ex.Message);
+            Err.WriteLine(ex.ToString());
         }
 
         public static void Write(string format, params object [] args)

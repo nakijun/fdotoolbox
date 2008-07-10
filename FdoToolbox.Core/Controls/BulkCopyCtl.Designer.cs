@@ -49,15 +49,24 @@ namespace FdoToolbox.Core.Controls
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.chkCoerceDataTypes = new System.Windows.Forms.CheckBox();
+            this.chkCopySpatialContexts = new System.Windows.Forms.CheckBox();
+            this.chkApplySchema = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.grpSource.SuspendLayout();
             this.grpTarget.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.txtName);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(4, 4);
@@ -95,7 +104,7 @@ namespace FdoToolbox.Core.Controls
             this.grpSource.Controls.Add(this.label2);
             this.grpSource.Location = new System.Drawing.Point(281, 59);
             this.grpSource.Name = "grpSource";
-            this.grpSource.Size = new System.Drawing.Size(246, 86);
+            this.grpSource.Size = new System.Drawing.Size(246, 71);
             this.grpSource.TabIndex = 1;
             this.grpSource.TabStop = false;
             this.grpSource.Text = "Source";
@@ -105,7 +114,7 @@ namespace FdoToolbox.Core.Controls
             this.cmbSrcSchema.DisplayMember = "Name";
             this.cmbSrcSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSrcSchema.FormattingEnabled = true;
-            this.cmbSrcSchema.Location = new System.Drawing.Point(75, 46);
+            this.cmbSrcSchema.Location = new System.Drawing.Point(74, 43);
             this.cmbSrcSchema.Name = "cmbSrcSchema";
             this.cmbSrcSchema.Size = new System.Drawing.Size(160, 21);
             this.cmbSrcSchema.TabIndex = 3;
@@ -115,7 +124,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.cmbSrcConn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSrcConn.FormattingEnabled = true;
-            this.cmbSrcConn.Location = new System.Drawing.Point(75, 19);
+            this.cmbSrcConn.Location = new System.Drawing.Point(74, 16);
             this.cmbSrcConn.Name = "cmbSrcConn";
             this.cmbSrcConn.Size = new System.Drawing.Size(160, 21);
             this.cmbSrcConn.TabIndex = 2;
@@ -124,7 +133,7 @@ namespace FdoToolbox.Core.Controls
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 49);
+            this.label3.Location = new System.Drawing.Point(7, 46);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 1;
@@ -133,7 +142,7 @@ namespace FdoToolbox.Core.Controls
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 22);
+            this.label2.Location = new System.Drawing.Point(7, 19);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 13);
             this.label2.TabIndex = 0;
@@ -146,9 +155,9 @@ namespace FdoToolbox.Core.Controls
             this.grpTarget.Controls.Add(this.cmbDestConn);
             this.grpTarget.Controls.Add(this.label5);
             this.grpTarget.Controls.Add(this.label4);
-            this.grpTarget.Location = new System.Drawing.Point(281, 151);
+            this.grpTarget.Location = new System.Drawing.Point(281, 136);
             this.grpTarget.Name = "grpTarget";
-            this.grpTarget.Size = new System.Drawing.Size(249, 85);
+            this.grpTarget.Size = new System.Drawing.Size(249, 75);
             this.grpTarget.TabIndex = 2;
             this.grpTarget.TabStop = false;
             this.grpTarget.Text = "Target";
@@ -160,7 +169,7 @@ namespace FdoToolbox.Core.Controls
             this.cmbDestSchema.DisplayMember = "Name";
             this.cmbDestSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDestSchema.FormattingEnabled = true;
-            this.cmbDestSchema.Location = new System.Drawing.Point(74, 52);
+            this.cmbDestSchema.Location = new System.Drawing.Point(74, 46);
             this.cmbDestSchema.Name = "cmbDestSchema";
             this.cmbDestSchema.Size = new System.Drawing.Size(160, 21);
             this.cmbDestSchema.TabIndex = 7;
@@ -172,7 +181,7 @@ namespace FdoToolbox.Core.Controls
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbDestConn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDestConn.FormattingEnabled = true;
-            this.cmbDestConn.Location = new System.Drawing.Point(74, 25);
+            this.cmbDestConn.Location = new System.Drawing.Point(74, 19);
             this.cmbDestConn.Name = "cmbDestConn";
             this.cmbDestConn.Size = new System.Drawing.Size(160, 21);
             this.cmbDestConn.TabIndex = 6;
@@ -181,7 +190,7 @@ namespace FdoToolbox.Core.Controls
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 28);
+            this.label5.Location = new System.Drawing.Point(8, 22);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(61, 13);
             this.label5.TabIndex = 4;
@@ -190,7 +199,7 @@ namespace FdoToolbox.Core.Controls
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 55);
+            this.label4.Location = new System.Drawing.Point(8, 49);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 13);
             this.label4.TabIndex = 5;
@@ -226,9 +235,10 @@ namespace FdoToolbox.Core.Controls
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Location = new System.Drawing.Point(281, 242);
+            this.groupBox3.Controls.Add(this.panel1);
+            this.groupBox3.Location = new System.Drawing.Point(281, 217);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(246, 100);
+            this.groupBox3.Size = new System.Drawing.Size(246, 125);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Bulk Copy Options";
@@ -259,6 +269,57 @@ namespace FdoToolbox.Core.Controls
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.chkCoerceDataTypes);
+            this.panel1.Controls.Add(this.chkCopySpatialContexts);
+            this.panel1.Controls.Add(this.chkApplySchema);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(3, 16);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(240, 106);
+            this.panel1.TabIndex = 0;
+            // 
+            // chkCoerceDataTypes
+            // 
+            this.chkCoerceDataTypes.AutoSize = true;
+            this.chkCoerceDataTypes.Enabled = false;
+            this.chkCoerceDataTypes.Location = new System.Drawing.Point(7, 49);
+            this.chkCoerceDataTypes.Name = "chkCoerceDataTypes";
+            this.chkCoerceDataTypes.Size = new System.Drawing.Size(155, 17);
+            this.chkCoerceDataTypes.TabIndex = 5;
+            this.chkCoerceDataTypes.Text = "Coerce Source Data Types";
+            this.toolTip.SetToolTip(this.chkCoerceDataTypes, "If source/target properties are of different types, the conver the source data ty" +
+                    "pe to the target\'s data type");
+            this.chkCoerceDataTypes.UseVisualStyleBackColor = true;
+            // 
+            // chkCopySpatialContexts
+            // 
+            this.chkCopySpatialContexts.AutoSize = true;
+            this.chkCopySpatialContexts.Enabled = false;
+            this.chkCopySpatialContexts.Location = new System.Drawing.Point(8, 26);
+            this.chkCopySpatialContexts.Name = "chkCopySpatialContexts";
+            this.chkCopySpatialContexts.Size = new System.Drawing.Size(129, 17);
+            this.chkCopySpatialContexts.TabIndex = 4;
+            this.chkCopySpatialContexts.Text = "Copy Spatial Contexts";
+            this.toolTip.SetToolTip(this.chkCopySpatialContexts, "Copy spatial contexts defined in the source connection to the target connection");
+            this.chkCopySpatialContexts.UseVisualStyleBackColor = true;
+            // 
+            // chkApplySchema
+            // 
+            this.chkApplySchema.AutoSize = true;
+            this.chkApplySchema.Checked = true;
+            this.chkApplySchema.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkApplySchema.Location = new System.Drawing.Point(8, 3);
+            this.chkApplySchema.Name = "chkApplySchema";
+            this.chkApplySchema.Size = new System.Drawing.Size(230, 17);
+            this.chkApplySchema.TabIndex = 3;
+            this.chkApplySchema.Text = "Apply Schema on target (ignores mappings)";
+            this.toolTip.SetToolTip(this.chkApplySchema, "If checked, will apply the entire source schema to the target (mappings are ignor" +
+                    "ed)");
+            this.chkApplySchema.UseVisualStyleBackColor = true;
+            // 
             // BulkCopyCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,7 +340,10 @@ namespace FdoToolbox.Core.Controls
             this.grpTarget.ResumeLayout(false);
             this.grpTarget.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -305,5 +369,10 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.TreeView mTreeView;
         private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox chkCoerceDataTypes;
+        private System.Windows.Forms.CheckBox chkCopySpatialContexts;
+        private System.Windows.Forms.CheckBox chkApplySchema;
     }
 }

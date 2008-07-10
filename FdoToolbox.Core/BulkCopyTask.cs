@@ -32,6 +32,7 @@ using OSGeo.FDO.ClientServices;
 using OSGeo.FDO.Filter;
 using System.Diagnostics;
 using OSGeo.FDO.Commands.Schema;
+using OSGeo.FDO.Common.Io;
 #region overview
 /*
  * Bulk Copy overview
@@ -102,7 +103,6 @@ namespace FdoToolbox.Core
             ClassCopyOptions[] classesToCopy;
             ValidateBulkCopyOptions(srcConn, out srcClasses, out classesToCopy);
             int classesCopied = 1;
-            SendMessage("Applying schema for target");
             using (IApplySchema apply = destConn.CreateCommand(CommandType.CommandType_ApplySchema) as IApplySchema)
             {
                 FeatureSchema schema = null;
@@ -116,11 +116,12 @@ namespace FdoToolbox.Core
                         if (fs.Name == _Options.TargetSchemaName)
                             schema = fs;
                     }
-                    if (schema == null)
-                        schema = CreateTargetSchema(_Options.SourceSchemaName, srcClasses);
+                    if (_Options.ApplySchemaToTarget || schema == null)
+                        schema = CreateTargetSchema(_Options.SourceSchemaName, srcConn);
                     else
                         schema = UpdateTargetSchema(schema, classesToCopy);
                 }
+                SendMessage("Applying schema for target");
                 apply.FeatureSchema = schema;
                 apply.Execute();
                 SendMessage("Target Schema Applied");
@@ -203,6 +204,33 @@ namespace FdoToolbox.Core
             AppConsole.Alert("Bulk Copy", total + " features copied in " + watch.ElapsedMilliseconds + "ms");
         }
 
+        private FeatureSchema CreateTargetSchema(string sourceSchemaName, IConnection srcConn)
+        {
+            SendMessage("Cloning source schema for target");
+            FeatureSchema fs = null;
+            using (IDescribeSchema desc = srcConn.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            {
+                FeatureSchemaCollection schemas = desc.Execute();
+                fs = schemas[schemas.IndexOf(sourceSchemaName)];
+            }
+
+            if (fs != null)
+            {
+                //FDO doesn't have clone support for schemas so we'll use
+                //in-memory XML serialization as a workaround.
+                using (IoStream stream = new IoMemoryStream())
+                {
+                    fs.WriteXml(stream);
+                    stream.Reset();
+                    FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
+                    newSchemas.ReadXml(stream);
+                    stream.Close();
+                    return newSchemas[0];
+                }
+            }
+            throw new BulkCopyException("Could not find source schema to clone: " + sourceSchemaName);
+        }
+
         /// <summary>
         /// Validates the options supplied for this bulk copy task
         /// </summary>
@@ -216,7 +244,10 @@ namespace FdoToolbox.Core
 
             if (string.IsNullOrEmpty(_Options.SourceSchemaName))
                 throw new BulkCopyException("Source schema name not defined");
-
+            
+            if (!Array.Exists<int>(_Options.Target.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)CommandType.CommandType_ApplySchema; }))
+                throw new BulkCopyException("Target connection does not support IApplySchema");
+            
             //Get source schema classes
             srcClasses = null;
             using (IDescribeSchema desc = srcConn.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
@@ -232,6 +263,18 @@ namespace FdoToolbox.Core
                 throw new BulkCopyException("Unable to get classes of feature schema: " + _Options.SourceSchemaName);
 
             classesToCopy = _Options.GetClassCopyOptions();
+            
+            if (_Options.ApplySchemaToTarget)
+            {
+                //Include *all* classes and *all* properties
+                _Options.ClearClassCopyOptions();
+                foreach (ClassDefinition classDef in srcClasses)
+                {
+                    _Options.AddClassCopyOption(new ClassCopyOptions(classDef, true));
+                }
+                classesToCopy = _Options.GetClassCopyOptions();
+            }
+
             bool checkedForDelete = false;
             foreach (ClassCopyOptions copyOpts in classesToCopy)
             {
@@ -315,32 +358,6 @@ namespace FdoToolbox.Core
             return targetSchema;
         }
 
-        private FeatureSchema CreateTargetSchema(string name, ClassCollection classes)
-        {
-            throw new NotImplementedException();
-            /*
-            SendMessage("Creating target schema");
-            FeatureSchema schema = new FeatureSchema(name, "");
-            ClassCopyOptions[] classOpts = _Options.GetSourceClasses();
-            foreach (ClassCopyOptions copyOpts in classOpts)
-            {
-                ClassDefinition classDef = classes[classes.IndexOf(copyOpts.ClassName)];
-                ClassDefinition clonedClass = null;
-                switch (classDef.ClassType)
-                {
-                    case ClassType.ClassType_Class:
-                        clonedClass = CloneClass((Class)classDef, copyOpts);
-                        break;
-                    case ClassType.ClassType_FeatureClass:
-                        clonedClass = CloneFeatureClass((FeatureClass)classDef, copyOpts);
-                        break;
-                }
-                if (clonedClass != null)
-                    schema.Classes.Add(clonedClass);
-            }
-            return schema;
-             */
-        }
 
         private int ProcessReader(ClassDefinition classDef, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
         {
@@ -486,7 +503,18 @@ namespace FdoToolbox.Core
             get { return _CoerceDataTypes; }
             set { _CoerceDataTypes = value; }
         }
-	
+
+        private bool _ApplySchemaToTarget;
+
+        /// <summary>
+        /// If true, the mappings are ignored and the full source schema
+        /// will be applied to the target
+        /// </summary>
+        public bool ApplySchemaToTarget
+        {
+            get { return _ApplySchemaToTarget; }
+            set { _ApplySchemaToTarget = value; }
+        }
 
         /// <summary>
         /// The source schema
@@ -515,6 +543,14 @@ namespace FdoToolbox.Core
         public void AddClassCopyOption(ClassCopyOptions options)
         {
             _SourceClasses.Add(options);
+        }
+
+        /// <summary>
+        /// Removes all added class copy options
+        /// </summary>
+        public void ClearClassCopyOptions()
+        {
+            _SourceClasses.Clear();
         }
 
         /// <summary>
@@ -562,6 +598,24 @@ namespace FdoToolbox.Core
             _ClassDef = classDef;
             _PropertyMappings = new NameValueCollection();
             _PropertyDefinitions = new Dictionary<string, PropertyDefinition>();
+        }
+
+        /// <summary>
+        /// Alternative constructor.
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <param name="includeAllProperties"></param>
+        public ClassCopyOptions(ClassDefinition classDef, bool includeAllProperties)
+            : this(classDef)
+        {
+            if (includeAllProperties)
+            {
+                foreach (PropertyDefinition def in classDef.Properties)
+                {
+                    this.AddProperty(def, def.Name);
+                }
+                this.TargetClassName = _ClassDef.Name;
+            }
         }
 
         public ClassDefinition SourceClassDefinition
