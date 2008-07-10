@@ -86,7 +86,16 @@ namespace FdoToolbox.Core.Controls
             using (IDescribeSchema cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
             {
                 FeatureSchemaCollection schemas = cmd.Execute();
-                cmbSrcSchema.DataSource = schemas;
+                if(schemas.Count == 0)
+                {
+                    AppConsole.Alert("Error", "The source connection is not a valid bulk copy source");
+                    btnSave.Enabled = false;
+                }
+                else
+                {
+                    btnSave.Enabled = false;
+                    cmbSrcSchema.DataSource = schemas;
+                }
             }
         }
 
@@ -98,6 +107,7 @@ namespace FdoToolbox.Core.Controls
             {
                 FeatureSchemaCollection schemas = cmd.Execute();
                 cmbDestSchema.DataSource = schemas;
+                chkApplySchema.Checked = (schemas.Count == 0);
             }
         }
 
@@ -147,25 +157,28 @@ namespace FdoToolbox.Core.Controls
 
         private void cmbDestSchema_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FeatureSchema schema = cmbDestSchema.SelectedItem as FeatureSchema;
-            if (schema != null)
+            ctxTargetClasses.Items.Clear();
+            ResetClassNodes();
+            if (!chkApplySchema.Checked)
             {
-                ctxTargetClasses.Items.Clear();
-                ResetClassNodes();
-                foreach (ClassDefinition classDef in schema.Classes)
-                {
-                    ToolStripItem tsi = new ToolStripMenuItem();
-                    string className = classDef.Name;
-                    tsi.Name = className;
-                    tsi.Text = "Map class to: " + className;
-                    tsi.Click += delegate(object obj, EventArgs evt) 
+                FeatureSchema schema = cmbDestSchema.SelectedItem as FeatureSchema;
+                if (schema != null)
+                {   
+                    foreach (ClassDefinition classDef in schema.Classes)
                     {
-                        TreeNode classNode = mTreeView.SelectedNode;
-                        classNode.Tag = className;
-                        classNode.Text = classNode.Name + " (=> " + className + ")";
-                        ResetPropertyNodes(classNode, tsi.Name);
-                    };
-                    ctxTargetClasses.Items.Add(tsi);
+                        ToolStripItem tsi = new ToolStripMenuItem();
+                        string className = classDef.Name;
+                        tsi.Name = className;
+                        tsi.Text = "Map class to: " + className;
+                        tsi.Click += delegate(object obj, EventArgs evt)
+                        {
+                            TreeNode classNode = mTreeView.SelectedNode;
+                            classNode.Tag = className;
+                            classNode.Text = classNode.Name + " (=> " + className + ")";
+                            ResetPropertyNodes(classNode, tsi.Name);
+                        };
+                        ctxTargetClasses.Items.Add(tsi);
+                    }
                 }
             }
         }
@@ -361,6 +374,9 @@ namespace FdoToolbox.Core.Controls
                     HostApplication.Instance.ConnectionManager.GetConnection(destConnName)
                 )
             );
+            options.ApplySchemaToTarget = chkApplySchema.Checked;
+            options.CoerceDataTypes = chkCoerceDataTypes.Checked;
+            options.CopySpatialContexts = chkCopySpatialContexts.Checked;
             foreach (TreeNode classNode in GetRootNode().Nodes)
             {
                 //A tag set on the class node indicates this class is to be copied
@@ -388,7 +404,8 @@ namespace FdoToolbox.Core.Controls
                 }
             }
             options.SourceSchemaName = (cmbSrcSchema.SelectedItem as FeatureSchema).Name;
-            options.TargetSchemaName = (cmbDestSchema.SelectedItem as FeatureSchema).Name;
+            if(!options.ApplySchemaToTarget) 
+                options.TargetSchemaName = (cmbDestSchema.SelectedItem as FeatureSchema).Name;
             BulkCopyTask task = new BulkCopyTask(txtName.Text, options);
             HostApplication.Instance.TaskManager.AddTask(task);
             this.Close();

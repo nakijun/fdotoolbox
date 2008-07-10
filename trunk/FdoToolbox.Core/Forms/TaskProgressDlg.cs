@@ -66,8 +66,15 @@ namespace FdoToolbox.Core.Forms
 
         void WorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            btnOK.Enabled = true;
-            btnCancel.Enabled = false;
+            if (e.Cancelled)
+            {
+                lblMessage.Text = "Bulk Copy Cancelled";
+            }
+            else
+            {
+                btnOK.Enabled = true;
+                btnCancel.Enabled = false;
+            }
         }
 
         void DoWork(object sender, DoWorkEventArgs e)
@@ -96,6 +103,7 @@ namespace FdoToolbox.Core.Forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            bgWorker.CancelAsync();
             this.DialogResult = DialogResult.Cancel;
         }
     }

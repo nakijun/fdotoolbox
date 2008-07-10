@@ -126,13 +126,23 @@ namespace FdoToolbox.Core.Controls
                             DataTable table = new DataTable(cmbClass.SelectedItem.ToString());
                             int count = 0;
                             PrepareGrid(table, reader.GetClassDefinition());
-                            while (reader.ReadNext() && count < limit)
+                            try
                             {
-                                ProcessReader(table, reader);
-                                count++;
+                                while (reader.ReadNext() && count < limit)
+                                {
+                                    ProcessReader(table, reader);
+                                    count++;
+                                }
                             }
-                            reader.Close();
-                            grdPreview.DataSource = table;
+                            catch (OSGeo.FDO.Common.Exception ex)
+                            {
+                                throw ex;
+                            }
+                            finally
+                            {
+                                reader.Close();
+                                grdPreview.DataSource = table;
+                            }
                         }
                     }
                 }
@@ -206,9 +216,22 @@ namespace FdoToolbox.Core.Controls
                     }
                     else if (geomDef != null)
                     {
-                        using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(reader.GetGeometry(geomDef.Name)))
+                        byte[] binGeom = reader.GetGeometry(geomDef.Name);
+                        using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(binGeom))
                         {
-                            row[geomDef.Name] = geom.Text;
+                            //FIXME: 
+                            //The line below when called many times over will eventually
+                            //cause "Memory allocation failed"
+                            //
+                            //API docs state that calling get_Text() on a 
+                            //large number of IGeometry objects that are retained 
+                            //in memory may cause a noticable increase in memory 
+                            //consumption. 
+                            //
+                            //Does not calling Dispose() or wrapping the
+                            //IGeometry in a using block solve this problem?
+                            string text = geom.Text;
+                            row[geomDef.Name] = text;
                         }
                     }
                 }
