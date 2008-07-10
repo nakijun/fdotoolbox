@@ -97,6 +97,7 @@ namespace FdoToolbox.Core
         public void CreateSDF()
         {
             SaveFileDialog diag = new SaveFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Create SDF";
             diag.Filter = "SDF File (*.sdf)|*.sdf";
             if (diag.ShowDialog() == DialogResult.OK)
@@ -124,6 +125,7 @@ namespace FdoToolbox.Core
             //create a Class Definition up-front as part of the process.
 
             SaveFileDialog diag = new SaveFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Create SHP file";
             diag.Filter = "SHP File (*.shp)|*.shp";
             if(diag.ShowDialog() == DialogResult.OK)

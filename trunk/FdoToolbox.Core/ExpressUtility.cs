@@ -36,6 +36,7 @@ namespace FdoToolbox.Core
         {
             IConnection conn = null;
             OpenFileDialog diag = new OpenFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Create SDF connection";
             diag.Filter = "SDF Files (*.sdf)|*.sdf";
             diag.Multiselect = false;
@@ -53,6 +54,7 @@ namespace FdoToolbox.Core
         {
             IConnection conn = null;
             OpenFileDialog diag = new OpenFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
             diag.Title = "Create SHP connection";
             diag.Filter = "SHP Files (*.shp)|*.shp";
             diag.Multiselect = false;
@@ -69,6 +71,7 @@ namespace FdoToolbox.Core
         {
             IConnection conn = null;
             FolderBrowserDialog diag = new FolderBrowserDialog();
+            diag.SelectedPath = HostApplication.Instance.AppPath;
             diag.Description = "Select the directory that contains the SHP files";
             diag.ShowNewFolderButton = false;
             if (diag.ShowDialog() == DialogResult.OK)
