@@ -159,33 +159,39 @@ namespace FdoToolbox.Core.Controls
             return defs;
         }
 
+        /*
         public override string Title
         {
             get
             {
                 string title = string.Empty;
-                switch (_ClassDef.ClassType)
-                {
-                    case ClassType.ClassType_Class:
-                        title = "Class Definition - " + _ClassDef.Name;
-                        break;
-                    case ClassType.ClassType_FeatureClass:
-                        title = "Feature Class Definition - " + _ClassDef.Name;
-                        break;
-                    case ClassType.ClassType_NetworkClass:
-                        title = "Network Class Definition - " + _ClassDef.Name;
-                        break;
-                    case ClassType.ClassType_NetworkLayerClass:
-                        title = "Network Layer Class Definition - " + _ClassDef.Name;
-                        break;
-                    case ClassType.ClassType_NetworkLinkClass:
-                        title = "Network Link Class Definition - " + _ClassDef.Name;
-                        break;
-                    case ClassType.ClassType_NetworkNodeClass:
-                        title = "Network Node Class Definition - " + _ClassDef.Name;
-                        break;
-                }
+                title = SetTitle(title);
                 return title;
+            }
+        }*/
+
+        private void SetTitle()
+        {
+            switch (_ClassDef.ClassType)
+            {
+                case ClassType.ClassType_Class:
+                    this.Title = "Class Definition - " + _ClassDef.Name;
+                    break;
+                case ClassType.ClassType_FeatureClass:
+                    this.Title = "Feature Class Definition - " + _ClassDef.Name;
+                    break;
+                case ClassType.ClassType_NetworkClass:
+                    this.Title = "Network Class Definition - " + _ClassDef.Name;
+                    break;
+                case ClassType.ClassType_NetworkLayerClass:
+                    this.Title = "Network Layer Class Definition - " + _ClassDef.Name;
+                    break;
+                case ClassType.ClassType_NetworkLinkClass:
+                    this.Title = "Network Link Class Definition - " + _ClassDef.Name;
+                    break;
+                case ClassType.ClassType_NetworkNodeClass:
+                    this.Title = "Network Node Class Definition - " + _ClassDef.Name;
+                    break;
             }
         }
 

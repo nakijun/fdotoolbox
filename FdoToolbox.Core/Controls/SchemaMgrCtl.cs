@@ -37,6 +37,7 @@ namespace FdoToolbox.Core.Controls
         public SchemaMgrCtl()
         {
             InitializeComponent();
+            this.Title = "Schema Management";
             _bsClasses = new BindingSource();
             _bsSchemas = new BindingSource();
         }
@@ -45,15 +46,7 @@ namespace FdoToolbox.Core.Controls
         private BindingSource _bsClasses;
 
         public event EventHandler OnSchemasApplied;
-
-        public override string Title
-        {
-            get
-            {
-                return "Schema Management";
-            }
-        }
-
+        
         private IConnection _BoundConnection;
          
         public SchemaMgrCtl(IConnection conn)
