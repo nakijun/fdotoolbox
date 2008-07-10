@@ -69,6 +69,7 @@ namespace FdoToolbox.Core
         public const string CMD_REMOVECONN = "removeconn";
         public const string CMD_MANAGESPATIALCONTEXTS = "mansc";
         public const string CMD_RENAMECONNECTION = "renameconn";
+        public const string CMD_REFRESHCONN = "refreshconn";
 
         #endregion
 
@@ -477,6 +478,18 @@ namespace FdoToolbox.Core
                 else
                     AppConsole.Alert("Error", reason);
             }
+        }
+
+        [Command(CoreModule.CMD_REFRESHCONN, "Refresh Connection", Description = "Refresh the selected connection", InvocationType = CommandInvocationType.UI, ImageResourceName = "page_resource")]
+        public void RefreshConnection()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            if (connInfo == null)
+            {
+                AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
+                return;
+            }
+            HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
         }
     }
 }
