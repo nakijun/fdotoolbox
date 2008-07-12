@@ -35,6 +35,8 @@ using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Common.Io;
 using OSGeo.FDO.Commands.SpatialContext;
 using FdoToolbox.Core.Forms;
+using FdoToolbox.Core.Controls;
+using System.IO;
 #region overview
 /*
  * Bulk Copy overview
@@ -54,18 +56,23 @@ using FdoToolbox.Core.Forms;
  * A high level overview of the process is as follows:
  * 
  * for each [source class] to copy
- *      ISelect on that [source class] with the specified list of properties
+ *      ISelect on that [source class] with the specified [list of properties]
  *      for each result from the returned feature reader
  *          prepare an IInsert on the [target class]
  *          add each [source property] reader value using the [target property name]
  *          execute the IInsert
  * 
- * To make the initial implementation simpler, we don't allow the creation 
- * of new classes/properties as this requires cloning feature schemas and 
- * class definitions, something that FDO currently doesn't support.
+ * To make the initial implementation simpler, we don't allow updates on the 
+ * target schema as there would be issues regarding cloning, capabilities and
+ * various corner cases that would need to be resolved.
  * 
- * Creation of non-existent properties and classes will come in a later 
- * release.
+ * Schema/Class creation will be all or nothing. ie. The
+ * following scenarios are supported.
+ * 
+ *  - [Source Schema] to [Empty data store] (full schema/class creation)
+ *  - [Source Schema] to [Target Schema] with all mappings *valid* (no creation)
+ * 
+ * Creation of non-existent properties and classes will come in the future
  */
 #endregion
 namespace FdoToolbox.Core
@@ -75,7 +82,7 @@ namespace FdoToolbox.Core
     public class BulkCopyTask : ITask
     {
         private BulkCopyOptions _Options;
-
+        
         public BulkCopyTask(string name, BulkCopyOptions options)
         {
             _Name = name;
@@ -124,7 +131,11 @@ namespace FdoToolbox.Core
             ClassCollection srcClasses;
             ClassCopyOptions[] classesToCopy;
             ValidateBulkCopyOptions(srcConn, destConn, out srcClasses, out classesToCopy);
-            
+
+            if (_Options.CopySpatialContexts)
+            {
+                CopySpatialContexts(srcConn, destConn);
+            }
             //If target schema is undefined, create it
             if (_Options.ApplySchemaToTarget)
             {
@@ -135,10 +146,6 @@ namespace FdoToolbox.Core
                     apply.Execute();
                     SendMessage("Target Schema Applied");
                 }
-            }
-            if (_Options.CopySpatialContexts)
-            {
-                CopySpatialContexts(srcConn, destConn);
             }
             SendMessage("Begin bulk copy of classes");
             int total = 0;
@@ -250,12 +257,16 @@ namespace FdoToolbox.Core
                                         }
                                     }
                                     SendMessage("Deleting all target spatial contexts");
-                                    foreach (string contextToDelete in deleteList)
+                                    bool targetCanDestroySpatialContext = (Array.Exists<int>(destConn.CommandCapabilities.Commands, delegate(int c) { return c == (int)CommandType.CommandType_DestroySpatialContext; })) ;
+                                    if (targetCanDestroySpatialContext)
                                     {
-                                        using (IDestroySpatialContext destroy = destConn.CreateCommand(CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
+                                        foreach (string contextToDelete in deleteList)
                                         {
-                                            destroy.Name = contextToDelete;
-                                            destroy.Execute();
+                                            using (IDestroySpatialContext destroy = destConn.CreateCommand(CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
+                                            {
+                                                destroy.Name = contextToDelete;
+                                                destroy.Execute();
+                                            }
                                         }
                                     }
                                     SendMessage("Copying selected spatial context to target");
@@ -266,7 +277,12 @@ namespace FdoToolbox.Core
                                         create.Description = reader.GetDescription();
                                         create.Extent = reader.GetExtent();
                                         create.ExtentType = reader.GetExtentType();
-                                        create.Name = reader.GetName();
+                                        //If context was destroyed, use new name otherwise
+                                        //update with the existing name
+                                        if (targetCanDestroySpatialContext)
+                                            create.Name = reader.GetName();
+                                        else
+                                            create.UpdateExisting = true;
                                         create.XYTolerance = reader.GetXYTolerance();
                                         create.ZTolerance = reader.GetZTolerance();
                                         create.Execute();
@@ -289,16 +305,37 @@ namespace FdoToolbox.Core
                             {
                                 string name = reader.GetName();
                                 SendMessage("Copying spatial context: " + name);
-                                create.CoordinateSystem = reader.GetCoordinateSystem();
-                                create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                                create.Description = reader.GetDescription();
-                                create.Extent = reader.GetExtent();
-                                create.ExtentType = reader.GetExtentType();
-                                create.Name = name;
-                                create.UpdateExisting = true;
-                                create.XYTolerance = reader.GetXYTolerance();
-                                create.ZTolerance = reader.GetZTolerance();
-
+                                //SHP-Specific processing (ugh!) It doesn't like it when
+                                //CSName != Spatial Context Name
+                                if(destConn.ConnectionInfo.ProviderName.StartsWith(ExpressUtility.PROVIDER_SHP))
+                                {
+                                    string wkt = reader.GetCoordinateSystemWkt();
+                                    WKTParser parser = new WKTParser(wkt);
+                                    //No wkt. Don't bother creating the context
+                                    if(!string.IsNullOrEmpty(parser.CSName))
+                                    {
+                                        create.CoordinateSystem = parser.CSName;
+                                        create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
+                                        create.Description = reader.GetDescription();
+                                        create.Extent = reader.GetExtent();
+                                        create.ExtentType = reader.GetExtentType();
+                                        create.Name = parser.CSName;
+                                        create.XYTolerance = reader.GetXYTolerance();
+                                        create.ZTolerance = reader.GetZTolerance();
+                                    }
+                                }
+                                else
+                                {
+                                    create.CoordinateSystem = reader.GetCoordinateSystem();
+                                    create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
+                                    create.Description = reader.GetDescription();
+                                    create.Extent = reader.GetExtent();
+                                    create.ExtentType = reader.GetExtentType();
+                                    create.Name = name;
+                                    create.UpdateExisting = true;
+                                    create.XYTolerance = reader.GetXYTolerance();
+                                    create.ZTolerance = reader.GetZTolerance();
+                                }
                                 create.Execute();
                             }
                         }
@@ -319,19 +356,24 @@ namespace FdoToolbox.Core
 
             if (fs != null)
             {
-                //FDO doesn't have clone support for schemas so we'll use
-                //in-memory XML serialization as a workaround.
-                using (IoStream stream = new IoMemoryStream())
-                {
-                    fs.WriteXml(stream);
-                    stream.Reset();
-                    FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
-                    newSchemas.ReadXml(stream);
-                    stream.Close();
-                    return newSchemas[0];
-                }
+                return CloneSchema(fs);
             }
             throw new BulkCopyException("Could not find source schema to clone: " + sourceSchemaName);
+        }
+
+        public static FeatureSchema CloneSchema(FeatureSchema fs)
+        {
+            //FDO doesn't have clone support for schemas so we'll use
+            //in-memory XML serialization as a workaround.
+            using (IoStream stream = new IoMemoryStream())
+            {
+                fs.WriteXml(stream);
+                stream.Reset();
+                FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
+                newSchemas.ReadXml(stream);
+                stream.Close();
+                return newSchemas[0];
+            }
         }
 
         /// <summary>
@@ -353,16 +395,7 @@ namespace FdoToolbox.Core
                 throw new BulkCopyException("Target connection does not support IApplySchema");
 
             //Get source schema classes
-            srcClasses = null;
-            using (IDescribeSchema desc = srcConn.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
-            {
-                FeatureSchemaCollection srcSchemas = desc.Execute();
-                foreach (FeatureSchema schema in srcSchemas)
-                {
-                    if (schema.Name == _Options.SourceSchemaName)
-                        srcClasses = schema.Classes;
-                }
-            }
+            srcClasses = GetSourceClasses(_Options);
             if (srcClasses == null)
                 throw new BulkCopyException("Unable to get classes of feature schema: " + _Options.SourceSchemaName);
 
@@ -370,13 +403,7 @@ namespace FdoToolbox.Core
             
             if (_Options.ApplySchemaToTarget)
             {
-                //Include *all* classes and *all* properties
-                _Options.ClearClassCopyOptions();
-                foreach (ClassDefinition classDef in srcClasses)
-                {
-                    _Options.AddClassCopyOption(new ClassCopyOptions(classDef, true));
-                }
-                classesToCopy = _Options.GetClassCopyOptions();
+                classesToCopy = GetAllClassCopyOptions(_Options, srcClasses);
             }
 
             bool checkedForDelete = false;
@@ -407,6 +434,33 @@ namespace FdoToolbox.Core
                 }
             }
             SendMessage("Validation Completed");
+        }
+
+        public static ClassCopyOptions[] GetAllClassCopyOptions(BulkCopyOptions options, ClassCollection srcClasses)
+        {
+            //Include *all* classes and *all* properties
+            options.ClearClassCopyOptions();
+            foreach (ClassDefinition classDef in srcClasses)
+            {
+                options.AddClassCopyOption(new ClassCopyOptions(classDef, true));
+            }
+            return options.GetClassCopyOptions();;
+        }
+
+        public static ClassCollection GetSourceClasses(BulkCopyOptions options)
+        {
+            IConnection srcConn = options.Source.Connection;
+            ClassCollection srcClasses = null;
+            using (IDescribeSchema desc = srcConn.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            {
+                FeatureSchemaCollection srcSchemas = desc.Execute();
+                foreach (FeatureSchema schema in srcSchemas)
+                {
+                    if (schema.Name == options.SourceSchemaName)
+                        srcClasses = schema.Classes;
+                }
+            }
+            return srcClasses;
         }
 
         private int ProcessReader(ClassDefinition classDef, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
@@ -510,7 +564,7 @@ namespace FdoToolbox.Core
         public event TaskProgressMessageEventHandler OnLogTaskMessage;
     }
 
-    public class BulkCopyOptions
+    public class BulkCopyOptions : IDisposable
     {
         private ConnectionInfo _Source;
         private ConnectionInfo _Target;
@@ -519,11 +573,105 @@ namespace FdoToolbox.Core
         private string _SourceSchemaName;
         private List<ClassCopyOptions> _SourceClasses;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
         public BulkCopyOptions(ConnectionInfo source, ConnectionInfo target)
         {
             _Source = source;
             _Target = target;
             _SourceClasses = new List<ClassCopyOptions>();
+        }
+
+        private bool _ExpressMode = false;
+
+        /// <summary>
+        /// Constructor for express bulk copy tasks. The target will be created
+        /// and all necessary connections will be set up. Parameters will be set
+        /// up so that ApplySchemaToTarget is true
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <param name="sourceFile"></param>
+        /// <param name="targetFile"></param>
+        public BulkCopyOptions(ExpressProvider source, ExpressProvider target, string sourceFile, string targetFile)
+        {
+            _SourceClasses = new List<ClassCopyOptions>();
+            _ExpressMode = true;
+            //Delete target file
+            
+            IConnection src = null;
+            IConnection dest = null;
+
+            switch (source)
+            {
+                case ExpressProvider.SDF:
+                    src = FeatureAccessManager.GetConnectionManager().CreateConnection(ExpressUtility.PROVIDER_SDF);
+                    src.ConnectionString = string.Format(ExpressUtility.CONN_FMT_SDF, sourceFile);
+                    break;
+                case ExpressProvider.SHP:
+                    src = FeatureAccessManager.GetConnectionManager().CreateConnection(ExpressUtility.PROVIDER_SHP);
+                    src.ConnectionString = string.Format(ExpressUtility.CONN_FMT_SHP, sourceFile);
+                    break;
+            }
+
+            src.Open();
+
+            //SDF and SHP are single schema, so grab the first schema from IDescribeSchema
+            //and set it as the source schema name
+            using (IDescribeSchema desc = src.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            {
+                FeatureSchemaCollection schemas = desc.Execute();
+                if (schemas.Count == 0)
+                    throw new BulkCopyException("No schemas found on source connection");
+                this.SourceSchemaName = schemas[0].Name;
+            }
+
+            switch (target)
+            {
+                case ExpressProvider.SDF:
+                    {
+                        ExpressUtility.CreateSDF(targetFile);
+                        dest = FeatureAccessManager.GetConnectionManager().CreateConnection(ExpressUtility.PROVIDER_SDF);
+                        dest.ConnectionString = string.Format(ExpressUtility.CONN_FMT_SDF, targetFile);
+                    }
+                    break;
+                case ExpressProvider.SHP:
+                    {
+                        dest = FeatureAccessManager.GetConnectionManager().CreateConnection(ExpressUtility.PROVIDER_SHP);
+                        string name = Path.GetFileNameWithoutExtension(targetFile);
+                        string path = Path.GetDirectoryName(targetFile);
+                        DeleteRelatedShpFiles(path, name);
+                        dest.ConnectionString = string.Format(ExpressUtility.CONN_FMT_SHP, path);
+                    }
+                    break;
+            }
+
+            dest.Open();
+
+            if (src != null && dest != null)
+            {
+                this.Source = new ConnectionInfo("SOURCE", src);
+                this.Target = new ConnectionInfo("TARGET", dest);
+            }
+        }
+
+        /// <summary>
+        /// Deletes a SHP file and all its related files
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="name"></param>
+        private void DeleteRelatedShpFiles(string path, string name)
+        {
+            string[] extensions = { "shp", "dbf", "prj", "shx", "idx", "cpg" };
+            foreach (string ext in extensions)
+            {
+                string file = Path.Combine(path, string.Format("{0}.{1}", name, ext));
+                File.Delete(file);
+                AppConsole.WriteLine("[Express Bulk Copy]: Deleted file {0}", file);
+            }
         }
 
         public ConnectionInfo Source
@@ -535,7 +683,7 @@ namespace FdoToolbox.Core
         public ConnectionInfo Target
         {
             get { return _Target; }
-            set { _Source = value; }
+            set { _Target = value; }
         }
 
         private bool _CopySpatialContexts;
@@ -617,6 +765,22 @@ namespace FdoToolbox.Core
         {
             return _SourceClasses.ToArray();
         }
+
+        public void Dispose()
+        {
+            //Since connections in express mode are created outside of the
+            //connection manager's knowledge we have to clean them up explicitly
+            if (_ExpressMode)
+            {
+                if (this.Source.Connection.ConnectionState == ConnectionState.ConnectionState_Open)
+                    this.Source.Connection.Close();
+                if (this.Target.Connection.ConnectionState == ConnectionState.ConnectionState_Open)
+                    this.Target.Connection.Close();
+
+                this.Source.Connection.Dispose();
+                this.Target.Connection.Dispose();
+            }
+        }
     }
 
     /// <summary>
@@ -657,7 +821,7 @@ namespace FdoToolbox.Core
         }
 
         /// <summary>
-        /// Alternative constructor.
+        /// Alternative constructor. Used for express BCP tasks
         /// </summary>
         /// <param name="classDef"></param>
         /// <param name="includeAllProperties"></param>
@@ -668,6 +832,13 @@ namespace FdoToolbox.Core
             {
                 foreach (PropertyDefinition def in classDef.Properties)
                 {
+                    //Omit any non-writable properties
+                    DataPropertyDefinition dataDef = def as DataPropertyDefinition;
+                    GeometricPropertyDefinition geomDef = def as GeometricPropertyDefinition;
+                    if (dataDef != null && dataDef.ReadOnly)
+                        continue;
+                    if (geomDef != null && geomDef.ReadOnly)
+                        continue;
                     this.AddProperty(def, def.Name);
                 }
                 this.TargetClassName = _ClassDef.Name;

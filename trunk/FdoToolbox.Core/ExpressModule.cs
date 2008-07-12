@@ -184,25 +184,29 @@ namespace FdoToolbox.Core
         [Command(ExpressModule.CMD_SDF2SDF, "SDF to SDF", "Copy feature data from an SDF data source to another SDF data source")]
         public void SdfToSdf()
         {
-            throw new NotImplementedException();
+            ExpressBulkCopyCtl ctl = new ExpressBulkCopyCtl(ExpressProvider.SDF, ExpressProvider.SDF);
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(ExpressModule.CMD_SHP2SHP, "SHP to SHP", "Copy feature data from an SHP data source to another SHP data source")]
         public void ShpToShp()
         {
-            throw new NotImplementedException();
+            ExpressBulkCopyCtl ctl = new ExpressBulkCopyCtl(ExpressProvider.SHP, ExpressProvider.SHP);
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(ExpressModule.CMD_SHP2SDF, "SHP to SDF", "Copy feature data from an SHP data source to an SDF data source")]
         public void ShpToSdf()
         {
-            throw new NotImplementedException();
+            ExpressBulkCopyCtl ctl = new ExpressBulkCopyCtl(ExpressProvider.SHP, ExpressProvider.SDF);
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(ExpressModule.CMD_SDF2SHP, "SDF to SHP", "Copy feature data from an SDF data source to an SHP data source")]
         public void SdfToShp()
         {
-            throw new NotImplementedException();
+            ExpressBulkCopyCtl ctl = new ExpressBulkCopyCtl(ExpressProvider.SDF, ExpressProvider.SHP);
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
     }
 }
