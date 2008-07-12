@@ -32,6 +32,12 @@ namespace FdoToolbox.Core
     /// </summary>
     public class ExpressUtility
     {
+        public const string PROVIDER_SDF = "OSGeo.SDF";
+        public const string PROVIDER_SHP = "OSGeo.SHP";
+
+        public const string CONN_FMT_SDF = "File={0}";
+        public const string CONN_FMT_SHP = "DefaultFileLocation={0}";
+
         public static IConnection CreateSDFConnection()
         {
             IConnection conn = null;

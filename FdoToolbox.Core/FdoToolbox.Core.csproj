@@ -79,6 +79,12 @@
     <Compile Include="Controls\DataPreviewCtl.Designer.cs">
       <DependentUpon>DataPreviewCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ExpressBulkCopyCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ExpressBulkCopyCtl.Designer.cs">
+      <DependentUpon>ExpressBulkCopyCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FeatureClassExtendedInfoCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -203,6 +209,7 @@
     <Compile Include="SpatialContextInfo.cs" />
     <Compile Include="TaskLoader.cs" />
     <Compile Include="TaskManager.cs" />
+    <Compile Include="WKTParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BulkCopyTask.xml" />
@@ -257,6 +264,10 @@
     <EmbeddedResource Include="Controls\DataPreviewCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DataPreviewCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ExpressBulkCopyCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ExpressBulkCopyCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FeatureClassExtendedInfoCtl.resx">
       <SubType>Designer</SubType>

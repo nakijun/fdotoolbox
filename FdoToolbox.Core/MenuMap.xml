@@ -33,14 +33,12 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="sdfcreate" displayName="SDF" />
 			<Command name="shpcreate" displayName="SHP" />
 		</SubMenu>
-		<!--
 		<SubMenu name="Bulk Copy" resource="table_go">
 			<Command name="sdf2sdf" />
 			<Command name="shp2shp" />
 			<Command name="sdf2shp" />
 			<Command name="shp2sdf" /> 
 		</SubMenu>
-		-->
 	</Menu>
 	<Menu name="Help">
 		<Command name="help" />
