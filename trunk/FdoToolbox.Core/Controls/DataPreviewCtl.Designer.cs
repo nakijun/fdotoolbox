@@ -171,14 +171,9 @@ namespace FdoToolbox.Core.Controls
             this.cmbLimit.FormattingEnabled = true;
             this.cmbLimit.Items.AddRange(new object[] {
             "10",
+            "20",
             "50",
-            "100",
-            "250",
-            "500",
-            "750",
-            "1000",
-            "2500",
-            "5000"});
+            "100"});
             this.cmbLimit.Location = new System.Drawing.Point(91, 33);
             this.cmbLimit.Name = "cmbLimit";
             this.cmbLimit.Size = new System.Drawing.Size(139, 21);
