@@ -385,6 +385,9 @@ namespace FdoToolbox.Core
         /// <param name="classesToCopy">The copy options for each specified class</param>
         private void ValidateBulkCopyOptions(IConnection srcConn, IConnection destConn, out ClassCollection srcClasses, out ClassCopyOptions[] classesToCopy)
         {
+            //TODO: Validate length of data properties so that:
+            //[source property length] <= [target property length]
+
             //Validate each source class copy option specified.
             SendMessage("Validating Bulk Copy Options");
 
@@ -600,7 +603,6 @@ namespace FdoToolbox.Core
         {
             _SourceClasses = new List<ClassCopyOptions>();
             _ExpressMode = true;
-            //Delete target file
             
             IConnection src = null;
             IConnection dest = null;
@@ -674,12 +676,18 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// The source connection
+        /// </summary>
         public ConnectionInfo Source
         {
             get { return _Source; }
             set { _Source = value; }
         }
 
+        /// <summary>
+        /// The target connection
+        /// </summary>
         public ConnectionInfo Target
         {
             get { return _Target; }
@@ -707,8 +715,6 @@ namespace FdoToolbox.Core
             get { return _CoerceDataTypes; }
             set { _CoerceDataTypes = value; }
         }
-
-        private bool _ApplySchemaToTarget;
 
         /// <summary>
         /// If true, the mappings are ignored and the full source schema
@@ -758,7 +764,7 @@ namespace FdoToolbox.Core
         }
 
         /// <summary>
-        /// 
+        /// Gets all the classes to copy
         /// </summary>
         /// <returns></returns>
         public ClassCopyOptions[] GetClassCopyOptions()
@@ -803,6 +809,9 @@ namespace FdoToolbox.Core
 
         private string _TargetClassName;
 
+        /// <summary>
+        /// The target class name
+        /// </summary>
 	    public string TargetClassName
 	    {
 		    get { return _TargetClassName; }
@@ -845,6 +854,9 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// The source class definition
+        /// </summary>
         public ClassDefinition SourceClassDefinition
         {
             get { return _ClassDef; }
@@ -852,6 +864,9 @@ namespace FdoToolbox.Core
 
         private bool _DeleteClassData;
 
+        /// <summary>
+        /// If true, delete all data on the target before copying
+        /// </summary>
         public bool DeleteClassData
         {
             get { return _DeleteClassData; }
