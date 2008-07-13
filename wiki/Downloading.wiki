@@ -7,3 +7,5 @@ The "Full" release includes the required FDO binaries.
 The "Lite" release does not (to save download time)
 
 Downloading the "Lite" release is recommended if you already have downloaded the FDO binaries 
+
+Each release is labeled with the appropriate version of FDO, so if you downloaded the lite release, you need to download or copy across that version of the FDO binaries
