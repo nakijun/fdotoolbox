@@ -253,6 +253,26 @@ namespace FdoToolbox.Core.Controls
                 string srcClassName = sourceClassNode.Name;
                 string destClassName = targetClassDef.Name;
                 string newPropertyName = property.Name;
+                switch (property.PropertyType)
+                {
+                    case PropertyType.PropertyType_DataProperty:
+                        tsi.Image = Properties.Resources.table;
+                        break;
+                    case PropertyType.PropertyType_GeometricProperty:
+                        tsi.Image = Properties.Resources.shape_handles;
+                        break;
+                    /*
+                    case PropertyType.PropertyType_RasterProperty:
+                        tsi.Image = Properties.Resources.image;
+                        break;
+                    case PropertyType.PropertyType_ObjectProperty:
+                        tsi.Image = Properties.Resources.package;
+                        break;
+                    case PropertyType.PropertyType_AssociationProperty:
+                        tsi.Image = Properties.Resources.table_relationship;
+                        break;
+                     */
+                }
                 tsi.Click += delegate(object sender, EventArgs e)
                 {
                     TreeNode propertyNode = mTreeView.SelectedNode;
