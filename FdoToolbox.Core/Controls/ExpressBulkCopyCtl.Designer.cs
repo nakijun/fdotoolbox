@@ -38,7 +38,7 @@ namespace FdoToolbox.Core.Controls
             this.txtTarget = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnExecute = new System.Windows.Forms.Button();
-            this.Cancel = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.chkCopySpatialContexts = new System.Windows.Forms.CheckBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -151,14 +151,14 @@ namespace FdoToolbox.Core.Controls
             // 
             // Cancel
             // 
-            this.Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Cancel.Location = new System.Drawing.Point(345, 286);
-            this.Cancel.Name = "Cancel";
-            this.Cancel.Size = new System.Drawing.Size(75, 23);
-            this.Cancel.TabIndex = 3;
-            this.Cancel.Text = "Cancel";
-            this.Cancel.UseVisualStyleBackColor = true;
-            this.Cancel.Click += new System.EventHandler(this.Cancel_Click);
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Location = new System.Drawing.Point(345, 286);
+            this.btnCancel.Name = "Cancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 3;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.Cancel_Click);
             // 
             // groupBox3
             // 
@@ -206,7 +206,7 @@ namespace FdoToolbox.Core.Controls
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.Cancel);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnExecute);
             this.Controls.Add(this.grpTarget);
             this.Controls.Add(this.grpSource);
@@ -229,7 +229,7 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.GroupBox grpTarget;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnExecute;
-        private System.Windows.Forms.Button Cancel;
+        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button btnBrowseSource;
         private System.Windows.Forms.TextBox txtSource;

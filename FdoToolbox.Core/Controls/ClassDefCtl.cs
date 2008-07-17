@@ -46,23 +46,18 @@ namespace FdoToolbox.Core.Controls
 
         private IConnection _BoundConnection;
 
-        private bool _initializing = true;
-
         public ClassDefCtl(ClassDefinition classDef, IConnection conn)
         {
-            _initializing = true;
             InitializeComponent();
             _BoundConnection = conn;
             _ClassDef = classDef;
             InitCommon(_ClassDef.ClassType);
             InitForm();
             ToggleUI();
-            _initializing = false;
         }
 
         public ClassDefCtl(FeatureSchema schema, ClassType ctype, IConnection conn)
         {
-            _initializing = true;
             InitializeComponent();
             switch (ctype)
             {
@@ -90,7 +85,6 @@ namespace FdoToolbox.Core.Controls
             _ParentSchema = schema;
             InitCommon(ctype);
             ToggleUI();
-            _initializing = false;
         }
 
         private void ToggleUI()
