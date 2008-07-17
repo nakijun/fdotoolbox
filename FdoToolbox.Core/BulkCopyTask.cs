@@ -388,6 +388,8 @@ namespace FdoToolbox.Core
             //TODO: Validate length of data properties so that:
             //[source property length] <= [target property length]
 
+            //TODO: Validate supported property types
+
             //Validate each source class copy option specified.
             SendMessage("Validating Bulk Copy Options");
 
