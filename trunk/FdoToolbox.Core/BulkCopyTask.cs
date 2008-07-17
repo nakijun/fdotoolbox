@@ -441,8 +441,21 @@ namespace FdoToolbox.Core
 
                 foreach (string propName in propNames)
                 {
-                    if (classDef.Properties.IndexOf(propName) < 0)
+                    int pidx = classDef.Properties.IndexOf(propName);
+                    if (pidx < 0)
+                    {
                         throw new BulkCopyException("Unable to find source property " + propName + " in class " + classDef.Name + " of schema " + _Options.SourceSchemaName);
+                    }
+                    else
+                    {
+                        PropertyDefinition propDef = classDef.Properties[pidx];
+                        if (propDef.PropertyType == PropertyType.PropertyType_DataProperty)
+                        {
+                            DataType dtype = (propDef as DataPropertyDefinition).DataType;
+                            if (Array.IndexOf<DataType>(destConn.SchemaCapabilities.DataTypes, dtype) < 0)
+                                throw new BulkCopyException(string.Format("Source class {0} has a property {1} whose data type {2} is not supported by the target connection", classDef.Name, propDef.Name, dtype));
+                        }
+                    }
                 }
             }
             SendMessage("Validation Completed");
