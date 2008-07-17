@@ -186,6 +186,8 @@ namespace FdoToolbox.Core
                     AppConsole.Out = new ConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
                     AppConsole.Err = new ConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
                     AppConsole.Err.TextColor = System.Drawing.Color.Red;
+                    AppConsole.Out.TimestampEntries = true;
+                    AppConsole.Err.TimestampEntries = true;
 
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
                     AppConsole.WriteLine("Loading modules");

@@ -41,6 +41,18 @@ namespace FdoToolbox.Core
             this.TextColor = Color.Black;
         }
 
+        private bool _TimestampEntries;
+
+        /// <summary>
+        /// If true will pre-pend the current date and time to each entry written
+        /// to the stream
+        /// </summary>
+        public bool TimestampEntries
+        {
+            get { return _TimestampEntries; }
+            set { _TimestampEntries = value; }
+        }
+
         private Color _TextColor;
 
         /// <summary>
@@ -147,6 +159,11 @@ namespace FdoToolbox.Core
         {
             string s = Encoding.Default.GetString(buffer, offset, count);
             s = s.Trim();
+            if (this.TimestampEntries)
+            {
+                DateTime dt = DateTime.Now;
+                s = string.Format("[{0}] {1}", dt.ToString(), s);
+            }
             if (!string.IsNullOrEmpty(s))
             {
                 if (_txtBox is RichTextBox)
@@ -164,6 +181,11 @@ namespace FdoToolbox.Core
 
         public void Write(string s)
         {
+            if (this.TimestampEntries)
+            {
+                DateTime dt = DateTime.Now;
+                s = string.Format("[{0}] {1}", dt.ToString(), s);
+            }
             if (!string.IsNullOrEmpty(s))
             {
                 if (_txtBox is RichTextBox)
