@@ -195,6 +195,8 @@ namespace FdoToolbox.Core
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
 
+                    LoadDefinedModules();
+
                     InitMenus();
                     _init = true;
                 }
@@ -206,6 +208,42 @@ namespace FdoToolbox.Core
 
                 if (this.OnAppInitialized != null)
                     this.OnAppInitialized(this, EventArgs.Empty);
+            }
+        }
+
+        private void LoadDefinedModules()
+        {
+            string fileName = "Modules.xml";
+            if (File.Exists(fileName))
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(fileName);
+
+                XmlNodeList modList = doc.SelectNodes("//ModuleList/Module");
+                if (modList.Count > 0)
+                {
+                    foreach (XmlNode modNode in modList)
+                    {
+                        string assembly = modNode.InnerText;
+                        if (File.Exists(assembly))
+                        {
+                            AppConsole.WriteLine("Loading assembly: {0}", assembly);
+                            ModuleManager.LoadExtension(assembly);
+                        }
+                        else
+                        {
+                            AppConsole.Err.WriteLine("Assembly not found: {0}. Skipping", assembly);
+                        }
+                    }
+                }
+                else
+                {
+                    AppConsole.Err.WriteLine("No assemblies defined in {0}. Skipping", fileName);
+                }
+            }
+            else
+            {
+                AppConsole.Err.WriteLine("Configuration file {0} not found. Skipping auto-loading", fileName);
             }
         }
 
