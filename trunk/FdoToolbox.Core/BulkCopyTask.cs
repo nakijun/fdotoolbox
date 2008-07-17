@@ -196,13 +196,20 @@ namespace FdoToolbox.Core
                         //Cache for subsequent iterations
                         ClassDefinition classDef = sourceReader.GetClassDefinition();
                         IInsert insert = destConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert;
-                        
+                        PropertyDefinitionCollection propDefs = classDef.Properties;
+
+                        Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
+                        for (int i = 0; i < propDefs.Count; i++)
+                        {
+                            cachedPropertyNames.Add(i, propDefs[i].Name);
+                        }
+
                         //Loop through the feature reader and process each
                         //result
                         int oldpc = 0;
                         while (sourceReader.ReadNext())
                         {
-                            copied += ProcessReader(classDef, insert, copyOpts, sourceReader);
+                            copied += ProcessReader(cachedPropertyNames, propDefs, insert, copyOpts, sourceReader);
                             int pc = (int)(((double)copied / (double)count) * 100);
                             //Only update progress counter when % changes
                             if(pc != oldpc)
@@ -468,56 +475,57 @@ namespace FdoToolbox.Core
             return srcClasses;
         }
 
-        private int ProcessReader(ClassDefinition classDef, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
+        private int ProcessReader(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
         {
             int inserted = 0;
             string targetClass = copyOpts.TargetClassName;
 
             insert.SetFeatureClassName(targetClass);
             insert.PropertyValues.Clear();
-            for (int i = 0; i < classDef.Properties.Count; i++)
+            for (int i = 0; i < propDefs.Count; i++)
             {
-                if (!sourceReader.IsNull(classDef.Properties[i].Name))
+                string name = cachedPropertyNames[i];
+                if (!sourceReader.IsNull(name))
                 {
-                    string target = copyOpts.GetTargetPropertyName(classDef.Properties[i].Name);
+                    string target = copyOpts.GetTargetPropertyName(name);
                     if (string.IsNullOrEmpty(target))
-                        target = classDef.Properties[i].Name;
+                        target = name;
 
-                    DataPropertyDefinition dataDef = classDef.Properties[i] as DataPropertyDefinition;
-                    GeometricPropertyDefinition geomDef = classDef.Properties[i] as GeometricPropertyDefinition;
+                    DataPropertyDefinition dataDef = propDefs[i] as DataPropertyDefinition;
+                    GeometricPropertyDefinition geomDef = propDefs[i] as GeometricPropertyDefinition;
                     if (dataDef != null)
                     {
                         switch (dataDef.DataType)
                         {
                             case DataType.DataType_BLOB:
-                                insert.PropertyValues.Add(new PropertyValue(target, new BLOBValue(sourceReader.GetLOB(dataDef.Name).Data)));
+                                insert.PropertyValues.Add(new PropertyValue(target, new BLOBValue(sourceReader.GetLOB(name).Data)));
                                 break;
                             case DataType.DataType_Boolean:
-                                insert.PropertyValues.Add(new PropertyValue(target, new BooleanValue(sourceReader.GetBoolean(dataDef.Name))));
+                                insert.PropertyValues.Add(new PropertyValue(target, new BooleanValue(sourceReader.GetBoolean(name))));
                                 break;
                             case DataType.DataType_Byte:
-                                insert.PropertyValues.Add(new PropertyValue(target, new ByteValue(sourceReader.GetByte(dataDef.Name))));
+                                insert.PropertyValues.Add(new PropertyValue(target, new ByteValue(sourceReader.GetByte(name))));
                                 break;
                             case DataType.DataType_CLOB:
-                                insert.PropertyValues.Add(new PropertyValue(target, new CLOBValue(sourceReader.GetLOB(dataDef.Name).Data)));
+                                insert.PropertyValues.Add(new PropertyValue(target, new CLOBValue(sourceReader.GetLOB(name).Data)));
                                 break;
                             case DataType.DataType_DateTime:
-                                insert.PropertyValues.Add(new PropertyValue(target, new DateTimeValue(sourceReader.GetDateTime(dataDef.Name))));
+                                insert.PropertyValues.Add(new PropertyValue(target, new DateTimeValue(sourceReader.GetDateTime(name))));
                                 break;
                             case DataType.DataType_Decimal:
-                                insert.PropertyValues.Add(new PropertyValue(target, new DecimalValue(sourceReader.GetDouble(dataDef.Name))));
+                                insert.PropertyValues.Add(new PropertyValue(target, new DecimalValue(sourceReader.GetDouble(name))));
                                 break;
                             case DataType.DataType_Double:
-                                insert.PropertyValues.Add(new PropertyValue(target, new DecimalValue(sourceReader.GetDouble(dataDef.Name))));
+                                insert.PropertyValues.Add(new PropertyValue(target, new DecimalValue(sourceReader.GetDouble(name))));
                                 break;
                             case DataType.DataType_Int16:
-                                insert.PropertyValues.Add(new PropertyValue(target, new Int16Value(sourceReader.GetInt16(dataDef.Name))));
+                                insert.PropertyValues.Add(new PropertyValue(target, new Int16Value(sourceReader.GetInt16(name))));
                                 break;
                             case DataType.DataType_Int32:
-                                insert.PropertyValues.Add(new PropertyValue(target, new Int32Value(sourceReader.GetInt32(dataDef.Name))));
+                                insert.PropertyValues.Add(new PropertyValue(target, new Int32Value(sourceReader.GetInt32(name))));
                                 break;
                             case DataType.DataType_Int64:
-                                insert.PropertyValues.Add(new PropertyValue(target, new Int64Value(sourceReader.GetInt64(dataDef.Name))));
+                                insert.PropertyValues.Add(new PropertyValue(target, new Int64Value(sourceReader.GetInt64(name))));
                                 break;
                             case DataType.DataType_Single:
                                 insert.PropertyValues.Add(new PropertyValue(target, new SingleValue(sourceReader.GetSingle(dataDef.Name))));
@@ -529,8 +537,8 @@ namespace FdoToolbox.Core
                     }
                     else if (geomDef != null)
                     {
-                        byte[] value = sourceReader.GetGeometry(geomDef.Name);
-                        insert.PropertyValues.Add(new PropertyValue(geomDef.Name, new GeometryValue(value)));
+                        byte[] value = sourceReader.GetGeometry(name);
+                        insert.PropertyValues.Add(new PropertyValue(name, new GeometryValue(value)));
                     }
                 }
             }
