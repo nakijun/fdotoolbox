@@ -501,17 +501,18 @@ namespace FdoToolbox.Core
 
             insert.SetFeatureClassName(targetClass);
             insert.PropertyValues.Clear();
-            for (int i = 0; i < propDefs.Count; i++)
+            foreach (int key in cachedPropertyNames.Keys)
             {
-                string name = cachedPropertyNames[i];
+                string name = cachedPropertyNames[key];
+                PropertyDefinition def = propDefs[key];
                 if (!sourceReader.IsNull(name))
                 {
                     string target = copyOpts.GetTargetPropertyName(name);
                     if (string.IsNullOrEmpty(target))
                         target = name;
 
-                    DataPropertyDefinition dataDef = propDefs[i] as DataPropertyDefinition;
-                    GeometricPropertyDefinition geomDef = propDefs[i] as GeometricPropertyDefinition;
+                    DataPropertyDefinition dataDef = def as DataPropertyDefinition;
+                    GeometricPropertyDefinition geomDef = def as GeometricPropertyDefinition;
                     if (dataDef != null)
                     {
                         switch (dataDef.DataType)
