@@ -336,6 +336,7 @@ namespace FdoToolbox.Core
                                         create.Name = parser.CSName;
                                         create.XYTolerance = reader.GetXYTolerance();
                                         create.ZTolerance = reader.GetZTolerance();
+                                        create.Execute();
                                     }
                                 }
                                 else
@@ -349,8 +350,8 @@ namespace FdoToolbox.Core
                                     create.UpdateExisting = true;
                                     create.XYTolerance = reader.GetXYTolerance();
                                     create.ZTolerance = reader.GetZTolerance();
+                                    create.Execute();
                                 }
-                                create.Execute();
                             }
                         }
                     }
