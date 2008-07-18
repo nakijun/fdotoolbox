@@ -125,12 +125,18 @@ namespace FdoToolbox.Core.Controls
                         {
                             DataTable table = new DataTable(cmbClass.SelectedItem.ToString());
                             int count = 0;
-                            PrepareGrid(table, reader.GetClassDefinition());
+                            ClassDefinition cd = reader.GetClassDefinition();
+                            PrepareGrid(table, cd);
+                            Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
+                            for (int i = 0; i < cd.Properties.Count; i++)
+                            {
+                                cachedPropertyNames.Add(i, cd.Properties[i].Name);
+                            }
                             try
                             {
                                 while (reader.ReadNext() && count < limit)
                                 {
-                                    ProcessReader(table, reader);
+                                    ProcessReader(table, cd.Properties, cachedPropertyNames, reader);
                                     count++;
                                 }
                             }
@@ -162,13 +168,15 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
-        private void ProcessReader(DataTable table, IFeatureReader reader)
+        private void ProcessReader(DataTable table, PropertyDefinitionCollection propDefs, Dictionary<int, string> cachedPropertyNames, IFeatureReader reader)
         {
             ClassDefinition classDef = reader.GetClassDefinition();
             DataRow row = table.NewRow();
-            foreach (PropertyDefinition def in classDef.Properties)
+            foreach (int key in cachedPropertyNames.Keys)
             {
-                if (!reader.IsNull(def.Name))
+                string name = cachedPropertyNames[key];
+                PropertyDefinition def = propDefs[key];
+                if (!reader.IsNull(name))
                 {
                     DataPropertyDefinition dataDef = def as DataPropertyDefinition;
                     GeometricPropertyDefinition geomDef = def as GeometricPropertyDefinition;
@@ -177,46 +185,46 @@ namespace FdoToolbox.Core.Controls
                         switch (dataDef.DataType)
                         {
                             case DataType.DataType_String:
-                                row[dataDef.Name] = reader.GetString(dataDef.Name);
+                                row[name] = reader.GetString(name);
                                 break;
                             case DataType.DataType_Int16:
-                                row[dataDef.Name] = reader.GetInt16(dataDef.Name);
+                                row[name] = reader.GetInt16(name);
                                 break;
                             case DataType.DataType_Int32:
-                                row[dataDef.Name] = reader.GetInt32(dataDef.Name);
+                                row[name] = reader.GetInt32(name);
                                 break;
                             case DataType.DataType_Int64:
-                                row[dataDef.Name] = reader.GetInt64(dataDef.Name);
+                                row[name] = reader.GetInt64(name);
                                 break;
                             case DataType.DataType_Double:
-                                row[dataDef.Name] = reader.GetDouble(dataDef.Name);
+                                row[name] = reader.GetDouble(name);
                                 break;
                             case DataType.DataType_Boolean:
-                                row[dataDef.Name] = reader.GetBoolean(dataDef.Name);
+                                row[name] = reader.GetBoolean(name);
                                 break;
                             case DataType.DataType_Byte:
-                                row[dataDef.Name] = reader.GetByte(dataDef.Name);
+                                row[name] = reader.GetByte(name);
                                 break;
                             case DataType.DataType_BLOB:
-                                row[dataDef.Name] = reader.GetLOB(dataDef.Name).Data;
+                                row[name] = reader.GetLOB(name).Data;
                                 break;
                             case DataType.DataType_CLOB:
-                                row[dataDef.Name] = reader.GetLOB(dataDef.Name).Data;
+                                row[name] = reader.GetLOB(name).Data;
                                 break;
                             case DataType.DataType_DateTime:
-                                row[dataDef.Name] = reader.GetDateTime(dataDef.Name);
+                                row[name] = reader.GetDateTime(name);
                                 break;
                             case DataType.DataType_Decimal:
-                                row[dataDef.Name] = reader.GetDouble(dataDef.Name);
+                                row[name] = reader.GetDouble(name);
                                 break;
                             case DataType.DataType_Single:
-                                row[dataDef.Name] = reader.GetSingle(dataDef.Name);
+                                row[name] = reader.GetSingle(name);
                                 break;
                         }
                     }
                     else if (geomDef != null)
                     {
-                        byte[] binGeom = reader.GetGeometry(geomDef.Name);
+                        byte[] binGeom = reader.GetGeometry(name);
                         using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(binGeom))
                         {
                             //FIXME: 
@@ -231,13 +239,13 @@ namespace FdoToolbox.Core.Controls
                             //Does not calling Dispose() or wrapping the
                             //IGeometry in a using block solve this problem?
                             string text = geom.Text;
-                            row[geomDef.Name] = text;
+                            row[name] = text;
                         }
                     }
                 }
                 else
                 {
-                    row[def.Name] = null;
+                    row[name] = null;
                 }
             }
             table.Rows.Add(row);
