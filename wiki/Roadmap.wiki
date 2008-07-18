@@ -1,11 +1,11 @@
 #summary Planned features for upcoming releases
 
 === 0.3 ===
- ~~* Implement Express Bulk Copy commands~~
-      ~~* sdf2sdf~~
-      ~~* sdf2shp~~
-      ~~* shp2sdf~~
-      ~~* shp2shp~~
+ * ~~Implement Express Bulk Copy commands~~
+      * ~~sdf2sdf~~
+      * ~~sdf2shp~~
+      * ~~shp2sdf~~
+      * ~~shp2shp~~
 
 === 0.4 ===
  * Create Database Join Tasks.
