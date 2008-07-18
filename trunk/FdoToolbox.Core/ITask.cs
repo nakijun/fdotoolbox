@@ -25,10 +25,24 @@ namespace FdoToolbox.Core
 {
     public interface ITask
     {
+        /// <summary>
+        /// The name of the task
+        /// </summary>
         string Name { get; set; }
+        /// <summary>
+        /// Validate the parameters for this task. Task execution
+        /// only proceeds when the parameters are valid
+        /// </summary>
+        void ValidateTaskParameters();
+        /// <summary>
+        /// Execute the task
+        /// </summary>
         void Execute();
+        /// <summary>
+        /// The type of task
+        /// </summary>
         TaskType TaskType { get; }
-
+        
         event TaskPercentageEventHandler OnItemProcessed;
         event TaskProgressMessageEventHandler OnTaskMessage;
         event TaskProgressMessageEventHandler OnLogTaskMessage;

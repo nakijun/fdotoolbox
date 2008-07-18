@@ -119,7 +119,18 @@ namespace FdoToolbox.Core
             get { return _Name; }
             set { _Name = value; }
         }
-	
+
+        private ClassCollection _SourceClasses;
+        private ClassCopyOptions[] _ClassesToCopy;
+
+        public void ValidateTaskParameters()
+        {
+            IConnection srcConn = _Options.Source.Connection;
+            IConnection destConn = _Options.Target.Connection;
+
+            ValidateBulkCopyOptions(srcConn, destConn);
+        }
+
         public void Execute()
         {
             Stopwatch watch = new Stopwatch();
@@ -127,11 +138,7 @@ namespace FdoToolbox.Core
 
             IConnection srcConn = _Options.Source.Connection;
             IConnection destConn = _Options.Target.Connection;
-
-            ClassCollection srcClasses;
-            ClassCopyOptions[] classesToCopy;
-            ValidateBulkCopyOptions(srcConn, destConn, out srcClasses, out classesToCopy);
-
+            
             if (_Options.CopySpatialContexts)
             {
                 CopySpatialContexts(srcConn, destConn);
@@ -150,10 +157,10 @@ namespace FdoToolbox.Core
             SendMessage("Begin bulk copy of classes");
             int total = 0;
             int classesCopied = 1;
-            foreach (ClassCopyOptions copyOpts in classesToCopy)
+            foreach (ClassCopyOptions copyOpts in _ClassesToCopy)
             {
                 int copied = 0;
-                SendMessage(string.Format("Bulk Copying class {0} of {1}: {2}", classesCopied, classesToCopy.Length, copyOpts.ClassName));
+                SendMessage(string.Format("Bulk Copying class {0} of {1}: {2}", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName));
                 string [] propNames = copyOpts.PropertyNames;
 
                 //See if we need to delete
@@ -215,7 +222,7 @@ namespace FdoToolbox.Core
                             if(pc != oldpc)
                             {
                                 oldpc = pc;
-                                SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3}% of {4} features)", classesCopied, classesToCopy.Length, copyOpts.ClassName, oldpc, count));
+                                SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3}% of {4} features)", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName, oldpc, count));
                                 SendCount(oldpc);
                             }
                         }
@@ -390,61 +397,59 @@ namespace FdoToolbox.Core
         /// <param name="destConn">The target connection</param>
         /// <param name="srcClasses">The classes to be copied</param>
         /// <param name="classesToCopy">The copy options for each specified class</param>
-        private void ValidateBulkCopyOptions(IConnection srcConn, IConnection destConn, out ClassCollection srcClasses, out ClassCopyOptions[] classesToCopy)
+        private void ValidateBulkCopyOptions(IConnection srcConn, IConnection destConn)
         {
             //TODO: Validate length of data properties so that:
             //[source property length] <= [target property length]
-
-            //TODO: Validate supported property types
 
             //Validate each source class copy option specified.
             SendMessage("Validating Bulk Copy Options");
 
             if (string.IsNullOrEmpty(_Options.SourceSchemaName))
-                throw new BulkCopyException("Source schema name not defined");
+                throw new TaskValidationException("Source schema name not defined");
 
             if (!Array.Exists<int>(_Options.Target.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)CommandType.CommandType_ApplySchema; }))
-                throw new BulkCopyException("Target connection does not support IApplySchema");
+                throw new TaskValidationException("Target connection does not support IApplySchema");
 
             //Get source schema classes
-            srcClasses = GetSourceClasses(_Options);
-            if (srcClasses == null)
-                throw new BulkCopyException("Unable to get classes of feature schema: " + _Options.SourceSchemaName);
+            _SourceClasses = GetSourceClasses(_Options);
+            if (_SourceClasses == null)
+                throw new TaskValidationException("Unable to get classes of feature schema: " + _Options.SourceSchemaName);
 
-            classesToCopy = _Options.GetClassCopyOptions();
+            _ClassesToCopy = _Options.GetClassCopyOptions();
             
             if (_Options.ApplySchemaToTarget)
             {
-                classesToCopy = GetAllClassCopyOptions(_Options, srcClasses);
+                _ClassesToCopy = GetAllClassCopyOptions(_Options, _SourceClasses);
             }
 
             bool checkedForDelete = false;
-            foreach (ClassCopyOptions copyOpts in classesToCopy)
+            foreach (ClassCopyOptions copyOpts in _ClassesToCopy)
             {
                 if (!checkedForDelete && copyOpts.DeleteClassData)
                 {
                     if (!Array.Exists<int>(_Options.Target.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)CommandType.CommandType_Delete; }))
-                        throw new BulkCopyException("Target connection does not support delete (IDelete)");
+                        throw new TaskValidationException("Target connection does not support delete (IDelete)");
                     checkedForDelete = true;
                 }
 
                 string className = copyOpts.ClassName;
-                int idx = srcClasses.IndexOf(className);
+                int idx = _SourceClasses.IndexOf(className);
                 if (idx < 0)
-                    throw new BulkCopyException("Unable to find class " + className + " in schema " + _Options.SourceSchemaName);
+                    throw new TaskValidationException("Unable to find class " + className + " in schema " + _Options.SourceSchemaName);
 
-                ClassDefinition classDef = srcClasses[idx];
+                ClassDefinition classDef = _SourceClasses[idx];
                 string[] propNames = copyOpts.PropertyNames;
 
                 if (propNames.Length == 0)
-                    throw new BulkCopyException("Nothing to copy from class " + className + " in schema " + _Options.SourceSchemaName);
+                    throw new TaskValidationException("Nothing to copy from class " + className + " in schema " + _Options.SourceSchemaName);
 
                 foreach (string propName in propNames)
                 {
                     int pidx = classDef.Properties.IndexOf(propName);
                     if (pidx < 0)
                     {
-                        throw new BulkCopyException("Unable to find source property " + propName + " in class " + classDef.Name + " of schema " + _Options.SourceSchemaName);
+                        throw new TaskValidationException("Unable to find source property " + propName + " in class " + classDef.Name + " of schema " + _Options.SourceSchemaName);
                     }
                     else
                     {
@@ -453,7 +458,7 @@ namespace FdoToolbox.Core
                         {
                             DataType dtype = (propDef as DataPropertyDefinition).DataType;
                             if (Array.IndexOf<DataType>(destConn.SchemaCapabilities.DataTypes, dtype) < 0)
-                                throw new BulkCopyException(string.Format("Source class {0} has a property {1} whose data type {2} is not supported by the target connection", classDef.Name, propDef.Name, dtype));
+                                throw new TaskValidationException(string.Format("Source class {0} has a property {1} whose data type {2} is not supported by the target connection", classDef.Name, propDef.Name, dtype));
                         }
                     }
                 }

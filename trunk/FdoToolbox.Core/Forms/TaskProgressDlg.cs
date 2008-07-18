@@ -92,8 +92,23 @@ namespace FdoToolbox.Core.Forms
 
         public void Run()
         {
-            bgWorker.RunWorkerAsync();
-            this.ShowDialog();
+            bool valid = true;
+            try
+            {
+                _Task.ValidateTaskParameters();
+                valid = true;
+            }
+            catch (TaskValidationException ex)
+            {
+                AppConsole.Alert("Error in Validating Task", ex.Message + "\n\nTask execution will not proceed");
+                AppConsole.WriteException(ex);
+                valid = false;
+            }
+            if (valid)
+            {
+                bgWorker.RunWorkerAsync();
+                this.ShowDialog();
+            }
         }
 
         private void btnOK_Click(object sender, EventArgs e)

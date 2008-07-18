@@ -48,6 +48,7 @@ namespace FdoToolbox.Core.Controls
         {
             this.SourceProvider = source;
             this.TargetProvider = target;
+            lblWarning.Visible = (this.TargetProvider == ExpressProvider.SHP);
         }
 
         private ExpressProvider _SourceProvider;

@@ -48,4 +48,11 @@ namespace FdoToolbox.Core
         public TaskLoaderException(string msg) : base(msg) { }
         public TaskLoaderException(string msg, Exception inner) : base(msg, inner) { }
     }
+
+    public class TaskValidationException : Exception
+    {
+        public TaskValidationException() : base() { }
+        public TaskValidationException(string msg) : base(msg) { }
+        public TaskValidationException(string msg, Exception inner) : base(msg, inner) { }
+    }
 }
