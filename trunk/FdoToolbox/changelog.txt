@@ -6,6 +6,7 @@ v0.3.1
 - Class properties visible in Object Explorer
 - Extensions can be auto-loaded via editing Modules.xml
 - Bulk Copy Control: The list of mappable properties now have icons to indicate property type.
+- SVN Changesets: r53 - r68
 
 v0.3
 ----
@@ -21,6 +22,7 @@ v0.3
 	- Re-designed control
 	- Multi-class support
 	- Copy spatial contexts option
+- SVN Changesets: r9 - r50
 
 v0.2
 ----
