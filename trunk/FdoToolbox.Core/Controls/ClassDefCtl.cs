@@ -34,7 +34,7 @@ namespace FdoToolbox.Core.Controls
     /// <summary>
     /// User Control to create Class Definitions.
     /// </summary>
-    public partial class ClassDefCtl : BaseDocumentCtl
+    public partial class ClassDefCtl : BaseDocumentCtl, IConnectionBoundCtl
     {
         private ClassDefinition _ClassDef;
 
@@ -89,9 +89,9 @@ namespace FdoToolbox.Core.Controls
 
         private void ToggleUI()
         {
-            associationPropertyToolStripMenuItem.Visible = _BoundConnection.SchemaCapabilities.SupportsAssociationProperties;
-            objectPropertyToolStripMenuItem.Visible = _BoundConnection.SchemaCapabilities.SupportsObjectProperties;
-            rasterPropertyToolStripMenuItem.Visible = _BoundConnection.RasterCapabilities.SupportsRaster();
+            associationPropertyToolStripMenuItem.Visible = this.BoundConnection.SchemaCapabilities.SupportsAssociationProperties;
+            objectPropertyToolStripMenuItem.Visible = this.BoundConnection.SchemaCapabilities.SupportsObjectProperties;
+            rasterPropertyToolStripMenuItem.Visible = this.BoundConnection.RasterCapabilities.SupportsRaster();
         }
 
         private void InitForm()
@@ -198,14 +198,14 @@ namespace FdoToolbox.Core.Controls
 
         private void NewDataProperty_Click(object sender, EventArgs e)
         {
-            DataPropertyDefinition def = DataPropertyDefinitionDlg.NewDataProperty(_BoundConnection);
+            DataPropertyDefinition def = DataPropertyDefinitionDlg.NewDataProperty(this.BoundConnection);
             if(def != null)
                 _BoundProperties.Add(def);
         }
 
         private void NewGeometryProperty_Click(object sender, EventArgs e)
         {
-            GeometricPropertyDefinition def = GeometryPropertyDefinitionDlg.NewGeometryProperty(_BoundConnection);
+            GeometricPropertyDefinition def = GeometryPropertyDefinitionDlg.NewGeometryProperty(this.BoundConnection);
             if(def != null)
                 _BoundProperties.Add(def);
         }
@@ -248,10 +248,10 @@ namespace FdoToolbox.Core.Controls
                 switch (def.PropertyType)
                 {
                     case PropertyType.PropertyType_DataProperty:
-                        frm = new DataPropertyDefinitionDlg((DataPropertyDefinition)def, _BoundConnection);
+                        frm = new DataPropertyDefinitionDlg((DataPropertyDefinition)def, this.BoundConnection);
                         break;
                     case PropertyType.PropertyType_GeometricProperty:
-                        frm = new GeometryPropertyDefinitionDlg((GeometricPropertyDefinition)def, _BoundConnection);
+                        frm = new GeometryPropertyDefinitionDlg((GeometricPropertyDefinition)def, this.BoundConnection);
                         break;
                 }
                 if (frm != null)
@@ -379,11 +379,11 @@ namespace FdoToolbox.Core.Controls
             PropertyDefinition def = GetSelectedProperty();
             if (def.PropertyType == PropertyType.PropertyType_DataProperty)
             {
-                DataType[] supported = _BoundConnection.SchemaCapabilities.SupportedIdentityPropertyTypes;
+                DataType[] supported = this.BoundConnection.SchemaCapabilities.SupportedIdentityPropertyTypes;
                 if (Array.IndexOf<DataType>(supported, ((DataPropertyDefinition)def).DataType) >= 0)
                 {
                     //Supports composite id (multiple identity properties)
-                    if (_BoundConnection.SchemaCapabilities.SupportsCompositeId)
+                    if (this.BoundConnection.SchemaCapabilities.SupportsCompositeId)
                     {
                         if(!_BoundIdentityProperties.Contains(def))
                             _BoundIdentityProperties.Add(def);
@@ -411,6 +411,11 @@ namespace FdoToolbox.Core.Controls
             {
                 _BoundIdentityProperties.Remove(def);
             }
+        }
+
+        public IConnection BoundConnection
+        {
+            get { return _BoundConnection; }
         }
     }
 }

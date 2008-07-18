@@ -34,7 +34,7 @@ namespace FdoToolbox.Core.Controls
     /// <summary>
     /// A control to manage spatial contexts for a given connection
     /// </summary>
-    public partial class SpatialContextCtl : BaseDocumentCtl
+    public partial class SpatialContextCtl : BaseDocumentCtl, IConnectionBoundCtl
     {
         private IConnection _BoundConnection;
         private FgfGeometryFactory _GeomFactory;
@@ -63,8 +63,8 @@ namespace FdoToolbox.Core.Controls
 
         private void ToggleUI()
         {
-            _CanCreate = Array.Exists<int>(_BoundConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext; });
-            _CanDelete = Array.Exists<int>(_BoundConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext; });
+            _CanCreate = Array.Exists<int>(this.BoundConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext; });
+            _CanDelete = Array.Exists<int>(this.BoundConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext; });
             _CanEdit = _CanCreate;
 
             btnCreate.Enabled = _CanCreate;
@@ -82,7 +82,7 @@ namespace FdoToolbox.Core.Controls
         private void LoadSpatialContexts()
         {
             _bsContexts.Clear();
-            using (IGetSpatialContexts cmd = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+            using (IGetSpatialContexts cmd = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
             {
                 using (ISpatialContextReader reader = cmd.Execute())
                 {
@@ -131,7 +131,7 @@ namespace FdoToolbox.Core.Controls
 
         private void DeleteSpatialContext(SpatialContextInfo ctx)
         {
-            using (IDestroySpatialContext destory = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
+            using (IDestroySpatialContext destory = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
             {
                 destory.Name = ctx.Name;
                 destory.Execute();
@@ -152,7 +152,7 @@ namespace FdoToolbox.Core.Controls
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            SpatialContextInfo ctx = SpatialContextInfoDlg.CreateNew(_BoundConnection);
+            SpatialContextInfo ctx = SpatialContextInfoDlg.CreateNew(this.BoundConnection);
             if (ctx != null)
             {
                 SpatialContextInfo search = GetSpatialContextByName(ctx.Name);
@@ -178,7 +178,7 @@ namespace FdoToolbox.Core.Controls
         private void CreateSpatialContext(SpatialContextInfo ctx, bool updateExisting)
         {
             using (FgfGeometryFactory factory = new FgfGeometryFactory())
-            using (ICreateSpatialContext create = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
+            using (ICreateSpatialContext create = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
             {
                 create.CoordinateSystem = ctx.CoordinateSystem;
                 create.CoordinateSystemWkt = ctx.CoordinateSystemWkt;
@@ -205,7 +205,7 @@ namespace FdoToolbox.Core.Controls
                     AppConsole.Alert("Created", "New Spatial Context created: " + ctx.Name);
                     _bsContexts.Add(ctx);
                 }
-                btnDelete.Enabled = _CanDelete && (_BoundConnection.ConnectionCapabilities.SupportsMultipleSpatialContexts() || (grdSpatialContexts.Rows.Count == 0));
+                btnDelete.Enabled = _CanDelete && (this.BoundConnection.ConnectionCapabilities.SupportsMultipleSpatialContexts() || (grdSpatialContexts.Rows.Count == 0));
                 if (geom != null)
                     geom.Dispose();
             }
@@ -242,12 +242,17 @@ namespace FdoToolbox.Core.Controls
             SpatialContextInfo ctx = GetSelectedSpatialContext();
             if (ctx != null)
             {
-                ctx = SpatialContextInfoDlg.Edit(_BoundConnection, ctx);
+                ctx = SpatialContextInfoDlg.Edit(this.BoundConnection, ctx);
                 if (ctx != null)
                 {
                     CreateSpatialContext(ctx, true);
                 }
             }
+        }
+
+        public IConnection BoundConnection
+        {
+            get { return _BoundConnection; }
         }
     }
 }

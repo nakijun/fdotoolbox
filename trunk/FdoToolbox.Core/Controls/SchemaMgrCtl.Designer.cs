@@ -179,14 +179,14 @@ namespace FdoToolbox.Core.Controls
             // featureClassToolStripMenuItem
             // 
             this.featureClassToolStripMenuItem.Name = "featureClassToolStripMenuItem";
-            this.featureClassToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.featureClassToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.featureClassToolStripMenuItem.Text = "Feature Class";
             this.featureClassToolStripMenuItem.Click += new System.EventHandler(this.featureClassToolStripMenuItem_Click);
             // 
             // classNonFeatureToolStripMenuItem
             // 
             this.classNonFeatureToolStripMenuItem.Name = "classNonFeatureToolStripMenuItem";
-            this.classNonFeatureToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.classNonFeatureToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.classNonFeatureToolStripMenuItem.Text = "Class (Non-Feature)";
             this.classNonFeatureToolStripMenuItem.Click += new System.EventHandler(this.classNonFeatureToolStripMenuItem_Click);
             // 
@@ -194,21 +194,21 @@ namespace FdoToolbox.Core.Controls
             // 
             this.networkClassToolStripMenuItem.Enabled = false;
             this.networkClassToolStripMenuItem.Name = "networkClassToolStripMenuItem";
-            this.networkClassToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.networkClassToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.networkClassToolStripMenuItem.Text = "Network Class";
             // 
             // networkLayerClassToolStripMenuItem
             // 
             this.networkLayerClassToolStripMenuItem.Enabled = false;
             this.networkLayerClassToolStripMenuItem.Name = "networkLayerClassToolStripMenuItem";
-            this.networkLayerClassToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.networkLayerClassToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.networkLayerClassToolStripMenuItem.Text = "Network Layer Class";
             // 
             // networkLinkClassToolStripMenuItem
             // 
             this.networkLinkClassToolStripMenuItem.Enabled = false;
             this.networkLinkClassToolStripMenuItem.Name = "networkLinkClassToolStripMenuItem";
-            this.networkLinkClassToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.networkLinkClassToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.networkLinkClassToolStripMenuItem.Text = "Network Link Class";
             // 
             // btnEditClass

@@ -34,13 +34,15 @@ using OSGeo.FDO.Filter;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class DataPreviewCtl : BaseDocumentCtl
+    public partial class DataPreviewCtl : BaseDocumentCtl, IConnectionBoundCtl
     {
         const int TAB_STANDARD = 0;
         const int TAB_AGGREGATE = 1;
         const int TAB_SQL = 2;
 
         private FgfGeometryFactory _GeomFactory;
+
+        private IConnection _BoundConnection;
 
         internal DataPreviewCtl()
         {
@@ -65,11 +67,9 @@ namespace FdoToolbox.Core.Controls
                 tabQueryMode.TabPages.RemoveAt(TAB_AGGREGATE);
         }
 
-        private IConnection _BoundConnection;
-
         protected override void OnLoad(EventArgs e)
         {
-            using (IDescribeSchema desc = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            using (IDescribeSchema desc = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
             {
                 FeatureSchemaCollection schemas = desc.Execute();
                 cmbSchema.DataSource = schemas;
@@ -111,7 +111,7 @@ namespace FdoToolbox.Core.Controls
                 return;
             }
             int limit = Convert.ToInt32(cmbLimit.SelectedItem.ToString());
-            using (ISelect select = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
+            using (ISelect select = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
             {
                 try
                 {
@@ -296,6 +296,11 @@ namespace FdoToolbox.Core.Controls
         private void btnClear_Click(object sender, EventArgs e)
         {
             grdPreview.DataSource = null;
+        }
+
+        public IConnection BoundConnection
+        {
+            get { return _BoundConnection; }
         }
     }
 }
