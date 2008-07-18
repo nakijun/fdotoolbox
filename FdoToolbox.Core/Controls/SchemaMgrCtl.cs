@@ -32,7 +32,7 @@ using OSGeo.FDO.Commands.Schema;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class SchemaMgrCtl : BaseDocumentCtl
+    public partial class SchemaMgrCtl : BaseDocumentCtl, IConnectionBoundCtl
     {
         public SchemaMgrCtl()
         {
@@ -53,7 +53,7 @@ namespace FdoToolbox.Core.Controls
             : this()
         {
             _BoundConnection = conn;
-            using (IDescribeSchema cmd = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            using (IDescribeSchema cmd = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
             {
                 _Schemas = cmd.Execute();
             }
@@ -69,7 +69,7 @@ namespace FdoToolbox.Core.Controls
         private void ToggleUI()
         {
             //Supported class types
-            ClassType[] ctypes = _BoundConnection.SchemaCapabilities.ClassTypes;
+            ClassType[] ctypes = this.BoundConnection.SchemaCapabilities.ClassTypes;
             featureClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_FeatureClass) >= 0;
             classNonFeatureToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_Class) >= 0;
             networkClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_NetworkClass) >= 0;
@@ -77,7 +77,7 @@ namespace FdoToolbox.Core.Controls
             networkLinkClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_NetworkLinkClass) >= 0;
 
             //Schema modification
-            btnDeleteSchema.Visible = btnDeleteClass.Visible = _BoundConnection.SchemaCapabilities.SupportsSchemaModification;
+            btnDeleteSchema.Visible = btnDeleteClass.Visible = this.BoundConnection.SchemaCapabilities.SupportsSchemaModification;
         }
 
         private FeatureSchemaCollection _Schemas;
@@ -108,7 +108,7 @@ namespace FdoToolbox.Core.Controls
             {
                 if (_Schemas.Count > 0)
                 {
-                    using (IApplySchema cmd = _BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
+                    using (IApplySchema cmd = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
                     {
                         foreach (FeatureSchema schema in _Schemas)
                         {
@@ -135,8 +135,8 @@ namespace FdoToolbox.Core.Controls
 
         private void btnAddSchema_Click(object sender, EventArgs e)
         {
-            bool canAdd = _BoundConnection.SchemaCapabilities.SupportsMultipleSchemas ||
-                        (!_BoundConnection.SchemaCapabilities.SupportsMultipleSchemas && _bsSchemas.Count == 0);
+            bool canAdd = this.BoundConnection.SchemaCapabilities.SupportsMultipleSchemas ||
+                        (!this.BoundConnection.SchemaCapabilities.SupportsMultipleSchemas && _bsSchemas.Count == 0);
             if (canAdd)
             {
                 FeatureSchema schema = SchemaInfoDlg.NewSchema();
@@ -169,10 +169,10 @@ namespace FdoToolbox.Core.Controls
             switch (classDef.ClassType)
             {
                 case ClassType.ClassType_Class:
-                    ctl = new ClassDefCtl((Class)classDef, _BoundConnection);
+                    ctl = new ClassDefCtl((Class)classDef, this.BoundConnection);
                     break;
                 case ClassType.ClassType_FeatureClass:
-                    ctl = new ClassDefCtl((FeatureClass)classDef, _BoundConnection);
+                    ctl = new ClassDefCtl((FeatureClass)classDef, this.BoundConnection);
                     break;
             }
             if (ctl != null)
@@ -200,9 +200,14 @@ namespace FdoToolbox.Core.Controls
         private void NewClass(ClassType classType)
         {
             FeatureSchema schema = (FeatureSchema)lstSchemas.SelectedItem;
-            BaseDocumentCtl ctl = new ClassDefCtl(schema, classType, _BoundConnection);
+            BaseDocumentCtl ctl = new ClassDefCtl(schema, classType, this.BoundConnection);
             Form frm = FormFactory.CreateFormForControl(ctl, 500, 400);
             frm.ShowDialog();
+        }
+
+        public IConnection BoundConnection
+        {
+            get { return _BoundConnection; }
         }
     }
 }

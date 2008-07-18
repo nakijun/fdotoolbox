@@ -103,6 +103,7 @@
     <Compile Include="Controls\GenericConnectCtl.Designer.cs">
       <DependentUpon>GenericConnectCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\IConnectionBoundCtl.cs" />
     <Compile Include="Controls\ModuleInfoCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
