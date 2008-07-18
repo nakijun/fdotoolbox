@@ -1,6 +1,7 @@
 v0.3.1
 ------
 - Bulk Copy stability fixes
+- Added unsupported (DataPropertyDefinition) data type validation
 - Failed Bulk Copy validation will prevent execution from taking place
 - Class properties visible in Object Explorer
 - Extensions can be auto-loaded via editing Modules.xml
