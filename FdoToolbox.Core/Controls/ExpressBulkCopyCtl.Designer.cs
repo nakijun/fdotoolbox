@@ -34,6 +34,7 @@ namespace FdoToolbox.Core.Controls
             this.txtSource = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.grpTarget = new System.Windows.Forms.GroupBox();
+            this.lblWarning = new System.Windows.Forms.Label();
             this.btnBrowseTarget = new System.Windows.Forms.Button();
             this.txtTarget = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -44,7 +45,6 @@ namespace FdoToolbox.Core.Controls
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.label3 = new System.Windows.Forms.Label();
             this.grpSource.SuspendLayout();
             this.grpTarget.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -98,7 +98,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.grpTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpTarget.Controls.Add(this.label3);
+            this.grpTarget.Controls.Add(this.lblWarning);
             this.grpTarget.Controls.Add(this.btnBrowseTarget);
             this.grpTarget.Controls.Add(this.txtTarget);
             this.grpTarget.Controls.Add(this.label1);
@@ -108,6 +108,16 @@ namespace FdoToolbox.Core.Controls
             this.grpTarget.TabIndex = 1;
             this.grpTarget.TabStop = false;
             this.grpTarget.Text = "Target";
+            // 
+            // lblWarning
+            // 
+            this.lblWarning.AutoSize = true;
+            this.lblWarning.ForeColor = System.Drawing.Color.Red;
+            this.lblWarning.Location = new System.Drawing.Point(21, 58);
+            this.lblWarning.Name = "lblWarning";
+            this.lblWarning.Size = new System.Drawing.Size(309, 13);
+            this.lblWarning.TabIndex = 4;
+            this.lblWarning.Text = "Warning: This file and any related files (SHP only) will be deleted";
             // 
             // btnBrowseTarget
             // 
@@ -149,11 +159,11 @@ namespace FdoToolbox.Core.Controls
             this.btnExecute.UseVisualStyleBackColor = true;
             this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
             // 
-            // Cancel
+            // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.Location = new System.Drawing.Point(345, 286);
-            this.btnCancel.Name = "Cancel";
+            this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "Cancel";
@@ -190,16 +200,6 @@ namespace FdoToolbox.Core.Controls
             // errorProvider
             // 
             this.errorProvider.ContainerControl = this;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.Color.Red;
-            this.label3.Location = new System.Drawing.Point(21, 58);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(309, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Warning: This file and any related files (SHP only) will be deleted";
             // 
             // ExpressBulkCopyCtl
             // 
@@ -240,6 +240,6 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ErrorProvider errorProvider;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblWarning;
     }
 }
