@@ -1,0 +1,47 @@
+v0.3.1
+------
+- Bulk Copy stability fixes
+- Added unsupported (DataPropertyDefinition) data type validation
+- Failed Bulk Copy validation will prevent execution from taking place
+- Class properties visible in Object Explorer
+- Extensions can be auto-loaded via editing Modules.xml
+- Bulk Copy Control: The list of mappable properties now have icons to indicate property type.
+- SVN Changesets: r53 - r68
+
+v0.3
+----
+- XML driven menus/toolbars
+- Express commands
+	- sdf2sdf
+	- sdf2shp
+	- shp2sdf
+	- shp2shp
+- New Express Bulk Copy Control
+- Re-designed Data Preview Control
+- Enhanced Bulk Copy
+	- Re-designed control
+	- Multi-class support
+	- Copy spatial contexts option
+- SVN Changesets: r9 - r50
+
+v0.2
+----
+- Simple Bulk Copy Implementation
+- Simple Class Data Preview
+
+v0.1
+----
+- Using FDO 3.3.1
+- Initial Implementation
+	- Generic Connection Dialog
+	- Generic Data Store Creation Dialog
+	- Specialized Dialogs (SHP/SDF)
+		- Connection
+		- Create Data Store
+	- Class/Schema Management with capability checking
+		- Add/Delete schemas
+		- Add/Edit/Delete classes
+	- Class/Schema XML serialization
+	- FDO Provider registration/unregistration dialog
+	- Extension module loader/manager
+	- Extension module information dialog
