@@ -78,6 +78,7 @@ namespace FdoToolbox.Core.Controls
 
             //Schema modification
             btnDeleteSchema.Visible = btnDeleteClass.Visible = this.BoundConnection.SchemaCapabilities.SupportsSchemaModification;
+            btnEditClass.Visible = false; //temp measure
         }
 
         private FeatureSchemaCollection _Schemas;
