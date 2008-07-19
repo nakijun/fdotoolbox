@@ -332,6 +332,7 @@ namespace FdoToolbox.Core.Forms
                 }
                 item.Click += new EventHandler(property_Click);
                 btnProperties.DropDown.Items.Add(item);
+                insertPropertyToolStripMenuItem.DropDown.Items.Add(item);
             }
         }
 
@@ -404,6 +405,11 @@ namespace FdoToolbox.Core.Forms
             }
         }
 
+        /// <summary>
+        /// Inserts the given text at the text selection region or at
+        /// the position of the caret (if there is no selection)
+        /// </summary>
+        /// <param name="exprText"></param>
         private void InsertText(string exprText)
         {
             int index = txtExpression.SelectionStart;
@@ -434,7 +440,7 @@ namespace FdoToolbox.Core.Forms
             if (item != null)
             {
                 FunctionDefinition funcDef = item.Tag as FunctionDefinition;
-                string funcTemplate = "{0}({1})";
+                string funcTemplate = "{0}( {1} )";
                 List<string> parameters = new List<string>();
                 foreach (ArgumentDefinition argDef in funcDef.Arguments)
                 {
