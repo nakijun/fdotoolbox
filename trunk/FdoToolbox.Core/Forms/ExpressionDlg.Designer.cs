@@ -31,18 +31,16 @@ namespace FdoToolbox.Core.Forms
             this.components = new System.ComponentModel.Container();
             this.mToolStrip = new System.Windows.Forms.ToolStrip();
             this.btnFunctions = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnConditions = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnDistance = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnSpatial = new System.Windows.Forms.ToolStripDropDownButton();
-            this.btnProperties = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnValidate = new System.Windows.Forms.ToolStripButton();
             this.txtExpression = new System.Windows.Forms.RichTextBox();
             this.ctxExpression = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.insertPropertyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.insertPropertyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mToolStrip.SuspendLayout();
             this.ctxExpression.SuspendLayout();
             this.SuspendLayout();
@@ -51,11 +49,9 @@ namespace FdoToolbox.Core.Forms
             // 
             this.mToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnFunctions,
-            this.toolStripSeparator2,
             this.btnConditions,
             this.btnDistance,
             this.btnSpatial,
-            this.btnProperties,
             this.toolStripSeparator1,
             this.btnValidate});
             this.mToolStrip.Location = new System.Drawing.Point(0, 0);
@@ -71,11 +67,6 @@ namespace FdoToolbox.Core.Forms
             this.btnFunctions.Name = "btnFunctions";
             this.btnFunctions.Size = new System.Drawing.Size(82, 22);
             this.btnFunctions.Text = "Functions";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // btnConditions
             // 
@@ -100,14 +91,6 @@ namespace FdoToolbox.Core.Forms
             this.btnSpatial.Name = "btnSpatial";
             this.btnSpatial.Size = new System.Drawing.Size(68, 22);
             this.btnSpatial.Text = "Spatial";
-            // 
-            // btnProperties
-            // 
-            this.btnProperties.Image = global::FdoToolbox.Core.Properties.Resources.table;
-            this.btnProperties.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnProperties.Name = "btnProperties";
-            this.btnProperties.Size = new System.Drawing.Size(85, 22);
-            this.btnProperties.Text = "Properties";
             // 
             // toolStripSeparator1
             // 
@@ -141,7 +124,14 @@ namespace FdoToolbox.Core.Forms
             this.ctxExpression.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.insertPropertyToolStripMenuItem});
             this.ctxExpression.Name = "ctxExpression";
-            this.ctxExpression.Size = new System.Drawing.Size(153, 48);
+            this.ctxExpression.Size = new System.Drawing.Size(149, 26);
+            // 
+            // insertPropertyToolStripMenuItem
+            // 
+            this.insertPropertyToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.table;
+            this.insertPropertyToolStripMenuItem.Name = "insertPropertyToolStripMenuItem";
+            this.insertPropertyToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.insertPropertyToolStripMenuItem.Text = "Insert Property";
             // 
             // btnOK
             // 
@@ -165,13 +155,6 @@ namespace FdoToolbox.Core.Forms
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // insertPropertyToolStripMenuItem
-            // 
-            this.insertPropertyToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.table;
-            this.insertPropertyToolStripMenuItem.Name = "insertPropertyToolStripMenuItem";
-            this.insertPropertyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.insertPropertyToolStripMenuItem.Text = "Insert Property";
             // 
             // ExpressionDlg
             // 
@@ -204,9 +187,7 @@ namespace FdoToolbox.Core.Forms
         private System.Windows.Forms.ToolStripButton btnValidate;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.ToolStripDropDownButton btnProperties;
         private System.Windows.Forms.ToolStripDropDownButton btnConditions;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripDropDownButton btnDistance;
         private System.Windows.Forms.ToolStripDropDownButton btnSpatial;
         private System.Windows.Forms.ContextMenuStrip ctxExpression;

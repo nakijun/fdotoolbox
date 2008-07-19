@@ -318,7 +318,11 @@ namespace FdoToolbox.Core.Forms
                         item.Image = Properties.Resources.table_relationship;
                         break;
                     case PropertyType.PropertyType_DataProperty:
-                        item.Image = Properties.Resources.table;
+                        {
+                            DataPropertyDefinition dataDef = (DataPropertyDefinition)propDef;
+                            item.Image = Properties.Resources.table;
+                            item.ToolTipText = string.Format("Data Type: {0}\nLength: {1}", dataDef.DataType, dataDef.Length);
+                        }
                         break;
                     case PropertyType.PropertyType_GeometricProperty:
                         item.Image = Properties.Resources.shape_handles;
@@ -331,7 +335,6 @@ namespace FdoToolbox.Core.Forms
                         break;
                 }
                 item.Click += new EventHandler(property_Click);
-                btnProperties.DropDown.Items.Add(item);
                 insertPropertyToolStripMenuItem.DropDown.Items.Add(item);
             }
         }
