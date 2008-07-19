@@ -31,6 +31,10 @@ using OSGeo.FDO.Commands.Feature;
 using OSGeo.FDO.Commands.SQL;
 using OSGeo.FDO.Geometry;
 using OSGeo.FDO.Filter;
+using OSGeo.FDO.Connections.Capabilities;
+using FdoToolbox.Core.Forms;
+using System.Collections.Specialized;
+using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -71,8 +75,8 @@ namespace FdoToolbox.Core.Controls
         {
             using (IDescribeSchema desc = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
             {
-                FeatureSchemaCollection schemas = desc.Execute();
-                cmbSchema.DataSource = schemas;
+                cmbSchema.DataSource = desc.Execute();
+                cmbAggSchema.DataSource = desc.Execute();
             }
             base.OnLoad(e);
         }
@@ -100,7 +104,179 @@ namespace FdoToolbox.Core.Controls
 
         private void QueryAggregate()
         {
-            throw new NotImplementedException();
+            ClassDefinition classDef = cmbAggClass.SelectedItem as ClassDefinition;
+            if (CheckValidAggregates() && classDef != null)
+            {
+                using (ISelectAggregates select = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates) as ISelectAggregates)
+                {
+                    select.Distinct = chkDistinct.Checked;
+                    select.SetFeatureClassName(classDef.Name);
+                    NameValueCollection aggParams = GetAggregateParameters();
+                    foreach (string identifier in aggParams.AllKeys)
+                    {
+                        select.PropertyNames.Add(new ComputedIdentifier(identifier, Expression.Parse(aggParams[identifier])));
+                    }
+
+                    using (OSGeo.FDO.Commands.Feature.IDataReader reader = select.Execute())
+                    {
+                        DataTable table = new DataTable();
+                        PrepareGrid(table, reader);
+                        try
+                        {
+                            while (reader.ReadNext())
+                            {
+                                ProcessDataReader(table, aggParams, reader);
+                            }
+                        }
+                        catch (OSGeo.FDO.Common.Exception ex)
+                        {
+                            throw ex;
+                        }
+                        finally
+                        {
+                            reader.Close();
+                            grdPreview.DataSource = table;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ProcessDataReader(DataTable table, NameValueCollection aggParams, OSGeo.FDO.Commands.Feature.IDataReader reader)
+        {
+            DataRow row = table.NewRow();
+            foreach (string identifier in aggParams.AllKeys)
+            {
+                if (!reader.IsNull(identifier))
+                {
+                    PropertyType ptype = reader.GetPropertyType(identifier);
+                    switch (ptype)
+                    {
+                        case PropertyType.PropertyType_DataProperty:
+                            {
+                                DataType dtype = reader.GetDataType(identifier);
+                                switch (dtype)
+                                {
+                                    case DataType.DataType_BLOB:
+                                        row[identifier] = reader.GetLOB(identifier).Data;
+                                        break;
+                                    case DataType.DataType_Boolean:
+                                        row[identifier] = reader.GetBoolean(identifier);
+                                        break;
+                                    case DataType.DataType_Byte:
+                                        row[identifier] = reader.GetByte(identifier);
+                                        break;
+                                    case DataType.DataType_CLOB:
+                                        row[identifier] = reader.GetLOB(identifier).Data;
+                                        break;
+                                    case DataType.DataType_DateTime:
+                                        row[identifier] = reader.GetDateTime(identifier);
+                                        break;
+                                    case DataType.DataType_Decimal:
+                                        row[identifier] = reader.GetDouble(identifier);
+                                        break;
+                                    case DataType.DataType_Double:
+                                        row[identifier] = reader.GetDouble(identifier);
+                                        break;
+                                    case DataType.DataType_Int16:
+                                        row[identifier] = reader.GetInt16(identifier);
+                                        break;
+                                    case DataType.DataType_Int32:
+                                        row[identifier] = reader.GetInt32(identifier);
+                                        break;
+                                    case DataType.DataType_Int64:
+                                        row[identifier] = reader.GetInt64(identifier);
+                                        break;
+                                    case DataType.DataType_Single:
+                                        row[identifier] = reader.GetSingle(identifier);
+                                        break;
+                                    case DataType.DataType_String:
+                                        row[identifier] = reader.GetString(identifier);
+                                        break;
+                                }
+                            }
+                            break;
+                        case PropertyType.PropertyType_GeometricProperty:
+                            {
+                                byte[] bGeom = reader.GetGeometry(identifier);
+                                using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(bGeom))
+                                {
+                                    row[identifier] = geom.Text;
+                                }
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    row[identifier] = null;
+                }
+            }
+            table.Rows.Add(row);
+        }
+
+        /// <summary>
+        /// Prepares the data grid for select aggregate query results
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="reader"></param>
+        private void PrepareGrid(DataTable table, OSGeo.FDO.Commands.Feature.IDataReader reader)
+        {
+            int propCount = reader.GetPropertyCount();
+            for (int i = 0; i < propCount; i++)
+            {
+                string propName = reader.GetPropertyName(i);
+                table.Columns.Add(propName);
+            }
+        }
+
+        private bool CheckValidAggregates()
+        {
+            // Return true only if the following is true
+            // - All cells are not empty
+            // - All Expressions are valid
+            bool valid = true;
+            foreach (DataGridViewRow row in grdExpressions.Rows)
+            {
+                object expr = row.Cells[0].Value;
+                object alias = row.Cells[1].Value;
+
+                if (expr == null)
+                {
+                    row.ErrorText = "Expression cannot be empty";
+                    valid = false;
+                }
+                else
+                {
+                    try
+                    {
+                        using (Expression exp = Expression.Parse(expr.ToString())) { }
+                    }
+                    catch (OSGeo.FDO.Common.Exception ex)
+                    {
+                        row.ErrorText = ex.Message;
+                        valid = false;
+                    }
+                }
+
+                if (alias == null)
+                {
+                    row.ErrorText = "Alias cannot be empty";
+                    valid = false;
+                }
+            }
+
+            return valid;
+        }
+
+        private NameValueCollection GetAggregateParameters()
+        {
+            NameValueCollection dict = new NameValueCollection();
+            foreach (DataGridViewRow row in grdExpressions.Rows)
+            {
+                dict.Add(row.Cells[1].Value.ToString(), row.Cells[0].Value.ToString());
+            }
+            return dict;
         }
 
         private void QueryStandard()
@@ -136,7 +312,7 @@ namespace FdoToolbox.Core.Controls
                             {
                                 while (reader.ReadNext() && count < limit)
                                 {
-                                    ProcessReader(table, cd.Properties, cachedPropertyNames, reader);
+                                    ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
                                     count++;
                                 }
                             }
@@ -160,6 +336,11 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
+        /// <summary>
+        /// Prepares the data grid for standard query results
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="classDefinition"></param>
         private void PrepareGrid(DataTable table, ClassDefinition classDefinition)
         {
             foreach (PropertyDefinition def in classDefinition.Properties)
@@ -168,7 +349,7 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
-        private void ProcessReader(DataTable table, PropertyDefinitionCollection propDefs, Dictionary<int, string> cachedPropertyNames, IFeatureReader reader)
+        private void ProcessFeatureReader(DataTable table, PropertyDefinitionCollection propDefs, Dictionary<int, string> cachedPropertyNames, IFeatureReader reader)
         {
             ClassDefinition classDef = reader.GetClassDefinition();
             DataRow row = table.NewRow();
@@ -301,6 +482,82 @@ namespace FdoToolbox.Core.Controls
         public IConnection BoundConnection
         {
             get { return _BoundConnection; }
+        }
+
+        private void cmbAggSchema_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FeatureSchema schema = cmbAggSchema.SelectedItem as FeatureSchema;
+            if (schema != null)
+            {
+                cmbAggClass.DataSource = schema.Classes;
+            }
+        }
+
+        private void cmbAggClass_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
+            if (classDef != null)
+            {
+                this.Title = "Data Preview - " + classDef.Name;
+            }
+        }
+
+        private void grdExpressions_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ClassDefinition classDef = cmbAggClass.SelectedItem as ClassDefinition;
+            btnDeleteExpr.Enabled = (grdExpressions.Rows.Count > 0);
+            if (classDef != null && grdExpressions.Rows.Count > 0)
+            {
+                if (e.ColumnIndex == 0)
+                {
+                    string expr = string.Empty;
+                    object obj = grdExpressions.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    if (obj != null)
+                        expr = obj.ToString();
+
+                    expr = ExpressionDlg.EditExpression(this.BoundConnection, classDef, expr, ExpressionMode.SelectAggregates);
+                    if (!string.IsNullOrEmpty(expr))
+                        grdExpressions.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = expr;
+                }
+            }
+        }
+
+        private int counter = 0;
+
+        private void btnAddExpr_Click(object sender, EventArgs e)
+        {
+            ClassDefinition classDef = cmbAggClass.SelectedItem as ClassDefinition;
+            if (classDef != null)
+            {
+                string expr = ExpressionDlg.NewExpression(this.BoundConnection, classDef, ExpressionMode.SelectAggregates);
+                if (!string.IsNullOrEmpty(expr))
+                {
+                    string identifier = "Expr" + (counter++);
+                    grdExpressions.Rows.Add(expr, identifier);
+                }
+            }
+        }
+
+        private void btnDeleteExpr_Click(object sender, EventArgs e)
+        {
+            if (grdExpressions.SelectedRows.Count == 1)
+                grdExpressions.Rows.Remove(grdExpressions.SelectedRows[0]);
+            else if (grdExpressions.SelectedCells.Count == 1)
+                grdExpressions.Rows.RemoveAt(grdExpressions.SelectedCells[0].RowIndex);
+        }
+
+        private void btnEditFilter_Click(object sender, EventArgs e)
+        {
+            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
+            if(classDef != null)
+            {
+                string filterText = txtFilter.Text;
+                string newFilter = ExpressionDlg.EditExpression(this.BoundConnection, classDef, filterText, ExpressionMode.Filter);
+                if (!string.IsNullOrEmpty(newFilter))
+                {
+                    txtFilter.Text = newFilter;
+                }
+            }
         }
     }
 }
