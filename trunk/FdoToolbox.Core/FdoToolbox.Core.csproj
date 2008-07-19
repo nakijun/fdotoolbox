@@ -144,6 +144,12 @@
     <Compile Include="Forms\DataPropertyDefinitionDlg.Designer.cs">
       <DependentUpon>DataPropertyDefinitionDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ExpressionDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExpressionDlg.Designer.cs">
+      <DependentUpon>ExpressionDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormFactory.cs" />
     <Compile Include="Forms\GeometryPropertyDefinitionDlg.cs">
       <SubType>Form</SubType>
@@ -225,6 +231,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyMapping.xml" />
+    <None Include="Resources\arrow_right.png" />
+    <None Include="Resources\map.png" />
+    <None Include="Resources\add.png" />
+    <None Include="Resources\bricks.png" />
     <None Include="Resources\page_refresh.png" />
     <None Include="Resources\database_add.png" />
     <None Include="Resources\chart_organisation.png" />
@@ -308,6 +318,10 @@
     <EmbeddedResource Include="Forms\DataPropertyDefinitionDlg.resx">
       <DependentUpon>DataPropertyDefinitionDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExpressionDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ExpressionDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GeometryPropertyDefinitionDlg.resx">
       <DependentUpon>GeometryPropertyDefinitionDlg.cs</DependentUpon>
