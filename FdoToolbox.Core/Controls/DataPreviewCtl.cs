@@ -109,34 +109,42 @@ namespace FdoToolbox.Core.Controls
             {
                 using (ISelectAggregates select = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates) as ISelectAggregates)
                 {
-                    select.Distinct = chkDistinct.Checked;
-                    select.SetFeatureClassName(classDef.Name);
-                    NameValueCollection aggParams = GetAggregateParameters();
-                    foreach (string identifier in aggParams.AllKeys)
+                    try
                     {
-                        select.PropertyNames.Add(new ComputedIdentifier(identifier, Expression.Parse(aggParams[identifier])));
-                    }
-
-                    using (OSGeo.FDO.Commands.Feature.IDataReader reader = select.Execute())
-                    {
-                        DataTable table = new DataTable();
-                        PrepareGrid(table, reader);
-                        try
+                        select.Distinct = chkDistinct.Checked;
+                        select.SetFeatureClassName(classDef.Name);
+                        NameValueCollection aggParams = GetAggregateParameters();
+                        foreach (string identifier in aggParams.AllKeys)
                         {
-                            while (reader.ReadNext())
+                            select.PropertyNames.Add(new ComputedIdentifier(identifier, Expression.Parse(aggParams[identifier])));
+                        }
+
+                        using (OSGeo.FDO.Commands.Feature.IDataReader reader = select.Execute())
+                        {
+                            DataTable table = new DataTable();
+                            PrepareGrid(table, reader);
+                            try
                             {
-                                ProcessDataReader(table, aggParams, reader);
+                                while (reader.ReadNext())
+                                {
+                                    ProcessDataReader(table, aggParams, reader);
+                                }
+                            }
+                            catch (OSGeo.FDO.Common.Exception ex)
+                            {
+                                throw ex;
+                            }
+                            finally
+                            {
+                                reader.Close();
+                                grdPreview.DataSource = table;
                             }
                         }
-                        catch (OSGeo.FDO.Common.Exception ex)
-                        {
-                            throw ex;
-                        }
-                        finally
-                        {
-                            reader.Close();
-                            grdPreview.DataSource = table;
-                        }
+                    }
+                    catch (OSGeo.FDO.Common.Exception ex)
+                    {
+                        AppConsole.Alert("Error", ex.Message);
+                        AppConsole.WriteException(ex);
                     }
                 }
             }
