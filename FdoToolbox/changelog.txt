@@ -1,3 +1,10 @@
+v0.3.2
+------
+
+- Implemented the Expression Editor. Currently it doesn't support the Spatial and Distance operation types.
+- Data Preview: Added Select Aggregate support.
+- SVN changesets: r72 - r80
+
 v0.3.1
 ------
 - Bulk Copy stability fixes
