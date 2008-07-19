@@ -24,7 +24,7 @@
  * Console Mode
  * Raster Provider support
  * KML support
- * Expression Editor
+ * ~~Expression Editor~~
  * Visual Preview of FDO Data Sources
  * Extra Bulk Copy options
       * Property Value Mappings
