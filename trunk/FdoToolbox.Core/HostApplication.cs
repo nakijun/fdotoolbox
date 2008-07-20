@@ -56,16 +56,16 @@ namespace FdoToolbox.Core
 
         private bool _init = false;
 
-        private ToolStripMenuItem CreateSubMenu(string name, XmlNodeList nodes)
+        private ToolStripMenuItem CreateSubMenu(ToolStripMenuItem menu, XmlNodeList nodes)
         {
-            ToolStripMenuItem menu = new ToolStripMenuItem();
-            menu.Name = menu.Text = name;
             foreach (XmlNode node in nodes)
             {
                 ToolStripItem item = null;
                 if (node.Name == "SubMenu")
                 {
-                    item = CreateSubMenu(node.Attributes["name"].Value, node.ChildNodes);
+                    item = new ToolStripMenuItem();
+                    item.Name = item.Text = node.Attributes["name"].Value;
+                    item = CreateSubMenu((ToolStripMenuItem)item, node.ChildNodes);
                     if (node.Attributes["resource"] != null)
                     {
                         object resource = Properties.Resources.ResourceManager.GetObject(node.Attributes["resource"].Value);
@@ -137,11 +137,44 @@ namespace FdoToolbox.Core
             XmlNode root = doc.SelectNodes("//MenuMap")[0];
             foreach (XmlNode node in root.ChildNodes)
             {
-                ToolStripMenuItem menu = CreateSubMenu(node.Attributes["name"].Value, node.ChildNodes);
+                ToolStripMenuItem menu = new ToolStripMenuItem();
+                menu.Name = menu.Text = node.Attributes["name"].Value;
+                menu = CreateSubMenu(menu, node.ChildNodes);
                 Shell.MainMenu.Items.Add(menu);
             }
 
             AppConsole.WriteLine("Main Menu initialized");
+        }
+
+        public void ExtendUI(string uiExtensionFile)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(uiExtensionFile);
+
+            XmlNode shellExt = doc.SelectSingleNode("//UIExtension/Shell");
+            if (shellExt != null)
+            {
+                foreach (XmlNode menuNode in shellExt.ChildNodes)
+                {
+                    if (menuNode.Name != "Menu")
+                        AppConsole.Err.WriteLine("Unknown element {0} in {1}. Skipping", menuNode.Name, uiExtensionFile);
+
+                    string name = menuNode.Attributes["name"].Value;
+                    if (Shell.MainMenu.Items.ContainsKey(name))
+                    {
+                        ToolStripMenuItem menu = Shell.MainMenu.Items[name] as ToolStripMenuItem;
+                        menu = CreateSubMenu(menu, menuNode.ChildNodes);
+                    }
+                    else
+                    {
+                        ToolStripMenuItem menu = new ToolStripMenuItem();
+                        menu.Text = menu.Name = menuNode.Attributes["name"].Value;
+                        menu = CreateSubMenu(menu, menuNode.ChildNodes);
+                        Shell.MainMenu.Items.Add(menu);
+                    }
+                }
+            }
+            Shell.ObjectExplorer.ExtendUI(uiExtensionFile);
         }
 
         private void Cleanup()
@@ -188,18 +221,14 @@ namespace FdoToolbox.Core
                     AppConsole.Err.TextColor = System.Drawing.Color.Red;
                     AppConsole.Out.TimestampEntries = true;
                     AppConsole.Err.TimestampEntries = true;
-
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
                     AppConsole.WriteLine("Loading modules");
 
                     InitMessageHandlers();
-
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
-
-                    LoadDefinedModules();
-
                     InitMenus();
+                    LoadDefinedModules();
                     _init = true;
                 }
                 catch (Exception ex)

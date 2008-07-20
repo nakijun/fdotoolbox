@@ -314,69 +314,94 @@ namespace FdoToolbox
 
         private void ProcessMenuNode(object toolstrip, XmlNode menuNode)
         {
-            //TODO: Try to find the interface (one that exposes the .Items property)
-            //so we can avoid this type testing nonsense
-            ToolStrip tstrip = toolstrip as ToolStrip;
-            ToolStripMenuItem tsmi = toolstrip as ToolStripMenuItem;
-            foreach (XmlNode node in menuNode.ChildNodes)
+            if (menuNode != null)
             {
-                switch (node.Name)
+                //TODO: Try to find the interface (one that exposes the .Items property)
+                //so we can avoid this type testing nonsense
+                ToolStrip tstrip = toolstrip as ToolStrip;
+                ToolStripMenuItem tsmi = toolstrip as ToolStripMenuItem;
+                foreach (XmlNode node in menuNode.ChildNodes)
                 {
-                    case "Command":
-                        string cmdName = node.Attributes["name"].Value;
-                        Command cmd = HostApplication.Instance.ModuleManager.GetCommand(cmdName);
-                        if (cmd != null && (cmd.InvocationType != CommandInvocationType.Console))
-                        {
+                    switch (node.Name)
+                    {
+                        case "Command":
+                            string cmdName = node.Attributes["name"].Value;
+                            Command cmd = HostApplication.Instance.ModuleManager.GetCommand(cmdName);
+                            if (cmd != null && (cmd.InvocationType != CommandInvocationType.Console))
+                            {
+                                if (tstrip != null)
+                                    tstrip.Items.Add(CreateMenuItem(cmd, node));
+                                else if (tsmi != null)
+                                    tsmi.DropDown.Items.Add(CreateMenuItem(cmd, node));
+                            }
+                            else
+                            {
+                                AppConsole.Err.WriteLine("unrecognised menu command entry {0}", cmdName);
+                            }
+                            break;
+                        case "Separator":
                             if (tstrip != null)
-                                tstrip.Items.Add(CreateMenuItem(cmd, node));
+                                tstrip.Items.Add(new ToolStripSeparator());
                             else if (tsmi != null)
-                                tsmi.DropDown.Items.Add(CreateMenuItem(cmd, node));
-                        }
-                        else
-                        {
-                            AppConsole.Err.WriteLine("unrecognised menu command entry {0}", cmdName);
-                        }
-                        break;
-                    case "Separator":
-                        if (tstrip != null)
-                            tstrip.Items.Add(new ToolStripSeparator());
-                        else if (tsmi != null)
-                            tsmi.DropDown.Items.Add(new ToolStripSeparator());
-                        break;
-                    case "SubMenu":
-                        string subMenuName = node.Attributes["name"].Value;
-                        ToolStripMenuItem subMenu = new ToolStripMenuItem();
-                        subMenu.Text = subMenuName;
-                        if (node.Attributes["resource"] != null)
-                        {
-                            object resource = Properties.Resources.ResourceManager.GetObject(node.Attributes["resource"].Value);
-                            if (resource != null)
-                                subMenu.Image = (Image)resource;
-                        }
-                        ProcessMenuNode(subMenu, node);
-                        if (tstrip != null)
-                            tstrip.Items.Add(subMenu);
-                        else if (tsmi != null)
-                            tsmi.DropDown.Items.Add(subMenu);
-                        break;
-                    case "Menu":
-                        string menuName = node.Attributes["name"].Value;
-                        ToolStripMenuItem menu = new ToolStripMenuItem();
-                        menu.Text = menuName;
-                        ProcessMenuNode(menu, node);
-                        if (node.Attributes["resource"] != null)
-                        {
-                            object resource = Properties.Resources.ResourceManager.GetObject(node.Attributes["resource"].Value);
-                            if (resource != null)
-                                menu.Image = (Image)resource;
-                        }
-                        if (tstrip != null)
-                            tstrip.Items.Add(menu);
-                        else if (tsmi != null)
-                            tsmi.DropDown.Items.Add(menu);
-                        break;
+                                tsmi.DropDown.Items.Add(new ToolStripSeparator());
+                            break;
+                        case "SubMenu":
+                            string subMenuName = node.Attributes["name"].Value;
+                            ToolStripMenuItem subMenu = new ToolStripMenuItem();
+                            subMenu.Text = subMenuName;
+                            if (node.Attributes["resource"] != null)
+                            {
+                                object resource = Properties.Resources.ResourceManager.GetObject(node.Attributes["resource"].Value);
+                                if (resource != null)
+                                    subMenu.Image = (Image)resource;
+                            }
+                            ProcessMenuNode(subMenu, node);
+                            if (tstrip != null)
+                                tstrip.Items.Add(subMenu);
+                            else if (tsmi != null)
+                                tsmi.DropDown.Items.Add(subMenu);
+                            break;
+                        case "Menu":
+                            string menuName = node.Attributes["name"].Value;
+                            ToolStripMenuItem menu = new ToolStripMenuItem();
+                            menu.Text = menuName;
+                            ProcessMenuNode(menu, node);
+                            if (node.Attributes["resource"] != null)
+                            {
+                                object resource = Properties.Resources.ResourceManager.GetObject(node.Attributes["resource"].Value);
+                                if (resource != null)
+                                    menu.Image = (Image)resource;
+                            }
+                            if (tstrip != null)
+                                tstrip.Items.Add(menu);
+                            else if (tsmi != null)
+                                tsmi.DropDown.Items.Add(menu);
+                            break;
+                    }
                 }
             }
+        }
+
+        public void ExtendUI(string uiExtensionFile)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(uiExtensionFile);
+
+            XmlNode toolbarNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/Toolbar");
+            XmlNode connCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/Connections");
+            XmlNode selConnCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedConnection");
+            XmlNode taskCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/Tasks");
+            XmlNode selTaskCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedTask");
+            XmlNode moduleCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/Modules");
+            XmlNode selModuleCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedModule");
+
+            ProcessMenuNode(mToolStrip, toolbarNode);
+            ProcessMenuNode(ctxConnections, connCtxNode);
+            ProcessMenuNode(ctxSelectedConnection, selConnCtxNode);
+            ProcessMenuNode(ctxTasks, taskCtxNode);
+            ProcessMenuNode(ctxSelectedTask, selTaskCtxNode);
+            ProcessMenuNode(ctxModules, moduleCtxNode);
+            ProcessMenuNode(ctxSelectedModule, selModuleCtxNode);
         }
     }
 }

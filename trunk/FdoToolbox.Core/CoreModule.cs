@@ -29,6 +29,7 @@ using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Common.Io;
+using System.IO;
 
 namespace FdoToolbox.Core
 {
@@ -123,7 +124,9 @@ namespace FdoToolbox.Core
             {
                 try
                 {
-                    HostApplication.Instance.ModuleManager.LoadExtension(diag.FileName);
+                    string assemblyFile = diag.FileName;
+                    HostApplication.Instance.ModuleManager.LoadExtension(assemblyFile);
+                    
                 }
                 catch (ModuleLoadException ex)
                 {
