@@ -65,9 +65,9 @@ namespace FdoToolbox.Core.Controls
 
         private void ToggleUI()
         {
-            if (!_BoundConnection.ConnectionCapabilities.SupportsSQL())
+            if (!this.BoundConnection.ConnectionCapabilities.SupportsSQL())
                 tabQueryMode.TabPages.RemoveAt(TAB_SQL);
-            if (!Array.Exists<int>(_BoundConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates; }))
+            if (!Array.Exists<int>(this.BoundConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates; }))
                 tabQueryMode.TabPages.RemoveAt(TAB_AGGREGATE);
         }
 
