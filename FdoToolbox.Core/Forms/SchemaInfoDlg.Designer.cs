@@ -112,6 +112,7 @@ namespace FdoToolbox.Core.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SchemaInfoDlg";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Schema Information";
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
