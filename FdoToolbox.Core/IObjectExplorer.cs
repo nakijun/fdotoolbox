@@ -60,5 +60,11 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="name"></param>
         void RefreshConnection(string name);
+
+        /// <summary>
+        /// Extend the Object Explorer UI
+        /// </summary>
+        /// <param name="objExplorerExt">The Module's UI Extension file</param>
+        void ExtendUI(string uiExtensionFile);
     }
 }

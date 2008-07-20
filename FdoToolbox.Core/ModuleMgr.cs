@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
+using System.IO;
 
 namespace FdoToolbox.Core
 {
@@ -128,7 +129,7 @@ namespace FdoToolbox.Core
 
         public event ModuleEventHandler ModuleUnloaded;
 
-        public void LoadExtension(Assembly asm)
+        private void LoadExtension(Assembly asm)
         {
             //Probe assembly for all types that extend from
             //ModuleBase or implement IModule
@@ -162,6 +163,10 @@ namespace FdoToolbox.Core
                 asmPath = System.IO.Path.Combine(HostApplication.Instance.AppPath, asmPath);
             Assembly asm = Assembly.LoadFile(asmPath);
             LoadExtension(asm);
+
+            string uiExtensionFile = assemblyFile.Replace(".dll", ".UIExtension");
+            if (File.Exists(uiExtensionFile))
+                HostApplication.Instance.ExtendUI(uiExtensionFile);
         }
         
         public IModule GetLoadedModule(string name)
