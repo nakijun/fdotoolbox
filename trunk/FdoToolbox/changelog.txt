@@ -1,3 +1,9 @@
+
+- Extension modules can now extend the application UI
+- Errors thrown by ISelectAggregate execution are now alerted to the user.
+- Expression Editor: Property List now is in a context menu.
+- SVN changesets: r83 - 
+
 v0.3.2
 ------
 
