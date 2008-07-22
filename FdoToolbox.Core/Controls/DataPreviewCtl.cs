@@ -99,7 +99,50 @@ namespace FdoToolbox.Core.Controls
 
         private void QuerySQL()
         {
-            throw new NotImplementedException();
+            string sql = txtSQL.Text;
+            if (string.IsNullOrEmpty(sql))
+            {
+                AppConsole.Alert("Error", "Please enter the SQL query text");
+                return;
+            }
+            if (!sql.TrimStart().StartsWith("SELECT "))
+            {
+                AppConsole.Alert("Error", "Only SQL SELECT statements are allowed for data previewing");
+                return;
+            }
+            using (ISQLCommand sqlCmd = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand) as ISQLCommand)
+            {
+                try
+                {
+                    sqlCmd.SQLStatement = sql;
+                    using (ISQLDataReader reader = sqlCmd.ExecuteReader())
+                    {
+                        DataTable table = new DataTable();
+                        PrepareGrid(table, reader);
+                        try
+                        {
+                            while (reader.ReadNext())
+                            {
+                                ProcessSQLReader(table, reader);
+                            }
+                        }
+                        catch (OSGeo.FDO.Common.Exception ex)
+                        {
+                            throw ex;
+                        }
+                        finally
+                        {
+                            reader.Close();
+                            grdPreview.DataSource = table;
+                        }
+                    }
+                }
+                catch (OSGeo.FDO.Common.Exception ex)
+                {
+                    AppConsole.Alert("Error", ex.Message);
+                    AppConsole.WriteException(ex);
+                }
+            }
         }
 
         private void QueryAggregate()
@@ -148,6 +191,80 @@ namespace FdoToolbox.Core.Controls
                     }
                 }
             }
+        }
+
+        private void ProcessSQLReader(DataTable table, ISQLDataReader reader)
+        {
+            DataRow row = table.NewRow();
+            foreach (DataColumn col in table.Columns)
+            {
+                string identifier = col.ColumnName;
+                if (!reader.IsNull(identifier))
+                {
+                    PropertyType ptype = reader.GetPropertyType(identifier);
+                    switch (ptype)
+                    {
+                        case PropertyType.PropertyType_DataProperty:
+                            {
+                                DataType dtype = reader.GetColumnType(identifier);
+                                switch (dtype)
+                                {
+                                    case DataType.DataType_BLOB:
+                                        row[identifier] = reader.GetLOB(identifier).Data;
+                                        break;
+                                    case DataType.DataType_Boolean:
+                                        row[identifier] = reader.GetBoolean(identifier);
+                                        break;
+                                    case DataType.DataType_Byte:
+                                        row[identifier] = reader.GetByte(identifier);
+                                        break;
+                                    case DataType.DataType_CLOB:
+                                        row[identifier] = reader.GetLOB(identifier).Data;
+                                        break;
+                                    case DataType.DataType_DateTime:
+                                        row[identifier] = reader.GetDateTime(identifier);
+                                        break;
+                                    case DataType.DataType_Decimal:
+                                        row[identifier] = reader.GetDouble(identifier);
+                                        break;
+                                    case DataType.DataType_Double:
+                                        row[identifier] = reader.GetDouble(identifier);
+                                        break;
+                                    case DataType.DataType_Int16:
+                                        row[identifier] = reader.GetInt16(identifier);
+                                        break;
+                                    case DataType.DataType_Int32:
+                                        row[identifier] = reader.GetInt32(identifier);
+                                        break;
+                                    case DataType.DataType_Int64:
+                                        row[identifier] = reader.GetInt64(identifier);
+                                        break;
+                                    case DataType.DataType_Single:
+                                        row[identifier] = reader.GetSingle(identifier);
+                                        break;
+                                    case DataType.DataType_String:
+                                        row[identifier] = reader.GetString(identifier);
+                                        break;
+                                }
+                            }
+                            break;
+                        case PropertyType.PropertyType_GeometricProperty:
+                            {
+                                byte[] bGeom = reader.GetGeometry(identifier);
+                                using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(bGeom))
+                                {
+                                    row[identifier] = geom.Text;
+                                }
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    row[identifier] = null;
+                }
+            }
+            table.Rows.Add(row);
         }
 
         private void ProcessDataReader(DataTable table, NameValueCollection aggParams, OSGeo.FDO.Commands.Feature.IDataReader reader)
@@ -234,6 +351,21 @@ namespace FdoToolbox.Core.Controls
             for (int i = 0; i < propCount; i++)
             {
                 string propName = reader.GetPropertyName(i);
+                table.Columns.Add(propName);
+            }
+        }
+
+        /// <summary>
+        /// Prepares the data grid for SQL query results
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="reader"></param>
+        private void PrepareGrid(DataTable table, ISQLDataReader reader)
+        {
+            int propCount = reader.GetColumnCount();
+            for (int i = 0; i < propCount; i++)
+            {
+                string propName = reader.GetColumnName(i);
                 table.Columns.Add(propName);
             }
         }
