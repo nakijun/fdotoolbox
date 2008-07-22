@@ -88,6 +88,7 @@ namespace FdoToolbox.Core
             _Name = name;
             _Options = options;
             this.SpatialContextPickerMethod += new GetSpatialContextNameMethod(GetSourceSpatialContext);
+            this.CopySpatialContextOverride = OverrideFactory.GetCopySpatialContextOverride(options.Target.Connection);
         }
 
         private string GetSourceSpatialContext(IConnection conn)
@@ -120,6 +121,19 @@ namespace FdoToolbox.Core
             set { _Name = value; }
         }
 
+        private ICopySpatialContextOverride _CopySpatialContextOverride;
+
+        /// <summary>
+        /// A custom copy spatial context method. Use this to handle
+        /// corner cases with specific FDO providers
+        /// </summary>
+        public ICopySpatialContextOverride CopySpatialContextOverride
+        {
+            get { return _CopySpatialContextOverride; }
+            set { _CopySpatialContextOverride = value; }
+        }
+	
+
         private ClassCollection _SourceClasses;
         private ClassCopyOptions[] _ClassesToCopy;
 
@@ -141,7 +155,10 @@ namespace FdoToolbox.Core
             
             if (_Options.CopySpatialContexts)
             {
-                CopySpatialContexts(srcConn, destConn);
+                if (this.CopySpatialContextOverride != null)
+                    this.CopySpatialContextOverride.CopySpatialContexts(srcConn, destConn);
+                else
+                    CopySpatialContexts(srcConn, destConn);
             }
             //If target schema is undefined, create it
             if (_Options.ApplySchemaToTarget)
@@ -242,6 +259,7 @@ namespace FdoToolbox.Core
 
         private void CopySpatialContexts(IConnection srcConn, IConnection destConn)
         {
+            
             SendMessage("Copying spatial contexts to destination");
             if (!destConn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
             {
@@ -249,6 +267,7 @@ namespace FdoToolbox.Core
                 {
                     SendMessage("Prompting user for source spatial context");
                     string contextName = this.SpatialContextPickerMethod(srcConn);
+                    bool targetCanDestroySpatialContext = (Array.Exists<int>(destConn.CommandCapabilities.Commands, delegate(int c) { return c == (int)CommandType.CommandType_DestroySpatialContext; }));
                     //Get source spatial context 
                     using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
                     {
@@ -271,7 +290,6 @@ namespace FdoToolbox.Core
                                         }
                                     }
                                     SendMessage("Deleting all target spatial contexts");
-                                    bool targetCanDestroySpatialContext = (Array.Exists<int>(destConn.CommandCapabilities.Commands, delegate(int c) { return c == (int)CommandType.CommandType_DestroySpatialContext; })) ;
                                     if (targetCanDestroySpatialContext)
                                     {
                                         foreach (string contextToDelete in deleteList)
@@ -319,39 +337,17 @@ namespace FdoToolbox.Core
                             {
                                 string name = reader.GetName();
                                 SendMessage("Copying spatial context: " + name);
-                                //SHP-Specific processing (ugh!) It doesn't like it when
-                                //CSName != Spatial Context Name
-                                if(destConn.ConnectionInfo.ProviderName.StartsWith(ExpressUtility.PROVIDER_SHP))
-                                {
-                                    string wkt = reader.GetCoordinateSystemWkt();
-                                    WKTParser parser = new WKTParser(wkt);
-                                    //No wkt. Don't bother creating the context
-                                    if(!string.IsNullOrEmpty(parser.CSName))
-                                    {
-                                        create.CoordinateSystem = parser.CSName;
-                                        create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                                        create.Description = reader.GetDescription();
-                                        create.Extent = reader.GetExtent();
-                                        create.ExtentType = reader.GetExtentType();
-                                        create.Name = parser.CSName;
-                                        create.XYTolerance = reader.GetXYTolerance();
-                                        create.ZTolerance = reader.GetZTolerance();
-                                        create.Execute();
-                                    }
-                                }
-                                else
-                                {
-                                    create.CoordinateSystem = reader.GetCoordinateSystem();
-                                    create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                                    create.Description = reader.GetDescription();
-                                    create.Extent = reader.GetExtent();
-                                    create.ExtentType = reader.GetExtentType();
-                                    create.Name = name;
-                                    create.UpdateExisting = true;
-                                    create.XYTolerance = reader.GetXYTolerance();
-                                    create.ZTolerance = reader.GetZTolerance();
-                                    create.Execute();
-                                }
+                                
+                                create.CoordinateSystem = reader.GetCoordinateSystem();
+                                create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
+                                create.Description = reader.GetDescription();
+                                create.Extent = reader.GetExtent();
+                                create.ExtentType = reader.GetExtentType();
+                                create.Name = name;
+                                create.XYTolerance = reader.GetXYTolerance();
+                                create.ZTolerance = reader.GetZTolerance();
+                                create.UpdateExisting = true;
+                                create.Execute();
                             }
                         }
                     }
@@ -558,7 +554,7 @@ namespace FdoToolbox.Core
                     else if (geomDef != null)
                     {
                         byte[] value = sourceReader.GetGeometry(name);
-                        insert.PropertyValues.Add(new PropertyValue(name, new GeometryValue(value)));
+                        insert.PropertyValues.Add(new PropertyValue(target, new GeometryValue(value)));
                     }
                 }
             }
