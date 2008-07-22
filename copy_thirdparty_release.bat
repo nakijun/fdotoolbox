@@ -1,2 +1,2 @@
 @echo off
-copy /Y Thirdparty\Fdo\*.* out\Release
+xcopy /S /Y /I Thirdparty\Fdo\*.* out\Release
