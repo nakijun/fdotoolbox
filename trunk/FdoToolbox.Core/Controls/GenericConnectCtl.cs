@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using OSGeo.FDO.ClientServices;
 using System.Collections.Specialized;
 using OSGeo.FDO.Connections;
+using FdoToolbox.Core.Forms;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -37,6 +38,7 @@ namespace FdoToolbox.Core.Controls
             InitializeComponent();
             InitializeGrid();
             this.Title = "New Data Connection";
+            _PendingProperties = new List<string>();
             StringCollection providerNames = new StringCollection();
             using (ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders())
             {
@@ -87,8 +89,8 @@ namespace FdoToolbox.Core.Controls
                     MessageBox.Show("Connection failed: " + ex.Message);
                 }
             }
-        }
 
+        }
         private void btnConnect_Click(object sender, EventArgs e)
         {
             errorProvider1.Clear();
@@ -103,23 +105,45 @@ namespace FdoToolbox.Core.Controls
                 return;
             }
             IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(cmbProvider.SelectedItem.ToString());
-            using (conn)
+           
+            conn.ConnectionString = this.ParseConnectionString();
+            try
             {
-                conn.ConnectionString = this.ParseConnectionString();
-                try
+                if (conn.Open() == OSGeo.FDO.Connections.ConnectionState.ConnectionState_Pending)
                 {
-                    if (conn.Open() == OSGeo.FDO.Connections.ConnectionState.ConnectionState_Open)
+                    //Pending. Further parameters required
+                    NameValueCollection pendingParams = PendingParameterDialog.GetParameters(_PendingProperties, conn);
+                    if (pendingParams != null)
                     {
-                        HostApplication.Instance.ConnectionManager.AddConnection(txtName.Text, conn);
-                        this.Close();
+                        foreach (string name in pendingParams.AllKeys)
+                        {
+                            conn.ConnectionInfo.ConnectionProperties.SetProperty(name, pendingParams[name]);
+                        }
                     }
                     else
-                        MessageBox.Show("Connection failed");
+                    {
+                        throw new FdoConnectionException("Pending Parameters were not filled in");
+                    }
                 }
-                catch (OSGeo.FDO.Common.Exception ex)
+                if (conn.Open() == OSGeo.FDO.Connections.ConnectionState.ConnectionState_Open)
                 {
-                    MessageBox.Show("Connection failed: " + ex.Message);
+                    HostApplication.Instance.ConnectionManager.AddConnection(txtName.Text, conn);
+                    this.Close();
                 }
+                else
+                {
+                    throw new FdoConnectionException("Opening the connection did not move it to the \"opened\" state");
+                }
+            }
+            catch (FdoConnectionException ex)
+            {
+                AppConsole.Alert("Error", ex.Message);
+                conn.Dispose();
+            }
+            catch (OSGeo.FDO.Common.Exception ex)
+            {
+                AppConsole.Alert("Error", "Connection failed: " + ex.Message);
+                conn.Dispose();
             }
         }
 
@@ -145,19 +169,19 @@ namespace FdoToolbox.Core.Controls
             grdConnectProperties.Columns.Add(colValue);
         }
 
-        private void AddRequiredProperty(string name, string defaultValue)
+        private DataGridViewRow AddRequiredProperty(string name, string defaultValue)
         {
             //TODO: Attach a validation scheme
-            AddProperty(name, defaultValue);
+            return AddProperty(name, defaultValue);
         }
 
-        private void AddRequiredEnumerableProperty(string name, string defaultValue, IEnumerable<string> values)
+        private DataGridViewRow AddRequiredEnumerableProperty(string name, string defaultValue, IEnumerable<string> values)
         {
             //TODO: Attach a validation scheme
-            AddOptionalEnumerableProperty(name, defaultValue, values);
+            return AddOptionalEnumerableProperty(name, defaultValue, values);
         }
 
-        private void AddOptionalEnumerableProperty(string name, string defaultValue, IEnumerable<string> values)
+        private DataGridViewRow AddOptionalEnumerableProperty(string name, string defaultValue, IEnumerable<string> values)
         {
             DataGridViewRow row = new DataGridViewRow();
             DataGridViewTextBoxCell nameCell = new DataGridViewTextBoxCell();
@@ -169,9 +193,10 @@ namespace FdoToolbox.Core.Controls
             row.Cells.Add(valueCell);
 
             grdConnectProperties.Rows.Add(row);
+            return row;
         }
 
-        private void AddProperty(string name, string defaultValue)
+        private DataGridViewRow AddProperty(string name, string defaultValue)
         {
             DataGridViewRow row = new DataGridViewRow();
             DataGridViewTextBoxCell nameCell = new DataGridViewTextBoxCell();
@@ -182,10 +207,14 @@ namespace FdoToolbox.Core.Controls
             row.Cells.Add(valueCell);
 
             grdConnectProperties.Rows.Add(row);
+            return row;
         }
+
+        private List<string> _PendingProperties;
 
         public void SetConnectProperties(string provider)
         {
+            _PendingProperties.Clear();
             try
             {
                 IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(provider);
@@ -199,6 +228,47 @@ namespace FdoToolbox.Core.Controls
                         bool required = conn.ConnectionInfo.ConnectionProperties.IsPropertyRequired(name);
                         bool enumerable = conn.ConnectionInfo.ConnectionProperties.IsPropertyEnumerable(name);
                         string defaultValue = conn.ConnectionInfo.ConnectionProperties.GetPropertyDefault(name);
+                        bool canGetValues = true;
+                        string[] values = null;
+                        try
+                        {
+                            values = conn.ConnectionInfo.ConnectionProperties.EnumeratePropertyValues(name);
+                        }
+                        catch
+                        {
+                            _PendingProperties.Add(name);
+                            canGetValues = false;
+                        }
+                        if (required)
+                        {
+                            if (enumerable)
+                            {
+                                if (canGetValues)
+                                {
+                                    DataGridViewRow row = AddRequiredEnumerableProperty(localized, defaultValue, values);
+                                    if(values.Length > 0)
+                                        row.Cells[1].Value = values[0];
+                                }
+                            }
+                            else
+                                AddRequiredProperty(localized, defaultValue);
+                        }
+                        else
+                        {
+                            if (enumerable)
+                            {
+                                if(canGetValues)
+                                    AddOptionalEnumerableProperty(localized, defaultValue, values);
+                            }
+                            else
+                                AddProperty(localized, defaultValue);
+                        }
+                            
+                        /*
+                        string localized = conn.ConnectionInfo.ConnectionProperties.GetLocalizedName(name);
+                        bool required = conn.ConnectionInfo.ConnectionProperties.IsPropertyRequired(name);
+                        bool enumerable = conn.ConnectionInfo.ConnectionProperties.IsPropertyEnumerable(name);
+                        string defaultValue = conn.ConnectionInfo.ConnectionProperties.GetPropertyDefault(name);
                         string[] values = conn.ConnectionInfo.ConnectionProperties.EnumeratePropertyValues(name);
                         if (required && !enumerable)
                             AddRequiredProperty(localized, defaultValue);
@@ -208,6 +278,7 @@ namespace FdoToolbox.Core.Controls
                             AddOptionalEnumerableProperty(localized, defaultValue, values);
                         else
                             AddProperty(localized, defaultValue);
+                         */
                     }
                     btnTest.Enabled = btnConnect.Enabled = true;
                 }
@@ -218,11 +289,6 @@ namespace FdoToolbox.Core.Controls
                 btnTest.Enabled = btnConnect.Enabled = false;
                 grdConnectProperties.Rows.Clear();
             }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
