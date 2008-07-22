@@ -36,42 +36,83 @@ namespace FdoToolbox.Core.Controls
         public GenericCreateDataStoreCtl()
         {
             InitializeComponent();
-            InitializeGrid();
+            InitializeGrid(grdConnectProperties);
+            InitializeGrid(grdDataStoreProperties);
             this.Title = "New Data Store";
-            StringCollection providerNames = new StringCollection();
-            using (ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders())
+        }
+
+        private bool _FlatFile;
+
+        public bool IsFlatFile
+        {
+            get { return _FlatFile; }
+            set { _FlatFile = value; }
+        }
+	
+        protected override void OnLoad(EventArgs e)
+        {
+            ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders();
+            List<Provider> bProviders = new List<Provider>();
+            foreach (Provider prov in providers)
             {
-                foreach (Provider prov in providers)
-                {
-                    providerNames.Add(prov.Name);
-                }
+                bProviders.Add(prov);
             }
-            cmbProvider.DataSource = providerNames;
+            cmbProvider.DataSource = bProviders;
+            base.OnLoad(e);
         }
 
         private void cmbProvider_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SetConnectProperties(cmbProvider.SelectedItem.ToString());
+            Provider prov = cmbProvider.SelectedItem as Provider;
+            if (prov != null)
+            {
+                using (IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(prov.Name))
+                {
+                    this.IsFlatFile = (conn.ConnectionInfo.ProviderDatastoreType == ProviderDatastoreType.ProviderDatastoreType_File);
+                    if (SetDataStoreProperties(conn))
+                    {   
+                        grpConnect.Enabled = !this.IsFlatFile;
+                        if (!this.IsFlatFile)
+                            SetConnectProperties(conn);
+                    }
+                }
+            }
         }
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(cmbProvider.SelectedItem.ToString());
-            using (conn)
+            Provider prov = cmbProvider.SelectedItem as Provider;
+            if (prov != null)
             {
-                using (ICreateDataStore cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) as ICreateDataStore)
+                IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(prov.Name);
+                using (conn)
                 {
-                    foreach (DataGridViewRow row in grdConnectProperties.Rows)
-                    {
-                        string name = row.Cells[0].Value.ToString();
-                        string value = row.Cells[1].Value.ToString();
-                        cmd.DataStoreProperties.SetProperty(name, value);
-                    }
                     try
                     {
-                        cmd.Execute();
-                        AppConsole.Alert("Create Data Store", "Data Store successfully created");
-                        this.Accept();
+                        //Non-flatfile providers require a connection be made first
+                        if (!this.IsFlatFile)
+                        {
+                            foreach (DataGridViewRow row in grdConnectProperties.Rows)
+                            {
+                                string name = row.Cells[0].Value.ToString();
+                                string value = row.Cells[1].Value.ToString();
+                                conn.ConnectionInfo.ConnectionProperties.SetProperty(name, value);
+                            }
+                            conn.Open();
+                        }
+
+                        using (ICreateDataStore cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) as ICreateDataStore)
+                        {
+                            foreach (DataGridViewRow row in grdDataStoreProperties.Rows)
+                            {
+                                string name = row.Cells[0].Value.ToString();
+                                string value = row.Cells[1].Value.ToString();
+                                cmd.DataStoreProperties.SetProperty(name, value);
+                            }
+                            cmd.Execute();
+                            AppConsole.Alert("Create Data Store", "Data Store successfully created");
+                            this.Accept();
+                        }
                     }
                     catch (OSGeo.FDO.Common.Exception ex)
                     {
@@ -86,10 +127,10 @@ namespace FdoToolbox.Core.Controls
             this.Cancel();
         }
 
-        private void InitializeGrid()
+        private void InitializeGrid(DataGridView grid)
         {
-            grdConnectProperties.Rows.Clear();
-            grdConnectProperties.Columns.Clear();
+            grid.Rows.Clear();
+            grid.Columns.Clear();
             DataGridViewColumn colName = new DataGridViewColumn();
             colName.Name = "COL_NAME";
             colName.HeaderText = "Name";
@@ -99,23 +140,23 @@ namespace FdoToolbox.Core.Controls
             colValue.HeaderText = "Value";
 
             colValue.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            grdConnectProperties.Columns.Add(colName);
-            grdConnectProperties.Columns.Add(colValue);
+            grid.Columns.Add(colName);
+            grid.Columns.Add(colValue);
         }
 
-        private void AddRequiredProperty(string name, string defaultValue)
+        private DataGridViewRow AddRequiredProperty(DataGridView grid, string name, string defaultValue)
         {
             //TODO: Attach a validation scheme
-            AddProperty(name, defaultValue);
+            return AddProperty(grid, name, defaultValue);
         }
 
-        private void AddRequiredEnumerableProperty(string name, string defaultValue, IEnumerable<string> values)
+        private DataGridViewRow AddRequiredEnumerableProperty(DataGridView grid, string name, string defaultValue, IEnumerable<string> values)
         {
             //TODO: Attach a validation scheme
-            AddOptionalEnumerableProperty(name, defaultValue, values);
+            return AddOptionalEnumerableProperty(grid, name, defaultValue, values);
         }
 
-        private void AddOptionalEnumerableProperty(string name, string defaultValue, IEnumerable<string> values)
+        private DataGridViewRow AddOptionalEnumerableProperty(DataGridView grid, string name, string defaultValue, IEnumerable<string> values)
         {
             DataGridViewRow row = new DataGridViewRow();
             DataGridViewTextBoxCell nameCell = new DataGridViewTextBoxCell();
@@ -126,10 +167,11 @@ namespace FdoToolbox.Core.Controls
             row.Cells.Add(nameCell);
             row.Cells.Add(valueCell);
 
-            grdConnectProperties.Rows.Add(row);
+            grid.Rows.Add(row);
+            return row;
         }
 
-        private void AddProperty(string name, string defaultValue)
+        private DataGridViewRow AddProperty(DataGridView grid, string name, string defaultValue)
         {
             DataGridViewRow row = new DataGridViewRow();
             DataGridViewTextBoxCell nameCell = new DataGridViewTextBoxCell();
@@ -139,49 +181,117 @@ namespace FdoToolbox.Core.Controls
             row.Cells.Add(nameCell);
             row.Cells.Add(valueCell);
 
-            grdConnectProperties.Rows.Add(row);
+            grid.Rows.Add(row);
+            return row;
         }
 
-        public void SetConnectProperties(string provider)
+        public bool SetDataStoreProperties(IConnection conn)
+        {
+            bool canCreate = false;
+            try
+            {  
+                //Supports ICreateDataStore
+                if (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) > 0)
+                {
+                    canCreate = true;
+                    using (ICreateDataStore cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) as ICreateDataStore)
+                    {
+                        string[] propertyNames = cmd.DataStoreProperties.PropertyNames;
+                        grdDataStoreProperties.Rows.Clear();
+                        foreach (string name in propertyNames)
+                        {
+                            string localized = cmd.DataStoreProperties.GetLocalizedName(name);
+                            bool required = cmd.DataStoreProperties.IsPropertyRequired(name);
+                            bool enumerable = cmd.DataStoreProperties.IsPropertyEnumerable(name);
+                            string defaultValue = cmd.DataStoreProperties.GetPropertyDefault(name);
+                            string[] values = cmd.DataStoreProperties.EnumeratePropertyValues(name);
+                            if (required)
+                            {
+                                if (enumerable)
+                                {
+                                    DataGridViewRow row = AddRequiredEnumerableProperty(grdDataStoreProperties, localized, defaultValue, values);
+                                    if (values.Length > 0)
+                                        row.Cells[1].Value = values[0];
+                                }
+                                else
+                                    AddRequiredProperty(grdDataStoreProperties, localized, defaultValue);
+                            }
+                            else
+                            {
+                                if (enumerable)
+                                    AddOptionalEnumerableProperty(grdDataStoreProperties, localized, defaultValue, values);
+                                else
+                                    AddProperty(grdDataStoreProperties, localized, defaultValue);
+                            }
+                        }
+                    }
+                    btnCreate.Enabled = true;
+                }
+                else
+                {
+                    canCreate = false;
+                    AppConsole.Alert("Error", "The selected provider does not support the creation of data stores");
+                    btnCreate.Enabled = false;
+                    grdDataStoreProperties.Rows.Clear();
+                }
+            }
+            catch (OSGeo.FDO.Common.Exception ex)
+            {
+                AppConsole.Alert("Error", ex.Message);
+                btnCreate.Enabled = false;
+                grdDataStoreProperties.Rows.Clear();
+            }
+            return canCreate;
+        }
+
+        private void SetConnectProperties(IConnection conn)
         {
             try
             {
-                IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(provider);
-                using (conn)
+                string[] propertyNames = conn.ConnectionInfo.ConnectionProperties.PropertyNames;
+                grdConnectProperties.Rows.Clear();
+                foreach (string name in propertyNames)
                 {
-                    //Supports ICreateDataStore
-                    if (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) > 0)
+                    string localized = conn.ConnectionInfo.ConnectionProperties.GetLocalizedName(name);
+                    bool required = conn.ConnectionInfo.ConnectionProperties.IsPropertyRequired(name);
+                    bool enumerable = conn.ConnectionInfo.ConnectionProperties.IsPropertyEnumerable(name);
+                    string defaultValue = conn.ConnectionInfo.ConnectionProperties.GetPropertyDefault(name);
+                    bool canGetValues = true;
+                    string[] values = null;
+                    try
                     {
-                        using (ICreateDataStore cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) as ICreateDataStore)
+                        values = conn.ConnectionInfo.ConnectionProperties.EnumeratePropertyValues(name);
+                    }
+                    catch
+                    {
+                        canGetValues = false;
+                    }
+                    if (required)
+                    {
+                        if (enumerable)
                         {
-                            string[] propertyNames = cmd.DataStoreProperties.PropertyNames;
-                            grdConnectProperties.Rows.Clear();
-                            foreach (string name in propertyNames)
+                            if (canGetValues)
                             {
-                                string localized = cmd.DataStoreProperties.GetLocalizedName(name);
-                                bool required = cmd.DataStoreProperties.IsPropertyRequired(name);
-                                bool enumerable = cmd.DataStoreProperties.IsPropertyEnumerable(name);
-                                string defaultValue = cmd.DataStoreProperties.GetPropertyDefault(name);
-                                string[] values = cmd.DataStoreProperties.EnumeratePropertyValues(name);
-                                if (required && !enumerable)
-                                    AddRequiredProperty(localized, defaultValue);
-                                else if (required && enumerable)
-                                    AddRequiredEnumerableProperty(localized, defaultValue, values);
-                                else if (!required && enumerable)
-                                    AddOptionalEnumerableProperty(localized, defaultValue, values);
-                                else
-                                    AddProperty(localized, defaultValue);
+                                DataGridViewRow row = AddRequiredEnumerableProperty(grdConnectProperties, localized, defaultValue, values);
+                                if (values.Length > 0)
+                                    row.Cells[1].Value = values[0];
                             }
                         }
-                        btnCreate.Enabled = true;
+                        else
+                            AddRequiredProperty(grdConnectProperties, localized, defaultValue);
                     }
                     else
                     {
-                        AppConsole.Alert("Error", "The selected provider does not support the creation of data stores");
-                        btnCreate.Enabled = false;
-                        grdConnectProperties.Rows.Clear();
+                        if (enumerable)
+                        {
+                            if (canGetValues)
+                                AddOptionalEnumerableProperty(grdConnectProperties, localized, defaultValue, values);
+                        }
+                        else
+                            AddProperty(grdConnectProperties, localized, defaultValue);
                     }
                 }
+                btnCreate.Enabled = true;
             }
             catch (OSGeo.FDO.Common.Exception ex)
             {
