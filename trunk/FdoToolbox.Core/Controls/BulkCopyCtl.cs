@@ -226,9 +226,12 @@ namespace FdoToolbox.Core.Controls
 
         private void MapClassNode(string className, TreeNode classNode)
         {
-            classNode.Tag = className;
-            classNode.Text = classNode.Name + " (=> " + className + ")";
-            ResetPropertyNodes(classNode, className);
+            if (classNode != null)
+            {
+                classNode.Tag = className;
+                classNode.Text = classNode.Name + " (=> " + className + ")";
+                ResetPropertyNodes(classNode, className);
+            }
         }
 
         /// <summary>
@@ -260,7 +263,19 @@ namespace FdoToolbox.Core.Controls
         {
             ClassDefinition targetClassDef = GetTargetClassByName(targetClassName);
             ContextMenuStrip ctxProperties = new ContextMenuStrip();
-            
+            ToolStripItem resetItem = new ToolStripMenuItem();
+            resetItem.Text = "Remove Mapping";
+            resetItem.Image = Properties.Resources.cross;
+            resetItem.Click += delegate(object sender, EventArgs e)
+            {
+                TreeNode propNode = mTreeView.SelectedNode;
+                propNode.Tag = null;
+                propNode.Text = GetPropertyName(propNode) + " (unmapped)";
+            };
+
+            ctxProperties.Items.Add(resetItem);
+            ctxProperties.Items.Add(new ToolStripSeparator());
+
             foreach (TreeNode node in sourceClassNode.Nodes)
             {
                 node.Tag = null;
@@ -346,8 +361,11 @@ namespace FdoToolbox.Core.Controls
 
         private void MapPropertyNode(TreeNode propertyNode, string propertyName, string newPropertyName)
         {
-            propertyNode.Tag = newPropertyName;
-            propertyNode.Text = propertyName + "(=> " + newPropertyName + ")";
+            if (propertyNode != null)
+            {
+                propertyNode.Tag = newPropertyName;
+                propertyNode.Text = propertyName + "(=> " + newPropertyName + ")";
+            }
         }
 
         /// <summary>
