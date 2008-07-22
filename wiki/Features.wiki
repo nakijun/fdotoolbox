@@ -38,3 +38,8 @@ See [[http://fdo.osgeo.org FDO project page]] for a list of providers which supp
 All menus in FDO Toolbox are XML driven, you can edit these files to customise the user interface.
 
 FDO Toolbox can be extended through extension modules. With extension modules you can add new commands for custom functionality and include new menu entries to expose them in the user interface.
+
+
+
+
+^1^ Certain FDO providers do not support such a feature.
