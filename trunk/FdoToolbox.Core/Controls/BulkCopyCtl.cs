@@ -71,6 +71,8 @@ namespace FdoToolbox.Core.Controls
     {
         private ContextMenuStrip ctxTargetClasses;
 
+        private bool update = false;
+
         public BulkCopyCtl()
         {
             InitializeComponent();
@@ -78,6 +80,44 @@ namespace FdoToolbox.Core.Controls
             ctxTargetClasses = new ContextMenuStrip();
             cmbSrcConn.DataSource = new List<string>(HostApplication.Instance.ConnectionManager.GetConnectionNames());
             cmbDestConn.DataSource = new List<string>(HostApplication.Instance.ConnectionManager.GetConnectionNames());
+            update = false;
+        }
+
+        public BulkCopyCtl(BulkCopyTask task) : this()
+        {
+            txtName.Text = task.Name;
+            LoadSettings(task);
+            update = true;
+        }
+
+        private void LoadSettings(BulkCopyTask task)
+        {
+            cmbSrcConn.SelectedItem = task.Options.Source.Name; 
+            cmbDestConn.SelectedItem = task.Options.Target.Name;
+
+            cmbSrcSchema.SelectedText = task.Options.SourceSchemaName;
+            cmbDestSchema.SelectedText = task.Options.TargetSchemaName;
+
+            chkCopySpatialContexts.Checked = task.Options.CopySpatialContexts;
+
+            ClassCopyOptions[] copts = task.Options.GetClassCopyOptions();
+            foreach (ClassCopyOptions classCopyOption in copts)
+            {
+                //Map the class node
+                TreeNode classNode = GetRootNode().Nodes[classCopyOption.ClassName];
+                MapClassNode(classCopyOption.TargetClassName, classNode);
+
+                //Now map its properties
+                string[] srcProperties = classCopyOption.PropertyNames;
+                foreach (string sourceProp in srcProperties)
+                {
+                    string key = PREFIX_PROPERTY + sourceProp;
+                    TreeNode propertyNode = classNode.Nodes[key];
+                    string targetProp = classCopyOption.GetTargetPropertyName(sourceProp);
+
+                    MapPropertyNode(propertyNode, sourceProp, targetProp);
+                }
+            }
         }
 
         private void cmbSrcConn_SelectedIndexChanged(object sender, EventArgs e)
@@ -177,13 +217,18 @@ namespace FdoToolbox.Core.Controls
                     tsi.Click += delegate(object obj, EventArgs evt)
                     {
                         TreeNode classNode = mTreeView.SelectedNode;
-                        classNode.Tag = className;
-                        classNode.Text = classNode.Name + " (=> " + className + ")";
-                        ResetPropertyNodes(classNode, tsi.Name);
+                        MapClassNode(className, classNode);
                     };
                     ctxTargetClasses.Items.Add(tsi);
                 }
             }
+        }
+
+        private void MapClassNode(string className, TreeNode classNode)
+        {
+            classNode.Tag = className;
+            classNode.Text = classNode.Name + " (=> " + className + ")";
+            ResetPropertyNodes(classNode, className);
         }
 
         /// <summary>
@@ -281,8 +326,7 @@ namespace FdoToolbox.Core.Controls
                     if (IsMappable(srcClassName, propertyName, destClassName, newPropertyName, ref reason))
                     {
                         //Use the Tag property to store the mapped property name
-                        propertyNode.Tag = newPropertyName;
-                        propertyNode.Text = propertyName + "(=> " + newPropertyName + ")";
+                        MapPropertyNode(propertyNode, propertyName, newPropertyName);
                     }
                     else
                     {
@@ -298,6 +342,12 @@ namespace FdoToolbox.Core.Controls
                     node.ContextMenuStrip = ctxProperties;
                 }
             }
+        }
+
+        private void MapPropertyNode(TreeNode propertyNode, string propertyName, string newPropertyName)
+        {
+            propertyNode.Tag = newPropertyName;
+            propertyNode.Text = propertyName + "(=> " + newPropertyName + ")";
         }
 
         /// <summary>
@@ -438,8 +488,19 @@ namespace FdoToolbox.Core.Controls
             if (destSchema != null)
                 options.TargetSchemaName = destSchema.Name;
            
-            BulkCopyTask task = new BulkCopyTask(txtName.Text, options);
-            HostApplication.Instance.TaskManager.AddTask(task);
+            BulkCopyTask bcptask = new BulkCopyTask(txtName.Text, options);
+            if(update)
+            {
+                ITask task = HostApplication.Instance.TaskManager.GetTask(txtName.Text);
+                if (task != null)
+                    HostApplication.Instance.TaskManager.UpdateTask(txtName.Text, bcptask);
+                else
+                    HostApplication.Instance.TaskManager.AddTask(bcptask);
+            }
+            else
+            {
+                HostApplication.Instance.TaskManager.AddTask(bcptask);
+            }
             this.Close();
         }
 
