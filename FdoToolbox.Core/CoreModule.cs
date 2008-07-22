@@ -314,7 +314,26 @@ namespace FdoToolbox.Core
         [Command(CoreModule.CMD_EDITTASK, "Edit Task", InvocationType = CommandInvocationType.UI)]
         public void EditTask()
         {
-            throw new NotImplementedException();
+            ITask task = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedTask();
+            if (task == null)
+            {
+                AppConsole.WriteLine("Please select the task from the Object Explorer before invoking this command");
+                return;
+            }
+            switch (task.TaskType)
+            {
+                case TaskType.BulkCopy:
+                    {
+                        BaseDocumentCtl ctl = new BulkCopyCtl((BulkCopyTask)task);
+                        HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+                    }
+                    break;
+                default:
+                    {
+                        AppConsole.Alert("Error", "This task type is currently not editable");
+                    }
+                    break;
+            }
         }
 
         [Command(CoreModule.CMD_EXECUTETASK, "Execute Task", ImageResourceName = "application_go", InvocationType = CommandInvocationType.UI)]

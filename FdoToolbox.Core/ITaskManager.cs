@@ -34,5 +34,7 @@ namespace FdoToolbox.Core
 
         event TaskEventHandler TaskAdded;
         event TaskEventHandler TaskRemoved;
+
+        void UpdateTask(string taskName, ITask task);
     }
 }
