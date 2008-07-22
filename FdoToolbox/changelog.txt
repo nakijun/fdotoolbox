@@ -1,8 +1,15 @@
+v0.3.3
+------
 
+- Bulk Copy Control: Mappings can now be removed
+- Fixes for the Generic [Connect/Create Data Store] Dialogs for non-flatfile providers
+- Bulk Copy fixes for copying spatial contexts
+- Data Preview SQL support
 - Extension modules can now extend the application UI
 - Errors thrown by ISelectAggregate execution are now alerted to the user.
 - Expression Editor: Property List now is in a context menu.
-- SVN changesets: r83 - 
+- Included missing SQL scripts from FDO distribution. These were needed by rdbms providers and was not copied during the build process.
+- SVN changesets: r83 - r96
 
 v0.3.2
 ------
