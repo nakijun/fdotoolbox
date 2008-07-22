@@ -1,0 +1,40 @@
+#summary Features of FDO Toolbox
+
+== Data Management ==
+
+=== Connect to a wide-variety of geospatial data sources ===
+ 
+See [[http://fdo.osgeo.org FDO project page]] for a list of supported geospatial data sources.
+
+=== Create geospatial data stores ===
+
+See [[http://fdo.osgeo.org FDO project page]] for a list of providers which support data store creation.
+
+=== Manage geospatial data ===
+ 
+ * Create and edit feature schemas ^1^
+ * Create and edit feature classes and its properties ^1^
+ * Create and edit spatial contexts ^1^
+
+=== Save/Load schema configurations ===
+
+ * Save schema to XML
+ * Load and apply a schema from XML ^1^
+
+== Data Preview ==
+ 
+ * Preview geospatial data using a variety of methods
+    * Standard FDO query 
+    * Standard FDO aggregate query ^1^
+    * SQL query ^1^
+
+== Bulk Copy ==
+
+ * Copy any number of Feature Classes and its properties from one source to another ^1^
+ * Save/Load bulk copy tasks.
+
+== Extensibility ==
+
+All menus in FDO Toolbox are XML driven, you can edit these files to customise the user interface.
+
+FDO Toolbox can be extended through extension modules. With extension modules you can add new commands for custom functionality and include new menu entries to expose them in the user interface.
