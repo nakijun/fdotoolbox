@@ -403,5 +403,10 @@ namespace FdoToolbox
             ProcessMenuNode(ctxModules, moduleCtxNode);
             ProcessMenuNode(ctxSelectedModule, selModuleCtxNode);
         }
+
+        public void UnHide()
+        {
+            this.Show();
+        }
     }
 }

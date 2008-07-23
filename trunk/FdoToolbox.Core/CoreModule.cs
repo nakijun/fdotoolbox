@@ -71,6 +71,8 @@ namespace FdoToolbox.Core
         public const string CMD_MANAGESPATIALCONTEXTS = "mansc";
         public const string CMD_RENAMECONNECTION = "renameconn";
         public const string CMD_REFRESHCONN = "refreshconn";
+        public const string CMD_SHOWOBJECTEXPLORER = "showobjectexplorer";
+        public const string CMD_SHOWCONSOLE = "showconsole";
 
         #endregion
 
@@ -533,6 +535,18 @@ namespace FdoToolbox.Core
                 return;
             }
             HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
+        }
+
+        [Command(CoreModule.CMD_SHOWOBJECTEXPLORER, "Show Object Explorer", ShortcutKeys = Keys.Control | Keys.D1)]
+        public void ShowObjectExplorer()
+        {
+            HostApplication.Instance.Shell.ObjectExplorer.UnHide();
+        }
+
+        [Command(CoreModule.CMD_SHOWCONSOLE, "Show Application Console", ShortcutKeys = Keys.Control | Keys.D2)]
+        public void ShowConsole()
+        {
+            HostApplication.Instance.Shell.ConsoleWindow.UnHide();
         }
     }
 }

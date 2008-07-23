@@ -88,6 +88,7 @@ namespace FdoToolbox
             this.ClientSize = new System.Drawing.Size(563, 266);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.HideOnClose = true;
             this.Name = "ConsoleWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.TabText = "Application Console";

@@ -40,6 +40,10 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="shp2sdf" /> 
 		</SubMenu>
 	</Menu>
+	<Menu name="View">
+		<Command name="showobjectexplorer" />
+		<Command name="showconsole" />
+	</Menu>
 	<Menu name="Help">
 		<Command name="help" />
 		<Command name="about" />
