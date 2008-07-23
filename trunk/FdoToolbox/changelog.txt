@@ -1,3 +1,17 @@
+- Enhancements:
+	- Schema Management
+		- Can save selected schema to:
+			- XML
+			- Applied to a new SDF file
+		- Re-Activated class editing. Removing properties does not work.
+	- Express Module
+		- You can now create connections straight after creating SDF/SHP files.
+- Other:
+		- FDO libraries now reside in its own subdirectory. This makes it easier to update the FDO libraries independent of FDO Toolbox.
+- Fixes:
+	- Can un-hide Object Explorer or Application Console if they were accidentally hidden.
+- SVN changesets: r101 - 
+
 v0.3.3
 ------
 
