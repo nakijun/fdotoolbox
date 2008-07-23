@@ -77,8 +77,7 @@ namespace FdoToolbox.Core.Controls
             networkLinkClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_NetworkLinkClass) >= 0;
 
             //Schema modification
-            btnDeleteSchema.Visible = btnDeleteClass.Visible = this.BoundConnection.SchemaCapabilities.SupportsSchemaModification;
-            btnEditClass.Visible = false; //temp measure
+            btnDeleteSchema.Visible = btnDeleteClass.Visible = btnEditClass.Visible = this.BoundConnection.SchemaCapabilities.SupportsSchemaModification;
         }
 
         private FeatureSchemaCollection _Schemas;
