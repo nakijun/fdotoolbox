@@ -52,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConsole.cs" />
+    <Compile Include="BulkCopyOptions.cs" />
     <Compile Include="BulkCopyTask.cs" />
+    <Compile Include="ClassCopyOptions.cs" />
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="ConnLoader.cs" />
     <Compile Include="Controls\BaseDocumentCtl.cs">
