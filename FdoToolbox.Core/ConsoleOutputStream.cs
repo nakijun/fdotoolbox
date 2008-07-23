@@ -188,15 +188,18 @@ namespace FdoToolbox.Core
             }
             if (!string.IsNullOrEmpty(s))
             {
-                if (_txtBox is RichTextBox)
+                if (!_txtBox.IsDisposed)
                 {
-                    AppendColoredText((_txtBox as RichTextBox), this.TextColor, s);
-                    _txtBox.Invoke(new MethodInvoker(delegate { _txtBox.ScrollToCaret(); }));
-                }
-                else
-                {
-                    _txtBox.AppendText(s);
-                    _txtBox.ScrollToCaret();
+                    if (_txtBox is RichTextBox)
+                    {
+                        AppendColoredText((_txtBox as RichTextBox), this.TextColor, s);
+                        _txtBox.Invoke(new MethodInvoker(delegate { _txtBox.ScrollToCaret(); }));
+                    }
+                    else
+                    {
+                        _txtBox.AppendText(s);
+                        _txtBox.ScrollToCaret();
+                    }
                 }
             }
         }
