@@ -94,6 +94,27 @@ namespace FdoToolbox.Core
 
         public override void Cleanup() { }
 
+        /// <summary>
+        /// Helper method to add a connection by the given name, if that name
+        /// already exists, the user will be asked to enter a new name, and
+        /// will be repeatedly asked to do this until they enter a unique name 
+        /// (connection added)
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="name"></param>
+        /// <returns>The name of the added connection</returns>
+        public static void AddConnection(IConnection conn, string name)
+        {
+            IConnection conn2 = HostApplication.Instance.ConnectionManager.GetConnection(name);
+            while (conn2 != null)
+            {
+                AppConsole.Alert("Error", "This connection name already exists. Please pick another");
+                name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
+                conn2 = HostApplication.Instance.ConnectionManager.GetConnection(name);
+            }
+            HostApplication.Instance.ConnectionManager.AddConnection(name, conn);
+        }
+
         [Command(CoreModule.CMD_ABOUT, "About", Description = "About this application", ImageResourceName = "information")]
         public void About()
         {
