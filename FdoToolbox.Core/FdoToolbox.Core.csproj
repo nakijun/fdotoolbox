@@ -244,6 +244,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyMapping.xml" />
+    <None Include="Resources\page_white_code.png" />
     <None Include="Resources\arrow_right.png" />
     <None Include="Resources\map.png" />
     <None Include="Resources\add.png" />

@@ -29,6 +29,7 @@ using System.Diagnostics;
 using FdoToolbox.Core.Forms;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.Schema;
+using OSGeo.FDO.Common.Io;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -90,9 +91,11 @@ namespace FdoToolbox.Core.Controls
                 _bsClasses.DataSource = selectedSchema.Classes;
                 lstClasses.DataSource = _bsClasses;
                 btnAddClass.Enabled = btnEditClass.Enabled = btnDeleteClass.Enabled = true;
+                btnSaveSchema.Visible = true;
             }
             else
             {
+                btnSaveSchema.Visible = false;
                 btnAddClass.Enabled = btnEditClass.Enabled = btnDeleteClass.Enabled = false;
             }
         }
@@ -208,6 +211,79 @@ namespace FdoToolbox.Core.Controls
         public IConnection BoundConnection
         {
             get { return _BoundConnection; }
+        }
+
+        private void SaveSchemaAsXML_Click(object sender, EventArgs e)
+        {
+            FeatureSchema selectedSchema = lstSchemas.SelectedItem as FeatureSchema;
+            if (selectedSchema != null)
+            {
+                SaveFileDialog diag = new SaveFileDialog();
+                diag.InitialDirectory = HostApplication.Instance.AppPath;
+                diag.Title = "Save schema to XML";
+                diag.Filter = "Feature Schema Definition (*.schema)|*.schema";
+                if (diag.ShowDialog() == DialogResult.OK)
+                {
+                    selectedSchema.WriteXml(diag.FileName);
+                    AppConsole.Alert("Schema saved", "Schema saved to " + diag.FileName);
+                }
+            }
+        }
+
+        private void SaveSchemaAsSDF_Click(object sender, EventArgs e)
+        {
+            FeatureSchema selectedSchema = lstSchemas.SelectedItem as FeatureSchema;
+            if (selectedSchema != null)
+            {
+                SaveFileDialog diag = new SaveFileDialog();
+                diag.Title = "Save schema to SDF";
+                diag.Filter = "SDF File (*.sdf)|*.sdf";
+                if (diag.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        if (ExpressUtility.CreateSDF(diag.FileName))
+                        {
+                            FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
+                            using (IoMemoryStream stream = new IoMemoryStream())
+                            {
+                                //Clone selected schema
+                                selectedSchema.WriteXml(stream);
+                                stream.Reset();
+                                newSchemas.ReadXml(stream);
+
+                                IConnection conn = ExpressUtility.CreateSDFConnection(diag.FileName, false);
+                                conn.Open();
+                                using (IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
+                                {
+                                    apply.FeatureSchema = newSchemas[0];
+                                    apply.Execute();
+                                }
+
+                                if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + diag.FileName + ". Connect to it?"))
+                                {
+                                    string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
+                                    name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
+                                    CoreModule.AddConnection(conn, name);
+                                }
+                                else
+                                {
+                                    conn.Dispose();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Unable to create SDF file at " + diag.FileName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        AppConsole.Alert("Error", ex.Message);
+                        AppConsole.WriteException(ex);
+                    }
+                }
+            }
         }
     }
 }
