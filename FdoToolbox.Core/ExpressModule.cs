@@ -70,26 +70,39 @@ namespace FdoToolbox.Core
         public override void Cleanup() { }
 
         [Command(ExpressModule.CMD_SDFCONNECT, "Connect to SDF", Description = "Connect to a SDF data source")]
-        public void SDFConnect()
+        public void SdfConnect()
         {
-            IConnection conn = ExpressUtility.CreateSDFConnection();
-            if (conn != null)
+            IConnection conn = null;
+            OpenFileDialog diag = new OpenFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
+            diag.Title = "Create SDF connection";
+            diag.Filter = "SDF Files (*.sdf)|*.sdf";
+            diag.Multiselect = false;
+            diag.ShowReadOnly = true;
+            if (diag.ShowDialog() == DialogResult.OK)
             {
+                conn = ExpressUtility.CreateSDFConnection(diag.FileName, diag.ReadOnlyChecked);
                 IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
                 string name = mgr.CreateUniqueName();
-                mgr.AddConnection(name, conn); 
+                CoreModule.AddConnection(conn, name);
             }
         }
 
         [Command(ExpressModule.CMD_SHPCONNECT, "Connect to SHP", Description = "Connect to a SHP data source")]
-        public void SHPConnect()
+        public void ShpConnect()
         {
-            IConnection conn = ExpressUtility.CreateSHPConnection();
-            if (conn != null)
+            IConnection conn = null;
+            OpenFileDialog diag = new OpenFileDialog();
+            diag.InitialDirectory = HostApplication.Instance.AppPath;
+            diag.Title = "Create SHP connection";
+            diag.Filter = "SHP Files (*.shp)|*.shp";
+            diag.Multiselect = false;
+            if (diag.ShowDialog() == DialogResult.OK)
             {
+                conn = ExpressUtility.CreateSHPConnection(diag.FileName);
                 IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
                 string name = mgr.CreateUniqueName();
-                mgr.AddConnection(name, conn);
+                CoreModule.AddConnection(conn, name);
             }
         }
 
@@ -105,7 +118,13 @@ namespace FdoToolbox.Core
                 string fileName = diag.FileName;
                 if (ExpressUtility.CreateSDF(fileName))
                 {
-                    AppConsole.Alert("Create SDF", "SDF File created at " + fileName, true);
+                    if (AppConsole.Confirm("Create SDF", "SDF File created at " + fileName + ". Create a connection to it?"))
+                    {
+                        string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
+                        name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
+                        IConnection conn = ExpressUtility.CreateSDFConnection(fileName, false);
+                        CoreModule.AddConnection(conn, name);
+                    }
                 }
                 else
                 {
@@ -140,44 +159,54 @@ namespace FdoToolbox.Core
                 string connStr = string.Format("DefaultFileLocation={0}", dir);
 
                 IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SHP");
-                using (conn)
+                
+                conn.ConnectionString = connStr;
+                if (conn.Open() == ConnectionState.ConnectionState_Open)
                 {
-                    conn.ConnectionString = connStr;
-                    if (conn.Open() == ConnectionState.ConnectionState_Open)
-                    {
-                        FeatureSchema schema = new FeatureSchema("Default", "Default SHP Schema");
-                        FeatureClass classDef = new FeatureClass();
-                        classDef.Name = className;
-                        schema.Classes.Add(classDef);
+                    FeatureSchema schema = new FeatureSchema("Default", "Default SHP Schema");
+                    FeatureClass classDef = new FeatureClass();
+                    classDef.Name = className;
+                    schema.Classes.Add(classDef);
 
-                        ClassDefCtl ctl = new ClassDefCtl(classDef, conn);
-                        Form frm = FormFactory.CreateFormForControl(ctl);
-                        if (frm.ShowDialog() == DialogResult.OK)
+                    ClassDefCtl ctl = new ClassDefCtl(classDef, conn);
+                    Form frm = FormFactory.CreateFormForControl(ctl);
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        //Because we are connecting to a directory, this should create an empty
+                        //SHP file for each feature class of the same name
+                        using (IApplySchema cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
                         {
-                            //Because we are connecting to a directory, this should create an empty
-                            //SHP file for each feature class of the same name
-                            using (IApplySchema cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
+                            cmd.FeatureSchema = schema;
+                            cmd.Execute();
+                            if (AppConsole.Confirm("Create SHP", "New SHP file created at: " + diag.FileName + ". Create a connection?"))
                             {
-                                cmd.FeatureSchema = schema;
-                                cmd.Execute();
-                                AppConsole.Alert("Create SHP", "New SHP file created at: " + diag.FileName);
+                                string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
+                                name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
+                                CoreModule.AddConnection(conn, name);
+                                return; //Save this connection, don't dispose
                             }
                         }
-                        conn.Close();
                     }
                 }
+                conn.Dispose();
             }
         }
 
+        
         [Command(ExpressModule.CMD_SHPDIRCONNECT, "Connect to SHP (directory)", "Connect to a directory of SHP files")]
         public void ShpDirConnect()
         {
-            IConnection conn = ExpressUtility.CreateSHPDirectoryConnection();
-            if (conn != null)
+            IConnection conn = null;
+            FolderBrowserDialog diag = new FolderBrowserDialog();
+            diag.SelectedPath = HostApplication.Instance.AppPath;
+            diag.Description = "Select the directory that contains the SHP files";
+            diag.ShowNewFolderButton = false;
+            if (diag.ShowDialog() == DialogResult.OK)
             {
+                conn = ExpressUtility.CreateSHPConnection(diag.SelectedPath);
                 IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
                 string name = mgr.CreateUniqueName();
-                mgr.AddConnection(name, conn);
+                CoreModule.AddConnection(conn, name);
             }
         }
 

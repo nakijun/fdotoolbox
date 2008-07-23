@@ -111,7 +111,7 @@ namespace FdoToolbox.Core.Controls
                             }
                             cmd.Execute();
                             AppConsole.Alert("Create Data Store", "Data Store successfully created");
-                            this.Accept();
+                            this.Close();
                         }
                     }
                     catch (OSGeo.FDO.Common.Exception ex)

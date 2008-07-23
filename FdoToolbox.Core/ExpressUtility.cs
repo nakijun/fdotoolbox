@@ -38,54 +38,19 @@ namespace FdoToolbox.Core
         public const string CONN_FMT_SDF = "File={0}";
         public const string CONN_FMT_SHP = "DefaultFileLocation={0}";
 
-        public static IConnection CreateSDFConnection()
+        public static IConnection CreateSDFConnection(string sdfFile, bool readOnly)
         {
-            IConnection conn = null;
-            OpenFileDialog diag = new OpenFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Create SDF connection";
-            diag.Filter = "SDF Files (*.sdf)|*.sdf";
-            diag.Multiselect = false;
-            diag.ShowReadOnly = true;
-            if (diag.ShowDialog() == DialogResult.OK)
-            {
-                string connStr = string.Format("File={0};ReadOnly={1}", diag.FileName, diag.ReadOnlyChecked.ToString().ToUpper());
-                conn =  FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SDF");
-                conn.ConnectionString = connStr;
-            }
+            string connStr = string.Format("File={0};ReadOnly={1}", sdfFile, readOnly.ToString().ToUpper());
+            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(PROVIDER_SDF);
+            conn.ConnectionString = connStr;
             return conn;
         }
 
-        public static IConnection CreateSHPConnection()
+        public static IConnection CreateSHPConnection(string path)
         {
-            IConnection conn = null;
-            OpenFileDialog diag = new OpenFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Create SHP connection";
-            diag.Filter = "SHP Files (*.shp)|*.shp";
-            diag.Multiselect = false;
-            if (diag.ShowDialog() == DialogResult.OK)
-            {
-                string connStr = string.Format("DefaultFileLocation={0}", diag.FileName);
-                conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SHP");
-                conn.ConnectionString = connStr;
-            }
-            return conn;
-        }
-
-        public static IConnection CreateSHPDirectoryConnection()
-        {
-            IConnection conn = null;
-            FolderBrowserDialog diag = new FolderBrowserDialog();
-            diag.SelectedPath = HostApplication.Instance.AppPath;
-            diag.Description = "Select the directory that contains the SHP files";
-            diag.ShowNewFolderButton = false;
-            if (diag.ShowDialog() == DialogResult.OK)
-            {
-                string connStr = string.Format("DefaultFileLocation={0}", diag.SelectedPath);
-                conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SHP");
-                conn.ConnectionString = connStr;
-            }
+            string connStr = string.Format("DefaultFileLocation={0}", path);
+            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(PROVIDER_SHP);
+            conn.ConnectionString = connStr;
             return conn;
         }
 
