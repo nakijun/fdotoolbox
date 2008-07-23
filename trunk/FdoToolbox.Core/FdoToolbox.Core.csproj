@@ -221,6 +221,8 @@
     <Compile Include="ModuleMgr.cs" />
     <Compile Include="MySqlCopySpatialContextOverride.cs" />
     <Compile Include="OverrideFactory.cs" />
+    <Compile Include="PreferenceDictionary.cs" />
+    <Compile Include="PreferenceNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -245,6 +247,7 @@
     <Content Include="OEMenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Preferences.xml" />
     <Content Include="PropertyMapping.xml" />
     <None Include="Resources\page_white_code.png" />
     <None Include="Resources\arrow_right.png" />
