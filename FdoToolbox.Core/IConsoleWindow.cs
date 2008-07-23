@@ -26,10 +26,12 @@ namespace FdoToolbox.Core
 {
     public delegate void ConsoleInputHandler(string input);
 
-    public interface IConsoleWindow
+    public interface IConsoleWindow : IFormWrapper
     {
         event ConsoleInputHandler ConsoleInput;
         TextBoxBase TextWindow { get; }
         TextBoxBase InputTextBox { get; }
+
+        void UnHide();
     }
 }

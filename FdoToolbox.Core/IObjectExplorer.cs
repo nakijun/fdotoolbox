@@ -66,5 +66,7 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="objExplorerExt">The Module's UI Extension file</param>
         void ExtendUI(string uiExtensionFile);
+
+        void UnHide();
     }
 }

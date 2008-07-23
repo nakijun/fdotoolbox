@@ -74,5 +74,15 @@ namespace FdoToolbox
 					this.ConsoleInput(cmdText);
 			}
 		}
-	}
+
+        public Form FormObj
+        {
+            get { return this; }
+        }
+
+        public void UnHide()
+        {
+            this.Show();
+        }
+    }
 }

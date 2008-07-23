@@ -137,6 +137,7 @@ namespace FdoToolbox
             this.ClientSize = new System.Drawing.Size(292, 266);
             this.Controls.Add(this.mTreeView);
             this.Controls.Add(this.mToolStrip);
+            this.HideOnClose = true;
             this.Name = "ObjectExplorer";
             this.TabText = "Object Explorer";
             this.Text = "Object Explorer";
