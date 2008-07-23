@@ -211,6 +211,7 @@ namespace FdoToolbox.Core
 
         private void Cleanup()
         {
+            Preferences.Save();
             if (_moduleMgr is IDisposable)
                 (_moduleMgr as IDisposable).Dispose();
             if (_connMgr is IDisposable)
@@ -251,8 +252,12 @@ namespace FdoToolbox.Core
                     AppConsole.Out = new ConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
                     AppConsole.Err = new ConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
                     AppConsole.Err.TextColor = System.Drawing.Color.Red;
-                    AppConsole.Out.TimestampEntries = true;
-                    AppConsole.Err.TimestampEntries = true;
+
+                    InitializePrefs();
+
+                    bool? timestamp = this.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
+                    AppConsole.Out.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
+                    AppConsole.Err.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
                     AppConsole.WriteLine("Loading modules");
 
@@ -272,6 +277,21 @@ namespace FdoToolbox.Core
                 if (this.OnAppInitialized != null)
                     this.OnAppInitialized(this, EventArgs.Empty);
             }
+        }
+
+        private void InitializePrefs()
+        {
+            PreferenceDictionary dict = new PreferenceDictionary();
+            string file = "Preferences.xml";
+            if (File.Exists(file))
+            {
+                dict.LoadPreferences(file);
+            }
+            else
+            {
+                dict.InitializeDefault();
+            }
+            _PrefDict = dict;
         }
 
         private void LoadDefinedModules()
@@ -437,6 +457,14 @@ namespace FdoToolbox.Core
         {
             get { return "FDO Toolbox"; } 
         }
+
+        private IPreferenceDictionary _PrefDict;
+
+        public IPreferenceDictionary Preferences
+        {
+            get { return _PrefDict; }
+        }
+	
 
         /// <summary>
         /// Current working directory path of the application
