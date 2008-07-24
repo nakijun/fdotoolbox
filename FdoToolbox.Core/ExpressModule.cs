@@ -80,6 +80,7 @@ namespace FdoToolbox.Core
                 conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
                 IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
                 string name = mgr.CreateUniqueName();
+                name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                 CoreModule.AddConnection(conn, name);
             }
         }
@@ -94,6 +95,7 @@ namespace FdoToolbox.Core
                 conn = ExpressUtility.CreateSHPConnection(shpFile);
                 IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
                 string name = mgr.CreateUniqueName();
+                name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                 CoreModule.AddConnection(conn, name);
             }
         }
@@ -191,6 +193,7 @@ namespace FdoToolbox.Core
                 conn = ExpressUtility.CreateSHPConnection(diag.SelectedPath);
                 IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
                 string name = mgr.CreateUniqueName();
+                name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                 CoreModule.AddConnection(conn, name);
             }
         }
