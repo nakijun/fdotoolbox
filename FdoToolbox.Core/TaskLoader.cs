@@ -33,14 +33,14 @@ namespace FdoToolbox.Core
 {
     public sealed class TaskLoader
     {
-        public static ITask LoadTask(string configFile)
+        public static ITask LoadTask(string configFile, bool consoleMode)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(configFile);
 
             XmlNode bcpNode = doc.SelectSingleNode("//BulkCopyTask");
             if(bcpNode != null)
-                return LoadBulkCopy(doc);
+                return LoadBulkCopy(doc, consoleMode);
             else
                 return null;
         }
@@ -58,7 +58,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        private static BulkCopyTask LoadBulkCopy(XmlDocument doc)
+        private static BulkCopyTask LoadBulkCopy(XmlDocument doc, bool consoleMode)
         {
             string srcName = HostApplication.Instance.ConnectionManager.CreateUniqueName();
             string destName = HostApplication.Instance.ConnectionManager.CreateUniqueName();
@@ -86,10 +86,17 @@ namespace FdoToolbox.Core
                 srcConn.ConnectionString = srcConnStr;
                 destConn.ConnectionString = destConnStr;
 
-                IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
-
-                mgr.AddConnection(srcName, srcConn);
-                mgr.AddConnection(destName, destConn);
+                if (consoleMode)
+                {
+                    srcConn.Open();
+                    destConn.Open();
+                }
+                else
+                {
+                    IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
+                    mgr.AddConnection(srcName, srcConn);
+                    mgr.AddConnection(destName, destConn);
+                }
 
                 string name = "BCP" + DateTime.Now.ToFileTimeUtc();
 
@@ -136,8 +143,11 @@ namespace FdoToolbox.Core
             catch (OSGeo.FDO.Common.Exception ex)
             {
                 AppConsole.WriteException(ex);
-                HostApplication.Instance.ConnectionManager.RemoveConnection(srcName);
-                HostApplication.Instance.ConnectionManager.RemoveConnection(destName);
+                if (!consoleMode)
+                {
+                    HostApplication.Instance.ConnectionManager.RemoveConnection(srcName);
+                    HostApplication.Instance.ConnectionManager.RemoveConnection(destName);
+                }
                 return null;
             }
         }
