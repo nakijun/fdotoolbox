@@ -162,6 +162,12 @@
     <Compile Include="Forms\GeometryPropertyDefinitionDlg.Designer.cs">
       <DependentUpon>GeometryPropertyDefinitionDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MultiClassPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MultiClassPicker.Designer.cs">
+      <DependentUpon>MultiClassPicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PendingParameterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -345,6 +351,10 @@
     <EmbeddedResource Include="Forms\GeometryPropertyDefinitionDlg.resx">
       <DependentUpon>GeometryPropertyDefinitionDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MultiClassPicker.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MultiClassPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PendingParameterDialog.resx">
       <SubType>Designer</SubType>
