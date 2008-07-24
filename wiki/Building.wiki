@@ -1,4 +1,5 @@
 #summary How to build FdoToolbox from source
+#labels Featured
 == Check out source from SVN ==
 
 Follow the instructions in the "Source" tab of this project site.
