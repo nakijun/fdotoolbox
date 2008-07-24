@@ -12,7 +12,6 @@ v0.3.4
 			- XML
 			- Applied to a new SDF file
 		- Geometric Property Definition dialog now uses GeometryType allowing for more geometry types.
-		- Re-Activated class editing. Removing properties does not work.
 	- Express Module
 		- You can now create connections straight after creating SDF/SHP files.
 		- You can name your connection after creating a SDF/SHP connection
