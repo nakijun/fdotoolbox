@@ -11,6 +11,7 @@
             * Left Outer Join
 
 === 0.5 ===
+ * Command-line utilities
  * Advanced bulk copy options
       * Data type coercion of mapped properties
       * Delete target before copying
