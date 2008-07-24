@@ -217,14 +217,11 @@ namespace FdoToolbox.Core.Controls
             FeatureSchema selectedSchema = lstSchemas.SelectedItem as FeatureSchema;
             if (selectedSchema != null)
             {
-                SaveFileDialog diag = new SaveFileDialog();
-                diag.InitialDirectory = HostApplication.Instance.AppPath;
-                diag.Title = "Save schema to XML";
-                diag.Filter = "Feature Schema Definition (*.schema)|*.schema";
-                if (diag.ShowDialog() == DialogResult.OK)
+                string fileName = HostApplication.Instance.SaveFile("Save schema to XML", "Feature Schema Definition (*.schema)|*.schema");
+                if (System.IO.File.Exists(fileName))
                 {
-                    selectedSchema.WriteXml(diag.FileName);
-                    AppConsole.Alert("Schema saved", "Schema saved to " + diag.FileName);
+                    selectedSchema.WriteXml(fileName);
+                    AppConsole.Alert("Schema saved", "Schema saved to " + fileName);
                 }
             }
         }
@@ -234,14 +231,12 @@ namespace FdoToolbox.Core.Controls
             FeatureSchema selectedSchema = lstSchemas.SelectedItem as FeatureSchema;
             if (selectedSchema != null)
             {
-                SaveFileDialog diag = new SaveFileDialog();
-                diag.Title = "Save schema to SDF";
-                diag.Filter = "SDF File (*.sdf)|*.sdf";
-                if (diag.ShowDialog() == DialogResult.OK)
+                string sdfFile = HostApplication.Instance.SaveFile("Save schema to SDF", "SDF File (*.sdf)|*.sdf");
+                if(System.IO.File.Exists(sdfFile))
                 {
                     try
                     {
-                        if (ExpressUtility.CreateSDF(diag.FileName))
+                        if (ExpressUtility.CreateSDF(sdfFile))
                         {
                             FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
                             using (IoMemoryStream stream = new IoMemoryStream())
@@ -252,7 +247,7 @@ namespace FdoToolbox.Core.Controls
                                 newSchemas.ReadXml(stream);
                                 stream.Close();
 
-                                IConnection conn = ExpressUtility.CreateSDFConnection(diag.FileName, false);
+                                IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
                                 conn.Open();
                                 using (IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
                                 {
@@ -260,7 +255,7 @@ namespace FdoToolbox.Core.Controls
                                     apply.Execute();
                                 }
 
-                                if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + diag.FileName + ". Connect to it?"))
+                                if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
                                 {
                                     string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
                                     name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
@@ -274,7 +269,7 @@ namespace FdoToolbox.Core.Controls
                         }
                         else
                         {
-                            throw new Exception("Unable to create SDF file at " + diag.FileName);
+                            throw new Exception("Unable to create SDF file at " + sdfFile);
                         }
                     }
                     catch (Exception ex)

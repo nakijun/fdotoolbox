@@ -138,18 +138,12 @@ namespace FdoToolbox.Core
         [Command(CoreModule.CMD_EXTLOAD, "Load Extension", Description = "Loads a custom extension", ImageResourceName = "plugin", ShortcutKeys = Keys.F2)]
         public void LoadExtension()
         {
-            OpenFileDialog diag = new OpenFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Load Extension Module";
-            diag.Filter = ".net Assembly (*.dll)|*.dll";
-            diag.Multiselect = false;
-            if (diag.ShowDialog() == DialogResult.OK)
+            string assemblyFile = HostApplication.Instance.OpenFile("Load Extension Module", ".net Assembly (*.dll)|*.dll");
+            if(File.Exists(assemblyFile))
             {
                 try
                 {
-                    string assemblyFile = diag.FileName;
                     HostApplication.Instance.ModuleManager.LoadExtension(assemblyFile);
-                    
                 }
                 catch (ModuleLoadException ex)
                 {
@@ -227,11 +221,8 @@ namespace FdoToolbox.Core
             if (connInfo == null)
                 AppConsole.WriteLine("Please select the active connection from the Object Explorer before invoking this command");
 
-            OpenFileDialog diag = new OpenFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Load schemas from XML";
-            diag.Filter = "Feature Schema Definition (*.schema)|*.schema";
-            if (diag.ShowDialog() == DialogResult.OK)
+            string schemaFile = HostApplication.Instance.OpenFile("Load schemas from XML", "Feature Schema Definition (*.schema)|*.schema");
+            if(File.Exists(schemaFile))
             {
                 FeatureSchemaCollection schemas = null;
                 try
@@ -239,7 +230,7 @@ namespace FdoToolbox.Core
                     using (IDescribeSchema cmd = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
                     {
                         schemas = cmd.Execute();
-                        schemas.ReadXml(diag.FileName);
+                        schemas.ReadXml(schemaFile);
                         foreach (FeatureSchema schema in schemas)
                         {
                             using (IApplySchema apply = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
@@ -266,18 +257,15 @@ namespace FdoToolbox.Core
             if (connInfo == null)
                 AppConsole.WriteLine("Please select the active connection from the Object Explorer before invoking this command");
 
-            SaveFileDialog diag = new SaveFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Save schemas to XML";
-            diag.Filter = "Feature Schema Definition (*.schema)|*.schema";
-            if (diag.ShowDialog() == DialogResult.OK)
+            string schemaFile = HostApplication.Instance.SaveFile("Save schemas to XML", "Feature Schema Definition (*.schema)|*.schema");
+            if (File.Exists(schemaFile))
             {
                 using (IDescribeSchema cmd = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
                 {
                     using (FeatureSchemaCollection schemas = cmd.Execute())
                     {
-                        schemas.WriteXml(diag.FileName);
-                        AppConsole.Alert("Save schemas", "Schemas Saved to " + diag.FileName);
+                        schemas.WriteXml(schemaFile);
+                        AppConsole.Alert("Save schemas", "Schemas Saved to " + schemaFile);
                     }
                 }
             }
@@ -401,18 +389,14 @@ namespace FdoToolbox.Core
         [Command(CoreModule.CMD_LOADTASK, "Load Task", ImageResourceName = "folder")]
         public void LoadTask()
         {
-            OpenFileDialog diag = new OpenFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Load Task";
-            diag.Filter = "Task Definition (*.task)|*.task";
-            diag.Multiselect = false;
-            if (diag.ShowDialog() == DialogResult.OK)
+            string taskDef = HostApplication.Instance.OpenFile("Load Task", "Task Definition (*.task)|*.task");
+            if(File.Exists(taskDef))
             {
-                ITask task = TaskLoader.LoadTask(diag.FileName);
+                ITask task = TaskLoader.LoadTask(taskDef);
                 if (task != null)
                 {
                     HostApplication.Instance.TaskManager.AddTask(task);
-                    AppConsole.WriteLine("Task loaded from {0}", diag.FileName);
+                    AppConsole.WriteLine("Task loaded from {0}", taskDef);
                 }
             }
         }
@@ -426,27 +410,21 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the task from the Object Explorer before invoking this command");
                 return;
             }
-            SaveFileDialog diag = new SaveFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Save Task";
-            diag.Filter = "Task Definition (*.task)|*.task";
-            if (diag.ShowDialog() == DialogResult.OK)
+            string taskDef = HostApplication.Instance.SaveFile("Save Task", "Task Definition (*.task)|*.task");
+            if(File.Exists(taskDef))
             {
-                TaskLoader.SaveTask(task, diag.FileName);
-                AppConsole.WriteLine("Task saved to {0}", diag.FileName);
+                TaskLoader.SaveTask(task, taskDef);
+                AppConsole.WriteLine("Task saved to {0}", taskDef);
             }
         }
 
         [Command(CoreModule.CMD_LOADCONN, "Load Connection", ImageResourceName = "folder")]
         public void LoadConnection()
         {
-            OpenFileDialog diag = new OpenFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Load connection information";
-            diag.Filter = "Connection information (*.conn)|*.conn";
-            if (diag.ShowDialog() == DialogResult.OK)
+            string connDef = HostApplication.Instance.OpenFile("Load connection information", "Connection information (*.conn)|*.conn");
+            if(File.Exists(connDef))
             {
-                ConnectionInfo connInfo = ConnLoader.LoadConnection(diag.FileName);
+                ConnectionInfo connInfo = ConnLoader.LoadConnection(connDef);
                 IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connInfo.Name);
                 if (conn != null)
                 {
@@ -455,7 +433,7 @@ namespace FdoToolbox.Core
                     AppConsole.WriteLine("Attempting to load as {0} instead", connInfo.Name);
                 }
                 HostApplication.Instance.ConnectionManager.AddConnection(connInfo.Name, connInfo.Connection);
-                AppConsole.WriteLine("Connection loaded from {0}", diag.FileName);
+                AppConsole.WriteLine("Connection loaded from {0}", connDef);
             }
         }
 
@@ -468,14 +446,11 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            SaveFileDialog diag = new SaveFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Save connection information";
-            diag.Filter = "Connection information (*.conn)|*.conn";
-            if (diag.ShowDialog() == DialogResult.OK)
+            string connDef = HostApplication.Instance.SaveFile("Save connection information", "Connection information (*.conn)|*.conn");
+            if(File.Exists(connDef))
             {
-                ConnLoader.SaveConnection(connInfo, diag.FileName);
-                AppConsole.WriteLine("Connection saved to {0}", diag.FileName);
+                ConnLoader.SaveConnection(connInfo, connDef);
+                AppConsole.WriteLine("Connection saved to {0}", connDef);
             }
         }
 

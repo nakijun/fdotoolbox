@@ -28,6 +28,7 @@ using OSGeo.FDO.ClientServices;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core.Forms;
 using OSGeo.FDO.Commands.Schema;
+using System.IO;
 
 namespace FdoToolbox.Core
 {
@@ -73,15 +74,10 @@ namespace FdoToolbox.Core
         public void SdfConnect()
         {
             IConnection conn = null;
-            OpenFileDialog diag = new OpenFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Create SDF connection";
-            diag.Filter = "SDF Files (*.sdf)|*.sdf";
-            diag.Multiselect = false;
-            diag.ShowReadOnly = true;
-            if (diag.ShowDialog() == DialogResult.OK)
+            string sdfFile = HostApplication.Instance.OpenFile("Create SDF connection", "SDF Files (*.sdf)|*.sdf");
+            if(File.Exists(sdfFile))
             {
-                conn = ExpressUtility.CreateSDFConnection(diag.FileName, diag.ReadOnlyChecked);
+                conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
                 IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
                 string name = mgr.CreateUniqueName();
                 CoreModule.AddConnection(conn, name);
@@ -91,15 +87,11 @@ namespace FdoToolbox.Core
         [Command(ExpressModule.CMD_SHPCONNECT, "Connect to SHP", Description = "Connect to a SHP data source")]
         public void ShpConnect()
         {
-            IConnection conn = null;
-            OpenFileDialog diag = new OpenFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Create SHP connection";
-            diag.Filter = "SHP Files (*.shp)|*.shp";
-            diag.Multiselect = false;
-            if (diag.ShowDialog() == DialogResult.OK)
+            IConnection conn = null;            
+            string shpFile = HostApplication.Instance.OpenFile("Create SHP connection", "SHP Files (*.shp)|*.shp");
+            if(File.Exists(shpFile))
             {
-                conn = ExpressUtility.CreateSHPConnection(diag.FileName);
+                conn = ExpressUtility.CreateSHPConnection(shpFile);
                 IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
                 string name = mgr.CreateUniqueName();
                 CoreModule.AddConnection(conn, name);
@@ -109,20 +101,16 @@ namespace FdoToolbox.Core
         [Command(ExpressModule.CMD_SDFCREATE, "Create SDF", Description = "Creates a new SDF file")]
         public void CreateSDF()
         {
-            SaveFileDialog diag = new SaveFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Create SDF";
-            diag.Filter = "SDF File (*.sdf)|*.sdf";
-            if (diag.ShowDialog() == DialogResult.OK)
+            string sdfFile = HostApplication.Instance.SaveFile("Create SDF", "SDF File (*.sdf)|*.sdf");
+            if(File.Exists(sdfFile))
             {
-                string fileName = diag.FileName;
-                if (ExpressUtility.CreateSDF(fileName))
+                if (ExpressUtility.CreateSDF(sdfFile))
                 {
-                    if (AppConsole.Confirm("Create SDF", "SDF File created at " + fileName + ". Create a connection to it?"))
+                    if (AppConsole.Confirm("Create SDF", "SDF File created at " + sdfFile + ". Create a connection to it?"))
                     {
                         string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
                         name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
-                        IConnection conn = ExpressUtility.CreateSDFConnection(fileName, false);
+                        IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
                         CoreModule.AddConnection(conn, name);
                     }
                 }
@@ -143,19 +131,15 @@ namespace FdoToolbox.Core
             //Because of this, we have to force the user to *explicity*
             //create a Class Definition up-front as part of the process.
 
-            SaveFileDialog diag = new SaveFileDialog();
-            diag.InitialDirectory = HostApplication.Instance.AppPath;
-            diag.Title = "Create SHP file";
-            diag.Filter = "SHP File (*.shp)|*.shp";
-            if(diag.ShowDialog() == DialogResult.OK)
+            string shpFile = HostApplication.Instance.SaveFile("Create SHP file", "SHP Files (*.shp)|*.shp");
+            if(File.Exists(shpFile))
             {
                 //If file exists, the user would've been asked to
                 //overwrite, so we can safely delete it first.
-                if (System.IO.File.Exists(diag.FileName))
-                    System.IO.File.Delete(diag.FileName);
+                File.Delete(shpFile);
 
-                string dir = System.IO.Path.GetDirectoryName(diag.FileName);
-                string className = System.IO.Path.GetFileNameWithoutExtension(diag.FileName);
+                string dir = Path.GetDirectoryName(shpFile);
+                string className = Path.GetFileNameWithoutExtension(shpFile);
                 string connStr = string.Format("DefaultFileLocation={0}", dir);
 
                 IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SHP");
@@ -179,7 +163,7 @@ namespace FdoToolbox.Core
                         {
                             cmd.FeatureSchema = schema;
                             cmd.Execute();
-                            if (AppConsole.Confirm("Create SHP", "New SHP file created at: " + diag.FileName + ". Create a connection?"))
+                            if (AppConsole.Confirm("Create SHP", "New SHP file created at: " + shpFile + ". Create a connection?"))
                             {
                                 string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
                                 name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
