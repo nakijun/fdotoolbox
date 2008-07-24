@@ -20,6 +20,7 @@ See [[http://fdo.osgeo.org/OSFeatureMatrix.html FDO project page]] for a list of
 
  * Save schema to XML
  * Load and apply a schema from XML ^1^
+ * Apply schema to new SDF file
 
 == Data Preview ==
  
