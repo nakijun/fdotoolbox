@@ -1,0 +1,95 @@
+v0.3.4
+------
+
+- Enhancements:
+	- General:
+		- Added a preference dictionary. This gets loaded and saved to Preferences.xml on each
+		session. If Preferences.xml is not found then a default one will be created on application exit.
+	- Spatial Contexts
+		- Can now auto-compute the extents from a list of chosen classes.
+	- Schema Management
+		- Can save selected schema to:
+			- XML
+			- Applied to a new SDF file
+		- Geometric Property Definition dialog now uses GeometryType allowing for more geometry types.
+		- Re-Activated class editing. Removing properties does not work.
+	- Express Module
+		- You can now create connections straight after creating SDF/SHP files.
+		- You can name your connection after creating a SDF/SHP connection
+- Other:
+	- Class editing is re-activated. Be aware that deleting properties won't work at the moment.
+	- FDO libraries now reside in their own subdirectory. This makes it easier to update the FDO libraries independent of FDO Toolbox.
+- Fixes:
+	- Closing the main application window (via clicking the [X]) will now trigger application shutdown. 
+	- Tabs now close if the connection they are bound to is also closed.
+	- Tabs will be renamed if the connection they are bound to is also renamed.
+	- Can un-hide Object Explorer or Application Console if they were accidentally hidden.
+- SVN changesets: r101 - r117
+
+v0.3.3
+------
+
+- Bulk Copy Control: Mappings can now be removed
+- Fixes for the Generic [Connect/Create Data Store] Dialogs for non-flatfile providers
+- Bulk Copy fixes for copying spatial contexts
+- Data Preview SQL support
+- Extension modules can now extend the application UI
+- Errors thrown by ISelectAggregate execution are now alerted to the user.
+- Expression Editor: Property List now is in a context menu.
+- Included missing SQL scripts from FDO distribution. These were needed by rdbms providers and was not copied during the build process.
+- SVN changesets: r83 - r96
+
+v0.3.2
+------
+
+- Implemented the Expression Editor. Currently it doesn't support the Spatial and Distance operation types.
+- Data Preview: Added Select Aggregate support.
+- SVN changesets: r72 - r80
+
+v0.3.1
+------
+- Bulk Copy stability fixes
+- Added unsupported (DataPropertyDefinition) data type validation
+- Failed Bulk Copy validation will prevent execution from taking place
+- Class properties visible in Object Explorer
+- Extensions can be auto-loaded via editing Modules.xml
+- Bulk Copy Control: The list of mappable properties now have icons to indicate property type.
+- SVN Changesets: r53 - r68
+
+v0.3
+----
+- XML driven menus/toolbars
+- Express commands
+	- sdf2sdf
+	- sdf2shp
+	- shp2sdf
+	- shp2shp
+- New Express Bulk Copy Control
+- Re-designed Data Preview Control
+- Enhanced Bulk Copy
+	- Re-designed control
+	- Multi-class support
+	- Copy spatial contexts option
+- SVN Changesets: r9 - r50
+
+v0.2
+----
+- Simple Bulk Copy Implementation
+- Simple Class Data Preview
+
+v0.1
+----
+- Using FDO 3.3.1
+- Initial Implementation
+	- Generic Connection Dialog
+	- Generic Data Store Creation Dialog
+	- Specialized Dialogs (SHP/SDF)
+		- Connection
+		- Create Data Store
+	- Class/Schema Management with capability checking
+		- Add/Delete schemas
+		- Add/Edit/Delete classes
+	- Class/Schema XML serialization
+	- FDO Provider registration/unregistration dialog
+	- Extension module loader/manager
+	- Extension module information dialog
