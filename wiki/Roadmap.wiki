@@ -1,13 +1,8 @@
 #summary Planned features for upcoming releases
 
-=== 0.3 ===
- * ~~Implement Express Bulk Copy commands~~
-      * ~~sdf2sdf~~
-      * ~~sdf2shp~~
-      * ~~shp2sdf~~
-      * ~~shp2shp~~
-
 === 0.4 ===
+ * Coordinate System Browser/Catalog
+ * Execute tasks from the command line.
  * Create Database Join Tasks.
       * Support OLEDB data sources
       * Supported Join Types
@@ -18,15 +13,17 @@
  * Advanced bulk copy options
       * Data type coercion of mapped properties
       * Delete target before copying
-      * Feature Limit
+      * Attribute filtering (per-class)
+      * Spatial filter (global)
 
 === Future ===
- * Console Mode
  * Raster Provider support
  * KML support
- * ~~Expression Editor~~
  * Visual Preview of FDO Data Sources
  * Extra Bulk Copy options
       * Property Value Mappings
  * Chainable tasks
+ * Coordinate System Re-Projection
+ * Provider-specific extension modules
+ * Product-specific extension modules
  * MapGuide Enterprise/Open Source integration
