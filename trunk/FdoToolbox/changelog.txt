@@ -24,7 +24,7 @@ v0.3.4
 	- Tabs now close if the connection they are bound to is also closed.
 	- Tabs will be renamed if the connection they are bound to is also renamed.
 	- Can un-hide Object Explorer or Application Console if they were accidentally hidden.
-- SVN changesets: r101 - 
+- SVN changesets: r101 - r117
 
 v0.3.3
 ------
