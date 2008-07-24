@@ -225,7 +225,6 @@ namespace FdoToolbox.Core.Controls
             this.cmbClass.Name = "cmbClass";
             this.cmbClass.Size = new System.Drawing.Size(131, 21);
             this.cmbClass.TabIndex = 3;
-            this.cmbClass.SelectedIndexChanged += new System.EventHandler(this.cmbClass_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -365,7 +364,6 @@ namespace FdoToolbox.Core.Controls
             this.cmbAggClass.Name = "cmbAggClass";
             this.cmbAggClass.Size = new System.Drawing.Size(146, 21);
             this.cmbAggClass.TabIndex = 2;
-            this.cmbAggClass.SelectedIndexChanged += new System.EventHandler(this.cmbAggClass_SelectedIndexChanged);
             // 
             // label5
             // 

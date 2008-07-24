@@ -167,8 +167,9 @@ namespace FdoToolbox.Core
                     FeatureClass classDef = new FeatureClass();
                     classDef.Name = className;
                     schema.Classes.Add(classDef);
-
-                    ClassDefCtl ctl = new ClassDefCtl(classDef, conn);
+                    //Use a dummy name for the connection
+                    ConnectionInfo connInfo = new ConnectionInfo(conn.GetHashCode().ToString(), conn);
+                    ClassDefCtl ctl = new ClassDefCtl(classDef, connInfo);
                     Form frm = FormFactory.CreateFormForControl(ctl);
                     if (frm.ShowDialog() == DialogResult.OK)
                     {

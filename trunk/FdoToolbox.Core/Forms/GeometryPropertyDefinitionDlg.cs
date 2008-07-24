@@ -33,9 +33,9 @@ namespace FdoToolbox.Core.Forms
     {
         private GeometricPropertyDefinition _Definition;
 
-        private IConnection _BoundConnection;
+        private ConnectionInfo _BoundConnection;
 
-        internal GeometryPropertyDefinitionDlg(IConnection conn)
+        internal GeometryPropertyDefinitionDlg(ConnectionInfo conn)
         {
             InitializeComponent();
             _BoundConnection = conn;
@@ -48,7 +48,7 @@ namespace FdoToolbox.Core.Forms
             }
         }
 
-        internal GeometryPropertyDefinitionDlg(GeometricPropertyDefinition def, IConnection conn)
+        internal GeometryPropertyDefinitionDlg(GeometricPropertyDefinition def, ConnectionInfo conn)
             : this(conn)
         {
             _Definition = def;
@@ -71,8 +71,8 @@ namespace FdoToolbox.Core.Forms
             if ((def.GeometryTypes & (int)GeometricType.GeometricType_Surface) == (int)GeometricType.GeometricType_Surface)
                 chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_Surface), true);    
         }
- 
-        public static GeometricPropertyDefinition NewGeometryProperty(IConnection conn)
+
+        public static GeometricPropertyDefinition NewGeometryProperty(ConnectionInfo conn)
         {
             GeometryPropertyDefinitionDlg dlg = new GeometryPropertyDefinitionDlg(conn);
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -82,7 +82,7 @@ namespace FdoToolbox.Core.Forms
             return null;
         }
 
-        public static void EditGeometryProperty(GeometricPropertyDefinition def, IConnection conn)
+        public static void EditGeometryProperty(GeometricPropertyDefinition def, ConnectionInfo conn)
         {
             GeometryPropertyDefinitionDlg dlg = new GeometryPropertyDefinitionDlg(def, conn);
             dlg.ShowDialog();

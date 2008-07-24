@@ -44,9 +44,9 @@ namespace FdoToolbox.Core.Controls
 
         private FeatureSchema _ParentSchema;
 
-        private IConnection _BoundConnection;
+        private ConnectionInfo _BoundConnection;
 
-        public ClassDefCtl(ClassDefinition classDef, IConnection conn)
+        public ClassDefCtl(ClassDefinition classDef, ConnectionInfo conn)
         {
             InitializeComponent();
             _BoundConnection = conn;
@@ -56,7 +56,7 @@ namespace FdoToolbox.Core.Controls
             ToggleUI();
         }
 
-        public ClassDefCtl(FeatureSchema schema, ClassType ctype, IConnection conn)
+        public ClassDefCtl(FeatureSchema schema, ClassType ctype, ConnectionInfo conn)
         {
             InitializeComponent();
             switch (ctype)
@@ -89,9 +89,9 @@ namespace FdoToolbox.Core.Controls
 
         private void ToggleUI()
         {
-            associationPropertyToolStripMenuItem.Visible = this.BoundConnection.SchemaCapabilities.SupportsAssociationProperties;
-            objectPropertyToolStripMenuItem.Visible = this.BoundConnection.SchemaCapabilities.SupportsObjectProperties;
-            rasterPropertyToolStripMenuItem.Visible = this.BoundConnection.RasterCapabilities.SupportsRaster();
+            associationPropertyToolStripMenuItem.Visible = this.BoundConnection.Connection.SchemaCapabilities.SupportsAssociationProperties;
+            objectPropertyToolStripMenuItem.Visible = this.BoundConnection.Connection.SchemaCapabilities.SupportsObjectProperties;
+            rasterPropertyToolStripMenuItem.Visible = this.BoundConnection.Connection.RasterCapabilities.SupportsRaster();
         }
 
         private void InitForm()
@@ -379,11 +379,11 @@ namespace FdoToolbox.Core.Controls
             PropertyDefinition def = GetSelectedProperty();
             if (def.PropertyType == PropertyType.PropertyType_DataProperty)
             {
-                DataType[] supported = this.BoundConnection.SchemaCapabilities.SupportedIdentityPropertyTypes;
+                DataType[] supported = this.BoundConnection.Connection.SchemaCapabilities.SupportedIdentityPropertyTypes;
                 if (Array.IndexOf<DataType>(supported, ((DataPropertyDefinition)def).DataType) >= 0)
                 {
                     //Supports composite id (multiple identity properties)
-                    if (this.BoundConnection.SchemaCapabilities.SupportsCompositeId)
+                    if (this.BoundConnection.Connection.SchemaCapabilities.SupportsCompositeId)
                     {
                         if(!_BoundIdentityProperties.Contains(def))
                             _BoundIdentityProperties.Add(def);
@@ -413,9 +413,19 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
-        public IConnection BoundConnection
+        public ConnectionInfo BoundConnection
         {
             get { return _BoundConnection; }
+        }
+
+        ConnectionInfo IConnectionBoundCtl.BoundConnection
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public void SetName(string name)
+        {
+            this.BoundConnection.Name = name;
         }
     }
 }

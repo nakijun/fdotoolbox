@@ -26,6 +26,7 @@ namespace FdoToolbox.Core
 {
     public delegate void ConnectionEventHandler(string name);
     public delegate void ConnectionRenamedEventHandler(string oldName, string newName);
+    public delegate void ConnectionBeforeRemoveHandler(string name, ref bool cancel);
 
     public interface IConnectionMgr
     {
@@ -37,6 +38,7 @@ namespace FdoToolbox.Core
         void RenameConnection(string oldName, string newName);
         bool CanRenameConnection(string oldName, string newName, ref string reason);
 
+        event ConnectionBeforeRemoveHandler BeforeConnectionRemove;
         event ConnectionEventHandler ConnectionAdded;
         event ConnectionEventHandler ConnectionRemoved;
         event ConnectionRenamedEventHandler ConnectionRenamed;

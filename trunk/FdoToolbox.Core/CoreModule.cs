@@ -292,7 +292,7 @@ namespace FdoToolbox.Core
             if (connInfo == null)
                 AppConsole.WriteLine("Please select the connection to manage from the Object Explorer before invoking this command");
 
-            SchemaMgrCtl ctl = new SchemaMgrCtl(connInfo.Connection);
+            SchemaMgrCtl ctl = new SchemaMgrCtl(connInfo);
             ctl.OnSchemasApplied += delegate
             {
                 HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
@@ -394,7 +394,7 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            BaseDocumentCtl ctl = new DataPreviewCtl(connInfo.Connection);
+            BaseDocumentCtl ctl = new DataPreviewCtl(connInfo);
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
@@ -500,7 +500,7 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            SpatialContextCtl ctl = new SpatialContextCtl(connInfo.Connection);
+            SpatialContextCtl ctl = new SpatialContextCtl(connInfo);
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 

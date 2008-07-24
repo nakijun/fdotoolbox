@@ -38,7 +38,6 @@ namespace FdoToolbox.Core.Controls
         public SchemaMgrCtl()
         {
             InitializeComponent();
-            this.Title = "Schema Management";
             _bsClasses = new BindingSource();
             _bsSchemas = new BindingSource();
         }
@@ -47,14 +46,14 @@ namespace FdoToolbox.Core.Controls
         private BindingSource _bsClasses;
 
         public event EventHandler OnSchemasApplied;
-        
-        private IConnection _BoundConnection;
-         
-        public SchemaMgrCtl(IConnection conn)
+
+        private ConnectionInfo _BoundConnection;
+
+        public SchemaMgrCtl(ConnectionInfo conn)
             : this()
         {
             _BoundConnection = conn;
-            using (IDescribeSchema cmd = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            using (IDescribeSchema cmd = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
             {
                 _Schemas = cmd.Execute();
             }
@@ -70,7 +69,7 @@ namespace FdoToolbox.Core.Controls
         private void ToggleUI()
         {
             //Supported class types
-            ClassType[] ctypes = this.BoundConnection.SchemaCapabilities.ClassTypes;
+            ClassType[] ctypes = this.BoundConnection.Connection.SchemaCapabilities.ClassTypes;
             featureClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_FeatureClass) >= 0;
             classNonFeatureToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_Class) >= 0;
             networkClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_NetworkClass) >= 0;
@@ -78,7 +77,7 @@ namespace FdoToolbox.Core.Controls
             networkLinkClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_NetworkLinkClass) >= 0;
 
             //Schema modification
-            btnDeleteSchema.Visible = btnDeleteClass.Visible = btnEditClass.Visible = this.BoundConnection.SchemaCapabilities.SupportsSchemaModification;
+            btnDeleteSchema.Visible = btnDeleteClass.Visible = btnEditClass.Visible = this.BoundConnection.Connection.SchemaCapabilities.SupportsSchemaModification;
         }
 
         private FeatureSchemaCollection _Schemas;
@@ -111,7 +110,7 @@ namespace FdoToolbox.Core.Controls
             {
                 if (_Schemas.Count > 0)
                 {
-                    using (IApplySchema cmd = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
+                    using (IApplySchema cmd = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
                     {
                         foreach (FeatureSchema schema in _Schemas)
                         {
@@ -138,8 +137,8 @@ namespace FdoToolbox.Core.Controls
 
         private void btnAddSchema_Click(object sender, EventArgs e)
         {
-            bool canAdd = this.BoundConnection.SchemaCapabilities.SupportsMultipleSchemas ||
-                        (!this.BoundConnection.SchemaCapabilities.SupportsMultipleSchemas && _bsSchemas.Count == 0);
+            bool canAdd = this.BoundConnection.Connection.SchemaCapabilities.SupportsMultipleSchemas ||
+                        (!this.BoundConnection.Connection.SchemaCapabilities.SupportsMultipleSchemas && _bsSchemas.Count == 0);
             if (canAdd)
             {
                 FeatureSchema schema = SchemaInfoDlg.NewSchema();
@@ -208,7 +207,7 @@ namespace FdoToolbox.Core.Controls
             frm.ShowDialog();
         }
 
-        public IConnection BoundConnection
+        public ConnectionInfo BoundConnection
         {
             get { return _BoundConnection; }
         }
@@ -251,6 +250,7 @@ namespace FdoToolbox.Core.Controls
                                 selectedSchema.WriteXml(stream);
                                 stream.Reset();
                                 newSchemas.ReadXml(stream);
+                                stream.Close();
 
                                 IConnection conn = ExpressUtility.CreateSDFConnection(diag.FileName, false);
                                 conn.Open();
@@ -284,6 +284,13 @@ namespace FdoToolbox.Core.Controls
                     }
                 }
             }
+        }
+
+
+        public void SetName(string name)
+        {
+            this.BoundConnection.Name = name;
+            this.Title = "Schema Management - " + this.BoundConnection.Name;
         }
     }
 }

@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Connections;
+using FdoToolbox.Core.Controls;
 
 namespace FdoToolbox.Core
 {
@@ -50,6 +51,14 @@ namespace FdoToolbox.Core
         {
             if (_ConnectionDict.ContainsKey(name))
             {
+                if (this.BeforeConnectionRemove != null)
+                {
+                    bool cancel = false;
+                    this.BeforeConnectionRemove(name, ref cancel);
+                    if (cancel)
+                        return;
+                }
+
                 IConnection conn = _ConnectionDict[name];
                 if (conn.ConnectionState == ConnectionState.ConnectionState_Open)
                     conn.Close();
@@ -122,5 +131,8 @@ namespace FdoToolbox.Core
             }
             return true;
         }
+
+
+        public event ConnectionBeforeRemoveHandler BeforeConnectionRemove;
     }
 }
