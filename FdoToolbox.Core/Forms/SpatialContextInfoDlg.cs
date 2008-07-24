@@ -27,6 +27,9 @@ using System.Windows.Forms;
 using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Geometry;
+using OSGeo.FDO.Schema;
+using OSGeo.FDO.Commands.Feature;
+using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -253,6 +256,68 @@ namespace FdoToolbox.Core.Forms
                 return info;
             }
             return null;
+        }
+
+        private void btnCompute_Click(object sender, EventArgs e)
+        {
+            List<ClassDefinition> classes = MultiClassPicker.GetClasses("Compute Extents", "Select the classes to compute extents", _BoundConnection);
+            if (classes.Count > 0)
+            {
+                //Use brute-force instead of SpatialExtents() as there
+                //is no guarantee that every provider will implement that
+                //expression function
+
+                FgfGeometryFactory geomFactory = new FgfGeometryFactory();
+                //IEnvelope extents = geomFactory.CreateEnvelopeXY(0.0, 0.0, 0.0, 0.0);
+                double maxx = 0.0;
+                double maxy = 0.0;
+                double minx = 0.0;
+                double miny = 0.0;
+                
+                foreach (ClassDefinition classDef in classes)
+                {
+                    if (classDef.ClassType == ClassType.ClassType_FeatureClass)
+                    {
+                        using (ISelect select = _BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
+                        {
+                            string propertyName = ((FeatureClass)classDef).GeometryProperty.Name;
+                            select.SetFeatureClassName(classDef.Name);
+                            select.PropertyNames.Clear();
+                            select.PropertyNames.Add((Identifier)Identifier.Parse(propertyName));
+                            using (IFeatureReader reader = select.Execute())
+                            {
+                                while (reader.ReadNext())
+                                {
+                                    if (!reader.IsNull(propertyName))
+                                    {
+                                        byte[] bGeom = reader.GetGeometry(propertyName);
+                                        IGeometry geom = geomFactory.CreateGeometryFromFgf(bGeom);
+                                        IEnvelope env = geom.Envelope;
+                                        if (env.MaxX > maxx)
+                                            maxx = env.MaxX;
+                                        if (env.MaxY > maxy)
+                                            maxy = env.MaxY;
+                                        if (env.MinX < minx)
+                                            minx = env.MinX;
+                                        if (env.MinY < miny)
+                                            miny = env.MinY;
+                                        env.Dispose();
+                                        geom.Dispose();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if ((maxx != 0.0) || (maxy != 0.0) || (minx != 0.0) || (miny != 0.0))
+                {
+                    txtLowerLeftX.Text = minx.ToString();
+                    txtLowerLeftY.Text = miny.ToString();
+                    txtUpperRightX.Text = maxx.ToString();
+                    txtUpperRightY.Text = maxy.ToString();
+                }
+                geomFactory.Dispose();
+            }
         }
     }
 }

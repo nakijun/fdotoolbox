@@ -57,6 +57,7 @@ namespace FdoToolbox.Core.Forms
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.btnCompute = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.grpExtents.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
@@ -321,11 +322,22 @@ namespace FdoToolbox.Core.Forms
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // btnCompute
+            // 
+            this.btnCompute.Location = new System.Drawing.Point(13, 342);
+            this.btnCompute.Name = "btnCompute";
+            this.btnCompute.Size = new System.Drawing.Size(103, 23);
+            this.btnCompute.TabIndex = 4;
+            this.btnCompute.Text = "Compute Extents";
+            this.btnCompute.UseVisualStyleBackColor = true;
+            this.btnCompute.Click += new System.EventHandler(this.btnCompute_Click);
+            // 
             // SpatialContextInfoDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(415, 377);
+            this.Controls.Add(this.btnCompute);
             this.Controls.Add(this.grpExtents);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnCancel);
@@ -374,5 +386,6 @@ namespace FdoToolbox.Core.Forms
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.Button btnCompute;
     }
 }
