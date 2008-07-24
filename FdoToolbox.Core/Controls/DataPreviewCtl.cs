@@ -46,7 +46,7 @@ namespace FdoToolbox.Core.Controls
 
         private FgfGeometryFactory _GeomFactory;
 
-        private IConnection _BoundConnection;
+        private ConnectionInfo _BoundConnection;
 
         internal DataPreviewCtl()
         {
@@ -56,7 +56,7 @@ namespace FdoToolbox.Core.Controls
             this.Disposed += delegate { _GeomFactory.Dispose(); };
         }
 
-        public DataPreviewCtl(IConnection conn)
+        public DataPreviewCtl(ConnectionInfo conn)
             : this()
         {
             _BoundConnection = conn;
@@ -65,15 +65,15 @@ namespace FdoToolbox.Core.Controls
 
         private void ToggleUI()
         {
-            if (!this.BoundConnection.ConnectionCapabilities.SupportsSQL())
+            if (!this.BoundConnection.Connection.ConnectionCapabilities.SupportsSQL())
                 tabQueryMode.TabPages.RemoveAt(TAB_SQL);
-            if (!Array.Exists<int>(this.BoundConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates; }))
+            if (!Array.Exists<int>(this.BoundConnection.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates; }))
                 tabQueryMode.TabPages.RemoveAt(TAB_AGGREGATE);
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            using (IDescribeSchema desc = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            using (IDescribeSchema desc = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
             {
                 cmbSchema.DataSource = desc.Execute();
                 cmbAggSchema.DataSource = desc.Execute();
@@ -110,7 +110,7 @@ namespace FdoToolbox.Core.Controls
                 AppConsole.Alert("Error", "Only SQL SELECT statements are allowed for data previewing");
                 return;
             }
-            using (ISQLCommand sqlCmd = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand) as ISQLCommand)
+            using (ISQLCommand sqlCmd = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand) as ISQLCommand)
             {
                 try
                 {
@@ -150,7 +150,7 @@ namespace FdoToolbox.Core.Controls
             ClassDefinition classDef = cmbAggClass.SelectedItem as ClassDefinition;
             if (CheckValidAggregates() && classDef != null)
             {
-                using (ISelectAggregates select = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates) as ISelectAggregates)
+                using (ISelectAggregates select = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates) as ISelectAggregates)
                 {
                     try
                     {
@@ -427,7 +427,7 @@ namespace FdoToolbox.Core.Controls
                 return;
             }
             int limit = Convert.ToInt32(cmbLimit.SelectedItem.ToString());
-            using (ISelect select = this.BoundConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
+            using (ISelect select = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
             {
                 try
                 {
@@ -581,13 +581,6 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
-        private void cmbClass_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
-            if(classDef != null)
-                this.Title = "Data Preview - " + classDef.Name;
-        }
-
         private bool CheckValidFilter()
         {
             bool valid = false;
@@ -619,7 +612,7 @@ namespace FdoToolbox.Core.Controls
             grdPreview.DataSource = null;
         }
 
-        public IConnection BoundConnection
+        public ConnectionInfo BoundConnection
         {
             get { return _BoundConnection; }
         }
@@ -630,15 +623,6 @@ namespace FdoToolbox.Core.Controls
             if (schema != null)
             {
                 cmbAggClass.DataSource = schema.Classes;
-            }
-        }
-
-        private void cmbAggClass_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
-            if (classDef != null)
-            {
-                this.Title = "Data Preview - " + classDef.Name;
             }
         }
 
@@ -698,6 +682,13 @@ namespace FdoToolbox.Core.Controls
                     txtFilter.Text = newFilter;
                 }
             }
+        }
+
+
+        public void SetName(string name)
+        {
+            this.BoundConnection.Name = name;
+            this.Title = "Data Preview - " + this.BoundConnection.Name;
         }
     }
 }

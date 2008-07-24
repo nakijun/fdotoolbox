@@ -77,7 +77,7 @@ using System.IO;
 #endregion
 namespace FdoToolbox.Core
 {
-    public delegate string GetSpatialContextNameMethod(IConnection conn);
+    public delegate string GetSpatialContextNameMethod(ConnectionInfo conn);
 
     public class BulkCopyTask : ITask
     {
@@ -91,7 +91,7 @@ namespace FdoToolbox.Core
             this.CopySpatialContextOverride = OverrideFactory.GetCopySpatialContextOverride(options.Target.Connection);
         }
 
-        private string GetSourceSpatialContext(IConnection conn)
+        private string GetSourceSpatialContext(ConnectionInfo conn)
         {
             return SpatialContextPicker.GetName(conn);
         }
@@ -158,7 +158,7 @@ namespace FdoToolbox.Core
                 if (this.CopySpatialContextOverride != null)
                     this.CopySpatialContextOverride.CopySpatialContexts(srcConn, destConn);
                 else
-                    CopySpatialContexts(srcConn, destConn);
+                    CopySpatialContexts(_Options.Source, _Options.Target);
             }
             //If target schema is undefined, create it
             if (_Options.ApplySchemaToTarget)
@@ -257,16 +257,17 @@ namespace FdoToolbox.Core
             AppConsole.Alert("Bulk Copy", total + " features copied in " + watch.ElapsedMilliseconds + "ms");
         }
 
-        private void CopySpatialContexts(IConnection srcConn, IConnection destConn)
+        private void CopySpatialContexts(ConnectionInfo source, ConnectionInfo target)
         {
-            
+            IConnection srcConn = source.Connection;
+            IConnection destConn = target.Connection;
             SendMessage("Copying spatial contexts to destination");
             if (!destConn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
             {
                 if (this.SpatialContextPickerMethod != null)
                 {
                     SendMessage("Prompting user for source spatial context");
-                    string contextName = this.SpatialContextPickerMethod(srcConn);
+                    string contextName = this.SpatialContextPickerMethod(source);
                     bool targetCanDestroySpatialContext = (Array.Exists<int>(destConn.CommandCapabilities.Commands, delegate(int c) { return c == (int)CommandType.CommandType_DestroySpatialContext; }));
                     //Get source spatial context 
                     using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)

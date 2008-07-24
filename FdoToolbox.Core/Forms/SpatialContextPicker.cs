@@ -70,9 +70,9 @@ namespace FdoToolbox.Core.Forms
             btnOK.Enabled = (lstNames.SelectedIndex >= 0);
         }
 
-        public static string GetName(IConnection conn)
+        public static string GetName(ConnectionInfo conn)
         {
-            SpatialContextPicker picker = new SpatialContextPicker(conn);
+            SpatialContextPicker picker = new SpatialContextPicker(conn.Connection);
             if (picker.ShowDialog() == DialogResult.OK)
             {
                 return picker.lstNames.SelectedItem.ToString();

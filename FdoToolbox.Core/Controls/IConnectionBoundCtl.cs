@@ -26,6 +26,7 @@ namespace FdoToolbox.Core.Controls
 {
     public interface IConnectionBoundCtl
     {
-        IConnection BoundConnection { get; }
+        ConnectionInfo BoundConnection { get; }
+        void SetName(string name);
     }
 }
