@@ -392,7 +392,7 @@ namespace FdoToolbox.Core
             string taskDef = HostApplication.Instance.OpenFile("Load Task", "Task Definition (*.task)|*.task");
             if(File.Exists(taskDef))
             {
-                ITask task = TaskLoader.LoadTask(taskDef);
+                ITask task = TaskLoader.LoadTask(taskDef, false);
                 if (task != null)
                 {
                     HostApplication.Instance.TaskManager.AddTask(task);
