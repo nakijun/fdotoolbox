@@ -212,6 +212,10 @@ namespace FdoToolbox.Core
         private void Cleanup()
         {
             Preferences.Save();
+            _OpenFileDialog.Dispose();
+            _OpenFolderDialog.Dispose();
+            _SaveFileDialog.Dispose();
+            _SaveFolderDialog.Dispose();
             if (_moduleMgr is IDisposable)
                 (_moduleMgr as IDisposable).Dispose();
             if (_connMgr is IDisposable)
@@ -254,6 +258,8 @@ namespace FdoToolbox.Core
                     AppConsole.Err.TextColor = System.Drawing.Color.Red;
 
                     InitializePrefs();
+                    InitializeDialogs();
+                    InitMessageHandlers();
 
                     bool? timestamp = this.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
                     AppConsole.Out.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
@@ -261,7 +267,6 @@ namespace FdoToolbox.Core
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
                     AppConsole.WriteLine("Loading modules");
 
-                    InitMessageHandlers();
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
                     InitMenus();
@@ -277,6 +282,25 @@ namespace FdoToolbox.Core
                 if (this.OnAppInitialized != null)
                     this.OnAppInitialized(this, EventArgs.Empty);
             }
+        }
+
+        private void InitializeDialogs()
+        {
+            _OpenFileDialog = new OpenFileDialog();
+            _OpenFolderDialog = new FolderBrowserDialog();
+            _SaveFolderDialog = new FolderBrowserDialog();
+            _SaveFileDialog = new SaveFileDialog();
+
+            string initialPath = Preferences.GetStringPref(PreferenceNames.PREF_STR_WORKING_DIRECTORY);
+            if (string.IsNullOrEmpty(initialPath))
+                initialPath = HostApplication.Instance.AppPath;
+
+            _OpenFolderDialog.SelectedPath = initialPath;
+            _OpenFileDialog.InitialDirectory = initialPath;
+            _SaveFileDialog.InitialDirectory = initialPath;
+            _SaveFolderDialog.SelectedPath = initialPath;
+
+            _OpenFileDialog.Multiselect = false;
         }
 
         private void InitializePrefs()
@@ -487,6 +511,53 @@ namespace FdoToolbox.Core
         public void About()
         {
             new AboutDialog().ShowDialog();
+        }
+
+        private OpenFileDialog _OpenFileDialog;
+        private SaveFileDialog _SaveFileDialog;
+        private FolderBrowserDialog _OpenFolderDialog;
+        private FolderBrowserDialog _SaveFolderDialog;
+
+        public string OpenFile(string title, string filter)
+        {
+            _OpenFileDialog.Title = title;
+            _OpenFileDialog.Filter = filter;
+            if (_OpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                return _OpenFileDialog.FileName;
+            }
+            return null;
+        }
+
+        public string SaveFile(string title, string filter)
+        {
+            _SaveFileDialog.Title = title;
+            _SaveFileDialog.Filter = filter;
+            if (_SaveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                return _SaveFileDialog.FileName;
+            }
+            return null;
+        }
+
+        public string OpenDirectory(string prompt)
+        {
+            _OpenFolderDialog.Description = prompt;
+            if (_OpenFolderDialog.ShowDialog() == DialogResult.OK)
+            {
+                return _OpenFolderDialog.SelectedPath;
+            }
+            return null;
+        }
+
+        public string SaveDirectory(string prompt)
+        {
+            _SaveFolderDialog.Description = prompt;
+            if (_SaveFolderDialog.ShowDialog() == DialogResult.OK)
+            {
+                return _SaveFolderDialog.SelectedPath;
+            }
+            return null;
         }
     }
 }
