@@ -38,6 +38,7 @@ namespace FdoToolbox.Core.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnPickContext = new System.Windows.Forms.Button();
             this.txtSpatialContext = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -46,7 +47,6 @@ namespace FdoToolbox.Core.Forms
             this.chkMeasure = new System.Windows.Forms.CheckBox();
             this.chkElevation = new System.Windows.Forms.CheckBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.btnPickContext = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
@@ -56,7 +56,7 @@ namespace FdoToolbox.Core.Forms
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(325, 310);
+            this.btnCancel.Location = new System.Drawing.Point(375, 302);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 9;
@@ -67,7 +67,7 @@ namespace FdoToolbox.Core.Forms
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(244, 310);
+            this.btnOK.Location = new System.Drawing.Point(294, 302);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 8;
@@ -86,7 +86,7 @@ namespace FdoToolbox.Core.Forms
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(10, 14);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(390, 119);
+            this.groupBox1.Size = new System.Drawing.Size(440, 119);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General";
@@ -107,7 +107,7 @@ namespace FdoToolbox.Core.Forms
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDescription.Location = new System.Drawing.Point(100, 57);
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(276, 20);
+            this.txtDescription.Size = new System.Drawing.Size(326, 20);
             this.txtDescription.TabIndex = 3;
             // 
             // txtName
@@ -116,7 +116,7 @@ namespace FdoToolbox.Core.Forms
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.Location = new System.Drawing.Point(100, 26);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(276, 20);
+            this.txtName.Size = new System.Drawing.Size(326, 20);
             this.txtName.TabIndex = 2;
             // 
             // label2
@@ -152,23 +152,37 @@ namespace FdoToolbox.Core.Forms
             this.groupBox2.Controls.Add(this.chkElevation);
             this.groupBox2.Location = new System.Drawing.Point(10, 140);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(390, 162);
+            this.groupBox2.Size = new System.Drawing.Size(440, 154);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Extended Properties";
             // 
+            // btnPickContext
+            // 
+            this.btnPickContext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPickContext.Location = new System.Drawing.Point(402, 90);
+            this.btnPickContext.Name = "btnPickContext";
+            this.btnPickContext.Size = new System.Drawing.Size(24, 23);
+            this.btnPickContext.TabIndex = 7;
+            this.btnPickContext.Text = "...";
+            this.btnPickContext.UseVisualStyleBackColor = true;
+            this.btnPickContext.Click += new System.EventHandler(this.btnPickContext_Click);
+            // 
             // txtSpatialContext
             // 
-            this.txtSpatialContext.Location = new System.Drawing.Point(156, 97);
+            this.txtSpatialContext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSpatialContext.Location = new System.Drawing.Point(156, 89);
             this.txtSpatialContext.Multiline = true;
             this.txtSpatialContext.Name = "txtSpatialContext";
-            this.txtSpatialContext.Size = new System.Drawing.Size(189, 48);
+            this.txtSpatialContext.Size = new System.Drawing.Size(239, 48);
             this.txtSpatialContext.TabIndex = 6;
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 100);
+            this.label4.Location = new System.Drawing.Point(15, 92);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(135, 13);
             this.label4.TabIndex = 5;
@@ -185,10 +199,13 @@ namespace FdoToolbox.Core.Forms
             // 
             // chkGeometryTypes
             // 
+            this.chkGeometryTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.chkGeometryTypes.FormattingEnabled = true;
             this.chkGeometryTypes.Location = new System.Drawing.Point(156, 42);
             this.chkGeometryTypes.Name = "chkGeometryTypes";
-            this.chkGeometryTypes.Size = new System.Drawing.Size(189, 49);
+            this.chkGeometryTypes.Size = new System.Drawing.Size(239, 34);
             this.chkGeometryTypes.TabIndex = 3;
             // 
             // chkReadOnly
@@ -225,21 +242,11 @@ namespace FdoToolbox.Core.Forms
             // 
             this.errorProvider.ContainerControl = this;
             // 
-            // btnPickContext
-            // 
-            this.btnPickContext.Location = new System.Drawing.Point(352, 98);
-            this.btnPickContext.Name = "btnPickContext";
-            this.btnPickContext.Size = new System.Drawing.Size(24, 23);
-            this.btnPickContext.TabIndex = 7;
-            this.btnPickContext.Text = "...";
-            this.btnPickContext.UseVisualStyleBackColor = true;
-            this.btnPickContext.Click += new System.EventHandler(this.btnPickContext_Click);
-            // 
             // GeometryPropertyDefinitionDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(410, 345);
+            this.ClientSize = new System.Drawing.Size(460, 337);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);

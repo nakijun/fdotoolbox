@@ -26,6 +26,7 @@ using System.Text;
 using System.Windows.Forms;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Connections;
+using OSGeo.FDO.Common;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -41,7 +42,9 @@ namespace FdoToolbox.Core.Forms
             _BoundConnection = conn;
             _Definition = new GeometricPropertyDefinition(txtName.Text, txtDescription.Text);
             
-            Array gtypes = Enum.GetValues(typeof(GeometricType));
+            GeometryType[] gtypes = _BoundConnection.Connection.GeometryCapabilities.GeometryTypes;
+
+            //Array gtypes = Enum.GetValues(typeof(GeometricType));
             foreach (object val in gtypes)
             {
                 chkGeometryTypes.Items.Add(val, false);
@@ -60,16 +63,32 @@ namespace FdoToolbox.Core.Forms
             chkReadOnly.Checked = def.ReadOnly;
             chkSystem.Checked = def.IsSystem;
             chkGeometryTypes.ClearSelected();
-            if ((def.GeometryTypes & (int)GeometricType.GeometricType_All) == (int)GeometricType.GeometricType_All)
-                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_All), true);
-            if ((def.GeometryTypes & (int)GeometricType.GeometricType_Curve) == (int)GeometricType.GeometricType_Curve)
-                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_Curve), true);
-            if ((def.GeometryTypes & (int)GeometricType.GeometricType_Point) == (int)GeometricType.GeometricType_Point)
-                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_Point), true);
-            if ((def.GeometryTypes & (int)GeometricType.GeometricType_Solid) == (int)GeometricType.GeometricType_Solid)
-                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_Solid), true);
-            if ((def.GeometryTypes & (int)GeometricType.GeometricType_Surface) == (int)GeometricType.GeometricType_Surface)
-                chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometricType.GeometricType_Surface), true);    
+
+            if (def.GeometryTypes != (int)GeometryType.GeometryType_None)
+            {
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_CurvePolygon) == (int)GeometryType.GeometryType_CurvePolygon)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_CurvePolygon), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_CurveString) == (int)GeometryType.GeometryType_CurveString)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_CurveString), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_LineString) == (int)GeometryType.GeometryType_LineString)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_LineString), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiCurvePolygon) == (int)GeometryType.GeometryType_MultiCurvePolygon)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiCurvePolygon), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiCurveString) == (int)GeometryType.GeometryType_MultiCurveString)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiCurveString), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiGeometry) == (int)GeometryType.GeometryType_MultiGeometry)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiGeometry), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiLineString) == (int)GeometryType.GeometryType_MultiLineString)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiLineString), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiPoint) == (int)GeometryType.GeometryType_MultiPoint)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiPoint), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiPolygon) == (int)GeometryType.GeometryType_MultiPolygon)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiPolygon), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_Point) == (int)GeometryType.GeometryType_Point)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_Point), true);
+                if ((def.GeometryTypes & (int)GeometryType.GeometryType_Polygon) == (int)GeometryType.GeometryType_Polygon)
+                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_Polygon), true);
+            }
         }
 
         public static GeometricPropertyDefinition NewGeometryProperty(ConnectionInfo conn)
@@ -108,11 +127,11 @@ namespace FdoToolbox.Core.Forms
 
         private int GetGeometryTypes()
         {
-            GeometricType gtype = default(GeometricType);
+            GeometryType gtype = GeometryType.GeometryType_None;
             foreach (int idx in chkGeometryTypes.SelectedIndices)
             {
                 if (chkGeometryTypes.GetItemChecked(idx))
-                    gtype |= (GeometricType)Enum.Parse(typeof(GeometricType), chkGeometryTypes.Items[idx].ToString());
+                    gtype |= (GeometryType)Enum.Parse(typeof(GeometryType), chkGeometryTypes.Items[idx].ToString());
             }
             return (int)gtype;
         }
