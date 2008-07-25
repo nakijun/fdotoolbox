@@ -30,6 +30,7 @@ using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Common.Io;
 using System.IO;
+using OSGeo.FDO.Commands;
 
 namespace FdoToolbox.Core
 {
@@ -38,7 +39,7 @@ namespace FdoToolbox.Core
     /// 
     /// Core Functionality is implemented here.
     /// </summary>
-    public class CoreModule : ModuleBase
+    public class CoreModule : ModuleBase, ICommandVerifier
     {
         #region Command Names
 
@@ -522,6 +523,27 @@ namespace FdoToolbox.Core
         public void ShowConsole()
         {
             HostApplication.Instance.Shell.ConsoleWindow.UnHide();
+        }
+
+        public bool IsCommandExecutable(string cmdName, IConnection conn)
+        {
+            bool executable = true;
+            switch (cmdName)
+            {
+                case CMD_LOADSCHEMA:
+                    {
+                        executable =
+                            (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) >= 0)
+                            && conn.SchemaCapabilities.SupportsSchemaModification;
+                    }
+                    break;
+                case CMD_MANSCHEMA:
+                    {
+                        executable = conn.SchemaCapabilities.SupportsSchemaModification;
+                    }
+                    break;
+            }
+            return executable;
         }
     }
 }

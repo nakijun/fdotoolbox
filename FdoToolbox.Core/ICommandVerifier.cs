@@ -20,27 +20,29 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core
 {
     /// <summary>
-    /// Provides an interface for menu state management.
+    /// Provides an interface to determine whether a given command
+    /// is executable under the context of a given connection. 
+    /// 
+    /// (eg. A "Delete Class" command is not executable, if the connection
+    /// doesn't support schema modification)
+    /// 
+    /// Only apply this interfaces to subclasses of ModuleBase or implementers of
+    /// IModule, otherwise it will not be picked up by the Module Manager.
     /// </summary>
-    public interface IMenuStateMgr
+    public interface ICommandVerifier
     {
         /// <summary>
-        /// Enables or disables a command. All menu items associated with the
-        /// command are enabled or disabled accordingly.
+        /// Returns true if the given command (name) can be executed
+        /// under the context of this connection
         /// </summary>
         /// <param name="cmdName"></param>
-        /// <param name="enabled"></param>
-        void EnableCommand(string cmdName, bool enabled);
-
-        /// <summary>
-        /// Associates a menu item with a command
-        /// </summary>
-        /// <param name="cmdName"></param>
-        /// <param name="menuItem"></param>
-        void RegisterMenuItem(string cmdName, System.Windows.Forms.ToolStripItem menuItem);
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        bool IsCommandExecutable(string cmdName, IConnection conn);
     }
 }

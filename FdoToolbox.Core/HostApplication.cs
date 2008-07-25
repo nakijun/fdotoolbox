@@ -119,6 +119,7 @@ namespace FdoToolbox.Core
                         tsi.ToolTipText = cmd.Description;
                         tsi.Image = cmd.CommandImage;
                         tsi.ShortcutKeys = cmd.ShortcutKeys;
+                        tsi.Tag = cmd;
                         tsi.Click += delegate(object sender, EventArgs e)
                         {
                             cmd.Execute();
@@ -126,6 +127,7 @@ namespace FdoToolbox.Core
                         if (node.Attributes["displayName"] != null)
                             tsi.Text = node.Attributes["displayName"].Value;    
                         item = tsi;
+                        MenuStateManager.RegisterMenuItem(cmd.Name, tsi);
                     }
                     else
                     {

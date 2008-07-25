@@ -263,18 +263,27 @@ namespace FdoToolbox
         public ConnectionInfo GetSelectedConnection()
         {
             TreeNode connNode = mTreeView.SelectedNode;
-            if (connNode == null || connNode.Level != 1)
+            if (connNode == null || connNode.Level == 0)
             {
                 return null;
             }
             else
             {
-                string name = connNode.Name;
-                IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connNode.Name);
-                if (conn != null)
-                    return new ConnectionInfo(name, conn);
-                else
-                    return null;
+                //If level > 1, walk back up the hierarchy
+                while (connNode.Level > 1)
+                {
+                    connNode = connNode.Parent;
+                }
+                if (connNode.Parent == GetConnectionsNode())
+                {
+                    string name = connNode.Name;
+                    IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connNode.Name);
+                    if (conn != null)
+                        return new ConnectionInfo(name, conn);
+                    else
+                        return null;
+                }
+                return null;
             }
         }
 
@@ -307,6 +316,7 @@ namespace FdoToolbox
             menuItem.Image = cmd.CommandImage;
             menuItem.ToolTipText = cmd.Description;
             menuItem.ShortcutKeys = cmd.ShortcutKeys;
+            menuItem.Tag = cmd;
             menuItem.Click += delegate { cmd.Execute(); };
             if (cmdNode.Attributes["displayName"] != null)
                 menuItem.Text = cmdNode.Attributes["displayName"].Value;
@@ -437,14 +447,32 @@ namespace FdoToolbox
 
         private void SelectedSchemaMenu_Opening(object sender, CancelEventArgs e)
         {
-            //Reset visibility
             /*
+            IConnection conn = GetSelectedConnection();
             foreach (ToolStripItem tsi in ctxSelectedSchema.Items)
             {
                 tsi.Visible = true;
+                Command cmd = tsi.Tag as Command;
+                if(cmd != null)
+                    tsi.Visible = HostApplication.Instance.ModuleManager.IsCommandExecutable( 
             }
             */
             //See which commands apply, those that don't hide themselves
+        }
+
+        private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            ConnectionInfo connInfo = GetSelectedConnection();
+            if (connInfo != null)
+            {
+                IModuleMgr modMgr = HostApplication.Instance.ModuleManager;
+                ICollection<string> cmdNames = modMgr.GetCommandNames();
+                foreach (string cmd in cmdNames)
+                {
+                    bool canExec = modMgr.IsCommandExecutable(cmd, connInfo.Connection);
+                    HostApplication.Instance.MenuStateManager.EnableCommand(cmd, canExec);
+                }
+            }
         }
     }
 }

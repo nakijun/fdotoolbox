@@ -23,6 +23,7 @@ using System.Text;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Drawing;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core
 {
@@ -65,7 +66,8 @@ namespace FdoToolbox.Core
                         attr.Name,
                         attr.DisplayName,
                         attr.Description,
-                        (CommandExecuteHandler)Delegate.CreateDelegate(typeof(CommandExecuteHandler), this, method)
+                        (CommandExecuteHandler)Delegate.CreateDelegate(typeof(CommandExecuteHandler), this, method),
+                        this.Name
                     );
                     cmd.InvocationType = attr.InvocationType;
                     if (!string.IsNullOrEmpty(attr.ImageResourceName))

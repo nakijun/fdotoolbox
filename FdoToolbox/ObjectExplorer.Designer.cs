@@ -99,6 +99,7 @@ namespace FdoToolbox
             this.mTreeView.ShowNodeToolTips = true;
             this.mTreeView.Size = new System.Drawing.Size(292, 241);
             this.mTreeView.TabIndex = 1;
+            this.mTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
             this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeView_MouseDown);
             // 
             // mImageList
@@ -136,7 +137,7 @@ namespace FdoToolbox
             // ctxSelectedSchema
             // 
             this.ctxSelectedSchema.Name = "ctxSelectedSchema";
-            this.ctxSelectedSchema.Size = new System.Drawing.Size(153, 26);
+            this.ctxSelectedSchema.Size = new System.Drawing.Size(61, 4);
             this.ctxSelectedSchema.Opening += new System.ComponentModel.CancelEventHandler(this.SelectedSchemaMenu_Opening);
             // 
             // ctxSelectedClass

@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core
 {
@@ -39,5 +40,6 @@ namespace FdoToolbox.Core
         event ModuleEventHandler ModuleUnloaded;
 
         IModule GetLoadedModule(string name);
+        bool IsCommandExecutable(string cmdName, IConnection conn);
     }
 }
