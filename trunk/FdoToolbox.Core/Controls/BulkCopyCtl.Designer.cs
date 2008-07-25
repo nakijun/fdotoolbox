@@ -53,6 +53,7 @@ namespace FdoToolbox.Core.Controls
             this.btnCancel = new System.Windows.Forms.Button();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.chkSourceContextList = new System.Windows.Forms.CheckedListBox();
             this.groupBox1.SuspendLayout();
             this.grpSource.SuspendLayout();
             this.grpTarget.SuspendLayout();
@@ -245,6 +246,7 @@ namespace FdoToolbox.Core.Controls
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.chkSourceContextList);
             this.panel1.Controls.Add(this.chkCoerceDataTypes);
             this.panel1.Controls.Add(this.chkCopySpatialContexts);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -257,7 +259,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.chkCoerceDataTypes.AutoSize = true;
             this.chkCoerceDataTypes.Enabled = false;
-            this.chkCoerceDataTypes.Location = new System.Drawing.Point(8, 36);
+            this.chkCoerceDataTypes.Location = new System.Drawing.Point(8, 86);
             this.chkCoerceDataTypes.Name = "chkCoerceDataTypes";
             this.chkCoerceDataTypes.Size = new System.Drawing.Size(155, 17);
             this.chkCoerceDataTypes.TabIndex = 5;
@@ -269,7 +271,7 @@ namespace FdoToolbox.Core.Controls
             // chkCopySpatialContexts
             // 
             this.chkCopySpatialContexts.AutoSize = true;
-            this.chkCopySpatialContexts.Location = new System.Drawing.Point(8, 13);
+            this.chkCopySpatialContexts.Location = new System.Drawing.Point(8, 3);
             this.chkCopySpatialContexts.Name = "chkCopySpatialContexts";
             this.chkCopySpatialContexts.Size = new System.Drawing.Size(129, 17);
             this.chkCopySpatialContexts.TabIndex = 4;
@@ -303,6 +305,14 @@ namespace FdoToolbox.Core.Controls
             // errorProvider
             // 
             this.errorProvider.ContainerControl = this;
+            // 
+            // chkSourceContextList
+            // 
+            this.chkSourceContextList.FormattingEnabled = true;
+            this.chkSourceContextList.Location = new System.Drawing.Point(7, 27);
+            this.chkSourceContextList.Name = "chkSourceContextList";
+            this.chkSourceContextList.Size = new System.Drawing.Size(224, 49);
+            this.chkSourceContextList.TabIndex = 6;
             // 
             // BulkCopyCtl
             // 
@@ -357,5 +367,6 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox chkCoerceDataTypes;
         private System.Windows.Forms.CheckBox chkCopySpatialContexts;
+        private System.Windows.Forms.CheckedListBox chkSourceContextList;
     }
 }

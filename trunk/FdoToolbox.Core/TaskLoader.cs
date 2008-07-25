@@ -98,7 +98,7 @@ namespace FdoToolbox.Core
                     mgr.AddConnection(destName, destConn);
                 }
 
-                string name = "BCP" + DateTime.Now.ToFileTimeUtc();
+                string name = doc.DocumentElement.Attributes["name"].Value;
 
                 ConnectionInfo srcConnInfo = new ConnectionInfo(srcName, srcConn);
                 ConnectionInfo destConnInfo = new ConnectionInfo(destName, destConn);
@@ -108,6 +108,17 @@ namespace FdoToolbox.Core
                 options.TargetSchemaName = destSchema;
                 options.CoerceDataTypes = coerceDataTypes;
                 options.CopySpatialContexts = copySpatialContexts;
+                if (options.CopySpatialContexts)
+                {
+                    XmlNodeList contextList = sourceNode.SelectNodes("SpatialContextList/Name");
+                    if (contextList != null)
+                    {
+                        foreach (XmlNode contextNode in contextList)
+                        {
+                            options.SourceSpatialContexts.Add(contextNode.InnerText);
+                        }
+                    }
+                }
 
                 FeatureSchemaCollection schemas = null;
                 using (IDescribeSchema desc = srcConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
@@ -188,12 +199,22 @@ namespace FdoToolbox.Core
                 }
                 classMappingXml += string.Format(Properties.Resources.ClassMapping, delete, srcClass, destClass, mappingsXml) + "\n";
             }
+            StringBuilder sb = new StringBuilder();
+            if (task.Options.CopySpatialContexts)
+            {
+                foreach (string name in task.Options.SourceSpatialContexts)
+                {
+                    sb.Append("<Name>" + name + "</Name>\n");
+                }
+            }
+            string contextXml = sb.ToString();
             string configXml = string.Format(
                 Properties.Resources.BulkCopyTask,
                 task.Name,
                 task.Options.Source.Connection.ConnectionInfo.ProviderName,
                 task.Options.Source.Connection.ConnectionString,
                 task.Options.SourceSchemaName,
+                contextXml,
                 task.Options.Target.Connection.ConnectionInfo.ProviderName,
                 task.Options.Target.Connection.ConnectionString,
                 task.Options.TargetSchemaName,
