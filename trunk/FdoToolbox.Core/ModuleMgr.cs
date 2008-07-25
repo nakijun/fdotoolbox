@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.IO;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core
 {
@@ -36,6 +37,8 @@ namespace FdoToolbox.Core
         //is in alphabetical order
         private SortedDictionary<string, Command> _GlobalNamespace;
 
+        private Dictionary<string, ICommandVerifier> _CommandVerifiers;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -43,6 +46,7 @@ namespace FdoToolbox.Core
         { 
             _Modules = new List<IModule>();
             _GlobalNamespace = new SortedDictionary<string, Command>();
+            _CommandVerifiers = new Dictionary<string, ICommandVerifier>();
         }
 
         /// <summary>
@@ -61,6 +65,10 @@ namespace FdoToolbox.Core
         {
             _Modules.Add(module);
             module.Initialize();
+
+            ICommandVerifier verifier = module as ICommandVerifier;
+            if (verifier != null)
+                _CommandVerifiers.Add(module.Name, verifier);
 
             //Add module commands to global namespace
             ICollection<string> cmdNames = module.CommandNames;
@@ -168,7 +176,18 @@ namespace FdoToolbox.Core
             if (File.Exists(uiExtensionFile))
                 HostApplication.Instance.ExtendUI(uiExtensionFile);
         }
-        
+
+        public bool IsCommandExecutable(string cmdName, IConnection conn)
+        {
+            //Get the parent module of the command, and if it is also a verifier,
+            //Check if it is executable. Otherwise it is assumed to be executable (true)
+            Command cmd = this.GetCommand(cmdName);
+            if (_CommandVerifiers.ContainsKey(cmd.ModuleName))
+                return _CommandVerifiers[cmd.ModuleName].IsCommandExecutable(cmdName, conn);
+
+            return true;
+        }
+
         public IModule GetLoadedModule(string name)
         {
             return _Modules.Find(delegate(IModule mod) { return mod.Name == name; });

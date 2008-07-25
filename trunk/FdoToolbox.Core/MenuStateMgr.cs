@@ -37,7 +37,7 @@ namespace FdoToolbox.Core
         {
             if (_MenuItems.ContainsKey(cmdName))
             {
-                _MenuItems[cmdName].ForEach(delegate(ToolStripItem item) { item.Visible = enabled; });
+                _MenuItems[cmdName].ForEach(delegate(ToolStripItem item) { item.Enabled = enabled; });
             }
         }
 

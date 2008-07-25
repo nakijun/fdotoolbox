@@ -83,18 +83,27 @@ namespace FdoToolbox.Core
             get { return _InvocationType; }
             set { _InvocationType = value; }
         }
+
+        private string _ModuleName;
+
+        [DisplayName("Parent Module")]
+        public string ModuleName
+        {
+            get { return _ModuleName; }
+        }
 	
-        public Command(string name, string display, string description, CommandExecuteHandler execMethod)
+        public Command(string name, string display, string description, CommandExecuteHandler execMethod, string parentModuleName)
         {
             this.InvocationType = CommandInvocationType.All;
             this.Name = name;
             this.DisplayName = display;
             this.Description = description;
             this.OnExecute = execMethod;
+            _ModuleName = parentModuleName;
         }
 
-        public Command(string name, string display, string description, Image img, CommandExecuteHandler execMethod)
-            : this(name, display, description, execMethod)
+        public Command(string name, string display, string description, Image img, CommandExecuteHandler execMethod, string parentModuleName)
+            : this(name, display, description, execMethod, parentModuleName)
         {
             this.CommandImage = img;
         }
