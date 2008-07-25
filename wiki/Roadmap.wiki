@@ -1,7 +1,7 @@
 #summary Planned features for upcoming releases
 
 === 0.4 ===
- * Data Store manager.
+ * ~~Data Store manager.~~
  * Coordinate System Browser/Catalog
  * Execute tasks from the command line.
  * Create Database Join Tasks.
