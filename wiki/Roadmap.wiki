@@ -3,15 +3,14 @@
 === 0.4 ===
  * ~~Data Store manager.~~
  * Coordinate System Browser/Catalog
- * Execute tasks from the command line.
+ * Command-line utilities
+
+=== 0.5 ===
  * Create Database Join Tasks.
       * Support OLEDB data sources
       * Supported Join Types
             * Inner Join
             * Left Outer Join
-
-=== 0.5 ===
- * Command-line utilities
  * Advanced bulk copy options
       * Data type coercion of mapped properties
       * Delete target before copying
