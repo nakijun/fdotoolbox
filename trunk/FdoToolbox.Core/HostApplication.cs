@@ -48,6 +48,7 @@ namespace FdoToolbox.Core
             _moduleMgr = new ModuleMgr();
             _connMgr = new ConnectionMgr();
             _taskMgr = new TaskManager();
+            _MenuStateMgr = new MenuStateMgr();
         }
 
         //This handler is called only when the common language runtime tries to bind to the assembly and fails.
@@ -423,6 +424,13 @@ namespace FdoToolbox.Core
                     AppConsole.WriteException(ex);
                 }
             }
+        }
+
+        private MenuStateMgr _MenuStateMgr;
+
+        public IMenuStateMgr MenuStateManager
+        {
+            get { return _MenuStateMgr; }
         }
         
         /// <summary>

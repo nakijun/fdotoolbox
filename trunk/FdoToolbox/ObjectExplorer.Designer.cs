@@ -42,6 +42,8 @@ namespace FdoToolbox
             this.ctxSelectedModule = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxSelectedTask = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxSelectedConnection = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxSelectedSchema = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxSelectedClass = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.SuspendLayout();
             // 
             // ctxConnections
@@ -129,6 +131,19 @@ namespace FdoToolbox
             // 
             this.ctxSelectedConnection.Name = "ctxSelectedConnection";
             this.ctxSelectedConnection.Size = new System.Drawing.Size(61, 4);
+            this.ctxSelectedConnection.Opening += new System.ComponentModel.CancelEventHandler(this.SelectedConnectionMenu_Opening);
+            // 
+            // ctxSelectedSchema
+            // 
+            this.ctxSelectedSchema.Name = "ctxSelectedSchema";
+            this.ctxSelectedSchema.Size = new System.Drawing.Size(153, 26);
+            this.ctxSelectedSchema.Opening += new System.ComponentModel.CancelEventHandler(this.SelectedSchemaMenu_Opening);
+            // 
+            // ctxSelectedClass
+            // 
+            this.ctxSelectedClass.Name = "ctxSelectedClass";
+            this.ctxSelectedClass.Size = new System.Drawing.Size(61, 4);
+            this.ctxSelectedClass.Opening += new System.ComponentModel.CancelEventHandler(this.SelectedClassMenu_Opening);
             // 
             // ObjectExplorer
             // 
@@ -157,5 +172,7 @@ namespace FdoToolbox
         private System.Windows.Forms.ContextMenuStrip ctxConnections;
         private System.Windows.Forms.ContextMenuStrip ctxTasks;
         private System.Windows.Forms.ContextMenuStrip ctxModules;
+        private System.Windows.Forms.ContextMenuStrip ctxSelectedSchema;
+        private System.Windows.Forms.ContextMenuStrip ctxSelectedClass;
     }
 }

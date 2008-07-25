@@ -98,6 +98,7 @@ namespace FdoToolbox
                         {
                             TreeNode schemaNode = new TreeNode();
                             schemaNode.Name = schemaNode.Text = schema.Name;
+                            schemaNode.ContextMenuStrip = ctxSelectedSchema;
                             schemaNode.ImageIndex = schemaNode.SelectedImageIndex = IMG_IDX_SCHEMA;
                             
                             GetClassNodes(schema, schemaNode);
@@ -114,6 +115,7 @@ namespace FdoToolbox
             {
                 TreeNode classNode = new TreeNode();
                 classNode.Name = classNode.Text = classDef.Name;
+                classNode.ContextMenuStrip = ctxSelectedClass;
                 classNode.ImageIndex = classNode.SelectedImageIndex = IMG_IDX_CLASS;
                 classNode.ToolTipText = string.Format("Type: {0}", classDef.ClassType);
                 GetPropertyNodes(classDef, classNode);
@@ -308,7 +310,7 @@ namespace FdoToolbox
             menuItem.Click += delegate { cmd.Execute(); };
             if (cmdNode.Attributes["displayName"] != null)
                 menuItem.Text = cmdNode.Attributes["displayName"].Value;
-
+            HostApplication.Instance.MenuStateManager.RegisterMenuItem(cmd.Name, menuItem);
             return menuItem;
         }
 
@@ -407,6 +409,42 @@ namespace FdoToolbox
         public void UnHide()
         {
             this.Show();
+        }
+
+        private void SelectedConnectionMenu_Opening(object sender, CancelEventArgs e)
+        {
+            //Reset visibility
+            /*
+            foreach (ToolStripItem tsi in ctxSelectedConnection.Items)
+            {
+                tsi.Visible = true;
+            }
+            */
+            //See which commands apply, those that don't hide themselves
+        }
+
+        private void SelectedClassMenu_Opening(object sender, CancelEventArgs e)
+        {
+            //Reset visibility
+            /*
+            foreach (ToolStripItem tsi in ctxSelectedClass.Items)
+            {
+                tsi.Visible = true;
+            }
+            */
+            //See which commands apply, those that don't hide themselves
+        }
+
+        private void SelectedSchemaMenu_Opening(object sender, CancelEventArgs e)
+        {
+            //Reset visibility
+            /*
+            foreach (ToolStripItem tsi in ctxSelectedSchema.Items)
+            {
+                tsi.Visible = true;
+            }
+            */
+            //See which commands apply, those that don't hide themselves
         }
     }
 }

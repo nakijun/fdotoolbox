@@ -214,6 +214,7 @@
     <Compile Include="IConsoleWindow.cs" />
     <Compile Include="ICopySpatialContextOverride.cs" />
     <Compile Include="IFormWrapper.cs" />
+    <Compile Include="IMenuStateMgr.cs" />
     <Compile Include="IObjectExplorer.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="Command.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="IShell.cs" />
     <Compile Include="IModuleMgr.cs" />
     <Compile Include="ITaskManager.cs" />
+    <Compile Include="MenuStateMgr.cs" />
     <Compile Include="ModuleBase.cs" />
     <Compile Include="ModuleMgr.cs" />
     <Compile Include="MySqlCopySpatialContextOverride.cs" />
