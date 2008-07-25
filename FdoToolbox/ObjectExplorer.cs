@@ -100,7 +100,6 @@ namespace FdoToolbox
                             schemaNode.Name = schemaNode.Text = schema.Name;
                             schemaNode.ContextMenuStrip = ctxSelectedSchema;
                             schemaNode.ImageIndex = schemaNode.SelectedImageIndex = IMG_IDX_SCHEMA;
-                            
                             GetClassNodes(schema, schemaNode);
                             connNode.Nodes.Add(schemaNode);
                         }
@@ -189,6 +188,9 @@ namespace FdoToolbox
         const int IMG_IDX_PROPERTY_GEOMETRY = 8;
         const int IMG_IDX_PROPERTY_ASSOCIATION = 9;
         const int IMG_IDX_PROPERTY_OBJECT = 10;
+
+        const int NODE_LEVEL_SCHEMA = 2;
+        const int NODE_LEVEL_CLASS = 3;
 
         void OnModuleLoaded(IModule module) 
         {
@@ -421,45 +423,6 @@ namespace FdoToolbox
             this.Show();
         }
 
-        private void SelectedConnectionMenu_Opening(object sender, CancelEventArgs e)
-        {
-            //Reset visibility
-            /*
-            foreach (ToolStripItem tsi in ctxSelectedConnection.Items)
-            {
-                tsi.Visible = true;
-            }
-            */
-            //See which commands apply, those that don't hide themselves
-        }
-
-        private void SelectedClassMenu_Opening(object sender, CancelEventArgs e)
-        {
-            //Reset visibility
-            /*
-            foreach (ToolStripItem tsi in ctxSelectedClass.Items)
-            {
-                tsi.Visible = true;
-            }
-            */
-            //See which commands apply, those that don't hide themselves
-        }
-
-        private void SelectedSchemaMenu_Opening(object sender, CancelEventArgs e)
-        {
-            /*
-            IConnection conn = GetSelectedConnection();
-            foreach (ToolStripItem tsi in ctxSelectedSchema.Items)
-            {
-                tsi.Visible = true;
-                Command cmd = tsi.Tag as Command;
-                if(cmd != null)
-                    tsi.Visible = HostApplication.Instance.ModuleManager.IsCommandExecutable( 
-            }
-            */
-            //See which commands apply, those that don't hide themselves
-        }
-
         private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             ConnectionInfo connInfo = GetSelectedConnection();
@@ -473,6 +436,30 @@ namespace FdoToolbox
                     HostApplication.Instance.MenuStateManager.EnableCommand(cmd, canExec);
                 }
             }
+        }
+
+        public string GetSelectedSchema()
+        {
+            TreeNode node = mTreeView.SelectedNode;
+            while (node.Level > NODE_LEVEL_SCHEMA)
+                node = node.Parent;
+
+            if (node.Level == NODE_LEVEL_SCHEMA && GetConnectionsNode() == node.Parent)
+                return node.Name;
+
+            return null;
+        }
+
+        public string GetSelectedClass()
+        {
+            TreeNode node = mTreeView.SelectedNode;
+            while (node.Level > NODE_LEVEL_CLASS)
+                node = node.Parent;
+            
+            if (node.Level == NODE_LEVEL_CLASS && GetConnectionsNode() == node.Parent.Parent)
+                return node.Name;
+
+            return null;
         }
     }
 }

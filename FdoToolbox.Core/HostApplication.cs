@@ -272,6 +272,9 @@ namespace FdoToolbox.Core
 
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
+#if DEBUG
+                    ModuleManager.LoadModule(new TestModule());
+#endif
                     InitMenus();
                     LoadDefinedModules();
                     _init = true;

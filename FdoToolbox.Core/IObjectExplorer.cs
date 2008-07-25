@@ -35,11 +35,25 @@ namespace FdoToolbox.Core
         void InitializeMenus(string menuMapFile);
         
         /// <summary>
-        /// If a connection node is selected, returns the
+        /// If a connection node (or child) is selected, returns the
         /// underlying connection object
         /// </summary>
         /// <returns></returns>
         ConnectionInfo GetSelectedConnection();
+
+        /// <summary>
+        /// If a schema node is selected, returns the name of the
+        /// schema
+        /// </summary>
+        /// <returns></returns>
+        string GetSelectedSchema();
+
+        /// <summary>
+        /// If a class node is selected, returns the name of the
+        /// class
+        /// </summary>
+        /// <returns></returns>
+        string GetSelectedClass();
 
         /// <summary>
         /// If a task node is selected, returns the

@@ -232,55 +232,9 @@ namespace FdoToolbox.Core.Controls
             if (selectedSchema != null)
             {
                 string sdfFile = HostApplication.Instance.SaveFile("Save schema to SDF", "SDF File (*.sdf)|*.sdf");
-                if(System.IO.File.Exists(sdfFile))
-                {
-                    try
-                    {
-                        if (ExpressUtility.CreateSDF(sdfFile))
-                        {
-                            FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
-                            using (IoMemoryStream stream = new IoMemoryStream())
-                            {
-                                //Clone selected schema
-                                selectedSchema.WriteXml(stream);
-                                stream.Reset();
-                                newSchemas.ReadXml(stream);
-                                stream.Close();
-
-                                IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
-                                conn.Open();
-                                using (IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
-                                {
-                                    apply.FeatureSchema = newSchemas[0];
-                                    apply.Execute();
-                                }
-
-                                if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
-                                {
-                                    string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
-                                    name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
-                                    CoreModule.AddConnection(conn, name);
-                                }
-                                else
-                                {
-                                    conn.Dispose();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Unable to create SDF file at " + sdfFile);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        AppConsole.Alert("Error", ex.Message);
-                        AppConsole.WriteException(ex);
-                    }
-                }
+                ExpressUtility.ApplySchemaToSDF(selectedSchema, sdfFile);
             }
         }
-
 
         public void SetName(string name)
         {
