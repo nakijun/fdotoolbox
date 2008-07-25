@@ -105,7 +105,7 @@ namespace FdoToolbox.Core.Controls
                 AppConsole.Alert("Error", "Please enter the SQL query text");
                 return;
             }
-            if (!sql.TrimStart().StartsWith("SELECT "))
+            if (!sql.TrimStart().StartsWith("SELECT ", StringComparison.OrdinalIgnoreCase))
             {
                 AppConsole.Alert("Error", "Only SQL SELECT statements are allowed for data previewing");
                 return;
