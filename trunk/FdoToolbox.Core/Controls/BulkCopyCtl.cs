@@ -364,7 +364,7 @@ namespace FdoToolbox.Core.Controls
             if (propertyNode != null)
             {
                 propertyNode.Tag = newPropertyName;
-                propertyNode.Text = propertyName + "(=> " + newPropertyName + ")";
+                propertyNode.Text = propertyName + " (=> " + newPropertyName + ")";
             }
         }
 
