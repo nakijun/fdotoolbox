@@ -74,7 +74,7 @@ namespace FdoToolbox.Core
         public const string CMD_REFRESHCONN = "refreshconn";
         public const string CMD_SHOWOBJECTEXPLORER = "showobjectexplorer";
         public const string CMD_SHOWCONSOLE = "showconsole";
-
+        public const string CMD_MANAGEDATASTORES = "mandstore";
         #endregion
 
         public override string Name
@@ -531,6 +531,17 @@ namespace FdoToolbox.Core
             HostApplication.Instance.Shell.ConsoleWindow.UnHide();
         }
 
+        [Command(CoreModule.CMD_MANAGEDATASTORES, "Manage Data Stores", InvocationType = CommandInvocationType.UI)]
+        public void ManageDataStores()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            if (connInfo != null)
+            {
+                DataStoreMgrCtl ctl = new DataStoreMgrCtl(connInfo);
+                HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            }
+        }
+
         public bool IsCommandExecutable(string cmdName, IConnection conn)
         {
             bool executable = true;
@@ -546,6 +557,11 @@ namespace FdoToolbox.Core
                 case CMD_MANSCHEMA:
                     {
                         executable = conn.SchemaCapabilities.SupportsSchemaModification;
+                    }
+                    break;
+                case CMD_MANAGEDATASTORES:
+                    {
+                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ListDataStores) >= 0);
                     }
                     break;
             }

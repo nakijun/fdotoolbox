@@ -84,6 +84,12 @@
     <Compile Include="Controls\DataPreviewCtl.Designer.cs">
       <DependentUpon>DataPreviewCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DataStoreMgrCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DataStoreMgrCtl.Designer.cs">
+      <DependentUpon>DataStoreMgrCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ExpressBulkCopyCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -134,6 +140,7 @@
       <DependentUpon>SpatialContextCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="CoreModule.cs" />
+    <Compile Include="DataStoreInfo.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="ExpressModule.cs" />
     <Compile Include="ExpressUtility.cs" />
@@ -142,6 +149,12 @@
     </Compile>
     <Compile Include="Forms\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DictionaryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DictionaryDialog.Designer.cs">
+      <DependentUpon>DictionaryDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\DataPropertyDefinitionDlg.cs">
       <SubType>Form</SubType>
@@ -308,6 +321,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DataPreviewCtl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DataStoreMgrCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DataStoreMgrCtl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ExpressBulkCopyCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ExpressBulkCopyCtl.cs</DependentUpon>
@@ -343,6 +360,10 @@
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DictionaryDialog.resx">
+      <DependentUpon>DictionaryDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DataPropertyDefinitionDlg.resx">
       <DependentUpon>DataPropertyDefinitionDlg.cs</DependentUpon>

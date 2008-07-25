@@ -54,6 +54,7 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="datapreview" />
 			<Command name="manschema" />
 			<Command name="mansc" />
+			<Command name="mandstore" />
 			<Separator/>
 			<Command name="renameconn" />
 			<Command name="saveconn" />
