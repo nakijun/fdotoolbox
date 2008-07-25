@@ -25,11 +25,11 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Core
 {
-    public class ConsoleInputStream : Stream
+    public class TextConsoleInputStream : Stream, IConsoleInputStream
     {
         private TextBoxBase _txtBox;
 
-        public ConsoleInputStream(TextBoxBase txtbox)
+        public TextConsoleInputStream(TextBoxBase txtbox)
 		{
 			_txtBox = txtbox;
 		}

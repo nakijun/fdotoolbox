@@ -255,10 +255,20 @@ namespace FdoToolbox.Core
                     _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
 
                     //Set streams for Application Console
-                    AppConsole.In = new ConsoleInputStream(_shell.ConsoleWindow.InputTextBox);
-                    AppConsole.Out = new ConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
-                    AppConsole.Err = new ConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
+                    AppConsole.In = new TextConsoleInputStream(_shell.ConsoleWindow.InputTextBox);
+                    AppConsole.Out = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
+                    AppConsole.Err = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
                     AppConsole.Err.TextColor = System.Drawing.Color.Red;
+
+                    AppConsole.DoConfirm += delegate(string title, string text)
+                    {
+                        return MessageBox.Show(text, title, MessageBoxButtons.YesNo) == DialogResult.Yes;
+                    };
+
+                    AppConsole.DoAlert += delegate(string title, string text)
+                    {
+                        MessageBox.Show(text, title);
+                    };
 
                     InitializePrefs();
                     InitializeDialogs();

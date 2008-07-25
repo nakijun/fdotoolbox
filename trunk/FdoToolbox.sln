@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Core", "FdoToolb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestModule", "TestModule\TestModule.csproj", "{5C49DC2A-B75D-4F7C-ACE3-008804D8933B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskRun", "TaskRun\TaskRun.csproj", "{553049B9-2000-4FE3-B8F1-3C82AAB370B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{5C49DC2A-B75D-4F7C-ACE3-008804D8933B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C49DC2A-B75D-4F7C-ACE3-008804D8933B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C49DC2A-B75D-4F7C-ACE3-008804D8933B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{553049B9-2000-4FE3-B8F1-3C82AAB370B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{553049B9-2000-4FE3-B8F1-3C82AAB370B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{553049B9-2000-4FE3-B8F1-3C82AAB370B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{553049B9-2000-4FE3-B8F1-3C82AAB370B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -24,29 +24,32 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Core
 {
+    public delegate void AlertHandler(string title, string message);
+    public delegate bool ConfirmHandler(string title, string message);
+
     /// <summary>
     /// Application console class. Output is redirected
     /// to the application console window.
     /// </summary>
     public class AppConsole
     {
-        private static ConsoleInputStream _In;
+        private static IConsoleInputStream _In;
 
-        public static ConsoleInputStream In
+        public static IConsoleInputStream In
         {
             get { return _In; }
             set { _In = value; }
         }
-        private static ConsoleOutputStream _Out;
+        private static IConsoleOutputStream _Out;
 
-        public static ConsoleOutputStream Out
+        public static IConsoleOutputStream Out
         {
             get { return _Out; }
             set { _Out = value; }
         }
-        private static ConsoleOutputStream _Err;
+        private static IConsoleOutputStream _Err;
 
-        public static ConsoleOutputStream Err
+        public static IConsoleOutputStream Err
         {
             get { return _Err; }
             set { _Err = value; }
@@ -67,19 +70,6 @@ namespace FdoToolbox.Core
             Alert(title, msg, true);
         }
 
-        public static void Execute(string cmdName)
-        {
-            try
-            {
-                Command cmd = HostApplication.Instance.ModuleManager.GetCommand(cmdName);
-                cmd.Execute();
-            }
-            catch (Exception ex)
-            {
-                Err.WriteLine("ERROR: " + ex.Message);
-            }
-        }
-
         public static void WriteException(Exception ex)
         {
             Err.WriteLine(ex.ToString());
@@ -92,14 +82,23 @@ namespace FdoToolbox.Core
 
         public static void Alert(string title, string message, bool writeToConsole)
         {
-            MessageBox.Show(message, title);
+            if (DoAlert != null)
+                DoAlert(title, message);
+            else
+                throw new ApplicationException("DoAlert handler not initialized");
             if (writeToConsole)
                 Out.WriteLine(message);
         }
 
         public static bool Confirm(string title, string text)
         {
-            return MessageBox.Show(text, title, MessageBoxButtons.YesNo) == DialogResult.Yes;
+            if (DoConfirm != null)
+                return DoConfirm(title, text);
+
+            throw new ApplicationException("DoConfirm handler not initialized");
         }
+
+        public static event AlertHandler DoAlert;
+        public static event ConfirmHandler DoConfirm;
     }
 }

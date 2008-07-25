@@ -55,8 +55,11 @@
     <Compile Include="BulkCopyOptions.cs" />
     <Compile Include="BulkCopyTask.cs" />
     <Compile Include="ClassCopyOptions.cs" />
+    <Compile Include="CmdConsoleErrorStream.cs" />
+    <Compile Include="CmdConsoleOutputStream.cs" />
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="ConnLoader.cs" />
+    <Compile Include="ConsoleApplication.cs" />
     <Compile Include="Controls\BaseDocumentCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -64,8 +67,8 @@
       <DependentUpon>BaseDocumentCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="ConnectionMgr.cs" />
-    <Compile Include="ConsoleInputStream.cs" />
-    <Compile Include="ConsoleOutputStream.cs" />
+    <Compile Include="TextConsoleInputStream.cs" />
+    <Compile Include="TextConsoleOutputStream.cs" />
     <Compile Include="Controls\BulkCopyCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -225,6 +228,8 @@
     </Compile>
     <Compile Include="ICommandVerifier.cs" />
     <Compile Include="IConnectionMgr.cs" />
+    <Compile Include="IConsoleInputStream.cs" />
+    <Compile Include="IConsoleOutputStream.cs" />
     <Compile Include="IConsoleWindow.cs" />
     <Compile Include="ICopySpatialContextOverride.cs" />
     <Compile Include="IFormWrapper.cs" />
