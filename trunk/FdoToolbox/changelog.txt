@@ -1,3 +1,22 @@
+v0.3.5
+------
+- Enhancements:
+	- General:
+		- New program: TaskRun.exe, use it to load and execute task definitions from the command line
+			- Usage: TaskRun.exe [task definition file]
+			- Please be aware that both source and target connections must be valid. Otherwise the execution will fail.
+		- Capability-aware menus. If a menu item is disabled, it means you can't run that command on the current selected connection because that provider doesn't support it!
+		- Data Store Manager for rdbms-based providers
+		- Bulk copy enhancements.
+			- Added source spatial context list to Bulk Copy Control, so the user can specify up-front which ones to copy.
+			- Saved definitions can now be fully executed without manual user input, provided both source and target connections are valid.
+		- Added Console Application framework. TaskRun.exe is built on this framework.
+- Fixes:
+	- Save dialogs now work as before
+	- Data Preview: Be more lenient with the case of SQL queries.
+
+SVN changesets: r130 - r144
+
 v0.3.4
 ------
 
