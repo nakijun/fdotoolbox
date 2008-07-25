@@ -259,8 +259,10 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the active connection from the Object Explorer before invoking this command");
 
             string schemaFile = HostApplication.Instance.SaveFile("Save schemas to XML", "Feature Schema Definition (*.schema)|*.schema");
-            if (File.Exists(schemaFile))
+            if (schemaFile != null)
             {
+                if (File.Exists(schemaFile))
+                    File.Delete(schemaFile);
                 using (IDescribeSchema cmd = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
                 {
                     using (FeatureSchemaCollection schemas = cmd.Execute())
@@ -412,8 +414,10 @@ namespace FdoToolbox.Core
                 return;
             }
             string taskDef = HostApplication.Instance.SaveFile("Save Task", "Task Definition (*.task)|*.task");
-            if(File.Exists(taskDef))
+            if (taskDef != null)
             {
+                if (File.Exists(taskDef))
+                    File.Delete(taskDef);
                 TaskLoader.SaveTask(task, taskDef);
                 AppConsole.WriteLine("Task saved to {0}", taskDef);
             }
@@ -448,8 +452,10 @@ namespace FdoToolbox.Core
                 return;
             }
             string connDef = HostApplication.Instance.SaveFile("Save connection information", "Connection information (*.conn)|*.conn");
-            if(File.Exists(connDef))
+            if (connDef != null)
             {
+                if (File.Exists(connDef))
+                    File.Delete(connDef);
                 ConnLoader.SaveConnection(connInfo, connDef);
                 AppConsole.WriteLine("Connection saved to {0}", connDef);
             }
