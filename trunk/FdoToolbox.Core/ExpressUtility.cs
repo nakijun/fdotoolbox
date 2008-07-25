@@ -24,6 +24,10 @@ using OSGeo.FDO.Connections;
 using System.Windows.Forms;
 using OSGeo.FDO.ClientServices;
 using OSGeo.FDO.Commands.DataStore;
+using OSGeo.FDO.Schema;
+using OSGeo.FDO.Common.Io;
+using OSGeo.FDO.Commands.Schema;
+using FdoToolbox.Core.Forms;
 
 namespace FdoToolbox.Core
 {
@@ -52,6 +56,53 @@ namespace FdoToolbox.Core
             IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(PROVIDER_SHP);
             conn.ConnectionString = connStr;
             return conn;
+        }
+
+        public static void ApplySchemaToSDF(FeatureSchema selectedSchema, string sdfFile)
+        {
+            try
+            {
+                if (ExpressUtility.CreateSDF(sdfFile))
+                {
+                    FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
+                    using (IoMemoryStream stream = new IoMemoryStream())
+                    {
+                        //Clone selected schema
+                        selectedSchema.WriteXml(stream);
+                        stream.Reset();
+                        newSchemas.ReadXml(stream);
+                        stream.Close();
+
+                        IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
+                        conn.Open();
+                        using (IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
+                        {
+                            apply.FeatureSchema = newSchemas[0];
+                            apply.Execute();
+                        }
+
+                        if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
+                        {
+                            string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
+                            name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
+                            CoreModule.AddConnection(conn, name);
+                        }
+                        else
+                        {
+                            conn.Dispose();
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception("Unable to create SDF file at " + sdfFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppConsole.Alert("Error", ex.Message);
+                AppConsole.WriteException(ex);
+            }
         }
 
         public static bool CreateSDF(string fileName)
