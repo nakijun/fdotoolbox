@@ -308,8 +308,9 @@ namespace FdoToolbox.Core
                                         create.CoordinateSystem = reader.GetCoordinateSystem();
                                         create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
                                         create.Description = reader.GetDescription();
-                                        create.Extent = reader.GetExtent();
                                         create.ExtentType = reader.GetExtentType();
+                                        if(create.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static)
+                                            create.Extent = reader.GetExtent();
                                         //If context was destroyed, use new name otherwise
                                         //update with the existing name
                                         if (targetCanDestroySpatialContext)
@@ -342,8 +343,9 @@ namespace FdoToolbox.Core
                                 create.CoordinateSystem = reader.GetCoordinateSystem();
                                 create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
                                 create.Description = reader.GetDescription();
-                                create.Extent = reader.GetExtent();
                                 create.ExtentType = reader.GetExtentType();
+                                if (create.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static)
+                                    create.Extent = reader.GetExtent();
                                 create.Name = name;
                                 create.XYTolerance = reader.GetXYTolerance();
                                 create.ZTolerance = reader.GetZTolerance();
