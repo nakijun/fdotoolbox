@@ -30,6 +30,7 @@ using FdoToolbox.Core.Forms;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Common.Io;
+using System.IO;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -218,8 +219,10 @@ namespace FdoToolbox.Core.Controls
             if (selectedSchema != null)
             {
                 string fileName = HostApplication.Instance.SaveFile("Save schema to XML", "Feature Schema Definition (*.schema)|*.schema");
-                if (System.IO.File.Exists(fileName))
+                if(fileName != null)
                 {
+                    if (File.Exists(fileName))
+                        File.Delete(fileName);
                     selectedSchema.WriteXml(fileName);
                     AppConsole.Alert("Schema saved", "Schema saved to " + fileName);
                 }
@@ -232,7 +235,8 @@ namespace FdoToolbox.Core.Controls
             if (selectedSchema != null)
             {
                 string sdfFile = HostApplication.Instance.SaveFile("Save schema to SDF", "SDF File (*.sdf)|*.sdf");
-                ExpressUtility.ApplySchemaToSDF(selectedSchema, sdfFile);
+                if(sdfFile != null)
+                    ExpressUtility.ApplySchemaToSDF(selectedSchema, sdfFile);
             }
         }
 

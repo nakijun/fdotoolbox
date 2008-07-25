@@ -105,7 +105,7 @@ namespace FdoToolbox.Core
         public void CreateSDF()
         {
             string sdfFile = HostApplication.Instance.SaveFile("Create SDF", "SDF File (*.sdf)|*.sdf");
-            if(File.Exists(sdfFile))
+            if (sdfFile != null)
             {
                 if (ExpressUtility.CreateSDF(sdfFile))
                 {
@@ -135,7 +135,7 @@ namespace FdoToolbox.Core
             //create a Class Definition up-front as part of the process.
 
             string shpFile = HostApplication.Instance.SaveFile("Create SHP file", "SHP Files (*.shp)|*.shp");
-            if(File.Exists(shpFile))
+            if(shpFile != null)
             {
                 //If file exists, the user would've been asked to
                 //overwrite, so we can safely delete it first.
