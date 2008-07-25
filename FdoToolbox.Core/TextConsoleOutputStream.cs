@@ -31,11 +31,11 @@ namespace FdoToolbox.Core
     /// <summary>
     /// Textbox-based output stream used by the Application console
     /// </summary>
-    public class ConsoleOutputStream : Stream
+    public class TextConsoleOutputStream : Stream, IConsoleOutputStream
     {
         private TextBoxBase _txtBox;
 
-        public ConsoleOutputStream(TextBoxBase txtbox)
+        public TextConsoleOutputStream(TextBoxBase txtbox)
         {
             _txtBox = txtbox;
             this.TextColor = Color.Black;
