@@ -1,6 +1,11 @@
 #summary Frequently Asked Questions
 #labels Featured
 
-=== I get "Memory allocation failed" when previewing data ===
+=== Q: I get "Memory allocation failed" when previewing data ===
 
-See Issue 21
+A: See Issue 21
+
+=== Q: What is the difference between Lite and Full releases? ===
+
+A: Lite releases do not include the FDO binaries, you will need to copy over binaries from a previous install of FDO Toolbox or from the [[http://fdo.osgeo.org FDO Project page]]. The
+binaries must reside in the "FDO" sub-directory of the directory you extracted the lite release to.
