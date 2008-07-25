@@ -164,14 +164,9 @@ namespace FdoToolbox.Core.Controls
                 }
                 else
                 {
-                    CreateSpatialContext(ctx);
+                    CreateSpatialContext(ctx, false);
                 }
             }
-        }
-
-        private void CreateSpatialContext(SpatialContextInfo ctx)
-        {
-            CreateSpatialContext(ctx, true);
         }
 
         private void CreateSpatialContext(SpatialContextInfo ctx, bool updateExisting)

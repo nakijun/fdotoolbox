@@ -49,6 +49,7 @@ namespace FdoToolbox.Core
             _Source = source;
             _Target = target;
             _SourceClasses = new List<ClassCopyOptions>();
+            _SourceSpatialContexts = new List<string>();
         }
 
         private bool _ExpressMode = false;
@@ -65,6 +66,7 @@ namespace FdoToolbox.Core
         public BulkCopyOptions(ExpressProvider source, ExpressProvider target, string sourceFile, string targetFile)
         {
             _SourceClasses = new List<ClassCopyOptions>();
+            _SourceSpatialContexts = new List<string>();
             _ExpressMode = true;
 
             IConnection src = null;
@@ -147,6 +149,18 @@ namespace FdoToolbox.Core
             get { return _Source; }
             set { _Source = value; }
         }
+
+        private List<string> _SourceSpatialContexts;
+
+        /// <summary>
+        /// The name of the source spatial context to copy over if we are
+        /// to copy spatial contexts
+        /// </summary>
+        public List<string> SourceSpatialContexts
+        {
+            get { return _SourceSpatialContexts; }
+        }
+	
 
         /// <summary>
         /// The target connection

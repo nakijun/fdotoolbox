@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Connections;
+using OSGeo.FDO.Commands.SpatialContext;
 #region overview
 /*
  * The bulk copy control is the front-end to the BulkCopyTask class.
@@ -99,7 +100,15 @@ namespace FdoToolbox.Core.Controls
             cmbDestSchema.SelectedText = task.Options.TargetSchemaName;
 
             chkCopySpatialContexts.Checked = task.Options.CopySpatialContexts;
-
+            if (task.Options.CopySpatialContexts)
+            {
+                foreach (string name in task.Options.SourceSpatialContexts)
+                {
+                    int idx = chkSourceContextList.Items.IndexOf(name);
+                    if (idx >= 0)
+                        chkSourceContextList.SetItemChecked(idx, true);
+                }
+            }
             ClassCopyOptions[] copts = task.Options.GetClassCopyOptions();
             foreach (ClassCopyOptions classCopyOption in copts)
             {
@@ -134,6 +143,17 @@ namespace FdoToolbox.Core.Controls
                 }
                 else
                 {
+                    using (IGetSpatialContexts fetch = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+                    {
+                        using (ISpatialContextReader reader = fetch.Execute())
+                        {
+                            chkSourceContextList.Items.Clear();
+                            while (reader.ReadNext())
+                            {
+                                chkSourceContextList.Items.Add(reader.GetName(), false);
+                            }
+                        }
+                    }
                     btnSave.Enabled = true;
                     cmbSrcSchema.DataSource = schemas;
                 }
@@ -460,9 +480,19 @@ namespace FdoToolbox.Core.Controls
                 errorProvider.SetError(txtName, "Required");
                 return;
             }
-            
+
             string srcConnName = cmbSrcConn.SelectedItem.ToString();
             string destConnName = cmbDestConn.SelectedItem.ToString();
+            IConnection destConn = HostApplication.Instance.ConnectionManager.GetConnection(destConnName);
+            if (!destConn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
+            {
+                if (chkSourceContextList.CheckedItems.Count > 1)
+                {
+                    AppConsole.Alert("Spatial Contexts", "Target connection doesn't support multiple spatial contexts\n\nTherefore, please select at most ONE spatial context from the list");
+                    return;
+                }
+            }
+            
             BulkCopyOptions options = new BulkCopyOptions(
                 new ConnectionInfo(
                     srcConnName,
@@ -475,6 +505,13 @@ namespace FdoToolbox.Core.Controls
             );
             options.CoerceDataTypes = chkCoerceDataTypes.Checked;
             options.CopySpatialContexts = chkCopySpatialContexts.Checked;
+            if (options.CopySpatialContexts)
+            {
+                foreach (object item in chkSourceContextList.CheckedItems)
+                {
+                    options.SourceSpatialContexts.Add(item.ToString());
+                }
+            }
             foreach (TreeNode classNode in GetRootNode().Nodes)
             {
                 //A tag set on the class node indicates this class is to be copied
@@ -541,13 +578,14 @@ namespace FdoToolbox.Core.Controls
 
         private void chkCopySpatialContexts_CheckedChanged(object sender, EventArgs e)
         {
+            chkSourceContextList.Enabled = chkCopySpatialContexts.Checked;
             if (chkCopySpatialContexts.Checked)
             {
                 string connName = cmbDestConn.SelectedItem.ToString();
                 IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connName);
                 if (!conn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
                 {
-                    AppConsole.Alert("Warning", "The target connection does not support multiple spatial contexts\nWhen the bulk copy begins you will be prompted for the spatial context to copy\nThe target spatial context and any data stored in that context will also be destroyed!");
+                    AppConsole.Alert("Warning", "The target connection does not support multiple spatial contexts\nSelect at most ONE spatial context from the list\nThe target spatial context and any data stored in that context will also be destroyed!");
                 }
             }
         }
