@@ -29,25 +29,31 @@ namespace TaskRun
     {
         private StreamWriter logWriter;
 
+        private string _FileName;
+
+        public string FileName
+        {
+            get { return _FileName; }
+            set { _FileName = value; }
+        }
+
         public override void Run(string[] args)
         {
-            if (args.Length != 1)
+            try
             {
+                ParseArguments(args);
+            }
+            catch (ArgumentException ex)
+            {
+                AppConsole.WriteLine(ex.Message);
                 ShowUsage();
                 return;
             }
 
-            string fileName = args[0];
-            if (!File.Exists(fileName))
-            {
-                AppConsole.WriteLine("Unable to find task definition: {0}", fileName);
-                return;
-            }
-
-            string logFile = Path.GetFileNameWithoutExtension(fileName) + DateTime.Now.ToFileTimeUtc() + ".log";
+            string logFile = Path.GetFileNameWithoutExtension(this.FileName) + DateTime.Now.ToFileTimeUtc() + ".log";
             logWriter = new StreamWriter(logFile);
 
-            ITask task = TaskLoader.LoadTask(fileName, true);
+            ITask task = TaskLoader.LoadTask(this.FileName, true);
             task.OnLogTaskMessage += new TaskProgressMessageEventHandler(task_OnLogTaskMessage);
             task.OnItemProcessed += new TaskPercentageEventHandler(task_OnItemProcessed);
             task.OnTaskMessage += new TaskProgressMessageEventHandler(task_OnTaskMessage);
@@ -87,6 +93,20 @@ namespace TaskRun
         void ShowUsage()
         {
             AppConsole.WriteLine("Usage: TaskRun.exe [task definition file]");
+        }
+
+        public override void ParseArguments(string[] args)
+        {
+            if (args.Length != 1)
+            {
+                throw new ArgumentException("Insufficent arguments");
+            }
+            string fileName = args[0];
+            if (!File.Exists(fileName))
+            {
+                throw new ArgumentException("Unable to find task definition: " + fileName);
+            }
+            this.FileName = fileName;
         }
     }
 }

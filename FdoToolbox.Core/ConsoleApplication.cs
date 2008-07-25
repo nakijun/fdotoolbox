@@ -26,7 +26,7 @@ using System.IO;
 
 namespace FdoToolbox.Core
 {
-    public class ConsoleApplication
+    public abstract class ConsoleApplication
     {
         public ConsoleApplication()
         {
@@ -82,6 +82,8 @@ namespace FdoToolbox.Core
             //Return the loaded assembly.
             return MyAssembly;
         }
+
+        public abstract void ParseArguments(string[] args);
 
         public virtual void Run(string[] args) { }
     }
