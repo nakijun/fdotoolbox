@@ -40,7 +40,7 @@ namespace TaskRun
             string fileName = args[0];
             if (!File.Exists(fileName))
             {
-                Console.WriteLine("Unable to find task definition: {0}", fileName);
+                AppConsole.WriteLine("Unable to find task definition: {0}", fileName);
                 return;
             }
 
@@ -55,11 +55,11 @@ namespace TaskRun
             {
                 task.ValidateTaskParameters();
                 task.Execute();
-                Console.WriteLine("Task completed. Log written to {0}", logFile);
+                AppConsole.WriteLine("Task completed. Log written to {0}", logFile);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception caught during execution.\n\n{0}", ex.ToString());
+                AppConsole.WriteLine("Exception caught during execution.\n\n{0}", ex.ToString());
                 logWriter.WriteLine("Exception caught during execution.\n\n{0}", ex.ToString());
             }
             finally
@@ -76,17 +76,17 @@ namespace TaskRun
 
         void task_OnTaskMessage(string msg)
         {
-            Console.WriteLine(msg);
+            AppConsole.WriteLine(msg);
         }
 
         void task_OnItemProcessed(int pc)
         {
-            Console.WriteLine("{0}% done", pc);
+            AppConsole.WriteLine("{0}% done", pc);
         }
 
         void ShowUsage()
         {
-            Console.WriteLine("Usage: TaskRun.exe [task definition file]");
+            AppConsole.WriteLine("Usage: TaskRun.exe [task definition file]");
         }
     }
 }
