@@ -83,8 +83,26 @@ namespace FdoToolbox.Core
             return MyAssembly;
         }
 
-        public abstract void ParseArguments(string[] args);
+        public abstract void ParseArguments(string[] args, int minArguments, int maxArguments);
+
+        public abstract void ShowUsage();
 
         public virtual void Run(string[] args) { }
+
+        protected string GetArgument(string prefix, string [] args)
+        {
+            if (args.Length == 0)
+                return null;
+
+            foreach (string arg in args)
+            {
+                if (arg.StartsWith(prefix))
+                {
+                    string argument = arg.Substring(arg.IndexOf(":")+1);
+                    return argument;
+                }
+            }
+            return null;
+        }
     }
 }
