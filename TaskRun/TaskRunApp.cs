@@ -37,11 +37,19 @@ namespace TaskRun
             set { _FileName = value; }
         }
 
+        private string _LogFile;
+
+        public string LogFile
+        {
+            get { return _LogFile; }
+            set { _LogFile = value; }
+        }
+	
         public override void Run(string[] args)
         {
             try
             {
-                ParseArguments(args);
+                ParseArguments(args, 1, 2);
             }
             catch (ArgumentException ex)
             {
@@ -50,34 +58,41 @@ namespace TaskRun
                 return;
             }
 
-            string logFile = Path.GetFileNameWithoutExtension(this.FileName) + DateTime.Now.ToFileTimeUtc() + ".log";
-            logWriter = new StreamWriter(logFile);
-
-            ITask task = TaskLoader.LoadTask(this.FileName, true);
-            task.OnLogTaskMessage += new TaskProgressMessageEventHandler(task_OnLogTaskMessage);
-            task.OnItemProcessed += new TaskPercentageEventHandler(task_OnItemProcessed);
-            task.OnTaskMessage += new TaskProgressMessageEventHandler(task_OnTaskMessage);
             try
             {
+                if (!string.IsNullOrEmpty(this.LogFile))
+                    logWriter = new StreamWriter(this.LogFile);
+
+                ITask task = TaskLoader.LoadTask(this.FileName, true);
+                task.OnLogTaskMessage += new TaskProgressMessageEventHandler(task_OnLogTaskMessage);
+                task.OnItemProcessed += new TaskPercentageEventHandler(task_OnItemProcessed);
+                task.OnTaskMessage += new TaskProgressMessageEventHandler(task_OnTaskMessage);
                 task.ValidateTaskParameters();
                 task.Execute();
-                AppConsole.WriteLine("Task completed. Log written to {0}", logFile);
+                AppConsole.WriteLine("Task completed.");
+                if (logWriter != null)
+                    AppConsole.WriteLine("Log written to {0}", this.LogFile);
             }
             catch (Exception ex)
             {
                 AppConsole.WriteLine("Exception caught during execution.\n\n{0}", ex.ToString());
-                logWriter.WriteLine("Exception caught during execution.\n\n{0}", ex.ToString());
+                if(logWriter != null)
+                    logWriter.WriteLine("Exception caught during execution.\n\n{0}", ex.ToString());
             }
             finally
             {
-                logWriter.Close();
-                logWriter.Dispose();
+                if (logWriter != null)
+                {
+                    logWriter.Close();
+                    logWriter.Dispose();
+                }
             }
         }
 
         void task_OnLogTaskMessage(string msg)
         {
-            logWriter.WriteLine(msg);
+            if(logWriter != null)
+                logWriter.WriteLine(msg);
         }
 
         void task_OnTaskMessage(string msg)
@@ -90,23 +105,36 @@ namespace TaskRun
             AppConsole.WriteLine("{0}% done", pc);
         }
 
-        void ShowUsage()
+        public override void ShowUsage()
         {
-            AppConsole.WriteLine("Usage: TaskRun.exe [task definition file]");
+            AppConsole.WriteLine("Usage: TaskRun.exe -file:<task definition file> [-log:<log file>]");
         }
 
-        public override void ParseArguments(string[] args)
+        public override void ParseArguments(string[] args, int minArguments, int maxArguments)
         {
-            if (args.Length != 1)
+            if (args.Length < minArguments || args.Length > maxArguments)
             {
                 throw new ArgumentException("Insufficent arguments");
             }
-            string fileName = args[0];
+
+            string fileName = GetArgument("-file", args);
+            string logFile = GetArgument("-log", args);
+
             if (!File.Exists(fileName))
             {
-                throw new ArgumentException("Unable to find task definition: " + fileName);
+                if (!Path.IsPathRooted(fileName))
+                    fileName = Path.Combine(this.AppPath, fileName);
+
+                if (!File.Exists(fileName))
+                    throw new ArgumentException("Unable to find task definition: " + fileName);
+                else
+                    this.FileName = fileName;
             }
-            this.FileName = fileName;
+            else
+            {
+                this.FileName = fileName;
+            }
+            this.LogFile = logFile;
         }
     }
 }
