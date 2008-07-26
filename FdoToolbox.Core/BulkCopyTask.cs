@@ -138,7 +138,7 @@ namespace FdoToolbox.Core
             if (_Options.CopySpatialContexts)
             {
                 if (this.CopySpatialContextOverride != null)
-                    this.CopySpatialContextOverride.CopySpatialContexts(srcConn, destConn);
+                    this.CopySpatialContextOverride.CopySpatialContexts(srcConn, destConn, _Options.SourceSpatialContexts);
                 else
                     CopySpatialContexts(_Options.Source, _Options.Target);
             }

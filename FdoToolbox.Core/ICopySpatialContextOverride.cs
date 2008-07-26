@@ -26,6 +26,6 @@ namespace FdoToolbox.Core
 {
     public interface ICopySpatialContextOverride
     {
-        void CopySpatialContexts(IConnection source, IConnection target);
+        void CopySpatialContexts(IConnection source, IConnection target, List<string> spatialContextNames);
     }
 }
