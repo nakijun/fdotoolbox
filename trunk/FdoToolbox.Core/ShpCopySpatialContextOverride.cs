@@ -23,6 +23,7 @@ using System.Text;
 using System.Diagnostics;
 using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Commands;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core
 {
@@ -32,36 +33,41 @@ namespace FdoToolbox.Core
     /// </summary>
     public class ShpCopySpatialContextOverride : ICopySpatialContextOverride
     {
-        public void CopySpatialContexts(OSGeo.FDO.Connections.IConnection srcConn, OSGeo.FDO.Connections.IConnection destConn)
+        public void CopySpatialContexts(IConnection srcConn, IConnection destConn, List<string> spatialContextNames)
         {
+            if (spatialContextNames.Count == 0)
+                return;
+
             Debug.Assert(destConn.ConnectionInfo.ProviderName.Contains("OSGeo.SHP"));
+            string srcName = spatialContextNames[0];
             using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
             {
                 using (ISpatialContextReader reader = cmd.Execute())
                 {
                     while (reader.ReadNext())
                     {
-                        using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
+                        //Only copy the matching context (by name)
+                        if (reader.GetName() == srcName)
                         {
-                            string name = reader.GetName();
-                            //SendMessage("Copying spatial context: " + name);
-                            //SHP-Specific processing (ugh!) It doesn't like it when
-                            //CSName != Spatial Context Name
-                            
-                            string wkt = reader.GetCoordinateSystemWkt();
-                            WKTParser parser = new WKTParser(wkt);
-                            //No wkt. Don't bother creating the context
-                            if (!string.IsNullOrEmpty(parser.CSName))
+                            using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
                             {
-                                create.CoordinateSystem = parser.CSName;
-                                create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                                create.Description = reader.GetDescription();
-                                create.Extent = reader.GetExtent();
-                                create.ExtentType = reader.GetExtentType();
-                                create.Name = parser.CSName;
-                                create.XYTolerance = reader.GetXYTolerance();
-                                create.ZTolerance = reader.GetZTolerance();
-                                create.Execute();
+                                string name = reader.GetName();
+                                //Make sure that CSName != Spatial Context Name
+                                string wkt = reader.GetCoordinateSystemWkt();
+                                WKTParser parser = new WKTParser(wkt);
+                                //No wkt. Don't bother creating the context
+                                if (!string.IsNullOrEmpty(parser.CSName))
+                                {
+                                    create.CoordinateSystem = parser.CSName;
+                                    create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
+                                    create.Description = reader.GetDescription();
+                                    create.Extent = reader.GetExtent();
+                                    create.ExtentType = reader.GetExtentType();
+                                    create.Name = parser.CSName;
+                                    create.XYTolerance = reader.GetXYTolerance();
+                                    create.ZTolerance = reader.GetZTolerance();
+                                    create.Execute();
+                                }
                             }
                         }
                     }

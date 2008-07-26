@@ -23,6 +23,7 @@ using System.Text;
 using System.Diagnostics;
 using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Commands;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core
 {
@@ -39,45 +40,50 @@ namespace FdoToolbox.Core
     /// </summary>
     public class MySqlCopySpatialContextOverride : ICopySpatialContextOverride
     {
-        public void CopySpatialContexts(OSGeo.FDO.Connections.IConnection srcConn, OSGeo.FDO.Connections.IConnection destConn)
+        public void CopySpatialContexts(IConnection srcConn, IConnection destConn, List<string> spatialContextNames)
         {
+            if (spatialContextNames.Count == 0)
+                return;
+
             Debug.Assert(destConn.ConnectionInfo.ProviderName.Contains("OSGeo.MySQL"));
-            //SendMessage("Copying spatial contexts to destination");
             using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
             {
                 using (ISpatialContextReader reader = cmd.Execute())
                 {
                     while (reader.ReadNext())
                     {
-                        using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
+                        //Only copy if in the list of spatial contexts to copy
+                        if(spatialContextNames.Contains(reader.GetName()))
                         {
-                            string name = reader.GetName();
-                            //SendMessage("Copying spatial context: " + name);
-                            
-                            create.CoordinateSystem = reader.GetCoordinateSystem();
-                            create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                            create.Description = reader.GetDescription();
-                            create.Extent = reader.GetExtent();
-                            create.ExtentType = reader.GetExtentType();
-                            create.Name = name;
-                            create.XYTolerance = reader.GetXYTolerance();
-                            create.ZTolerance = reader.GetZTolerance();
-                            create.UpdateExisting = false;
+                            using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
+                            {
+                                string name = reader.GetName();
+                                
+                                create.CoordinateSystem = reader.GetCoordinateSystem();
+                                create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
+                                create.Description = reader.GetDescription();
+                                create.Extent = reader.GetExtent();
+                                create.ExtentType = reader.GetExtentType();
+                                create.Name = name;
+                                create.XYTolerance = reader.GetXYTolerance();
+                                create.ZTolerance = reader.GetZTolerance();
+                                create.UpdateExisting = false;
 
-                            try
-                            {
-                                //Destory first then create
-                                using (IDestroySpatialContext destroy = destConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
+                                try
                                 {
-                                    destroy.Name = name;
-                                    destroy.Execute();
+                                    //Destory first then create
+                                    using (IDestroySpatialContext destroy = destConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
+                                    {
+                                        destroy.Name = name;
+                                        destroy.Execute();
+                                    }
+                                    create.Execute();
                                 }
-                                create.Execute();
-                            }
-                            catch (OSGeo.FDO.Common.Exception ex)
-                            {
-                                AppConsole.WriteException(ex);
-                                AppConsole.WriteLine("Ignoring that context");
+                                catch (OSGeo.FDO.Common.Exception ex)
+                                {
+                                    AppConsole.WriteException(ex);
+                                    AppConsole.WriteLine("Ignoring that context");
+                                }
                             }
                         }
                     }
