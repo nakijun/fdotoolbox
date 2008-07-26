@@ -236,7 +236,7 @@ namespace FdoToolbox.Core.Controls
             {
                 string sdfFile = HostApplication.Instance.SaveFile("Save schema to SDF", "SDF File (*.sdf)|*.sdf");
                 if(sdfFile != null)
-                    ExpressUtility.ApplySchemaToSDF(selectedSchema, sdfFile);
+                    ExpressUtility.ApplySchemaToNewSDF(selectedSchema, sdfFile);
             }
         }
 

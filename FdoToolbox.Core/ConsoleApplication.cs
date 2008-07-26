@@ -87,8 +87,34 @@ namespace FdoToolbox.Core
 
         public abstract void ShowUsage();
 
-        public virtual void Run(string[] args) { }
+        public abstract void Run(string[] args);
 
+        /// <summary>
+        /// Verifies the file name exists.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns>The file name.</returns>
+        protected string CheckFile(string fileName)
+        {
+            string file = fileName;
+            if (!File.Exists(file))
+            {
+                if (!Path.IsPathRooted(file))
+                    file = Path.Combine(this.AppPath, file);
+
+                if (!File.Exists(file))
+                    throw new ArgumentException("Unable to find file: " + fileName);
+            }
+            return file;
+        }
+
+        /// <summary>
+        /// Gets an argument value with the given prefix. Arguments follow the
+        /// convention [prefix]:[value]
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        /// <returns>The argument value if found, otherwise null</returns>
         protected string GetArgument(string prefix, string [] args)
         {
             if (args.Length == 0)

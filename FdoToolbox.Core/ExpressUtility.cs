@@ -58,7 +58,42 @@ namespace FdoToolbox.Core
             return conn;
         }
 
-        public static void ApplySchemaToSDF(FeatureSchema selectedSchema, string sdfFile)
+        /// <summary>
+        /// Applies a feature schema definition to an existing sdf file
+        /// </summary>
+        /// <param name="schemaFile"></param>
+        /// <param name="sdfFile"></param>
+        public static void ApplySchemaToSDF(string schemaFile, string sdfFile)
+        {
+            try
+            {
+                FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
+                newSchemas.ReadXml(schemaFile);
+
+                IConnection conn = CreateSDFConnection(sdfFile, false);
+                conn.Open();
+                using (conn)
+                {
+                    using (IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
+                    {
+                        apply.FeatureSchema = newSchemas[0];
+                        apply.Execute();
+                    }
+                }
+            }
+            catch (OSGeo.FDO.Common.Exception ex)
+            {
+                AppConsole.WriteLine(ex.Message);
+                AppConsole.WriteException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Applies an in-memory feature schema to a new sdf file
+        /// </summary>
+        /// <param name="selectedSchema"></param>
+        /// <param name="sdfFile"></param>
+        public static void ApplySchemaToNewSDF(FeatureSchema selectedSchema, string sdfFile)
         {
             try
             {
