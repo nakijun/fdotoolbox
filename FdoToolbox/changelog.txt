@@ -1,3 +1,15 @@
+v0.4.0
+------
+- Enhancements:
+	- General:
+		- A whole suite of command-line utilites have been included. For more information see cmd_readme.txt
+		- Coordinate System Catalog. You can store and manage commonly-used coordinate systems.
+			- The Spatial Context Dialog can now invoke a Coordinate System picker to auto-fill parts of the form.
+			
+- Other:
+	- API change in ICopySpatialContextOverride
+	- Removed capability check for the manschema command as the tab it displays is already capability-aware.
+
 v0.3.5
 ------
 - Enhancements:
