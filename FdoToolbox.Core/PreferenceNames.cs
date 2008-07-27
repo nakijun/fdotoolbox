@@ -23,6 +23,9 @@ using System.Text;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Master preference name list
+    /// </summary>
     public class PreferenceNames
     {
         #region string preferences

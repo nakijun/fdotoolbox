@@ -25,6 +25,9 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Input stream for GUI applications
+    /// </summary>
     public class TextConsoleInputStream : Stream, IConsoleInputStream
     {
         private TextBoxBase _txtBox;

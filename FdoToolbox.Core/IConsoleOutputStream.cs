@@ -24,6 +24,9 @@ using System.Drawing;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Output stream interface
+    /// </summary>
     public interface IConsoleOutputStream
     {
         Color TextColor { get; set; }

@@ -23,6 +23,9 @@ using System.Text;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Input stream interface
+    /// </summary>
     public interface IConsoleInputStream
     {
 

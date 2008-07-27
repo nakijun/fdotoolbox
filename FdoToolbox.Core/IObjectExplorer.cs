@@ -26,6 +26,9 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Object Explorer interface
+    /// </summary>
     public interface IObjectExplorer : IFormWrapper
     {
         /// <summary>

@@ -26,6 +26,9 @@ namespace FdoToolbox.Core
 {
     public delegate void ConsoleInputHandler(string input);
 
+    /// <summary>
+    /// Application Console interface
+    /// </summary>
     public interface IConsoleWindow : IFormWrapper
     {
         event ConsoleInputHandler ConsoleInput;

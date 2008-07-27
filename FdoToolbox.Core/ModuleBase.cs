@@ -37,6 +37,10 @@ namespace FdoToolbox.Core
     /// Care must be taken with command names. A ModuleLoadException
     /// will be thrown when attempting to load a module with a command
     /// whose name already exists in the global namespace.
+    /// 
+    /// Subclasses of ModuleBase must implement ICommandVerifier if they
+    /// contain commands that cannot execute if certain capabilities are 
+    /// not met.
     /// </summary>
     public abstract class ModuleBase : IModule
     {
