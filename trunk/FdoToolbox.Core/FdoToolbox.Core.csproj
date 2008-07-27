@@ -303,6 +303,7 @@
     </Content>
     <Content Include="Preferences.xml" />
     <Content Include="PropertyMapping.xml" />
+    <None Include="Resources\world.png" />
     <None Include="cscatalog.sqlite">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
