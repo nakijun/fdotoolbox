@@ -46,6 +46,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.54.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\SQLite\System.Data.SQLite.DLL</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -67,6 +71,27 @@
       <DependentUpon>BaseDocumentCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="ConnectionMgr.cs" />
+    <Compile Include="Controls\CoordSysManagerCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CoordSysManagerCtl.Designer.cs">
+      <DependentUpon>CoordSysManagerCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CoordinateSystem.cs" />
+    <Compile Include="CoordSysCatalog.cs" />
+    <Compile Include="Forms\CoordinateSystemPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CoordinateSystemPicker.Designer.cs">
+      <DependentUpon>CoordinateSystemPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CSInfoDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CSInfoDlg.Designer.cs">
+      <DependentUpon>CSInfoDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ICoordinateSystemCatalog.cs" />
     <Compile Include="TextConsoleInputStream.cs" />
     <Compile Include="TextConsoleOutputStream.cs" />
     <Compile Include="Controls\BulkCopyCtl.cs">
@@ -264,6 +289,7 @@
     <Compile Include="WKTParser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="APP_ABOUT.txt" />
     <Content Include="BulkCopyTask.xml" />
     <Content Include="ClassMapping.xml" />
     <Content Include="MenuMap.xml">
@@ -277,6 +303,9 @@
     </Content>
     <Content Include="Preferences.xml" />
     <Content Include="PropertyMapping.xml" />
+    <None Include="cscatalog.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\page_white_code.png" />
     <None Include="Resources\arrow_right.png" />
     <None Include="Resources\map.png" />
@@ -322,6 +351,10 @@
       <DependentUpon>ClassDefCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CoordSysManagerCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CoordSysManagerCtl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\DataPreviewCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DataPreviewCtl.cs</DependentUpon>
@@ -365,6 +398,14 @@
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CoordinateSystemPicker.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CoordinateSystemPicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CSInfoDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CSInfoDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DictionaryDialog.resx">
       <DependentUpon>DictionaryDialog.cs</DependentUpon>

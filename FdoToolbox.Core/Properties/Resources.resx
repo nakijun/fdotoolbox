@@ -121,9 +121,6 @@
   <data name="bricks" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bricks.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BulkCopyTask" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\BulkCopyTask.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="table_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\table_edit.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -184,15 +181,6 @@
   <data name="information" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\information.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="APP_ABOUT" xml:space="preserve">
-    <value>This application uses the following libraries:
-
-- Feature Data Objects (c) Autodesk/OSGeo (http://fdo.osgeo.org)
-- DockPanel Suite (c) Weifen Luo (http://sourceforge.net/projects/dockpanelsuite)
-- famfamfam silk icon set (c) Mark James (http://www.famfamfam.com/lab/icons/silk/)
-
-This application and its components are licensed under the GNU Lesser General Public Licence (see http://www.gnu.org/licenses/lgpl.html)</value>
-  </data>
   <data name="database_connect" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\database_connect.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -249,5 +237,11 @@ This application and its components are licensed under the GNU Lesser General Pu
   </data>
   <data name="Preferences" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Preferences.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="APP_ABOUT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\APP_ABOUT.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="BulkCopyTask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\BulkCopyTask.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

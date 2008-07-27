@@ -39,6 +39,8 @@ namespace FdoToolbox.Core
         private IModuleMgr _moduleMgr;
         private ITaskManager _taskMgr;
         private IConnectionMgr _connMgr;
+        private IPreferenceDictionary _PrefDict;
+        private ICoordinateSystemCatalog _CsCatalog;
         private static HostApplication _Instance;
 
         private HostApplication()
@@ -49,6 +51,7 @@ namespace FdoToolbox.Core
             _connMgr = new ConnectionMgr();
             _taskMgr = new TaskManager();
             _MenuStateMgr = new MenuStateMgr();
+            _CsCatalog = new CoordSysCatalog();
         }
 
         //This handler is called only when the common language runtime tries to bind to the assembly and fails.
@@ -505,13 +508,15 @@ namespace FdoToolbox.Core
             get { return "FDO Toolbox"; } 
         }
 
-        private IPreferenceDictionary _PrefDict;
-
         public IPreferenceDictionary Preferences
         {
             get { return _PrefDict; }
         }
-	
+
+        public ICoordinateSystemCatalog CoordinateSystemCatalog
+        {
+            get { return _CsCatalog; }
+        }
 
         /// <summary>
         /// Current working directory path of the application
