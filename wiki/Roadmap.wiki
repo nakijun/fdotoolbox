@@ -1,10 +1,5 @@
 #summary Planned features for upcoming releases
 
-=== 0.4 ===
- * ~~Data Store manager.~~
- * ~~Coordinate System Browser/Catalog~~
- * ~~Command-line utilities~~
-
 === 0.5 ===
  * Create Database Join Tasks.
       * Support OLEDB data sources
