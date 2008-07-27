@@ -103,7 +103,7 @@ namespace DumpSchema
             }
             catch (ArgumentException ex)
             {
-                AppConsole.WriteLine(ex.Message);
+                AppConsole.Err.WriteLine(ex.Message);
                 ShowUsage();
                 return;
             }
