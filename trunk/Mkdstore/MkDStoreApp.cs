@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.ClientServices;
 using OSGeo.FDO.Commands.DataStore;
+using OSGeo.FDO.Commands;
 
 namespace Mkdstore
 {
@@ -89,6 +90,9 @@ namespace Mkdstore
             try
             {
                 IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(this.FdoProvider);
+                if (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_CreateDataStore) < 0)
+                    throw new ArgumentException("The selected provider does not support creating data stores");
+                
                 if (!string.IsNullOrEmpty(this.ConnectionString))
                 {
                     conn.ConnectionString = this.ConnectionString;
@@ -108,7 +112,7 @@ namespace Mkdstore
                     }
                 }
             }
-            catch (OSGeo.FDO.Common.Exception ex)
+            catch (Exception ex)
             {
                 AppConsole.WriteLine("Error: {0}", ex.Message);
                 AppConsole.WriteException(ex);
