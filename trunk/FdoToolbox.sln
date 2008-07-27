@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Destroy", "Destroy\Destroy.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DumpSchema", "DumpSchema\DumpSchema.csproj", "{0A3A81BD-4958-4A79-BDE1-B0AEC4CBD5B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplySchema", "ApplySchema\ApplySchema.csproj", "{62C5CA3A-9CE5-4E33-B24D-FD2AA5F6F1A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{0A3A81BD-4958-4A79-BDE1-B0AEC4CBD5B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A3A81BD-4958-4A79-BDE1-B0AEC4CBD5B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A3A81BD-4958-4A79-BDE1-B0AEC4CBD5B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62C5CA3A-9CE5-4E33-B24D-FD2AA5F6F1A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62C5CA3A-9CE5-4E33-B24D-FD2AA5F6F1A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62C5CA3A-9CE5-4E33-B24D-FD2AA5F6F1A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62C5CA3A-9CE5-4E33-B24D-FD2AA5F6F1A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
