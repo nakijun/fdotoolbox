@@ -51,6 +51,7 @@ namespace FdoToolbox.Core
                     if (cmd.ExecuteNonQuery() == 1)
                     {
                         _Projections.Add(cs);
+                        AppConsole.WriteLine("Coordinate System {0} added to database", cs.Name);
                     }
                 }
                 conn.Close();
@@ -70,6 +71,7 @@ namespace FdoToolbox.Core
                     update.Parameters.AddWithValue("@d", oldName);
                     if (update.ExecuteNonQuery() == 1)
                     {
+                        AppConsole.WriteLine("Coordinate System {0} updated in database", oldName);
                         return true;
                     }
                 }
@@ -88,6 +90,7 @@ namespace FdoToolbox.Core
                     delete.Parameters.AddWithValue("@a", cs.Name);
                     if (delete.ExecuteNonQuery() == 1)
                     {
+                        AppConsole.WriteLine("Coordinate System {0} deleted from database", cs.Name);
                         _Projections.Remove(cs);
                         return true;
                     }
@@ -106,6 +109,7 @@ namespace FdoToolbox.Core
             SQLiteConnection conn = new SQLiteConnection(_ConnectionString);
             using (conn)
             {
+                AppConsole.WriteLine("Loading all Coordinate Systems from {0}", DB_FILE);
                 conn.Open();
                 string name = string.Empty;
                 string desc = string.Empty;

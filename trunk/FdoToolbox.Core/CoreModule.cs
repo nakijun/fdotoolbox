@@ -543,7 +543,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_CSMANAGER, "Coordinate Systems Catalog", Description = "Manage Coordinate Systems", ImageResourceName = "world")]
+        [Command(CoreModule.CMD_CSMANAGER, "Coordinate System Catalog", Description = "Manage Coordinate Systems", ImageResourceName = "world")]
         public void ManageCoordinateSystems()
         {
             CoordSysManagerCtl ctl = new CoordSysManagerCtl();
