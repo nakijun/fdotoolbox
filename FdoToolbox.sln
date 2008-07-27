@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeSdf", "MakeSdf\MakeSdf.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mkdstore", "Mkdstore\Mkdstore.csproj", "{FF06FCA6-0893-42F1-AC27-7C3685523B51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Destroy", "Destroy\Destroy.csproj", "{4608C9A7-FCB9-44AD-AEEE-CB1FD93A2C79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{FF06FCA6-0893-42F1-AC27-7C3685523B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF06FCA6-0893-42F1-AC27-7C3685523B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF06FCA6-0893-42F1-AC27-7C3685523B51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4608C9A7-FCB9-44AD-AEEE-CB1FD93A2C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4608C9A7-FCB9-44AD-AEEE-CB1FD93A2C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4608C9A7-FCB9-44AD-AEEE-CB1FD93A2C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4608C9A7-FCB9-44AD-AEEE-CB1FD93A2C79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
