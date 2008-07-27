@@ -30,6 +30,9 @@ using System.IO;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Options object for the BulkCopyTask
+    /// </summary>
     public class BulkCopyOptions : IDisposable
     {
         private ConnectionInfo _Source;
@@ -187,6 +190,11 @@ namespace FdoToolbox.Core
 
         private bool _CoerceDataTypes;
 
+        /// <summary>
+        /// If true, the bulk copy process will attempt to convert the source
+        /// data type to the target data type. This option is currently not in
+        /// use.
+        /// </summary>
         public bool CoerceDataTypes
         {
             get { return _CoerceDataTypes; }

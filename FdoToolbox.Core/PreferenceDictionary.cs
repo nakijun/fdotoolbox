@@ -25,6 +25,9 @@ using System.IO;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Preference dictionary interface
+    /// </summary>
     public interface IPreferenceDictionary
     {
         void SetDoublePref(string name, double value);
