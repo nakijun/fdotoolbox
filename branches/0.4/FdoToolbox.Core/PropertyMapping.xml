@@ -1,0 +1,4 @@
+﻿<PropertyMapping>
+	<SourceProperty>{0}</SourceProperty>
+	<TargetProperty>{1}</TargetProperty>
+</PropertyMapping>
