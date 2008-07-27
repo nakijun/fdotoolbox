@@ -6,6 +6,7 @@ The following command-line utilities are included with FdoToolbox:
 - ApplySchema.exe
 - Destroy.exe
 - DumpSchema.exe
+- ExpressBCP.exe
 - MakeSdf.exe
 - Mkdstore.exe
 - TaskRun.exe
@@ -56,6 +57,32 @@ Description: Writes a schema in a FDO data store to an XML file
 Usage: DumpSchema.exe -file:<schema file> -provider:<provider> -connection:<connection string> -schema:<selected schema>
 
 Notes: n/a
+
+ExpressBCP.exe
+--------------
+
+Description: Copies the contents of a feature schema (or optionally, a list of classes within) into a 
+flat-file data store.
+
+Usage: ExpressBCP.exe -src_provider:<provider name> -src_conn:<connection
+string> -dest_provider:<provider name> -dest_file:<file> -schema:<source
+schema name> [-classes:<comma-separated list of class names>]
+[-copy_srs:<source spatial context name>]
+
+Notes:
+
+If the -classes parameter is omitted, all classes under the given schema
+will be copied
+
+Any class names not found will be ignored during the copy process.
+
+For this initial version, no attribute or any spatial filtering will be
+performed.
+
+The dest_provider parameter can only be the following (at the moment):
+
+- OSGeo.SDF
+
 
 MakeSdf.exe
 -----------
