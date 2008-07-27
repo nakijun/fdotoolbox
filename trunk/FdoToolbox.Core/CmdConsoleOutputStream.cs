@@ -23,6 +23,9 @@ using System.Text;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Output stream for console applications
+    /// </summary>
     public class CmdConsoleOutputStream : IConsoleOutputStream 
     {
         public System.Drawing.Color TextColor

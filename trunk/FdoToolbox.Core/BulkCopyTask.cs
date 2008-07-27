@@ -77,12 +77,15 @@ using System.IO;
 #endregion
 namespace FdoToolbox.Core
 {
-    public delegate string GetSpatialContextNameMethod(ConnectionInfo conn);
-
     public class BulkCopyTask : ITask
     {
         private BulkCopyOptions _Options;
         
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="options"></param>
         public BulkCopyTask(string name, BulkCopyOptions options)
         {
             _Name = name;
@@ -90,6 +93,9 @@ namespace FdoToolbox.Core
             this.CopySpatialContextOverride = OverrideFactory.GetCopySpatialContextOverride(options.Target.Connection);
         }
 
+        /// <summary>
+        /// The options object
+        /// </summary>
         public BulkCopyOptions Options
         {
             get { return _Options; }
@@ -97,6 +103,9 @@ namespace FdoToolbox.Core
 
         private string _Name;
 
+        /// <summary>
+        /// The name of the task
+        /// </summary>
         public string Name
         {
             get { return _Name; }
@@ -119,6 +128,10 @@ namespace FdoToolbox.Core
         private ClassCollection _SourceClasses;
         private ClassCopyOptions[] _ClassesToCopy;
 
+        /// <summary>
+        /// Validate the task parameters. Any exceptions thrown should
+        /// prevent execution.
+        /// </summary>
         public void ValidateTaskParameters()
         {
             IConnection srcConn = _Options.Source.Connection;
@@ -127,6 +140,9 @@ namespace FdoToolbox.Core
             ValidateBulkCopyOptions(srcConn, destConn);
         }
 
+        /// <summary>
+        /// Execute the task. Must validate the task first before executing.
+        /// </summary>
         public void Execute()
         {
             Stopwatch watch = new Stopwatch();
@@ -239,6 +255,11 @@ namespace FdoToolbox.Core
             AppConsole.Alert("Bulk Copy", total + " features copied in " + watch.ElapsedMilliseconds + "ms");
         }
 
+        /// <summary>
+        /// Copy the list of spatial contexts from the source to the target
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
         private void CopySpatialContexts(ConnectionInfo source, ConnectionInfo target)
         {
             IConnection srcConn = source.Connection;
@@ -341,6 +362,12 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Creates the target schema from the source schema
+        /// </summary>
+        /// <param name="sourceSchemaName"></param>
+        /// <param name="srcConn"></param>
+        /// <returns></returns>
         private FeatureSchema CreateTargetSchema(string sourceSchemaName, IConnection srcConn)
         {
             SendMessage("Cloning source schema for target");
@@ -358,6 +385,11 @@ namespace FdoToolbox.Core
             throw new BulkCopyException("Could not find source schema to clone: " + sourceSchemaName);
         }
 
+        /// <summary>
+        /// Perform an in-memory clone of a given Feature Schema
+        /// </summary>
+        /// <param name="fs"></param>
+        /// <returns></returns>
         public static FeatureSchema CloneSchema(FeatureSchema fs)
         {
             //FDO doesn't have clone support for schemas so we'll use
@@ -452,6 +484,12 @@ namespace FdoToolbox.Core
             SendMessage("Validation Completed");
         }
 
+        /// <summary>
+        /// Gets all the class copy options for this task
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="srcClasses"></param>
+        /// <returns></returns>
         public static ClassCopyOptions[] GetAllClassCopyOptions(BulkCopyOptions options, ClassCollection srcClasses)
         {
             //Include *all* classes and *all* properties
@@ -460,9 +498,14 @@ namespace FdoToolbox.Core
             {
                 options.AddClassCopyOption(new ClassCopyOptions(classDef, true));
             }
-            return options.GetClassCopyOptions();;
+            return options.GetClassCopyOptions();
         }
 
+        /// <summary>
+        /// Gets all the source class definitions
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static ClassCollection GetSourceClasses(BulkCopyOptions options)
         {
             IConnection srcConn = options.Source.Connection;
@@ -556,6 +599,9 @@ namespace FdoToolbox.Core
             return inserted;
         }
 
+        /// <summary>
+        /// The type of task (BulkCopy)
+        /// </summary>
         public TaskType TaskType
         {
             get { return TaskType.BulkCopy; }

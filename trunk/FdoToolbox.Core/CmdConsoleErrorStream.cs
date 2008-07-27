@@ -23,6 +23,9 @@ using System.Text;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Error stream for console applications
+    /// </summary>
     public class CmdConsoleErrorStream : IConsoleOutputStream
     {
         public System.Drawing.Color TextColor

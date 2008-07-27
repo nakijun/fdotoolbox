@@ -25,6 +25,10 @@ using System.ComponentModel;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// A simple data access object to the Coordinate System Catalog which resides
+    /// in a SQLite database.
+    /// </summary>
     public class CoordSysCatalog : ICoordinateSystemCatalog
     {
         const string DB_FILE = "cscatalog.sqlite";
@@ -37,7 +41,11 @@ namespace FdoToolbox.Core
         }
 
         private BindingList<CoordinateSystem> _Projections;
-
+        
+        /// <summary>
+        /// Adds a new coordinate system to the database
+        /// </summary>
+        /// <param name="cs"></param>
         public void AddProjection(CoordinateSystem cs)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_ConnectionString))
@@ -58,6 +66,12 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Updates an existing coordinate system in the database
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <param name="oldName"></param>
+        /// <returns></returns>
         public bool UpdateProjection(CoordinateSystem cs, string oldName)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_ConnectionString))
@@ -80,6 +94,11 @@ namespace FdoToolbox.Core
             return false;
         }
 
+        /// <summary>
+        /// Deletes a coordinate system from the database
+        /// </summary>
+        /// <param name="cs"></param>
+        /// <returns></returns>
         public bool DeleteProjection(CoordinateSystem cs)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_ConnectionString))
@@ -100,6 +119,10 @@ namespace FdoToolbox.Core
             return false;
         }
 
+        /// <summary>
+        /// Gets all the coordinate systems in the database
+        /// </summary>
+        /// <returns></returns>
         public BindingList<CoordinateSystem> GetAllProjections()
         {
             if (_Projections != null)
@@ -132,6 +155,11 @@ namespace FdoToolbox.Core
             return _Projections;
         }
 
+        /// <summary>
+        /// Checks if a coordinate system exists
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool ProjectionExists(string name)
         {
             if (_Projections == null)

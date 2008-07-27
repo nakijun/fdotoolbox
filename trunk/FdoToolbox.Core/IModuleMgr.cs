@@ -27,19 +27,71 @@ namespace FdoToolbox.Core
 {
     public delegate void ModuleEventHandler(IModule module);
 
+    /// <summary>
+    /// Module manager interface
+    /// </summary>
     public interface IModuleMgr
     {
+        /// <summary>
+        /// Gets the list of loaded modules
+        /// </summary>
         IModule[] LoadedModules { get; }
+
+        /// <summary>
+        /// Loads the module
+        /// </summary>
+        /// <param name="module"></param>
         void LoadModule(IModule module);
+
+        /// <summary>
+        /// Unloads the module
+        /// </summary>
+        /// <param name="module"></param>
         void UnloadModule(IModule module);
+
+        /// <summary>
+        /// Gets a command (by name) from the global namespace
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         Command GetCommand(string name);
+
+        /// <summary>
+        /// Gets all the registered command names
+        /// </summary>
+        /// <returns></returns>
         ICollection<string> GetCommandNames();
+
+        /// <summary>
+        /// Loads a .net assembly and loads all IModule instances within
+        /// </summary>
+        /// <param name="assemblyFile"></param>
         void LoadExtension(string assemblyFile);
 
+        /// <summary>
+        /// Fired when a module has been loaded
+        /// </summary>
         event ModuleEventHandler ModuleLoaded;
+
+        /// <summary>
+        /// Fired when a module has been unloaded
+        /// </summary>
         event ModuleEventHandler ModuleUnloaded;
 
+        /// <summary>
+        /// Gets a loaded module by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         IModule GetLoadedModule(string name);
+
+        /// <summary>
+        /// Checks whether a given command is executable under the given
+        /// connection context.
+        /// </summary>
+        /// <param name="cmdName"></param>
+        /// <param name="conn"></param>
+        /// <returns></returns>
         bool IsCommandExecutable(string cmdName, IConnection conn);
     }
 }

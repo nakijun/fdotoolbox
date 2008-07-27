@@ -26,8 +26,18 @@ using System.IO;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Base Application class for console applications. Provides basic
+    /// services such as argument parsing.
+    /// 
+    /// In order for argument parsing to work, arguments must be defined 
+    /// in the form of [-prefix]:[value] pairs.
+    /// </summary>
     public abstract class ConsoleApplication
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ConsoleApplication()
         {
             AppConsole.Out = new CmdConsoleOutputStream();
@@ -50,6 +60,9 @@ namespace FdoToolbox.Core
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
         }
 
+        /// <summary>
+        /// Application path
+        /// </summary>
         public string AppPath { get { return Path.GetDirectoryName(Application.ExecutablePath); } }
 
         //This handler is called only when the common language runtime tries to bind to the assembly and fails.
@@ -83,10 +96,23 @@ namespace FdoToolbox.Core
             return MyAssembly;
         }
 
+        /// <summary>
+        /// Parse application-specific arguments.
+        /// </summary>
+        /// <param name="args">The array of commandline arguments</param>
+        /// <param name="minArguments">The minimum number of expected arguments</param>
+        /// <param name="maxArguments">The maximum number of expected arguments</param>
         public abstract void ParseArguments(string[] args, int minArguments, int maxArguments);
 
+        /// <summary>
+        /// Display usage information for this application
+        /// </summary>
         public abstract void ShowUsage();
 
+        /// <summary>
+        /// Run the application
+        /// </summary>
+        /// <param name="args">The array of commandline arguments</param>
         public abstract void Run(string[] args);
 
         /// <summary>
