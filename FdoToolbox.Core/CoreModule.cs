@@ -562,11 +562,6 @@ namespace FdoToolbox.Core
                             && conn.SchemaCapabilities.SupportsSchemaModification;
                     }
                     break;
-                case CMD_MANSCHEMA:
-                    {
-                        executable = conn.SchemaCapabilities.SupportsSchemaModification;
-                    }
-                    break;
                 case CMD_MANAGEDATASTORES:
                     {
                         executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ListDataStores) >= 0);
