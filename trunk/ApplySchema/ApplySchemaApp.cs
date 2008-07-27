@@ -7,6 +7,7 @@ using OSGeo.FDO.ClientServices;
 using System.IO;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands.Schema;
+using OSGeo.FDO.Commands;
 
 namespace ApplySchema
 {
@@ -79,6 +80,9 @@ namespace ApplySchema
             try
             {
                 IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(this.FdoProvider);
+                if (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) < 0)
+                    throw new ArgumentException("This provider does not support applying schemas");
+                
                 conn.ConnectionString = this.ConnectionString;
                 conn.Open();
                 using (conn)
