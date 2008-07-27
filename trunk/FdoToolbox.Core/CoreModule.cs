@@ -75,6 +75,7 @@ namespace FdoToolbox.Core
         public const string CMD_SHOWOBJECTEXPLORER = "showobjectexplorer";
         public const string CMD_SHOWCONSOLE = "showconsole";
         public const string CMD_MANAGEDATASTORES = "mandstore";
+        public const string CMD_CSMANAGER = "csmanager";
         #endregion
 
         public override string Name
@@ -540,6 +541,13 @@ namespace FdoToolbox.Core
                 DataStoreMgrCtl ctl = new DataStoreMgrCtl(connInfo);
                 HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
             }
+        }
+
+        [Command(CoreModule.CMD_CSMANAGER, "Coordinate Systems Catalog", Description = "Manage Coordinate Systems")]
+        public void ManageCoordinateSystems()
+        {
+            CoordSysManagerCtl ctl = new CoordSysManagerCtl();
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
         public bool IsCommandExecutable(string cmdName, IConnection conn)

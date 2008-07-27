@@ -21,6 +21,7 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="regprovider" />
 			<Command name="unregprovider" />
 		</SubMenu>
+		<Command name="csmanager" />
 		<Command name="extload" />
 	</Menu>
 	<Menu name="Express">

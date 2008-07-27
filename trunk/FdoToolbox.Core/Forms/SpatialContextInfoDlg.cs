@@ -319,5 +319,18 @@ namespace FdoToolbox.Core.Forms
                 geomFactory.Dispose();
             }
         }
+
+        private void btnLoadCS_Click(object sender, EventArgs e)
+        {
+            CoordinateSystem cs = CoordinateSystemPicker.GetCoordinateSystem();
+            if (cs != null)
+            {
+                if(txtName.Enabled)
+                    txtName.Text = cs.Name;
+                txtDescription.Text = cs.Description;
+                txtCoordSys.Text = cs.Wkt;
+                txtCoordSysWkt.Text = cs.Wkt;
+            }
+        }
     }
 }
