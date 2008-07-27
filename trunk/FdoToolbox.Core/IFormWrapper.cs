@@ -24,6 +24,9 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Form wrapper interface
+    /// </summary>
     public interface IFormWrapper
     {
         Form FormObj { get; }

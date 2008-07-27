@@ -23,6 +23,9 @@ using System.Text;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Helper class to parse WKT strings
+    /// </summary>
     public class WKTParser
     {
         private string _CsName;
@@ -32,7 +35,6 @@ namespace FdoToolbox.Core
             get { return _CsName; }
             set { _CsName = value; }
         }
-	
 
         public WKTParser(string wktText)
         {

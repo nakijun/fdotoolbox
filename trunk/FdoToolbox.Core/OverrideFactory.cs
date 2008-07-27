@@ -24,6 +24,9 @@ using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Utility class to create override objects
+    /// </summary>
     public sealed class OverrideFactory
     {
         public static ICopySpatialContextOverride GetCopySpatialContextOverride(IConnection targetConn)
