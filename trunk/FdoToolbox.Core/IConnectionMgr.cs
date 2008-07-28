@@ -38,6 +38,8 @@ namespace FdoToolbox.Core
         void RenameConnection(string oldName, string newName);
         bool CanRenameConnection(string oldName, string newName, ref string reason);
 
+        FeatureService CreateService(string name);
+
         event ConnectionBeforeRemoveHandler BeforeConnectionRemove;
         event ConnectionEventHandler ConnectionAdded;
         event ConnectionEventHandler ConnectionRemoved;

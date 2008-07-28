@@ -86,24 +86,19 @@ namespace FdoToolbox
 
         private void GetSchemaNodes(TreeNode connNode)
         {
-            IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connNode.Name);
-            if (conn != null)
+            FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connNode.Name);
+            if (service != null)
             {
-                connNode.ToolTipText = string.Format("Provider: {0}\nConnection String: {1}", conn.ConnectionInfo.ProviderName, conn.ConnectionString);
-                using (IDescribeSchema cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                connNode.ToolTipText = string.Format("Provider: {0}\nConnection String: {1}", service.Connection.ConnectionInfo.ProviderName, service.Connection.ConnectionString);
+                FeatureSchemaCollection schemas = service.DescribeSchema();
+                foreach (FeatureSchema schema in schemas)
                 {
-                    using (FeatureSchemaCollection schemas = cmd.Execute())
-                    {
-                        foreach (FeatureSchema schema in schemas)
-                        {
-                            TreeNode schemaNode = new TreeNode();
-                            schemaNode.Name = schemaNode.Text = schema.Name;
-                            schemaNode.ContextMenuStrip = ctxSelectedSchema;
-                            schemaNode.ImageIndex = schemaNode.SelectedImageIndex = IMG_IDX_SCHEMA;
-                            GetClassNodes(schema, schemaNode);
-                            connNode.Nodes.Add(schemaNode);
-                        }
-                    }
+                    TreeNode schemaNode = new TreeNode();
+                    schemaNode.Name = schemaNode.Text = schema.Name;
+                    schemaNode.ContextMenuStrip = ctxSelectedSchema;
+                    schemaNode.ImageIndex = schemaNode.SelectedImageIndex = IMG_IDX_SCHEMA;
+                    GetClassNodes(schema, schemaNode);
+                    connNode.Nodes.Add(schemaNode);
                 }
             }
         }

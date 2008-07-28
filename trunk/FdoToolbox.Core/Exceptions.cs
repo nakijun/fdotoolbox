@@ -55,4 +55,11 @@ namespace FdoToolbox.Core
         public TaskValidationException(string msg) : base(msg) { }
         public TaskValidationException(string msg, Exception inner) : base(msg, inner) { }
     }
+
+    public class FeatureServiceException : Exception
+    {
+        public FeatureServiceException() : base() { }
+        public FeatureServiceException(string msg) : base(msg) { }
+        public FeatureServiceException(string msg, Exception inner) : base(msg, inner) { }
+    }
 }
