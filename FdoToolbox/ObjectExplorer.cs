@@ -301,10 +301,14 @@ namespace FdoToolbox
             XmlNode selTaskCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedTask");
             XmlNode moduleCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/Modules");
             XmlNode selModuleCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedModule");
+            XmlNode selSchemaCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedSchema");
+            XmlNode selClassCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedClass");
 
             ProcessMenuNode(mToolStrip, toolbarNode);
             ProcessMenuNode(ctxConnections, connCtxNode);
             ProcessMenuNode(ctxSelectedConnection, selConnCtxNode);
+            ProcessMenuNode(ctxSelectedSchema, selSchemaCtxNode);
+            ProcessMenuNode(ctxSelectedClass, selClassCtxNode);
             ProcessMenuNode(ctxTasks, taskCtxNode);
             ProcessMenuNode(ctxSelectedTask, selTaskCtxNode);
             ProcessMenuNode(ctxModules, moduleCtxNode);
@@ -408,10 +412,14 @@ namespace FdoToolbox
             XmlNode selTaskCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedTask");
             XmlNode moduleCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/Modules");
             XmlNode selModuleCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedModule");
+            XmlNode selSchemaCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedSchema");
+            XmlNode selClassCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedClass");
 
             ProcessMenuNode(mToolStrip, toolbarNode);
             ProcessMenuNode(ctxConnections, connCtxNode);
             ProcessMenuNode(ctxSelectedConnection, selConnCtxNode);
+            ProcessMenuNode(ctxSelectedSchema, selSchemaCtxNode);
+            ProcessMenuNode(ctxSelectedClass, selClassCtxNode);
             ProcessMenuNode(ctxTasks, taskCtxNode);
             ProcessMenuNode(ctxSelectedTask, selTaskCtxNode);
             ProcessMenuNode(ctxModules, moduleCtxNode);
@@ -444,7 +452,7 @@ namespace FdoToolbox
             while (node.Level > NODE_LEVEL_SCHEMA)
                 node = node.Parent;
 
-            if (node.Level == NODE_LEVEL_SCHEMA && GetConnectionsNode() == node.Parent)
+            if (node.Level == NODE_LEVEL_SCHEMA && GetConnectionsNode() == node.Parent.Parent)
                 return node.Name;
 
             return null;
@@ -456,7 +464,7 @@ namespace FdoToolbox
             while (node.Level > NODE_LEVEL_CLASS)
                 node = node.Parent;
             
-            if (node.Level == NODE_LEVEL_CLASS && GetConnectionsNode() == node.Parent.Parent)
+            if (node.Level == NODE_LEVEL_CLASS && GetConnectionsNode() == node.Parent.Parent.Parent)
                 return node.Name;
 
             return null;
