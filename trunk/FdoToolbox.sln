@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplySchema", "ApplySchema\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressBCP", "ExpressBCP\ExpressBCP.csproj", "{994AB85E-A756-42F8-AC49-5EECEB114F62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{6E1EB800-982A-4565-92F5-562F95BF15B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,9 @@ Global
 		{994AB85E-A756-42F8-AC49-5EECEB114F62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{994AB85E-A756-42F8-AC49-5EECEB114F62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{994AB85E-A756-42F8-AC49-5EECEB114F62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E1EB800-982A-4565-92F5-562F95BF15B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E1EB800-982A-4565-92F5-562F95BF15B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E1EB800-982A-4565-92F5-562F95BF15B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

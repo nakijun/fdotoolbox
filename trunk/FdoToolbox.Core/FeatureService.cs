@@ -36,7 +36,7 @@ namespace FdoToolbox.Core
 
         private FgfGeometryFactory _GeomFactory;
 
-        internal FeatureService(IConnection conn)
+        public FeatureService(IConnection conn)
         {
             _conn = conn;
             _GeomFactory = new FgfGeometryFactory();
