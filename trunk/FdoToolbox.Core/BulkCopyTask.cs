@@ -80,6 +80,9 @@ namespace FdoToolbox.Core
     public class BulkCopyTask : ITask
     {
         private BulkCopyOptions _Options;
+
+        private FeatureService _SrcService;
+        private FeatureService _DestService;
         
         /// <summary>
         /// Constructor
@@ -90,6 +93,8 @@ namespace FdoToolbox.Core
         {
             _Name = name;
             _Options = options;
+            _SrcService = new FeatureService(options.Source.Connection);
+            _DestService = new FeatureService(options.Target.Connection);
             this.CopySpatialContextOverride = OverrideFactory.GetCopySpatialContextOverride(options.Target.Connection);
         }
 
@@ -161,13 +166,9 @@ namespace FdoToolbox.Core
             //If target schema is undefined, create it
             if (_Options.ApplySchemaToTarget)
             {
-                using (IApplySchema apply = destConn.CreateCommand(CommandType.CommandType_ApplySchema) as IApplySchema)
-                {
-                    SendMessage("Applying schema for target (this may take a while)");
-                    apply.FeatureSchema = CreateTargetSchema(_Options.SourceSchemaName, srcConn);
-                    apply.Execute();
-                    SendMessage("Target Schema Applied");
-                }
+                SendMessage("Applying schema for target (this may take a while)");
+                _DestService.ApplySchema(CreateTargetSchema(_Options.SourceSchemaName, srcConn));
+                SendMessage("Target Schema Applied");
             }
             SendMessage("Begin bulk copy of classes");
             int total = 0;
@@ -262,6 +263,12 @@ namespace FdoToolbox.Core
         /// <param name="target"></param>
         private void CopySpatialContexts(ConnectionInfo source, ConnectionInfo target)
         {
+            if (_Options.SourceSpatialContexts.Count == 0)
+            {
+                SendMessage("Didn't specify any spatial contexts to copy. Skipping");
+                return;
+            }
+
             IConnection srcConn = source.Connection;
             IConnection destConn = target.Connection;
             SendMessage("Copying spatial contexts to destination");
@@ -271,92 +278,30 @@ namespace FdoToolbox.Core
                 SendMessage("Copying context: " + contextName);
                 bool targetCanDestroySpatialContext = (Array.Exists<int>(destConn.CommandCapabilities.Commands, delegate(int c) { return c == (int)CommandType.CommandType_DestroySpatialContext; }));
                 //Get source spatial context 
-                using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+                SpatialContextInfo srcContext = _SrcService.GetSpatialContext(contextName);
+                if (srcContext != null)
                 {
-                    using (ISpatialContextReader reader = cmd.Execute())
+                    SendMessage("Found source spatial context: " + contextName);
+                    List<string> deleteList = new List<string>();
+                    SpatialContextInfo destContext = _DestService.GetSpatialContext(contextName);
+                    SendMessage("Deleting all target spatial contexts");
+                    if (targetCanDestroySpatialContext)
                     {
-                        while (reader.ReadNext())
-                        {
-                            if (reader.GetName() == contextName)
-                            {
-                                SendMessage("Found source spatial context: " + contextName);
-                                List<string> deleteList = new List<string>();
-                                using (IGetSpatialContexts targetContexts = destConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
-                                {
-                                    using (ISpatialContextReader targetReader = targetContexts.Execute())
-                                    {
-                                        while (targetReader.ReadNext())
-                                        {
-                                            deleteList.Add(targetReader.GetName());
-                                        }
-                                    }
-                                }
-                                SendMessage("Deleting all target spatial contexts");
-                                if (targetCanDestroySpatialContext)
-                                {
-                                    foreach (string contextToDelete in deleteList)
-                                    {
-                                        using (IDestroySpatialContext destroy = destConn.CreateCommand(CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
-                                        {
-                                            destroy.Name = contextToDelete;
-                                            destroy.Execute();
-                                        }
-                                    }
-                                }
-                                SendMessage("Copying selected spatial context " + contextName + " to target");
-                                using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
-                                {
-                                    create.CoordinateSystem = reader.GetCoordinateSystem();
-                                    create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                                    create.Description = reader.GetDescription();
-                                    create.ExtentType = reader.GetExtentType();
-                                    if (create.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static)
-                                        create.Extent = reader.GetExtent();
-                                    //If context was destroyed, use new name otherwise
-                                    //update with the existing name
-                                    if (targetCanDestroySpatialContext)
-                                        create.Name = reader.GetName();
-                                    else
-                                        create.UpdateExisting = true;
-                                    create.XYTolerance = reader.GetXYTolerance();
-                                    create.ZTolerance = reader.GetZTolerance();
-                                    create.Execute();
-                                }
-                            }
-                        }
+                        _DestService.DestroySpatialContext(destContext);
                     }
+                    SendMessage("Copying selected spatial context " + contextName + " to target");
+                    _DestService.CreateSpatialContext(srcContext, !targetCanDestroySpatialContext);
                 }
             }
             else
             {
-                using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+                List<SpatialContextInfo> srcContexts = _SrcService.GetSpatialContexts();
+                foreach (string ctxName in _Options.SourceSpatialContexts)
                 {
-                    using (ISpatialContextReader reader = cmd.Execute())
+                    SpatialContextInfo srcContext = srcContexts.Find(delegate(SpatialContextInfo ctx) { return ctx.Name == ctxName; });
+                    if (srcContext != null)
                     {
-                        while (reader.ReadNext())
-                        {
-                            //Copy over only if it is in list of contexts to copy
-                            if (_Options.SourceSpatialContexts.Contains(reader.GetName()))
-                            {
-                                using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
-                                {
-                                    string name = reader.GetName();
-                                    SendMessage("Copying spatial context: " + name);
-
-                                    create.CoordinateSystem = reader.GetCoordinateSystem();
-                                    create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                                    create.Description = reader.GetDescription();
-                                    create.ExtentType = reader.GetExtentType();
-                                    if (create.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static)
-                                        create.Extent = reader.GetExtent();
-                                    create.Name = name;
-                                    create.XYTolerance = reader.GetXYTolerance();
-                                    create.ZTolerance = reader.GetZTolerance();
-                                    create.UpdateExisting = true;
-                                    create.Execute();
-                                }
-                            }
-                        }
+                        _DestService.CreateSpatialContext(srcContext, true);
                     }
                 }
             }
@@ -371,13 +316,7 @@ namespace FdoToolbox.Core
         private FeatureSchema CreateTargetSchema(string sourceSchemaName, IConnection srcConn)
         {
             SendMessage("Cloning source schema for target");
-            FeatureSchema fs = null;
-            using (IDescribeSchema desc = srcConn.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
-            {
-                FeatureSchemaCollection schemas = desc.Execute();
-                fs = schemas[schemas.IndexOf(sourceSchemaName)];
-            }
-
+            FeatureSchema fs = _SrcService.GetSchemaByName(sourceSchemaName);
             if (fs != null)
             {
                 return CloneSchema(fs);
@@ -508,18 +447,11 @@ namespace FdoToolbox.Core
         /// <returns></returns>
         public static ClassCollection GetSourceClasses(BulkCopyOptions options)
         {
-            IConnection srcConn = options.Source.Connection;
-            ClassCollection srcClasses = null;
-            using (IDescribeSchema desc = srcConn.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
-            {
-                FeatureSchemaCollection srcSchemas = desc.Execute();
-                foreach (FeatureSchema schema in srcSchemas)
-                {
-                    if (schema.Name == options.SourceSchemaName)
-                        srcClasses = schema.Classes;
-                }
-            }
-            return srcClasses;
+            FeatureService service = new FeatureService(options.Source.Connection);
+            FeatureSchema schema = service.GetSchemaByName(options.SourceSchemaName);
+            if (schema != null)
+                return schema.Classes;
+            return null;
         }
 
         private int ProcessReader(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)

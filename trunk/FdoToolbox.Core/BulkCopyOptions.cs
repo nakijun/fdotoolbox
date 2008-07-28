@@ -91,13 +91,11 @@ namespace FdoToolbox.Core
 
             //SDF and SHP are single schema, so grab the first schema from IDescribeSchema
             //and set it as the source schema name
-            using (IDescribeSchema desc = src.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
-            {
-                FeatureSchemaCollection schemas = desc.Execute();
-                if (schemas.Count == 0)
-                    throw new BulkCopyException("No schemas found on source connection");
-                this.SourceSchemaName = schemas[0].Name;
-            }
+            FeatureService srcService = new FeatureService(src);
+            FeatureSchemaCollection schemas = srcService.DescribeSchema();
+            if (schemas.Count == 0)
+                throw new BulkCopyException("No schemas found on source connection");
+            this.SourceSchemaName = schemas[0].Name;
 
             switch (target)
             {

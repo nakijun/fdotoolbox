@@ -39,13 +39,10 @@ namespace FdoToolbox.Core.Forms
         public MultiClassPicker(ConnectionInfo connInfo)
             : this()
         {
-            using (IDescribeSchema desc = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
-            {
-                FeatureSchemaCollection schemas = desc.Execute();
-                BindingSource bs = new BindingSource();
-                bs.DataSource = schemas;
-                cmbSchema.DataSource = bs;
-            }
+            FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+            BindingSource bs = new BindingSource();
+            bs.DataSource = service.DescribeSchema();
+            cmbSchema.DataSource = bs;
         }
 
         private void btnOK_Click(object sender, EventArgs e)

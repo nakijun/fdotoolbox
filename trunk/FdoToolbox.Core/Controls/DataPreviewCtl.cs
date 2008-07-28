@@ -73,11 +73,9 @@ namespace FdoToolbox.Core.Controls
 
         protected override void OnLoad(EventArgs e)
         {
-            using (IDescribeSchema desc = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
-            {
-                cmbSchema.DataSource = desc.Execute();
-                cmbAggSchema.DataSource = desc.Execute();
-            }
+            FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(this.BoundConnection.Name);
+            cmbSchema.DataSource = service.DescribeSchema();
+            cmbAggSchema.DataSource = service.DescribeSchema();
             base.OnLoad(e);
         }
 

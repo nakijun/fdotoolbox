@@ -76,8 +76,8 @@ namespace FdoToolbox.Core.Forms
                     chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiCurvePolygon), true);
                 if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiCurveString) == (int)GeometryType.GeometryType_MultiCurveString)
                     chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiCurveString), true);
-                if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiGeometry) == (int)GeometryType.GeometryType_MultiGeometry)
-                    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiGeometry), true);
+                //if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiGeometry) == (int)GeometryType.GeometryType_MultiGeometry)
+                //    chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiGeometry), true);
                 if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiLineString) == (int)GeometryType.GeometryType_MultiLineString)
                     chkGeometryTypes.SetItemChecked(chkGeometryTypes.Items.IndexOf(GeometryType.GeometryType_MultiLineString), true);
                 if ((def.GeometryTypes & (int)GeometryType.GeometryType_MultiPoint) == (int)GeometryType.GeometryType_MultiPoint)

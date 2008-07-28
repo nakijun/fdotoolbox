@@ -46,49 +46,26 @@ namespace FdoToolbox.Core
                 return;
 
             Debug.Assert(destConn.ConnectionInfo.ProviderName.Contains("OSGeo.MySQL"));
-            using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+            FeatureService srcService = new FeatureService(srcConn);
+            FeatureService destService = new FeatureService(destConn);
+            List<SpatialContextInfo> srcContexts = srcService.GetSpatialContexts();
+            srcContexts.ForEach(delegate(SpatialContextInfo ctx)
             {
-                using (ISpatialContextReader reader = cmd.Execute())
+                if (spatialContextNames.Contains(ctx.Name))
                 {
-                    while (reader.ReadNext())
+                    try
                     {
-                        //Only copy if in the list of spatial contexts to copy
-                        if(spatialContextNames.Contains(reader.GetName()))
-                        {
-                            using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
-                            {
-                                string name = reader.GetName();
-                                
-                                create.CoordinateSystem = reader.GetCoordinateSystem();
-                                create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                                create.Description = reader.GetDescription();
-                                create.Extent = reader.GetExtent();
-                                create.ExtentType = reader.GetExtentType();
-                                create.Name = name;
-                                create.XYTolerance = reader.GetXYTolerance();
-                                create.ZTolerance = reader.GetZTolerance();
-                                create.UpdateExisting = false;
-
-                                try
-                                {
-                                    //Destory first then create
-                                    using (IDestroySpatialContext destroy = destConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
-                                    {
-                                        destroy.Name = name;
-                                        destroy.Execute();
-                                    }
-                                    create.Execute();
-                                }
-                                catch (OSGeo.FDO.Common.Exception ex)
-                                {
-                                    AppConsole.WriteException(ex);
-                                    AppConsole.WriteLine("Ignoring that context");
-                                }
-                            }
-                        }
+                        //Destroy then create
+                        destService.DestroySpatialContext(ctx.Name);
+                        destService.CreateSpatialContext(ctx, false);
+                    }
+                    catch (OSGeo.FDO.Common.Exception ex)
+                    {
+                        AppConsole.WriteException(ex);
+                        AppConsole.WriteLine("Ignoring that context");
                     }
                 }
-            }
+            });
         }
     }
 }

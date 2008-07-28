@@ -40,37 +40,18 @@ namespace FdoToolbox.Core
 
             Debug.Assert(destConn.ConnectionInfo.ProviderName.Contains("OSGeo.SHP"));
             string srcName = spatialContextNames[0];
-            using (IGetSpatialContexts cmd = srcConn.CreateCommand(CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+            FeatureService srcService = new FeatureService(srcConn);
+            FeatureService destService = new FeatureService(destConn);
+            SpatialContextInfo context = srcService.GetSpatialContext(srcName);
+            if (context != null)
             {
-                using (ISpatialContextReader reader = cmd.Execute())
+                //Make sure that CSName != Spatial Context Name
+                WKTParser parser = new WKTParser(context.CoordinateSystemWkt);
+                if (!string.IsNullOrEmpty(parser.CSName))
                 {
-                    while (reader.ReadNext())
-                    {
-                        //Only copy the matching context (by name)
-                        if (reader.GetName() == srcName)
-                        {
-                            using (ICreateSpatialContext create = destConn.CreateCommand(CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
-                            {
-                                string name = reader.GetName();
-                                //Make sure that CSName != Spatial Context Name
-                                string wkt = reader.GetCoordinateSystemWkt();
-                                WKTParser parser = new WKTParser(wkt);
-                                //No wkt. Don't bother creating the context
-                                if (!string.IsNullOrEmpty(parser.CSName))
-                                {
-                                    create.CoordinateSystem = parser.CSName;
-                                    create.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-                                    create.Description = reader.GetDescription();
-                                    create.Extent = reader.GetExtent();
-                                    create.ExtentType = reader.GetExtentType();
-                                    create.Name = parser.CSName;
-                                    create.XYTolerance = reader.GetXYTolerance();
-                                    create.ZTolerance = reader.GetZTolerance();
-                                    create.Execute();
-                                }
-                            }
-                        }
-                    }
+                    context.CoordinateSystem = parser.CSName;
+                    context.Name = parser.CSName;
+                    destService.CreateSpatialContext(context, true);
                 }
             }
         }

@@ -50,14 +50,15 @@ namespace FdoToolbox.Core.Controls
 
         private ConnectionInfo _BoundConnection;
 
+        private FeatureSchemaCollection _Schemas;
+        private FeatureService _Service;
+
         public SchemaMgrCtl(ConnectionInfo conn)
             : this()
         {
             _BoundConnection = conn;
-            using (IDescribeSchema cmd = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
-            {
-                _Schemas = cmd.Execute();
-            }
+            _Service = HostApplication.Instance.ConnectionManager.CreateService(_BoundConnection.Name);
+            _Schemas = _Service.DescribeSchema();
             _bsSchemas.DataSource = _Schemas;
             lstSchemas.DataSource = _bsSchemas;
 
@@ -81,8 +82,6 @@ namespace FdoToolbox.Core.Controls
             btnDeleteSchema.Visible = btnDeleteClass.Visible = btnEditClass.Visible = this.BoundConnection.Connection.SchemaCapabilities.SupportsSchemaModification;
         }
 
-        private FeatureSchemaCollection _Schemas;
-
         private void lstSchemas_SelectedIndexChanged(object sender, EventArgs e)
         {
             FeatureSchema selectedSchema = lstSchemas.SelectedItem as FeatureSchema;
@@ -102,7 +101,11 @@ namespace FdoToolbox.Core.Controls
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Cancel();
+            foreach (FeatureSchema schema in _Schemas)
+            {
+                schema.RejectChanges();
+            }
+            this.Close();
         }
 
         private void btnApply_Click(object sender, EventArgs e)
@@ -111,18 +114,14 @@ namespace FdoToolbox.Core.Controls
             {
                 if (_Schemas.Count > 0)
                 {
-                    using (IApplySchema cmd = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
+                    foreach (FeatureSchema schema in _Schemas)
                     {
-                        foreach (FeatureSchema schema in _Schemas)
-                        {
-                            cmd.FeatureSchema = schema;
-                            cmd.Execute();
-                        }
-                        AppConsole.Alert("Schema Management", "Schema(s) applied");
-                        if (this.OnSchemasApplied != null)
-                            this.OnSchemasApplied(this, EventArgs.Empty);
-                        this.Accept();
+                        _Service.ApplySchema(schema);
                     }
+                    AppConsole.Alert("Schema Management", "Schema(s) applied");
+                    if (this.OnSchemasApplied != null)
+                        this.OnSchemasApplied(this, EventArgs.Empty);
+                    this.Accept();
                 }
                 else
                 {
