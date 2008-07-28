@@ -710,10 +710,6 @@ namespace FdoToolbox.Core
                         AppConsole.Alert("Edit Class", "Changes saved");
                         HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
                     }
-                    else
-                    {
-                        classDef.FeatureSchema.RejectChanges();
-                    }
                 }
             }
         }
