@@ -28,6 +28,7 @@ using OSGeo.FDO.Connections;
 using System.Diagnostics;
 using System.Collections.Specialized;
 using OSGeo.FDO.Commands.DataStore;
+using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -54,6 +55,16 @@ namespace FdoToolbox.Core.Forms
             colValue.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             grdProperties.Columns.Add(colName);
             grdProperties.Columns.Add(colValue);
+        }
+
+        public DictionaryDialog(SchemaAttributeDictionary dict)
+            : this()
+        {
+            foreach (string name in dict.AttributeNames)
+            {
+                string value = dict.GetAttributeValue(name);
+                AddProperty(name, value);
+            }
         }
 
         public DictionaryDialog(IConnectionPropertyDictionary dict)
@@ -139,6 +150,17 @@ namespace FdoToolbox.Core.Forms
                 nvc.Add(name, value);
             }
             return nvc;
+        }
+
+        public static NameValueCollection GetParameters(string title, SchemaAttributeDictionary dict)
+        {
+            DictionaryDialog diag = new DictionaryDialog(dict);
+            diag.Text = title;
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                return diag.GetProperties();
+            }
+            return null;
         }
 
         public static NameValueCollection GetParameters(string title, IConnectionPropertyDictionary dict)

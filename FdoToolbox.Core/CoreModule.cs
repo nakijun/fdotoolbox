@@ -31,6 +31,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Common.Io;
 using System.IO;
 using OSGeo.FDO.Commands;
+using System.Collections.Specialized;
 
 namespace FdoToolbox.Core
 {
@@ -555,11 +556,89 @@ namespace FdoToolbox.Core
         [Command(CoreModule.CMD_EDITSCHEMA_ATTRIBUTES, "Edit Schema Attributes", Description = "Edit the attributes of this schema", InvocationType = CommandInvocationType.UI)]
         public void EditSchemaAttributes()
         {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            if (connInfo != null)
+            {
+                using (IDescribeSchema desc = connInfo.Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                {
+                    FeatureSchemaCollection schemas = desc.Execute();
+                    FeatureSchema theSchema = null;
+                    foreach (FeatureSchema schema in schemas)
+                    {
+                        if (schema.Name == schemaName)
+                            theSchema = schema;
+                    }
+
+                    if (theSchema != null)
+                    {
+                        NameValueCollection nvc = DictionaryDialog.GetParameters("Edit Schema Attributes", theSchema.Attributes);
+                        if (nvc != null)
+                        {
+                            foreach (string key in nvc.AllKeys)
+                            {
+                                theSchema.Attributes.SetAttributeValue(key, nvc[key]);
+                            }
+                            using (IApplySchema apply = connInfo.Connection.CreateCommand(CommandType.CommandType_ApplySchema) as IApplySchema)
+                            {
+                                apply.FeatureSchema = theSchema;
+                                apply.Execute();
+                                AppConsole.WriteLine("Schema attributes saved");
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         [Command(CoreModule.CMD_EDITCLASS_ATTRIBUTES, "Edit Class Attributes", Description = "Edit the attributes of this class", InvocationType = CommandInvocationType.UI)]
         public void EditClassAttributes()
         {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            string className = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedClass();
+            if (connInfo != null)
+            {
+                using (IDescribeSchema desc = connInfo.Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                {
+                    FeatureSchemaCollection schemas = desc.Execute();
+                    FeatureSchema theSchema = null;
+                    foreach (FeatureSchema schema in schemas)
+                    {
+                        if (schema.Name == schemaName)
+                            theSchema = schema;
+                    }
+
+                    if (theSchema != null)
+                    {
+                        ClassDefinition theClass = null;
+                        foreach (ClassDefinition classDef in theSchema.Classes)
+                        {
+                            if (classDef.Name == className)
+                            {
+                                theClass = classDef;
+                            }
+                        }
+                        if (theClass != null)
+                        {
+                            NameValueCollection nvc = DictionaryDialog.GetParameters("Edit Class Attributes", theClass.Attributes);
+                            if (nvc != null)
+                            {
+                                foreach (string key in nvc.AllKeys)
+                                {
+                                    theClass.Attributes.SetAttributeValue(key, nvc[key]);
+                                }
+                                using (IApplySchema apply = connInfo.Connection.CreateCommand(CommandType.CommandType_ApplySchema) as IApplySchema)
+                                {
+                                    apply.FeatureSchema = theSchema;
+                                    apply.Execute();
+                                    AppConsole.WriteLine("Class attributes saved");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public bool IsCommandExecutable(string cmdName, IConnection conn)
@@ -579,6 +658,18 @@ namespace FdoToolbox.Core
                         executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ListDataStores) >= 0);
                     }
                     break;
+                    /*
+                case CMD_EDITSCHEMA_ATTRIBUTES:
+                    {
+                        
+                    }
+                    break;
+                case CMD_EDITCLASS_ATTRIBUTES:
+                    { 
+                    
+                    }
+                    break;
+                     */
             }
             return executable;
         }
