@@ -66,11 +66,9 @@ DO NOT DELETE THIS FILE!!!
 		</SelectedConnection>
 		<SelectedSchema>
 			<Command name="manschema" displayName="Manage" />
+			<Command name="delschema" displayName="Destroy" />
 			<Separator/>
-			<Command name="addclass" displayName="Add Class" />
-			<Command name="delschema" displayName="Delete" />
-			<Separator/>
-			<Menu name="Save To...">
+			<Menu name="Save" resource="disk">
 				<Command name="saveschemaxml" />
 				<Command name="saveschemasdf" />
 			</Menu>
@@ -78,11 +76,6 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="editschemaattributes" />		  
 		</SelectedSchema>
 		<SelectedClass>
-			<Command name="editclass" displayName="Edit" />
-			<!-- 
-			<Command name="delclass" displayName="Delete" />
-			-->
-			<Separator/>
 			<Command name="editclassattributes" />
 		</SelectedClass>
 		<SelectedTask>

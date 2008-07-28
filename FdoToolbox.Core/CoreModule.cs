@@ -79,12 +79,9 @@ namespace FdoToolbox.Core
         public const string CMD_CSMANAGER = "csmanager";
         public const string CMD_EDITSCHEMA_ATTRIBUTES = "editschemaattributes";
         public const string CMD_EDITCLASS_ATTRIBUTES = "editclassattributes";
-        public const string CMD_ADD_CLASS = "addclass";
         public const string CMD_SAVE_SCHEMA_XML = "saveschemaxml";
         public const string CMD_SAVE_SCHEMA_SDF = "saveschemasdf";
         public const string CMD_DELETE_SCHEMA = "delschema";
-        public const string CMD_DELETE_CLASS = "delclass";
-        public const string CMD_EDIT_CLASS = "editclass";
         #endregion
 
         public override string Name
@@ -550,7 +547,7 @@ namespace FdoToolbox.Core
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
-        [Command(CoreModule.CMD_EDITSCHEMA_ATTRIBUTES, "Edit Schema Attributes", Description = "Edit the attributes of this schema", InvocationType = CommandInvocationType.UI)]
+        [Command(CoreModule.CMD_EDITSCHEMA_ATTRIBUTES, "Edit Schema Attributes", Description = "Edit the attributes of this schema", InvocationType = CommandInvocationType.UI, ImageResourceName = "application_edit")]
         public void EditSchemaAttributes()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -575,7 +572,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_EDITCLASS_ATTRIBUTES, "Edit Class Attributes", Description = "Edit the attributes of this class", InvocationType = CommandInvocationType.UI)]
+        [Command(CoreModule.CMD_EDITCLASS_ATTRIBUTES, "Edit Class Attributes", Description = "Edit the attributes of this class", InvocationType = CommandInvocationType.UI, ImageResourceName = "application_edit")]
         public void EditClassAttributes()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -596,33 +593,6 @@ namespace FdoToolbox.Core
                         }
                         service.ApplySchema(theClass.FeatureSchema);
                         AppConsole.WriteLine("Class attributes saved");
-                    }
-                }
-            }
-        }
-
-        [Command(CoreModule.CMD_ADD_CLASS, "Add Class", InvocationType = CommandInvocationType.UI, ImageResourceName = "add")]
-        public void AddClass()
-        {
-            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
-            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
-            if (connInfo != null && !string.IsNullOrEmpty(schemaName))
-            {
-                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
-                FeatureSchema schema =  service.GetSchemaByName(schemaName);
-                if(schema != null)
-                {
-                    ClassType? ctype = ClassTypePicker.GetClassType(connInfo);
-                    if (ctype.HasValue)
-                    {
-                        ClassDefCtl ctl = new ClassDefCtl(schema, ctype.Value, connInfo);
-                        Form frm = FormFactory.CreateFormForControl(ctl, 500, 400);
-                        if (frm.ShowDialog() == DialogResult.OK)
-                        {
-                            service.ApplySchema(schema);
-                            AppConsole.Alert("Add Class", "New class added");
-                            HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
-                        }
                     }
                 }
             }
@@ -689,53 +659,6 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_EDIT_CLASS, "Edit Class", InvocationType = CommandInvocationType.UI, ImageResourceName = "application_edit")]
-        public void EditClass()
-        {
-            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
-            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
-            string className = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedClass();
-
-            if (connInfo != null)
-            {
-                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
-                ClassDefinition classDef = service.GetClassByName(schemaName, className);
-                if (classDef != null)
-                {
-                    ClassDefCtl ctl = new ClassDefCtl(classDef, connInfo);
-                    Form frm = FormFactory.CreateFormForControl(ctl, 500, 400);
-                    if (frm.ShowDialog() == DialogResult.OK)
-                    {
-                        service.ApplySchema(classDef.FeatureSchema);
-                        AppConsole.Alert("Edit Class", "Changes saved");
-                        HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
-                    }
-                }
-            }
-        }
-
-        [Command(CoreModule.CMD_DELETE_CLASS, "Delete Class", InvocationType = CommandInvocationType.UI, ImageResourceName = "cross")]
-        public void DeleteClass()
-        { 
-            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
-            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
-            string className = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedClass();
-
-            if (connInfo != null)
-            {
-                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
-                ClassDefinition classDef = service.GetClassByName(schemaName, className);
-                if (classDef != null) 
-                {
-                    FeatureSchema schema = classDef.FeatureSchema;
-                    schema.Classes.Remove(classDef);
-                    service.ApplySchema(schema);
-                    AppConsole.Alert("Delete Class", "Class Deleted");
-                    HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
-                }
-            }
-        }
-
         public bool IsCommandExecutable(string cmdName, IConnection conn)
         {
             bool executable = true;
@@ -751,27 +674,9 @@ namespace FdoToolbox.Core
                         executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ListDataStores) >= 0);
                     }
                     break;
-                case CMD_ADD_CLASS:
-                    {
-                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) >= 0)
-                                && conn.SchemaCapabilities.SupportsSchemaModification;
-                    }
-                    break;
                 case CMD_DELETE_SCHEMA:
                     {
                         executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_DestroySchema) >= 0);
-                    }
-                    break;
-                case CMD_EDIT_CLASS:
-                    {
-                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) >= 0)
-                                && conn.SchemaCapabilities.SupportsSchemaModification;
-                    }
-                    break;
-                case CMD_DELETE_CLASS:
-                    {
-                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) >= 0)
-                                && conn.SchemaCapabilities.SupportsSchemaModification;
                     }
                     break;
             }
