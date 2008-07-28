@@ -62,9 +62,10 @@ namespace FdoToolbox.Core.Controls
 
         private void ToggleUI()
         {
-            _CanCreate = Array.Exists<int>(this.BoundConnection.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext; });
+            _CanCreate = Array.Exists<int>(this.BoundConnection.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext; })
+                        && this.BoundConnection.Connection.ConnectionCapabilities.SupportsMultipleSpatialContexts();
             _CanDelete = Array.Exists<int>(this.BoundConnection.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext; });
-            _CanEdit = _CanCreate;
+            _CanEdit = (_bsContexts.Count > 0);
 
             btnCreate.Enabled = _CanCreate;
             btnDelete.Enabled = _CanDelete;
@@ -81,46 +82,9 @@ namespace FdoToolbox.Core.Controls
         private void LoadSpatialContexts()
         {
             _bsContexts.Clear();
-            using (IGetSpatialContexts cmd = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
-            {
-                using (ISpatialContextReader reader = cmd.Execute())
-                {
-                    while (reader.ReadNext())
-                    {
-                        SpatialContextInfo info = GetSpatialContextFromReader(reader);
-                        _bsContexts.Add(info);
-                    }
-                }
-            }
-        }
-
-        private SpatialContextInfo GetSpatialContextFromReader(ISpatialContextReader reader)
-        {
-            SpatialContextInfo info = new SpatialContextInfo();
-            info.Name = reader.GetName();
-            info.Description = reader.GetDescription();
-            info.CoordinateSystem = reader.GetCoordinateSystem();
-            info.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
-            info.ExtentType = reader.GetExtentType();
-            info.XYTolerance = reader.GetXYTolerance();
-            info.ZTolerance = reader.GetZTolerance();
-            try
-            {
-                byte[] bGeom = reader.GetExtent();
-                if (bGeom != null)
-                {
-                    using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(bGeom))
-                    {
-                        info.ExtentGeometryText = geom.Text;
-                    }
-                }
-            }
-            catch
-            {
-                info.ExtentGeometryText = null;
-            }
-            info.IsActive = reader.IsActive();
-            return info;
+            FeatureService service = new FeatureService(this.BoundConnection.Connection);
+            List<SpatialContextInfo> context = service.GetSpatialContexts();
+            context.ForEach(delegate(SpatialContextInfo ctx) { _bsContexts.Add(ctx); });
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -141,7 +105,7 @@ namespace FdoToolbox.Core.Controls
 
         private SpatialContextInfo GetSpatialContextByName(string name)
         {
-            List<SpatialContextInfo> ctx = grdSpatialContexts.DataSource as List<SpatialContextInfo>;
+            List<SpatialContextInfo> ctx = _bsContexts.DataSource as List<SpatialContextInfo>;
             if (ctx != null)
             {
                 return ctx.Find(delegate(SpatialContextInfo sci) { return sci.Name == name; });
@@ -171,38 +135,21 @@ namespace FdoToolbox.Core.Controls
 
         private void CreateSpatialContext(SpatialContextInfo ctx, bool updateExisting)
         {
-            using (FgfGeometryFactory factory = new FgfGeometryFactory())
-            using (ICreateSpatialContext create = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
-            {
-                create.CoordinateSystem = ctx.CoordinateSystem;
-                create.CoordinateSystemWkt = ctx.CoordinateSystemWkt;
-                create.Description = ctx.Description;
-                IGeometry geom = null;
-                create.ExtentType = ctx.ExtentType;
-                if (ctx.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static)
-                {
-                    geom = factory.CreateGeometry(ctx.ExtentGeometryText);
-                    create.Extent = factory.GetFgf(geom);
-                }
-                create.Name = ctx.Name;
-                create.UpdateExisting = updateExisting;
-                create.XYTolerance = ctx.XYTolerance;
-                create.ZTolerance = ctx.ZTolerance;
-                create.Execute();
+            FeatureService service = new FeatureService(this.BoundConnection.Connection);
+            service.CreateSpatialContext(ctx, updateExisting);
 
-                if (updateExisting)
-                {
-                    AppConsole.Alert("Updated", "Spatial Context updated: " + ctx.Name);
-                }
-                else
-                {
-                    AppConsole.Alert("Created", "New Spatial Context created: " + ctx.Name);
-                    _bsContexts.Add(ctx);
-                }
-                btnDelete.Enabled = _CanDelete && (this.BoundConnection.Connection.ConnectionCapabilities.SupportsMultipleSpatialContexts() || (grdSpatialContexts.Rows.Count == 0));
-                if (geom != null)
-                    geom.Dispose();
+            if (updateExisting)
+            {
+                AppConsole.Alert("Updated", "Spatial Context updated: " + ctx.Name);
+                _bsContexts.DataSource = service.GetSpatialContexts();
+                //grdSpatialContexts.DataSource = _bsContexts;
             }
+            else
+            {
+                AppConsole.Alert("Created", "New Spatial Context created: " + ctx.Name);
+                _bsContexts.Add(ctx);
+            }
+            btnDelete.Enabled = _CanDelete && (this.BoundConnection.Connection.ConnectionCapabilities.SupportsMultipleSpatialContexts() || (grdSpatialContexts.Rows.Count == 0));
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

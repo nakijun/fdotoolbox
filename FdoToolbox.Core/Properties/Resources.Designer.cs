@@ -82,7 +82,7 @@ namespace FdoToolbox.Core.Properties {
         ///- famfamfam silk icon set (c) Mark James (http://www.famfamfam.com/lab/icons/silk/)
         ///- ADO.NET 2.0 SQLite Data Provider (c) Robert Simpson (http://sqlite.phxsoftware.com)
         ///
-        ///This application and its components are licensed under the GNU Lesser General Public Licence (see http://www.gnu.org/licenses/lgpl.html).
+        ///This application and its non-thirdparty components are licensed under the GNU Lesser General Public Licence (see http://www.gnu.org/license [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string APP_ABOUT {
             get {

@@ -25,18 +25,23 @@ using OSGeo.FDO.Connections;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Common.Io;
+using OSGeo.FDO.Commands.SpatialContext;
+using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core
 {
-    public class FeatureService
+    public class FeatureService : IDisposable
     {
         private IConnection _conn;
 
         private FeatureSchemaCollection _Schemas;
 
+        private FgfGeometryFactory _GeomFactory;
+
         internal FeatureService(IConnection conn)
         {
             _conn = conn;
+            _GeomFactory = new FgfGeometryFactory();
         }
 
         public IConnection Connection
@@ -51,6 +56,20 @@ namespace FdoToolbox.Core
             {
                 ApplySchema(fs);
             }
+        }
+
+        public static FeatureSchema CloneSchema(FeatureSchema fs)
+        {
+            FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
+            using (IoMemoryStream stream = new IoMemoryStream())
+            {
+                //Clone selected schema
+                fs.WriteXml(stream);
+                stream.Reset();
+                newSchemas.ReadXml(stream);
+                stream.Close();
+            }
+            return newSchemas[0];
         }
 
         public void ApplySchema(FeatureSchema fs)
@@ -89,6 +108,9 @@ namespace FdoToolbox.Core
 
         public FeatureSchema GetSchemaByName(string schemaName)
         {
+            if (_Schemas == null)
+                CacheSchemas();
+
             foreach (FeatureSchema schema in _Schemas)
             {
                 if (schema.Name == schemaName)
@@ -131,6 +153,78 @@ namespace FdoToolbox.Core
                 }
             }
             return null;
+        }
+
+        public void WriteSchemaToXml(string schemaFile)
+        {
+            _Schemas.WriteXml(schemaFile);
+        }
+
+        public List<SpatialContextInfo> GetSpatialContexts()
+        {
+            List<SpatialContextInfo> contexts = new List<SpatialContextInfo>();
+            using (IGetSpatialContexts get = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+            {
+                get.ActiveOnly = false;
+                using (ISpatialContextReader reader = get.Execute())
+                {
+                    while (reader.ReadNext())
+                    {
+                        SpatialContextInfo info = new SpatialContextInfo(reader);
+                        contexts.Add(info);
+                    }
+                }
+            }
+            return contexts;
+        }
+
+        public SpatialContextInfo GetSpatialContext(string name)
+        {
+            List<SpatialContextInfo> contexts = GetSpatialContexts();
+            return contexts.Find(delegate(SpatialContextInfo info) { return info.Name == name; });
+        }
+
+        public void CreateSpatialContext(SpatialContextInfo ctx, bool updateExisting)
+        {
+            using (ICreateSpatialContext create = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
+            {
+                IGeometry geom = null;
+                create.CoordinateSystem = ctx.CoordinateSystem;
+                create.CoordinateSystemWkt = ctx.CoordinateSystemWkt;
+                create.Description = ctx.Description;
+                create.ExtentType = ctx.ExtentType;
+                if (create.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static)
+                {
+                    geom = _GeomFactory.CreateGeometry(ctx.ExtentGeometryText);
+                    create.Extent = _GeomFactory.GetFgf(geom);
+                }
+                create.Name = ctx.Name;
+                create.UpdateExisting = updateExisting;
+                create.XYTolerance = ctx.XYTolerance;
+                create.ZTolerance = ctx.ZTolerance;
+                create.Execute();
+                if(geom != null)
+                    geom.Dispose();
+            }
+        }
+
+        public void DestroySpatialContext(SpatialContextInfo ctx)
+        {
+            DestroySpatialContext(ctx.Name);
+        }
+
+        public void DestroySpatialContext(string name)
+        {
+            using (IDestroySpatialContext destroy = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
+            {
+                destroy.Name = name;
+                destroy.Execute();
+            }
+        }
+
+        public void Dispose()
+        {
+            _GeomFactory.Dispose();
         }
     }
 }

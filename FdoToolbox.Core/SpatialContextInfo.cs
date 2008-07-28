@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Commands.SpatialContext;
 using System.ComponentModel;
+using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core
 {
@@ -109,6 +110,36 @@ namespace FdoToolbox.Core
         {
             get { return _CoordinateSystemWkt; }
             set { _CoordinateSystemWkt = value; }
+        }
+
+        public SpatialContextInfo() { }
+
+        internal SpatialContextInfo(ISpatialContextReader reader)
+        {
+            this.CoordinateSystem = reader.GetCoordinateSystem();
+            this.CoordinateSystemWkt = reader.GetCoordinateSystemWkt();
+            this.Description = reader.GetDescription();
+            this.ExtentType = reader.GetExtentType();
+            this.Name = reader.GetName();
+            this.XYTolerance = reader.GetXYTolerance();
+            this.ZTolerance = reader.GetZTolerance();
+            this.IsActive = reader.IsActive();
+            try
+            {
+                byte[] bGeom = reader.GetExtent();
+                if (bGeom != null)
+                {
+                    using (FgfGeometryFactory factory = new FgfGeometryFactory())
+                    using (IGeometry geom = factory.CreateGeometryFromFgf(bGeom))
+                    {
+                        this.ExtentGeometryText = geom.Text;
+                    }
+                }
+            }
+            catch
+            {
+                this.ExtentGeometryText = null;
+            }
         }
     }
 }

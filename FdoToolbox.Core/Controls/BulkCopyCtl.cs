@@ -133,30 +133,23 @@ namespace FdoToolbox.Core.Controls
         {
             string connName = cmbSrcConn.SelectedItem.ToString();
             IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connName);
-            using (IDescribeSchema cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            FeatureService service = new FeatureService(conn);
+            FeatureSchemaCollection schemas = service.DescribeSchema();
+            if(schemas.Count == 0)
             {
-                FeatureSchemaCollection schemas = cmd.Execute();
-                if(schemas.Count == 0)
+                AppConsole.Alert("Error", "The source connection is not a valid bulk copy source");
+                btnSave.Enabled = false;
+            }
+            else
+            {
+                chkSourceContextList.Items.Clear();
+                List<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                contexts.ForEach(delegate(SpatialContextInfo ctx)
                 {
-                    AppConsole.Alert("Error", "The source connection is not a valid bulk copy source");
-                    btnSave.Enabled = false;
-                }
-                else
-                {
-                    using (IGetSpatialContexts fetch = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
-                    {
-                        using (ISpatialContextReader reader = fetch.Execute())
-                        {
-                            chkSourceContextList.Items.Clear();
-                            while (reader.ReadNext())
-                            {
-                                chkSourceContextList.Items.Add(reader.GetName(), false);
-                            }
-                        }
-                    }
-                    btnSave.Enabled = true;
-                    cmbSrcSchema.DataSource = schemas;
-                }
+                    chkSourceContextList.Items.Add(ctx.Name, false);
+                });
+                btnSave.Enabled = true;
+                cmbSrcSchema.DataSource = schemas;
             }
         }
 
@@ -164,16 +157,14 @@ namespace FdoToolbox.Core.Controls
         {
             string connName = cmbDestConn.SelectedItem.ToString();
             IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connName);
-            using (IDescribeSchema cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            FeatureService service = new FeatureService(conn);
+            FeatureSchemaCollection schemas = service.DescribeSchema();
+            cmbDestSchema.DataSource = schemas;
+            if (schemas.Count == 0)
             {
-                FeatureSchemaCollection schemas = cmd.Execute();
-                cmbDestSchema.DataSource = schemas;
-                if (schemas.Count == 0)
-                {
-                    AppConsole.Alert("Warning", "There are no schemas in the target connection. If you save this task, all source classes will be copied");
-                    ctxTargetClasses.Items.Clear();
-                    ResetClassNodes();
-                }
+                AppConsole.Alert("Warning", "There are no schemas in the target connection. If you save this task, all source classes will be copied");
+                ctxTargetClasses.Items.Clear();
+                ResetClassNodes();
             }
         }
 

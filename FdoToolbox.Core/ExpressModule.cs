@@ -160,19 +160,16 @@ namespace FdoToolbox.Core
                     Form frm = FormFactory.CreateFormForControl(ctl);
                     if (frm.ShowDialog() == DialogResult.OK)
                     {
+                        FeatureService service = new FeatureService(conn);
                         //Because we are connecting to a directory, this should create an empty
                         //SHP file for each feature class of the same name
-                        using (IApplySchema cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
+                        service.ApplySchema(schema);
+                        if (AppConsole.Confirm("Create SHP", "New SHP file created at: " + shpFile + ". Create a connection?"))
                         {
-                            cmd.FeatureSchema = schema;
-                            cmd.Execute();
-                            if (AppConsole.Confirm("Create SHP", "New SHP file created at: " + shpFile + ". Create a connection?"))
-                            {
-                                string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
-                                name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
-                                CoreModule.AddConnection(conn, name);
-                                return; //Save this connection, don't dispose
-                            }
+                            string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
+                            name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
+                            CoreModule.AddConnection(conn, name);
+                            return; //Save this connection, don't dispose
                         }
                     }
                 }

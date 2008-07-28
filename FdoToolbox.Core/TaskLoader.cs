@@ -120,11 +120,9 @@ namespace FdoToolbox.Core
                     }
                 }
 
-                FeatureSchemaCollection schemas = null;
-                using (IDescribeSchema desc = srcConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
-                {
-                    schemas = desc.Execute();
-                }
+                FeatureService srcService = new FeatureService(srcConn);
+
+                FeatureSchemaCollection schemas = srcService.DescribeSchema();
 
                 XmlNodeList classMappingNodeList = doc.SelectNodes("//BulkCopyTask/ClassMappings/Mapping");
                 foreach (XmlNode classMappingNode in classMappingNodeList)

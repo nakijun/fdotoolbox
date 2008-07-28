@@ -67,19 +67,10 @@ namespace FdoToolbox.Core
         {
             try
             {
-                FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
-                newSchemas.ReadXml(schemaFile);
-
                 IConnection conn = CreateSDFConnection(sdfFile, false);
                 conn.Open();
-                using (conn)
-                {
-                    using (IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
-                    {
-                        apply.FeatureSchema = newSchemas[0];
-                        apply.Execute();
-                    }
-                }
+                FeatureService service = new FeatureService(conn);
+                service.LoadSchemasFromXml(schemaFile);
             }
             catch (OSGeo.FDO.Common.Exception ex)
             {
@@ -98,34 +89,21 @@ namespace FdoToolbox.Core
             try
             {
                 if (ExpressUtility.CreateSDF(sdfFile))
-                {
-                    FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
-                    using (IoMemoryStream stream = new IoMemoryStream())
+                {   
+                    IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
+                    conn.Open();
+                    FeatureService service = new FeatureService(conn);
+                    service.ApplySchema(FeatureService.CloneSchema(selectedSchema));
+
+                    if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
                     {
-                        //Clone selected schema
-                        selectedSchema.WriteXml(stream);
-                        stream.Reset();
-                        newSchemas.ReadXml(stream);
-                        stream.Close();
-
-                        IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
-                        conn.Open();
-                        using (IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
-                        {
-                            apply.FeatureSchema = newSchemas[0];
-                            apply.Execute();
-                        }
-
-                        if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
-                        {
-                            string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
-                            name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
-                            CoreModule.AddConnection(conn, name);
-                        }
-                        else
-                        {
-                            conn.Dispose();
-                        }
+                        string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
+                        name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
+                        CoreModule.AddConnection(conn, name);
+                    }
+                    else
+                    {
+                        conn.Dispose();
                     }
                 }
                 else

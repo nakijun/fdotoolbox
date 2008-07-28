@@ -42,17 +42,10 @@ namespace FdoToolbox.Core.Forms
         
         public SpatialContextPicker(IConnection conn) : this()
         {
-            using (IGetSpatialContexts cmd = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
-            {
-                using (ISpatialContextReader reader = cmd.Execute())
-                {
-                    lstNames.Items.Clear();
-                    while (reader.ReadNext())
-                    {
-                        lstNames.Items.Add(reader.GetName());
-                    }
-                }
-            }
+            FeatureService service = new FeatureService(conn);
+            lstNames.Items.Clear();
+            List<SpatialContextInfo> contexts = service.GetSpatialContexts();
+            contexts.ForEach(delegate(SpatialContextInfo ctx) { lstNames.Items.Add(ctx.Name); });
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

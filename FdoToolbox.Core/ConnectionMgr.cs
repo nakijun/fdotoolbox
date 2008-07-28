@@ -68,6 +68,14 @@ namespace FdoToolbox.Core
                     conn.Close();
                 
                 _ConnectionDict.Remove(name);
+
+                if (_FeatureServices.ContainsKey(name))
+                {
+                    FeatureService service = _FeatureServices[name];
+                    _FeatureServices.Remove(name);
+                    service.Dispose();
+                }
+
                 conn.Dispose();
                 if (this.ConnectionRemoved != null)
                     this.ConnectionRemoved(name);
@@ -115,6 +123,14 @@ namespace FdoToolbox.Core
             IConnection conn = _ConnectionDict[oldName];
             _ConnectionDict.Remove(oldName);
             _ConnectionDict.Add(newName, conn);
+
+            if (_FeatureServices.ContainsKey(oldName))
+            {
+                FeatureService service = _FeatureServices[oldName];
+                _FeatureServices.Remove(oldName);
+                _FeatureServices[newName] = service;
+            }
+
             if (this.ConnectionRenamed != null)
                 this.ConnectionRenamed(oldName, newName);
         }

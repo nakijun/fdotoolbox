@@ -223,34 +223,23 @@ namespace FdoToolbox.Core
         public void LoadSchema()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
-            if (connInfo == null)
-                AppConsole.WriteLine("Please select the active connection from the Object Explorer before invoking this command");
-
-            string schemaFile = HostApplication.Instance.OpenFile("Load schemas from XML", "Feature Schema Definition (*.schema)|*.schema");
-            if(File.Exists(schemaFile))
+            if (connInfo != null)
             {
-                FeatureSchemaCollection schemas = null;
-                try
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                string schemaFile = HostApplication.Instance.OpenFile("Load schemas from XML", "Feature Schema Definition (*.schema)|*.schema");
+                if (File.Exists(schemaFile))
                 {
-                    using (IDescribeSchema cmd = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                    try
                     {
-                        schemas = cmd.Execute();
-                        schemas.ReadXml(schemaFile);
-                        foreach (FeatureSchema schema in schemas)
-                        {
-                            using (IApplySchema apply = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
-                            {
-                                apply.FeatureSchema = schema;
-                                apply.Execute();
-                            }
-                        }
-                        AppConsole.Alert("Load schemas", "Schemas loaded into connection " + connInfo.Name);
-                        HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
+                        service.LoadSchemasFromXml(schemaFile);
                     }
-                }
-                catch (OSGeo.FDO.Common.Exception ex)
-                {
-                    AppConsole.Alert("Error", ex.Message);
+                    catch (OSGeo.FDO.Common.Exception ex)
+                    {
+                        AppConsole.Alert("Error", ex.Message);
+                        AppConsole.WriteException(ex);
+                    }
+                    AppConsole.Alert("Load schemas", "Schemas loaded into connection " + connInfo.Name);
+                    HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
                 }
             }
         }
@@ -259,21 +248,25 @@ namespace FdoToolbox.Core
         public void SaveSchema()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
-            if (connInfo == null)
-                AppConsole.WriteLine("Please select the active connection from the Object Explorer before invoking this command");
-
-            string schemaFile = HostApplication.Instance.SaveFile("Save schemas to XML", "Feature Schema Definition (*.schema)|*.schema");
-            if (schemaFile != null)
+            if (connInfo != null)
             {
-                if (File.Exists(schemaFile))
-                    File.Delete(schemaFile);
-                using (IDescribeSchema cmd = connInfo.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                string schemaFile = HostApplication.Instance.SaveFile("Save schemas to XML", "Feature Schema Definition (*.schema)|*.schema");
+                if (schemaFile != null)
                 {
-                    using (FeatureSchemaCollection schemas = cmd.Execute())
+                    if (File.Exists(schemaFile))
+                        File.Delete(schemaFile);
+
+                    try
                     {
-                        schemas.WriteXml(schemaFile);
+                        service.WriteSchemaToXml(schemaFile);
                         AppConsole.Alert("Save schemas", "Schemas Saved to " + schemaFile);
                     }
+                    catch (OSGeo.FDO.Common.Exception ex)
+                    {
+                        AppConsole.Alert("Error", ex.Message);
+                        AppConsole.WriteException(ex);
+                    }       
                 }
             }
         }
@@ -560,32 +553,19 @@ namespace FdoToolbox.Core
             string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                using (IDescribeSchema desc = connInfo.Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                FeatureSchema theSchema = service.GetSchemaByName(schemaName);
+                if (theSchema != null)
                 {
-                    FeatureSchemaCollection schemas = desc.Execute();
-                    FeatureSchema theSchema = null;
-                    foreach (FeatureSchema schema in schemas)
+                    NameValueCollection nvc = DictionaryDialog.GetParameters("Edit Schema Attributes", theSchema.Attributes);
+                    if (nvc != null)
                     {
-                        if (schema.Name == schemaName)
-                            theSchema = schema;
-                    }
-
-                    if (theSchema != null)
-                    {
-                        NameValueCollection nvc = DictionaryDialog.GetParameters("Edit Schema Attributes", theSchema.Attributes);
-                        if (nvc != null)
+                        foreach (string key in nvc.AllKeys)
                         {
-                            foreach (string key in nvc.AllKeys)
-                            {
-                                theSchema.Attributes.SetAttributeValue(key, nvc[key]);
-                            }
-                            using (IApplySchema apply = connInfo.Connection.CreateCommand(CommandType.CommandType_ApplySchema) as IApplySchema)
-                            {
-                                apply.FeatureSchema = theSchema;
-                                apply.Execute();
-                                AppConsole.WriteLine("Schema attributes saved");
-                            }
+                            theSchema.Attributes.SetAttributeValue(key, nvc[key]);
                         }
+                        service.ApplySchema(theSchema);
+                        AppConsole.WriteLine("Schema attributes saved");
                     }
                 }
             }
@@ -599,43 +579,19 @@ namespace FdoToolbox.Core
             string className = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedClass();
             if (connInfo != null)
             {
-                using (IDescribeSchema desc = connInfo.Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                ClassDefinition theClass = service.GetClassByName(schemaName, className);
+                if (theClass != null)
                 {
-                    FeatureSchemaCollection schemas = desc.Execute();
-                    FeatureSchema theSchema = null;
-                    foreach (FeatureSchema schema in schemas)
+                    NameValueCollection nvc = DictionaryDialog.GetParameters("Edit Class Attributes", theClass.Attributes);
+                    if (nvc != null)
                     {
-                        if (schema.Name == schemaName)
-                            theSchema = schema;
-                    }
-
-                    if (theSchema != null)
-                    {
-                        ClassDefinition theClass = null;
-                        foreach (ClassDefinition classDef in theSchema.Classes)
+                        foreach (string key in nvc.AllKeys)
                         {
-                            if (classDef.Name == className)
-                            {
-                                theClass = classDef;
-                            }
+                            theClass.Attributes.SetAttributeValue(key, nvc[key]);
                         }
-                        if (theClass != null)
-                        {
-                            NameValueCollection nvc = DictionaryDialog.GetParameters("Edit Class Attributes", theClass.Attributes);
-                            if (nvc != null)
-                            {
-                                foreach (string key in nvc.AllKeys)
-                                {
-                                    theClass.Attributes.SetAttributeValue(key, nvc[key]);
-                                }
-                                using (IApplySchema apply = connInfo.Connection.CreateCommand(CommandType.CommandType_ApplySchema) as IApplySchema)
-                                {
-                                    apply.FeatureSchema = theSchema;
-                                    apply.Execute();
-                                    AppConsole.WriteLine("Class attributes saved");
-                                }
-                            }
-                        }
+                        service.ApplySchema(theClass.FeatureSchema);
+                        AppConsole.WriteLine("Class attributes saved");
                     }
                 }
             }
