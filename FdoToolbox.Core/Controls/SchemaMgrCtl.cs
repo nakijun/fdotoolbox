@@ -82,6 +82,16 @@ namespace FdoToolbox.Core.Controls
             btnDeleteSchema.Visible = btnDeleteClass.Visible = btnEditClass.Visible = this.BoundConnection.Connection.SchemaCapabilities.SupportsSchemaModification;
         }
 
+        private void CheckDirtyStatus()
+        {
+            btnApply.Enabled = false;
+            foreach (FeatureSchema schema in _Schemas)
+            {
+                if (schema.ElementState != SchemaElementState.SchemaElementState_Unchanged)
+                    btnApply.Enabled = true;
+            }
+        }
+
         private void lstSchemas_SelectedIndexChanged(object sender, EventArgs e)
         {
             FeatureSchema selectedSchema = lstSchemas.SelectedItem as FeatureSchema;
@@ -121,12 +131,12 @@ namespace FdoToolbox.Core.Controls
                     AppConsole.Alert("Schema Management", "Schema(s) applied");
                     if (this.OnSchemasApplied != null)
                         this.OnSchemasApplied(this, EventArgs.Empty);
-                    this.Accept();
+                    this.Close();
                 }
                 else
                 {
                     AppConsole.Alert("Schema Management", "No schema(s) to apply. Closing");
-                    this.Cancel();
+                    this.Close();
                 }
             }
             catch (OSGeo.FDO.Common.Exception ex)
@@ -142,7 +152,9 @@ namespace FdoToolbox.Core.Controls
             if (canAdd)
             {
                 FeatureSchema schema = SchemaInfoDlg.NewSchema();
-                _bsSchemas.Add(schema);
+                if(schema != null)
+                    _bsSchemas.Add(schema);
+                CheckDirtyStatus();
             }
             else
             {
@@ -154,6 +166,7 @@ namespace FdoToolbox.Core.Controls
         {
             FeatureSchema schema = (FeatureSchema)lstSchemas.SelectedItem;
             _bsSchemas.Remove(schema);
+            CheckDirtyStatus();
         }
 
         private void btnEditClass_Click(object sender, EventArgs e)
@@ -163,6 +176,7 @@ namespace FdoToolbox.Core.Controls
                 EditClass(classDef);
             else
                 AppConsole.Alert("Error", "Selected class is read-only and cannot be edited");
+            CheckDirtyStatus();
         }
 
         private void EditClass(ClassDefinition classDef)
@@ -187,6 +201,7 @@ namespace FdoToolbox.Core.Controls
         private void btnDeleteClass_Click(object sender, EventArgs e)
         {
             _bsClasses.Remove((ClassDefinition)lstClasses.SelectedItem);
+            CheckDirtyStatus();
         }
 
         private void featureClassToolStripMenuItem_Click(object sender, EventArgs e)
@@ -205,6 +220,7 @@ namespace FdoToolbox.Core.Controls
             BaseDocumentCtl ctl = new ClassDefCtl(schema, classType, this.BoundConnection);
             Form frm = FormFactory.CreateFormForControl(ctl, 500, 400);
             frm.ShowDialog();
+            CheckDirtyStatus();
         }
 
         public ConnectionInfo BoundConnection

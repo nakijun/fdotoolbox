@@ -147,7 +147,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.asXMLToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.page_white_code;
             this.asXMLToolStripMenuItem.Name = "asXMLToolStripMenuItem";
-            this.asXMLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.asXMLToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.asXMLToolStripMenuItem.Text = "As XML";
             this.asXMLToolStripMenuItem.ToolTipText = "Save the selected schema definition to an XML file";
             this.asXMLToolStripMenuItem.Click += new System.EventHandler(this.SaveSchemaAsXML_Click);
@@ -156,7 +156,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.asNewSDFToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.database;
             this.asNewSDFToolStripMenuItem.Name = "asNewSDFToolStripMenuItem";
-            this.asNewSDFToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.asNewSDFToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.asNewSDFToolStripMenuItem.Text = "As New SDF";
             this.asNewSDFToolStripMenuItem.ToolTipText = "Apply this selected schema to a new SDF file";
             this.asNewSDFToolStripMenuItem.Click += new System.EventHandler(this.SaveSchemaAsSDF_Click);
@@ -268,6 +268,7 @@ namespace FdoToolbox.Core.Controls
             // btnApply
             // 
             this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnApply.Enabled = false;
             this.btnApply.Location = new System.Drawing.Point(326, 255);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
