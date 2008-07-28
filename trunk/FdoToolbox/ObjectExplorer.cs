@@ -99,6 +99,7 @@ namespace FdoToolbox
                     schemaNode.ImageIndex = schemaNode.SelectedImageIndex = IMG_IDX_SCHEMA;
                     GetClassNodes(schema, schemaNode);
                     connNode.Nodes.Add(schemaNode);
+                    schemaNode.Expand();
                 }
             }
         }
@@ -254,6 +255,14 @@ namespace FdoToolbox
             TreeNode node = GetConnectionsNode().Nodes[name];
             Debug.Assert(node != null);
             node.Nodes.Clear();
+
+            IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(node.Name);
+            if (conn != null)
+            {
+                conn.Close();
+                conn.Open();
+            }
+
             GetSchemaNodes(node);
         }
 

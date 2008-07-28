@@ -34,8 +34,6 @@ namespace FdoToolbox.Core
     {
         private IConnection _conn;
 
-        private FeatureSchemaCollection _Schemas;
-
         private FgfGeometryFactory _GeomFactory;
 
         internal FeatureService(IConnection conn)
@@ -51,8 +49,9 @@ namespace FdoToolbox.Core
 
         public void LoadSchemasFromXml(string xmlFile)
         {
-            _Schemas.ReadXml(xmlFile);
-            foreach (FeatureSchema fs in _Schemas)
+            FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
+            schemas.ReadXml(xmlFile);
+            foreach (FeatureSchema fs in schemas)
             {
                 ApplySchema(fs);
             }
@@ -96,10 +95,11 @@ namespace FdoToolbox.Core
 
         public FeatureSchemaCollection CloneSchemas()
         {
+            FeatureSchemaCollection schemas = DescribeSchema();
             FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
             using (IoMemoryStream stream = new IoMemoryStream())
             {
-                _Schemas.WriteXml(stream);
+                schemas.WriteXml(stream);
                 stream.Reset();
                 newSchemas.ReadXml(stream);
             }
@@ -108,10 +108,12 @@ namespace FdoToolbox.Core
 
         public FeatureSchema GetSchemaByName(string schemaName)
         {
-            if (_Schemas == null)
-                CacheSchemas();
+            if (string.IsNullOrEmpty(schemaName))
+                return null;
 
-            foreach (FeatureSchema schema in _Schemas)
+            FeatureSchemaCollection schemas = DescribeSchema();
+
+            foreach (FeatureSchema schema in schemas)
             {
                 if (schema.Name == schemaName)
                     return schema;
@@ -120,29 +122,21 @@ namespace FdoToolbox.Core
             return null;
         }
 
-        private void CacheSchemas()
-        {
-            if (_Schemas == null)
-            {
-                using (IDescribeSchema describe = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
-                {
-                    _Schemas = describe.Execute();
-                }
-            }
-        }
-
         public FeatureSchemaCollection DescribeSchema()
         {
-            if (_Schemas != null)
-                return _Schemas;
-
-            CacheSchemas();
-
-            return _Schemas;
+            FeatureSchemaCollection schemas = null;
+            using (IDescribeSchema describe = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            {
+                schemas = describe.Execute();
+            }
+            return schemas;
         }
 
         public ClassDefinition GetClassByName(string schemaName, string className)
         {
+            if (string.IsNullOrEmpty(className))
+                return null;
+
             FeatureSchema schema = GetSchemaByName(schemaName);
             if (schema != null)
             {
@@ -157,7 +151,8 @@ namespace FdoToolbox.Core
 
         public void WriteSchemaToXml(string schemaFile)
         {
-            _Schemas.WriteXml(schemaFile);
+            FeatureSchemaCollection schemas = DescribeSchema();
+            schemas.WriteXml(schemaFile);
         }
 
         public List<SpatialContextInfo> GetSpatialContexts()
@@ -218,6 +213,15 @@ namespace FdoToolbox.Core
             using (IDestroySpatialContext destroy = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
             {
                 destroy.Name = name;
+                destroy.Execute();
+            }
+        }
+
+        public void DestroySchema(string schemaName)
+        {
+            using (IDestroySchema destroy = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySchema) as IDestroySchema)
+            {
+                destroy.SchemaName = schemaName;
                 destroy.Execute();
             }
         }

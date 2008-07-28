@@ -79,6 +79,12 @@ namespace FdoToolbox.Core
         public const string CMD_CSMANAGER = "csmanager";
         public const string CMD_EDITSCHEMA_ATTRIBUTES = "editschemaattributes";
         public const string CMD_EDITCLASS_ATTRIBUTES = "editclassattributes";
+        public const string CMD_ADD_CLASS = "addclass";
+        public const string CMD_SAVE_SCHEMA_XML = "saveschemaxml";
+        public const string CMD_SAVE_SCHEMA_SDF = "saveschemasdf";
+        public const string CMD_DELETE_SCHEMA = "delschema";
+        public const string CMD_DELETE_CLASS = "delclass";
+        public const string CMD_EDIT_CLASS = "editclass";
         #endregion
 
         public override string Name
@@ -597,6 +603,145 @@ namespace FdoToolbox.Core
             }
         }
 
+        [Command(CoreModule.CMD_ADD_CLASS, "Add Class", InvocationType = CommandInvocationType.UI)]
+        public void AddClass()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            if (connInfo != null && !string.IsNullOrEmpty(schemaName))
+            {
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                FeatureSchema schema =  service.GetSchemaByName(schemaName);
+                if(schema != null)
+                {
+                    ClassType? ctype = ClassTypePicker.GetClassType(connInfo);
+                    if (ctype.HasValue)
+                    {
+                        ClassDefCtl ctl = new ClassDefCtl(schema, ctype.Value, connInfo);
+                        Form frm = FormFactory.CreateFormForControl(ctl, 500, 400);
+                        if (frm.ShowDialog() == DialogResult.OK)
+                        {
+                            service.ApplySchema(schema);
+                            AppConsole.Alert("Add Class", "New class added");
+                            HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
+                        }
+                    }
+                }
+            }
+        }
+
+        [Command(CoreModule.CMD_SAVE_SCHEMA_XML, "Save schema as XML", InvocationType = CommandInvocationType.UI)]
+        public void SaveSchemaAsXml()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            if (connInfo != null)
+            {
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                FeatureSchema schema = service.GetSchemaByName(schemaName);
+                if (schema != null)
+                {
+                    string file = HostApplication.Instance.SaveFile("Save schema", "Feature Schema Definition (*.schema)|*.schema");
+                    if (file != null)
+                    {
+                        if (File.Exists(file))
+                            File.Delete(file);
+
+                        service.WriteSchemaToXml(schemaName, file);
+                        AppConsole.Alert("Save schema", "Schema saved to: " + file);
+                    }
+                }
+            }
+        }
+
+        [Command(CoreModule.CMD_SAVE_SCHEMA_SDF, "Save schema as SDF", InvocationType = CommandInvocationType.UI)]
+        public void SaveSchemaAsSdf()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            if (connInfo != null)
+            {
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                FeatureSchema schema = service.GetSchemaByName(schemaName);
+                if (schema != null)
+                {
+                    string sdfFile = HostApplication.Instance.SaveFile("Save schema to SDF", "SDF files (*.sdf)|*.sdf");
+                    if (sdfFile != null)
+                    {
+                        if (File.Exists(sdfFile))
+                            File.Delete(sdfFile);
+
+                        ExpressUtility.ApplySchemaToNewSDF(schema, sdfFile);
+                        AppConsole.Alert("Save to SDF", "Schema applied to new SDF file: " + sdfFile);
+                    }
+                }
+            }
+        }
+
+        [Command(CoreModule.CMD_DELETE_SCHEMA, "Delete Schema", InvocationType = CommandInvocationType.UI)]
+        public void DeleteSchema()
+        { 
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            if (connInfo != null && !string.IsNullOrEmpty(schemaName))
+            {
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                service.DestroySchema(schemaName);
+                AppConsole.Alert("Delete Schema", "Schema Deleted");
+            }
+        }
+
+        [Command(CoreModule.CMD_EDIT_CLASS, "Edit Class", InvocationType = CommandInvocationType.UI)]
+        public void EditClass()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            string className = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedClass();
+
+            if (connInfo != null)
+            {
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                ClassDefinition classDef = service.GetClassByName(schemaName, className);
+                if (classDef != null)
+                {
+                    ClassDefCtl ctl = new ClassDefCtl(classDef, connInfo);
+                    Form frm = FormFactory.CreateFormForControl(ctl, 500, 400);
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        service.ApplySchema(classDef.FeatureSchema);
+                        AppConsole.Alert("Edit Class", "Changes saved");
+                        HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
+                    }
+                    else
+                    {
+                        classDef.FeatureSchema.RejectChanges();
+                    }
+                }
+            }
+        }
+
+        [Command(CoreModule.CMD_DELETE_CLASS, "Delete Class", InvocationType = CommandInvocationType.UI)]
+        public void DeleteClass()
+        { 
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            string className = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedClass();
+
+            if (connInfo != null)
+            {
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                ClassDefinition classDef = service.GetClassByName(schemaName, className);
+                if (classDef != null) 
+                {
+                    FeatureSchema schema = classDef.FeatureSchema;
+                    schema.Classes.Remove(classDef);
+                    service.ApplySchema(schema);
+                    AppConsole.Alert("Delete Class", "Class Deleted");
+                    HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
+                }
+            }
+        }
+
         public bool IsCommandExecutable(string cmdName, IConnection conn)
         {
             bool executable = true;
@@ -604,9 +749,7 @@ namespace FdoToolbox.Core
             {
                 case CMD_LOADSCHEMA:
                     {
-                        executable =
-                            (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) >= 0)
-                            && conn.SchemaCapabilities.SupportsSchemaModification;
+                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) >= 0);
                     }
                     break;
                 case CMD_MANAGEDATASTORES:
@@ -614,18 +757,29 @@ namespace FdoToolbox.Core
                         executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ListDataStores) >= 0);
                     }
                     break;
-                    /*
-                case CMD_EDITSCHEMA_ATTRIBUTES:
+                case CMD_ADD_CLASS:
                     {
-                        
+                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) >= 0)
+                                && conn.SchemaCapabilities.SupportsSchemaModification;
                     }
                     break;
-                case CMD_EDITCLASS_ATTRIBUTES:
-                    { 
-                    
+                case CMD_DELETE_SCHEMA:
+                    {
+                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_DestroySchema) >= 0);
                     }
                     break;
-                     */
+                case CMD_EDIT_CLASS:
+                    {
+                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) >= 0)
+                                && conn.SchemaCapabilities.SupportsSchemaModification;
+                    }
+                    break;
+                case CMD_DELETE_CLASS:
+                    {
+                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ApplySchema) >= 0)
+                                && conn.SchemaCapabilities.SupportsSchemaModification;
+                    }
+                    break;
             }
             return executable;
         }
