@@ -33,12 +33,12 @@ namespace FdoToolbox.Core
     /// In order for argument parsing to work, arguments must be defined 
     /// in the form of [-prefix]:[value] pairs.
     /// </summary>
-    public abstract class ConsoleApplication
+    public abstract class ConsoleApplication : BaseApplication, IDisposable
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ConsoleApplication()
+        public ConsoleApplication() : base()
         {
             AppConsole.Out = new CmdConsoleOutputStream();
             AppConsole.Err = new CmdConsoleErrorStream();
@@ -59,11 +59,6 @@ namespace FdoToolbox.Core
             };
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
         }
-
-        /// <summary>
-        /// Application path
-        /// </summary>
-        public string AppPath { get { return Path.GetDirectoryName(Application.ExecutablePath); } }
 
         //This handler is called only when the common language runtime tries to bind to the assembly and fails.
         Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -155,6 +150,30 @@ namespace FdoToolbox.Core
                 }
             }
             return null;
+        }
+
+        protected override void OnApplicationException(Exception ex)
+        {
+            AppConsole.Err.WriteLine(ex.ToString());
+        }
+
+        protected override void CheckFdoPath()
+        {
+            string fdoPath = this.Preferences.GetStringPref(PreferenceNames.PREF_STR_FDO_HOME);
+            if (!Directory.Exists(fdoPath))
+            {
+                while (!Directory.Exists(fdoPath))
+                {
+                    Console.Write("Please enter the path where the FDO libaries are located (this is a one-off thing):");
+                    fdoPath = Console.ReadLine();
+                }
+                this.Preferences.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, fdoPath);
+            }
+        }
+
+        public void Dispose()
+        {
+            this.Preferences.Save();
         }
     }
 }

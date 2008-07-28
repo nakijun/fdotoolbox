@@ -27,7 +27,8 @@ namespace MakeSdf
     {
         static void Main(string[] args)
         {
-            new MakeSdfApp().Run(args);
+            MakeSdfApp app = new MakeSdfApp();
+            using (app) { app.Run(args); }
         }
     }
 }

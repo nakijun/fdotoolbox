@@ -29,7 +29,8 @@ namespace TaskRun
     {
         static void Main(string[] args)
         {
-            new TaskRunApp().Run(args); 
+            TaskRunApp app = new TaskRunApp();
+            using(app) { app.Run(args); }
         }
     }
 }

@@ -212,7 +212,6 @@ namespace FdoToolbox.Core
 
         public void Save()
         {
-            AppConsole.WriteLine("Saving Preferences");
             string prefXml = Properties.Resources.Preferences;
             StringBuilder doublePref = new StringBuilder();
             StringBuilder integerPref = new StringBuilder();
@@ -252,7 +251,6 @@ namespace FdoToolbox.Core
                 integerPref.ToString(),
                 booleanPref.ToString());
             File.WriteAllText("Preferences.xml", prefXml);
-            AppConsole.WriteLine("Preferences Saved");
         }
     }
 }

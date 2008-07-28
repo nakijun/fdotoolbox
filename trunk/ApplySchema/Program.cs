@@ -27,7 +27,8 @@ namespace ApplySchema
     {
         static void Main(string[] args)
         {
-            new ApplySchemaApp().Run(args);
+            ApplySchemaApp app = new ApplySchemaApp();
+            using (app) { app.Run(args); }
         }
     }
 }
