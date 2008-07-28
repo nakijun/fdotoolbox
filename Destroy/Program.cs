@@ -27,7 +27,8 @@ namespace Destroy
     {
         static void Main(string[] args)
         {
-            new DestroyApp().Run(args);
+            DestroyApp app = new DestroyApp();
+            using (app) { app.Run(args); }
         }
     }
 }

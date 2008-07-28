@@ -27,7 +27,8 @@ namespace Mkdstore
     {
         static void Main(string[] args)
         {
-            new MkDStoreApp().Run(args);
+            MkDStoreApp app = new MkDStoreApp();
+            using (app) { app.Run(args); }
         }
     }
 }

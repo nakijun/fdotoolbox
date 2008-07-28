@@ -118,12 +118,15 @@ namespace FdoToolbox.Core
             FolderBrowserDialog diag = new FolderBrowserDialog();
             if (!Directory.Exists(fdoPath))
             {
-                diag.ShowNewFolderButton = true;
-                diag.Description = "Select the path where the FDO libraries are located";
-                if (diag.ShowDialog() == DialogResult.OK)
+                while (!Directory.Exists(fdoPath))
                 {
-                    fdoPath = diag.SelectedPath;
-                    this.Preferences.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, fdoPath);
+                    diag.ShowNewFolderButton = true;
+                    diag.Description = "Select the path where the FDO libraries are located";
+                    if (diag.ShowDialog() == DialogResult.OK)
+                    {
+                        fdoPath = diag.SelectedPath;
+                        this.Preferences.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, fdoPath);
+                    }
                 }
             }
         }

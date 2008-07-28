@@ -27,7 +27,8 @@ namespace ExpressBCP
     {
         static void Main(string[] args)
         {
-            new ExpressBcpApp().Run(args);
+            ExpressBcpApp app = new ExpressBcpApp();
+            using (app) { app.Run(args); }
         }
     }
 }

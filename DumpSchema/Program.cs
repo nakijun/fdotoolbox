@@ -27,7 +27,8 @@ namespace DumpSchema
     {
         static void Main(string[] args)
         {
-            new DumpSchemaApp().Run(args);
+            DumpSchemaApp app = new DumpSchemaApp();
+            using (app) { app.Run(args); }
         }
     }
 }
