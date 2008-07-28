@@ -65,9 +65,22 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="removeconn" />
 		</SelectedConnection>
 		<SelectedSchema>
+			<Command name="manschema" displayName="Manage" />
+			<Separator/>
+			<Command name="addclass" displayName="Add Class" />
+			<Command name="delschema" displayName="Delete" />
+			<Separator/>
+			<Menu name="Save To...">
+				<Command name="saveschemaxml" />
+				<Command name="saveschemasdf" />
+			</Menu>
+			<Separator/>
 			<Command name="editschemaattributes" />		  
 		</SelectedSchema>
 		<SelectedClass>
+			<Command name="editclass" displayName="Edit" />
+			<Command name="delclass" displayName="Delete" />
+			<Separator/>
 			<Command name="editclassattributes" />
 		</SelectedClass>
 		<SelectedTask>

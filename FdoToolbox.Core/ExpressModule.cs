@@ -53,7 +53,6 @@ namespace FdoToolbox.Core
         public const string CMD_SDF2SHP = "sdf2shp";
         public const string CMD_SHP2SDF = "shp2sdf";
         public const string CMD_SHP2SHP = "shp2shp";
-        public const string CMD_SAVESCHEMASDF = "saveschemasdf";
 
         #endregion
 
@@ -222,12 +221,6 @@ namespace FdoToolbox.Core
         {
             ExpressBulkCopyCtl ctl = new ExpressBulkCopyCtl(ExpressProvider.SDF, ExpressProvider.SHP);
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
-        }
-
-        [Command(ExpressModule.CMD_SAVESCHEMASDF, "Apply to new SDF file", "Applies the selected schema to a new SDF file")]
-        public void SaveSchemaToSdf()
-        {
-            
         }
     }
 }
