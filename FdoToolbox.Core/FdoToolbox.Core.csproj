@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="CoordinateSystem.cs" />
     <Compile Include="CoordSysCatalog.cs" />
+    <Compile Include="FeatureService.cs" />
     <Compile Include="Forms\CoordinateSystemPicker.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -34,7 +34,11 @@ namespace FdoToolbox.Core
 
         private Dictionary<string, IConnection> _ConnectionDict;
 
-        public ConnectionMgr() { _ConnectionDict = new Dictionary<string, IConnection>(); }
+        public ConnectionMgr() 
+        { 
+            _ConnectionDict = new Dictionary<string, IConnection>();
+            _FeatureServices = new Dictionary<string, FeatureService>();
+        }
 
         public void AddConnection(string name, OSGeo.FDO.Connections.IConnection conn)
         {
@@ -134,5 +138,18 @@ namespace FdoToolbox.Core
 
 
         public event ConnectionBeforeRemoveHandler BeforeConnectionRemove;
+
+        private Dictionary<string, FeatureService> _FeatureServices;
+
+        public FeatureService CreateService(string name)
+        {
+            if (!_ConnectionDict.ContainsKey(name))
+                return null;
+
+            if (!_FeatureServices.ContainsKey(name))
+                _FeatureServices[name] = new FeatureService(GetConnection(name));
+                
+            return _FeatureServices[name];
+        }
     }
 }
