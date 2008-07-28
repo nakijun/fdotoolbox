@@ -76,6 +76,8 @@ namespace FdoToolbox.Core
         public const string CMD_SHOWCONSOLE = "showconsole";
         public const string CMD_MANAGEDATASTORES = "mandstore";
         public const string CMD_CSMANAGER = "csmanager";
+        public const string CMD_EDITSCHEMA_ATTRIBUTES = "editschemaattributes";
+        public const string CMD_EDITCLASS_ATTRIBUTES = "editclassattributes";
         #endregion
 
         public override string Name
@@ -548,6 +550,16 @@ namespace FdoToolbox.Core
         {
             CoordSysManagerCtl ctl = new CoordSysManagerCtl();
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+        }
+
+        [Command(CoreModule.CMD_EDITSCHEMA_ATTRIBUTES, "Edit Schema Attributes", Description = "Edit the attributes of this schema", InvocationType = CommandInvocationType.UI)]
+        public void EditSchemaAttributes()
+        {
+        }
+
+        [Command(CoreModule.CMD_EDITCLASS_ATTRIBUTES, "Edit Class Attributes", Description = "Edit the attributes of this class", InvocationType = CommandInvocationType.UI)]
+        public void EditClassAttributes()
+        {
         }
 
         public bool IsCommandExecutable(string cmdName, IConnection conn)
