@@ -33,23 +33,18 @@ namespace FdoToolbox.Core
     /// Host Application class/controller. The gateway object to all the
     /// services provided by the application.
     /// </summary>
-    public class HostApplication
+    public class HostApplication : BaseApplication
     {
         private IShell _shell;
         private IModuleMgr _moduleMgr;
         private ITaskManager _taskMgr;
         private IConnectionMgr _connMgr;
-        private IPreferenceDictionary _PrefDict;
         private ICoordinateSystemCatalog _CsCatalog;
         private static HostApplication _Instance;
 
-        private HostApplication()
+        private HostApplication() : base()
         {
-            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-            InitializePrefs();
             InitializeDialogs();
-            CheckFdoPath();
             _connMgr = new ConnectionMgr();
             _moduleMgr = new ModuleMgr();
             _taskMgr = new TaskManager();
@@ -115,50 +110,27 @@ namespace FdoToolbox.Core
             }
         }
 
-        void CheckFdoPath()
+        protected override void CheckFdoPath()
         {
             string fdoPath = this.Preferences.GetStringPref(PreferenceNames.PREF_STR_FDO_HOME);
+            //Don't use OpenDirectory as dialogs haven't been initialized
+            //at this point
+            FolderBrowserDialog diag = new FolderBrowserDialog();
             if (!Directory.Exists(fdoPath))
             {
-                fdoPath = this.OpenDirectory("Select the path where the FDO libraries are located");
-                this.Preferences.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, fdoPath);
-            }
-        }
-
-        //This handler is called only when the common language runtime tries to bind to the assembly and fails.
-        Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            string fdoPath = this.Preferences.GetStringPref(PreferenceNames.PREF_STR_FDO_HOME);
-            
-            //Retrieve the list of referenced assemblies in an array of AssemblyName.
-            Assembly MyAssembly, objExecutingAssemblies;
-            string strTempAssmbPath = "";
-
-            objExecutingAssemblies = Assembly.GetExecutingAssembly();
-            AssemblyName[] arrReferencedAssmbNames = objExecutingAssemblies.GetReferencedAssemblies();
-
-            //Loop through the array of referenced assembly names.
-            foreach (AssemblyName strAssmbName in arrReferencedAssmbNames)
-            {
-                //Check for the assembly names that have raised the "AssemblyResolve" event.
-                if (strAssmbName.FullName.Substring(0, strAssmbName.FullName.IndexOf(",")) == args.Name.Substring(0, args.Name.IndexOf(",")))
+                diag.ShowNewFolderButton = true;
+                diag.Description = "Select the path where the FDO libraries are located";
+                if (diag.ShowDialog() == DialogResult.OK)
                 {
-                    //Build the path of the assembly from where it has to be loaded.				
-                    strTempAssmbPath = Path.Combine(fdoPath, args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll");
-                    break;
+                    fdoPath = diag.SelectedPath;
+                    this.Preferences.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, fdoPath);
                 }
-
             }
-            //Load the assembly from the specified path. 					
-            MyAssembly = Assembly.LoadFrom(strTempAssmbPath);
-
-            //Return the loaded assembly.
-            return MyAssembly;		
         }
 
-        private void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        protected override void OnApplicationException(Exception ex)
         {
-            MessageBox.Show(e.Exception.ToString()); 
+            MessageBox.Show(ex.ToString(), "Error");
         }
 
         private bool _init = false;
@@ -286,9 +258,8 @@ namespace FdoToolbox.Core
             Shell.ObjectExplorer.ExtendUI(uiExtensionFile);
         }
 
-        private void Cleanup()
+        protected override void Cleanup()
         {
-            Preferences.Save();
             _OpenFileDialog.Dispose();
             _OpenFolderDialog.Dispose();
             _SaveFileDialog.Dispose();
@@ -297,6 +268,8 @@ namespace FdoToolbox.Core
                 (_moduleMgr as IDisposable).Dispose();
             if (_connMgr is IDisposable)
                 (_connMgr as IDisposable).Dispose();
+
+            base.Cleanup();
         }
 
         public static HostApplication Instance
@@ -331,28 +304,6 @@ namespace FdoToolbox.Core
             _SaveFolderDialog.SelectedPath = initialPath;
 
             _OpenFileDialog.Multiselect = false;
-        }
-
-        private void InitializePrefs()
-        {
-            PreferenceDictionary dict = new PreferenceDictionary();
-            string file = "Preferences.xml";
-            if (File.Exists(file))
-            {
-                dict.LoadPreferences(file);
-            }
-            else
-            {
-                InitializeDefaultPrefs(dict);
-            }
-            _PrefDict = dict;
-        }
-
-        private void InitializeDefaultPrefs(PreferenceDictionary dict)
-        {
-            dict.SetStringPref(PreferenceNames.PREF_STR_WORKING_DIRECTORY, this.AppPath);
-            dict.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, Path.Combine(this.AppPath, "FDO\\"));
-            dict.SetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, true);
         }
 
         private void LoadDefinedModules()
@@ -526,21 +477,6 @@ namespace FdoToolbox.Core
             get { return "FDO Toolbox"; } 
         }
 
-        public IPreferenceDictionary Preferences
-        {
-            get { return _PrefDict; }
-        }
-
-        public ICoordinateSystemCatalog CoordinateSystemCatalog
-        {
-            get { return _CsCatalog; }
-        }
-
-        /// <summary>
-        /// Current working directory path of the application
-        /// </summary>
-        public string AppPath { get { return System.IO.Path.GetDirectoryName(Application.ExecutablePath); } }
-
         /// <summary>
         /// Application version
         /// </summary>
@@ -551,6 +487,14 @@ namespace FdoToolbox.Core
         /// </summary>
         public string ProjectUrl { get { return "http://code.google.com/p/fdotoolbox"; } }
 
+        /// <summary>
+        /// The coordinate system catalog
+        /// </summary>
+        public ICoordinateSystemCatalog CoordinateSystemCatalog
+        {
+            get { return _CsCatalog; }
+        }
+        
         /// <summary>
         /// Displays the about box for this application
         /// </summary>
