@@ -263,6 +263,8 @@ namespace TestApp
             schema = cdef.FeatureSchema;
             schema.Classes.Remove(cdef);
 
+            Debug.Assert(cdef.ElementState == SchemaElementState.SchemaElementState_Detached, "Class2 is not detached");
+
             try
             {
                 using(IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
