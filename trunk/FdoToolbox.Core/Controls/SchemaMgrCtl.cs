@@ -65,6 +65,19 @@ namespace FdoToolbox.Core.Controls
             ToggleUI();
         }
 
+        public SchemaMgrCtl(ConnectionInfo conn, string schemaName)
+            : this(conn)
+        {
+            if (!string.IsNullOrEmpty(schemaName))
+            {
+                int idx = _Schemas.IndexOf(schemaName);
+                if (idx >= 0)
+                {
+                    lstSchemas.SelectedIndex = idx;
+                }
+            }
+        }
+
         /// <summary>
         /// Toggle ui elements based on capabilities
         /// </summary>
