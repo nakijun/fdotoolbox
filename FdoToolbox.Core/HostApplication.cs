@@ -47,18 +47,89 @@ namespace FdoToolbox.Core
         {
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-            _moduleMgr = new ModuleMgr();
+            InitializePrefs();
+            InitializeDialogs();
+            CheckFdoPath();
             _connMgr = new ConnectionMgr();
+            _moduleMgr = new ModuleMgr();
             _taskMgr = new TaskManager();
             _MenuStateMgr = new MenuStateMgr();
             _CsCatalog = new CoordSysCatalog();
         }
 
+        /// <summary>
+        /// Initialize the application
+        /// </summary>
+        /// <param name="shell">The top-level window</param>
+        public void Initialize(IShell shell)
+        {
+            if (!_init)
+            {
+                try
+                {
+                    _shell = shell;
+                    _shell.Title = this.Name;
+                    _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
+
+                    //Set streams for Application Console
+                    AppConsole.In = new TextConsoleInputStream(_shell.ConsoleWindow.InputTextBox);
+                    AppConsole.Out = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
+                    AppConsole.Err = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
+                    AppConsole.Err.TextColor = System.Drawing.Color.Red;
+
+                    AppConsole.DoConfirm += delegate(string title, string text)
+                    {
+                        return MessageBox.Show(text, title, MessageBoxButtons.YesNo) == DialogResult.Yes;
+                    };
+
+                    AppConsole.DoAlert += delegate(string title, string text)
+                    {
+                        MessageBox.Show(text, title);
+                    };
+
+                    InitMessageHandlers();
+
+                    bool? timestamp = this.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
+                    AppConsole.Out.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
+                    AppConsole.Err.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
+                    AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
+                    AppConsole.WriteLine("Loading modules");
+
+                    ModuleManager.LoadModule(new CoreModule());
+                    ModuleManager.LoadModule(new ExpressModule());
+#if DEBUG
+                    ModuleManager.LoadModule(new TestModule());
+#endif
+                    InitMenus();
+                    LoadDefinedModules();
+                    _init = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "Initialization Error");
+                    Application.Exit();
+                }
+
+                if (this.OnAppInitialized != null)
+                    this.OnAppInitialized(this, EventArgs.Empty);
+            }
+        }
+
+        void CheckFdoPath()
+        {
+            string fdoPath = this.Preferences.GetStringPref(PreferenceNames.PREF_STR_FDO_HOME);
+            if (!Directory.Exists(fdoPath))
+            {
+                fdoPath = this.OpenDirectory("Select the path where the FDO libraries are located");
+                this.Preferences.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, fdoPath);
+            }
+        }
+
         //This handler is called only when the common language runtime tries to bind to the assembly and fails.
         Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            string fdoPath = Path.Combine(this.AppPath, "FDO\\");
-
+            string fdoPath = this.Preferences.GetStringPref(PreferenceNames.PREF_STR_FDO_HOME);
+            
             //Retrieve the list of referenced assemblies in an array of AssemblyName.
             Assembly MyAssembly, objExecutingAssemblies;
             string strTempAssmbPath = "";
@@ -73,7 +144,7 @@ namespace FdoToolbox.Core
                 if (strAssmbName.FullName.Substring(0, strAssmbName.FullName.IndexOf(",")) == args.Name.Substring(0, args.Name.IndexOf(",")))
                 {
                     //Build the path of the assembly from where it has to be loaded.				
-                    strTempAssmbPath = fdoPath + args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll";
+                    strTempAssmbPath = Path.Combine(fdoPath, args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll");
                     break;
                 }
 
@@ -243,66 +314,6 @@ namespace FdoToolbox.Core
         /// </summary>
         public event EventHandler OnAppInitialized;
 
-        /// <summary>
-        /// Initialize the application
-        /// </summary>
-        /// <param name="shell">The top-level window</param>
-        public void Initialize(IShell shell)
-        {
-            if (!_init)
-            {
-                try
-                {
-                    _shell = shell;
-                    _shell.Title = this.Name;
-                    _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
-
-                    //Set streams for Application Console
-                    AppConsole.In = new TextConsoleInputStream(_shell.ConsoleWindow.InputTextBox);
-                    AppConsole.Out = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
-                    AppConsole.Err = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
-                    AppConsole.Err.TextColor = System.Drawing.Color.Red;
-
-                    AppConsole.DoConfirm += delegate(string title, string text)
-                    {
-                        return MessageBox.Show(text, title, MessageBoxButtons.YesNo) == DialogResult.Yes;
-                    };
-
-                    AppConsole.DoAlert += delegate(string title, string text)
-                    {
-                        MessageBox.Show(text, title);
-                    };
-
-                    InitializePrefs();
-                    InitializeDialogs();
-                    InitMessageHandlers();
-
-                    bool? timestamp = this.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
-                    AppConsole.Out.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
-                    AppConsole.Err.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
-                    AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
-                    AppConsole.WriteLine("Loading modules");
-
-                    ModuleManager.LoadModule(new CoreModule());
-                    ModuleManager.LoadModule(new ExpressModule());
-#if DEBUG
-                    ModuleManager.LoadModule(new TestModule());
-#endif
-                    InitMenus();
-                    LoadDefinedModules();
-                    _init = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString(), "Initialization Error");
-                    Application.Exit();
-                }
-
-                if (this.OnAppInitialized != null)
-                    this.OnAppInitialized(this, EventArgs.Empty);
-            }
-        }
-
         private void InitializeDialogs()
         {
             _OpenFileDialog = new OpenFileDialog();
@@ -332,9 +343,16 @@ namespace FdoToolbox.Core
             }
             else
             {
-                dict.InitializeDefault();
+                InitializeDefaultPrefs(dict);
             }
             _PrefDict = dict;
+        }
+
+        private void InitializeDefaultPrefs(PreferenceDictionary dict)
+        {
+            dict.SetStringPref(PreferenceNames.PREF_STR_WORKING_DIRECTORY, this.AppPath);
+            dict.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, Path.Combine(this.AppPath, "FDO\\"));
+            dict.SetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, true);
         }
 
         private void LoadDefinedModules()

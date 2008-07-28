@@ -34,9 +34,8 @@ namespace FdoToolbox
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            FormMain frm = new FormMain();
             HostApplication app = HostApplication.Instance;
-            app.Initialize(frm);
+            app.Initialize(new FormMain());
             app.Run();
         }
     }

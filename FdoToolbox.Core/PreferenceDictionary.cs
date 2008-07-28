@@ -63,17 +63,6 @@ namespace FdoToolbox.Core
             _DoublePrefs = new Dictionary<string, double>();
         }
 
-        internal void InitializeDefault()
-        {
-            _BooleanPrefs.Clear();
-            _IntegerPrefs.Clear();
-            _DoublePrefs.Clear();
-            _StringPrefs.Clear();
-
-            SetStringPref(PreferenceNames.PREF_STR_WORKING_DIRECTORY, HostApplication.Instance.AppPath);
-            SetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, true);
-        }
-
         public void LoadPreferences(string prefsFile)
         {
             XmlDocument doc = new XmlDocument();
@@ -155,22 +144,22 @@ namespace FdoToolbox.Core
 
         public void SetStringPref(string name, string pref)
         {
-            _StringPrefs.Add(name, pref);
+            _StringPrefs[name] = pref;
         }
 
         public void SetDoublePref(string name, double pref)
         {
-            _DoublePrefs.Add(name, pref);
+            _DoublePrefs[name] = pref;
         }
 
         public void SetIntegerPref(string name, int pref)
         {
-            _IntegerPrefs.Add(name, pref);
+            _IntegerPrefs[name] = pref;
         }
 
         public void SetBooleanPref(string name, bool pref)
         {
-            _BooleanPrefs.Add(name, pref);
+            _BooleanPrefs[name] = pref;
         }
 
         public bool? GetBooleanPref(string name)
