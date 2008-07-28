@@ -64,6 +64,12 @@ DO NOT DELETE THIS FILE!!!
 			<Separator/>
 			<Command name="removeconn" />
 		</SelectedConnection>
+		<SelectedSchema>
+			<Command name="editschemaattributes" />		  
+		</SelectedSchema>
+		<SelectedClass>
+			<Command name="editclassattributes" />
+		</SelectedClass>
 		<SelectedTask>
 			<Command name="exectask" />
 			<Command name="edittask" />
