@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConsole.cs" />
+    <Compile Include="BaseApplication.cs" />
     <Compile Include="BulkCopyOptions.cs" />
     <Compile Include="BulkCopyTask.cs" />
     <Compile Include="ClassCopyOptions.cs" />
