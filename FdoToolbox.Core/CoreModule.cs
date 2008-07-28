@@ -281,18 +281,16 @@ namespace FdoToolbox.Core
         public void ManageSchema()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
-            
-            //Must've been invoked from console
-            if (connInfo == null)
-                AppConsole.WriteLine("Please select the connection to manage from the Object Explorer before invoking this command");
-
-            SchemaMgrCtl ctl = new SchemaMgrCtl(connInfo);
-            ctl.OnSchemasApplied += delegate
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            if (connInfo != null)
             {
-                HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
-            };
-            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
-            
+                SchemaMgrCtl ctl = new SchemaMgrCtl(connInfo, schemaName);
+                ctl.OnSchemasApplied += delegate
+                {
+                    HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
+                };
+                HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            }
         }
 
         [Command(CoreModule.CMD_HELP, "Help", "Show the help documentation", ImageResourceName = "help")]
@@ -603,7 +601,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_ADD_CLASS, "Add Class", InvocationType = CommandInvocationType.UI)]
+        [Command(CoreModule.CMD_ADD_CLASS, "Add Class", InvocationType = CommandInvocationType.UI, ImageResourceName = "add")]
         public void AddClass()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -630,7 +628,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_SAVE_SCHEMA_XML, "Save schema as XML", InvocationType = CommandInvocationType.UI)]
+        [Command(CoreModule.CMD_SAVE_SCHEMA_XML, "Save schema as XML", InvocationType = CommandInvocationType.UI, ImageResourceName = "page_white_code")]
         public void SaveSchemaAsXml()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -654,7 +652,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_SAVE_SCHEMA_SDF, "Save schema as SDF", InvocationType = CommandInvocationType.UI)]
+        [Command(CoreModule.CMD_SAVE_SCHEMA_SDF, "Save schema as SDF", InvocationType = CommandInvocationType.UI, ImageResourceName = "database")]
         public void SaveSchemaAsSdf()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -678,7 +676,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_DELETE_SCHEMA, "Delete Schema", InvocationType = CommandInvocationType.UI)]
+        [Command(CoreModule.CMD_DELETE_SCHEMA, "Delete Schema", InvocationType = CommandInvocationType.UI, ImageResourceName = "cross")]
         public void DeleteSchema()
         { 
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -691,7 +689,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_EDIT_CLASS, "Edit Class", InvocationType = CommandInvocationType.UI)]
+        [Command(CoreModule.CMD_EDIT_CLASS, "Edit Class", InvocationType = CommandInvocationType.UI, ImageResourceName = "application_edit")]
         public void EditClass()
         {
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
@@ -720,7 +718,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        [Command(CoreModule.CMD_DELETE_CLASS, "Delete Class", InvocationType = CommandInvocationType.UI)]
+        [Command(CoreModule.CMD_DELETE_CLASS, "Delete Class", InvocationType = CommandInvocationType.UI, ImageResourceName = "cross")]
         public void DeleteClass()
         { 
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();

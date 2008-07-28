@@ -79,7 +79,9 @@ DO NOT DELETE THIS FILE!!!
 		</SelectedSchema>
 		<SelectedClass>
 			<Command name="editclass" displayName="Edit" />
+			<!-- 
 			<Command name="delclass" displayName="Delete" />
+			-->
 			<Separator/>
 			<Command name="editclassattributes" />
 		</SelectedClass>
