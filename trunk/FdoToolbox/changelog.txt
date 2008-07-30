@@ -1,3 +1,23 @@
+v0.4.1
+------
+- Enhancements:
+	- General:
+		- Added new per-class bulk copy option: Attribute filter
+			- To migrate existing bulk copy task definitions. Add a <SourceFilter> element as the last child of each <Mapping> element.
+		- Merged all command-line utilites into a single utility, FdoUtil.exe. Consult the updated cmd_readme.txt for usage details.
+		- Support for external FDO installations. When FdoToolbox launches for the first time it will look for the "FDO" subdirectory. 
+		  If this directory doesn't exist, you will be prompted to specify the directory containing the FDO binaries. After this the
+		  directory will be written to a string preference pref_str_fdo_home. This value will be written to preferences.xml and used 
+		  for every subsequent usage of FdoToolbox or its command-line utilities.
+		- SchemaAttributeDictionary editing support for schemas and classes.
+	    - Added context menus for schema and class nodes on the Object Explorer. 
+- Fixes:
+	- Expression Editor:
+		- When in filter mode, "Validate Expression" now uses Filter.Parse() instead of Expression.Parse()
+
+- Other:
+	- Removed lots of redundant code by introducing a FeatureService API
+
 v0.4.0
 ------
 - Enhancements:
