@@ -7,12 +7,13 @@
             * Inner Join
             * Left Outer Join
  * Advanced bulk copy options
-      * Data type coercion of mapped properties
       * Delete target before copying
       * ~~Attribute filtering (per-class)~~
       * Spatial filter (global)
 
 === Future ===
+ * Advanced bulk copy options
+      * Data type coercion of mapped properties
  * Raster Provider support
  * KML support
  * Visual Preview of FDO Data Sources
