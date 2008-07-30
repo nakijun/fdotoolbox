@@ -43,6 +43,19 @@ namespace FdoToolbox.Core
             get { return _ClassDef.Name; }
         }
 
+        private string _AttributeFilter;
+
+        /// <summary>
+        /// The attribute filter to apply when reading from the
+        /// source class
+        /// </summary>
+        public string AttributeFilter
+        {
+            get { return _AttributeFilter; }
+            set { _AttributeFilter = value; }
+        }
+	
+
         private string _TargetClassName;
 
         /// <summary>

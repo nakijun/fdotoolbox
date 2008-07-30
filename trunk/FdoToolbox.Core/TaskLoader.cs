@@ -130,6 +130,7 @@ namespace FdoToolbox.Core
                     bool deleteTarget = Convert.ToBoolean(classMappingNode.SelectSingleNode("DeleteTarget").InnerText);
                     string src = classMappingNode.SelectSingleNode("SourceClass").InnerText;
                     string target = classMappingNode.SelectSingleNode("TargetClass").InnerText;
+                    string filter = classMappingNode.SelectSingleNode("SourceFilter").InnerText;
 
                     ClassDefinition classDef = FindClass(schemas, src);
                     if (classDef == null)
@@ -137,6 +138,9 @@ namespace FdoToolbox.Core
                     ClassCopyOptions copt = new ClassCopyOptions(classDef);
                     copt.TargetClassName = target;
                     copt.DeleteClassData = deleteTarget;
+
+                    if (!string.IsNullOrEmpty(filter))
+                        copt.AttributeFilter = filter;
 
                     XmlNodeList propertyMappingList = classMappingNode.SelectNodes("Properties/PropertyMapping");
                     foreach (XmlNode propertyNode in propertyMappingList)
@@ -195,7 +199,7 @@ namespace FdoToolbox.Core
                     string targetPropertyName = copt.GetTargetPropertyName(propertyName);
                     mappingsXml += string.Format(Properties.Resources.PropertyMapping, propertyName, targetPropertyName) + "\n";
                 }
-                classMappingXml += string.Format(Properties.Resources.ClassMapping, delete, srcClass, destClass, mappingsXml) + "\n";
+                classMappingXml += string.Format(Properties.Resources.ClassMapping, delete, srcClass, destClass, mappingsXml, copt.AttributeFilter) + "\n";
             }
             StringBuilder sb = new StringBuilder();
             if (task.Options.CopySpatialContexts)

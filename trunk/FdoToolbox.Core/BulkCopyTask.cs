@@ -197,6 +197,8 @@ namespace FdoToolbox.Core
                 using (ISelect select = srcConn.CreateCommand(CommandType.CommandType_Select) as ISelect)
                 {
                     select.SetFeatureClassName(copyOpts.ClassName);
+                    if (!string.IsNullOrEmpty(copyOpts.AttributeFilter))
+                        select.Filter = Filter.Parse(copyOpts.AttributeFilter);
                     
                     using (IFeatureReader reader = select.Execute())
                     {
@@ -210,6 +212,9 @@ namespace FdoToolbox.Core
                 using (ISelect select = srcConn.CreateCommand(CommandType.CommandType_Select) as ISelect)
                 {
                     select.SetFeatureClassName(copyOpts.ClassName);
+                    if (!string.IsNullOrEmpty(copyOpts.AttributeFilter))
+                        select.Filter = Filter.Parse(copyOpts.AttributeFilter);
+                    
                     foreach (string propName in propNames)
                     {
                         select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
@@ -387,6 +392,16 @@ namespace FdoToolbox.Core
                     if (!Array.Exists<int>(_Options.Target.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)CommandType.CommandType_Delete; }))
                         throw new TaskValidationException("Target connection does not support delete (IDelete)");
                     checkedForDelete = true;
+                }
+
+                try
+                {
+                    if(!string.IsNullOrEmpty(copyOpts.AttributeFilter))
+                        using (Filter filter = Filter.Parse(copyOpts.AttributeFilter)) { }
+                }
+                catch (OSGeo.FDO.Common.Exception ex)
+                {
+                    throw new TaskValidationException("Error parsing filter", ex);
                 }
 
                 string className = copyOpts.ClassName;

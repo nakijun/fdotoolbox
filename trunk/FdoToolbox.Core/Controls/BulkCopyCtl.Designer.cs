@@ -29,7 +29,7 @@ namespace FdoToolbox.Core.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Classes");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Classes");
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -47,13 +47,15 @@ namespace FdoToolbox.Core.Controls
             this.mTreeView = new System.Windows.Forms.TreeView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.chkSourceContextList = new System.Windows.Forms.CheckedListBox();
             this.chkCoerceDataTypes = new System.Windows.Forms.CheckBox();
             this.chkCopySpatialContexts = new System.Windows.Forms.CheckBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.chkSourceContextList = new System.Windows.Forms.CheckedListBox();
+            this.ctxClassFilter = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.grpSource.SuspendLayout();
             this.grpTarget.SuspendLayout();
@@ -61,6 +63,7 @@ namespace FdoToolbox.Core.Controls
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+            this.ctxClassFilter.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -223,10 +226,10 @@ namespace FdoToolbox.Core.Controls
             this.mTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mTreeView.Location = new System.Drawing.Point(3, 16);
             this.mTreeView.Name = "mTreeView";
-            treeNode1.Name = "NODE_CLASSES";
-            treeNode1.Text = "Classes";
+            treeNode2.Name = "NODE_CLASSES";
+            treeNode2.Text = "Classes";
             this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode2});
             this.mTreeView.Size = new System.Drawing.Size(265, 264);
             this.mTreeView.TabIndex = 0;
             this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mTreeView_MouseDown);
@@ -254,6 +257,14 @@ namespace FdoToolbox.Core.Controls
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(240, 106);
             this.panel1.TabIndex = 0;
+            // 
+            // chkSourceContextList
+            // 
+            this.chkSourceContextList.FormattingEnabled = true;
+            this.chkSourceContextList.Location = new System.Drawing.Point(7, 27);
+            this.chkSourceContextList.Name = "chkSourceContextList";
+            this.chkSourceContextList.Size = new System.Drawing.Size(224, 49);
+            this.chkSourceContextList.TabIndex = 6;
             // 
             // chkCoerceDataTypes
             // 
@@ -306,13 +317,19 @@ namespace FdoToolbox.Core.Controls
             // 
             this.errorProvider.ContainerControl = this;
             // 
-            // chkSourceContextList
+            // ctxClassFilter
             // 
-            this.chkSourceContextList.FormattingEnabled = true;
-            this.chkSourceContextList.Location = new System.Drawing.Point(7, 27);
-            this.chkSourceContextList.Name = "chkSourceContextList";
-            this.chkSourceContextList.Size = new System.Drawing.Size(224, 49);
-            this.chkSourceContextList.TabIndex = 6;
+            this.ctxClassFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setFilterToolStripMenuItem});
+            this.ctxClassFilter.Name = "ctxClassFilter";
+            this.ctxClassFilter.Size = new System.Drawing.Size(153, 48);
+            // 
+            // setFilterToolStripMenuItem
+            // 
+            this.setFilterToolStripMenuItem.Name = "setFilterToolStripMenuItem";
+            this.setFilterToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setFilterToolStripMenuItem.Text = "Set Filter";
+            this.setFilterToolStripMenuItem.Click += new System.EventHandler(this.setFilterToolStripMenuItem_Click);
             // 
             // BulkCopyCtl
             // 
@@ -338,6 +355,7 @@ namespace FdoToolbox.Core.Controls
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+            this.ctxClassFilter.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -368,5 +386,7 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.CheckBox chkCoerceDataTypes;
         private System.Windows.Forms.CheckBox chkCopySpatialContexts;
         private System.Windows.Forms.CheckedListBox chkSourceContextList;
+        private System.Windows.Forms.ContextMenuStrip ctxClassFilter;
+        private System.Windows.Forms.ToolStripMenuItem setFilterToolStripMenuItem;
     }
 }

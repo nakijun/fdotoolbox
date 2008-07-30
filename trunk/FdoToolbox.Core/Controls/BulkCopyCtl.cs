@@ -28,6 +28,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.SpatialContext;
+using FdoToolbox.Core.Forms;
 #region overview
 /*
  * The bulk copy control is the front-end to the BulkCopyTask class.
@@ -115,16 +116,22 @@ namespace FdoToolbox.Core.Controls
                 //Map the class node
                 TreeNode classNode = GetRootNode().Nodes[classCopyOption.ClassName];
                 MapClassNode(classCopyOption.TargetClassName, classNode);
-
+                TreeNode optionsNode = classNode.Nodes[IDX_OPTIONS];
+                TreeNode propertiesNode = classNode.Nodes[IDX_PROPERTIES];
                 //Now map its properties
                 string[] srcProperties = classCopyOption.PropertyNames;
                 foreach (string sourceProp in srcProperties)
                 {
                     string key = PREFIX_PROPERTY + sourceProp;
-                    TreeNode propertyNode = classNode.Nodes[key];
+                    TreeNode propertyNode = propertiesNode.Nodes[key];
                     string targetProp = classCopyOption.GetTargetPropertyName(sourceProp);
 
                     MapPropertyNode(propertyNode, sourceProp, targetProp);
+                }
+                if (!string.IsNullOrEmpty(classCopyOption.AttributeFilter))
+                {
+                    optionsNode.Nodes[IDX_OPTION_FILTER].Tag = classCopyOption.AttributeFilter;
+                    optionsNode.Nodes[IDX_OPTION_FILTER].Text = "Filter (set)";
                 }
             }
         }
@@ -179,6 +186,11 @@ namespace FdoToolbox.Core.Controls
 
         private TreeNode GetRootNode() { return mTreeView.Nodes["NODE_CLASSES"]; }
 
+        const int IDX_OPTIONS = 0;
+        const int IDX_PROPERTIES = 1;
+
+        const int IDX_OPTION_FILTER = 0;
+
         /// <summary>
         /// Fill the tree view with class nodes
         /// </summary>
@@ -193,10 +205,75 @@ namespace FdoToolbox.Core.Controls
                 classNode.Text = classDef.Name + " (unmapped)";
                 classNode.Checked = false;
                 classNode.ContextMenuStrip = ctxTargetClasses;
-                PopulatePropertyNodes(classNode, classDef);
+
+                TreeNode propertiesNode = new TreeNode();
+                propertiesNode.Name = "Properties";
+                propertiesNode.Text = "Properties";
+                PopulatePropertyNodes(propertiesNode, classDef);
+
+                TreeNode optionsNode = new TreeNode();
+                optionsNode.Name = "Options";
+                optionsNode.Text = "Options";
+                PopulateOptionNodes(optionsNode);
+
+                classNode.Nodes.Add(optionsNode);
+                classNode.Nodes.Add(propertiesNode);
+
                 GetRootNode().Nodes.Add(classNode);
             }
             GetRootNode().ExpandAll();
+        }
+
+        private void PopulateOptionNodes(TreeNode optionsNode)
+        {
+            TreeNode filterNode = new TreeNode();
+            filterNode.Name = filterNode.Text = "Filter";
+            filterNode.ContextMenuStrip = ctxClassFilter;
+
+            optionsNode.Nodes.Add(filterNode);
+        }
+
+        private void setFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode filterNode = mTreeView.SelectedNode;
+            string name = cmbSrcConn.SelectedItem.ToString();
+            string schemaName = (cmbSrcSchema.SelectedItem as FeatureSchema).Name;
+            string className = filterNode.Parent.Parent.Name;
+            IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(name);
+            FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(name);
+            ConnectionInfo connInfo = new ConnectionInfo(name, conn);
+            ClassDefinition classDef = service.GetClassByName(schemaName, className);
+            if (classDef != null)
+            {
+                if (filterNode.Tag != null)
+                {   
+                    string expr = ExpressionDlg.EditExpression(connInfo, classDef, filterNode.Tag.ToString(), ExpressionMode.Filter);
+                    if (!string.IsNullOrEmpty(expr))
+                    {
+                        filterNode.Tag = expr;
+                        filterNode.Text = "Filter (set)";
+                    }
+                    else
+                    {
+                        filterNode.Tag = null;
+                        filterNode.Text = filterNode.Name;
+                    }
+                }
+                else
+                {
+                    string expr = ExpressionDlg.NewExpression(connInfo, classDef, ExpressionMode.Filter);
+                    if (!string.IsNullOrEmpty(expr))
+                    {
+                        filterNode.Tag = expr;
+                        filterNode.Text = "Filter (set)";
+                    }
+                    else
+                    {
+                        filterNode.Tag = null;
+                        filterNode.Text = filterNode.Name;
+                    }
+                }
+            }
         }
 
         const string PREFIX_PROPERTY = "PROP";
@@ -246,21 +323,28 @@ namespace FdoToolbox.Core.Controls
         }
 
         /// <summary>
-        /// Remove all tags from all class/property nodes
+        /// Remove all tags from all class/property/option nodes
         /// </summary>
         private void ResetClassNodes()
         {
             foreach (TreeNode classNode in GetRootNode().Nodes)
             {
+                TreeNode propertiesNode = classNode.Nodes[IDX_PROPERTIES];
+                TreeNode optionsNode = classNode.Nodes[IDX_OPTIONS];
                 classNode.Tag = null;
                 classNode.Text = classNode.Name + " (unmapped)";
-                foreach (TreeNode propNode in classNode.Nodes)
+                foreach (TreeNode propNode in propertiesNode.Nodes)
                 {
                     if (propNode.Name.StartsWith(PREFIX_PROPERTY))
                     {
                         propNode.Tag = null;
                         propNode.Text = GetPropertyName(propNode) + " (unmapped)";
                     }
+                }
+                foreach (TreeNode optNode in optionsNode.Nodes)
+                {
+                    optionsNode.Tag = null;
+                    optionsNode.Text = optionsNode.Name;
                 }
             }
         }
@@ -272,6 +356,7 @@ namespace FdoToolbox.Core.Controls
         /// <param name="className"></param>
         private void ResetPropertyNodes(TreeNode sourceClassNode, string targetClassName)
         {
+            TreeNode propertiesNode = sourceClassNode.Nodes[IDX_PROPERTIES];
             ClassDefinition targetClassDef = GetTargetClassByName(targetClassName);
             ContextMenuStrip ctxProperties = new ContextMenuStrip();
             ToolStripItem resetItem = new ToolStripMenuItem();
@@ -287,7 +372,7 @@ namespace FdoToolbox.Core.Controls
             ctxProperties.Items.Add(resetItem);
             ctxProperties.Items.Add(new ToolStripSeparator());
 
-            foreach (TreeNode node in sourceClassNode.Nodes)
+            foreach (TreeNode node in propertiesNode.Nodes)
             {
                 node.Tag = null;
             }
@@ -361,7 +446,7 @@ namespace FdoToolbox.Core.Controls
                 };
                 ctxProperties.Items.Add(tsi);
             }
-            foreach (TreeNode node in sourceClassNode.Nodes)
+            foreach (TreeNode node in propertiesNode.Nodes)
             {
                 if (node.Name.StartsWith(PREFIX_PROPERTY))
                 {
@@ -508,9 +593,12 @@ namespace FdoToolbox.Core.Controls
                 //A tag set on the class node indicates this class is to be copied
                 if (classNode.Tag != null)
                 {
+                    TreeNode optionsNode = classNode.Nodes[IDX_OPTIONS];
+                    TreeNode propertiesNode = classNode.Nodes[IDX_PROPERTIES];
+
                     ClassCopyOptions cOptions = new ClassCopyOptions(GetSourceClassByName(classNode.Tag.ToString()));
                     cOptions.TargetClassName = classNode.Tag.ToString();
-                    foreach (TreeNode propertyNode in classNode.Nodes)
+                    foreach (TreeNode propertyNode in propertiesNode.Nodes)
                     {
                         if (propertyNode.Name.StartsWith(PREFIX_PROPERTY))
                         {
@@ -526,6 +614,11 @@ namespace FdoToolbox.Core.Controls
                             }
                         }
                     }
+
+                    TreeNode filterNode = optionsNode.Nodes[IDX_OPTION_FILTER];
+                    if (filterNode.Tag != null)
+                        cOptions.AttributeFilter = filterNode.Tag.ToString();
+
                     options.AddClassCopyOption(cOptions);
                 }
             }
