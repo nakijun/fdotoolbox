@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoUtil", "FdoUtil\FdoUtil.csproj", "{6E4AD556-BD21-4E01-BE29-3D511DD7ABD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoInfo", "FdoInfo\FdoInfo.csproj", "{DBDFEEB3-A526-4E93-A587-3DA1AFB63B87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{6E4AD556-BD21-4E01-BE29-3D511DD7ABD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E4AD556-BD21-4E01-BE29-3D511DD7ABD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E4AD556-BD21-4E01-BE29-3D511DD7ABD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBDFEEB3-A526-4E93-A587-3DA1AFB63B87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBDFEEB3-A526-4E93-A587-3DA1AFB63B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBDFEEB3-A526-4E93-A587-3DA1AFB63B87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBDFEEB3-A526-4E93-A587-3DA1AFB63B87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
