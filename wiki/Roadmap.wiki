@@ -9,7 +9,7 @@
  * Advanced bulk copy options
       * Data type coercion of mapped properties
       * Delete target before copying
-      * Attribute filtering (per-class)
+      * ~~Attribute filtering (per-class)~~
       * Spatial filter (global)
 
 === Future ===
