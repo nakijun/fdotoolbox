@@ -31,6 +31,8 @@ namespace FdoToolbox.Core.Controls
 {
     public partial class DataStoreMgrCtl : BaseDocumentCtl, IConnectionBoundCtl
     {
+        private FeatureService _Service;
+
         internal DataStoreMgrCtl()
         {
             InitializeComponent();
@@ -40,7 +42,9 @@ namespace FdoToolbox.Core.Controls
             : this()
         {
             _BoundConnection = connInfo;
+            _Service = new FeatureService(connInfo.Connection);
             ToggleUI();
+            this.Disposed += delegate { _Service.Dispose(); };
         }
 
         private void ToggleUI()
@@ -57,21 +61,8 @@ namespace FdoToolbox.Core.Controls
 
         private void ListDataStores()
         {
-            List<DataStoreInfo> stores = new List<DataStoreInfo>();
-            using (IListDataStores dlist = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ListDataStores) as IListDataStores)
-            {
-                using (IDataStoreReader reader = dlist.Execute())
-                {
-                    while (reader.ReadNext())
-                    {
-                        if (reader.GetIsFdoEnabled())
-                        {
-                            DataStoreInfo dinfo = new DataStoreInfo(reader);
-                            stores.Add(dinfo);
-                        }
-                    }
-                }
-            }
+            FeatureService service = new FeatureService(this.BoundConnection.Connection);
+            List<DataStoreInfo> stores = service.ListDataStores(true);
             grdDataStores.DataSource = stores;
         }
 
@@ -111,7 +102,7 @@ namespace FdoToolbox.Core.Controls
             {
                 using (IDestroyDataStore destroy = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroyDataStore) as IDestroyDataStore)
                 {
-                    NameValueCollection props = DictionaryDialog.GetParameters("Destory parameters", destroy.DataStoreProperties);
+                    NameValueCollection props = DictionaryDialog.GetParameters("Destroy parameters", destroy.DataStoreProperties);
                     if (props != null)
                     {
                         foreach (string key in props.AllKeys)
