@@ -5,4 +5,5 @@
 	<Properties>
 		{3}
 	</Properties>
+	<SourceFilter>{4}</SourceFilter>
 </Mapping>
