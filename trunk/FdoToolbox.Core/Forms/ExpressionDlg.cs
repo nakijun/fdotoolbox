@@ -490,9 +490,19 @@ namespace FdoToolbox.Core.Forms
             {
                 if (!string.IsNullOrEmpty(txtExpression.Text))
                 {
-                    using (Expression expr = Expression.Parse(txtExpression.Text))
+                    if (_ExprMode == ExpressionMode.Filter)
                     {
-                        valid = true;
+                        using (Filter fl = Filter.Parse(txtExpression.Text))
+                        {
+                            valid = true;
+                        }
+                    }
+                    else
+                    {
+                        using (Expression expr = Expression.Parse(txtExpression.Text))
+                        {
+                            valid = true;
+                        }
                     }
                 }
             }
