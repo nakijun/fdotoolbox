@@ -252,8 +252,7 @@ namespace FdoToolbox.Core
                 total += copied;
             }
             watch.Stop();
-            SendMessage("Bulk Copy Completed in " + watch.ElapsedMilliseconds + "ms");
-            AppConsole.Alert("Bulk Copy", total + " features copied in " + watch.ElapsedMilliseconds + "ms");
+            SendMessage("Bulk Copy: " + total + " features copied in " + watch.ElapsedMilliseconds + "ms");
         }
 
         /// <summary>

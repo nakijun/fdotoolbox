@@ -95,9 +95,7 @@ namespace FdoToolbox.Core
         /// Parse application-specific arguments.
         /// </summary>
         /// <param name="args">The array of commandline arguments</param>
-        /// <param name="minArguments">The minimum number of expected arguments</param>
-        /// <param name="maxArguments">The maximum number of expected arguments</param>
-        public abstract void ParseArguments(string[] args, int minArguments, int maxArguments);
+        public abstract void ParseArguments(string[] args);
 
         /// <summary>
         /// Display usage information for this application
@@ -129,6 +127,29 @@ namespace FdoToolbox.Core
             return file;
         }
 
+        private bool _IsTest;
+
+        /// <summary>
+        /// Is this application being run in simulation mode?
+        /// </summary>
+        public bool IsTestOnly
+        {
+            get { return _IsTest; }
+            set { _IsTest = value; }
+        }
+
+        private bool _IsSilent;
+
+        /// <summary>
+        /// Is this application running silent? (no console output)
+        /// </summary>
+        public bool IsSilent
+        {
+            get { return _IsSilent; }
+            set { _IsSilent = value; }
+        }
+	
+
         /// <summary>
         /// Gets an argument value with the given prefix. Arguments follow the
         /// convention [prefix]:[value]
@@ -150,6 +171,26 @@ namespace FdoToolbox.Core
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Checks if a given parameter switch was defined
+        /// </summary>
+        /// <param name="strSwitch"></param>
+        /// <returns></returns>
+        protected bool IsSwitchDefined(string strSwitch, string [] args)
+        {
+            if (args.Length == 0)
+                return false;
+
+            foreach (string arg in args)
+            {
+                if (arg == strSwitch)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         protected override void OnApplicationException(Exception ex)
