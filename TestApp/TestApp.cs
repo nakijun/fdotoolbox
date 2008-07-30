@@ -43,20 +43,7 @@ namespace TestApp
 
             string connStr = "File=" + file;
 
-            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SDF");
-            Debug.Assert(conn != null, "Unable to create SDF connection");
-            try
-            {
-                using (ICreateDataStore create = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) as ICreateDataStore)
-                {
-                    create.DataStoreProperties.SetProperty("File", file);
-                    create.Execute();
-                }
-            }
-            catch
-            {
-                Debug.Fail("Could not create " + file);
-            }
+            IConnection conn = CreateSDF(file);
 
             conn.ConnectionString = connStr;
             conn.Open();
@@ -143,6 +130,13 @@ namespace TestApp
                 Debug.Fail("Could not apply schema");
             }
 
+            conn.Close();
+            conn.Dispose();
+
+            conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SDF");
+            conn.ConnectionString = connStr;
+            conn.Open();
+
             //re-describe
             describe = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema;
             schemas = null;
@@ -160,17 +154,8 @@ namespace TestApp
             Debug.Assert(idx < 0, "Property Foo was not deleted");
         }
 
-        private void TestClassDeleteRaw()
+        private static IConnection CreateSDF(string file)
         {
-            AppConsole.WriteLine("TestClassDeleteRaw");
-
-            string file = Path.Combine(this.AppPath,"Test.sdf");
-
-            if (File.Exists(file))
-                File.Delete(file);
-            
-            string connStr = "File=" + file;
-
             IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SDF");
             Debug.Assert(conn != null, "Unable to create SDF connection");
             try
@@ -185,6 +170,21 @@ namespace TestApp
             {
                 Debug.Fail("Could not create " + file);
             }
+            return conn;
+        }
+
+        private void TestClassDeleteRaw()
+        {
+            AppConsole.WriteLine("TestClassDeleteRaw");
+
+            string file = Path.Combine(this.AppPath,"Test.sdf");
+
+            if (File.Exists(file))
+                File.Delete(file);
+            
+            string connStr = "File=" + file;
+
+            IConnection conn = CreateSDF(file);
             
             conn.ConnectionString = connStr;
             conn.Open();
@@ -283,6 +283,13 @@ namespace TestApp
 
             idx = schema.Classes.IndexOf("Class2");
             Debug.Assert(idx < 0, "Class2 was not deleted");
+
+            conn.Close();
+            conn.Dispose();
+
+            conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SDF");
+            conn.ConnectionString = connStr;
+            conn.Open();
 
             //re-describe
 
