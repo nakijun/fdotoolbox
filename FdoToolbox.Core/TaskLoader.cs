@@ -190,7 +190,7 @@ namespace FdoToolbox.Core
             string classMappingXml = string.Empty;
             foreach (ClassCopyOptions copt in cOptions)
             {
-                bool delete = false;
+                bool delete = copt.DeleteClassData;
                 string srcClass = copt.ClassName;
                 string destClass = copt.TargetClassName;
                 string mappingsXml = string.Empty;

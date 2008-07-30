@@ -186,7 +186,7 @@ namespace FdoToolbox.Core
                     using (IDelete cmd = destConn.CreateCommand(CommandType.CommandType_Delete) as IDelete)
                     {
                         cmd.SetFeatureClassName(copyOpts.TargetClassName);
-                        cmd.Filter = Filter.Parse("1 = 1");
+                        //cmd.Filter = Filter.Parse("1 = 1");
                         cmd.Execute();
                     }
                     SendMessage("Done deleting");
