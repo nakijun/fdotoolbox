@@ -21,14 +21,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mkdstore
+namespace FdoUtil
 {
-    class Program
+    public interface IConsoleCommand
     {
-        static void Main(string[] args)
-        {
-            MkDStoreApp app = new MkDStoreApp();
-            using (app) { app.Run(args); }
-        }
+        int Execute();
+        bool IsTestOnly { get; set; }
+        bool IsSilent { get; set; }
     }
 }

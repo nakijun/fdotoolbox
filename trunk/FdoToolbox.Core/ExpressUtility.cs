@@ -28,6 +28,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Common.Io;
 using OSGeo.FDO.Commands.Schema;
 using FdoToolbox.Core.Forms;
+using System.Collections.Specialized;
 
 namespace FdoToolbox.Core
 {
@@ -141,6 +142,29 @@ namespace FdoToolbox.Core
                 }
             }
             return result;
+        }
+
+        public static NameValueCollection ConvertFromString(string str)
+        {
+            NameValueCollection param = new NameValueCollection();
+            if (!string.IsNullOrEmpty(str))
+            {
+                string[] parameters = str.Split(';');
+                if (parameters.Length > 0)
+                {
+                    foreach (string p in parameters)
+                    {
+                        string[] pair = p.Split('=');
+                        param.Add(pair[0], pair[1]);
+                    }
+                }
+                else
+                {
+                    string[] pair = str.Split('=');
+                    param.Add(pair[0], pair[1]);
+                }
+            }
+            return param;
         }
     }
 }

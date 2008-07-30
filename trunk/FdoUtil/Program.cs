@@ -20,17 +20,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.IO;
-using FdoToolbox.Core;
 
-namespace TaskRun
+namespace FdoUtil
 {
     class Program
     {
         static void Main(string[] args)
         {
-            TaskRunApp app = new TaskRunApp();
-            using(app) { app.Run(args); }
+            FdoUtilApp app = new FdoUtilApp();
+            using (app) { app.Run(args); }
         }
     }
 }

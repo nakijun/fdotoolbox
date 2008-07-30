@@ -21,14 +21,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExpressBCP
+namespace FdoUtil
 {
-    class Program
+    public enum CommandStatus : int
     {
-        static void Main(string[] args)
-        {
-            ExpressBcpApp app = new ExpressBcpApp();
-            using (app) { app.Run(args); }
-        }
+        E_OK = 0,
+        E_FAIL_SDF_CREATE = 1,
+        E_FAIL_APPLY_SCHEMA = 2,
+        E_FAIL_DESTROY_DATASTORE = 3,
+        E_FAIL_CONNECT = 4,
+        E_FAIL_SERIALIZE_SCHEMA_XML = 5,
+        E_FAIL_CREATE_DATASTORE = 6,
+        E_FAIL_BULK_COPY = 7,
+        E_FAIL_TASK_VALIDATION = 8
     }
 }

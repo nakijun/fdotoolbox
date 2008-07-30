@@ -27,6 +27,8 @@ using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Common.Io;
 using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Geometry;
+using System.Collections.Specialized;
+using OSGeo.FDO.Commands.DataStore;
 
 namespace FdoToolbox.Core
 {
@@ -55,6 +57,11 @@ namespace FdoToolbox.Core
             {
                 ApplySchema(fs);
             }
+        }
+
+        public bool SupportsCommand(OSGeo.FDO.Commands.CommandType cmd)
+        {
+            return Array.IndexOf<int>(_conn.CommandCapabilities.Commands, (int)cmd) >= 0;
         }
 
         public static FeatureSchema CloneSchema(FeatureSchema fs)
@@ -229,6 +236,32 @@ namespace FdoToolbox.Core
         public void Dispose()
         {
             _GeomFactory.Dispose();
+        }
+
+        public void DestroyDataStore(string dataStoreString)
+        {
+            NameValueCollection parameters = ExpressUtility.ConvertFromString(dataStoreString);
+            using (IDestroyDataStore destroy = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroyDataStore) as IDestroyDataStore)
+            {
+                foreach (string key in parameters.AllKeys)
+                {
+                    destroy.DataStoreProperties.SetProperty(key, parameters[key]);
+                }
+                destroy.Execute();
+            }
+        }
+
+        public void CreateDataStore(string dataStoreString)
+        {
+            NameValueCollection parameters = ExpressUtility.ConvertFromString(dataStoreString);
+            using (ICreateDataStore create = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) as ICreateDataStore)
+            {
+                foreach (string key in parameters.AllKeys)
+                {
+                    create.DataStoreProperties.SetProperty(key, parameters[key]);
+                }
+                create.Execute();
+            }
         }
     }
 }

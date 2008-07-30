@@ -15,7 +15,7 @@ namespace TestApp
 {
     public class TestApp : ConsoleApplication
     {
-        public override void ParseArguments(string[] args, int minArguments, int maxArguments)
+        public override void ParseArguments(string[] args)
         {
             
         }
