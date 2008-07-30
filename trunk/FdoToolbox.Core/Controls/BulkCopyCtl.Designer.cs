@@ -29,7 +29,7 @@ namespace FdoToolbox.Core.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Classes");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Classes");
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -56,6 +56,9 @@ namespace FdoToolbox.Core.Controls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ctxClassFilter = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxDeleteBeforeCopy = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.trueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.falseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.grpSource.SuspendLayout();
             this.grpTarget.SuspendLayout();
@@ -64,6 +67,7 @@ namespace FdoToolbox.Core.Controls
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.ctxClassFilter.SuspendLayout();
+            this.ctxDeleteBeforeCopy.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -226,10 +230,11 @@ namespace FdoToolbox.Core.Controls
             this.mTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mTreeView.Location = new System.Drawing.Point(3, 16);
             this.mTreeView.Name = "mTreeView";
-            treeNode2.Name = "NODE_CLASSES";
-            treeNode2.Text = "Classes";
+            treeNode1.Name = "NODE_CLASSES";
+            treeNode1.Text = "Classes";
             this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
+            this.mTreeView.ShowNodeToolTips = true;
             this.mTreeView.Size = new System.Drawing.Size(265, 264);
             this.mTreeView.TabIndex = 0;
             this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mTreeView_MouseDown);
@@ -322,14 +327,36 @@ namespace FdoToolbox.Core.Controls
             this.ctxClassFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setFilterToolStripMenuItem});
             this.ctxClassFilter.Name = "ctxClassFilter";
-            this.ctxClassFilter.Size = new System.Drawing.Size(153, 48);
+            this.ctxClassFilter.Size = new System.Drawing.Size(118, 26);
             // 
             // setFilterToolStripMenuItem
             // 
             this.setFilterToolStripMenuItem.Name = "setFilterToolStripMenuItem";
-            this.setFilterToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.setFilterToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.setFilterToolStripMenuItem.Text = "Set Filter";
             this.setFilterToolStripMenuItem.Click += new System.EventHandler(this.setFilterToolStripMenuItem_Click);
+            // 
+            // ctxDeleteBeforeCopy
+            // 
+            this.ctxDeleteBeforeCopy.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trueToolStripMenuItem,
+            this.falseToolStripMenuItem});
+            this.ctxDeleteBeforeCopy.Name = "ctxDeleteBeforeCopy";
+            this.ctxDeleteBeforeCopy.Size = new System.Drawing.Size(100, 48);
+            // 
+            // trueToolStripMenuItem
+            // 
+            this.trueToolStripMenuItem.Name = "trueToolStripMenuItem";
+            this.trueToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.trueToolStripMenuItem.Text = "True";
+            this.trueToolStripMenuItem.Click += new System.EventHandler(this.DeleteBeforeCopyEnable_Click);
+            // 
+            // falseToolStripMenuItem
+            // 
+            this.falseToolStripMenuItem.Name = "falseToolStripMenuItem";
+            this.falseToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.falseToolStripMenuItem.Text = "False";
+            this.falseToolStripMenuItem.Click += new System.EventHandler(this.DeleteBeforeCopyDisable_Click);
             // 
             // BulkCopyCtl
             // 
@@ -356,6 +383,7 @@ namespace FdoToolbox.Core.Controls
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ctxClassFilter.ResumeLayout(false);
+            this.ctxDeleteBeforeCopy.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -388,5 +416,8 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.CheckedListBox chkSourceContextList;
         private System.Windows.Forms.ContextMenuStrip ctxClassFilter;
         private System.Windows.Forms.ToolStripMenuItem setFilterToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip ctxDeleteBeforeCopy;
+        private System.Windows.Forms.ToolStripMenuItem trueToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem;
     }
 }

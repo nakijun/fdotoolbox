@@ -133,6 +133,9 @@ namespace FdoToolbox.Core.Controls
                     optionsNode.Nodes[IDX_OPTION_FILTER].Tag = classCopyOption.AttributeFilter;
                     optionsNode.Nodes[IDX_OPTION_FILTER].Text = "Filter (set)";
                 }
+                TreeNode deleteNode = optionsNode.Nodes[IDX_OPTION_DELETE];
+                deleteNode.Tag = classCopyOption.DeleteClassData;
+                deleteNode.Text = deleteNode.Name + " (" + deleteNode.Tag + ")";
             }
         }
 
@@ -190,6 +193,7 @@ namespace FdoToolbox.Core.Controls
         const int IDX_PROPERTIES = 1;
 
         const int IDX_OPTION_FILTER = 0;
+        const int IDX_OPTION_DELETE = 1;
 
         /// <summary>
         /// Fill the tree view with class nodes
@@ -228,9 +232,18 @@ namespace FdoToolbox.Core.Controls
         {
             TreeNode filterNode = new TreeNode();
             filterNode.Name = filterNode.Text = "Filter";
+            filterNode.ToolTipText = "Apply an attribute filter to this (source) class";
             filterNode.ContextMenuStrip = ctxClassFilter;
 
+            TreeNode deleteNode = new TreeNode();
+            deleteNode.Name = "Delete before copy";
+            deleteNode.ToolTipText = "Deletes all data in the target class before copying (may take a while)";
+            deleteNode.Tag = false;
+            deleteNode.Text = deleteNode.Name + " (" + deleteNode.Tag + ")";
+            deleteNode.ContextMenuStrip = ctxDeleteBeforeCopy;
+
             optionsNode.Nodes.Add(filterNode);
+            optionsNode.Nodes.Add(deleteNode);
         }
 
         private void setFilterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -616,9 +629,10 @@ namespace FdoToolbox.Core.Controls
                     }
 
                     TreeNode filterNode = optionsNode.Nodes[IDX_OPTION_FILTER];
+                    TreeNode deleteNode = optionsNode.Nodes[IDX_OPTION_DELETE];
                     if (filterNode.Tag != null)
                         cOptions.AttributeFilter = filterNode.Tag.ToString();
-
+                    cOptions.DeleteClassData = Convert.ToBoolean(deleteNode.Tag);
                     options.AddClassCopyOption(cOptions);
                 }
             }
@@ -672,6 +686,33 @@ namespace FdoToolbox.Core.Controls
                     AppConsole.Alert("Warning", "The target connection does not support multiple spatial contexts\nSelect at most ONE spatial context from the list\nThe target spatial context and any data stored in that context will also be destroyed!");
                 }
             }
+        }
+
+        private void DeleteBeforeCopyEnable_Click(object sender, EventArgs e)
+        {
+            string name = cmbDestConn.SelectedItem.ToString();
+            IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(name);
+            using (FeatureService service = new FeatureService(conn))
+            {
+                TreeNode delNode = mTreeView.SelectedNode;
+                if (service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Delete))
+                {
+                    delNode.Tag = true;
+                }
+                else
+                {
+                    AppConsole.Alert("Unsupported", "The target connection does not support deleting");
+                    delNode.Tag = false;
+                }
+                delNode.Text = delNode.Name + " (" + delNode.Tag + ")";
+            }
+        }
+
+        private void DeleteBeforeCopyDisable_Click(object sender, EventArgs e)
+        {
+            TreeNode delNode = mTreeView.SelectedNode;
+            delNode.Tag = false;
+            delNode.Text = delNode.Name + " (" + delNode.Tag + ")";
         }
     }
 }
