@@ -44,6 +44,11 @@ namespace FdoToolbox.Core
             _GeomFactory = new FgfGeometryFactory();
         }
 
+        public void Dispose()
+        {
+            _GeomFactory.Dispose();
+        }
+
         public IConnection Connection
         {
             get { return _conn; }
@@ -233,11 +238,6 @@ namespace FdoToolbox.Core
             }
         }
 
-        public void Dispose()
-        {
-            _GeomFactory.Dispose();
-        }
-
         public void DestroyDataStore(string dataStoreString)
         {
             NameValueCollection parameters = ExpressUtility.ConvertFromString(dataStoreString);
@@ -262,6 +262,34 @@ namespace FdoToolbox.Core
                 }
                 create.Execute();
             }
+        }
+
+        public List<DataStoreInfo> ListDataStores(bool onlyFdoEnabled)
+        {
+            List<DataStoreInfo> stores = new List<DataStoreInfo>();
+            using (IListDataStores dlist = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ListDataStores) as IListDataStores)
+            {
+                using (IDataStoreReader reader = dlist.Execute())
+                {
+                    while (reader.ReadNext())
+                    {
+                        if (onlyFdoEnabled)
+                        {
+                            if (reader.GetIsFdoEnabled())
+                            {
+                                DataStoreInfo dinfo = new DataStoreInfo(reader);
+                                stores.Add(dinfo);
+                            }
+                        }
+                        else
+                        {
+                            DataStoreInfo dinfo = new DataStoreInfo(reader);
+                            stores.Add(dinfo);
+                        }
+                    }
+                }
+            }
+            return stores;
         }
     }
 }

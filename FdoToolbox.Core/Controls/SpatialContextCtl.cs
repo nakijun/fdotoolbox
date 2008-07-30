@@ -54,10 +54,14 @@ namespace FdoToolbox.Core.Controls
             this.Disposed += delegate { _GeomFactory.Dispose(); };
         }
 
+        private FeatureService _Service;
+
         public SpatialContextCtl(ConnectionInfo conn)
             : this()
         {
             _BoundConnection = conn;
+            _Service = new FeatureService(conn.Connection);
+            this.Disposed += delegate { _Service.Dispose(); };
         }
 
         private void ToggleUI()
@@ -82,8 +86,7 @@ namespace FdoToolbox.Core.Controls
         private void LoadSpatialContexts()
         {
             _bsContexts.Clear();
-            FeatureService service = new FeatureService(this.BoundConnection.Connection);
-            List<SpatialContextInfo> context = service.GetSpatialContexts();
+            List<SpatialContextInfo> context = _Service.GetSpatialContexts();
             context.ForEach(delegate(SpatialContextInfo ctx) { _bsContexts.Add(ctx); });
         }
 
@@ -94,13 +97,9 @@ namespace FdoToolbox.Core.Controls
 
         private void DeleteSpatialContext(SpatialContextInfo ctx)
         {
-            using (IDestroySpatialContext destory = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
-            {
-                destory.Name = ctx.Name;
-                destory.Execute();
-                AppConsole.Alert("Deleted", "Spatial context deleted");
-                _bsContexts.Remove(ctx);
-            }
+            _Service.DestroySpatialContext(ctx);
+            AppConsole.Alert("Deleted", "Spatial context deleted");
+            _bsContexts.Remove(ctx);
         }
 
         private SpatialContextInfo GetSpatialContextByName(string name)
