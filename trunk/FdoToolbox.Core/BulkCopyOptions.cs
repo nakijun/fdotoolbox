@@ -126,6 +126,19 @@ namespace FdoToolbox.Core
             }
         }
 
+        private string _GlobalSpatialFilter;
+
+        /// <summary>
+        /// A global spatial filter to apply to each class. (the condition
+        /// is AND'ed to each class filter. Only applies to Feature Classes.
+        /// </summary>
+        public string GlobalSpatialFilter
+        {
+            get { return _GlobalSpatialFilter; }
+            set { _GlobalSpatialFilter = value; }
+        }
+	
+
         /// <summary>
         /// Deletes a SHP file and all its related files
         /// </summary>

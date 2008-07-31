@@ -79,7 +79,8 @@ namespace FdoToolbox.Core
                 
                 bool copySpatialContexts = Convert.ToBoolean(optionNode.SelectSingleNode("CopySpatialContexts").InnerText);
                 bool coerceDataTypes = Convert.ToBoolean(optionNode.SelectSingleNode("CoerceDataTypes").InnerText);
-                
+                string spatialFilter = optionNode.SelectSingleNode("GlobalSpatialFilter").InnerText;
+
                 IConnection srcConn = FeatureAccessManager.GetConnectionManager().CreateConnection(srcProvider);
                 IConnection destConn = FeatureAccessManager.GetConnectionManager().CreateConnection(destProvider);
 
@@ -108,6 +109,7 @@ namespace FdoToolbox.Core
                 options.TargetSchemaName = destSchema;
                 options.CoerceDataTypes = coerceDataTypes;
                 options.CopySpatialContexts = copySpatialContexts;
+                options.GlobalSpatialFilter = spatialFilter;
                 if (options.CopySpatialContexts)
                 {
                     XmlNodeList contextList = sourceNode.SelectNodes("SpatialContextList/Name");
@@ -222,7 +224,8 @@ namespace FdoToolbox.Core
                 task.Options.TargetSchemaName,
                 classMappingXml,
                 task.Options.CopySpatialContexts,
-                task.Options.CoerceDataTypes
+                task.Options.CoerceDataTypes,
+                task.Options.GlobalSpatialFilter
             );
             System.IO.File.Delete(configFile);
             using (XmlTextWriter writer = new XmlTextWriter(configFile, Encoding.UTF8))
