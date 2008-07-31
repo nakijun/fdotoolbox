@@ -49,6 +49,8 @@ namespace TestApp
             conn.Open();
             Debug.Assert(conn.ConnectionState == ConnectionState.ConnectionState_Open, "Could not open SDF connection");
 
+            AppConsole.WriteLine("Describing");
+
             IDescribeSchema describe = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema;
             FeatureSchemaCollection schemas = null;
             using (describe)
@@ -57,6 +59,8 @@ namespace TestApp
             }
             Debug.Assert(schemas != null, "Should be zero-size, not a null object");
             Debug.Assert(schemas.Count == 0, "Expected empty SDF file");
+
+            AppConsole.WriteLine("Creating class: Class1");
 
             //Create one
             FeatureSchema schema = new FeatureSchema("Test", "Test Schema");
@@ -81,6 +85,8 @@ namespace TestApp
 
             schema.Classes.Add(c1);
 
+            AppConsole.WriteLine("Applying schema");
+
             //Apply new class
             try
             {
@@ -88,12 +94,15 @@ namespace TestApp
                 {
                     apply.FeatureSchema = schema;
                     apply.Execute();
+                    conn.Flush();
                 }
             }
             catch
             {
                 Debug.Fail("Could not apply schema");
             }
+
+            AppConsole.WriteLine("Re-describe");
 
             //re-describe
             describe = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema;
@@ -105,11 +114,10 @@ namespace TestApp
             Debug.Assert(schemas != null, "Expected non-null object");
             Debug.Assert(schemas.Count == 1, "Expected 1 schema");
             Debug.Assert(schemas[0].Classes.Count == 1, "Expected 2 classes in schema");
-
             Debug.Assert(schemas[0].Classes[0].Properties.Count == 3, "Expected 3 properties");
 
             //Now remove the property "Foo"
-
+            AppConsole.WriteLine("Removing Property: Foo");
             ClassDefinition cdef = schemas[0].Classes[0];
             int idx = cdef.Properties.IndexOf("Foo");
             Debug.Assert(idx >= 0, "Expected property Foo to be there for us to delete");
@@ -130,13 +138,10 @@ namespace TestApp
                 Debug.Fail("Could not apply schema");
             }
 
-            conn.Close();
-            conn.Dispose();
+            AppConsole.WriteLine("Can flush: {0}", conn.ConnectionCapabilities.SupportsFlush());
+            conn.Flush();
 
-            conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SDF");
-            conn.ConnectionString = connStr;
-            conn.Open();
-
+            AppConsole.WriteLine("Re-describing");
             //re-describe
             describe = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema;
             schemas = null;
@@ -190,6 +195,7 @@ namespace TestApp
             conn.Open();
             Debug.Assert(conn.ConnectionState == ConnectionState.ConnectionState_Open, "Could not open SDF connection");
 
+            AppConsole.WriteLine("Describing");
             IDescribeSchema describe = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema;
             FeatureSchemaCollection schemas = null;
             using(describe)
@@ -200,6 +206,7 @@ namespace TestApp
             Debug.Assert(schemas.Count == 0, "Expected empty SDF file");
 
             //Create one
+            AppConsole.WriteLine("Creating class: Class1");
             FeatureSchema schema = new FeatureSchema("Test", "Test Schema");
             FeatureClass c1 = new FeatureClass("Class1", "");
             DataPropertyDefinition idP1 = new DataPropertyDefinition("ID", "");
@@ -215,7 +222,7 @@ namespace TestApp
             c1.GeometryProperty = geomP1;
 
             schema.Classes.Add(c1);
-
+            AppConsole.WriteLine("Creating class: Class2");
             FeatureClass c2 = new FeatureClass("Class2", "");
             DataPropertyDefinition idP2 = new DataPropertyDefinition("ID", "");
             idP2.DataType = DataType.DataType_Int32;
@@ -231,6 +238,7 @@ namespace TestApp
 
             schema.Classes.Add(c2);
 
+            AppConsole.WriteLine("Applying schema");
             try
             {
                 using(IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
@@ -244,6 +252,7 @@ namespace TestApp
                 Debug.Fail("Could not apply schema");
             }
 
+            AppConsole.WriteLine("Re-describing");
             describe = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema;
             schemas = null;
             using(describe)
@@ -255,7 +264,7 @@ namespace TestApp
             Debug.Assert(schemas[0].Classes.Count == 2, "Expected 2 classes in schema");
 
             //Now remove Class2
-
+            AppConsole.WriteLine("Removing class: Class2");
             int idx = schemas[0].Classes.IndexOf("Class2");
             Debug.Assert(idx >= 0, "Could not find Class2 in schema Test");
             ClassDefinition cdef = schemas[0].Classes[idx];
@@ -264,13 +273,14 @@ namespace TestApp
             schema.Classes.Remove(cdef);
 
             Debug.Assert(cdef.ElementState == SchemaElementState.SchemaElementState_Detached, "Class2 is not detached");
-
+            AppConsole.WriteLine("Applying schema");
             try
             {
                 using(IApplySchema apply = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
                 {
                     apply.FeatureSchema = schema;
                     apply.Execute();
+                    conn.Flush();
                 }
             }
             catch
@@ -284,15 +294,8 @@ namespace TestApp
             idx = schema.Classes.IndexOf("Class2");
             Debug.Assert(idx < 0, "Class2 was not deleted");
 
-            conn.Close();
-            conn.Dispose();
-
-            conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SDF");
-            conn.ConnectionString = connStr;
-            conn.Open();
-
             //re-describe
-
+            AppConsole.WriteLine("Re-describe");
             describe = conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchema) as IDescribeSchema;
             schemas = null;
             using(describe)
@@ -302,11 +305,9 @@ namespace TestApp
             
             Debug.Assert(schemas != null, "Expected non-null object");
             Debug.Assert(schemas.Count == 1, "Expected 1 schema");
-
+            Debug.Assert(schemas[0].Classes.Count == 1, "Expected 1 class (Class1) in schema");
             idx = schemas[0].Classes.IndexOf("Class2");
             Debug.Assert(idx < 0, "Class2 was not deleted");
-
-            Debug.Assert(schemas[0].Classes.Count == 1, "Expected 1 class (Class1) in schema");
 
             conn.Close();
         }
@@ -385,6 +386,7 @@ namespace TestApp
             try
             {
                 service.ApplySchema(schema);
+                service.Connection.Flush();
             }
             catch
             {
