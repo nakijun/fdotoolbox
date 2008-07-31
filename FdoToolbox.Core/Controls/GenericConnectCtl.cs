@@ -149,7 +149,7 @@ namespace FdoToolbox.Core.Controls
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Cancel();
+            this.Close();
         }
 
         private void InitializeGrid()
