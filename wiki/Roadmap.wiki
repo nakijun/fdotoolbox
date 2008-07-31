@@ -7,9 +7,9 @@
             * Inner Join
             * Left Outer Join
  * Advanced bulk copy options
-      * Delete target before copying
+      * ~~Delete target before copying~~
       * ~~Attribute filtering (per-class)~~
-      * Spatial filter (global)
+      * ~~Spatial filter (global)~~
 
 === Future ===
  * Advanced bulk copy options
