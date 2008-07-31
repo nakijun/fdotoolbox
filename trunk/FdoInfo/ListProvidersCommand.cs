@@ -20,27 +20,31 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OSGeo.FDO.Connections;
+using FdoToolbox.Core;
 using OSGeo.FDO.ClientServices;
 
-namespace FdoUtil
+namespace FdoInfo
 {
-    public abstract class ConnectionCommand : ConsoleCommand
+    public class ListProvidersCommand : ConsoleCommand
     {
-        protected string _provider;
-        protected string _connStr;
-
-        public ConnectionCommand(string provider, string connStr)
+        public override int Execute()
         {
-            _provider = provider;
-            _connStr = connStr;
-        }
-
-        protected IConnection CreateConnection()
-        {
-            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(_provider);
-            conn.ConnectionString = _connStr;
-            return conn;
+            ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders();
+            using (providers)
+            {
+                foreach (Provider provider in providers)
+                {
+                    AppConsole.WriteLine("\nProvider Name: {0}\n", provider.Name);
+                    AppConsole.WriteLine("\tDisplay Name: {0}\n\tDescription: {1}\n\tLibrary Path: {2}\n\tVersion: {3}\n\tFDO Version: {4}\n\tIs Managed: {5}",
+                        provider.DisplayName,
+                        provider.Description,
+                        provider.LibraryPath,
+                        provider.Version,
+                        provider.FeatureDataObjectsVersion,
+                        provider.IsManaged);
+                }
+            }
+            return (int)CommandStatus.E_OK;
         }
     }
 }

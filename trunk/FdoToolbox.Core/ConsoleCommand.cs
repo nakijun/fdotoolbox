@@ -20,9 +20,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using FdoToolbox.Core;
 
-namespace FdoUtil
+namespace FdoToolbox.Core
 {
     public abstract class ConsoleCommand : IConsoleCommand
     {

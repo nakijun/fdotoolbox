@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FdoUtil
+namespace FdoToolbox.Core
 {
     public enum CommandStatus : int
     {
@@ -33,6 +33,10 @@ namespace FdoUtil
         E_FAIL_SERIALIZE_SCHEMA_XML = 5,
         E_FAIL_CREATE_DATASTORE = 6,
         E_FAIL_BULK_COPY = 7,
-        E_FAIL_TASK_VALIDATION = 8
+        E_FAIL_TASK_VALIDATION = 8,
+        E_FAIL_CREATE_CONNECTION = 9,
+        E_FAIL_SCHEMA_NOT_FOUND = 10,
+        E_FAIL_CLASS_NOT_FOUND = 11,
+        E_FAIL_UNSUPPORTED_CAPABILITY = 12
     }
 }
