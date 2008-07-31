@@ -269,10 +269,10 @@ namespace FdoToolbox.Core.Forms
 
                 FgfGeometryFactory geomFactory = new FgfGeometryFactory();
                 //IEnvelope extents = geomFactory.CreateEnvelopeXY(0.0, 0.0, 0.0, 0.0);
-                double maxx = 0.0;
-                double maxy = 0.0;
-                double minx = 0.0;
-                double miny = 0.0;
+                double? maxx = null;
+                double? maxy = null;
+                double? minx = null;
+                double? miny = null;
                 
                 foreach (ClassDefinition classDef in classes)
                 {
@@ -293,13 +293,13 @@ namespace FdoToolbox.Core.Forms
                                         byte[] bGeom = reader.GetGeometry(propertyName);
                                         IGeometry geom = geomFactory.CreateGeometryFromFgf(bGeom);
                                         IEnvelope env = geom.Envelope;
-                                        if (env.MaxX > maxx)
+                                        if (!maxx.HasValue || env.MaxX > maxx)
                                             maxx = env.MaxX;
-                                        if (env.MaxY > maxy)
+                                        if (!maxy.HasValue || env.MaxY > maxy)
                                             maxy = env.MaxY;
-                                        if (env.MinX < minx)
+                                        if (!minx.HasValue || env.MinX < minx)
                                             minx = env.MinX;
-                                        if (env.MinY < miny)
+                                        if (!miny.HasValue || env.MinY < miny)
                                             miny = env.MinY;
                                         env.Dispose();
                                         geom.Dispose();
@@ -309,12 +309,12 @@ namespace FdoToolbox.Core.Forms
                         }
                     }
                 }
-                if ((maxx != 0.0) || (maxy != 0.0) || (minx != 0.0) || (miny != 0.0))
+                if ((maxx.HasValue) || (maxy.HasValue) || (minx.HasValue) || (miny.HasValue))
                 {
-                    txtLowerLeftX.Text = minx.ToString();
-                    txtLowerLeftY.Text = miny.ToString();
-                    txtUpperRightX.Text = maxx.ToString();
-                    txtUpperRightY.Text = maxy.ToString();
+                    txtLowerLeftX.Text = minx.Value.ToString();
+                    txtLowerLeftY.Text = miny.Value.ToString();
+                    txtUpperRightX.Text = maxx.Value.ToString();
+                    txtUpperRightY.Text = maxy.Value.ToString();
                 }
                 geomFactory.Dispose();
             }
