@@ -8,6 +8,10 @@
 			- To migrate existing bulk copy definitions. Add a <GlobalSpatialFilter> element at the end of the <BulkCopyOptions> element.
 		- New command-line utility: FdoInfo.exe. Consult the updated cmd_readme.txt for usage instructions.
 		- New command: Class Data Preview. This basically loads the Data Preview tab, set to the selected schema/class
+		- Expression Editor now supports building Spatial and Distance operations.
+- Fixes:
+	- Connection-bound tabs are now single-instance (per connection). For example: that means you can't open the Schema Management
+	  tab for <connection> more than once. Opening more than once will simply re-activate the existing tab.
 
 v0.4.1
 ------
