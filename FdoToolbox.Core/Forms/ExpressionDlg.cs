@@ -118,7 +118,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Contains";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> CONTAINS GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_CoveredBy:
@@ -126,7 +126,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Covered By";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> COVEREDBY GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_Crosses:
@@ -134,7 +134,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Crosses";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> CROSSES GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_Disjoint:
@@ -142,7 +142,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Disjoint";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> DISJOINT GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_EnvelopeIntersects:
@@ -150,7 +150,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Envelope Intersects";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> INTERSECTS GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_Equals:
@@ -158,7 +158,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Equals";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> EQUALS GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_Inside:
@@ -166,7 +166,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Inside";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> INSIDE GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_Intersects:
@@ -174,7 +174,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Intersects";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> INTERSECTS GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_Overlaps:
@@ -182,7 +182,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Overlaps";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> OVERLAPS GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_Touches:
@@ -190,7 +190,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Touches";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> TOUCHES GeomFromText('<geometry text>')"); };
                         }
                         break;
                     case SpatialOperations.SpatialOperations_Within:
@@ -198,7 +198,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Within";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<geometry property> WITHIN GeomFromText('<geometry text>')"); };
                         }
                         break;
                 }
@@ -220,7 +220,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Beyond";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<property name> BEYOND <expression> <DOUBLE|INTEGER>"); };
                         }
                         break;
                     case DistanceOperations.DistanceOperations_Within:
@@ -228,7 +228,7 @@ namespace FdoToolbox.Core.Forms
                             item = new ToolStripMenuItem();
                             item.Text = item.Name = "Within";
                             item.Tag = op;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implemented", "Not Implemented"); };
+                            item.Click += delegate(object sender, EventArgs e) { InsertText("<property name> WITHIN <expression> <DOUBLE|INTEGER>"); };
                         }
                         break;
                 }
@@ -529,6 +529,31 @@ namespace FdoToolbox.Core.Forms
         public void SetName(string name)
         {
             this.BoundConnection.Name = name;
+        }
+
+        private void pointToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InsertText("POINT <dimensionality> (< [x y] coordinate pair>)");
+        }
+
+        private void lineStringToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InsertText("LINESTRING <dimensionality> (<list of [x y] coordinate pairs>)");
+        }
+
+        private void polygonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InsertText("POLYGON <dimensionality> ((<list of [x y] coordinate pairs>),(<list of [x y] coordinate pairs>))");
+        }
+
+        private void curveStringToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InsertText("CURVESTRING <dimensionality> (<point> (<curve segment collection>))");
+        }
+
+        private void curvePolygonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InsertText("CURVEPOLYGON <dimensionality> (<curve string collection>)");
         }
     }
 
