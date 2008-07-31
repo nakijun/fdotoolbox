@@ -173,6 +173,7 @@ namespace FdoToolbox.Core
             SendMessage("Begin bulk copy of classes");
             int total = 0;
             int classesCopied = 1;
+            string globFilter = _Options.GlobalSpatialFilter;
             foreach (ClassCopyOptions copyOpts in _ClassesToCopy)
             {
                 int copied = 0;
@@ -192,14 +193,41 @@ namespace FdoToolbox.Core
                     SendMessage("Done deleting");
                 }
 
+                //Determine the filter
+                Filter theFilter = null;
+                Filter spatialFilter = null;
+                if (!string.IsNullOrEmpty(globFilter) && copyOpts.SourceClassDefinition.ClassType == ClassType.ClassType_FeatureClass)
+                {
+                    spatialFilter = Filter.Parse(((FeatureClass)copyOpts.SourceClassDefinition).GeometryProperty.Name + " " + globFilter);
+                }
+                Filter attrFilter = null;
+                if (!string.IsNullOrEmpty(copyOpts.AttributeFilter))
+                    attrFilter = Filter.Parse(copyOpts.AttributeFilter);
+
+                //Logical AND both attribute and spatial filters
+                if (attrFilter != null && spatialFilter != null)
+                {
+                    theFilter = Filter.Parse("(" + attrFilter.ToString() + ") AND (" + spatialFilter.ToString() + ")");
+                }
+                //Set spatial filter
+                else if (attrFilter == null && spatialFilter != null)
+                {
+                    theFilter = spatialFilter;
+                }
+                //Set attribute filter
+                else if (attrFilter != null && spatialFilter == null)
+                {
+                    theFilter = attrFilter;
+                }
+
                 //Get count of features to copy
                 int count = 0;
                 using (ISelect select = srcConn.CreateCommand(CommandType.CommandType_Select) as ISelect)
                 {
                     select.SetFeatureClassName(copyOpts.ClassName);
-                    if (!string.IsNullOrEmpty(copyOpts.AttributeFilter))
-                        select.Filter = Filter.Parse(copyOpts.AttributeFilter);
-                    
+                    if (theFilter != null)
+                        select.Filter = theFilter;
+
                     using (IFeatureReader reader = select.Execute())
                     {
                         while (reader.ReadNext())
@@ -212,9 +240,9 @@ namespace FdoToolbox.Core
                 using (ISelect select = srcConn.CreateCommand(CommandType.CommandType_Select) as ISelect)
                 {
                     select.SetFeatureClassName(copyOpts.ClassName);
-                    if (!string.IsNullOrEmpty(copyOpts.AttributeFilter))
-                        select.Filter = Filter.Parse(copyOpts.AttributeFilter);
-                    
+                    if(theFilter != null)
+                        select.Filter = theFilter;
+
                     foreach (string propName in propNames)
                     {
                         select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
