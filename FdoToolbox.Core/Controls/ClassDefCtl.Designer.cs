@@ -220,7 +220,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.dataPropertyToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.table;
             this.dataPropertyToolStripMenuItem.Name = "dataPropertyToolStripMenuItem";
-            this.dataPropertyToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.dataPropertyToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.dataPropertyToolStripMenuItem.Text = "Data Property";
             this.dataPropertyToolStripMenuItem.Click += new System.EventHandler(this.NewDataProperty_Click);
             // 
@@ -228,7 +228,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.geometryPropertyToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.shape_handles;
             this.geometryPropertyToolStripMenuItem.Name = "geometryPropertyToolStripMenuItem";
-            this.geometryPropertyToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.geometryPropertyToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.geometryPropertyToolStripMenuItem.Text = "Geometry Property";
             this.geometryPropertyToolStripMenuItem.Click += new System.EventHandler(this.NewGeometryProperty_Click);
             // 
@@ -237,7 +237,7 @@ namespace FdoToolbox.Core.Controls
             this.rasterPropertyToolStripMenuItem.Enabled = false;
             this.rasterPropertyToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.image;
             this.rasterPropertyToolStripMenuItem.Name = "rasterPropertyToolStripMenuItem";
-            this.rasterPropertyToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.rasterPropertyToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.rasterPropertyToolStripMenuItem.Text = "Raster Property";
             this.rasterPropertyToolStripMenuItem.Click += new System.EventHandler(this.NewRasterProperty_Click);
             // 
@@ -246,7 +246,7 @@ namespace FdoToolbox.Core.Controls
             this.objectPropertyToolStripMenuItem.Enabled = false;
             this.objectPropertyToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.package;
             this.objectPropertyToolStripMenuItem.Name = "objectPropertyToolStripMenuItem";
-            this.objectPropertyToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.objectPropertyToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.objectPropertyToolStripMenuItem.Text = "Object Property";
             this.objectPropertyToolStripMenuItem.Click += new System.EventHandler(this.NewObjectProperty_Click);
             // 
@@ -255,7 +255,7 @@ namespace FdoToolbox.Core.Controls
             this.associationPropertyToolStripMenuItem.Enabled = false;
             this.associationPropertyToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.table_relationship;
             this.associationPropertyToolStripMenuItem.Name = "associationPropertyToolStripMenuItem";
-            this.associationPropertyToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.associationPropertyToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.associationPropertyToolStripMenuItem.Text = "Association Property";
             this.associationPropertyToolStripMenuItem.Click += new System.EventHandler(this.NewAssociationProperty_Click);
             // 

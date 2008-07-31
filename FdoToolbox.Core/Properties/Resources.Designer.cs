@@ -121,6 +121,7 @@ namespace FdoToolbox.Core.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;BulkCopyTask name=&quot;{0}&quot;&gt;
+        ///	&lt;!-- Source connection information --&gt;
         ///	&lt;Source&gt;
         ///		&lt;Provider&gt;{1}&lt;/Provider&gt;
         ///		&lt;ConnectionString&gt;{2}&lt;/ConnectionString&gt;
@@ -129,17 +130,16 @@ namespace FdoToolbox.Core.Properties {
         ///			{4}		  
         ///		&lt;/SpatialContextList&gt;
         ///	&lt;/Source&gt;
+        ///	&lt;!-- Target connection information --&gt;
         ///	&lt;Target&gt;
         ///		&lt;Provider&gt;{5}&lt;/Provider&gt;
         ///		&lt;ConnectionString&gt;{6}&lt;/ConnectionString&gt;
         ///		&lt;Schema&gt;{7}&lt;/Schema&gt;
         ///	&lt;/Target&gt;
+        ///	&lt;!-- Class mappings --&gt;
         ///	&lt;ClassMappings&gt;
         ///		{8}
-        ///	&lt;/ClassMappings&gt;
-        ///	&lt;BulkCopyOptions&gt;
-        ///		&lt;CopySpatialContexts&gt;{9}&lt;/CopySpatialContexts&gt;
-        ///		&lt;CoerceDataTypes&gt;{10}&lt;/Coerce [rest of string was truncated]&quot;;.
+        ///	&lt;/ClassMapp [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BulkCopyTask {
             get {

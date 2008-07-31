@@ -63,6 +63,12 @@
     <Compile Include="CmdConsoleErrorStream.cs" />
     <Compile Include="CmdConsoleOutputStream.cs" />
     <Compile Include="CommandStatus.cs" />
+    <Compile Include="Controls\ConnectionBoundControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectionBoundControl.Designer.cs">
+      <DependentUpon>ConnectionBoundControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConnectionCommand.cs" />
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="ConnLoader.cs" />
@@ -75,12 +81,14 @@
       <DependentUpon>BaseDocumentCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="ConnectionMgr.cs" />
+    <Compile Include="Controls\ConnectionBoundTabManager.cs" />
     <Compile Include="Controls\CoordSysManagerCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\CoordSysManagerCtl.Designer.cs">
       <DependentUpon>CoordSysManagerCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\IConnectionBoundTabManager.cs" />
     <Compile Include="CoordinateSystem.cs" />
     <Compile Include="CoordSysCatalog.cs" />
     <Compile Include="FeatureService.cs" />

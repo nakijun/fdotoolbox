@@ -42,6 +42,15 @@ namespace FdoToolbox.Core
     /// </summary>
     public class CoreModule : ModuleBase, ICommandVerifier
     {
+        #region Connection-bound tab types
+        
+        public const string TAB_DATA_PREVIEW = "TAB_DATA_PREVIEW";
+        public const string TAB_SPATIAL_CONTEXT_MGMT = "TAB_SPATIAL_CONTEXT_MGMT";
+        public const string TAB_SCHEMA_MGMT = "TAB_SCHEMA_MGMT";
+        public const string TAB_DATASTORE_MGMT = "TAB_DATASTORE_MGMT";
+        
+        #endregion
+
         #region Command Names
 
         public const string CMD_QUIT = "quit";
@@ -101,6 +110,11 @@ namespace FdoToolbox.Core
             {
                 AppConsole.WriteLine("Type \"{0}\" for a list of all available commands", CMD_CMDLIST);
             };
+
+            HostApplication.Instance.TabManager.RegisterTabType(typeof(DataPreviewCtl));
+            HostApplication.Instance.TabManager.RegisterTabType(typeof(DataStoreMgrCtl));
+            HostApplication.Instance.TabManager.RegisterTabType(typeof(SchemaMgrCtl));
+            HostApplication.Instance.TabManager.RegisterTabType(typeof(SpatialContextCtl));
         }
 
         public override void Cleanup() { }
@@ -282,12 +296,15 @@ namespace FdoToolbox.Core
             string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                SchemaMgrCtl ctl = new SchemaMgrCtl(connInfo, schemaName);
-                ctl.OnSchemasApplied += delegate
+                IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(SchemaMgrCtl), connInfo);
+
+                SchemaMgrCtl schemaCtl = (SchemaMgrCtl)ctl.WrappedControl;
+                schemaCtl.SetInitialSchema(schemaName);
+                schemaCtl.OnSchemasApplied += delegate
                 {
                     HostApplication.Instance.Shell.ObjectExplorer.RefreshConnection(connInfo.Name);
                 };
-                HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+                HostApplication.Instance.Shell.ShowDocumentWindow(schemaCtl);
             }
         }
 
@@ -384,8 +401,8 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            BaseDocumentCtl ctl = new DataPreviewCtl(connInfo);
-            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(DataPreviewCtl), connInfo);
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl.WrappedControl);
         }
 
         [Command(CoreModule.CMD_LOADTASK, "Load Task", ImageResourceName = "folder")]
@@ -481,8 +498,8 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            SpatialContextCtl ctl = new SpatialContextCtl(connInfo);
-            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(SpatialContextCtl), connInfo);
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl.WrappedControl);
         }
 
         [Command(CoreModule.CMD_RENAMECONNECTION, "Rename Connection", InvocationType = CommandInvocationType.UI)]
@@ -536,8 +553,8 @@ namespace FdoToolbox.Core
             ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
             if (connInfo != null)
             {
-                DataStoreMgrCtl ctl = new DataStoreMgrCtl(connInfo);
-                HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+                IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(DataStoreMgrCtl), connInfo);
+                HostApplication.Instance.Shell.ShowDocumentWindow(ctl.WrappedControl);
             }
         }
 
@@ -672,8 +689,10 @@ namespace FdoToolbox.Core
                 ClassDefinition theClass = service.GetClassByName(schemaName, className);
                 if (theClass != null)
                 {
-                    DataPreviewCtl ctl = new DataPreviewCtl(connInfo, schemaName, className);
-                    HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+                    IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(DataPreviewCtl), connInfo);
+                    DataPreviewCtl dpreview = (DataPreviewCtl)ctl.WrappedControl;
+                    dpreview.SetInitialClass(schemaName, className);
+                    HostApplication.Instance.Shell.ShowDocumentWindow(dpreview);
                 }
             }
         }

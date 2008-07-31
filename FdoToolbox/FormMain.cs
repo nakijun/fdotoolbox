@@ -39,41 +39,14 @@ namespace FdoToolbox
         public FormMain()
         {
             InitializeComponent();
-            _BoundControls = new Dictionary<string, List<IConnectionBoundCtl>>();
             ObjectExplorer objExp = new ObjectExplorer();
             ConsoleWindow conWin = new ConsoleWindow();
             _objExplorer = objExp;
             _console = conWin;
             conWin.Show(mDockPanel, DockState.DockBottom);
             objExp.Show(mDockPanel, DockState.DockLeft);
-            HostApplication.Instance.ConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(ConnectionManager_ConnectionRenamed);
-            HostApplication.Instance.ConnectionManager.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(ConnectionManager_BeforeConnectionRemove);
         }
 
-        void ConnectionManager_ConnectionRenamed(string oldName, string newName)
-        {
-            if (_BoundControls.ContainsKey(oldName))
-            {
-                //Rename all connections in old list
-                List<IConnectionBoundCtl> controls = _BoundControls[oldName];
-                foreach (IConnectionBoundCtl ctl in controls)
-                {
-                    ctl.SetName(newName);
-                }
-
-                _BoundControls.Remove(oldName);
-                _BoundControls.Add(newName, controls);
-            }
-        }
-
-        void ConnectionManager_BeforeConnectionRemove(string name, ref bool cancel)
-        {
-            if (_BoundControls.ContainsKey(name) && _BoundControls[name].Count > 0)
-            {
-                cancel = !AppConsole.Confirm("Tabs still open", "There are tabs still open which rely on the connection you are about to close.\nIf you close the connection they will be closed too.\n\nClose connection?");
-            }
-        }
-        
         public IObjectExplorer ObjectExplorer
         {
             get { return _objExplorer; }
@@ -104,10 +77,47 @@ namespace FdoToolbox
             return this.MainMenu.Items[name] as ToolStripMenuItem;
         }
 
-        private Dictionary<string, List<IConnectionBoundCtl>> _BoundControls;
+        
+        public void ShowDocumentWindow(IConnectionBoundCtl ctl)
+        {
+            DockContent content = FindDocumentWindow(ctl.WrappedControl);
+            if (content == null)
+            {
+                content = new DockContent();
+                ctl.WrappedControl.Dock = DockStyle.Fill;
+                
+                content.Controls.Add(ctl.WrappedControl);
+                ctl.WrappedControl.OnSetTabText += delegate(string title) { content.TabText = title; };
+                ctl.WrappedControl.OnClose += delegate { content.Close(); };
+                ctl.WrappedControl.OnAccept += delegate { content.DialogResult = DialogResult.OK; };
+                ctl.WrappedControl.OnCancel += delegate { content.DialogResult = DialogResult.Cancel; };
+                content.Text = content.TabText = ctl.WrappedControl.Title;
+            }
+            content.Show(mDockPanel, DockState.Document);
+        }
+
+        private DockContent FindDocumentWindow(BaseDocumentCtl baseDocumentCtl)
+        {
+            IDockContent [] documents = mDockPanel.DocumentsToArray();
+            foreach (IDockContent dock in documents)
+            {
+                DockContent content = dock as DockContent;
+                if (content != null)
+                {
+                    if (content.Controls.Contains(baseDocumentCtl))
+                        return content;
+                }
+            }
+            return null;
+        }
 
         public void ShowDocumentWindow(BaseDocumentCtl ctl)
         {
+            if (ctl is IConnectionBoundCtl)
+            {
+                ShowDocumentWindow(ctl as IConnectionBoundCtl);
+                return;
+            }
             ctl.Dock = DockStyle.Fill;
             DockContent content = new DockContent();
             content.Controls.Add(ctl);
@@ -116,30 +126,6 @@ namespace FdoToolbox
             ctl.OnAccept += delegate { content.DialogResult = DialogResult.OK; };
             ctl.OnCancel += delegate { content.DialogResult = DialogResult.Cancel; };
             content.Text = content.TabText = ctl.Title;
-            IConnectionBoundCtl cbCtl = ctl as IConnectionBoundCtl;
-            if (cbCtl != null)
-            {
-                IConnectionMgr connMgr = HostApplication.Instance.ConnectionManager;
-                string name = cbCtl.BoundConnection.Name;
-                cbCtl.SetName(name);
-                if (!_BoundControls.ContainsKey(name))
-                    _BoundControls[name] = new List<IConnectionBoundCtl>();
-
-                _BoundControls[name].Add(cbCtl);
-                ConnectionEventHandler removeHandler = new ConnectionEventHandler(delegate(string connName) 
-                {
-                    if (cbCtl.BoundConnection.Name == connName)
-                        ctl.Close();
-                });
-                
-                connMgr.ConnectionRemoved += removeHandler;
-                ctl.Disposed += delegate
-                {
-                    connMgr.ConnectionRemoved -= removeHandler;
-                    if(_BoundControls.ContainsKey(name))
-                        _BoundControls[name].Remove(cbCtl);
-                };
-            }
             content.Show(mDockPanel, DockState.Document);
         }
         /*

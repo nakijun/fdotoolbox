@@ -26,6 +26,7 @@ using FdoToolbox.Core.Forms;
 using System.Reflection;
 using System.IO;
 using System.Drawing;
+using FdoToolbox.Core.Controls;
 
 namespace FdoToolbox.Core
 {
@@ -39,6 +40,7 @@ namespace FdoToolbox.Core
         private IModuleMgr _moduleMgr;
         private ITaskManager _taskMgr;
         private IConnectionMgr _connMgr;
+        private IConnectionBoundTabManager _TabManager;
         private ICoordinateSystemCatalog _CsCatalog;
         private static HostApplication _Instance;
 
@@ -65,6 +67,8 @@ namespace FdoToolbox.Core
                     _shell = shell;
                     _shell.Title = this.Name;
                     _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
+
+                    _TabManager = new ConnectionBoundTabManager();
 
                     //Set streams for Application Console
                     AppConsole.In = new TextConsoleInputStream(_shell.ConsoleWindow.InputTextBox);
@@ -453,6 +457,14 @@ namespace FdoToolbox.Core
         public IConnectionMgr ConnectionManager
         {
             get { return _connMgr; }
+        }
+
+        /// <summary>
+        /// The connection-bound tab manager
+        /// </summary>
+        public IConnectionBoundTabManager TabManager
+        {
+            get { return _TabManager; }
         }
 
         /// <summary>
