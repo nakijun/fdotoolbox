@@ -260,11 +260,7 @@ namespace FdoToolbox.Core.Forms
                         break;
                     case ConditionType.ConditionType_Distance:
                         {
-                            //Not supported atm
-                            item = new ToolStripMenuItem();
-                            item.Text = item.Name = "Distance";
-                            item.Tag = cond;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implented", "Not Implemented"); };
+                            btnDistance.Visible = true;
                         }
                         break;
                     case ConditionType.ConditionType_In:
@@ -294,10 +290,7 @@ namespace FdoToolbox.Core.Forms
                     case ConditionType.ConditionType_Spatial:
                         {
                             //Not supported atm
-                            item = new ToolStripMenuItem();
-                            item.Text = item.Name = "Spatial";
-                            item.Tag = cond;
-                            item.Click += delegate(object sender, EventArgs e) { AppConsole.Alert("Not Implented", "Not Implemented"); };
+                            btnSpatial.Visible = true;
                         }
                         break;
                 }
