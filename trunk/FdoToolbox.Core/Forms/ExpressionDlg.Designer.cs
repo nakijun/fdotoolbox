@@ -41,6 +41,12 @@ namespace FdoToolbox.Core.Forms
             this.insertPropertyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.insertGeometryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lineStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.polygonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.curveStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.curvePolygonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mToolStrip.SuspendLayout();
             this.ctxExpression.SuspendLayout();
             this.SuspendLayout();
@@ -122,15 +128,16 @@ namespace FdoToolbox.Core.Forms
             // ctxExpression
             // 
             this.ctxExpression.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.insertPropertyToolStripMenuItem});
+            this.insertPropertyToolStripMenuItem,
+            this.insertGeometryToolStripMenuItem});
             this.ctxExpression.Name = "ctxExpression";
-            this.ctxExpression.Size = new System.Drawing.Size(149, 26);
+            this.ctxExpression.Size = new System.Drawing.Size(165, 70);
             // 
             // insertPropertyToolStripMenuItem
             // 
             this.insertPropertyToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.table;
             this.insertPropertyToolStripMenuItem.Name = "insertPropertyToolStripMenuItem";
-            this.insertPropertyToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.insertPropertyToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.insertPropertyToolStripMenuItem.Text = "Insert Property";
             // 
             // btnOK
@@ -155,6 +162,54 @@ namespace FdoToolbox.Core.Forms
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // insertGeometryToolStripMenuItem
+            // 
+            this.insertGeometryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pointToolStripMenuItem,
+            this.lineStringToolStripMenuItem,
+            this.polygonToolStripMenuItem,
+            this.curveStringToolStripMenuItem,
+            this.curvePolygonToolStripMenuItem});
+            this.insertGeometryToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.shape_handles;
+            this.insertGeometryToolStripMenuItem.Name = "insertGeometryToolStripMenuItem";
+            this.insertGeometryToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.insertGeometryToolStripMenuItem.Text = "Insert Geometry";
+            // 
+            // pointToolStripMenuItem
+            // 
+            this.pointToolStripMenuItem.Name = "pointToolStripMenuItem";
+            this.pointToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pointToolStripMenuItem.Text = "Point";
+            this.pointToolStripMenuItem.Click += new System.EventHandler(this.pointToolStripMenuItem_Click);
+            // 
+            // lineStringToolStripMenuItem
+            // 
+            this.lineStringToolStripMenuItem.Name = "lineStringToolStripMenuItem";
+            this.lineStringToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.lineStringToolStripMenuItem.Text = "LineString";
+            this.lineStringToolStripMenuItem.Click += new System.EventHandler(this.lineStringToolStripMenuItem_Click);
+            // 
+            // polygonToolStripMenuItem
+            // 
+            this.polygonToolStripMenuItem.Name = "polygonToolStripMenuItem";
+            this.polygonToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.polygonToolStripMenuItem.Text = "Polygon";
+            this.polygonToolStripMenuItem.Click += new System.EventHandler(this.polygonToolStripMenuItem_Click);
+            // 
+            // curveStringToolStripMenuItem
+            // 
+            this.curveStringToolStripMenuItem.Name = "curveStringToolStripMenuItem";
+            this.curveStringToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.curveStringToolStripMenuItem.Text = "CurveString";
+            this.curveStringToolStripMenuItem.Click += new System.EventHandler(this.curveStringToolStripMenuItem_Click);
+            // 
+            // curvePolygonToolStripMenuItem
+            // 
+            this.curvePolygonToolStripMenuItem.Name = "curvePolygonToolStripMenuItem";
+            this.curvePolygonToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.curvePolygonToolStripMenuItem.Text = "CurvePolygon";
+            this.curvePolygonToolStripMenuItem.Click += new System.EventHandler(this.curvePolygonToolStripMenuItem_Click);
             // 
             // ExpressionDlg
             // 
@@ -192,5 +247,11 @@ namespace FdoToolbox.Core.Forms
         private System.Windows.Forms.ToolStripDropDownButton btnSpatial;
         private System.Windows.Forms.ContextMenuStrip ctxExpression;
         private System.Windows.Forms.ToolStripMenuItem insertPropertyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem insertGeometryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pointToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lineStringToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem polygonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem curveStringToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem curvePolygonToolStripMenuItem;
     }
 }
