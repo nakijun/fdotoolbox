@@ -1,3 +1,14 @@
+- Enhancements:
+	- General:
+		- New per-class copy option: Delete before copy
+			- Please be warned that deleting existing data may take a while. Only enable this option if necessary!
+		- Added global spatial filter bulk copy option. This is a textual spatial filter that is applied to each feature class
+		  that is being copied
+			- eg. "INTERSECTS GeomFromText('POLYGON XY ( 100 100, 0 100, 100 0, 0 0 )')
+			- To migrate existing bulk copy definitions. Add a <GlobalSpatialFilter> element at the end of the <BulkCopyOptions> element.
+		- New command-line utility: FdoInfo.exe. Consult the updated cmd_readme.txt for usage instructions.
+		- New command: Class Data Preview. This basically loads the Data Preview tab, set to the selected schema/class
+
 v0.4.1
 ------
 - Enhancements:
