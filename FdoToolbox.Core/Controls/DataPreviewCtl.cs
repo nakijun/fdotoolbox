@@ -63,6 +63,16 @@ namespace FdoToolbox.Core.Controls
             ToggleUI();
         }
 
+        private string _initialSchema;
+        private string _initialClass;
+
+        public DataPreviewCtl(ConnectionInfo connInfo, string schemaName, string className)
+            : this(connInfo)
+        {
+            _initialSchema = schemaName;
+            _initialClass = className;
+        }
+
         private void ToggleUI()
         {
             if (!this.BoundConnection.Connection.ConnectionCapabilities.SupportsSQL())
@@ -76,6 +86,37 @@ namespace FdoToolbox.Core.Controls
             FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(this.BoundConnection.Name);
             cmbSchema.DataSource = service.DescribeSchema();
             cmbAggSchema.DataSource = service.DescribeSchema();
+
+            if (!string.IsNullOrEmpty(_initialSchema) && !string.IsNullOrEmpty(_initialClass))
+            {
+                switch (tabQueryMode.SelectedIndex)
+                {
+                    case TAB_STANDARD:
+                        foreach (object obj in cmbSchema.Items)
+                        {
+                            if ((obj as FeatureSchema).Name == _initialSchema)
+                                cmbSchema.SelectedItem = obj;
+                        }
+                        foreach (object obj in cmbClass.Items)
+                        {
+                            if ((obj as ClassDefinition).Name == _initialClass)
+                                cmbClass.SelectedItem = obj;
+                        }
+                        break;
+                    case TAB_AGGREGATE:
+                        foreach (object obj in cmbAggSchema.Items)
+                        {
+                            if ((obj as FeatureSchema).Name == _initialSchema)
+                                cmbAggSchema.SelectedItem = obj;
+                        }
+                        foreach (object obj in cmbAggClass.Items)
+                        {
+                            if ((obj as ClassDefinition).Name == _initialClass)
+                                cmbAggClass.SelectedItem = obj;
+                        }
+                        break;
+                }
+            }
             base.OnLoad(e);
         }
 

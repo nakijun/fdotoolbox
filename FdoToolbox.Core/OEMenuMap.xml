@@ -76,6 +76,7 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="editschemaattributes" />		  
 		</SelectedSchema>
 		<SelectedClass>
+			<Command name="previewclass" displayName="Data Preview" />
 			<Command name="editclassattributes" />
 		</SelectedClass>
 		<SelectedTask>

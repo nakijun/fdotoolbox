@@ -82,6 +82,7 @@ namespace FdoToolbox.Core
         public const string CMD_SAVE_SCHEMA_XML = "saveschemaxml";
         public const string CMD_SAVE_SCHEMA_SDF = "saveschemasdf";
         public const string CMD_DELETE_SCHEMA = "delschema";
+        public const string CMD_PREVIEWCLASS = "previewclass";
         #endregion
 
         public override string Name
@@ -656,6 +657,24 @@ namespace FdoToolbox.Core
                 FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
                 service.DestroySchema(schemaName);
                 AppConsole.Alert("Delete Schema", "Schema Deleted");
+            }
+        }
+
+        [Command(CoreModule.CMD_PREVIEWCLASS, "Class Data Preview", InvocationType = CommandInvocationType.UI, ImageResourceName = "zoom")]
+        public void PreviewClass()
+        {
+            ConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedConnection();
+            string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
+            string className = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedClass();
+            if (connInfo != null)
+            {
+                FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connInfo.Name);
+                ClassDefinition theClass = service.GetClassByName(schemaName, className);
+                if (theClass != null)
+                {
+                    DataPreviewCtl ctl = new DataPreviewCtl(connInfo, schemaName, className);
+                    HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+                }
             }
         }
 
