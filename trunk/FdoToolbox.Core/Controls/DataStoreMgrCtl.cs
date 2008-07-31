@@ -29,7 +29,7 @@ using FdoToolbox.Core.Forms;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class DataStoreMgrCtl : BaseDocumentCtl, IConnectionBoundCtl
+    public partial class DataStoreMgrCtl : ConnectionBoundControl
     {
         private FeatureService _Service;
 
@@ -38,9 +38,10 @@ namespace FdoToolbox.Core.Controls
             InitializeComponent();
         }
 
-        public DataStoreMgrCtl(ConnectionInfo connInfo)
-            : this()
+        public DataStoreMgrCtl(ConnectionInfo connInfo, string key)
+            : base(connInfo, key)
         {
+            InitializeComponent();
             _BoundConnection = connInfo;
             _Service = new FeatureService(connInfo.Connection);
             ToggleUI();
@@ -66,14 +67,8 @@ namespace FdoToolbox.Core.Controls
             grdDataStores.DataSource = stores;
         }
 
-        private ConnectionInfo _BoundConnection;
 
-        public ConnectionInfo BoundConnection
-        {
-            get { return _BoundConnection; }
-        }
-
-        public void SetName(string name)
+        public override void SetName(string name)
         {
             this.Title = "Data Store Management - " + name;
         }
@@ -133,6 +128,11 @@ namespace FdoToolbox.Core.Controls
                 AppConsole.Alert("Create datastore", "Datastore created");
                 ListDataStores();
             }
+        }
+
+        public override string GetTabType()
+        {
+            return CoreModule.TAB_DATASTORE_MGMT;
         }
     }
 }

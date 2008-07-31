@@ -30,7 +30,7 @@ using FdoToolbox.Core.Controls;
 
 namespace FdoToolbox.Core.Forms
 {
-    public partial class DataPropertyDefinitionDlg : Form, IConnectionBoundCtl
+    public partial class DataPropertyDefinitionDlg : Form
     {
         private ConnectionInfo _BoundConnection;
 

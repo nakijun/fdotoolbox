@@ -34,7 +34,7 @@ using System.IO;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class SchemaMgrCtl : BaseDocumentCtl, IConnectionBoundCtl
+    public partial class SchemaMgrCtl : ConnectionBoundControl
     {
         public SchemaMgrCtl()
         {
@@ -48,14 +48,15 @@ namespace FdoToolbox.Core.Controls
 
         public event EventHandler OnSchemasApplied;
 
-        private ConnectionInfo _BoundConnection;
-
         private FeatureSchemaCollection _Schemas;
         private FeatureService _Service;
 
-        public SchemaMgrCtl(ConnectionInfo conn)
-            : this()
+        public SchemaMgrCtl(ConnectionInfo conn, string key)
+            : base(conn, key)
         {
+            InitializeComponent();
+            _bsClasses = new BindingSource();
+            _bsSchemas = new BindingSource();
             _BoundConnection = conn;
             _Service = HostApplication.Instance.ConnectionManager.CreateService(_BoundConnection.Name);
             _Schemas = _Service.DescribeSchema();
@@ -65,8 +66,7 @@ namespace FdoToolbox.Core.Controls
             ToggleUI();
         }
 
-        public SchemaMgrCtl(ConnectionInfo conn, string schemaName)
-            : this(conn)
+        public void SetInitialSchema(string schemaName)
         {
             if (!string.IsNullOrEmpty(schemaName))
             {
@@ -236,11 +236,6 @@ namespace FdoToolbox.Core.Controls
             CheckDirtyStatus();
         }
 
-        public ConnectionInfo BoundConnection
-        {
-            get { return _BoundConnection; }
-        }
-
         private void SaveSchemaAsXML_Click(object sender, EventArgs e)
         {
             FeatureSchema selectedSchema = lstSchemas.SelectedItem as FeatureSchema;
@@ -268,10 +263,15 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
-        public void SetName(string name)
+        public override void SetName(string name)
         {
             this.BoundConnection.Name = name;
             this.Title = "Schema Management - " + this.BoundConnection.Name;
+        }
+
+        public override string GetTabType()
+        {
+            return CoreModule.TAB_SCHEMA_MGMT;
         }
     }
 }

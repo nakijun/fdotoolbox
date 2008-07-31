@@ -147,7 +147,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.asXMLToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.page_white_code;
             this.asXMLToolStripMenuItem.Name = "asXMLToolStripMenuItem";
-            this.asXMLToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.asXMLToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.asXMLToolStripMenuItem.Text = "As XML";
             this.asXMLToolStripMenuItem.ToolTipText = "Save the selected schema definition to an XML file";
             this.asXMLToolStripMenuItem.Click += new System.EventHandler(this.SaveSchemaAsXML_Click);
@@ -156,7 +156,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.asNewSDFToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.database;
             this.asNewSDFToolStripMenuItem.Name = "asNewSDFToolStripMenuItem";
-            this.asNewSDFToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.asNewSDFToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.asNewSDFToolStripMenuItem.Text = "As New SDF";
             this.asNewSDFToolStripMenuItem.ToolTipText = "Apply this selected schema to a new SDF file";
             this.asNewSDFToolStripMenuItem.Click += new System.EventHandler(this.SaveSchemaAsSDF_Click);
@@ -213,14 +213,14 @@ namespace FdoToolbox.Core.Controls
             // featureClassToolStripMenuItem
             // 
             this.featureClassToolStripMenuItem.Name = "featureClassToolStripMenuItem";
-            this.featureClassToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.featureClassToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.featureClassToolStripMenuItem.Text = "Feature Class";
             this.featureClassToolStripMenuItem.Click += new System.EventHandler(this.featureClassToolStripMenuItem_Click);
             // 
             // classNonFeatureToolStripMenuItem
             // 
             this.classNonFeatureToolStripMenuItem.Name = "classNonFeatureToolStripMenuItem";
-            this.classNonFeatureToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.classNonFeatureToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.classNonFeatureToolStripMenuItem.Text = "Class (Non-Feature)";
             this.classNonFeatureToolStripMenuItem.Click += new System.EventHandler(this.classNonFeatureToolStripMenuItem_Click);
             // 
@@ -228,21 +228,21 @@ namespace FdoToolbox.Core.Controls
             // 
             this.networkClassToolStripMenuItem.Enabled = false;
             this.networkClassToolStripMenuItem.Name = "networkClassToolStripMenuItem";
-            this.networkClassToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.networkClassToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.networkClassToolStripMenuItem.Text = "Network Class";
             // 
             // networkLayerClassToolStripMenuItem
             // 
             this.networkLayerClassToolStripMenuItem.Enabled = false;
             this.networkLayerClassToolStripMenuItem.Name = "networkLayerClassToolStripMenuItem";
-            this.networkLayerClassToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.networkLayerClassToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.networkLayerClassToolStripMenuItem.Text = "Network Layer Class";
             // 
             // networkLinkClassToolStripMenuItem
             // 
             this.networkLinkClassToolStripMenuItem.Enabled = false;
             this.networkLinkClassToolStripMenuItem.Name = "networkLinkClassToolStripMenuItem";
-            this.networkLinkClassToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.networkLinkClassToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.networkLinkClassToolStripMenuItem.Text = "Network Link Class";
             // 
             // btnEditClass

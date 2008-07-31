@@ -33,7 +33,7 @@ using OSGeo.FDO.Filter;
 
 namespace FdoToolbox.Core.Forms
 {
-    public partial class ExpressionDlg : Form, IConnectionBoundCtl
+    public partial class ExpressionDlg : Form
     {
         private ConnectionInfo _BoundConnection;
 

@@ -38,15 +38,13 @@ using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class DataPreviewCtl : BaseDocumentCtl, IConnectionBoundCtl
+    public partial class DataPreviewCtl : ConnectionBoundControl
     {
         const int TAB_STANDARD = 0;
         const int TAB_AGGREGATE = 1;
         const int TAB_SQL = 2;
 
         private FgfGeometryFactory _GeomFactory;
-
-        private ConnectionInfo _BoundConnection;
 
         internal DataPreviewCtl()
         {
@@ -56,21 +54,15 @@ namespace FdoToolbox.Core.Controls
             this.Disposed += delegate { _GeomFactory.Dispose(); };
         }
 
-        public DataPreviewCtl(ConnectionInfo conn)
-            : this()
+        public DataPreviewCtl(ConnectionInfo conn, string key)
+            : base(conn, key)
         {
+            InitializeComponent();
+            cmbLimit.SelectedIndex = 0;
+            _GeomFactory = new FgfGeometryFactory();
+            this.Disposed += delegate { _GeomFactory.Dispose(); };
             _BoundConnection = conn;
             ToggleUI();
-        }
-
-        private string _initialSchema;
-        private string _initialClass;
-
-        public DataPreviewCtl(ConnectionInfo connInfo, string schemaName, string className)
-            : this(connInfo)
-        {
-            _initialSchema = schemaName;
-            _initialClass = className;
         }
 
         private void ToggleUI()
@@ -86,37 +78,6 @@ namespace FdoToolbox.Core.Controls
             FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(this.BoundConnection.Name);
             cmbSchema.DataSource = service.DescribeSchema();
             cmbAggSchema.DataSource = service.DescribeSchema();
-
-            if (!string.IsNullOrEmpty(_initialSchema) && !string.IsNullOrEmpty(_initialClass))
-            {
-                switch (tabQueryMode.SelectedIndex)
-                {
-                    case TAB_STANDARD:
-                        foreach (object obj in cmbSchema.Items)
-                        {
-                            if ((obj as FeatureSchema).Name == _initialSchema)
-                                cmbSchema.SelectedItem = obj;
-                        }
-                        foreach (object obj in cmbClass.Items)
-                        {
-                            if ((obj as ClassDefinition).Name == _initialClass)
-                                cmbClass.SelectedItem = obj;
-                        }
-                        break;
-                    case TAB_AGGREGATE:
-                        foreach (object obj in cmbAggSchema.Items)
-                        {
-                            if ((obj as FeatureSchema).Name == _initialSchema)
-                                cmbAggSchema.SelectedItem = obj;
-                        }
-                        foreach (object obj in cmbAggClass.Items)
-                        {
-                            if ((obj as ClassDefinition).Name == _initialClass)
-                                cmbAggClass.SelectedItem = obj;
-                        }
-                        break;
-                }
-            }
             base.OnLoad(e);
         }
 
@@ -651,11 +612,6 @@ namespace FdoToolbox.Core.Controls
             grdPreview.DataSource = null;
         }
 
-        public ConnectionInfo BoundConnection
-        {
-            get { return _BoundConnection; }
-        }
-
         private void cmbAggSchema_SelectedIndexChanged(object sender, EventArgs e)
         {
             FeatureSchema schema = cmbAggSchema.SelectedItem as FeatureSchema;
@@ -724,10 +680,49 @@ namespace FdoToolbox.Core.Controls
         }
 
 
-        public void SetName(string name)
+        public override void SetName(string name)
         {
             this.BoundConnection.Name = name;
             this.Title = "Data Preview - " + this.BoundConnection.Name;
+        }
+
+        public void SetInitialClass(string schemaName, string className)
+        {
+            if (!string.IsNullOrEmpty(schemaName) && !string.IsNullOrEmpty(className))
+            {
+                switch (tabQueryMode.SelectedIndex)
+                {
+                    case TAB_STANDARD:
+                        foreach (object obj in cmbSchema.Items)
+                        {
+                            if ((obj as FeatureSchema).Name == schemaName)
+                                cmbSchema.SelectedItem = obj;
+                        }
+                        foreach (object obj in cmbClass.Items)
+                        {
+                            if ((obj as ClassDefinition).Name == className)
+                                cmbClass.SelectedItem = obj;
+                        }
+                        break;
+                    case TAB_AGGREGATE:
+                        foreach (object obj in cmbAggSchema.Items)
+                        {
+                            if ((obj as FeatureSchema).Name == schemaName)
+                                cmbAggSchema.SelectedItem = obj;
+                        }
+                        foreach (object obj in cmbAggClass.Items)
+                        {
+                            if ((obj as ClassDefinition).Name == className)
+                                cmbAggClass.SelectedItem = obj;
+                        }
+                        break;
+                }
+            }
+        }
+
+        public override string GetTabType()
+        {
+            return CoreModule.TAB_DATA_PREVIEW;
         }
     }
 }

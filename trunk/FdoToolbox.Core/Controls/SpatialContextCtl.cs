@@ -34,9 +34,8 @@ namespace FdoToolbox.Core.Controls
     /// <summary>
     /// A control to manage spatial contexts for a given connection
     /// </summary>
-    public partial class SpatialContextCtl : BaseDocumentCtl, IConnectionBoundCtl
+    public partial class SpatialContextCtl : ConnectionBoundControl
     {
-        private ConnectionInfo _BoundConnection;
         private FgfGeometryFactory _GeomFactory;
         private BindingSource _bsContexts;
 
@@ -56,9 +55,15 @@ namespace FdoToolbox.Core.Controls
 
         private FeatureService _Service;
 
-        public SpatialContextCtl(ConnectionInfo conn)
-            : this()
+        public SpatialContextCtl(ConnectionInfo conn, string key)
+            : base(conn, key)
         {
+            InitializeComponent();
+            _GeomFactory = new FgfGeometryFactory();
+            _bsContexts = new BindingSource();
+            _bsContexts.DataSource = new List<SpatialContextInfo>();
+            grdSpatialContexts.DataSource = _bsContexts;
+            this.Disposed += delegate { _GeomFactory.Dispose(); };
             _BoundConnection = conn;
             _Service = new FeatureService(conn.Connection);
             this.Disposed += delegate { _Service.Dispose(); };
@@ -190,15 +195,15 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
-        public ConnectionInfo BoundConnection
-        {
-            get { return _BoundConnection; }
-        }
-
-        public void SetName(string name)
+        public override void SetName(string name)
         {
             this.BoundConnection.Name = name;
             this.Title = "Spatial Context Management - " + this.BoundConnection.Name;
+        }
+
+        public override string GetTabType()
+        {
+            return CoreModule.TAB_SPATIAL_CONTEXT_MGMT;
         }
     }
 }

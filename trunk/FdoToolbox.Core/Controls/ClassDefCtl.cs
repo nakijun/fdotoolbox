@@ -34,7 +34,7 @@ namespace FdoToolbox.Core.Controls
     /// <summary>
     /// User Control to create Class Definitions.
     /// </summary>
-    public partial class ClassDefCtl : BaseDocumentCtl, IConnectionBoundCtl
+    public partial class ClassDefCtl : BaseDocumentCtl
     {
         private ClassDefinition _ClassDef;
 
@@ -45,6 +45,11 @@ namespace FdoToolbox.Core.Controls
         private FeatureSchema _ParentSchema;
 
         private ConnectionInfo _BoundConnection;
+
+        public ConnectionInfo BoundConnection
+        {
+            get { return _BoundConnection; }
+        }
 
         public ClassDefCtl(ClassDefinition classDef, ConnectionInfo conn)
         {
@@ -411,21 +416,6 @@ namespace FdoToolbox.Core.Controls
             {
                 _BoundIdentityProperties.Remove(def);
             }
-        }
-
-        public ConnectionInfo BoundConnection
-        {
-            get { return _BoundConnection; }
-        }
-
-        ConnectionInfo IConnectionBoundCtl.BoundConnection
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
-
-        public void SetName(string name)
-        {
-            this.BoundConnection.Name = name;
         }
     }
 }
