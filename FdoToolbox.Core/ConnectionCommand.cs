@@ -20,15 +20,27 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using OSGeo.FDO.Connections;
+using OSGeo.FDO.ClientServices;
 
-namespace FdoInfo
+namespace FdoToolbox.Core
 {
-    class Program
+    public abstract class ConnectionCommand : ConsoleCommand
     {
-        static void Main(string[] args)
+        protected string _provider;
+        protected string _connStr;
+
+        public ConnectionCommand(string provider, string connStr)
         {
-            FdoInfoApp app = new FdoInfoApp();
-            using (app) { app.Run(args); }
+            _provider = provider;
+            _connStr = connStr;
+        }
+
+        protected IConnection CreateConnection()
+        {
+            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(_provider);
+            conn.ConnectionString = _connStr;
+            return conn;
         }
     }
 }

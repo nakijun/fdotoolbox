@@ -44,6 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FdoInfoApp.cs" />
+    <Compile Include="GetConnectionParametersCommand.cs" />
+    <Compile Include="GetCreateDataStoreParametersCommand.cs" />
+    <Compile Include="GetDestroyDataStoreParametersCommand.cs" />
+    <Compile Include="ListClassesCommand.cs" />
+    <Compile Include="ListClassPropertiesCommand.cs" />
+    <Compile Include="ListDataStoresCommand.cs" />
+    <Compile Include="ListProvidersCommand.cs" />
+    <Compile Include="ListSchemasCommand.cs" />
+    <Compile Include="ListSpatialContextsCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

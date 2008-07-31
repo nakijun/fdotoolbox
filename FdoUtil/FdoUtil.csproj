@@ -44,14 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplySchemaCommand.cs" />
-    <Compile Include="CommandStatus.cs" />
-    <Compile Include="ConnectionCommand.cs" />
-    <Compile Include="ConsoleCommand.cs" />
     <Compile Include="CreateDataStoreCommand.cs" />
     <Compile Include="DestroyCommand.cs" />
     <Compile Include="DumpSchemaCommand.cs" />
     <Compile Include="ExpressBcpCommand.cs" />
-    <Compile Include="IConsoleCommand.cs" />
     <Compile Include="FdoUtilApp.cs" />
     <Compile Include="MakeSdfCommand.cs" />
     <Compile Include="Program.cs" />
