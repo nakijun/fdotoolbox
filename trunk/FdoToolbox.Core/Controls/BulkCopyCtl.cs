@@ -99,7 +99,7 @@ namespace FdoToolbox.Core.Controls
 
             cmbSrcSchema.SelectedText = task.Options.SourceSchemaName;
             cmbDestSchema.SelectedText = task.Options.TargetSchemaName;
-
+            txtGlobalFilter.Text = task.Options.GlobalSpatialFilter;
             chkCopySpatialContexts.Checked = task.Options.CopySpatialContexts;
             if (task.Options.CopySpatialContexts)
             {
@@ -592,6 +592,9 @@ namespace FdoToolbox.Core.Controls
                     HostApplication.Instance.ConnectionManager.GetConnection(destConnName)
                 )
             );
+
+            if (!string.IsNullOrEmpty(txtGlobalFilter.Text.Trim()))
+                options.GlobalSpatialFilter = txtGlobalFilter.Text.Trim();
             options.CoerceDataTypes = chkCoerceDataTypes.Checked;
             options.CopySpatialContexts = chkCopySpatialContexts.Checked;
             if (options.CopySpatialContexts)

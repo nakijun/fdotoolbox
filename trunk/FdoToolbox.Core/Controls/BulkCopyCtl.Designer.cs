@@ -59,6 +59,8 @@ namespace FdoToolbox.Core.Controls
             this.ctxDeleteBeforeCopy = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.trueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.falseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtGlobalFilter = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.grpSource.SuspendLayout();
             this.grpTarget.SuspendLayout();
@@ -220,7 +222,7 @@ namespace FdoToolbox.Core.Controls
             this.groupBox2.Controls.Add(this.mTreeView);
             this.groupBox2.Location = new System.Drawing.Point(4, 59);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(271, 283);
+            this.groupBox2.Size = new System.Drawing.Size(271, 362);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Mappings";
@@ -235,7 +237,7 @@ namespace FdoToolbox.Core.Controls
             this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
             this.mTreeView.ShowNodeToolTips = true;
-            this.mTreeView.Size = new System.Drawing.Size(265, 264);
+            this.mTreeView.Size = new System.Drawing.Size(265, 343);
             this.mTreeView.TabIndex = 0;
             this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mTreeView_MouseDown);
             // 
@@ -246,7 +248,7 @@ namespace FdoToolbox.Core.Controls
             this.groupBox3.Controls.Add(this.panel1);
             this.groupBox3.Location = new System.Drawing.Point(281, 217);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(246, 125);
+            this.groupBox3.Size = new System.Drawing.Size(246, 204);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Bulk Copy Options";
@@ -254,13 +256,15 @@ namespace FdoToolbox.Core.Controls
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.txtGlobalFilter);
             this.panel1.Controls.Add(this.chkSourceContextList);
             this.panel1.Controls.Add(this.chkCoerceDataTypes);
             this.panel1.Controls.Add(this.chkCopySpatialContexts);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 16);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(240, 106);
+            this.panel1.Size = new System.Drawing.Size(240, 185);
             this.panel1.TabIndex = 0;
             // 
             // chkSourceContextList
@@ -299,7 +303,7 @@ namespace FdoToolbox.Core.Controls
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(371, 348);
+            this.btnSave.Location = new System.Drawing.Point(371, 427);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 5;
@@ -310,7 +314,7 @@ namespace FdoToolbox.Core.Controls
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(452, 348);
+            this.btnCancel.Location = new System.Drawing.Point(452, 427);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -327,12 +331,12 @@ namespace FdoToolbox.Core.Controls
             this.ctxClassFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setFilterToolStripMenuItem});
             this.ctxClassFilter.Name = "ctxClassFilter";
-            this.ctxClassFilter.Size = new System.Drawing.Size(118, 26);
+            this.ctxClassFilter.Size = new System.Drawing.Size(129, 26);
             // 
             // setFilterToolStripMenuItem
             // 
             this.setFilterToolStripMenuItem.Name = "setFilterToolStripMenuItem";
-            this.setFilterToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.setFilterToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.setFilterToolStripMenuItem.Text = "Set Filter";
             this.setFilterToolStripMenuItem.Click += new System.EventHandler(this.setFilterToolStripMenuItem_Click);
             // 
@@ -342,21 +346,38 @@ namespace FdoToolbox.Core.Controls
             this.trueToolStripMenuItem,
             this.falseToolStripMenuItem});
             this.ctxDeleteBeforeCopy.Name = "ctxDeleteBeforeCopy";
-            this.ctxDeleteBeforeCopy.Size = new System.Drawing.Size(100, 48);
+            this.ctxDeleteBeforeCopy.Size = new System.Drawing.Size(111, 48);
             // 
             // trueToolStripMenuItem
             // 
             this.trueToolStripMenuItem.Name = "trueToolStripMenuItem";
-            this.trueToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.trueToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.trueToolStripMenuItem.Text = "True";
             this.trueToolStripMenuItem.Click += new System.EventHandler(this.DeleteBeforeCopyEnable_Click);
             // 
             // falseToolStripMenuItem
             // 
             this.falseToolStripMenuItem.Name = "falseToolStripMenuItem";
-            this.falseToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.falseToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.falseToolStripMenuItem.Text = "False";
             this.falseToolStripMenuItem.Click += new System.EventHandler(this.DeleteBeforeCopyDisable_Click);
+            // 
+            // txtGlobalFilter
+            // 
+            this.txtGlobalFilter.Location = new System.Drawing.Point(7, 126);
+            this.txtGlobalFilter.Multiline = true;
+            this.txtGlobalFilter.Name = "txtGlobalFilter";
+            this.txtGlobalFilter.Size = new System.Drawing.Size(224, 56);
+            this.txtGlobalFilter.TabIndex = 7;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(4, 110);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(97, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Global Spatial Filter";
             // 
             // BulkCopyCtl
             // 
@@ -370,7 +391,7 @@ namespace FdoToolbox.Core.Controls
             this.Controls.Add(this.grpSource);
             this.Controls.Add(this.groupBox1);
             this.Name = "BulkCopyCtl";
-            this.Size = new System.Drawing.Size(530, 374);
+            this.Size = new System.Drawing.Size(530, 453);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.grpSource.ResumeLayout(false);
@@ -419,5 +440,7 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.ContextMenuStrip ctxDeleteBeforeCopy;
         private System.Windows.Forms.ToolStripMenuItem trueToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtGlobalFilter;
     }
 }
