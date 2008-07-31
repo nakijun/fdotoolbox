@@ -7,5 +7,8 @@ A: See Issue 21
 
 === Q: What is the difference between Lite and Full releases? ===
 
-A: Lite releases do not include the FDO binaries, you will need to copy over binaries from a previous install of FDO Toolbox or from the [[http://fdo.osgeo.org FDO Project page]]. The
-binaries must reside in the "FDO" sub-directory of the directory you extracted the lite release to.
+A: Lite releases do not include the FDO binaries, you will need the [[http://fdo.osgeo.org FDO binaries]]. You may be prompted for the directory containing the FDO binaries, this is a one-off thing.
+
+=== Q: What is the release cycle for Lite and Full releases? === 
+
+A: Every release will have a Lite version. Only major point releases (0.4, 0.5, ...) will have Full releases or when a newer version of FDO is released.
