@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Core;
 using OSGeo.FDO.Connections;
+using OSGeo.FDO.Commands;
 
 namespace FdoInfo
 {
@@ -48,6 +49,9 @@ namespace FdoInfo
                 WriteException(ex);
                 return (int)CommandStatus.E_FAIL_CONNECT;
             }
+
+            if (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_ListDataStores) < 0)
+                return (int)CommandStatus.E_FAIL_UNSUPPORTED_CAPABILITY;
 
             using (FeatureService service = new FeatureService(conn))
             {
