@@ -25,7 +25,7 @@ using FdoToolbox.Core;
 
 namespace FdoUtil
 {
-    public class ApplySchemaCommand : ConnectionCommand
+    public class ApplySchemaCommand : SpatialConnectionCommand
     {
         private string _schemaFile;
 

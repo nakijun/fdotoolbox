@@ -28,13 +28,13 @@ namespace FdoToolbox.Core
     /// <summary>
     /// FDO Connection Manager
     /// </summary>
-    public class ConnectionMgr : ISpatialConnectionMgr, IDisposable
+    public class SpatialConnectionMgr : ISpatialConnectionMgr, IDisposable
     {
         private int counter = 0;
 
         private Dictionary<string, IConnection> _ConnectionDict;
 
-        public ConnectionMgr() 
+        public SpatialConnectionMgr() 
         { 
             _ConnectionDict = new Dictionary<string, IConnection>();
             _FeatureServices = new Dictionary<string, FeatureService>();

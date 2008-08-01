@@ -26,7 +26,7 @@ using OSGeo.FDO.Schema;
 
 namespace FdoInfo
 {
-    public class ListSchemasCommand : ConnectionCommand
+    public class ListSchemasCommand : SpatialConnectionCommand
     {
         public ListSchemasCommand(string provider, string connStr)
             : base(provider, connStr)

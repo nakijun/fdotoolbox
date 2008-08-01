@@ -25,12 +25,12 @@ using OSGeo.FDO.ClientServices;
 
 namespace FdoToolbox.Core
 {
-    public abstract class ConnectionCommand : ConsoleCommand
+    public abstract class SpatialConnectionCommand : ConsoleCommand
     {
         protected string _provider;
         protected string _connStr;
 
-        public ConnectionCommand(string provider, string connStr)
+        public SpatialConnectionCommand(string provider, string connStr)
         {
             _provider = provider;
             _connStr = connStr;

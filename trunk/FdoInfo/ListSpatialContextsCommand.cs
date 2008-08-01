@@ -25,7 +25,7 @@ using OSGeo.FDO.Connections;
 
 namespace FdoInfo
 {
-    public class ListSpatialContextsCommand : ConnectionCommand
+    public class ListSpatialContextsCommand : SpatialConnectionCommand
     {
         public ListSpatialContextsCommand(string provider, string connStr)
             : base(provider, connStr)

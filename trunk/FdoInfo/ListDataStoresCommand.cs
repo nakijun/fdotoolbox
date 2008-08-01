@@ -25,7 +25,7 @@ using OSGeo.FDO.Connections;
 
 namespace FdoInfo
 {
-    public class ListDataStoresCommand : ConnectionCommand
+    public class ListDataStoresCommand : SpatialConnectionCommand
     {
         private bool _FdoOnly;
 

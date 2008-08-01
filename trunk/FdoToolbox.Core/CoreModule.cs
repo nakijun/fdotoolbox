@@ -445,7 +445,7 @@ namespace FdoToolbox.Core
             string connDef = HostApplication.Instance.OpenFile("Load connection information", "Connection information (*.conn)|*.conn");
             if(File.Exists(connDef))
             {
-                SpatialConnectionInfo connInfo = ConnLoader.LoadConnection(connDef);
+                SpatialConnectionInfo connInfo = SpatialConnLoader.LoadConnection(connDef);
                 IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(connInfo.Name);
                 if (conn != null)
                 {
@@ -472,7 +472,7 @@ namespace FdoToolbox.Core
             {
                 if (File.Exists(connDef))
                     File.Delete(connDef);
-                ConnLoader.SaveConnection(connInfo, connDef);
+                SpatialConnLoader.SaveConnection(connInfo, connDef);
                 AppConsole.WriteLine("Connection saved to {0}", connDef);
             }
         }

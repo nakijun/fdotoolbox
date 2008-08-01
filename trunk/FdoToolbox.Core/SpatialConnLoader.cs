@@ -26,7 +26,7 @@ using OSGeo.FDO.ClientServices;
 
 namespace FdoToolbox.Core
 {
-    public sealed class ConnLoader
+    public sealed class SpatialConnLoader
     {
         public static SpatialConnectionInfo LoadConnection(string file)
         {
