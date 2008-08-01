@@ -40,7 +40,7 @@ namespace FdoToolbox.Core
         private IModuleMgr _moduleMgr;
         private ITaskManager _taskMgr;
         private ISpatialConnectionMgr _connMgr;
-        private IConnectionBoundTabManager _TabManager;
+        private ISpatialConnectionBoundTabManager _TabManager;
         private ICoordinateSystemCatalog _CsCatalog;
         private static HostApplication _Instance;
 
@@ -68,7 +68,7 @@ namespace FdoToolbox.Core
                     _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
 
                     _CsCatalog = new CoordSysCatalog();
-                    _TabManager = new ConnectionBoundTabManager();
+                    _TabManager = new SpatialConnectionBoundTabManager();
 
                     //Set streams for Application Console
                     AppConsole.In = new TextConsoleInputStream(_shell.ConsoleWindow.InputTextBox);
@@ -462,7 +462,7 @@ namespace FdoToolbox.Core
         /// <summary>
         /// The connection-bound tab manager
         /// </summary>
-        public IConnectionBoundTabManager TabManager
+        public ISpatialConnectionBoundTabManager TabManager
         {
             get { return _TabManager; }
         }

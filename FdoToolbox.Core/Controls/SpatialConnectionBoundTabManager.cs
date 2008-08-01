@@ -23,20 +23,20 @@ using System.Text;
 
 namespace FdoToolbox.Core.Controls
 {
-    public class ConnectionBoundTabManager : IConnectionBoundTabManager
+    public class SpatialConnectionBoundTabManager : ISpatialConnectionBoundTabManager
     {
         private List<Type> _ControlTypes;
-        private Dictionary<Type, List<IConnectionBoundCtl>> _ControlInstances;
+        private Dictionary<Type, List<ISpatialConnectionBoundCtl>> _ControlInstances;
         
-        public ConnectionBoundTabManager()
+        public SpatialConnectionBoundTabManager()
         {
-            _ControlInstances = new Dictionary<Type, List<IConnectionBoundCtl>>();
+            _ControlInstances = new Dictionary<Type, List<ISpatialConnectionBoundCtl>>();
             _ControlTypes = new List<Type>();
             HostApplication.Instance.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(ConnectionManager_ConnectionRenamed);
             HostApplication.Instance.SpatialConnectionManager.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(ConnectionManager_BeforeConnectionRemove);
         }
 
-        public void RemoveTab(IConnectionBoundCtl ctl)
+        public void RemoveTab(ISpatialConnectionBoundCtl ctl)
         {
             bool removed = _ControlInstances[ctl.GetType()].Remove(ctl);
         }
@@ -45,14 +45,14 @@ namespace FdoToolbox.Core.Controls
         {
             foreach (Type t in _ControlTypes)
             {
-                List<IConnectionBoundCtl> controls = _ControlInstances[t].FindAll(
-                    delegate(IConnectionBoundCtl ctl)
+                List<ISpatialConnectionBoundCtl> controls = _ControlInstances[t].FindAll(
+                    delegate(ISpatialConnectionBoundCtl ctl)
                     {
                         return ctl.BoundConnection.Name == oldName;
                     }
                 );
                 controls.ForEach(
-                    delegate(IConnectionBoundCtl ctl)
+                    delegate(ISpatialConnectionBoundCtl ctl)
                     {
                         string newKey = GenerateKey(ctl.GetType(), newName);
                         ctl.SetName(newName);
@@ -64,11 +64,11 @@ namespace FdoToolbox.Core.Controls
 
         void ConnectionManager_BeforeConnectionRemove(string name, ref bool cancel)
         {
-            List<IConnectionBoundCtl> controls = new List<IConnectionBoundCtl>();
+            List<ISpatialConnectionBoundCtl> controls = new List<ISpatialConnectionBoundCtl>();
             foreach (Type type in _ControlInstances.Keys)
             {
-                List<IConnectionBoundCtl> found = _ControlInstances[type].FindAll(
-                    delegate(IConnectionBoundCtl ctl)
+                List<ISpatialConnectionBoundCtl> found = _ControlInstances[type].FindAll(
+                    delegate(ISpatialConnectionBoundCtl ctl)
                     {
                         return ctl.BoundConnection.Name == name;
                     }
@@ -79,22 +79,22 @@ namespace FdoToolbox.Core.Controls
                 cancel = !AppConsole.Confirm("Tabs still open", "There are tabs still open which rely on the connection you are about to close.\nIf you close the connection they will be closed too.\n\nClose connection?");
         }
 
-        public IConnectionBoundCtl CreateTab(Type tabType, SpatialConnectionInfo connInfo)
+        public ISpatialConnectionBoundCtl CreateTab(Type tabType, SpatialConnectionInfo connInfo)
         {
-            IConnectionBoundCtl control = null;
+            ISpatialConnectionBoundCtl control = null;
             if (!_ControlTypes.Contains(tabType))
             {
                 throw new ArgumentException("Tab type " + tabType + " was not registered");
             }
             string key = GenerateKey(tabType, connInfo.Name);
-            control = _ControlInstances[tabType].Find(delegate(IConnectionBoundCtl ctl) { return ctl.GetKey() == key; });
+            control = _ControlInstances[tabType].Find(delegate(ISpatialConnectionBoundCtl ctl) { return ctl.GetKey() == key; });
             if (control == null)
             {
                 ISpatialConnectionMgr connMgr = HostApplication.Instance.SpatialConnectionManager;
                 
                 //We're expecting a constructor with the following signature:
                 // (ConnectionInfo, string)
-                control = Activator.CreateInstance(tabType, connInfo, key) as IConnectionBoundCtl;
+                control = Activator.CreateInstance(tabType, connInfo, key) as ISpatialConnectionBoundCtl;
                 if (control == null)
                     throw new Exception("Failed to create tab of type " + tabType);
 
@@ -121,11 +121,11 @@ namespace FdoToolbox.Core.Controls
 
         public void RegisterTabType(Type tabType)
         {
-            if (Array.IndexOf<Type>(tabType.GetInterfaces(), typeof(IConnectionBoundCtl)) < 0)
+            if (Array.IndexOf<Type>(tabType.GetInterfaces(), typeof(ISpatialConnectionBoundCtl)) < 0)
                 throw new ArgumentException("The given type is not of type IConnectionBoundCtl");
 
             _ControlTypes.Add(tabType);
-            _ControlInstances[tabType] = new List<IConnectionBoundCtl>();
+            _ControlInstances[tabType] = new List<ISpatialConnectionBoundCtl>();
         }
 
         public string GenerateKey(Type t, string connName)

@@ -1,6 +1,6 @@
 namespace FdoToolbox.Core.Controls
 {
-    partial class GenericConnectCtl
+    partial class GenericSpatialConnectCtl
     {
         /// <summary> 
         /// Required designer variable.

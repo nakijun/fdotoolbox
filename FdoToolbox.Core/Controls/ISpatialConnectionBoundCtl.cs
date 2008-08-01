@@ -20,14 +20,17 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core.Controls
 {
-    public interface IConnectionBoundTabManager
+    public interface ISpatialConnectionBoundCtl
     {
-        void RemoveTab(IConnectionBoundCtl ctl);
-        void RegisterTabType(Type tabtype);
-        string GenerateKey(Type tabtype, string connName);
-        IConnectionBoundCtl CreateTab(Type tabtype, SpatialConnectionInfo connInfo);
+        SpatialConnectionInfo BoundConnection { get; }
+        void SetName(string name);
+        string GetKey();
+        void SetKey(string key);
+        string GetTabType();
+        BaseDocumentCtl WrappedControl { get; }
     }
 }

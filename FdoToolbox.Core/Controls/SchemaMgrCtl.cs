@@ -34,7 +34,7 @@ using System.IO;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class SchemaMgrCtl : ConnectionBoundControl
+    public partial class SchemaMgrCtl : SpatialConnectionBoundControl
     {
         public SchemaMgrCtl()
         {
