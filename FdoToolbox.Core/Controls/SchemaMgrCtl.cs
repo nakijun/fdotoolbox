@@ -51,14 +51,14 @@ namespace FdoToolbox.Core.Controls
         private FeatureSchemaCollection _Schemas;
         private FeatureService _Service;
 
-        public SchemaMgrCtl(ConnectionInfo conn, string key)
+        public SchemaMgrCtl(SpatialConnectionInfo conn, string key)
             : base(conn, key)
         {
             InitializeComponent();
             _bsClasses = new BindingSource();
             _bsSchemas = new BindingSource();
             _BoundConnection = conn;
-            _Service = HostApplication.Instance.ConnectionManager.CreateService(_BoundConnection.Name);
+            _Service = HostApplication.Instance.SpatialConnectionManager.CreateService(_BoundConnection.Name);
             _Schemas = _Service.DescribeSchema();
             _bsSchemas.DataSource = _Schemas;
             lstSchemas.DataSource = _bsSchemas;

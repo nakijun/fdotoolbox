@@ -32,8 +32,8 @@ namespace FdoToolbox.Core.Controls
         {
             _ControlInstances = new Dictionary<Type, List<IConnectionBoundCtl>>();
             _ControlTypes = new List<Type>();
-            HostApplication.Instance.ConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(ConnectionManager_ConnectionRenamed);
-            HostApplication.Instance.ConnectionManager.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(ConnectionManager_BeforeConnectionRemove);
+            HostApplication.Instance.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(ConnectionManager_ConnectionRenamed);
+            HostApplication.Instance.SpatialConnectionManager.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(ConnectionManager_BeforeConnectionRemove);
         }
 
         public void RemoveTab(IConnectionBoundCtl ctl)
@@ -79,7 +79,7 @@ namespace FdoToolbox.Core.Controls
                 cancel = !AppConsole.Confirm("Tabs still open", "There are tabs still open which rely on the connection you are about to close.\nIf you close the connection they will be closed too.\n\nClose connection?");
         }
 
-        public IConnectionBoundCtl CreateTab(Type tabType, ConnectionInfo connInfo)
+        public IConnectionBoundCtl CreateTab(Type tabType, SpatialConnectionInfo connInfo)
         {
             IConnectionBoundCtl control = null;
             if (!_ControlTypes.Contains(tabType))
@@ -90,7 +90,7 @@ namespace FdoToolbox.Core.Controls
             control = _ControlInstances[tabType].Find(delegate(IConnectionBoundCtl ctl) { return ctl.GetKey() == key; });
             if (control == null)
             {
-                IConnectionMgr connMgr = HostApplication.Instance.ConnectionManager;
+                ISpatialConnectionMgr connMgr = HostApplication.Instance.SpatialConnectionManager;
                 
                 //We're expecting a constructor with the following signature:
                 // (ConnectionInfo, string)

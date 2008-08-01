@@ -44,14 +44,14 @@ namespace FdoToolbox.Core.Controls
 
         private FeatureSchema _ParentSchema;
 
-        private ConnectionInfo _BoundConnection;
+        private SpatialConnectionInfo _BoundConnection;
 
-        public ConnectionInfo BoundConnection
+        public SpatialConnectionInfo BoundConnection
         {
             get { return _BoundConnection; }
         }
 
-        public ClassDefCtl(ClassDefinition classDef, ConnectionInfo conn)
+        public ClassDefCtl(ClassDefinition classDef, SpatialConnectionInfo conn)
         {
             InitializeComponent();
             _BoundConnection = conn;
@@ -61,7 +61,7 @@ namespace FdoToolbox.Core.Controls
             ToggleUI();
         }
 
-        public ClassDefCtl(FeatureSchema schema, ClassType ctype, ConnectionInfo conn)
+        public ClassDefCtl(FeatureSchema schema, ClassType ctype, SpatialConnectionInfo conn)
         {
             InitializeComponent();
             switch (ctype)

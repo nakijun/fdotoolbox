@@ -28,7 +28,7 @@ namespace FdoToolbox.Core
     public delegate void ConnectionRenamedEventHandler(string oldName, string newName);
     public delegate void ConnectionBeforeRemoveHandler(string name, ref bool cancel);
 
-    public interface IConnectionMgr
+    public interface ISpatialConnectionMgr
     {
         string CreateUniqueName();
         void AddConnection(string name, IConnection conn);

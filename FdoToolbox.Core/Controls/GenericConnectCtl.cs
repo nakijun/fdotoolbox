@@ -99,7 +99,7 @@ namespace FdoToolbox.Core.Controls
                 errorProvider1.SetError(txtName, "Required");
                 return;
             }
-            if (HostApplication.Instance.ConnectionManager.GetConnection(txtName.Text) != null)
+            if (HostApplication.Instance.SpatialConnectionManager.GetConnection(txtName.Text) != null)
             {
                 errorProvider1.SetError(txtName, "The specified connection name already exists. Please choose another");
                 return;
@@ -127,7 +127,7 @@ namespace FdoToolbox.Core.Controls
                 }
                 if (conn.Open() == OSGeo.FDO.Connections.ConnectionState.ConnectionState_Open)
                 {
-                    HostApplication.Instance.ConnectionManager.AddConnection(txtName.Text, conn);
+                    HostApplication.Instance.SpatialConnectionManager.AddConnection(txtName.Text, conn);
                     this.Close();
                 }
                 else

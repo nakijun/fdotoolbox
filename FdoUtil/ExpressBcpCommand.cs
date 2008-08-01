@@ -77,8 +77,8 @@ namespace FdoUtil
                 srcConn.Open();
                 destConn.Open();
 
-                ConnectionInfo srcConnInfo = new ConnectionInfo("SOURCE", srcConn);
-                ConnectionInfo destConnInfo = new ConnectionInfo("TARGET", destConn);
+                SpatialConnectionInfo srcConnInfo = new SpatialConnectionInfo("SOURCE", srcConn);
+                SpatialConnectionInfo destConnInfo = new SpatialConnectionInfo("TARGET", destConn);
 
                 SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(srcConnInfo, destConnInfo);
                 options.CopySpatialContexts = !string.IsNullOrEmpty(_SrcSpatialContext);

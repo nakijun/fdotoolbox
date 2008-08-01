@@ -85,7 +85,7 @@ namespace FdoToolbox.Core.Forms
             }
         }
 
-        public static ClassType? GetClassType(ConnectionInfo connInfo)
+        public static ClassType? GetClassType(SpatialConnectionInfo connInfo)
         {
             ClassTypePicker diag = new ClassTypePicker(connInfo.Connection.SchemaCapabilities.ClassTypes);
             if (diag.ShowDialog() == DialogResult.OK)

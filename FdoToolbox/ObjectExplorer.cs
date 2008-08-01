@@ -41,9 +41,9 @@ namespace FdoToolbox
             InitializeComponent();
             HostApplication.Instance.ModuleManager.ModuleLoaded += new ModuleEventHandler(OnModuleLoaded);
             HostApplication.Instance.ModuleManager.ModuleUnloaded += new ModuleEventHandler(OnModuleUnloaded);
-            HostApplication.Instance.ConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnConnectionAdded);
-            HostApplication.Instance.ConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnConnectionRemoved);
-            HostApplication.Instance.ConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
+            HostApplication.Instance.SpatialConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnConnectionAdded);
+            HostApplication.Instance.SpatialConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnConnectionRemoved);
+            HostApplication.Instance.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
             HostApplication.Instance.TaskManager.TaskAdded += new TaskEventHandler(OnTaskAdded);
             HostApplication.Instance.TaskManager.TaskRemoved += new TaskEventHandler(OnTaskRemoved);
         }
@@ -86,7 +86,7 @@ namespace FdoToolbox
 
         private void GetSchemaNodes(TreeNode connNode)
         {
-            FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(connNode.Name);
+            FeatureService service = HostApplication.Instance.SpatialConnectionManager.CreateService(connNode.Name);
             if (service != null)
             {
                 connNode.ToolTipText = string.Format("Provider: {0}\nConnection String: {1}", service.Connection.ConnectionInfo.ProviderName, service.Connection.ConnectionString);
@@ -250,13 +250,13 @@ namespace FdoToolbox
             }
         }
 
-        public void RefreshConnection(string name)
+        public void RefreshSpatialConnection(string name)
         {
             TreeNode node = GetConnectionsNode().Nodes[name];
             Debug.Assert(node != null);
             node.Nodes.Clear();
 
-            IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(node.Name);
+            IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(node.Name);
             if (conn != null)
             {
                 conn.Close();
@@ -266,7 +266,7 @@ namespace FdoToolbox
             GetSchemaNodes(node);
         }
 
-        public ConnectionInfo GetSelectedConnection()
+        public SpatialConnectionInfo GetSelectedSpatialConnection()
         {
             TreeNode connNode = mTreeView.SelectedNode;
             if (connNode == null || connNode.Level == 0)
@@ -283,9 +283,9 @@ namespace FdoToolbox
                 if (connNode.Parent == GetConnectionsNode())
                 {
                     string name = connNode.Name;
-                    IConnection conn = HostApplication.Instance.ConnectionManager.GetConnection(connNode.Name);
+                    IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(connNode.Name);
                     if (conn != null)
-                        return new ConnectionInfo(name, conn);
+                        return new SpatialConnectionInfo(name, conn);
                     else
                         return null;
                 }
@@ -437,7 +437,7 @@ namespace FdoToolbox
 
         private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            ConnectionInfo connInfo = GetSelectedConnection();
+            SpatialConnectionInfo connInfo = GetSelectedSpatialConnection();
             if (connInfo != null)
             {
                 IModuleMgr modMgr = HostApplication.Instance.ModuleManager;

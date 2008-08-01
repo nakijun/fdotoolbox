@@ -28,6 +28,6 @@ namespace FdoToolbox.Core.Controls
         void RemoveTab(IConnectionBoundCtl ctl);
         void RegisterTabType(Type tabtype);
         string GenerateKey(Type tabtype, string connName);
-        IConnectionBoundCtl CreateTab(Type tabtype, ConnectionInfo connInfo);
+        IConnectionBoundCtl CreateTab(Type tabtype, SpatialConnectionInfo connInfo);
     }
 }

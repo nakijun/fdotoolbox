@@ -35,8 +35,8 @@ namespace FdoToolbox.Core
     /// </summary>
     public class SpatialBulkCopyOptions : IDisposable
     {
-        private ConnectionInfo _Source;
-        private ConnectionInfo _Target;
+        private SpatialConnectionInfo _Source;
+        private SpatialConnectionInfo _Target;
 
         private string _TargetSchemaName;
         private string _SourceSchemaName;
@@ -47,7 +47,7 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public SpatialBulkCopyOptions(ConnectionInfo source, ConnectionInfo target)
+        public SpatialBulkCopyOptions(SpatialConnectionInfo source, SpatialConnectionInfo target)
         {
             _Source = source;
             _Target = target;
@@ -121,8 +121,8 @@ namespace FdoToolbox.Core
 
             if (src != null && dest != null)
             {
-                this.Source = new ConnectionInfo("SOURCE", src);
-                this.Target = new ConnectionInfo("TARGET", dest);
+                this.Source = new SpatialConnectionInfo("SOURCE", src);
+                this.Target = new SpatialConnectionInfo("TARGET", dest);
             }
         }
 
@@ -158,7 +158,7 @@ namespace FdoToolbox.Core
         /// <summary>
         /// The source connection
         /// </summary>
-        public ConnectionInfo Source
+        public SpatialConnectionInfo Source
         {
             get { return _Source; }
             set { _Source = value; }
@@ -179,7 +179,7 @@ namespace FdoToolbox.Core
         /// <summary>
         /// The target connection
         /// </summary>
-        public ConnectionInfo Target
+        public SpatialConnectionInfo Target
         {
             get { return _Target; }
             set { _Target = value; }

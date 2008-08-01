@@ -38,7 +38,7 @@ namespace FdoToolbox.Core.Controls
             InitializeComponent();
         }
 
-        public DataStoreMgrCtl(ConnectionInfo connInfo, string key)
+        public DataStoreMgrCtl(SpatialConnectionInfo connInfo, string key)
             : base(connInfo, key)
         {
             InitializeComponent();

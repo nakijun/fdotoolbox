@@ -32,9 +32,9 @@ namespace FdoToolbox.Core.Forms
 {
     public partial class DataPropertyDefinitionDlg : Form
     {
-        private ConnectionInfo _BoundConnection;
+        private SpatialConnectionInfo _BoundConnection;
 
-        internal DataPropertyDefinitionDlg(ConnectionInfo conn)
+        internal DataPropertyDefinitionDlg(SpatialConnectionInfo conn)
         {
             InitializeComponent();
             _BoundConnection = conn;
@@ -64,7 +64,7 @@ namespace FdoToolbox.Core.Forms
                 numScale.Maximum = this.BoundConnection.Connection.SchemaCapabilities.MaximumDecimalScale;
         }
 
-        internal DataPropertyDefinitionDlg(DataPropertyDefinition def, ConnectionInfo conn) : this(conn)
+        internal DataPropertyDefinitionDlg(DataPropertyDefinition def, SpatialConnectionInfo conn) : this(conn)
         {
             _Definition = def;
             txtName.Text = _Definition.Name;
@@ -82,7 +82,7 @@ namespace FdoToolbox.Core.Forms
 
         private DataPropertyDefinition _Definition;
 
-        public static DataPropertyDefinition NewDataProperty(ConnectionInfo conn)
+        public static DataPropertyDefinition NewDataProperty(SpatialConnectionInfo conn)
         {
             DataPropertyDefinitionDlg dlg = new DataPropertyDefinitionDlg(conn);
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -92,7 +92,7 @@ namespace FdoToolbox.Core.Forms
             return null;
         }
 
-        public static void EditDataProperty(DataPropertyDefinition def, ConnectionInfo conn)
+        public static void EditDataProperty(DataPropertyDefinition def, SpatialConnectionInfo conn)
         {
             DataPropertyDefinitionDlg dlg = new DataPropertyDefinitionDlg(def, conn);
             dlg.ShowDialog();
@@ -163,7 +163,7 @@ namespace FdoToolbox.Core.Forms
             numLength.Maximum = (max < 0) ? long.MaxValue : max;
         }
 
-        public ConnectionInfo BoundConnection
+        public SpatialConnectionInfo BoundConnection
         {
             get { return _BoundConnection; }
         }

@@ -39,7 +39,7 @@ namespace FdoToolbox.Core
         private IShell _shell;
         private IModuleMgr _moduleMgr;
         private ITaskManager _taskMgr;
-        private IConnectionMgr _connMgr;
+        private ISpatialConnectionMgr _connMgr;
         private IConnectionBoundTabManager _TabManager;
         private ICoordinateSystemCatalog _CsCatalog;
         private static HostApplication _Instance;
@@ -359,15 +359,15 @@ namespace FdoToolbox.Core
             {
                 AppConsole.WriteLine("Task Deleted: {0}", name);
             };
-            ConnectionManager.ConnectionRemoved += delegate(string name)
+            SpatialConnectionManager.ConnectionRemoved += delegate(string name)
             {
                 AppConsole.WriteLine("Connection removed: {0}", name);
             };
-            ConnectionManager.ConnectionAdded += delegate(string name)
+            SpatialConnectionManager.ConnectionAdded += delegate(string name)
             {
                 AppConsole.WriteLine("New connection added: {0}", name);
             };
-            ConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
+            SpatialConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
             {
                 AppConsole.WriteLine("Connection {0} renamed to {1}", oldName, newName);
             };
@@ -454,7 +454,7 @@ namespace FdoToolbox.Core
         /// <summary>
         /// The connection manager
         /// </summary>
-        public IConnectionMgr ConnectionManager
+        public ISpatialConnectionMgr SpatialConnectionManager
         {
             get { return _connMgr; }
         }
