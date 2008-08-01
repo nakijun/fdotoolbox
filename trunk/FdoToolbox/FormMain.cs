@@ -78,7 +78,7 @@ namespace FdoToolbox
         }
 
         
-        public void ShowDocumentWindow(IConnectionBoundCtl ctl)
+        public void ShowDocumentWindow(ISpatialConnectionBoundCtl ctl)
         {
             DockContent content = FindDocumentWindow(ctl.WrappedControl);
             if (content == null)
@@ -113,9 +113,9 @@ namespace FdoToolbox
 
         public void ShowDocumentWindow(BaseDocumentCtl ctl)
         {
-            if (ctl is IConnectionBoundCtl)
+            if (ctl is ISpatialConnectionBoundCtl)
             {
-                ShowDocumentWindow(ctl as IConnectionBoundCtl);
+                ShowDocumentWindow(ctl as ISpatialConnectionBoundCtl);
                 return;
             }
             ctl.Dock = DockStyle.Fill;

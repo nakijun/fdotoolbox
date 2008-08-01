@@ -38,7 +38,7 @@ using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class DataPreviewCtl : ConnectionBoundControl
+    public partial class SpatialDataPreviewCtl : SpatialConnectionBoundControl
     {
         const int TAB_STANDARD = 0;
         const int TAB_AGGREGATE = 1;
@@ -46,7 +46,7 @@ namespace FdoToolbox.Core.Controls
 
         private FgfGeometryFactory _GeomFactory;
 
-        internal DataPreviewCtl()
+        internal SpatialDataPreviewCtl()
         {
             InitializeComponent();
             cmbLimit.SelectedIndex = 0;
@@ -54,7 +54,7 @@ namespace FdoToolbox.Core.Controls
             this.Disposed += delegate { _GeomFactory.Dispose(); };
         }
 
-        public DataPreviewCtl(SpatialConnectionInfo conn, string key)
+        public SpatialDataPreviewCtl(SpatialConnectionInfo conn, string key)
             : base(conn, key)
         {
             InitializeComponent();

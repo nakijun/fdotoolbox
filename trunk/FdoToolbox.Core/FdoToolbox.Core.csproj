@@ -63,11 +63,11 @@
     <Compile Include="CmdConsoleErrorStream.cs" />
     <Compile Include="CmdConsoleOutputStream.cs" />
     <Compile Include="CommandStatus.cs" />
-    <Compile Include="Controls\ConnectionBoundControl.cs">
+    <Compile Include="Controls\SpatialConnectionBoundControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ConnectionBoundControl.Designer.cs">
-      <DependentUpon>ConnectionBoundControl.cs</DependentUpon>
+    <Compile Include="Controls\SpatialConnectionBoundControl.Designer.cs">
+      <DependentUpon>SpatialConnectionBoundControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ConnectionCommand.cs" />
     <Compile Include="ConnectionInfo.cs" />
@@ -81,14 +81,14 @@
       <DependentUpon>BaseDocumentCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="ConnectionMgr.cs" />
-    <Compile Include="Controls\ConnectionBoundTabManager.cs" />
+    <Compile Include="Controls\SpatialConnectionBoundTabManager.cs" />
     <Compile Include="Controls\CoordSysManagerCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\CoordSysManagerCtl.Designer.cs">
       <DependentUpon>CoordSysManagerCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\IConnectionBoundTabManager.cs" />
+    <Compile Include="Controls\ISpatialConnectionBoundTabManager.cs" />
     <Compile Include="CoordinateSystem.cs" />
     <Compile Include="CoordSysCatalog.cs" />
     <Compile Include="FeatureService.cs" />
@@ -126,11 +126,11 @@
     <Compile Include="Controls\ClassDefCtl.Designer.cs">
       <DependentUpon>ClassDefCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DataPreviewCtl.cs">
+    <Compile Include="Controls\SpatialDataPreviewCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\DataPreviewCtl.Designer.cs">
-      <DependentUpon>DataPreviewCtl.cs</DependentUpon>
+    <Compile Include="Controls\SpatialDataPreviewCtl.Designer.cs">
+      <DependentUpon>SpatialDataPreviewCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DataStoreMgrCtl.cs">
       <SubType>UserControl</SubType>
@@ -150,11 +150,11 @@
     <Compile Include="Controls\FeatureClassExtendedInfoCtl.Designer.cs">
       <DependentUpon>FeatureClassExtendedInfoCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GenericConnectCtl.cs">
+    <Compile Include="Controls\GenericSpatialConnectCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\GenericConnectCtl.Designer.cs">
-      <DependentUpon>GenericConnectCtl.cs</DependentUpon>
+    <Compile Include="Controls\GenericSpatialConnectCtl.Designer.cs">
+      <DependentUpon>GenericSpatialConnectCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\GenericCreateDataStoreCtl.cs">
       <SubType>UserControl</SubType>
@@ -162,7 +162,7 @@
     <Compile Include="Controls\GenericCreateDataStoreCtl.Designer.cs">
       <DependentUpon>GenericCreateDataStoreCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\IConnectionBoundCtl.cs" />
+    <Compile Include="Controls\ISpatialConnectionBoundCtl.cs" />
     <Compile Include="Controls\ModuleInfoCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -272,7 +272,7 @@
       <DependentUpon>UnregProviderDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="ICommandVerifier.cs" />
-    <Compile Include="IConnectionMgr.cs" />
+    <Compile Include="ISpatialConnectionMgr.cs" />
     <Compile Include="IConsoleInputStream.cs" />
     <Compile Include="IConsoleOutputStream.cs" />
     <Compile Include="IConsoleWindow.cs" />
@@ -376,9 +376,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>CoordSysManagerCtl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\DataPreviewCtl.resx">
+    <EmbeddedResource Include="Controls\SpatialDataPreviewCtl.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>DataPreviewCtl.cs</DependentUpon>
+      <DependentUpon>SpatialDataPreviewCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DataStoreMgrCtl.resx">
       <SubType>Designer</SubType>
@@ -392,8 +392,8 @@
       <SubType>Designer</SubType>
       <DependentUpon>FeatureClassExtendedInfoCtl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\GenericConnectCtl.resx">
-      <DependentUpon>GenericConnectCtl.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\GenericSpatialConnectCtl.resx">
+      <DependentUpon>GenericSpatialConnectCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\GenericCreateDataStoreCtl.resx">

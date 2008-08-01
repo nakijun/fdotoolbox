@@ -31,9 +31,9 @@ using FdoToolbox.Core.Forms;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class GenericConnectCtl : BaseDocumentCtl
+    public partial class GenericSpatialConnectCtl : BaseDocumentCtl
     {
-        public GenericConnectCtl()
+        public GenericSpatialConnectCtl()
         {
             InitializeComponent();
             InitializeGrid();

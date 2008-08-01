@@ -111,7 +111,7 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Type \"{0}\" for a list of all available commands", CMD_CMDLIST);
             };
 
-            HostApplication.Instance.TabManager.RegisterTabType(typeof(DataPreviewCtl));
+            HostApplication.Instance.TabManager.RegisterTabType(typeof(SpatialDataPreviewCtl));
             HostApplication.Instance.TabManager.RegisterTabType(typeof(DataStoreMgrCtl));
             HostApplication.Instance.TabManager.RegisterTabType(typeof(SchemaMgrCtl));
             HostApplication.Instance.TabManager.RegisterTabType(typeof(SpatialContextCtl));
@@ -155,7 +155,7 @@ namespace FdoToolbox.Core
         [Command(CoreModule.CMD_CONNECT, "Connect to Data", Description = "Creates a connection to an FDO-supported data source using the generic connection dialog", ImageResourceName = "database_connect")]
         public void DataConnect()
         {
-            HostApplication.Instance.Shell.ShowDocumentWindow(new GenericConnectCtl());
+            HostApplication.Instance.Shell.ShowDocumentWindow(new GenericSpatialConnectCtl());
         }
 
         [Command(CoreModule.CMD_EXTLOAD, "Load Extension", Description = "Loads a custom extension", ImageResourceName = "plugin", ShortcutKeys = Keys.F2)]
@@ -296,7 +296,7 @@ namespace FdoToolbox.Core
             string schemaName = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(SchemaMgrCtl), connInfo);
+                ISpatialConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(SchemaMgrCtl), connInfo);
 
                 SchemaMgrCtl schemaCtl = (SchemaMgrCtl)ctl.WrappedControl;
                 schemaCtl.SetInitialSchema(schemaName);
@@ -401,7 +401,7 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(DataPreviewCtl), connInfo);
+            ISpatialConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(SpatialDataPreviewCtl), connInfo);
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl.WrappedControl);
         }
 
@@ -498,7 +498,7 @@ namespace FdoToolbox.Core
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(SpatialContextCtl), connInfo);
+            ISpatialConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(SpatialContextCtl), connInfo);
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl.WrappedControl);
         }
 
@@ -553,7 +553,7 @@ namespace FdoToolbox.Core
             SpatialConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo != null)
             {
-                IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(DataStoreMgrCtl), connInfo);
+                ISpatialConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(DataStoreMgrCtl), connInfo);
                 HostApplication.Instance.Shell.ShowDocumentWindow(ctl.WrappedControl);
             }
         }
@@ -689,8 +689,8 @@ namespace FdoToolbox.Core
                 ClassDefinition theClass = service.GetClassByName(schemaName, className);
                 if (theClass != null)
                 {
-                    IConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(DataPreviewCtl), connInfo);
-                    DataPreviewCtl dpreview = (DataPreviewCtl)ctl.WrappedControl;
+                    ISpatialConnectionBoundCtl ctl = HostApplication.Instance.TabManager.CreateTab(typeof(SpatialDataPreviewCtl), connInfo);
+                    SpatialDataPreviewCtl dpreview = (SpatialDataPreviewCtl)ctl.WrappedControl;
                     dpreview.SetInitialClass(schemaName, className);
                     HostApplication.Instance.Shell.ShowDocumentWindow(dpreview);
                 }

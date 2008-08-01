@@ -27,18 +27,18 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class ConnectionBoundControl : BaseDocumentCtl, IConnectionBoundCtl
+    public partial class SpatialConnectionBoundControl : BaseDocumentCtl, ISpatialConnectionBoundCtl
     {
         protected SpatialConnectionInfo _BoundConnection;
 
         protected string _Key;
 
-        internal ConnectionBoundControl()
+        internal SpatialConnectionBoundControl()
         {
             InitializeComponent();
         }
 
-        public ConnectionBoundControl(SpatialConnectionInfo connInfo, string key)
+        public SpatialConnectionBoundControl(SpatialConnectionInfo connInfo, string key)
             : this()
         {
             _BoundConnection = connInfo;

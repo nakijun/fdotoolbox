@@ -1,6 +1,6 @@
 namespace FdoToolbox.Core.Controls
 {
-    partial class ConnectionBoundControl
+    partial class SpatialConnectionBoundControl
     {
         /// <summary> 
         /// Required designer variable.

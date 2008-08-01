@@ -1,6 +1,6 @@
 namespace FdoToolbox.Core.Controls
 {
-    partial class DataPreviewCtl
+    partial class SpatialDataPreviewCtl
     {
         /// <summary> 
         /// Required designer variable.
