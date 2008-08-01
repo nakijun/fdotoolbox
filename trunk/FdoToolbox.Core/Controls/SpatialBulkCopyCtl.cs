@@ -69,13 +69,13 @@ using FdoToolbox.Core.Forms;
 #endregion
 namespace FdoToolbox.Core.Controls
 {
-    public partial class BulkCopyCtl : BaseDocumentCtl 
+    public partial class SpatialBulkCopyCtl : BaseDocumentCtl 
     {
         private ContextMenuStrip ctxTargetClasses;
 
         private bool update = false;
 
-        public BulkCopyCtl()
+        public SpatialBulkCopyCtl()
         {
             InitializeComponent();
             this.Title = "Bulk Copy";
@@ -85,7 +85,7 @@ namespace FdoToolbox.Core.Controls
             update = false;
         }
 
-        public BulkCopyCtl(SpatialBulkCopyTask task) : this()
+        public SpatialBulkCopyCtl(SpatialBulkCopyTask task) : this()
         {
             txtName.Text = task.Name;
             LoadSettings(task);

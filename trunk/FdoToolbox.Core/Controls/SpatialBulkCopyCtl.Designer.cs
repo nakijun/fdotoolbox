@@ -1,6 +1,6 @@
 namespace FdoToolbox.Core.Controls
 {
-    partial class BulkCopyCtl
+    partial class SpatialBulkCopyCtl
     {
         /// <summary> 
         /// Required designer variable.
