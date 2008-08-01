@@ -39,7 +39,7 @@ namespace FdoInfo
                     {
                         if (IsSwitchDefined("-help", args))
                         {
-                            AppConsole.WriteLine("Gets all the registerd FDO providers");
+                            AppConsole.WriteLine("Gets and displays all the registerd FDO providers");
                             AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:ListProviders");
                             return;
                         }
@@ -51,7 +51,7 @@ namespace FdoInfo
                     {
                         if (IsSwitchDefined("-help", args))
                         {
-                            AppConsole.WriteLine("Gets the connection parameters for a given provider");
+                            AppConsole.WriteLine("Gets and displays the connection parameters for a given provider");
                             AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:GetConnectionParameters -provider:<provider name>");
                             return;
                         }
@@ -65,15 +65,14 @@ namespace FdoInfo
                     {
                         if (IsSwitchDefined("-help", args))
                         {
-                            AppConsole.WriteLine("Gets the parameters required to create a Data Store for a given provider");
-                            AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:GetCreateDataStoreParameters -provider:<provider name> [-connection:<connection string>]");
+                            AppConsole.WriteLine("Gets and displays the parameters required to create a Data Store for a given provider");
+                            AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:GetCreateDataStoreParameters -provider:<provider name>");
                             return;
                         }
 
                         string provider = GetArgument("-provider", args);
                         ThrowIfEmpty(provider, "-provider");
 
-                        string connStr = GetArgument("-connection", args);
                         _Command = new GetCreateDataStoreParametersCommand(provider);
                     }
                     break;
@@ -81,15 +80,14 @@ namespace FdoInfo
                     {
                         if (IsSwitchDefined("-help", args))
                         {
-                            AppConsole.WriteLine("Gets the parameters required to destroy a Data Store for a given provider");
-                            AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:GetDestroyDataStoreParameters -provider:<provider name> [-connection:<connection string>]");
+                            AppConsole.WriteLine("Gets and displays the parameters required to destroy a Data Store for a given provider");
+                            AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:GetDestroyDataStoreParameters -provider:<provider name>");
                             return;
                         }
 
                         string provider = GetArgument("-provider", args);
                         ThrowIfEmpty(provider, "-provider");
 
-                        string connStr = GetArgument("-connection", args);
                         _Command = new GetDestroyDataStoreParametersCommand(provider);
                     }
                     break;
@@ -97,7 +95,7 @@ namespace FdoInfo
                     {
                         if (IsSwitchDefined("-help", args))
                         {
-                            AppConsole.WriteLine("Lists the data stores of a given connection");
+                            AppConsole.WriteLine("Displays the data stores of a given connection");
                             AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:ListDataStores -provider:<provider name> -connection:<connection string> [-fdoOnly]");
                             return;
                         }
@@ -117,7 +115,7 @@ namespace FdoInfo
                     {
                         if (IsSwitchDefined("-help", args))
                         {
-                            AppConsole.WriteLine("Lists the feature schemas for a given connection");
+                            AppConsole.WriteLine("Displays the feature schemas for a given connection");
                             AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:ListSchemas -provider:<provider name> -connection:<connection string>");
                             return;
                         }
@@ -135,7 +133,7 @@ namespace FdoInfo
                     {
                         if (IsSwitchDefined("-help", args))
                         {
-                            AppConsole.WriteLine("Lists the feature classes under a given feature schema");
+                            AppConsole.WriteLine("Displays the feature classes under a given feature schema");
                             AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:ListClasses -provider:<provider name> -connection:<connection string> -schema:<schema name>");
                             return;
                         }
@@ -156,7 +154,7 @@ namespace FdoInfo
                     {
                         if (IsSwitchDefined("-help", args))
                         {
-                            AppConsole.WriteLine("Lists the properties under a given feature class");
+                            AppConsole.WriteLine("Displays the properties under a given feature class");
                             AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:ListClassProperties -provider:<provider name> -connection:<connection string> -schema:<schema name> -class:<class name>");
                             return;
                         }
@@ -180,7 +178,7 @@ namespace FdoInfo
                     {
                         if (IsSwitchDefined("-help", args))
                         {
-                            AppConsole.WriteLine("Lists the defined spatial contexts in a given connection");
+                            AppConsole.WriteLine("Displays the defined spatial contexts in a given connection");
                             AppConsole.WriteLine("Usage: FdoInfo.exe -cmd:ListSpatialContexts -provider:<provider name> -connection:<connection string>");
                             return;
                         }

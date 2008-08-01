@@ -1,15 +1,27 @@
 FdoToolbox Command-line Utilities readme
 ----------------------------------------
 
+Contents
+--------
+1. Introduction [A1]
+2. FdoUtil.exe command description [B1]
+3. FdoInfo.exe command description [B2]
+
+
+Introduction [A1]
+-----------------
+
 The following command-line utilities are included with FdoToolbox:
 
 - FdoUtil.exe
+- FdoInfo.exe
 
 The general invocation is as follows:
 
 FdoUtil.exe -cmd:<command name> [-quiet] [-test] <command parameters>
+FdoInfo.exe -cmd:<command name> <command parameters>
 
-The valid list of commands include:
+The valid list of commands for FdoUtil.exe include:
 - ApplySchema
 - CreateDataStore
 - Destroy
@@ -18,13 +30,24 @@ The valid list of commands include:
 - MakeSdf
 - RunTask
 
+The valid list of command for FdoInfo.exe include:
+- GetConnectionParameters
+- GetCreateDataStoreParameters
+- GetDestroyDataStoreParameters
+- ListClasses
+- ListClassProperties
+- ListDataStores
+- ListProviders
+- ListSchemas
+- ListSpatialContexts
+
 Where applicable, the -test switch performs a FDO capability check to determine if 
 execution can go ahead.
 
 Where applicable, the -quiet switch will suppress all console output. This is not 
 entirely the case however for debug builds of the command-line utilities
 
-FdoUtil.exe will return 0 for successful execution and will return a non-zero value
+All command-line utilities will return 0 for successful execution and will return a non-zero value
 otherwise. Consult CommandStatus.cs for the list of return codes.
 
 For commands that require a connection string parameter (see below) the connection 
@@ -38,7 +61,9 @@ SDF: -connection:File=C:\Test\Test.sdf
 SHP: -connection:DefaultFileLocation=C:\Test\Test.shp
 MySQL: -connection:Username=root;Password=1234;Service=localhost:3306;DataStore=mydatastore
 
-Each command is described in further detail below:
+======= FdoUtil.exe command description ======= [B1]
+
+Each command for FdoUtil.exe is described in further detail below:
 
 ApplySchema
 -----------
@@ -137,3 +162,91 @@ Notes:
 
 For bulk copy tasks, both the source and target connections must be valid 
 connections. Otherwise execution will fail.
+
+
+======= FdoInfo.exe command description ======= [B2]
+
+Each command for FdoInfo.exe is described in further detail below:
+
+GetConnectionParameters
+-----------------------
+
+Description: Gets and displays the connection parameters for a given provider
+
+Usage: FdoInfo.exe -cmd:GetConnectionParameters -provider:<provider name>
+
+Notes: n/a
+
+GetCreateDataStoreParameters
+----------------------------
+
+Description: Gets and displays the parameters required to create a Data Store for a given provider
+
+Usage: FdoInfo.exe -cmd:GetCreateDataStoreParameters -provider:<provider name>
+
+Notes: Only works for providers that support ICreateDataStore
+
+GetDestroyDataStoreParameters
+-----------------------------
+
+Description: Gets and displays the parameters required to destroy a Data Store for a given provider
+
+Usage: FdoInfo.exe -cmd:GetDestroyDataStoreParameters -provider:<provider name>
+
+Notes: Only works for providers that support IDestroyDataStore
+
+ListClasses
+-----------
+
+Description: Displays the feature classes under a given feature schema
+
+Usage: FdoInfo.exe -cmd:ListClasses -provider:<provider name> -connection:<connection string> -schema:<schema name>
+
+Notes: n/a
+
+ListClassProperties
+-------------------
+
+Description: Displays the properties under a given feature class
+
+Usage: FdoInfo.exe -cmd:ListClassProperties -provider:<provider name> -connection:<connection string> -schema:<schema name> -class:<class name>
+
+Notes: n/a
+
+ListDataStores
+--------------
+
+Description: Displays the data stores of a given connection
+
+Usage: FdoInfo.exe -cmd:ListDataStores -provider:<provider name> -connection:<connection string> [-fdoOnly]
+
+Notes: 
+Only works for providers that support IListDataStores
+If the -fdoOnly switch is supplied, it will display only fdo-enabled datastores.
+
+ListProviders
+-------------
+
+Description: Gets and displays all the registerd FDO providers
+
+Usage: FdoInfo.exe -cmd:ListProviders
+
+Notes: n/a
+
+ListSchemas
+-----------
+
+Description: Displays the feature schemas for a given connection
+
+Usage: FdoInfo.exe -cmd:ListSchemas -provider:<provider name> -connection:<connection string>
+
+Notes: n/a
+
+ListSpatialContexts
+-------------------
+
+Description: Displays the defined spatial contexts in a given connection
+
+Usage: FdoInfo.exe -cmd:ListSpatialContexts -provider:<provider name> -connection:<connection string>
+
+Notes: n/a
