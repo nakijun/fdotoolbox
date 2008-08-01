@@ -23,15 +23,25 @@ using System.Text;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Task definition manager
+    /// </summary>
     public class TaskManager : ITaskManager
     {
         private Dictionary<string, ITask> _Tasks;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public TaskManager()
         {
             _Tasks = new Dictionary<string, ITask>();
         }
 
+        /// <summary>
+        /// Adds a new task definition
+        /// </summary>
+        /// <param name="task">The task definition</param>
         public void AddTask(ITask task)
         {
             _Tasks.Add(task.Name, task);
@@ -39,6 +49,10 @@ namespace FdoToolbox.Core
                 this.TaskAdded(task.Name);
         }
 
+        /// <summary>
+        /// Removes a task definition (by name)
+        /// </summary>
+        /// <param name="name">The name of the task</param>
         public void RemoveTask(string name)
         {
             _Tasks.Remove(name);
@@ -46,6 +60,11 @@ namespace FdoToolbox.Core
                 this.TaskRemoved(name);
         }
 
+        /// <summary>
+        /// Gets a task definition (by name)
+        /// </summary>
+        /// <param name="name">The name of the task</param>
+        /// <returns>The task definition if found, null otherwise</returns>
         public ITask GetTask(string name)
         {
             if (_Tasks.ContainsKey(name))
@@ -53,15 +72,29 @@ namespace FdoToolbox.Core
             return null;
         }
 
+        /// <summary>
+        /// Gets the names of all the loaded task definitions
+        /// </summary>
         public ICollection<string> TaskNames
         {
             get { return _Tasks.Keys; }
         }
 
+        /// <summary>
+        /// Fires when a task definition is added
+        /// </summary>
         public event TaskEventHandler TaskAdded;
 
+        /// <summary>
+        /// Fires when a task definition is removed
+        /// </summary>
         public event TaskEventHandler TaskRemoved;
 
+        /// <summary>
+        /// Updates an existing task definition (by name)
+        /// </summary>
+        /// <param name="taskName">The name of the existing task</param>
+        /// <param name="task">The task definition</param>
         public void UpdateTask(string taskName, ITask task)
         {
             _Tasks.Remove(taskName);

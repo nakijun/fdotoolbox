@@ -32,12 +32,19 @@ using OSGeo.FDO.Commands.DataStore;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// IConnection wrapper service object.
+    /// </summary>
     public class FeatureService : IDisposable
     {
         private IConnection _conn;
 
         private FgfGeometryFactory _GeomFactory;
 
+        /// <summary>
+        /// Constructor. The passed connection must already be open.
+        /// </summary>
+        /// <param name="conn"></param>
         public FeatureService(IConnection conn)
         {
             _conn = conn;
@@ -49,11 +56,19 @@ namespace FdoToolbox.Core
             _GeomFactory.Dispose();
         }
 
+        /// <summary>
+        /// The underlying FDO connection
+        /// </summary>
         public IConnection Connection
         {
             get { return _conn; }
         }
 
+        /// <summary>
+        /// Loads and applies a defined feature schema definition file into the
+        /// current connection
+        /// </summary>
+        /// <param name="xmlFile"></param>
         public void LoadSchemasFromXml(string xmlFile)
         {
             FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
@@ -64,11 +79,21 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Checks if a given FDO command is supported
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
         public bool SupportsCommand(OSGeo.FDO.Commands.CommandType cmd)
         {
             return Array.IndexOf<int>(_conn.CommandCapabilities.Commands, (int)cmd) >= 0;
         }
 
+        /// <summary>
+        /// Utility method to clone a feature schema (via in-memory XML serialization)
+        /// </summary>
+        /// <param name="fs"></param>
+        /// <returns></returns>
         public static FeatureSchema CloneSchema(FeatureSchema fs)
         {
             FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
@@ -83,6 +108,10 @@ namespace FdoToolbox.Core
             return newSchemas[0];
         }
 
+        /// <summary>
+        /// Applies a feature schema to the current connection
+        /// </summary>
+        /// <param name="fs"></param>
         public void ApplySchema(FeatureSchema fs)
         {
             using (IApplySchema apply = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
@@ -92,6 +121,11 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Dumps a given feature schema (by name) to an xml file
+        /// </summary>
+        /// <param name="schemaName"></param>
+        /// <param name="xmlFile"></param>
         public void WriteSchemaToXml(string schemaName, string xmlFile)
         {
             FeatureSchema schema = GetSchemaByName(schemaName);
@@ -105,6 +139,11 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Clones all the feature schemas in the current connection (via in-memory
+        /// XML serialization)
+        /// </summary>
+        /// <returns></returns>
         public FeatureSchemaCollection CloneSchemas()
         {
             FeatureSchemaCollection schemas = DescribeSchema();
@@ -118,6 +157,11 @@ namespace FdoToolbox.Core
             return newSchemas;
         }
 
+        /// <summary>
+        /// Gets a feature schema by name
+        /// </summary>
+        /// <param name="schemaName">The name of the schema</param>
+        /// <returns>The feature schema. null if the schema was not found.</returns>
         public FeatureSchema GetSchemaByName(string schemaName)
         {
             if (string.IsNullOrEmpty(schemaName))
@@ -134,6 +178,10 @@ namespace FdoToolbox.Core
             return null;
         }
 
+        /// <summary>
+        /// Enumerates all the known feature schemas in the current connection.
+        /// </summary>
+        /// <returns></returns>
         public FeatureSchemaCollection DescribeSchema()
         {
             FeatureSchemaCollection schemas = null;
@@ -144,6 +192,12 @@ namespace FdoToolbox.Core
             return schemas;
         }
 
+        /// <summary>
+        /// Gets a class definition by name
+        /// </summary>
+        /// <param name="schemaName">The parent schema name</param>
+        /// <param name="className">The class name</param>
+        /// <returns>The class definition if found. null if it wasn't</returns>
         public ClassDefinition GetClassByName(string schemaName, string className)
         {
             if (string.IsNullOrEmpty(className))
@@ -161,12 +215,20 @@ namespace FdoToolbox.Core
             return null;
         }
 
+        /// <summary>
+        /// Dumps all feature schemas in the current connection to an xml file.
+        /// </summary>
+        /// <param name="schemaFile"></param>
         public void WriteSchemaToXml(string schemaFile)
         {
             FeatureSchemaCollection schemas = DescribeSchema();
             schemas.WriteXml(schemaFile);
         }
 
+        /// <summary>
+        /// Enumerates all spatial contexts in the current connection
+        /// </summary>
+        /// <returns></returns>
         public List<SpatialContextInfo> GetSpatialContexts()
         {
             List<SpatialContextInfo> contexts = new List<SpatialContextInfo>();
@@ -185,12 +247,22 @@ namespace FdoToolbox.Core
             return contexts;
         }
 
+        /// <summary>
+        /// Gets a spatial context by name
+        /// </summary>
+        /// <param name="name">The name of the spatial context</param>
+        /// <returns>The spatial context information if found. null if otherwise</returns>
         public SpatialContextInfo GetSpatialContext(string name)
         {
             List<SpatialContextInfo> contexts = GetSpatialContexts();
             return contexts.Find(delegate(SpatialContextInfo info) { return info.Name == name; });
         }
 
+        /// <summary>
+        /// Creates a spatial context
+        /// </summary>
+        /// <param name="ctx">The spatial context</param>
+        /// <param name="updateExisting">If true, will replace any existing spatial context of the same name</param>
         public void CreateSpatialContext(SpatialContextInfo ctx, bool updateExisting)
         {
             using (ICreateSpatialContext create = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) as ICreateSpatialContext)
@@ -215,11 +287,19 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Destroys a spatial context
+        /// </summary>
+        /// <param name="ctx">The spatial context to destroy</param>
         public void DestroySpatialContext(SpatialContextInfo ctx)
         {
             DestroySpatialContext(ctx.Name);
         }
 
+        /// <summary>
+        /// Destroys a spatial context
+        /// </summary>
+        /// <param name="name">The name of the spatial context to destroy</param>
         public void DestroySpatialContext(string name)
         {
             using (IDestroySpatialContext destroy = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) as IDestroySpatialContext)
@@ -229,6 +309,10 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Destroys a feature schema
+        /// </summary>
+        /// <param name="schemaName">The name of the schema to destroy</param>
         public void DestroySchema(string schemaName)
         {
             using (IDestroySchema destroy = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySchema) as IDestroySchema)
@@ -238,6 +322,10 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Destroys a data store
+        /// </summary>
+        /// <param name="dataStoreString">A connection-string style string describing the data store parameters</param>
         public void DestroyDataStore(string dataStoreString)
         {
             NameValueCollection parameters = ExpressUtility.ConvertFromString(dataStoreString);
@@ -251,6 +339,10 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Creates a data store
+        /// </summary>
+        /// <param name="dataStoreString">A connection-string style string describing the data store parameters</param>
         public void CreateDataStore(string dataStoreString)
         {
             NameValueCollection parameters = ExpressUtility.ConvertFromString(dataStoreString);
@@ -264,6 +356,11 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Enumerates all the datastores in the current connection
+        /// </summary>
+        /// <param name="onlyFdoEnabled">If true, only fdo-enabled datastores are returned</param>
+        /// <returns>A list of datastores</returns>
         public List<DataStoreInfo> ListDataStores(bool onlyFdoEnabled)
         {
             List<DataStoreInfo> stores = new List<DataStoreInfo>();

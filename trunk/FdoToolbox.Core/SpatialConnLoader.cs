@@ -26,8 +26,16 @@ using OSGeo.FDO.ClientServices;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Helper class to load and save connection settings
+    /// </summary>
     public sealed class SpatialConnLoader
     {
+        /// <summary>
+        /// Loads a connection from file
+        /// </summary>
+        /// <param name="file">The connection settings file</param>
+        /// <returns>The spatial connection</returns>
         public static SpatialConnectionInfo LoadConnection(string file)
         {
             XmlDocument doc = new XmlDocument();
@@ -40,6 +48,11 @@ namespace FdoToolbox.Core
             return new SpatialConnectionInfo(name, conn);
         }
 
+        /// <summary>
+        /// Saves a connection to file
+        /// </summary>
+        /// <param name="cinfo">The spatial connection</param>
+        /// <param name="file">The file to save it to</param>
         public static void SaveConnection(SpatialConnectionInfo cinfo, string file)
         {
             string xmlTemplate =
