@@ -189,14 +189,26 @@ namespace FdoToolbox.Core
 
         /// <summary>
         /// If true copies all source spatial contexts from the source to the
-        /// target. If the target does not support multiple spatial contexts,
-        /// then the target spatial context will be overwritten by the context
-        /// of the user's choice.
+        /// target. If this is a express mode bulk copy option, then it will
+        /// automatically set the first available spatial context as the one
+        /// to copy.
         /// </summary>
         public bool CopySpatialContexts
         {
             get { return _CopySpatialContexts; }
-            set { _CopySpatialContexts = value; }
+            set 
+            { 
+                _CopySpatialContexts = value;
+                if (_ExpressMode)
+                {
+                    using (FeatureService service = new FeatureService(_Source.Connection))
+                    {
+                        List<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                        _SourceSpatialContexts.Clear();
+                        _SourceSpatialContexts.Add(contexts[0].Name);
+                    }
+                }
+            }
         }
 
         private bool _CoerceDataTypes;
