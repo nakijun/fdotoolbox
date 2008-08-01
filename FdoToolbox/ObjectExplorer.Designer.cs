@@ -29,11 +29,11 @@ namespace FdoToolbox
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Connections", 0, 0);
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Spatial Data Connections", 0, 0);
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Tasks", 1, 1);
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Modules", 2, 2);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ObjectExplorer));
-            this.ctxConnections = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxFdoConnections = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxTasks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxModules = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mToolStrip = new System.Windows.Forms.ToolStrip();
@@ -46,10 +46,10 @@ namespace FdoToolbox
             this.ctxSelectedClass = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.SuspendLayout();
             // 
-            // ctxConnections
+            // ctxFdoConnections
             // 
-            this.ctxConnections.Name = "ctxConnections";
-            this.ctxConnections.Size = new System.Drawing.Size(61, 4);
+            this.ctxFdoConnections.Name = "ctxConnections";
+            this.ctxFdoConnections.Size = new System.Drawing.Size(61, 4);
             // 
             // ctxTasks
             // 
@@ -76,11 +76,11 @@ namespace FdoToolbox
             this.mTreeView.ImageList = this.mImageList;
             this.mTreeView.Location = new System.Drawing.Point(0, 25);
             this.mTreeView.Name = "mTreeView";
-            treeNode1.ContextMenuStrip = this.ctxConnections;
+            treeNode1.ContextMenuStrip = this.ctxFdoConnections;
             treeNode1.ImageIndex = 0;
-            treeNode1.Name = "NODE_CONNECTIONS";
+            treeNode1.Name = "NODE_FDO_CONNECTIONS";
             treeNode1.SelectedImageIndex = 0;
-            treeNode1.Text = "Connections";
+            treeNode1.Text = "Spatial Data Connections";
             treeNode2.ContextMenuStrip = this.ctxTasks;
             treeNode2.ImageIndex = 1;
             treeNode2.Name = "NODE_TASKS";
@@ -167,7 +167,7 @@ namespace FdoToolbox
         private System.Windows.Forms.ContextMenuStrip ctxSelectedModule;
         private System.Windows.Forms.ContextMenuStrip ctxSelectedTask;
         private System.Windows.Forms.ContextMenuStrip ctxSelectedConnection;
-        private System.Windows.Forms.ContextMenuStrip ctxConnections;
+        private System.Windows.Forms.ContextMenuStrip ctxFdoConnections;
         private System.Windows.Forms.ContextMenuStrip ctxTasks;
         private System.Windows.Forms.ContextMenuStrip ctxModules;
         private System.Windows.Forms.ContextMenuStrip ctxSelectedSchema;

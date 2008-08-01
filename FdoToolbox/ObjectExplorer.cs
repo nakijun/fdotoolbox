@@ -165,7 +165,7 @@ namespace FdoToolbox
             }
         }
 
-        TreeNode GetConnectionsNode() { return mTreeView.Nodes.Find("NODE_CONNECTIONS", false)[0]; }
+        TreeNode GetConnectionsNode() { return mTreeView.Nodes.Find("NODE_FDO_CONNECTIONS", false)[0]; }
         TreeNode GetTasksNode() { return mTreeView.Nodes.Find("NODE_TASKS", false)[0]; }
         TreeNode GetModulesNode() { return mTreeView.Nodes.Find("NODE_MODULES", false)[0]; }
 
@@ -309,7 +309,7 @@ namespace FdoToolbox
             XmlNode selClassCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedClass");
 
             ProcessMenuNode(mToolStrip, toolbarNode);
-            ProcessMenuNode(ctxConnections, connCtxNode);
+            ProcessMenuNode(ctxFdoConnections, connCtxNode);
             ProcessMenuNode(ctxSelectedConnection, selConnCtxNode);
             ProcessMenuNode(ctxSelectedSchema, selSchemaCtxNode);
             ProcessMenuNode(ctxSelectedClass, selClassCtxNode);
@@ -420,7 +420,7 @@ namespace FdoToolbox
             XmlNode selClassCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedClass");
 
             ProcessMenuNode(mToolStrip, toolbarNode);
-            ProcessMenuNode(ctxConnections, connCtxNode);
+            ProcessMenuNode(ctxFdoConnections, connCtxNode);
             ProcessMenuNode(ctxSelectedConnection, selConnCtxNode);
             ProcessMenuNode(ctxSelectedSchema, selSchemaCtxNode);
             ProcessMenuNode(ctxSelectedClass, selClassCtxNode);
