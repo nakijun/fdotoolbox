@@ -57,8 +57,8 @@
   <ItemGroup>
     <Compile Include="AppConsole.cs" />
     <Compile Include="BaseApplication.cs" />
-    <Compile Include="BulkCopyOptions.cs" />
-    <Compile Include="BulkCopyTask.cs" />
+    <Compile Include="SpatialBulkCopyOptions.cs" />
+    <Compile Include="SpatialBulkCopyTask.cs" />
     <Compile Include="ClassCopyOptions.cs" />
     <Compile Include="CmdConsoleErrorStream.cs" />
     <Compile Include="CmdConsoleOutputStream.cs" />

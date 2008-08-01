@@ -77,9 +77,9 @@ using System.IO;
 #endregion
 namespace FdoToolbox.Core
 {
-    public class BulkCopyTask : ITask
+    public class SpatialBulkCopyTask : ITask
     {
-        private BulkCopyOptions _Options;
+        private SpatialBulkCopyOptions _Options;
 
         private FeatureService _SrcService;
         private FeatureService _DestService;
@@ -89,7 +89,7 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="name"></param>
         /// <param name="options"></param>
-        public BulkCopyTask(string name, BulkCopyOptions options)
+        public SpatialBulkCopyTask(string name, SpatialBulkCopyOptions options)
         {
             _Name = name;
             _Options = options;
@@ -101,7 +101,7 @@ namespace FdoToolbox.Core
         /// <summary>
         /// The options object
         /// </summary>
-        public BulkCopyOptions Options
+        public SpatialBulkCopyOptions Options
         {
             get { return _Options; }
         }
@@ -471,7 +471,7 @@ namespace FdoToolbox.Core
         /// <param name="options"></param>
         /// <param name="srcClasses"></param>
         /// <returns></returns>
-        public static ClassCopyOptions[] GetAllClassCopyOptions(BulkCopyOptions options, ClassCollection srcClasses)
+        public static ClassCopyOptions[] GetAllClassCopyOptions(SpatialBulkCopyOptions options, ClassCollection srcClasses)
         {
             //Include *all* classes and *all* properties
             options.ClearClassCopyOptions();
@@ -487,7 +487,7 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static ClassCollection GetSourceClasses(BulkCopyOptions options)
+        public static ClassCollection GetSourceClasses(SpatialBulkCopyOptions options)
         {
             FeatureService service = new FeatureService(options.Source.Connection);
             FeatureSchema schema = service.GetSchemaByName(options.SourceSchemaName);

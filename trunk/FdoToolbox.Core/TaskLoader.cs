@@ -50,7 +50,7 @@ namespace FdoToolbox.Core
             switch (task.TaskType)
             {
                 case TaskType.BulkCopy:
-                    SaveBulkCopy((BulkCopyTask)task, file);
+                    SaveBulkCopy((SpatialBulkCopyTask)task, file);
                     break;
                 default:
                     AppConsole.WriteLine("Unknown or unsupported task type: {0}", task.TaskType);
@@ -58,7 +58,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        private static BulkCopyTask LoadBulkCopy(XmlDocument doc, bool consoleMode)
+        private static SpatialBulkCopyTask LoadBulkCopy(XmlDocument doc, bool consoleMode)
         {
             string srcName = HostApplication.Instance.ConnectionManager.CreateUniqueName();
             string destName = HostApplication.Instance.ConnectionManager.CreateUniqueName();
@@ -104,7 +104,7 @@ namespace FdoToolbox.Core
                 ConnectionInfo srcConnInfo = new ConnectionInfo(srcName, srcConn);
                 ConnectionInfo destConnInfo = new ConnectionInfo(destName, destConn);
 
-                BulkCopyOptions options = new BulkCopyOptions(srcConnInfo, destConnInfo);
+                SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(srcConnInfo, destConnInfo);
                 options.SourceSchemaName = srcSchema;
                 options.TargetSchemaName = destSchema;
                 options.CoerceDataTypes = coerceDataTypes;
@@ -153,7 +153,7 @@ namespace FdoToolbox.Core
                     }
                     options.AddClassCopyOption(copt);
                 }
-                return new BulkCopyTask(name, options);
+                return new SpatialBulkCopyTask(name, options);
             }
             catch (OSGeo.FDO.Common.Exception ex)
             {
@@ -186,7 +186,7 @@ namespace FdoToolbox.Core
             return null;
         }
 
-        private static void SaveBulkCopy(BulkCopyTask task, string configFile)
+        private static void SaveBulkCopy(SpatialBulkCopyTask task, string configFile)
         {
             ClassCopyOptions[] cOptions = task.Options.GetClassCopyOptions();
             string classMappingXml = string.Empty;

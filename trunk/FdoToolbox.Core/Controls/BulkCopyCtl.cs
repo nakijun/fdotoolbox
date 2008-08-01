@@ -85,14 +85,14 @@ namespace FdoToolbox.Core.Controls
             update = false;
         }
 
-        public BulkCopyCtl(BulkCopyTask task) : this()
+        public BulkCopyCtl(SpatialBulkCopyTask task) : this()
         {
             txtName.Text = task.Name;
             LoadSettings(task);
             update = true;
         }
 
-        private void LoadSettings(BulkCopyTask task)
+        private void LoadSettings(SpatialBulkCopyTask task)
         {
             cmbSrcConn.SelectedItem = task.Options.Source.Name; 
             cmbDestConn.SelectedItem = task.Options.Target.Name;
@@ -582,7 +582,7 @@ namespace FdoToolbox.Core.Controls
                 }
             }
             
-            BulkCopyOptions options = new BulkCopyOptions(
+            SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(
                 new ConnectionInfo(
                     srcConnName,
                     HostApplication.Instance.ConnectionManager.GetConnection(srcConnName)
@@ -644,7 +644,7 @@ namespace FdoToolbox.Core.Controls
             if (destSchema != null)
                 options.TargetSchemaName = destSchema.Name;
            
-            BulkCopyTask bcptask = new BulkCopyTask(txtName.Text, options);
+            SpatialBulkCopyTask bcptask = new SpatialBulkCopyTask(txtName.Text, options);
             if(update)
             {
                 ITask task = HostApplication.Instance.TaskManager.GetTask(txtName.Text);
