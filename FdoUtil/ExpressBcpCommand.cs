@@ -80,7 +80,7 @@ namespace FdoUtil
                 ConnectionInfo srcConnInfo = new ConnectionInfo("SOURCE", srcConn);
                 ConnectionInfo destConnInfo = new ConnectionInfo("TARGET", destConn);
 
-                BulkCopyOptions options = new BulkCopyOptions(srcConnInfo, destConnInfo);
+                SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(srcConnInfo, destConnInfo);
                 options.CopySpatialContexts = !string.IsNullOrEmpty(_SrcSpatialContext);
 
                 if (options.CopySpatialContexts)
@@ -90,7 +90,7 @@ namespace FdoUtil
                 if (_SrcClasses.Count > 0)
                 {
                     options.ClearClassCopyOptions();
-                    ClassCollection srcClasses = BulkCopyTask.GetSourceClasses(options);
+                    ClassCollection srcClasses = SpatialBulkCopyTask.GetSourceClasses(options);
                     foreach (ClassDefinition classDef in srcClasses)
                     {
                         if (_SrcClasses.Contains(classDef.Name))
@@ -102,7 +102,7 @@ namespace FdoUtil
                 }
                 else
                 {
-                    ClassCollection srcClasses = BulkCopyTask.GetSourceClasses(options);
+                    ClassCollection srcClasses = SpatialBulkCopyTask.GetSourceClasses(options);
                     foreach (ClassDefinition classDef in srcClasses)
                     {
                         WriteLine("Adding class to copy: {0}", classDef.Name);
@@ -110,7 +110,7 @@ namespace FdoUtil
                     }
                 }
 
-                BulkCopyTask task = new BulkCopyTask("BCP", options);
+                SpatialBulkCopyTask task = new SpatialBulkCopyTask("BCP", options);
                 task.OnItemProcessed += new TaskPercentageEventHandler(task_OnItemProcessed);
                 task.OnTaskMessage += new TaskProgressMessageEventHandler(task_OnTaskMessage);
                 task.ValidateTaskParameters();

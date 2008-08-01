@@ -354,7 +354,7 @@ namespace FdoToolbox.Core
             {
                 case TaskType.BulkCopy:
                     {
-                        BaseDocumentCtl ctl = new BulkCopyCtl((BulkCopyTask)task);
+                        BaseDocumentCtl ctl = new BulkCopyCtl((SpatialBulkCopyTask)task);
                         HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
                     }
                     break;

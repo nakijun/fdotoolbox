@@ -33,7 +33,7 @@ namespace FdoToolbox.Core
     /// <summary>
     /// Options object for the BulkCopyTask
     /// </summary>
-    public class BulkCopyOptions : IDisposable
+    public class SpatialBulkCopyOptions : IDisposable
     {
         private ConnectionInfo _Source;
         private ConnectionInfo _Target;
@@ -47,7 +47,7 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public BulkCopyOptions(ConnectionInfo source, ConnectionInfo target)
+        public SpatialBulkCopyOptions(ConnectionInfo source, ConnectionInfo target)
         {
             _Source = source;
             _Target = target;
@@ -66,7 +66,7 @@ namespace FdoToolbox.Core
         /// <param name="target"></param>
         /// <param name="sourceFile"></param>
         /// <param name="targetFile"></param>
-        public BulkCopyOptions(ExpressProvider source, ExpressProvider target, string sourceFile, string targetFile)
+        public SpatialBulkCopyOptions(ExpressProvider source, ExpressProvider target, string sourceFile, string targetFile)
         {
             _SourceClasses = new List<ClassCopyOptions>();
             _SourceSpatialContexts = new List<string>();

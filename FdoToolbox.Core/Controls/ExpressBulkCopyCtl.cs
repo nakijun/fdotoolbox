@@ -136,13 +136,13 @@ namespace FdoToolbox.Core.Controls
             string source = txtSource.Text;
             string target = txtTarget.Text;
 
-            BulkCopyOptions options = null;
+            SpatialBulkCopyOptions options = null;
             try
             {
-                options = new BulkCopyOptions(this.SourceProvider, this.TargetProvider, source, target);
+                options = new SpatialBulkCopyOptions(this.SourceProvider, this.TargetProvider, source, target);
                 options.CopySpatialContexts = chkCopySpatialContexts.Checked;
 
-                BulkCopyTask task = new BulkCopyTask("EXPR_BCP", options);
+                SpatialBulkCopyTask task = new SpatialBulkCopyTask("EXPR_BCP", options);
                 TaskProgressDlg diag = new TaskProgressDlg(task);
                 diag.Run();
             }
