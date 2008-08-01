@@ -337,7 +337,7 @@ namespace FdoToolbox.Core
                 AppConsole.Alert("Error", "Cannot create a bulk copy task. At least two open connections are required");
                 return;
             }
-            BulkCopyCtl ctl = new BulkCopyCtl();
+            SpatialBulkCopyCtl ctl = new SpatialBulkCopyCtl();
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
@@ -354,7 +354,7 @@ namespace FdoToolbox.Core
             {
                 case TaskType.BulkCopy:
                     {
-                        BaseDocumentCtl ctl = new BulkCopyCtl((SpatialBulkCopyTask)task);
+                        BaseDocumentCtl ctl = new SpatialBulkCopyCtl((SpatialBulkCopyTask)task);
                         HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
                     }
                     break;

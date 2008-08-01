@@ -33,9 +33,9 @@ using System.IO;
 
 namespace FdoToolbox.Core.Controls
 {
-    public partial class ExpressBulkCopyCtl : BaseDocumentCtl
+    public partial class ExpressSpatialBulkCopyCtl : BaseDocumentCtl
     {
-        internal ExpressBulkCopyCtl()
+        internal ExpressSpatialBulkCopyCtl()
         {
             InitializeComponent();
             this.Title = "Express Bulk Copy";
@@ -43,7 +43,7 @@ namespace FdoToolbox.Core.Controls
             saveFileDialog.InitialDirectory = HostApplication.Instance.AppPath;
         }
 
-        public ExpressBulkCopyCtl(ExpressProvider source, ExpressProvider target)
+        public ExpressSpatialBulkCopyCtl(ExpressProvider source, ExpressProvider target)
             : this()
         {
             this.SourceProvider = source;

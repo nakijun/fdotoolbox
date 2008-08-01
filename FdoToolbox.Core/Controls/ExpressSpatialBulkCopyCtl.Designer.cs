@@ -1,6 +1,6 @@
 namespace FdoToolbox.Core.Controls
 {
-    partial class ExpressBulkCopyCtl
+    partial class ExpressSpatialBulkCopyCtl
     {
         /// <summary> 
         /// Required designer variable.

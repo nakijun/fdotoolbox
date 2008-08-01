@@ -114,11 +114,11 @@
     <Compile Include="ICoordinateSystemCatalog.cs" />
     <Compile Include="TextConsoleInputStream.cs" />
     <Compile Include="TextConsoleOutputStream.cs" />
-    <Compile Include="Controls\BulkCopyCtl.cs">
+    <Compile Include="Controls\SpatialBulkCopyCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\BulkCopyCtl.Designer.cs">
-      <DependentUpon>BulkCopyCtl.cs</DependentUpon>
+    <Compile Include="Controls\SpatialBulkCopyCtl.Designer.cs">
+      <DependentUpon>SpatialBulkCopyCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ClassDefCtl.cs">
       <SubType>UserControl</SubType>
@@ -138,11 +138,11 @@
     <Compile Include="Controls\DataStoreMgrCtl.Designer.cs">
       <DependentUpon>DataStoreMgrCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ExpressBulkCopyCtl.cs">
+    <Compile Include="Controls\ExpressSpatialBulkCopyCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ExpressBulkCopyCtl.Designer.cs">
-      <DependentUpon>ExpressBulkCopyCtl.cs</DependentUpon>
+    <Compile Include="Controls\ExpressSpatialBulkCopyCtl.Designer.cs">
+      <DependentUpon>ExpressSpatialBulkCopyCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FeatureClassExtendedInfoCtl.cs">
       <SubType>UserControl</SubType>
@@ -364,9 +364,9 @@
     <None Include="Resources\accept.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\BulkCopyCtl.resx">
+    <EmbeddedResource Include="Controls\SpatialBulkCopyCtl.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>BulkCopyCtl.cs</DependentUpon>
+      <DependentUpon>SpatialBulkCopyCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ClassDefCtl.resx">
       <DependentUpon>ClassDefCtl.cs</DependentUpon>
@@ -384,9 +384,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>DataStoreMgrCtl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ExpressBulkCopyCtl.resx">
+    <EmbeddedResource Include="Controls\ExpressSpatialBulkCopyCtl.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>ExpressBulkCopyCtl.cs</DependentUpon>
+      <DependentUpon>ExpressSpatialBulkCopyCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FeatureClassExtendedInfoCtl.resx">
       <SubType>Designer</SubType>
