@@ -10,8 +10,16 @@
 		- New command: Class Data Preview. This basically loads the Data Preview tab, set to the selected schema/class
 		- Expression Editor now supports building Spatial and Distance operations.
 - Fixes:
+	- Small changes to extent labels in Spatial Context Dialog
+	- Clicking cancel on the Generic Connect/Create Data Store tabs will now close them.
+	- Fixed incorrect spatial context envelope computation for certain data sources.
+	- Fixed error about missing table: Projections in cscatalog.sqlite
 	- Connection-bound tabs are now single-instance (per connection). For example: that means you can't open the Schema Management
 	  tab for <connection> more than once. Opening more than once will simply re-activate the existing tab.
+
+- Other:
+	- API name changes: Added a "Spatial" prefix to almost every class/property name starting with "Conn" as part of preparations for 
+	  non-spatial data support
 
 v0.4.1
 ------
