@@ -69,9 +69,9 @@
     <Compile Include="Controls\SpatialConnectionBoundControl.Designer.cs">
       <DependentUpon>SpatialConnectionBoundControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConnectionCommand.cs" />
-    <Compile Include="ConnectionInfo.cs" />
-    <Compile Include="ConnLoader.cs" />
+    <Compile Include="SpatialConnectionCommand.cs" />
+    <Compile Include="SpatialConnectionInfo.cs" />
+    <Compile Include="SpatialConnLoader.cs" />
     <Compile Include="ConsoleApplication.cs" />
     <Compile Include="ConsoleCommand.cs" />
     <Compile Include="Controls\BaseDocumentCtl.cs">
@@ -80,7 +80,7 @@
     <Compile Include="Controls\BaseDocumentCtl.Designer.cs">
       <DependentUpon>BaseDocumentCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConnectionMgr.cs" />
+    <Compile Include="SpatialConnectionMgr.cs" />
     <Compile Include="Controls\SpatialConnectionBoundTabManager.cs" />
     <Compile Include="Controls\CoordSysManagerCtl.cs">
       <SubType>UserControl</SubType>

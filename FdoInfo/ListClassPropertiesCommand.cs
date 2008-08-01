@@ -27,7 +27,7 @@ using OSGeo.FDO.Common;
 
 namespace FdoInfo
 {
-    public class ListClassPropertiesCommand : ConnectionCommand
+    public class ListClassPropertiesCommand : SpatialConnectionCommand
     {
         private string _schema;
         private string _class;

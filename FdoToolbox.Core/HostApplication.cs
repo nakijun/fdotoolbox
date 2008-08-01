@@ -47,7 +47,7 @@ namespace FdoToolbox.Core
         private HostApplication() : base()
         {
             InitializeDialogs();
-            _connMgr = new ConnectionMgr();
+            _connMgr = new SpatialConnectionMgr();
             _moduleMgr = new ModuleMgr();
             _taskMgr = new TaskManager();
             _MenuStateMgr = new MenuStateMgr();
