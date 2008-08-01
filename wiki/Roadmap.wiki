@@ -17,6 +17,7 @@
  * Spatial -> Non-Spatial bulk copy
  * Non-Spatial -> Spatial bulk copy
  * Non-Spatial -> Spatial (Point Features) conversion 
+ * Pipeable console commands
  * Raster Provider support
  * KML support
  * Visual Preview of FDO Data Sources
