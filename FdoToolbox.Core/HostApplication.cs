@@ -51,7 +51,6 @@ namespace FdoToolbox.Core
             _moduleMgr = new ModuleMgr();
             _taskMgr = new TaskManager();
             _MenuStateMgr = new MenuStateMgr();
-            _CsCatalog = new CoordSysCatalog();
         }
 
         /// <summary>
@@ -68,6 +67,7 @@ namespace FdoToolbox.Core
                     _shell.Title = this.Name;
                     _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
 
+                    _CsCatalog = new CoordSysCatalog();
                     _TabManager = new ConnectionBoundTabManager();
 
                     //Set streams for Application Console

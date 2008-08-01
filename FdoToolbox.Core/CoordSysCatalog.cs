@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data.SQLite;
 using System.ComponentModel;
+using System.IO;
 
 namespace FdoToolbox.Core
 {
@@ -32,12 +33,14 @@ namespace FdoToolbox.Core
     public class CoordSysCatalog : ICoordinateSystemCatalog
     {
         const string DB_FILE = "cscatalog.sqlite";
+        private string dbpath;
 
         private string _ConnectionString;
 
         public CoordSysCatalog()
         {
-            _ConnectionString = string.Format("Data Source={0};Version=3;Compress=True", DB_FILE);
+            dbpath = Path.Combine(HostApplication.Instance.AppPath, DB_FILE);
+            _ConnectionString = string.Format("Data Source={0};Version=3;Compress=True;FailIfMissing=true", dbpath);
         }
 
         private BindingList<CoordinateSystem> _Projections;
@@ -132,7 +135,7 @@ namespace FdoToolbox.Core
             SQLiteConnection conn = new SQLiteConnection(_ConnectionString);
             using (conn)
             {
-                AppConsole.WriteLine("Loading all Coordinate Systems from {0}", DB_FILE);
+                AppConsole.WriteLine("Loading all Coordinate Systems from {0}", dbpath);
                 conn.Open();
                 string name = string.Empty;
                 string desc = string.Empty;
