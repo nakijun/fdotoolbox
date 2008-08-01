@@ -31,8 +31,17 @@ using OSGeo.FDO.Runtime;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Utility class to parse and load task definitions
+    /// </summary>
     public sealed class TaskLoader
     {
+        /// <summary>
+        /// Load a task definition
+        /// </summary>
+        /// <param name="configFile">The task definition file</param>
+        /// <param name="consoleMode">Is the application a console application?</param>
+        /// <returns>The task definition object, null if loading failed</returns>
         public static ITask LoadTask(string configFile, bool consoleMode)
         {
             XmlDocument doc = new XmlDocument();
@@ -45,6 +54,11 @@ namespace FdoToolbox.Core
                 return null;
         }
 
+        /// <summary>
+        /// Saves a task definition to file
+        /// </summary>
+        /// <param name="task">The task definition</param>
+        /// <param name="file">The file to save it to</param>
         public static void SaveTask(ITask task, string file)
         {
             switch (task.TaskType)
@@ -58,6 +72,12 @@ namespace FdoToolbox.Core
             }
         }
 
+        /// <summary>
+        /// Loads a bulk copy task
+        /// </summary>
+        /// <param name="doc">The loaded xml document</param>
+        /// <param name="consoleMode">Is this application a console application</param>
+        /// <returns>The Bulk Copy task, null if loading failed</returns>
         private static SpatialBulkCopyTask LoadBulkCopy(XmlDocument doc, bool consoleMode)
         {
             string srcName = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
@@ -186,6 +206,11 @@ namespace FdoToolbox.Core
             return null;
         }
 
+        /// <summary>
+        /// Saves a bulk copy task to file
+        /// </summary>
+        /// <param name="task">The bulk copy task</param>
+        /// <param name="configFile">The file to save it to</param>
         private static void SaveBulkCopy(SpatialBulkCopyTask task, string configFile)
         {
             ClassCopyOptions[] cOptions = task.Options.GetClassCopyOptions();

@@ -28,14 +28,41 @@ namespace FdoToolbox.Core
     /// </summary>
     public interface IModule
     {
+        /// <summary>
+        /// Module name
+        /// </summary>
         string Name { get; }
-        string Description { get; }
 
+        /// <summary>
+        /// Module description
+        /// </summary>
+        string Description { get; }
+        
+        /// <summary>
+        /// Names of all registered commands
+        /// </summary>
         ICollection<string> CommandNames { get; }
+
+        /// <summary>
+        /// The list of all registered commands
+        /// </summary>
         IList<Command> Commands { get; }
+
+        /// <summary>
+        /// Gets a command by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         Command GetCommand(string name);
 
+        /// <summary>
+        /// Initialize the module
+        /// </summary>
         void Initialize();
+
+        /// <summary>
+        /// Cleanup the module
+        /// </summary>
         void Cleanup();
     }
 }

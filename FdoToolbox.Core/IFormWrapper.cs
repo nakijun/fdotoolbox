@@ -29,6 +29,9 @@ namespace FdoToolbox.Core
     /// </summary>
     public interface IFormWrapper
     {
+        /// <summary>
+        /// The underlying form object
+        /// </summary>
         Form FormObj { get; }
     }
 }

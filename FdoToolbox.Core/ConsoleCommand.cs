@@ -23,12 +23,20 @@ using System.Text;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Base console command class. All console commands derive from
+    /// this class.
+    /// </summary>
     public abstract class ConsoleCommand : IConsoleCommand
     {
         public abstract int Execute();
 
         private bool _IsTestOnly;
 
+        /// <summary>
+        /// If true the command should run under simulation (no changes, if any,
+        /// are performed)
+        /// </summary>
         public bool IsTestOnly
         {
             get { return _IsTestOnly; }
@@ -37,6 +45,10 @@ namespace FdoToolbox.Core
 
         private bool _IsSilent;
 
+        /// <summary>
+        /// If true, suppresses all console output. Check the status code returned
+        /// by Execute() to determine successful execution.
+        /// </summary>
         public bool IsSilent
         {
             get { return _IsSilent; }

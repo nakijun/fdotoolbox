@@ -25,6 +25,10 @@ using OSGeo.FDO.ClientServices;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Console command with built-in connection. Derive from this class if
+    /// the command requires a single FDO connection.
+    /// </summary>
     public abstract class SpatialConnectionCommand : ConsoleCommand
     {
         protected string _provider;
