@@ -42,7 +42,7 @@ namespace FdoToolbox.Core
         /// underlying connection object
         /// </summary>
         /// <returns></returns>
-        ConnectionInfo GetSelectedConnection();
+        SpatialConnectionInfo GetSelectedSpatialConnection();
 
         /// <summary>
         /// If a schema node is selected, returns the name of the
@@ -73,10 +73,10 @@ namespace FdoToolbox.Core
         IModule GetSelectedModule();
 
         /// <summary>
-        /// Refreshes the selected connection's child nodes
+        /// Refreshes the selected spatial connection's child nodes
         /// </summary>
         /// <param name="name"></param>
-        void RefreshConnection(string name);
+        void RefreshSpatialConnection(string name);
 
         /// <summary>
         /// Extend the Object Explorer UI

@@ -98,7 +98,7 @@ namespace FdoToolbox.Core
 
                     if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
                     {
-                        string name = HostApplication.Instance.ConnectionManager.CreateUniqueName();
+                        string name = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
                         name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                         CoreModule.AddConnection(conn, name);
                     }

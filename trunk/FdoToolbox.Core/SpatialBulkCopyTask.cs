@@ -293,7 +293,7 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void CopySpatialContexts(ConnectionInfo source, ConnectionInfo target)
+        private void CopySpatialContexts(SpatialConnectionInfo source, SpatialConnectionInfo target)
         {
             if (_Options.SourceSpatialContexts.Count == 0)
             {

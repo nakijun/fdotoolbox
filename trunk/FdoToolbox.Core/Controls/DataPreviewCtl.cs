@@ -54,7 +54,7 @@ namespace FdoToolbox.Core.Controls
             this.Disposed += delegate { _GeomFactory.Dispose(); };
         }
 
-        public DataPreviewCtl(ConnectionInfo conn, string key)
+        public DataPreviewCtl(SpatialConnectionInfo conn, string key)
             : base(conn, key)
         {
             InitializeComponent();
@@ -75,7 +75,7 @@ namespace FdoToolbox.Core.Controls
 
         protected override void OnLoad(EventArgs e)
         {
-            FeatureService service = HostApplication.Instance.ConnectionManager.CreateService(this.BoundConnection.Name);
+            FeatureService service = HostApplication.Instance.SpatialConnectionManager.CreateService(this.BoundConnection.Name);
             cmbSchema.DataSource = service.DescribeSchema();
             cmbAggSchema.DataSource = service.DescribeSchema();
             base.OnLoad(e);

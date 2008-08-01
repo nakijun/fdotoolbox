@@ -28,7 +28,7 @@ namespace FdoToolbox.Core
 {
     public sealed class ConnLoader
     {
-        public static ConnectionInfo LoadConnection(string file)
+        public static SpatialConnectionInfo LoadConnection(string file)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(file);
@@ -37,10 +37,10 @@ namespace FdoToolbox.Core
             string connStr = doc.SelectSingleNode("//Connection/ConnectionString").InnerText;
             IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(provider);
             conn.ConnectionString = connStr;
-            return new ConnectionInfo(name, conn);
+            return new SpatialConnectionInfo(name, conn);
         }
 
-        public static void SaveConnection(ConnectionInfo cinfo, string file)
+        public static void SaveConnection(SpatialConnectionInfo cinfo, string file)
         {
             string xmlTemplate =
 @"<?xml version=""1.0""?>

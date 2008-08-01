@@ -28,7 +28,7 @@ namespace FdoToolbox.Core
     /// <summary>
     /// FDO Connection Manager
     /// </summary>
-    public class ConnectionMgr : IConnectionMgr, IDisposable
+    public class ConnectionMgr : ISpatialConnectionMgr, IDisposable
     {
         private int counter = 0;
 

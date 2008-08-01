@@ -24,9 +24,9 @@ using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core
 {
-    public class ConnectionInfo
+    public class SpatialConnectionInfo
     {
-        public ConnectionInfo(string name, IConnection conn)
+        public SpatialConnectionInfo(string name, IConnection conn)
         {
             this.Name = name;
             this.Connection = conn;

@@ -60,8 +60,8 @@ namespace FdoToolbox.Core
 
         private static SpatialBulkCopyTask LoadBulkCopy(XmlDocument doc, bool consoleMode)
         {
-            string srcName = HostApplication.Instance.ConnectionManager.CreateUniqueName();
-            string destName = HostApplication.Instance.ConnectionManager.CreateUniqueName();
+            string srcName = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
+            string destName = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
             
             try
             {
@@ -94,15 +94,15 @@ namespace FdoToolbox.Core
                 }
                 else
                 {
-                    IConnectionMgr mgr = HostApplication.Instance.ConnectionManager;
+                    ISpatialConnectionMgr mgr = HostApplication.Instance.SpatialConnectionManager;
                     mgr.AddConnection(srcName, srcConn);
                     mgr.AddConnection(destName, destConn);
                 }
 
                 string name = doc.DocumentElement.Attributes["name"].Value;
 
-                ConnectionInfo srcConnInfo = new ConnectionInfo(srcName, srcConn);
-                ConnectionInfo destConnInfo = new ConnectionInfo(destName, destConn);
+                SpatialConnectionInfo srcConnInfo = new SpatialConnectionInfo(srcName, srcConn);
+                SpatialConnectionInfo destConnInfo = new SpatialConnectionInfo(destName, destConn);
 
                 SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(srcConnInfo, destConnInfo);
                 options.SourceSchemaName = srcSchema;
@@ -160,8 +160,8 @@ namespace FdoToolbox.Core
                 AppConsole.WriteException(ex);
                 if (!consoleMode)
                 {
-                    HostApplication.Instance.ConnectionManager.RemoveConnection(srcName);
-                    HostApplication.Instance.ConnectionManager.RemoveConnection(destName);
+                    HostApplication.Instance.SpatialConnectionManager.RemoveConnection(srcName);
+                    HostApplication.Instance.SpatialConnectionManager.RemoveConnection(destName);
                 }
                 return null;
             }
