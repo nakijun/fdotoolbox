@@ -14,6 +14,9 @@
 === Future ===
  * Advanced bulk copy options
       * Data type coercion of mapped properties
+ * Spatial -> Non-Spatial bulk copy
+ * Non-Spatial -> Spatial bulk copy
+ * Non-Spatial -> Spatial (Point Features) conversion 
  * Raster Provider support
  * KML support
  * Visual Preview of FDO Data Sources
