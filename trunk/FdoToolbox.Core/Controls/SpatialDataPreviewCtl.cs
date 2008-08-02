@@ -419,6 +419,16 @@ namespace FdoToolbox.Core.Controls
             return dict;
         }
 
+        private NameValueCollection GetComputedFields()
+        {
+            NameValueCollection dict = new NameValueCollection();
+            foreach (DataGridViewRow row in grdComputedFields.Rows)
+            {
+                dict.Add(row.Cells[1].Value.ToString(), row.Cells[0].Value.ToString());
+            }
+            return dict;
+        }
+
         private void QueryStandard()
         {
             if (!CheckValidFilter())
@@ -437,6 +447,20 @@ namespace FdoToolbox.Core.Controls
                         select.SetFeatureClassName(classDef.Name);
                         if (!string.IsNullOrEmpty(txtFilter.Text))
                             select.SetFilter(txtFilter.Text);
+
+                        select.PropertyNames.Clear();
+                        List<string> propertyNames = GetCheckedProperties();
+                        foreach (string propName in propertyNames)
+                        {
+                            select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
+                        }
+
+                        NameValueCollection computed = GetComputedFields();
+                        foreach (string alias in computed.AllKeys)
+                        {
+                            select.PropertyNames.Add(new ComputedIdentifier(alias, Expression.Parse(computed[alias])));   
+                        }
+
                         using (IFeatureReader reader = select.Execute())
                         {
                             DataTable table = new DataTable(cmbClass.SelectedItem.ToString());
@@ -474,6 +498,16 @@ namespace FdoToolbox.Core.Controls
                     AppConsole.WriteException(ex);
                 }
             }
+        }
+
+        private List<string> GetCheckedProperties()
+        {
+            List<string> propNames = new List<string>();
+            foreach (object obj in chkPropertyNames.CheckedItems)
+            {
+                propNames.Add(obj.ToString());
+            }
+            return propNames;
         }
 
         /// <summary>
@@ -624,7 +658,7 @@ namespace FdoToolbox.Core.Controls
         private void grdExpressions_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             ClassDefinition classDef = cmbAggClass.SelectedItem as ClassDefinition;
-            btnDeleteExpr.Enabled = (grdExpressions.Rows.Count > 0);
+            btnDeleteExpr.Enabled = btnClearComputedFields.Enabled = (grdExpressions.Rows.Count > 0);
             if (classDef != null && grdExpressions.Rows.Count > 0)
             {
                 if (e.ColumnIndex == 0)
@@ -637,6 +671,26 @@ namespace FdoToolbox.Core.Controls
                     expr = ExpressionDlg.EditExpression(this.BoundConnection, classDef, expr, ExpressionMode.SelectAggregates);
                     if (!string.IsNullOrEmpty(expr))
                         grdExpressions.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = expr;
+                }
+            }
+        }
+
+        private void grdComputedFields_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
+            btnDeleteComputedField.Enabled = btnClearComputedFields.Enabled = (grdComputedFields.Rows.Count > 0);
+            if (classDef != null && grdComputedFields.Rows.Count > 0)
+            {
+                if (e.ColumnIndex == 0)
+                {
+                    string expr = string.Empty;
+                    object obj = grdComputedFields.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    if (obj != null)
+                        expr = obj.ToString();
+
+                    expr = ExpressionDlg.EditExpression(this.BoundConnection, classDef, expr, ExpressionMode.Normal);
+                    if (!string.IsNullOrEmpty(expr))
+                        grdComputedFields.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = expr;
                 }
             }
         }
@@ -723,6 +777,69 @@ namespace FdoToolbox.Core.Controls
         public override string GetTabType()
         {
             return CoreModule.TAB_DATA_PREVIEW;
+        }
+
+        private void btnClearComputedFields_Click(object sender, EventArgs e)
+        {
+            grdComputedFields.Rows.Clear();
+        }
+
+        private void btnDeleteComputedField_Click(object sender, EventArgs e)
+        {
+            if (grdComputedFields.SelectedRows.Count == 1)
+                grdComputedFields.Rows.Remove(grdComputedFields.SelectedRows[0]);
+            else if (grdComputedFields.SelectedCells.Count == 1)
+                grdComputedFields.Rows.RemoveAt(grdComputedFields.SelectedCells[0].RowIndex);
+        }
+
+        private void btnAddComputedField_Click(object sender, EventArgs e)
+        {
+            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
+            if (classDef != null)
+            {
+                string expr = ExpressionDlg.NewExpression(this.BoundConnection, classDef, ExpressionMode.Normal);
+                if (!string.IsNullOrEmpty(expr))
+                {
+                    string identifier = "Expr" + (counter++);
+                    grdComputedFields.Rows.Add(expr, identifier);
+                }
+            }
+        }
+
+        private void btnClearAggregates_Click(object sender, EventArgs e)
+        {
+            grdExpressions.Rows.Clear();
+        }
+
+        private void cmbClass_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
+            if (classDef != null)
+            {
+                chkPropertyNames.Items.Clear();
+                foreach (PropertyDefinition propDef in classDef.Properties)
+                {
+                    chkPropertyNames.Items.Add(propDef.Name, true);
+                }
+            }
+        }
+
+        private void btnCheckAllProperties_Click(object sender, EventArgs e)
+        {
+            CheckAllProperties(true);
+        }
+
+        private void CheckAllProperties(bool isChecked)
+        {
+            for (int i = 0; i < chkPropertyNames.Items.Count; i++)
+            {
+                chkPropertyNames.SetItemChecked(i, isChecked);
+            }
+        }
+
+        private void btnUncheckAllProperties_Click(object sender, EventArgs e)
+        {
+            CheckAllProperties(false);
         }
     }
 }
