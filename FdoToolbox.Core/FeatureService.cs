@@ -29,6 +29,8 @@ using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Geometry;
 using System.Collections.Specialized;
 using OSGeo.FDO.Commands.DataStore;
+using OSGeo.FDO.Commands.Feature;
+using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Core
 {
@@ -387,6 +389,65 @@ namespace FdoToolbox.Core
                 }
             }
             return stores;
+        }
+
+        /// <summary>
+        /// Computes the minimum envelope (bounding box) for the given list
+        /// of feature classes
+        /// </summary>
+        /// <param name="classes"></param>
+        /// <returns></returns>
+        public IEnvelope ComputeEnvelope(IEnumerable<ClassDefinition> classes)
+        {
+            double? maxx = null;
+            double? maxy = null;
+            double? minx = null;
+            double? miny = null;
+
+            IEnvelope computedEnvelope = null;
+
+            foreach (ClassDefinition classDef in classes)
+            {
+                if (classDef.ClassType == ClassType.ClassType_FeatureClass)
+                {
+                    using (ISelect select = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
+                    {
+                        string propertyName = ((FeatureClass)classDef).GeometryProperty.Name;
+                        select.SetFeatureClassName(classDef.Name);
+                        select.PropertyNames.Clear();
+                        select.PropertyNames.Add((Identifier)Identifier.Parse(propertyName));
+                        using (IFeatureReader reader = select.Execute())
+                        {
+                            while (reader.ReadNext())
+                            {
+                                if (!reader.IsNull(propertyName))
+                                {
+                                    byte[] bGeom = reader.GetGeometry(propertyName);
+                                    IGeometry geom = _GeomFactory.CreateGeometryFromFgf(bGeom);
+                                    IEnvelope env = geom.Envelope;
+                                    if (!maxx.HasValue || env.MaxX > maxx)
+                                        maxx = env.MaxX;
+                                    if (!maxy.HasValue || env.MaxY > maxy)
+                                        maxy = env.MaxY;
+                                    if (!minx.HasValue || env.MinX < minx)
+                                        minx = env.MinX;
+                                    if (!miny.HasValue || env.MinY < miny)
+                                        miny = env.MinY;
+                                    env.Dispose();
+                                    geom.Dispose();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ((maxx.HasValue) || (maxy.HasValue) || (minx.HasValue) || (miny.HasValue))
+            {
+                computedEnvelope = _GeomFactory.CreateEnvelopeXY(minx.Value, miny.Value, maxx.Value, maxy.Value);
+            }
+
+            return computedEnvelope;
         }
     }
 }
