@@ -78,6 +78,7 @@ namespace FdoToolbox.Core.Controls
             FeatureService service = HostApplication.Instance.SpatialConnectionManager.CreateService(this.BoundConnection.Name);
             cmbSchema.DataSource = service.DescribeSchema();
             cmbAggSchema.DataSource = service.DescribeSchema();
+            SetSelectedClass();
             base.OnLoad(e);
         }
 
@@ -740,33 +741,44 @@ namespace FdoToolbox.Core.Controls
             this.Title = "Data Preview - " + this.BoundConnection.Name;
         }
 
+        private string _schemaName;
+        private string _className;
+
         public void SetInitialClass(string schemaName, string className)
         {
-            if (!string.IsNullOrEmpty(schemaName) && !string.IsNullOrEmpty(className))
+            _schemaName = schemaName;
+            _className = className;
+
+            SetSelectedClass();
+        }
+
+        private void SetSelectedClass()
+        {
+            if (!string.IsNullOrEmpty(_schemaName) && !string.IsNullOrEmpty(_className))
             {
                 switch (tabQueryMode.SelectedIndex)
                 {
                     case TAB_STANDARD:
                         foreach (object obj in cmbSchema.Items)
                         {
-                            if ((obj as FeatureSchema).Name == schemaName)
+                            if ((obj as FeatureSchema).Name == _schemaName)
                                 cmbSchema.SelectedItem = obj;
                         }
                         foreach (object obj in cmbClass.Items)
                         {
-                            if ((obj as ClassDefinition).Name == className)
+                            if ((obj as ClassDefinition).Name == _className)
                                 cmbClass.SelectedItem = obj;
                         }
                         break;
                     case TAB_AGGREGATE:
                         foreach (object obj in cmbAggSchema.Items)
                         {
-                            if ((obj as FeatureSchema).Name == schemaName)
+                            if ((obj as FeatureSchema).Name == _schemaName)
                                 cmbAggSchema.SelectedItem = obj;
                         }
                         foreach (object obj in cmbAggClass.Items)
                         {
-                            if ((obj as ClassDefinition).Name == className)
+                            if ((obj as ClassDefinition).Name == _className)
                                 cmbAggClass.SelectedItem = obj;
                         }
                         break;
