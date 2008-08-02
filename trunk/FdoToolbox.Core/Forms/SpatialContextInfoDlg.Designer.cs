@@ -47,25 +47,25 @@ namespace FdoToolbox.Core.Forms
             this.cmbExtentType = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.grpExtents = new System.Windows.Forms.GroupBox();
-            this.txtUpperRightY = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtUpperRightX = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.txtLowerLeftY = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.txtUpperRightY = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtLowerLeftX = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtLowerLeftY = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.btnCompute = new System.Windows.Forms.Button();
             this.btnLoadCS = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.grpExtents.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
-            this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // btnOK
@@ -245,25 +245,22 @@ namespace FdoToolbox.Core.Forms
             this.grpExtents.TabStop = false;
             this.grpExtents.Text = "Extents";
             // 
-            // txtUpperRightY
+            // groupBox3
             // 
-            this.txtUpperRightY.Location = new System.Drawing.Point(67, 53);
-            this.txtUpperRightY.Name = "txtUpperRightY";
-            this.txtUpperRightY.Size = new System.Drawing.Size(100, 20);
-            this.txtUpperRightY.TabIndex = 10;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(17, 55);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(37, 13);
-            this.label11.TabIndex = 9;
-            this.label11.Text = "Y/Lat:";
+            this.groupBox3.Controls.Add(this.txtUpperRightX);
+            this.groupBox3.Controls.Add(this.label12);
+            this.groupBox3.Controls.Add(this.txtUpperRightY);
+            this.groupBox3.Controls.Add(this.label11);
+            this.groupBox3.Location = new System.Drawing.Point(191, 46);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(183, 73);
+            this.groupBox3.TabIndex = 12;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Upper Right";
             // 
             // txtUpperRightX
             // 
-            this.txtUpperRightX.Location = new System.Drawing.Point(67, 27);
+            this.txtUpperRightX.Location = new System.Drawing.Point(68, 19);
             this.txtUpperRightX.Name = "txtUpperRightX";
             this.txtUpperRightX.Size = new System.Drawing.Size(100, 20);
             this.txtUpperRightX.TabIndex = 8;
@@ -271,34 +268,72 @@ namespace FdoToolbox.Core.Forms
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(15, 30);
+            this.label12.Location = new System.Drawing.Point(16, 22);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(46, 13);
             this.label12.TabIndex = 7;
             this.label12.Text = "X/Long:";
             // 
-            // txtLowerLeftY
+            // txtUpperRightY
             // 
-            this.txtLowerLeftY.Location = new System.Drawing.Point(64, 53);
-            this.txtLowerLeftY.Name = "txtLowerLeftY";
-            this.txtLowerLeftY.Size = new System.Drawing.Size(100, 20);
-            this.txtLowerLeftY.TabIndex = 6;
+            this.txtUpperRightY.Location = new System.Drawing.Point(68, 45);
+            this.txtUpperRightY.Name = "txtUpperRightY";
+            this.txtUpperRightY.Size = new System.Drawing.Size(100, 20);
+            this.txtUpperRightY.TabIndex = 10;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(18, 47);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(37, 13);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "Y/Lat:";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.txtLowerLeftX);
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.label10);
+            this.groupBox2.Controls.Add(this.txtLowerLeftY);
+            this.groupBox2.Location = new System.Drawing.Point(11, 46);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(174, 73);
+            this.groupBox2.TabIndex = 11;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Lower Left";
+            // 
+            // txtLowerLeftX
+            // 
+            this.txtLowerLeftX.Location = new System.Drawing.Point(68, 19);
+            this.txtLowerLeftX.Name = "txtLowerLeftX";
+            this.txtLowerLeftX.Size = new System.Drawing.Size(100, 20);
+            this.txtLowerLeftX.TabIndex = 4;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(16, 22);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(46, 13);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "X/Long:";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(14, 56);
+            this.label10.Location = new System.Drawing.Point(18, 48);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(37, 13);
             this.label10.TabIndex = 5;
             this.label10.Text = "Y/Lat:";
             // 
-            // txtLowerLeftX
+            // txtLowerLeftY
             // 
-            this.txtLowerLeftX.Location = new System.Drawing.Point(64, 27);
-            this.txtLowerLeftX.Name = "txtLowerLeftX";
-            this.txtLowerLeftX.Size = new System.Drawing.Size(100, 20);
-            this.txtLowerLeftX.TabIndex = 4;
+            this.txtLowerLeftY.Location = new System.Drawing.Point(68, 45);
+            this.txtLowerLeftY.Name = "txtLowerLeftY";
+            this.txtLowerLeftY.Size = new System.Drawing.Size(100, 20);
+            this.txtLowerLeftY.TabIndex = 6;
             // 
             // label9
             // 
@@ -307,15 +342,6 @@ namespace FdoToolbox.Core.Forms
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(0, 13);
             this.label9.TabIndex = 3;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 30);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(46, 13);
-            this.label8.TabIndex = 2;
-            this.label8.Text = "X/Long:";
             // 
             // errorProvider
             // 
@@ -343,32 +369,6 @@ namespace FdoToolbox.Core.Forms
             this.btnLoadCS.UseVisualStyleBackColor = true;
             this.btnLoadCS.Click += new System.EventHandler(this.btnLoadCS_Click);
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.txtLowerLeftX);
-            this.groupBox2.Controls.Add(this.label8);
-            this.groupBox2.Controls.Add(this.label10);
-            this.groupBox2.Controls.Add(this.txtLowerLeftY);
-            this.groupBox2.Location = new System.Drawing.Point(11, 46);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(174, 79);
-            this.groupBox2.TabIndex = 11;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Lower Left";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.txtUpperRightX);
-            this.groupBox3.Controls.Add(this.label12);
-            this.groupBox3.Controls.Add(this.txtUpperRightY);
-            this.groupBox3.Controls.Add(this.label11);
-            this.groupBox3.Location = new System.Drawing.Point(191, 46);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(183, 79);
-            this.groupBox3.TabIndex = 12;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Upper Right";
-            // 
             // SpatialContextInfoDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -389,11 +389,11 @@ namespace FdoToolbox.Core.Forms
             this.groupBox1.PerformLayout();
             this.grpExtents.ResumeLayout(false);
             this.grpExtents.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
