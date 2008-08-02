@@ -193,11 +193,6 @@ namespace FdoToolbox.Core
             return false;
         }
 
-        protected override void OnApplicationException(Exception ex)
-        {
-            AppConsole.Err.WriteLine(ex.ToString());
-        }
-
         protected override void CheckFdoPath()
         {
             string fdoPath = this.Preferences.GetStringPref(PreferenceNames.PREF_STR_FDO_HOME);
