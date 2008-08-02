@@ -85,9 +85,9 @@ namespace FdoToolbox.Core.Forms
 
         private void ApplyView()
         {
-            btnConditions.Visible = (_ExprMode == ExpressionMode.Filter && btnConditions.DropDown.Items.Count > 0);
-            btnDistance.Visible = (_ExprMode == ExpressionMode.Filter && btnDistance.DropDown.Items.Count > 0);
-            btnSpatial.Visible = (_ExprMode == ExpressionMode.Filter && btnSpatial.DropDown.Items.Count > 0);
+            btnConditions.Visible = ((_ExprMode == ExpressionMode.Filter || _ExprMode == ExpressionMode.Normal) && btnConditions.DropDown.Items.Count > 0);
+            btnDistance.Visible = ((_ExprMode == ExpressionMode.Filter || _ExprMode == ExpressionMode.Normal) && btnDistance.DropDown.Items.Count > 0);
+            btnSpatial.Visible = ((_ExprMode == ExpressionMode.Filter || _ExprMode == ExpressionMode.Normal) && btnSpatial.DropDown.Items.Count > 0);
 
             if (_ExprMode == ExpressionMode.SelectAggregates)
             {
@@ -553,6 +553,7 @@ namespace FdoToolbox.Core.Forms
     public enum ExpressionMode
     {
         Filter,
-        SelectAggregates
+        SelectAggregates,
+        Normal
     }
 }
