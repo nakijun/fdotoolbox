@@ -268,55 +268,17 @@ namespace FdoToolbox.Core.Forms
                 //expression function
 
                 FgfGeometryFactory geomFactory = new FgfGeometryFactory();
-                //IEnvelope extents = geomFactory.CreateEnvelopeXY(0.0, 0.0, 0.0, 0.0);
-                double? maxx = null;
-                double? maxy = null;
-                double? minx = null;
-                double? miny = null;
-                
-                foreach (ClassDefinition classDef in classes)
+                using (FeatureService service = new FeatureService(_BoundConnection.Connection))
                 {
-                    if (classDef.ClassType == ClassType.ClassType_FeatureClass)
+                    IEnvelope env = service.ComputeEnvelope(classes);
+                    if (env != null)
                     {
-                        using (ISelect select = _BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
-                        {
-                            string propertyName = ((FeatureClass)classDef).GeometryProperty.Name;
-                            select.SetFeatureClassName(classDef.Name);
-                            select.PropertyNames.Clear();
-                            select.PropertyNames.Add((Identifier)Identifier.Parse(propertyName));
-                            using (IFeatureReader reader = select.Execute())
-                            {
-                                while (reader.ReadNext())
-                                {
-                                    if (!reader.IsNull(propertyName))
-                                    {
-                                        byte[] bGeom = reader.GetGeometry(propertyName);
-                                        IGeometry geom = geomFactory.CreateGeometryFromFgf(bGeom);
-                                        IEnvelope env = geom.Envelope;
-                                        if (!maxx.HasValue || env.MaxX > maxx)
-                                            maxx = env.MaxX;
-                                        if (!maxy.HasValue || env.MaxY > maxy)
-                                            maxy = env.MaxY;
-                                        if (!minx.HasValue || env.MinX < minx)
-                                            minx = env.MinX;
-                                        if (!miny.HasValue || env.MinY < miny)
-                                            miny = env.MinY;
-                                        env.Dispose();
-                                        geom.Dispose();
-                                    }
-                                }
-                            }
-                        }
+                        txtLowerLeftX.Text = env.MinX.ToString();
+                        txtLowerLeftY.Text = env.MinY.ToString();
+                        txtUpperRightX.Text = env.MaxX.ToString();
+                        txtUpperRightY.Text = env.MaxY.ToString();
                     }
                 }
-                if ((maxx.HasValue) || (maxy.HasValue) || (minx.HasValue) || (miny.HasValue))
-                {
-                    txtLowerLeftX.Text = minx.Value.ToString();
-                    txtLowerLeftY.Text = miny.Value.ToString();
-                    txtUpperRightX.Text = maxx.Value.ToString();
-                    txtUpperRightY.Text = maxy.Value.ToString();
-                }
-                geomFactory.Dispose();
             }
         }
 
