@@ -406,6 +406,9 @@ namespace FdoToolbox.Core
 
             IEnvelope computedEnvelope = null;
 
+            //Use brute-force instead of SpatialExtents() as there
+            //is no guarantee that every provider will implement that
+            //expression function
             foreach (ClassDefinition classDef in classes)
             {
                 if (classDef.ClassType == ClassType.ClassType_FeatureClass)
