@@ -1,4 +1,4 @@
-This application uses the following libraries:
+This application uses the following libraries and resources:
 
 - Feature Data Objects (c) Autodesk/OSGeo (http://fdo.osgeo.org)
 - DockPanel Suite (c) Weifen Luo (http://sourceforge.net/projects/dockpanelsuite)
