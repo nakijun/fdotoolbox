@@ -263,11 +263,6 @@ namespace FdoToolbox.Core.Forms
             List<ClassDefinition> classes = MultiClassPicker.GetClasses("Compute Extents", "Select the classes to compute extents", _BoundConnection);
             if (classes.Count > 0)
             {
-                //Use brute-force instead of SpatialExtents() as there
-                //is no guarantee that every provider will implement that
-                //expression function
-
-                FgfGeometryFactory geomFactory = new FgfGeometryFactory();
                 using (FeatureService service = new FeatureService(_BoundConnection.Connection))
                 {
                     IEnvelope env = service.ComputeEnvelope(classes);
