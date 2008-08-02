@@ -34,17 +34,9 @@ namespace FdoToolbox.Core
         public BaseApplication()
         {
             InitializePrefs();
-            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             CheckFdoPath();
         }
-
-        private void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
-        {
-            OnApplicationException(e.Exception);
-        }
-
-        protected abstract void OnApplicationException(Exception ex);
 
         //This handler is called only when the common language runtime tries to bind to the assembly and fails.
         Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

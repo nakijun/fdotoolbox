@@ -47,6 +47,8 @@ namespace FdoToolbox.Core
         private HostApplication() : base()
         {
             InitializeDialogs();
+            Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
+            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             _connMgr = new SpatialConnectionMgr();
             _moduleMgr = new ModuleMgr();
             _taskMgr = new TaskManager();
@@ -114,6 +116,16 @@ namespace FdoToolbox.Core
             }
         }
 
+        private void Application_ApplicationExit(object sender, EventArgs e)
+        {
+            Cleanup();
+        }
+
+        private void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            OnApplicationException(e.Exception);
+        }
+
         protected override void CheckFdoPath()
         {
             string fdoPath = this.Preferences.GetStringPref(PreferenceNames.PREF_STR_FDO_HOME);
@@ -135,7 +147,7 @@ namespace FdoToolbox.Core
             }
         }
 
-        protected override void OnApplicationException(Exception ex)
+        protected void OnApplicationException(Exception ex)
         {
             MessageBox.Show(ex.ToString(), "Error");
         }
@@ -480,7 +492,7 @@ namespace FdoToolbox.Core
         /// </summary>
         public void Quit()
         {
-            Cleanup();
+            //Cleanup();
             Application.Exit();
         }
 
