@@ -67,7 +67,8 @@ namespace FdoInfo
                     {
                         foreach (PropertyDefinition propDef in cd.Properties)
                         {
-                            AppConsole.WriteLine("\nName: {0} ({1})\n", propDef.Name, propDef.PropertyType);
+                            bool isIdentity = (propDef.PropertyType == PropertyType.PropertyType_DataProperty && cd.IdentityProperties.Contains((DataPropertyDefinition)propDef));
+                            AppConsole.WriteLine("\nName: {0} ({1}) {2}\n", propDef.Name, propDef.PropertyType, isIdentity ? "(IDENTITY)" : "");
                             AppConsole.WriteLine("\tQualified Name: {0}\n\tIs System: {1}", propDef.QualifiedName, propDef.IsSystem);
                             switch (propDef.PropertyType)
                             {
@@ -161,18 +162,24 @@ namespace FdoInfo
         private string GetGeometryTypes(int geometryTypes)
         {
             List<string> geomTypes = new List<string>();
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_CurvePolygon);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_CurveString);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_LineString);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiCurvePolygon);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiCurveString);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiGeometry);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiLineString);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiPoint);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiPolygon);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_None);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_Point);
-            CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_Polygon);
+            if (geometryTypes != (int)GeometryType.GeometryType_None)
+            {
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_CurvePolygon);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_CurveString);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_LineString);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiCurvePolygon);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiCurveString);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiGeometry);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiLineString);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiPoint);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_MultiPolygon);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_Point);
+                CheckGeometryType(geometryTypes, geomTypes, GeometryType.GeometryType_Polygon);
+            }
+            else
+            {
+                geomTypes.Add(GeometryType.GeometryType_None.ToString());
+            }
             return string.Join("\n\t\t- ", geomTypes.ToArray());
         }
 
