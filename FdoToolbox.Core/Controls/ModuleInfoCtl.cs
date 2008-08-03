@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using FdoToolbox.Core.Modules;
 
 namespace FdoToolbox.Core.Controls
 {

@@ -23,6 +23,8 @@ using System.Text;
 using System.Reflection;
 using System.Windows.Forms;
 using System.IO;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.IO;
 
 namespace FdoToolbox.Core
 {

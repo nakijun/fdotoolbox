@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Common;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.Forms
 {

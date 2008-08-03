@@ -37,6 +37,9 @@ using OSGeo.FDO.Commands.SpatialContext;
 using FdoToolbox.Core.Forms;
 using FdoToolbox.Core.Controls;
 using System.IO;
+using FdoToolbox.Core.Common;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Utility;
 #region overview
 /*
  * Bulk Copy overview

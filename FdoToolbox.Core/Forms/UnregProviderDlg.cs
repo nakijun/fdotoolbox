@@ -26,6 +26,7 @@ using System.Text;
 using System.Windows.Forms;
 using FdoToolbox.Core;
 using OSGeo.FDO.ClientServices;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Forms
 {

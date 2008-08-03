@@ -26,6 +26,9 @@ using System.Windows.Forms;
 using OSGeo.FDO.Commands.DataStore;
 using System.Collections.Specialized;
 using FdoToolbox.Core.Forms;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Modules;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.Controls
 {

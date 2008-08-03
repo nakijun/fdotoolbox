@@ -20,6 +20,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.Controls
 {
