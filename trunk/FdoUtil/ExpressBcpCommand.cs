@@ -24,6 +24,9 @@ using OSGeo.FDO.Connections;
 using OSGeo.FDO.ClientServices;
 using FdoToolbox.Core;
 using OSGeo.FDO.Schema;
+using FdoToolbox.Core.ETL;
+using FdoToolbox.Core.Commands;
+using FdoToolbox.Core.Common;
 
 namespace FdoUtil
 {

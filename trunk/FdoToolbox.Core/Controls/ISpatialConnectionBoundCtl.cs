@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Connections;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.Controls
 {

@@ -26,6 +26,8 @@ using System.Text;
 using System.Windows.Forms;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.SpatialContext;
+using FdoToolbox.Core.Common;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Forms
 {

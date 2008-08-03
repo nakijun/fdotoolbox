@@ -35,6 +35,9 @@ using OSGeo.FDO.Connections.Capabilities;
 using FdoToolbox.Core.Forms;
 using System.Collections.Specialized;
 using OSGeo.FDO.Expression;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Modules;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.Controls
 {

@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Core;
 using OSGeo.FDO.Connections;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Commands;
 
 namespace FdoInfo
 {

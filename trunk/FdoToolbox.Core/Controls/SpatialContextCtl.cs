@@ -28,6 +28,9 @@ using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Geometry;
 using FdoToolbox.Core.Forms;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Modules;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.Controls
 {

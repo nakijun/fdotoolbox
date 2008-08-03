@@ -28,6 +28,7 @@ using OSGeo.FDO.ClientServices;
 using System.Collections.Specialized;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.DataStore;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Controls
 {

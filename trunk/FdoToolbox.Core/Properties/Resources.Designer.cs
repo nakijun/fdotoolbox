@@ -322,6 +322,24 @@ namespace FdoToolbox.Core.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;!--
+        ///Module auto-load file. Place paths to assemblies that you want to automatically
+        ///load when FDO Toolbox starts up.
+        ///--&gt;
+        ///&lt;ModuleList&gt;
+        ///    &lt;!--
+        ///    &lt;Module&gt;TestModule.dll&lt;/Module&gt;
+        ///    --&gt;
+        ///&lt;/ModuleList&gt;.
+        /// </summary>
+        internal static string Modules {
+            get {
+                return ResourceManager.GetString("Modules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;!-- 
         ///Object Explorer menu definition file. 
         ///

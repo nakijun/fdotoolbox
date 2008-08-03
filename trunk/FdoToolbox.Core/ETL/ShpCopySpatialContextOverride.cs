@@ -24,6 +24,7 @@ using System.Diagnostics;
 using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Commands;
 using OSGeo.FDO.Connections;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.ETL
 {

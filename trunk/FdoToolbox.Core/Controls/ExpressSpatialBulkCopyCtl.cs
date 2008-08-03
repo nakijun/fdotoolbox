@@ -31,6 +31,7 @@ using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Schema;
 using System.IO;
 using FdoToolbox.Core.ETL;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Controls
 {

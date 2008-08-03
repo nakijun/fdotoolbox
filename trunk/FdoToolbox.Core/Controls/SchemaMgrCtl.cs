@@ -31,6 +31,9 @@ using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Common.Io;
 using System.IO;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Modules;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.Controls
 {

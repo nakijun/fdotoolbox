@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using FdoToolbox.Core;
+using FdoToolbox.Core.Commands;
+using FdoToolbox.Core.IO;
 
 namespace FdoUtil
 {

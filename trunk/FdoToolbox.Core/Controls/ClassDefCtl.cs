@@ -28,6 +28,8 @@ using OSGeo.FDO.Schema;
 using FdoToolbox.Core.Forms;
 using System.Diagnostics;
 using OSGeo.FDO.Connections;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.Controls
 {

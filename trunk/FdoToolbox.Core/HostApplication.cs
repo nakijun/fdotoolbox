@@ -27,6 +27,10 @@ using System.Reflection;
 using System.IO;
 using System.Drawing;
 using FdoToolbox.Core.Controls;
+using FdoToolbox.Core.Modules;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Commands;
+using FdoToolbox.Core.IO;
 
 namespace FdoToolbox.Core
 {

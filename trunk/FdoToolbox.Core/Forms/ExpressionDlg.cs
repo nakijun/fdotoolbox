@@ -30,6 +30,8 @@ using OSGeo.FDO.Connections.Capabilities;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Expression;
 using OSGeo.FDO.Filter;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.Forms
 {

@@ -23,6 +23,8 @@ using System.Text;
 using System.Windows.Forms;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Schema;
+using FdoToolbox.Core.Modules;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core
 {

@@ -10,6 +10,7 @@ using System.IO;
 using OSGeo.FDO.ClientServices;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Commands.DataStore;
+using FdoToolbox.Core.ClientServices;
 
 namespace TestApp
 {

@@ -24,6 +24,8 @@ using FdoToolbox.Core;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.ClientServices;
 using OSGeo.FDO.Commands.DataStore;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Commands;
 
 namespace FdoInfo
 {

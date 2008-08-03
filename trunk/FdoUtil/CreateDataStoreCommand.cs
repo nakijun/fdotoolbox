@@ -23,6 +23,8 @@ using System.Text;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.ClientServices;
 using FdoToolbox.Core;
+using FdoToolbox.Core.Commands;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoUtil
 {
