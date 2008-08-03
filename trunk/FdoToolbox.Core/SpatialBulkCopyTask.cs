@@ -425,11 +425,25 @@ namespace FdoToolbox.Core
                 try
                 {
                     if(!string.IsNullOrEmpty(copyOpts.AttributeFilter))
-                        using (Filter filter = Filter.Parse(copyOpts.AttributeFilter)) { }
+                        using (Filter filter = Filter.Parse(copyOpts.AttributeFilter)) { }   
                 }
                 catch (OSGeo.FDO.Common.Exception ex)
                 {
                     throw new TaskValidationException("Error parsing filter", ex);
+                }
+
+                try
+                {
+                    if (copyOpts.SourceClassDefinition.ClassType == ClassType.ClassType_FeatureClass && !string.IsNullOrEmpty(_Options.GlobalSpatialFilter))
+                    {
+                        string geomProp = (copyOpts.SourceClassDefinition as FeatureClass).GeometryProperty.Name;
+                        string filter = geomProp + " " + _Options.GlobalSpatialFilter;
+                        using (Filter spatialFilter = Filter.Parse(filter)) { } 
+                    }
+                }
+                catch (OSGeo.FDO.Common.Exception ex)
+                {
+                    throw new TaskValidationException("Error parsing global spatial filter", ex);
                 }
 
                 string className = copyOpts.ClassName;
