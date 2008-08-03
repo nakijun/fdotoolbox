@@ -41,7 +41,7 @@ namespace FdoToolbox.Core.Forms
         {
             using (ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders())
             {
-                foreach (Provider prov in providers)
+                foreach (OSGeo.FDO.ClientServices.Provider prov in providers)
                 {
                     lstProviders.Items.Add(prov.Name);
                 }

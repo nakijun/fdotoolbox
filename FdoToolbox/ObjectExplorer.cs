@@ -45,16 +45,83 @@ namespace FdoToolbox
             InitializeComponent();
             HostApplication.Instance.ModuleManager.ModuleLoaded += new ModuleEventHandler(OnModuleLoaded);
             HostApplication.Instance.ModuleManager.ModuleUnloaded += new ModuleEventHandler(OnModuleUnloaded);
-            HostApplication.Instance.SpatialConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnConnectionAdded);
-            HostApplication.Instance.SpatialConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnConnectionRemoved);
-            HostApplication.Instance.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
+            HostApplication.Instance.SpatialConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnSpatialConnectionAdded);
+            HostApplication.Instance.SpatialConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnSpatialConnectionRemoved);
+            HostApplication.Instance.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnSpatialConnectionRenamed);
+            HostApplication.Instance.DatabaseConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnDatabaseConnectionAdded);
+            HostApplication.Instance.DatabaseConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnDatabaseConnectionRemoved);
+            HostApplication.Instance.DatabaseConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnDatabaseConnectionRenamed);
             HostApplication.Instance.TaskManager.TaskAdded += new TaskEventHandler(OnTaskAdded);
             HostApplication.Instance.TaskManager.TaskRemoved += new TaskEventHandler(OnTaskRemoved);
         }
 
-        void OnConnectionRenamed(string oldName, string newName)
+        void OnDatabaseConnectionRenamed(string oldName, string newName)
         {
-            TreeNode node = GetConnectionsNode().Nodes[oldName];
+            TreeNode node = GetDatabaseConnectionsNode().Nodes[oldName];
+            node.Name = node.Text = newName;
+        }
+
+        void OnDatabaseConnectionRemoved(string name)
+        {
+            GetDatabaseConnectionsNode().Nodes.RemoveByKey(name);
+        }
+
+        void OnDatabaseConnectionAdded(string name)
+        {
+            DbConnectionInfo connInfo = HostApplication.Instance.DatabaseConnectionManager.GetConnection(name);
+            TreeNode node = new TreeNode();
+            node.Name = node.Text = name;
+            node.ImageIndex = node.SelectedImageIndex = IMG_IDX_CONNECTION;
+            node.ContextMenuStrip = ctxSelectedDatabaseConnection;
+
+            MyMeta.dbRoot root = new MyMeta.dbRoot();
+            root.Connect(connInfo.Driver, connInfo.Connection.ConnectionString);
+
+            GetDatabaseNodes(node, root);
+            GetDatabaseConnectionsNode().Nodes.Add(node);
+            node.Expand();
+        }
+
+        private void GetDatabaseNodes(TreeNode node, MyMeta.dbRoot root)
+        {
+            foreach (MyMeta.IDatabase db in root.Databases)
+            {
+                TreeNode dbNode = new TreeNode();
+                dbNode.Name = dbNode.Text = db.Name;
+                dbNode.ImageIndex = dbNode.SelectedImageIndex = IMG_IDX_DATABASE;
+                dbNode.ContextMenuStrip = ctxSelectedDatabase;
+                GetTableNodes(dbNode, db);
+                node.Nodes.Add(dbNode);
+            }
+        }
+
+        private void GetTableNodes(TreeNode node, MyMeta.IDatabase db)
+        {
+            foreach (MyMeta.ITable table in db.Tables)
+            {
+                TreeNode tableNode = new TreeNode();
+                tableNode.Name = tableNode.Text = table.Name;
+                tableNode.ImageIndex = tableNode.SelectedImageIndex = IMG_IDX_CLASS;
+                tableNode.ContextMenuStrip = ctxSelectedTable;
+                GetColumnNodes(tableNode, table);
+                node.Nodes.Add(tableNode);
+            }
+        }
+
+        private void GetColumnNodes(TreeNode tableNode, MyMeta.ITable table)
+        {
+            foreach (MyMeta.IColumn column in table.Columns)
+            {
+                TreeNode colNode = new TreeNode();
+                colNode.Name = colNode.Text = column.Name;
+                colNode.ImageIndex = colNode.SelectedImageIndex = IMG_IDX_PROPERTY_DATA;
+                tableNode.Nodes.Add(colNode);
+            }
+        }
+
+        void OnSpatialConnectionRenamed(string oldName, string newName)
+        {
+            TreeNode node = GetSpatialConnectionsNode().Nodes[oldName];
             node.Name = node.Text = newName;
         }
 
@@ -73,19 +140,19 @@ namespace FdoToolbox
             GetTasksNode().Nodes.Add(node);
         }
 
-        void OnConnectionRemoved(string name)
+        void OnSpatialConnectionRemoved(string name)
         {
-            GetConnectionsNode().Nodes.RemoveByKey(name);
+            GetSpatialConnectionsNode().Nodes.RemoveByKey(name);
         }
 
-        void OnConnectionAdded(string name)
+        void OnSpatialConnectionAdded(string name)
         {
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
             node.ImageIndex = node.SelectedImageIndex = IMG_IDX_CONNECTION;
-            node.ContextMenuStrip = ctxSelectedConnection;
+            node.ContextMenuStrip = ctxSelectedSpatialConnection;
             GetSchemaNodes(node);
-            GetConnectionsNode().Nodes.Add(node);
+            GetSpatialConnectionsNode().Nodes.Add(node);
             node.Expand();
         }
 
@@ -170,7 +237,8 @@ namespace FdoToolbox
             }
         }
 
-        TreeNode GetConnectionsNode() { return mTreeView.Nodes.Find("NODE_FDO_CONNECTIONS", false)[0]; }
+        TreeNode GetDatabaseConnectionsNode() { return mTreeView.Nodes.Find("NODE_DB_CONNECTIONS", false)[0]; }
+        TreeNode GetSpatialConnectionsNode() { return mTreeView.Nodes.Find("NODE_FDO_CONNECTIONS", false)[0]; }
         TreeNode GetTasksNode() { return mTreeView.Nodes.Find("NODE_TASKS", false)[0]; }
         TreeNode GetModulesNode() { return mTreeView.Nodes.Find("NODE_MODULES", false)[0]; }
 
@@ -189,6 +257,7 @@ namespace FdoToolbox
         const int IMG_IDX_PROPERTY_GEOMETRY = 8;
         const int IMG_IDX_PROPERTY_ASSOCIATION = 9;
         const int IMG_IDX_PROPERTY_OBJECT = 10;
+        const int IMG_IDX_DATABASE = 11;
 
         const int NODE_LEVEL_SCHEMA = 2;
         const int NODE_LEVEL_CLASS = 3;
@@ -255,10 +324,22 @@ namespace FdoToolbox
             }
         }
 
+        public void RefreshDatabaseConnection(string name)
+        {
+            TreeNode node = GetDatabaseConnectionsNode().Nodes[name];
+            node.Nodes.Clear();
+
+            DbConnectionInfo connInfo = HostApplication.Instance.DatabaseConnectionManager.GetConnection(name);
+            
+            MyMeta.dbRoot root = new MyMeta.dbRoot();
+            root.Connect(connInfo.Driver, connInfo.Connection.ConnectionString);
+
+            GetDatabaseNodes(node, root);
+        }
+
         public void RefreshSpatialConnection(string name)
         {
-            TreeNode node = GetConnectionsNode().Nodes[name];
-            Debug.Assert(node != null);
+            TreeNode node = GetSpatialConnectionsNode().Nodes[name];
             node.Nodes.Clear();
 
             IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(node.Name);
@@ -269,6 +350,33 @@ namespace FdoToolbox
             }
 
             GetSchemaNodes(node);
+        }
+
+        public DbConnectionInfo GetSelectedDatabaseConnection()
+        {
+            TreeNode connNode = mTreeView.SelectedNode;
+            if (connNode == null || connNode.Level == 0)
+            {
+                return null;
+            }
+            else
+            {
+                //If level > 1, walk back up the hierarchy
+                while (connNode.Level > 1)
+                {
+                    connNode = connNode.Parent;
+                }
+                if (connNode.Parent == GetDatabaseConnectionsNode())
+                {
+                    string name = connNode.Name;
+                    DbConnectionInfo connInfo = HostApplication.Instance.DatabaseConnectionManager.GetConnection(connNode.Name);
+                    if (connInfo != null)
+                        return connInfo;
+                    else
+                        return null;
+                }
+                return null;
+            }
         }
 
         public SpatialConnectionInfo GetSelectedSpatialConnection()
@@ -285,7 +393,7 @@ namespace FdoToolbox
                 {
                     connNode = connNode.Parent;
                 }
-                if (connNode.Parent == GetConnectionsNode())
+                if (connNode.Parent == GetSpatialConnectionsNode())
                 {
                     string name = connNode.Name;
                     IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(connNode.Name);
@@ -312,16 +420,24 @@ namespace FdoToolbox
             XmlNode selModuleCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedModule");
             XmlNode selSchemaCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedSchema");
             XmlNode selClassCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedClass");
+            XmlNode selDbConnNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedDatabaseConnection");
+            XmlNode dbConnNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/DatabaseConnections");
+            XmlNode selTableNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedTable");
+            XmlNode selDbNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedDatabase");
 
             ProcessMenuNode(mToolStrip, toolbarNode);
             ProcessMenuNode(ctxFdoConnections, connCtxNode);
-            ProcessMenuNode(ctxSelectedConnection, selConnCtxNode);
+            ProcessMenuNode(ctxSelectedSpatialConnection, selConnCtxNode);
             ProcessMenuNode(ctxSelectedSchema, selSchemaCtxNode);
             ProcessMenuNode(ctxSelectedClass, selClassCtxNode);
             ProcessMenuNode(ctxTasks, taskCtxNode);
             ProcessMenuNode(ctxSelectedTask, selTaskCtxNode);
             ProcessMenuNode(ctxModules, moduleCtxNode);
             ProcessMenuNode(ctxSelectedModule, selModuleCtxNode);
+            ProcessMenuNode(ctxSelectedDatabaseConnection, selDbConnNode);
+            ProcessMenuNode(ctxDbConnections, dbConnNode);
+            ProcessMenuNode(ctxSelectedTable, selTableNode);
+            ProcessMenuNode(ctxSelectedDatabase, selDbNode);
         }
 
         private ToolStripMenuItem CreateMenuItem(Command cmd, XmlNode cmdNode)
@@ -423,16 +539,24 @@ namespace FdoToolbox
             XmlNode selModuleCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedModule");
             XmlNode selSchemaCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedSchema");
             XmlNode selClassCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedClass");
+            XmlNode selDbConnNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedDatabaseConnection");
+            XmlNode dbConnNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/DatabaseConnections");
+            XmlNode selTableNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedTable");
+            XmlNode selDbNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedDatabase");
 
             ProcessMenuNode(mToolStrip, toolbarNode);
             ProcessMenuNode(ctxFdoConnections, connCtxNode);
-            ProcessMenuNode(ctxSelectedConnection, selConnCtxNode);
+            ProcessMenuNode(ctxSelectedSpatialConnection, selConnCtxNode);
             ProcessMenuNode(ctxSelectedSchema, selSchemaCtxNode);
             ProcessMenuNode(ctxSelectedClass, selClassCtxNode);
             ProcessMenuNode(ctxTasks, taskCtxNode);
             ProcessMenuNode(ctxSelectedTask, selTaskCtxNode);
             ProcessMenuNode(ctxModules, moduleCtxNode);
             ProcessMenuNode(ctxSelectedModule, selModuleCtxNode);
+            ProcessMenuNode(ctxSelectedDatabaseConnection, selDbConnNode);
+            ProcessMenuNode(ctxDbConnections, dbConnNode);
+            ProcessMenuNode(ctxSelectedTable, selTableNode);
+            ProcessMenuNode(ctxSelectedDatabase, selDbNode);
         }
 
         public void UnHide()
@@ -461,7 +585,7 @@ namespace FdoToolbox
             while (node.Level > NODE_LEVEL_SCHEMA)
                 node = node.Parent;
 
-            if (node.Level == NODE_LEVEL_SCHEMA && GetConnectionsNode() == node.Parent.Parent)
+            if (node.Level == NODE_LEVEL_SCHEMA && GetSpatialConnectionsNode() == node.Parent.Parent)
                 return node.Name;
 
             return null;
@@ -473,10 +597,13 @@ namespace FdoToolbox
             while (node.Level > NODE_LEVEL_CLASS)
                 node = node.Parent;
             
-            if (node.Level == NODE_LEVEL_CLASS && GetConnectionsNode() == node.Parent.Parent.Parent)
+            if (node.Level == NODE_LEVEL_CLASS && GetSpatialConnectionsNode() == node.Parent.Parent.Parent)
                 return node.Name;
 
             return null;
         }
+
+
+        
     }
 }

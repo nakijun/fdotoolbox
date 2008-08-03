@@ -40,7 +40,7 @@ namespace FdoToolbox.Core
         void InitializeMenus(string menuMapFile);
         
         /// <summary>
-        /// If a connection node (or child) is selected, returns the
+        /// If a spatial connection node (or child) is selected, returns the
         /// underlying connection object
         /// </summary>
         /// <returns></returns>
@@ -87,5 +87,18 @@ namespace FdoToolbox.Core
         void ExtendUI(string uiExtensionFile);
 
         void UnHide();
+
+        /// <summary>
+        /// Refreshes the selected database connection's child nodes
+        /// </summary>
+        /// <param name="name"></param>
+        void RefreshDatabaseConnection(string name);
+
+        /// <summary>
+        /// If a database connection node (or child) is selected, returns the
+        /// underlying connection object
+        /// </summary>
+        /// <returns></returns>
+        DbConnectionInfo GetSelectedDatabaseConnection();
     }
 }

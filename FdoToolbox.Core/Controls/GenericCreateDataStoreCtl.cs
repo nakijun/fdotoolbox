@@ -53,8 +53,8 @@ namespace FdoToolbox.Core.Controls
         protected override void OnLoad(EventArgs e)
         {
             ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders();
-            List<Provider> bProviders = new List<Provider>();
-            foreach (Provider prov in providers)
+            List<OSGeo.FDO.ClientServices.Provider> bProviders = new List<OSGeo.FDO.ClientServices.Provider>();
+            foreach (OSGeo.FDO.ClientServices.Provider prov in providers)
             {
                 bProviders.Add(prov);
             }
@@ -64,7 +64,7 @@ namespace FdoToolbox.Core.Controls
 
         private void cmbProvider_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Provider prov = cmbProvider.SelectedItem as Provider;
+            OSGeo.FDO.ClientServices.Provider prov = cmbProvider.SelectedItem as OSGeo.FDO.ClientServices.Provider;
             if (prov != null)
             {
                 using (IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(prov.Name))
@@ -82,7 +82,7 @@ namespace FdoToolbox.Core.Controls
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            Provider prov = cmbProvider.SelectedItem as Provider;
+            OSGeo.FDO.ClientServices.Provider prov = cmbProvider.SelectedItem as OSGeo.FDO.ClientServices.Provider;
             if (prov != null)
             {
                 IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(prov.Name);

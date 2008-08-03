@@ -43,7 +43,7 @@ namespace FdoToolbox.Core.Controls
             StringCollection providerNames = new StringCollection();
             using (ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders())
             {
-                foreach (Provider prov in providers)
+                foreach (OSGeo.FDO.ClientServices.Provider prov in providers)
                 {
                     providerNames.Add(prov.Name);
                 }

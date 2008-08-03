@@ -244,19 +244,19 @@
   <data name="ClassMapping" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ClassMapping.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="MenuMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\MenuMap.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Modules" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Modules.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="OEMenuMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OEMenuMap.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="Preferences" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Preferences.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="PropertyMapping" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PropertyMapping.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="MenuMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\MenuMap.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Modules" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Modules.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="OEMenuMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\OEMenuMap.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

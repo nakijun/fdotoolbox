@@ -35,6 +35,13 @@ namespace FdoToolbox.Core
         public FdoConnectionException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    public class DbConnectionException : Exception
+    {
+        public DbConnectionException() : base() { }
+        public DbConnectionException(string msg) : base(msg) { }
+        public DbConnectionException(string msg, Exception inner) : base(msg, inner) { }
+    }
+
     public class BulkCopyException : Exception
     {
         public BulkCopyException() : base() { }
