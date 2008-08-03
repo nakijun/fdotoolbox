@@ -445,7 +445,7 @@ namespace FdoToolbox.Core
                 }
             }
 
-            if ((maxx.HasValue) || (maxy.HasValue) || (minx.HasValue) || (miny.HasValue))
+            if ((maxx.HasValue) && (maxy.HasValue) && (minx.HasValue) && (miny.HasValue))
             {
                 computedEnvelope = _GeomFactory.CreateEnvelopeXY(minx.Value, miny.Value, maxx.Value, maxy.Value);
             }
