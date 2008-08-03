@@ -23,7 +23,7 @@ using System.Text;
 using System.Collections.Specialized;
 using OSGeo.FDO.Schema;
 
-namespace FdoToolbox.Core
+namespace FdoToolbox.Core.ETL
 {
     /// <summary>
     /// Source Class Copy options

@@ -25,7 +25,7 @@ using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Commands;
 using OSGeo.FDO.Connections;
 
-namespace FdoToolbox.Core
+namespace FdoToolbox.Core.ETL
 {
     /// <summary>
     /// Copy spatial context override for MySQL target. 

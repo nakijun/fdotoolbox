@@ -29,6 +29,7 @@ using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.SpatialContext;
 using FdoToolbox.Core.Forms;
+using FdoToolbox.Core.ETL;
 #region overview
 /*
  * The bulk copy control is the front-end to the BulkCopyTask class.

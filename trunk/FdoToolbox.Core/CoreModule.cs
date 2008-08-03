@@ -32,6 +32,7 @@ using OSGeo.FDO.Common.Io;
 using System.IO;
 using OSGeo.FDO.Commands;
 using System.Collections.Specialized;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Core
 {

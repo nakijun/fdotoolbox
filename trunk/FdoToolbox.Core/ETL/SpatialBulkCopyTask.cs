@@ -75,7 +75,7 @@ using System.IO;
  * Creation of non-existent properties and classes will come in the future
  */
 #endregion
-namespace FdoToolbox.Core
+namespace FdoToolbox.Core.ETL
 {
     public class SpatialBulkCopyTask : ITask
     {
