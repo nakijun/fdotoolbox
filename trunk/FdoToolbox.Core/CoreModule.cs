@@ -535,19 +535,19 @@ namespace FdoToolbox.Core
             HostApplication.Instance.Shell.ObjectExplorer.RefreshSpatialConnection(connInfo.Name);
         }
 
-        [Command(CoreModule.CMD_SHOWOBJECTEXPLORER, "Show Object Explorer", ShortcutKeys = Keys.Control | Keys.D1)]
+        [Command(CoreModule.CMD_SHOWOBJECTEXPLORER, "Show Object Explorer", ShortcutKeys = Keys.Control | Keys.D1, ImageResourceName = "application_side_boxes")]
         public void ShowObjectExplorer()
         {
             HostApplication.Instance.Shell.ObjectExplorer.UnHide();
         }
 
-        [Command(CoreModule.CMD_SHOWCONSOLE, "Show Application Console", ShortcutKeys = Keys.Control | Keys.D2)]
+        [Command(CoreModule.CMD_SHOWCONSOLE, "Show Application Console", ShortcutKeys = Keys.Control | Keys.D2, ImageResourceName = "application_xp_terminal")]
         public void ShowConsole()
         {
             HostApplication.Instance.Shell.ConsoleWindow.UnHide();
         }
 
-        [Command(CoreModule.CMD_MANAGEDATASTORES, "Manage Data Stores", InvocationType = CommandInvocationType.UI)]
+        [Command(CoreModule.CMD_MANAGEDATASTORES, "Manage Data Stores", InvocationType = CommandInvocationType.UI, ImageResourceName = "database_edit")]
         public void ManageDataStores()
         {
             SpatialConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedSpatialConnection();
