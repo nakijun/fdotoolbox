@@ -60,7 +60,7 @@ namespace FdoInfo
                         AppConsole.WriteLine("\nClasses in schema {0}: {1}\n", fs.Name, fs.Classes.Count);
                         foreach (ClassDefinition cd in fs.Classes)
                         {
-                            AppConsole.WriteLine("Name: {0}\n\n\tQualified Name: {1}", cd.Name, cd.QualifiedName);
+                            AppConsole.WriteLine("Name: {0} ({1})\n\n\tQualified Name: {2}", cd.Name, cd.ClassType, cd.QualifiedName);
                             AppConsole.WriteLine("\tDescription: {0}", cd.Description);
                             AppConsole.WriteLine("\tIs Abstract: {0}\n\tIs Computed: {1}", cd.IsAbstract, cd.IsComputed);
                             if (cd.BaseClass != null)
