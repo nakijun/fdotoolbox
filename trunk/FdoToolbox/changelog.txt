@@ -1,3 +1,5 @@
+v0.4.2
+------
 - Enhancements:
 	- General:
 		- New per-class copy option: Delete before copy
