@@ -82,6 +82,7 @@ namespace FdoToolbox
             node.ContextMenuStrip = ctxSelectedConnection;
             GetSchemaNodes(node);
             GetConnectionsNode().Nodes.Add(node);
+            node.Expand();
         }
 
         private void GetSchemaNodes(TreeNode connNode)
