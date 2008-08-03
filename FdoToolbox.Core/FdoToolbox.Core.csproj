@@ -323,6 +323,9 @@
     </Content>
     <Content Include="Preferences.xml" />
     <Content Include="PropertyMapping.xml" />
+    <None Include="Resources\database_edit.png" />
+    <None Include="Resources\application_side_boxes.png" />
+    <None Include="Resources\application_xp_terminal.png" />
     <None Include="Resources\world.png" />
     <None Include="cscatalog.sqlite">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
