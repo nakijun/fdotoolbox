@@ -55,11 +55,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdoNetModule.cs" />
     <Compile Include="AppConsole.cs" />
     <Compile Include="BaseApplication.cs" />
-    <Compile Include="SpatialBulkCopyOptions.cs" />
-    <Compile Include="SpatialBulkCopyTask.cs" />
-    <Compile Include="ClassCopyOptions.cs" />
+    <Compile Include="DbConnectionInfo.cs" />
+    <Compile Include="DbConnectionManager.cs" />
+    <Compile Include="ETL\SpatialBulkCopyOptions.cs" />
+    <Compile Include="ETL\SpatialBulkCopyTask.cs" />
+    <Compile Include="ETL\ClassCopyOptions.cs" />
     <Compile Include="CmdConsoleErrorStream.cs" />
     <Compile Include="CmdConsoleOutputStream.cs" />
     <Compile Include="CommandStatus.cs" />
@@ -276,7 +279,7 @@
     <Compile Include="IConsoleInputStream.cs" />
     <Compile Include="IConsoleOutputStream.cs" />
     <Compile Include="IConsoleWindow.cs" />
-    <Compile Include="ICopySpatialContextOverride.cs" />
+    <Compile Include="ETL\ICopySpatialContextOverride.cs" />
     <Compile Include="IFormWrapper.cs" />
     <Compile Include="IMenuStateMgr.cs" />
     <Compile Include="IObjectExplorer.cs" />
@@ -291,7 +294,7 @@
     <Compile Include="MenuStateMgr.cs" />
     <Compile Include="ModuleBase.cs" />
     <Compile Include="ModuleMgr.cs" />
-    <Compile Include="MySqlCopySpatialContextOverride.cs" />
+    <Compile Include="ETL\MySqlCopySpatialContextOverride.cs" />
     <Compile Include="OverrideFactory.cs" />
     <Compile Include="PreferenceDictionary.cs" />
     <Compile Include="PreferenceNames.cs" />
@@ -301,7 +304,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ShpCopySpatialContextOverride.cs" />
+    <Compile Include="ETL\ShpCopySpatialContextOverride.cs" />
     <Compile Include="SpatialContextInfo.cs" />
     <Compile Include="TaskLoader.cs" />
     <Compile Include="TaskManager.cs" />

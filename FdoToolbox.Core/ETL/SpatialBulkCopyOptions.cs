@@ -28,7 +28,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands;
 using System.IO;
 
-namespace FdoToolbox.Core
+namespace FdoToolbox.Core.ETL
 {
     /// <summary>
     /// Options object for the BulkCopyTask

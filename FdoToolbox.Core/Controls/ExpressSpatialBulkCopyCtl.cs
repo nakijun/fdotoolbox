@@ -30,6 +30,7 @@ using FdoToolbox.Core.Forms;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Schema;
 using System.IO;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Core.Controls
 {

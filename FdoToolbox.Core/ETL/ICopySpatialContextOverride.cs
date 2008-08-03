@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Connections;
 
-namespace FdoToolbox.Core
+namespace FdoToolbox.Core.ETL
 {
     public interface ICopySpatialContextOverride
     {
