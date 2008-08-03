@@ -234,7 +234,7 @@ namespace FdoToolbox.Core.Modules
                 else
                 {
                     AppConsole.WriteLine("Registered FDO Providers:");
-                    foreach (Provider prov in providers)
+                    foreach (OSGeo.FDO.ClientServices.Provider prov in providers)
                     {
                         AppConsole.WriteLine("-> {0}", prov.Name);
                     }

@@ -88,5 +88,15 @@ DO NOT DELETE THIS FILE!!!
 		<SelectedModule>
 			<Command name="modinfo" />
 		</SelectedModule>
+		<DatabaseConnections>
+			<Command name="dbconnect" />
+		</DatabaseConnections>
+		<SelectedDatabaseConnection>
+			<Command name="dbrefreshconn" />
+			<Command name="dbrenameconn" />
+			<Command name="dbremoveconn" />
+		</SelectedDatabaseConnection>
+		<SelectedTable>
+		</SelectedTable>
 	</ContextMenus>
 </ObjectExplorer>

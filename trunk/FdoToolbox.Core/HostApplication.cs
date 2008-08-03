@@ -44,6 +44,7 @@ namespace FdoToolbox.Core
         private IModuleMgr _moduleMgr;
         private ITaskManager _taskMgr;
         private ISpatialConnectionMgr _connMgr;
+        private IDbConnectionManager _dbConnMgr;
         private ISpatialConnectionBoundTabManager _TabManager;
         private ICoordinateSystemCatalog _CsCatalog;
         private static HostApplication _Instance;
@@ -53,6 +54,7 @@ namespace FdoToolbox.Core
             InitializeDialogs();
             Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+            _dbConnMgr = new DbConnectionManager();
             _connMgr = new SpatialConnectionMgr();
             _moduleMgr = new ModuleMgr();
             _taskMgr = new TaskManager();
@@ -102,6 +104,7 @@ namespace FdoToolbox.Core
 
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
+                    ModuleManager.LoadModule(new AdoNetModule());
 #if DEBUG
                     ModuleManager.LoadModule(new TestModule());
 #endif
@@ -468,11 +471,19 @@ namespace FdoToolbox.Core
         }
 
         /// <summary>
-        /// The connection manager
+        /// The spatial connection manager
         /// </summary>
         public ISpatialConnectionMgr SpatialConnectionManager
         {
             get { return _connMgr; }
+        }
+
+        /// <summary>
+        /// The database connection manager
+        /// </summary>
+        public IDbConnectionManager DatabaseConnectionManager
+        {
+            get { return _dbConnMgr; }
         }
 
         /// <summary>
