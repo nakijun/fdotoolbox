@@ -305,6 +305,9 @@ namespace FdoToolbox
         const int NODE_LEVEL_SCHEMA = 2;
         const int NODE_LEVEL_CLASS = 3;
 
+        const int NODE_LEVEL_DATABASE = 2;
+        const int NODE_LEVEL_TABLE = 3;
+
         void OnModuleLoaded(IModule module) 
         {
             string key = NODE_PREFIX_MODULE + module.Name.GetHashCode();
@@ -644,7 +647,28 @@ namespace FdoToolbox
             return null;
         }
 
+        public string GetSelectedDatabase()
+        {
+            TreeNode node = mTreeView.SelectedNode;
+            while (node.Level > NODE_LEVEL_DATABASE)
+                node = node.Parent;
 
-        
+            if (node.Level == NODE_LEVEL_DATABASE && GetDatabaseConnectionsNode() == node.Parent.Parent)
+                return node.Name;
+
+            return null;
+        }
+
+        public string GetSelectedTable()
+        {
+            TreeNode node = mTreeView.SelectedNode;
+            while (node.Level > NODE_LEVEL_TABLE)
+                node = node.Parent;
+
+            if (node.Level == NODE_LEVEL_TABLE && GetDatabaseConnectionsNode() == node.Parent.Parent.Parent)
+                return node.Name;
+
+            return null;
+        }
     }
 }

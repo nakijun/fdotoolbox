@@ -100,5 +100,17 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <returns></returns>
         DbConnectionInfo GetSelectedDatabaseConnection();
+
+        /// <summary>
+        /// If the database node is selected, gets the name of the selected database
+        /// </summary>
+        /// <returns></returns>
+        string GetSelectedDatabase();
+
+        /// <summary>
+        /// If the table node is selected, gets the name of the selected table
+        /// </summary>
+        /// <returns></returns>
+        string GetSelectedTable();
     }
 }
