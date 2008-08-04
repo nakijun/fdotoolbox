@@ -29,6 +29,8 @@ The valid list of commands for FdoUtil.exe include:
 - ExpressBCP
 - MakeSdf
 - RunTask
+- RegisterProvider
+- UnregisterProvider
 
 The valid list of command for FdoInfo.exe include:
 - GetConnectionParameters
@@ -46,6 +48,10 @@ execution can go ahead.
 
 Where applicable, the -quiet switch will suppress all console output. This is not 
 entirely the case however for debug builds of the command-line utilities
+
+If a given parameter value contains multiple words, enclose the string with quotes.
+
+eg. -description:"This is a multi word parameter value"
 
 All command-line utilities will return 0 for successful execution and will return a non-zero value
 otherwise. Consult CommandStatus.cs for the list of return codes.
@@ -163,6 +169,23 @@ Notes:
 For bulk copy tasks, both the source and target connections must be valid 
 connections. Otherwise execution will fail.
 
+RegisterProvider
+----------------
+
+Description: Registers a new FDO provider
+
+Usage: FdoUtil.exe -cmd:RegisterProvider -name:<Provider Name> -displayName:<Display Name> -description:<description> -libraryPath:<Path to provider dll> -version:<version> -fdoVersion:<fdo version> -isManaged:<true|false>
+
+Notes: n/a
+
+UnregisterProvider
+------------------
+
+Description: Unregisters a FDO provider
+
+Usage: FdoUtil.exe -cmd:UnregisterProvider -name:<Provider Name>
+
+Notes: The provider name must be fully qualified (inc. version number) otherwise un-registration will fail.
 
 ======= FdoInfo.exe command description ======= [B2]
 
