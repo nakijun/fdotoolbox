@@ -80,13 +80,10 @@ namespace FdoToolbox
             node.ImageIndex = node.SelectedImageIndex = IMG_IDX_CONNECTION;
             node.ContextMenuStrip = ctxSelectedDatabaseConnection;
 
-            MyMeta.dbRoot root = new MyMeta.dbRoot();
-            root.Connect(connInfo.Driver, connInfo.Connection.ConnectionString);
-            
-            GetDatabaseNodes(node, root);
+            GetDatabaseNodes(node, connInfo.MetaData);
             GetDatabaseConnectionsNode().Nodes.Add(node);
-            node.Tag = root;
-            string tooltip = string.Format("Driver: {0}\nConnection String: {1}", root.DriverString, root.ConnectionString);
+            node.Tag = connInfo.MetaData;
+            string tooltip = string.Format("Driver: {0}\nConnection String: {1}", connInfo.MetaData.DriverString, connInfo.MetaData.ConnectionString);
             node.ToolTipText = tooltip;
             node.Expand();
         }
