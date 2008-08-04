@@ -30,13 +30,21 @@ namespace FdoToolbox.Core.Common
             get { return _Driver; }
             set { _Driver = value; }
         }
-	
+
+        private MyMeta.dbRoot _Meta;
+
+        public MyMeta.dbRoot MetaData
+        {
+            get { return _Meta; }
+        }
 
         public DbConnectionInfo(string name, IDbConnection conn, string driver)
         {
             this.Name = name;
             this.Connection = conn;
             this.Driver = driver;
+            _Meta = new MyMeta.dbRoot();
+            _Meta.Connect(this.Driver, this.Connection.ConnectionString);
         }
     }
 }

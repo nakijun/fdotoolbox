@@ -55,6 +55,7 @@
       <HintPath>..\Thirdparty\MyMeta\System.Data.SQLite.DLL</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
