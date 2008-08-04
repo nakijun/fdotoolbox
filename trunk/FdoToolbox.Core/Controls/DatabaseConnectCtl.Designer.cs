@@ -28,6 +28,7 @@ namespace FdoToolbox.Core.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
@@ -38,8 +39,10 @@ namespace FdoToolbox.Core.Controls
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtConnStr = new System.Windows.Forms.TextBox();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -118,6 +121,7 @@ namespace FdoToolbox.Core.Controls
             this.cmbDriver.Name = "cmbDriver";
             this.cmbDriver.Size = new System.Drawing.Size(381, 21);
             this.cmbDriver.TabIndex = 1;
+            this.cmbDriver.SelectedIndexChanged += new System.EventHandler(this.cmbDriver_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -152,6 +156,11 @@ namespace FdoToolbox.Core.Controls
             this.txtConnStr.Name = "txtConnStr";
             this.txtConnStr.Size = new System.Drawing.Size(435, 152);
             this.txtConnStr.TabIndex = 0;
+            this.txtConnStr.Text = "Enter your connection string here";
+            // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
             // 
             // DatabaseConnectCtl
             // 
@@ -168,6 +177,7 @@ namespace FdoToolbox.Core.Controls
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -184,5 +194,6 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.ComboBox cmbDriver;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtConnStr;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }
