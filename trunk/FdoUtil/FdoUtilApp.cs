@@ -216,6 +216,56 @@ namespace FdoUtil
                         _Command = new RunTaskCommand(taskFile, logFile);
                     }
                     break;
+                case "RegisterProvider":
+                    {
+                        if (IsSwitchDefined("-help", args))
+                        {
+                            AppConsole.WriteLine("Description: {0}\nUsage: {1}",
+                                "Registers a new FDO provider",
+                                "FdoUtil.exe -cmd:RegisterProvider -name:<Provider Name> -displayName:<Display Name> -description:<description> -libraryPath:<Path to provider dll> -version:<version> -fdoVersion:<fdo version> -isManaged:<true|false>");
+                            return;
+                        }
+
+                        string name = GetArgument("-name", args);
+                        string display = GetArgument("-displayName", args);
+                        string desc = GetArgument("-description", args);
+                        string lib = GetArgument("-libraryPath", args);
+                        string version = GetArgument("-version", args);
+                        string fdoVersion = GetArgument("-fdoVersion", args);
+                        string managed = GetArgument("-isManaged", args);
+
+                        ThrowIfEmpty(name, "-name");
+                        ThrowIfEmpty(display, "-displayName");
+                        ThrowIfEmpty(desc, "-description");
+                        ThrowIfEmpty(lib, "-libraryPath");
+                        ThrowIfEmpty(version, "-version");
+                        ThrowIfEmpty(fdoVersion, "-fdoVersion");
+                        ThrowIfEmpty(managed, "-isManaged");
+
+                        _Command = new RegisterProviderCommand(
+                            name,
+                            display,
+                            desc,
+                            lib,
+                            version,
+                            fdoVersion,
+                            Convert.ToBoolean(managed));
+                    }
+                    break;
+                case "UnregisterProvider":
+                    {
+                        if (IsSwitchDefined("-help", args))
+                        {
+                            AppConsole.WriteLine("Description: {0}\nUsage: {1}",
+                                "Un-registers a FDO provider",
+                                "FdoUtil.exe -cmd:UnregisterProvider -name:<Provider Name>");
+                            return;
+                        }
+                        string name = GetArgument("-name", args);
+                        ThrowIfEmpty(name, "-name");
+                        _Command = new UnregisterProviderCommand(name);
+                    }
+                    break;
                 default:
                     throw new ArgumentException("Unknown command name: " + cmdName);
             }
@@ -238,6 +288,8 @@ namespace FdoUtil
  - ExpressBCP
  - MakeSdf
  - RunTask
+ - RegisterProvider
+ - UnregisterProvider
 For more information about a command type: FdoUtil.exe -cmd:<command name> -help
 For more help. Consult the help file cmd_readme.txt";
             AppConsole.WriteLine(usage);
@@ -264,7 +316,15 @@ For more help. Consult the help file cmd_readme.txt";
             int retCode = (int)CommandStatus.E_OK;
             if (_Command != null)
             {
-                retCode = _Command.Execute();
+                try
+                {
+                    retCode = _Command.Execute();
+                }
+                catch (Exception ex)
+                {
+                    AppConsole.WriteException(ex);
+                    retCode = (int)CommandStatus.E_FAIL_UNKNOWN;
+                }
             }
 #if DEBUG
             AppConsole.WriteLine("Status: {0}", retCode);
