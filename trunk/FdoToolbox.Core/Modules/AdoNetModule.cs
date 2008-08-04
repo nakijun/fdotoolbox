@@ -17,6 +17,7 @@ namespace FdoToolbox.Core.Modules
         public const string DB_REFRESH_CONNECTION = "dbrefreshconn";
         public const string DB_RENAME_CONNECTION = "dbrenameconn";
         public const string DB_REMOVE_CONNECTION = "dbremoveconn";
+        public const string DB_DATA_PREVIEW = "dbdatapreview";
 
         #endregion
 
@@ -74,6 +75,19 @@ namespace FdoToolbox.Core.Modules
             DbConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
                 HostApplication.Instance.DatabaseConnectionManager.RemoveConnection(connInfo.Name);
+        }
+
+        [Command(AdoNetModule.DB_DATA_PREVIEW, "Data Preview", ImageResourceName = "zoom")]
+        public void DataPreview()
+        {
+            //TODO: Don't create directly
+            DbConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            if (connInfo != null)
+            {
+                string key = "PREVIEW";
+                BaseDocumentCtl ctl = new DbDataPreviewCtl(connInfo, key);
+                HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            }
         }
     }
 }

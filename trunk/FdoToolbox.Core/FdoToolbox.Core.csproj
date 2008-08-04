@@ -65,6 +65,18 @@
     <Compile Include="Controls\DatabaseConnectCtl.Designer.cs">
       <DependentUpon>DatabaseConnectCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DbConnectionBoundCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DbConnectionBoundCtl.Designer.cs">
+      <DependentUpon>DbConnectionBoundCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DbDataPreviewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DbDataPreviewCtl.Designer.cs">
+      <DependentUpon>DbDataPreviewCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="IDbConnectionManager.cs" />
     <Compile Include="Modules\AdoNetModule.cs" />
     <Compile Include="ClientServices\AppConsole.cs" />
@@ -384,6 +396,10 @@
     <EmbeddedResource Include="Controls\DatabaseConnectCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DatabaseConnectCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DbDataPreviewCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DbDataPreviewCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SpatialBulkCopyCtl.resx">
       <SubType>Designer</SubType>
