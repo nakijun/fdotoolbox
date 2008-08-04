@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Windows.Forms;
 using System.Reflection;
 using FdoToolbox.Core.ClientServices;
 
@@ -102,7 +101,14 @@ namespace FdoToolbox.Core
         /// <summary>
         /// Current working directory path of the application
         /// </summary>
-        public string AppPath { get { return System.IO.Path.GetDirectoryName(Application.ExecutablePath); } }
+        public string AppPath 
+        { 
+            get 
+            { 
+                return System.IO.Path.GetDirectoryName(
+                    System.Reflection.Assembly.GetExecutingAssembly().Location); 
+            } 
+        }
 
         protected abstract void CheckFdoPath();
 
