@@ -63,7 +63,13 @@ namespace FdoToolbox
 
         void OnDatabaseConnectionRemoved(string name)
         {
-            GetDatabaseConnectionsNode().Nodes.RemoveByKey(name);
+            TreeNode node = GetDatabaseConnectionsNode().Nodes[name];
+            if (node != null)
+            {
+                GetDatabaseConnectionsNode().Nodes.RemoveByKey(name);
+                MyMeta.dbRoot root = node.Tag as MyMeta.dbRoot;
+                root.Dispose();
+            }
         }
 
         void OnDatabaseConnectionAdded(string name)
@@ -76,9 +82,12 @@ namespace FdoToolbox
 
             MyMeta.dbRoot root = new MyMeta.dbRoot();
             root.Connect(connInfo.Driver, connInfo.Connection.ConnectionString);
-
+            
             GetDatabaseNodes(node, root);
             GetDatabaseConnectionsNode().Nodes.Add(node);
+            node.Tag = root;
+            string tooltip = string.Format("Driver: {0}\nConnection String: {1}", root.DriverString, root.ConnectionString);
+            node.ToolTipText = tooltip;
             node.Expand();
         }
 
@@ -91,6 +100,8 @@ namespace FdoToolbox
                 dbNode.ImageIndex = dbNode.SelectedImageIndex = IMG_IDX_DATABASE;
                 dbNode.ContextMenuStrip = ctxSelectedDatabase;
                 GetTableNodes(dbNode, db);
+                string tooltip = string.Format("Name: {0}\nDescription: {1}", db.Name, db.Description);
+                dbNode.ToolTipText = tooltip;
                 node.Nodes.Add(dbNode);
             }
         }
@@ -104,7 +115,37 @@ namespace FdoToolbox
                 tableNode.ImageIndex = tableNode.SelectedImageIndex = IMG_IDX_CLASS;
                 tableNode.ContextMenuStrip = ctxSelectedTable;
                 GetColumnNodes(tableNode, table);
+                string tooltip = string.Format("Table\nDescription: {0}", table.Description);
+                tableNode.ToolTipText = tooltip;
                 node.Nodes.Add(tableNode);
+            }
+
+            foreach (MyMeta.IView view in db.Views)
+            {
+                TreeNode viewNode = new TreeNode();
+                viewNode.Name = viewNode.Text = view.Name;
+                viewNode.ImageIndex = viewNode.SelectedImageIndex = IMG_IDX_CLASS;
+                viewNode.ContextMenuStrip = ctxSelectedTable;
+                GetColumnNodes(viewNode, view);
+                string tooltip = string.Format("View\nDescription: {0}", view.Description);
+                viewNode.ToolTipText = tooltip;
+                node.Nodes.Add(viewNode);
+            }
+        }
+
+        private void GetColumnNodes(TreeNode viewNode, MyMeta.IView view)
+        {
+            foreach (MyMeta.IColumn column in view.Columns)
+            {
+                TreeNode colNode = new TreeNode();
+                colNode.Name = colNode.Text = column.Name;
+                int imageIndex = IMG_IDX_PROPERTY_DATA;
+                if (column.IsInPrimaryKey)
+                    imageIndex = IMG_IDX_PROPERTY_IDENTITY;
+                colNode.ImageIndex = colNode.SelectedImageIndex = imageIndex;
+                string tooltip = string.Format("Data Type: {0}\nNullable: {1}\nAuto-Generated: {2}\nComputed: {3}", column.DataTypeName, column.IsNullable, column.IsAutoKey, column.IsComputed);
+                colNode.ToolTipText = tooltip;
+                viewNode.Nodes.Add(colNode);
             }
         }
 
@@ -114,7 +155,12 @@ namespace FdoToolbox
             {
                 TreeNode colNode = new TreeNode();
                 colNode.Name = colNode.Text = column.Name;
-                colNode.ImageIndex = colNode.SelectedImageIndex = IMG_IDX_PROPERTY_DATA;
+                int imageIndex = IMG_IDX_PROPERTY_DATA;
+                if (column.IsInPrimaryKey)
+                    imageIndex = IMG_IDX_PROPERTY_IDENTITY;
+                colNode.ImageIndex = colNode.SelectedImageIndex = imageIndex;
+                string tooltip = string.Format("Data Type: {0}\nNullable: {1}\nAuto-Generated: {2}\nComputed: {3}", column.DataTypeName, column.IsNullable, column.IsAutoKey, column.IsComputed);
+                colNode.ToolTipText = tooltip;
                 tableNode.Nodes.Add(colNode);
             }
         }
@@ -327,14 +373,12 @@ namespace FdoToolbox
         public void RefreshDatabaseConnection(string name)
         {
             TreeNode node = GetDatabaseConnectionsNode().Nodes[name];
-            node.Nodes.Clear();
-
-            DbConnectionInfo connInfo = HostApplication.Instance.DatabaseConnectionManager.GetConnection(name);
-            
-            MyMeta.dbRoot root = new MyMeta.dbRoot();
-            root.Connect(connInfo.Driver, connInfo.Connection.ConnectionString);
-
-            GetDatabaseNodes(node, root);
+            if (node != null)
+            {
+                node.Nodes.Clear();
+                MyMeta.dbRoot root = node.Tag as MyMeta.dbRoot;
+                GetDatabaseNodes(node, root);
+            }
         }
 
         public void RefreshSpatialConnection(string name)
