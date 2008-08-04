@@ -93,10 +93,17 @@ DO NOT DELETE THIS FILE!!!
 		</DatabaseConnections>
 		<SelectedDatabaseConnection>
 			<Command name="dbrefreshconn" />
+			<Separator />
+			<Command name="dbdatapreview" />
+			<Separator />
 			<Command name="dbrenameconn" />
 			<Command name="dbremoveconn" />
 		</SelectedDatabaseConnection>
+		<SelectedDatabase>
+			<Command name="dbdatapreview" />
+		</SelectedDatabase>
 		<SelectedTable>
+			<Command name="dbdatapreview" />
 		</SelectedTable>
 	</ContextMenus>
 </ObjectExplorer>
