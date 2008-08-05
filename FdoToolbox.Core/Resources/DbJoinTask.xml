@@ -29,10 +29,10 @@
 		<Class>{18}</Class>
 	</Target>
 	<Joins>
-		{17}
+		{19}
 	</Joins>
 	<JoinOptions>
-		<JoinType>{18}</JoinType>
-		<JoinCardinality>{19}</JoinCardinality>
+		<JoinType>{20}</JoinType>
+		<JoinCardinality>{21}</JoinCardinality>
 	</JoinOptions>
 </DatabaseJoinTask>

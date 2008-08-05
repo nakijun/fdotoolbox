@@ -47,9 +47,14 @@ namespace FdoToolbox.Core.Controls
             cmbTargetConnection.DataSource = new List<string>(HostApplication.Instance.SpatialConnectionManager.GetConnectionNames());
         }
 
+        private bool update = false;
+
         public void LoadSettings(SpatialJoinTask task)
         {
+            update = true;
             txtTaskName.Text = task.Name;
+            txtColumnPrefix.Text = task.Options.SecondaryPrefix;
+
             SpatialJoinOptions options = task.Options;
 
             cmbPrimaryConnection.SelectedItem = options.PrimarySource.Name;
@@ -142,7 +147,11 @@ namespace FdoToolbox.Core.Controls
 
             SpatialJoinTask task = new SpatialJoinTask(options);
             task.Name = txtTaskName.Text;
-            HostApplication.Instance.TaskManager.AddTask(task);
+
+            if (update)
+                HostApplication.Instance.TaskManager.UpdateTask(txtTaskName.Text, task);
+            else
+                HostApplication.Instance.TaskManager.AddTask(task);
             this.Close();
         }
 
@@ -155,7 +164,7 @@ namespace FdoToolbox.Core.Controls
                 errorProvider.SetError(txtTaskName, "Required");
                 valid = false;
             }
-            if (HostApplication.Instance.TaskManager.GetTask(txtTaskName.Text) != null)
+            if (!update && HostApplication.Instance.TaskManager.GetTask(txtTaskName.Text) != null)
             {
                 errorProvider.SetError(txtTaskName, "A task named " + txtTaskName.Text + " already exists");
                 valid = false;
