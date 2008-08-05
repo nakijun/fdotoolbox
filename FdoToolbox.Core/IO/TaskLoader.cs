@@ -31,6 +31,8 @@ using OSGeo.FDO.Runtime;
 using FdoToolbox.Core.ETL;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
+using System.Data;
+using System.Data.OleDb;
 
 namespace FdoToolbox.Core.IO
 {
@@ -51,8 +53,11 @@ namespace FdoToolbox.Core.IO
             doc.Load(configFile);
 
             XmlNode bcpNode = doc.SelectSingleNode("//BulkCopyTask");
-            if(bcpNode != null)
+            XmlNode joinNode = doc.SelectSingleNode("//DatabaseJoinTask");
+            if (bcpNode != null)
                 return LoadBulkCopy(doc, consoleMode);
+            else if (joinNode != null)
+                return LoadJoinTask(doc, consoleMode);
             else
                 return null;
         }
@@ -69,9 +74,168 @@ namespace FdoToolbox.Core.IO
                 case TaskType.BulkCopy:
                     SaveBulkCopy((SpatialBulkCopyTask)task, file);
                     break;
+                case TaskType.DbJoin:
+                    SaveJoinTask((SpatialJoinTask)task, file);
+                    break;
                 default:
                     AppConsole.WriteLine("Unknown or unsupported task type: {0}", task.TaskType);
                     break;
+            }
+        }
+
+        private static ITask LoadJoinTask(XmlDocument doc, bool consoleMode)
+        {
+            ITask task = null;
+            string priName = null;
+            string secName = null;
+            string targetName = null;
+            try
+            {
+                XmlNode primaryNode = doc.SelectSingleNode("//DatabaseJoinTask/PrimarySource");
+                XmlNode secondaryNode = doc.SelectSingleNode("//DatabaseJoinTask/SecondarySource");
+                XmlNode targetNode = doc.SelectSingleNode("//DatabaseJoinTask/Target");
+                XmlNode joinNode = doc.SelectSingleNode("//DatabaseJoinTask/Joins");
+                XmlNode optionsNode = doc.SelectSingleNode("//DatabaseJoinTask/JoinOptions");
+
+                priName = primaryNode.SelectSingleNode("Name").InnerText;
+                string priProvider = primaryNode.SelectSingleNode("Provider").InnerText;
+                string priConnStr = primaryNode.SelectSingleNode("ConnectionString").InnerText;
+                string priSchema = primaryNode.SelectSingleNode("FeatureSchema").InnerText;
+                string priClass = primaryNode.SelectSingleNode("Class").InnerText;
+                string priPrefix = primaryNode.SelectSingleNode("Prefix").InnerText;
+
+                secName = secondaryNode.SelectSingleNode("Name").InnerText;
+                string secDriver = secondaryNode.SelectSingleNode("Driver").InnerText;
+                string secConnStr = secondaryNode.SelectSingleNode("ConnectionString").InnerText;
+                string secTable = secondaryNode.SelectSingleNode("Table").InnerText;
+                string secPrefix = secondaryNode.SelectSingleNode("Prefix").InnerText;
+
+                targetName = targetNode.SelectSingleNode("Name").InnerText;
+                string targetProvider = targetNode.SelectSingleNode("Provider").InnerText;
+                string targetConnStr = targetNode.SelectSingleNode("ConnectionString").InnerText;
+                string targetSchema = targetNode.SelectSingleNode("FeatureSchema").InnerText;
+                string targetClass = targetNode.SelectSingleNode("Class").InnerText;
+
+                IConnection priConn = FeatureAccessManager.GetConnectionManager().CreateConnection(priProvider);
+                priConn.ConnectionString = priConnStr;
+
+                IConnection targetConn = FeatureAccessManager.GetConnectionManager().CreateConnection(targetProvider);
+                targetConn.ConnectionString = targetConnStr;
+
+                IDbConnection secConn = new OleDbConnection(secConnStr);
+
+                SpatialConnectionInfo priConnInfo = new SpatialConnectionInfo(priName, priConn);
+                SpatialConnectionInfo targetConnInfo = new SpatialConnectionInfo(targetName, targetConn);
+                DbConnectionInfo secConnInfo = new DbConnectionInfo(secName, secConn, secDriver);
+
+                if (consoleMode)
+                {
+                    priConnInfo.Connection.Open();
+                    secConnInfo.Connection.Open();
+                    targetConnInfo.Connection.Open();
+                }
+                else
+                {
+                    HostApplication.Instance.SpatialConnectionManager.AddConnection(priConnInfo.Name, priConnInfo.Connection);
+                    HostApplication.Instance.SpatialConnectionManager.AddConnection(targetConnInfo.Name, targetConnInfo.Connection);
+                    HostApplication.Instance.DatabaseConnectionManager.AddConnection(secConnInfo);
+                }
+
+                SpatialJoinOptions options = new SpatialJoinOptions();
+                options.SetPrimary(priConnInfo, priSchema, priClass);
+                options.SetSecondary(secConnInfo, secTable);
+                options.SetTarget(targetConnInfo, targetSchema, targetClass);
+                options.PrimaryPrefix = priPrefix;
+                options.SecondaryPrefix = secPrefix;
+
+                foreach (XmlNode node in primaryNode.SelectNodes("PropertyList/Property"))
+                {
+                    options.AddProperty(node.InnerText);
+                }
+
+                foreach (XmlNode node in secondaryNode.SelectNodes("ColumnList/Column"))
+                {
+                    options.AddColumn(node.InnerText);
+                }
+
+                foreach (XmlNode node in joinNode.SelectNodes("Join"))
+                {
+                    string primary = node.Attributes["primary"].Value;
+                    string secondary = node.Attributes["secondary"].Value;
+
+                    options.AddJoinPair(primary, secondary);
+                }
+                options.Cardinality = (SpatialJoinCardinality)Enum.Parse(typeof(SpatialJoinCardinality), optionsNode.SelectSingleNode("JoinCardinality").InnerText);
+                options.JoinType = (SpatialJoinType)Enum.Parse(typeof(SpatialJoinType), optionsNode.SelectSingleNode("JoinType").InnerText);
+
+                task = new SpatialJoinTask(options);
+                task.Name = doc.SelectSingleNode("//DatabaseJoinTask").Attributes["name"].Value;
+            }
+            catch (Exception ex)
+            {
+                AppConsole.WriteException(ex);
+                if (!consoleMode)
+                {
+                    HostApplication.Instance.SpatialConnectionManager.RemoveConnection(priName);
+                    HostApplication.Instance.SpatialConnectionManager.RemoveConnection(targetName);
+                    HostApplication.Instance.DatabaseConnectionManager.RemoveConnection(secName);
+                }
+                return null;
+            }
+
+            return task;
+        }
+
+        private static void SaveJoinTask(SpatialJoinTask task, string configFile)
+        {
+            string xmlTemplate = Properties.Resources.DbJoinTask;
+            StringBuilder propertyList = new StringBuilder();
+            StringBuilder columnList = new StringBuilder();
+            StringBuilder joinList = new StringBuilder();
+            string[] propNames = task.Options.GetPropertyNames();
+            string[] colNames = task.Options.GetColumnNames();
+            string[] joinProps = task.Options.GetJoinedProperties();
+            foreach (string prop in propNames)
+            {
+                propertyList.Append("<Property>" + prop + "</Property>\n");
+            }
+            foreach (string col in colNames)
+            {
+                columnList.Append("<Column>" + col + "</Column>\n");
+            }
+            foreach (string prop in joinProps)
+            {
+                joinList.Append("<Join primary=\""+ prop +"\" secondary=\""+ task.Options.GetMatchingColumn(prop) +"\" />\n");
+            }
+            string xml = string.Format(xmlTemplate,
+                task.Name,
+                task.Options.PrimarySource.Name,
+                task.Options.PrimarySource.Connection.ConnectionInfo.ProviderName,
+                task.Options.PrimarySource.Connection.ConnectionString,
+                task.Options.SchemaName,
+                task.Options.ClassName,
+                propertyList.ToString(),
+                task.Options.PrimaryPrefix,
+                task.Options.SecondarySource.Name,
+                task.Options.SecondarySource.Driver,
+                task.Options.SecondarySource.Connection.ConnectionString,
+                task.Options.TableName,
+                columnList.ToString(),
+                task.Options.SecondaryPrefix,
+                task.Options.Target.Name,
+                task.Options.Target.Connection.ConnectionInfo.ProviderName,
+                task.Options.Target.Connection.ConnectionString,
+                task.Options.TargetSchema,
+                task.Options.TargetClassName,
+                joinList.ToString(),
+                task.Options.JoinType,
+                task.Options.Cardinality);
+            System.IO.File.Delete(configFile);
+            using (XmlTextWriter writer = new XmlTextWriter(configFile, Encoding.UTF8))
+            {
+                writer.Formatting = Formatting.Indented;
+                writer.WriteRaw(xml);
+                writer.Close();
             }
         }
 

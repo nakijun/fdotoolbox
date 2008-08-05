@@ -78,6 +78,14 @@
     <Compile Include="Controls\DbDataPreviewCtl.Designer.cs">
       <DependentUpon>DbDataPreviewCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SpatialJoinCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SpatialJoinCtl.Designer.cs">
+      <DependentUpon>SpatialJoinCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ETL\SpatialJoinOptions.cs" />
+    <Compile Include="ETL\SpatialJoinTask.cs" />
     <Compile Include="IDbConnectionManager.cs" />
     <Compile Include="Modules\AdoNetModule.cs" />
     <Compile Include="ClientServices\AppConsole.cs" />
@@ -348,6 +356,7 @@
     <Content Include="OEMenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\DbJoinTask.xml" />
     <Content Include="Resources\Preferences.xml" />
     <Content Include="Resources\PropertyMapping.xml" />
     <None Include="Resources\database_edit.png" />
@@ -453,6 +462,10 @@
     <EmbeddedResource Include="Controls\SpatialContextCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SpatialContextCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SpatialJoinCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SpatialJoinCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <SubType>Designer</SubType>

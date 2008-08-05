@@ -49,6 +49,20 @@ namespace FdoToolbox.Core
         public BulkCopyException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    public class SpatialJoinException : Exception
+    {
+        public SpatialJoinException() : base() { }
+        public SpatialJoinException(string msg) : base(msg) { }
+        public SpatialJoinException(string msg, Exception inner) : base(msg, inner) { }
+    }
+
+    public class UnsupportedException : Exception
+    {
+        public UnsupportedException() : base() { }
+        public UnsupportedException(string msg) : base(msg) { }
+        public UnsupportedException(string msg, Exception inner) : base(msg, inner) { }
+    }
+
     public class TaskLoaderException : Exception
     {
         public TaskLoaderException() : base() { }

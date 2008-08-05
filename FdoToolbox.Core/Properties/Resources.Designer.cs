@@ -81,8 +81,9 @@ namespace FdoToolbox.Core.Properties {
         ///- DockPanel Suite (c) Weifen Luo (http://sourceforge.net/projects/dockpanelsuite)
         ///- famfamfam silk icon set (c) Mark James (http://www.famfamfam.com/lab/icons/silk/)
         ///- ADO.NET 2.0 SQLite Data Provider (c) Robert Simpson (http://sqlite.phxsoftware.com)
+        ///- MyMeta (c) MyGeneration Software (http://sourceforge.net/projects/mygeneration)
         ///
-        ///This application and its non-thirdparty components are licensed under the GNU Lesser General Public Licence (see http://www.g [rest of string was truncated]&quot;;.
+        ///This application and its non-thirdparty co [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string APP_ABOUT {
             get {
@@ -238,6 +239,36 @@ namespace FdoToolbox.Core.Properties {
             get {
                 object obj = ResourceManager.GetObject("database_table", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;DatabaseJoinTask name=&quot;{0}&quot;&gt;
+        ///	&lt;PrimarySource&gt;
+        ///		&lt;Name&gt;{1}&lt;/Name&gt;
+        ///		&lt;Provider&gt;{2}&lt;/Provider&gt;
+        ///		&lt;ConnectionString&gt;{3}&lt;/ConnectionString&gt;
+        ///		&lt;FeatureSchema&gt;{4}&lt;/FeatureSchema&gt;
+        ///		&lt;Class&gt;{5}&lt;/Class&gt;
+        ///		&lt;PropertyList&gt;
+        ///			{6}
+        ///		&lt;/PropertyList&gt;
+        ///	&lt;/PrimarySource&gt;
+        ///	&lt;SecondarySource&gt;
+        ///		&lt;Name&gt;{7}&lt;/Name&gt;
+        ///		&lt;Driver&gt;{8}&lt;/Driver&gt;
+        ///		&lt;ConnectionString&gt;{9}&lt;/ConnectionString&gt;
+        ///		&lt;Table&gt;{10}&lt;/Table&gt;
+        ///		&lt;ColumnList&gt;
+        ///			{11}  
+        ///		&lt;/ColumnList&gt;
+        ///	&lt;/SecondarySource&gt;
+        ///	&lt;Target&gt;        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DbJoinTask {
+            get {
+                return ResourceManager.GetString("DbJoinTask", resourceCulture);
             }
         }
         
