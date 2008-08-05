@@ -322,7 +322,7 @@ namespace FdoToolbox.Core
 
             string initialPath = Preferences.GetStringPref(PreferenceNames.PREF_STR_WORKING_DIRECTORY);
             if (string.IsNullOrEmpty(initialPath))
-                initialPath = HostApplication.Instance.AppPath;
+                initialPath = this.AppPath;
 
             _OpenFolderDialog.SelectedPath = initialPath;
             _OpenFileDialog.InitialDirectory = initialPath;

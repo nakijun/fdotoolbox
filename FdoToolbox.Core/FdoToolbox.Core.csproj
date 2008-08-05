@@ -60,6 +60,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\BulkCopyTask.cs" />
+    <Compile Include="Configuration\DbConnection.cs" />
+    <Compile Include="Configuration\DbJoinTask.cs" />
+    <Compile Include="Configuration\Preferences.cs" />
+    <Compile Include="Configuration\SpatialConnection.cs" />
     <Compile Include="Controls\DatabaseConnectCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -352,8 +357,6 @@
   <ItemGroup>
     <None Include="Resources\application_form_edit.png" />
     <Content Include="Resources\APP_ABOUT.txt" />
-    <Content Include="Resources\BulkCopyTask.xml" />
-    <Content Include="Resources\ClassMapping.xml" />
     <Content Include="MenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -363,9 +366,6 @@
     <Content Include="OEMenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\DbJoinTask.xml" />
-    <Content Include="Resources\Preferences.xml" />
-    <Content Include="Resources\PropertyMapping.xml" />
     <None Include="Resources\database_edit.png" />
     <None Include="Resources\application_side_boxes.png" />
     <None Include="Resources\application_xp_terminal.png" />
@@ -408,6 +408,11 @@
     <None Include="Resources\application_go.png" />
     <None Include="Resources\application_edit.png" />
     <None Include="Resources\accept.png" />
+    <None Include="Schemas\BulkCopyTask.xsd" />
+    <None Include="Schemas\DbConnection.xsd" />
+    <None Include="Schemas\DbJoinTask.xsd" />
+    <None Include="Schemas\Preferences.xsd" />
+    <None Include="Schemas\SpatialConnection.xsd" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\DatabaseConnectCtl.resx">

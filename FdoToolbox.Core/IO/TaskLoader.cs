@@ -33,6 +33,9 @@ using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
 using System.Data;
 using System.Data.OleDb;
+using FdoToolbox.Core.Configuration;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace FdoToolbox.Core.IO
 {
@@ -55,9 +58,9 @@ namespace FdoToolbox.Core.IO
             XmlNode bcpNode = doc.SelectSingleNode("//BulkCopyTask");
             XmlNode joinNode = doc.SelectSingleNode("//DatabaseJoinTask");
             if (bcpNode != null)
-                return LoadBulkCopy(doc, consoleMode);
+                return LoadBulkCopy(configFile, consoleMode);
             else if (joinNode != null)
-                return LoadJoinTask(doc, consoleMode);
+                return LoadJoinTask(configFile, consoleMode);
             else
                 return null;
         }
@@ -83,7 +86,7 @@ namespace FdoToolbox.Core.IO
             }
         }
 
-        private static ITask LoadJoinTask(XmlDocument doc, bool consoleMode)
+        private static ITask LoadJoinTask(string configFile, bool consoleMode)
         {
             ITask task = null;
             string priName = null;
@@ -91,6 +94,14 @@ namespace FdoToolbox.Core.IO
             string targetName = null;
             try
             {
+                DatabaseJoinTask djt = null;
+                XmlSerializer serializer = new XmlSerializer(typeof(DatabaseJoinTask));
+                using (StreamReader reader = new StreamReader(configFile))
+                {
+                    djt = (DatabaseJoinTask)serializer.Deserialize(reader);
+                }
+
+                /*
                 XmlNode primaryNode = doc.SelectSingleNode("//DatabaseJoinTask/PrimarySource");
                 XmlNode secondaryNode = doc.SelectSingleNode("//DatabaseJoinTask/SecondarySource");
                 XmlNode targetNode = doc.SelectSingleNode("//DatabaseJoinTask/Target");
@@ -115,18 +126,22 @@ namespace FdoToolbox.Core.IO
                 string targetConnStr = targetNode.SelectSingleNode("ConnectionString").InnerText;
                 string targetSchema = targetNode.SelectSingleNode("FeatureSchema").InnerText;
                 string targetClass = targetNode.SelectSingleNode("Class").InnerText;
+                */
+                priName = djt.PrimarySource.name;
+                secName = djt.SecondarySource.name;
+                targetName = djt.Target.name;
 
-                IConnection priConn = FeatureAccessManager.GetConnectionManager().CreateConnection(priProvider);
-                priConn.ConnectionString = priConnStr;
+                IConnection priConn = FeatureAccessManager.GetConnectionManager().CreateConnection(djt.PrimarySource.Provider);
+                priConn.ConnectionString = djt.PrimarySource.ConnectionString;
 
-                IConnection targetConn = FeatureAccessManager.GetConnectionManager().CreateConnection(targetProvider);
-                targetConn.ConnectionString = targetConnStr;
+                IConnection targetConn = FeatureAccessManager.GetConnectionManager().CreateConnection(djt.Target.Provider);
+                targetConn.ConnectionString = djt.Target.ConnectionString;
 
-                IDbConnection secConn = new OleDbConnection(secConnStr);
+                IDbConnection secConn = new OleDbConnection(djt.SecondarySource.ConnectionString);
 
                 SpatialConnectionInfo priConnInfo = new SpatialConnectionInfo(priName, priConn);
                 SpatialConnectionInfo targetConnInfo = new SpatialConnectionInfo(targetName, targetConn);
-                DbConnectionInfo secConnInfo = new DbConnectionInfo(secName, secConn, secDriver);
+                DbConnectionInfo secConnInfo = new DbConnectionInfo(secName, secConn, djt.SecondarySource.Driver);
 
                 if (consoleMode)
                 {
@@ -142,34 +157,31 @@ namespace FdoToolbox.Core.IO
                 }
 
                 SpatialJoinOptions options = new SpatialJoinOptions();
-                options.SetPrimary(priConnInfo, priSchema, priClass);
-                options.SetSecondary(secConnInfo, secTable);
-                options.SetTarget(targetConnInfo, targetSchema, targetClass);
-                options.PrimaryPrefix = priPrefix;
-                options.SecondaryPrefix = secPrefix;
+                options.SetPrimary(priConnInfo, djt.PrimarySource.FeatureSchema, djt.PrimarySource.Class);
+                options.SetSecondary(secConnInfo, djt.SecondarySource.Table);
+                options.SetTarget(targetConnInfo, djt.Target.FeatureSchema, djt.Target.Class);
+                options.PrimaryPrefix = djt.PrimarySource.Prefix;
+                options.SecondaryPrefix = djt.SecondarySource.Prefix;
 
-                foreach (XmlNode node in primaryNode.SelectNodes("PropertyList/Property"))
+                foreach (string prop in djt.PrimarySource.PropertyList)
                 {
-                    options.AddProperty(node.InnerText);
+                    options.AddProperty(prop);
                 }
 
-                foreach (XmlNode node in secondaryNode.SelectNodes("ColumnList/Column"))
+                foreach (string column in djt.SecondarySource.ColumnList)
                 {
-                    options.AddColumn(node.InnerText);
+                    options.AddColumn(column);
                 }
 
-                foreach (XmlNode node in joinNode.SelectNodes("Join"))
+                foreach (Join j in djt.Joins)
                 {
-                    string primary = node.Attributes["primary"].Value;
-                    string secondary = node.Attributes["secondary"].Value;
-
-                    options.AddJoinPair(primary, secondary);
+                    options.AddJoinPair(j.primary, j.secondary);
                 }
-                options.Cardinality = (SpatialJoinCardinality)Enum.Parse(typeof(SpatialJoinCardinality), optionsNode.SelectSingleNode("JoinCardinality").InnerText);
-                options.JoinType = (SpatialJoinType)Enum.Parse(typeof(SpatialJoinType), optionsNode.SelectSingleNode("JoinType").InnerText);
+                options.Cardinality = djt.JoinOptions.JoinCardinality;
+                options.JoinType = djt.JoinOptions.JoinType;
 
                 task = new SpatialJoinTask(options);
-                task.Name = doc.SelectSingleNode("//DatabaseJoinTask").Attributes["name"].Value;
+                task.Name = djt.name;
             }
             catch (Exception ex)
             {
@@ -188,54 +200,53 @@ namespace FdoToolbox.Core.IO
 
         private static void SaveJoinTask(SpatialJoinTask task, string configFile)
         {
-            string xmlTemplate = Properties.Resources.DbJoinTask;
-            StringBuilder propertyList = new StringBuilder();
-            StringBuilder columnList = new StringBuilder();
-            StringBuilder joinList = new StringBuilder();
-            string[] propNames = task.Options.GetPropertyNames();
-            string[] colNames = task.Options.GetColumnNames();
-            string[] joinProps = task.Options.GetJoinedProperties();
-            foreach (string prop in propNames)
+            DatabaseJoinTask djt = new DatabaseJoinTask();
+            djt.name = task.Name;
+            djt.PrimarySource = new PrimarySource();
+            djt.SecondarySource = new SecondarySource();
+            djt.Target = new JoinTarget();
+            djt.JoinOptions = new JoinOptions();
+            List<Join> joins = new List<Join>();
+
+            djt.PrimarySource.name = task.Options.PrimarySource.Name;
+            djt.PrimarySource.Provider = task.Options.PrimarySource.Connection.ConnectionInfo.ProviderName;
+            djt.PrimarySource.ConnectionString = task.Options.PrimarySource.Connection.ConnectionString;
+            djt.PrimarySource.FeatureSchema = task.Options.SchemaName;
+            djt.PrimarySource.Class = task.Options.ClassName;
+            djt.PrimarySource.Prefix = task.Options.PrimaryPrefix;
+            djt.PrimarySource.PropertyList = task.Options.GetPropertyNames();
+            
+            djt.SecondarySource.ColumnList = task.Options.GetColumnNames();
+            djt.SecondarySource.ConnectionString = task.Options.SecondarySource.Connection.ConnectionString;
+            djt.SecondarySource.Driver = task.Options.SecondarySource.Driver;
+            djt.SecondarySource.name = task.Options.SecondarySource.Name;
+            djt.SecondarySource.Prefix = task.Options.SecondaryPrefix;
+            djt.SecondarySource.Table = task.Options.TableName;
+
+            djt.Target.Class = task.Options.TargetClassName;
+            djt.Target.ConnectionString = task.Options.Target.Connection.ConnectionString;
+            djt.Target.FeatureSchema = task.Options.TargetSchema;
+            djt.Target.name = task.Options.Target.Name;
+            djt.Target.Provider = task.Options.Target.Connection.ConnectionInfo.ProviderName;
+           
+            foreach (string prop in task.Options.GetJoinedProperties())
             {
-                propertyList.Append("<Property>" + prop + "</Property>\n");
+                Join j = new Join();
+                j.primary = prop;
+                j.secondary = task.Options.GetMatchingColumn(prop);
+                joins.Add(j);
             }
-            foreach (string col in colNames)
-            {
-                columnList.Append("<Column>" + col + "</Column>\n");
-            }
-            foreach (string prop in joinProps)
-            {
-                joinList.Append("<Join primary=\""+ prop +"\" secondary=\""+ task.Options.GetMatchingColumn(prop) +"\" />\n");
-            }
-            string xml = string.Format(xmlTemplate,
-                task.Name,
-                task.Options.PrimarySource.Name,
-                task.Options.PrimarySource.Connection.ConnectionInfo.ProviderName,
-                task.Options.PrimarySource.Connection.ConnectionString,
-                task.Options.SchemaName,
-                task.Options.ClassName,
-                propertyList.ToString(),
-                task.Options.PrimaryPrefix,
-                task.Options.SecondarySource.Name,
-                task.Options.SecondarySource.Driver,
-                task.Options.SecondarySource.Connection.ConnectionString,
-                task.Options.TableName,
-                columnList.ToString(),
-                task.Options.SecondaryPrefix,
-                task.Options.Target.Name,
-                task.Options.Target.Connection.ConnectionInfo.ProviderName,
-                task.Options.Target.Connection.ConnectionString,
-                task.Options.TargetSchema,
-                task.Options.TargetClassName,
-                joinList.ToString(),
-                task.Options.JoinType,
-                task.Options.Cardinality);
-            System.IO.File.Delete(configFile);
+            djt.Joins = joins.ToArray();
+
+            djt.JoinOptions.JoinCardinality = task.Options.Cardinality;
+            djt.JoinOptions.JoinType = task.Options.JoinType;
+
+            XmlSerializer serialzier = new XmlSerializer(typeof(DatabaseJoinTask));
             using (XmlTextWriter writer = new XmlTextWriter(configFile, Encoding.UTF8))
             {
+                writer.Indentation = 4;
                 writer.Formatting = Formatting.Indented;
-                writer.WriteRaw(xml);
-                writer.Close();
+                serialzier.Serialize(writer, djt);
             }
         }
 
@@ -245,34 +256,28 @@ namespace FdoToolbox.Core.IO
         /// <param name="doc">The loaded xml document</param>
         /// <param name="consoleMode">Is this application a console application</param>
         /// <returns>The Bulk Copy task, null if loading failed</returns>
-        private static SpatialBulkCopyTask LoadBulkCopy(XmlDocument doc, bool consoleMode)
+        private static SpatialBulkCopyTask LoadBulkCopy(string configFile, bool consoleMode)
         {
             string srcName = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
             string destName = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
             
             try
             {
-                XmlNode sourceNode = doc.SelectSingleNode("//BulkCopyTask/Source");
-                XmlNode targetNode = doc.SelectSingleNode("//BulkCopyTask/Target");
-                XmlNode optionNode = doc.SelectSingleNode("//BulkCopyTask/BulkCopyOptions");
-                
-                string srcProvider = sourceNode.SelectSingleNode("Provider").InnerText;
-                string srcConnStr = sourceNode.SelectSingleNode("ConnectionString").InnerText;
-                string srcSchema = sourceNode.SelectSingleNode("Schema").InnerText;
-                
-                string destProvider = targetNode.SelectSingleNode("Provider").InnerText;
-                string destConnStr = targetNode.SelectSingleNode("ConnectionString").InnerText;
-                string destSchema = targetNode.SelectSingleNode("Schema").InnerText;
-                
-                bool copySpatialContexts = Convert.ToBoolean(optionNode.SelectSingleNode("CopySpatialContexts").InnerText);
-                bool coerceDataTypes = Convert.ToBoolean(optionNode.SelectSingleNode("CoerceDataTypes").InnerText);
-                string spatialFilter = optionNode.SelectSingleNode("GlobalSpatialFilter").InnerText;
+                BulkCopyTask bcp = null;
+                XmlSerializer serializer = new XmlSerializer(typeof(BulkCopyTask));
+                using (StreamReader reader = new StreamReader(configFile))
+                {
+                    bcp = (BulkCopyTask)serializer.Deserialize(reader);
+                }
 
-                IConnection srcConn = FeatureAccessManager.GetConnectionManager().CreateConnection(srcProvider);
-                IConnection destConn = FeatureAccessManager.GetConnectionManager().CreateConnection(destProvider);
+                IConnection srcConn = FeatureAccessManager.GetConnectionManager().CreateConnection(bcp.Source.Provider);
+                IConnection destConn = FeatureAccessManager.GetConnectionManager().CreateConnection(bcp.Target.Provider);
 
-                srcConn.ConnectionString = srcConnStr;
-                destConn.ConnectionString = destConnStr;
+                srcConn.ConnectionString = bcp.Source.ConnectionString;
+                destConn.ConnectionString = bcp.Target.ConnectionString;
+
+                srcName = bcp.Source.name;
+                destName = bcp.Target.name;
 
                 if (consoleMode)
                 {
@@ -286,57 +291,42 @@ namespace FdoToolbox.Core.IO
                     mgr.AddConnection(destName, destConn);
                 }
 
-                string name = doc.DocumentElement.Attributes["name"].Value;
+                string name = bcp.name;
 
                 SpatialConnectionInfo srcConnInfo = new SpatialConnectionInfo(srcName, srcConn);
                 SpatialConnectionInfo destConnInfo = new SpatialConnectionInfo(destName, destConn);
 
                 SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(srcConnInfo, destConnInfo);
-                options.SourceSchemaName = srcSchema;
-                options.TargetSchemaName = destSchema;
-                options.CoerceDataTypes = coerceDataTypes;
-                options.CopySpatialContexts = copySpatialContexts;
-                options.GlobalSpatialFilter = spatialFilter;
+                options.SourceSchemaName = bcp.Source.Schema;
+                options.TargetSchemaName = bcp.Target.Schema;
+                options.CoerceDataTypes = bcp.BulkCopyOptions.CoerceDataTypes;
+                options.CopySpatialContexts = bcp.BulkCopyOptions.CopySpatialContexts;
+                options.GlobalSpatialFilter = bcp.BulkCopyOptions.GlobalSpatialFilter;
                 if (options.CopySpatialContexts)
                 {
-                    XmlNodeList contextList = sourceNode.SelectNodes("SpatialContextList/Name");
-                    if (contextList != null)
+                    foreach (string context in bcp.Source.SpatialContextList)
                     {
-                        foreach (XmlNode contextNode in contextList)
-                        {
-                            options.SourceSpatialContexts.Add(contextNode.InnerText);
-                        }
+                        options.SourceSpatialContexts.Add(context);
                     }
                 }
 
                 FeatureService srcService = new FeatureService(srcConn);
-
                 FeatureSchemaCollection schemas = srcService.DescribeSchema();
-
-                XmlNodeList classMappingNodeList = doc.SelectNodes("//BulkCopyTask/ClassMappings/Mapping");
-                foreach (XmlNode classMappingNode in classMappingNodeList)
+                foreach (Mapping m in bcp.ClassMappings)
                 {
-                    bool deleteTarget = Convert.ToBoolean(classMappingNode.SelectSingleNode("DeleteTarget").InnerText);
-                    string src = classMappingNode.SelectSingleNode("SourceClass").InnerText;
-                    string target = classMappingNode.SelectSingleNode("TargetClass").InnerText;
-                    string filter = classMappingNode.SelectSingleNode("SourceFilter").InnerText;
-
-                    ClassDefinition classDef = FindClass(schemas, src);
+                    ClassDefinition classDef = FindClass(schemas, m.SourceClass);
                     if (classDef == null)
-                        throw new TaskLoaderException("Unable to find SourceClass " + src);
+                        throw new TaskLoaderException("Unable to find SourceClass " + m.SourceClass);
                     ClassCopyOptions copt = new ClassCopyOptions(classDef);
-                    copt.TargetClassName = target;
-                    copt.DeleteClassData = deleteTarget;
+                    copt.TargetClassName = m.TargetClass;
+                    copt.DeleteClassData = m.DeleteTarget;
 
-                    if (!string.IsNullOrEmpty(filter))
-                        copt.AttributeFilter = filter;
+                    if (!string.IsNullOrEmpty(m.SourceFilter))
+                        copt.AttributeFilter = m.SourceFilter;
 
-                    XmlNodeList propertyMappingList = classMappingNode.SelectNodes("Properties/PropertyMapping");
-                    foreach (XmlNode propertyNode in propertyMappingList)
+                    foreach (PropertyMapping pm in m.Properties)
                     {
-                        string sourceProperty = propertyNode.SelectSingleNode("SourceProperty").InnerText;
-                        string targetProperty = propertyNode.SelectSingleNode("TargetProperty").InnerText;
-                        copt.AddProperty(GetPropertyDefinition(classDef, sourceProperty), targetProperty);
+                        copt.AddProperty(GetPropertyDefinition(classDef, pm.SourceProperty), pm.TargetProperty);
                     }
                     options.AddClassCopyOption(copt);
                 }
@@ -380,51 +370,65 @@ namespace FdoToolbox.Core.IO
         /// <param name="configFile">The file to save it to</param>
         private static void SaveBulkCopy(SpatialBulkCopyTask task, string configFile)
         {
+            BulkCopyTask bcp = new BulkCopyTask();
+            bcp.BulkCopyOptions = new BulkCopyOptions();
+            bcp.name = task.Name;
+            bcp.Source = new CopySource();
+            bcp.Target = new CopyTarget();
+            List<Mapping> mappings = new List<Mapping>();
+
+            bcp.Source.ConnectionString = task.Options.Source.Connection.ConnectionString;
+            bcp.Source.name = task.Options.Source.Name;
+            bcp.Source.Provider = task.Options.Source.Connection.ConnectionInfo.ProviderName;
+            bcp.Source.Schema = task.Options.SourceSchemaName;
+
+            bcp.Target.ConnectionString = task.Options.Target.Connection.ConnectionString;
+            bcp.Target.name = task.Options.Target.Name;
+            bcp.Target.Provider = task.Options.Target.Connection.ConnectionInfo.ProviderName;
+            bcp.Target.Schema = task.Options.TargetSchemaName;
+            
             ClassCopyOptions[] cOptions = task.Options.GetClassCopyOptions();
-            string classMappingXml = string.Empty;
             foreach (ClassCopyOptions copt in cOptions)
             {
-                bool delete = copt.DeleteClassData;
-                string srcClass = copt.ClassName;
-                string destClass = copt.TargetClassName;
-                string mappingsXml = string.Empty;
+                Mapping m = new Mapping();
+                m.DeleteTarget = copt.DeleteClassData;
+                m.SourceClass = copt.ClassName;
+                m.SourceFilter = copt.AttributeFilter;
+                m.TargetClass = copt.TargetClassName;
+                List<PropertyMapping> pms = new List<PropertyMapping>();
                 foreach (string propertyName in copt.PropertyNames)
                 {
-                    string targetPropertyName = copt.GetTargetPropertyName(propertyName);
-                    mappingsXml += string.Format(Properties.Resources.PropertyMapping, propertyName, targetPropertyName) + "\n";
+                    string tp = copt.GetTargetPropertyName(propertyName);
+                    PropertyMapping pm = new PropertyMapping();
+                    pm.SourceProperty = propertyName;
+                    pm.TargetProperty = tp;
                 }
-                classMappingXml += string.Format(Properties.Resources.ClassMapping, delete, srcClass, destClass, mappingsXml, copt.AttributeFilter) + "\n";
+                m.Properties = pms.ToArray();
+
+                mappings.Add(m);
             }
-            StringBuilder sb = new StringBuilder();
+
+            bcp.ClassMappings = mappings.ToArray();
+            bcp.BulkCopyOptions.CopySpatialContexts = task.Options.CopySpatialContexts;
+            bcp.BulkCopyOptions.CoerceDataTypes = task.Options.CoerceDataTypes;
+            bcp.BulkCopyOptions.GlobalSpatialFilter = task.Options.GlobalSpatialFilter;
+            
             if (task.Options.CopySpatialContexts)
             {
+                List<string> contexts = new List<string>();
                 foreach (string name in task.Options.SourceSpatialContexts)
                 {
-                    sb.Append("<Name>" + name + "</Name>\n");
+                    contexts.Add(name);
                 }
+                bcp.Source.SpatialContextList = contexts.ToArray();
             }
-            string contextXml = sb.ToString();
-            string configXml = string.Format(
-                Properties.Resources.BulkCopyTask,
-                task.Name,
-                task.Options.Source.Connection.ConnectionInfo.ProviderName,
-                task.Options.Source.Connection.ConnectionString,
-                task.Options.SourceSchemaName,
-                contextXml,
-                task.Options.Target.Connection.ConnectionInfo.ProviderName,
-                task.Options.Target.Connection.ConnectionString,
-                task.Options.TargetSchemaName,
-                classMappingXml,
-                task.Options.CopySpatialContexts,
-                task.Options.CoerceDataTypes,
-                task.Options.GlobalSpatialFilter
-            );
-            System.IO.File.Delete(configFile);
+
+            XmlSerializer serialzier = new XmlSerializer(typeof(BulkCopyTask));
             using (XmlTextWriter writer = new XmlTextWriter(configFile, Encoding.UTF8))
             {
+                writer.Indentation = 4;
                 writer.Formatting = Formatting.Indented;
-                writer.WriteRaw(configXml);
-                writer.Close();
+                serialzier.Serialize(writer, bcp);
             }
         }
     }
