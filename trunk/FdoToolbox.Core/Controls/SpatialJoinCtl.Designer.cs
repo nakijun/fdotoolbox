@@ -387,6 +387,7 @@ namespace FdoToolbox.Core.Controls
             this.grdJoins.Size = new System.Drawing.Size(533, 49);
             this.grdJoins.TabIndex = 5;
             this.toolTip1.SetToolTip(this.grdJoins, "Select the properties and columns to be joined");
+            this.grdJoins.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdJoins_CellContentClick);
             this.grdJoins.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdJoins_CellContentClick);
             // 
             // COL_PROPERTY
