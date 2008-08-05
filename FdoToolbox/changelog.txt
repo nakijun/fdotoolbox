@@ -17,6 +17,7 @@ v0.5.0
 				- The FDO connection is always the "Left" side and the Database connection is always the "Right" side.
 				- The target class is always created so it must not already exist.
 				- A column prefix is required if there is a clash between property and column names. Validation will pick this up.
+				- Properties which are also identity properties, can be copied over, but they won't be copied as identity properties to the joined feature class
 	- New FdoUtil.exe commands: RegisterProvider and UnregisterProvider. Consult the updated cmd_readme.txt for details
 	- FdoInfo.exe: Minor improvements in output display for ListClassProperties command.
 	- New Preferences tab to edit preference dictionary values. Most preferences require an application restart to take effect.
