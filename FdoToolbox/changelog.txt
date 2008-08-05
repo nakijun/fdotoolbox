@@ -1,3 +1,29 @@
+v0.5.0
+------
+- Enhancements:
+	- Non-spatial data support.
+		- Can create connections via OLEDB.
+		- Can preview data via SQL.
+		- Database Merge/Join Support.
+			- Supported Join Types
+				- Left Outer
+				- Inner
+			- Join Cardinalities
+				- 1:1
+				- 1:m
+			- Please be aware of the following:
+				- The target connection must support IApplySchema.
+				- An auto-generated property will always be created on the target class
+				- The FDO connection is always the "Left" side and the Database connection is always the "Right" side.
+				- The target class is always created so it must not already exist.
+				- A column prefix is required if there is a clash between property and column names. Validation will pick this up.
+	- New FdoUtil.exe commands: RegisterProvider and UnregisterProvider. Consult the updated cmd_readme.txt for details
+	- FdoInfo.exe: Minor improvements in output display for ListClassProperties command.
+	- New Preferences tab to edit preference dictionary values. Most preferences require an application restart to take effect.
+
+- Other:
+	- Major code/namespace re-structuring.
+	
 v0.4.2
 ------
 - Enhancements:
