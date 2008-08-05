@@ -91,12 +91,14 @@ DO NOT DELETE THIS FILE!!!
 		</SelectedModule>
 		<DatabaseConnections>
 			<Command name="dbconnect" />
+			<Command name="dbloadconn" />
 		</DatabaseConnections>
 		<SelectedDatabaseConnection>
 			<Command name="dbrefreshconn" />
 			<Separator />
 			<Command name="dbdatapreview" />
 			<Separator />
+			<Command name="dbsaveconn" />
 			<Command name="dbrenameconn" />
 			<Command name="dbremoveconn" />
 		</SelectedDatabaseConnection>
