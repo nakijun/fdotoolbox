@@ -98,6 +98,7 @@
     <Compile Include="ETL\SpatialJoinOptions.cs" />
     <Compile Include="ETL\SpatialJoinTask.cs" />
     <Compile Include="IDbConnectionManager.cs" />
+    <Compile Include="IO\DbConnLoader.cs" />
     <Compile Include="Modules\AdoNetModule.cs" />
     <Compile Include="ClientServices\AppConsole.cs" />
     <Compile Include="BaseApplication.cs" />

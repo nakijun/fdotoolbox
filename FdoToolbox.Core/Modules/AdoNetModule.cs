@@ -6,6 +6,8 @@ using FdoToolbox.Core.Controls;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Forms;
+using System.IO;
+using FdoToolbox.Core.IO;
 
 namespace FdoToolbox.Core.Modules
 {
@@ -18,6 +20,8 @@ namespace FdoToolbox.Core.Modules
         public const string DB_RENAME_CONNECTION = "dbrenameconn";
         public const string DB_REMOVE_CONNECTION = "dbremoveconn";
         public const string DB_DATA_PREVIEW = "dbdatapreview";
+        public const string DB_LOAD_CONNECTION = "dbloadconn";
+        public const string DB_SAVE_CONNECTION = "dbsaveconn";
 
         #endregion
 
@@ -87,6 +91,42 @@ namespace FdoToolbox.Core.Modules
                 string key = "PREVIEW";
                 BaseDocumentCtl ctl = new DbDataPreviewCtl(connInfo, key);
                 HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            }
+        }
+
+        [Command(AdoNetModule.DB_SAVE_CONNECTION, "Save Connection", ImageResourceName = "disk")]
+        public void SaveConnection()
+        {
+            DbConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            if (connInfo != null)
+            {
+                string connDef = HostApplication.Instance.SaveFile("Save connection information", "Connection information (*.dbconn)|*.dbconn");
+                if (connDef != null)
+                {
+                    if (File.Exists(connDef))
+                        File.Delete(connDef);
+                    DbConnLoader.SaveConnection(connInfo, connDef);
+                    AppConsole.WriteLine("Connection saved to {0}", connDef);
+                }
+            }
+        }
+
+        [Command(AdoNetModule.DB_LOAD_CONNECTION, "Load Connection", ImageResourceName = "folder")]
+        public void LoadConnection()
+        {
+            string connDef = HostApplication.Instance.OpenFile("Load connection information", "Connection information (*.dbconn)|*.dbconn");
+            if (File.Exists(connDef))
+            {
+                DbConnectionInfo connInfo = DbConnLoader.LoadConnection(connDef);
+                DbConnectionInfo conn = HostApplication.Instance.DatabaseConnectionManager.GetConnection(connInfo.Name);
+                if (conn != null)
+                {
+                    AppConsole.Write("A connection named {0} already exists. ", connInfo.Name);
+                    connInfo.Name = HostApplication.Instance.DatabaseConnectionManager.CreateUniqueName();
+                    AppConsole.WriteLine("Attempting to load as {0} instead", connInfo.Name);
+                }
+                HostApplication.Instance.DatabaseConnectionManager.AddConnection(connInfo);
+                AppConsole.WriteLine("Connection loaded from {0}", connDef);
             }
         }
     }
