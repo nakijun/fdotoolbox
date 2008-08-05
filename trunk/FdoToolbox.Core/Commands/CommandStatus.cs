@@ -37,6 +37,7 @@ namespace FdoToolbox.Core.Commands
         E_FAIL_CREATE_CONNECTION = 9,
         E_FAIL_SCHEMA_NOT_FOUND = 10,
         E_FAIL_CLASS_NOT_FOUND = 11,
-        E_FAIL_UNSUPPORTED_CAPABILITY = 12
+        E_FAIL_UNSUPPORTED_CAPABILITY = 12,
+        E_FAIL_UNKNOWN = 13
     }
 }

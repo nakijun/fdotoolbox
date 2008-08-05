@@ -42,6 +42,7 @@ DO NOT DELETE THIS FILE!!!
 		<Tasks>
 			<Menu name="New" resource="application_go">
 				<Command name="createbcp" />
+				<Command name="createdbjoin" />
 			</Menu>
 			<Command name="loadtask" />
 		</Tasks>

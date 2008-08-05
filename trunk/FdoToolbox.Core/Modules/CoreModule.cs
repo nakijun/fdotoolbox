@@ -97,6 +97,7 @@ namespace FdoToolbox.Core.Modules
         public const string CMD_SAVE_SCHEMA_SDF = "saveschemasdf";
         public const string CMD_DELETE_SCHEMA = "delschema";
         public const string CMD_PREVIEWCLASS = "previewclass";
+        public const string CMD_CREATEJOIN = "createdbjoin";
         #endregion
 
         public override string Name
@@ -360,6 +361,13 @@ namespace FdoToolbox.Core.Modules
                 case TaskType.BulkCopy:
                     {
                         BaseDocumentCtl ctl = new SpatialBulkCopyCtl((SpatialBulkCopyTask)task);
+                        HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+                    }
+                    break;
+                case TaskType.DbJoin:
+                    {
+                        SpatialJoinCtl ctl = new SpatialJoinCtl();
+                        ctl.LoadSettings((SpatialJoinTask)task);
                         HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
                     }
                     break;
@@ -700,6 +708,13 @@ namespace FdoToolbox.Core.Modules
                     HostApplication.Instance.Shell.ShowDocumentWindow(dpreview);
                 }
             }
+        }
+
+        [Command(CoreModule.CMD_CREATEJOIN, "Create Database Join", ImageResourceName = "table_relationship")]
+        public void CreateDbJoin()
+        {
+            BaseDocumentCtl ctl = new SpatialJoinCtl();
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 
         public bool IsCommandExecutable(string cmdName, IConnection conn)

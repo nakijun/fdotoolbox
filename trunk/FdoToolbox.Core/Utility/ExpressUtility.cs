@@ -168,5 +168,12 @@ namespace FdoToolbox.Core
             }
             return param;
         }
+
+        public static T[] CombineArray<T>(T[] array1, T[] array2)
+        {
+            List<T> list = new List<T>(array1);
+            list.AddRange(array2);
+            return list.ToArray();
+        }
     }
 }

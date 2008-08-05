@@ -23,6 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using FdoToolbox.Core.Commands;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Core.Modules
 {
@@ -45,6 +47,13 @@ namespace FdoToolbox.Core.Modules
 
         public override void Cleanup()
         {
+            
+        }
+
+        [Command("testjoin", "Test Join")]
+        public void TestJoin()
+        {
+            SpatialJoinOptions options = new SpatialJoinOptions();
             
         }
     }
