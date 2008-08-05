@@ -98,6 +98,13 @@ namespace FdoToolbox.Core.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap application_form_edit {
+            get {
+                object obj = ResourceManager.GetObject("application_form_edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap application_go {
             get {
                 object obj = ResourceManager.GetObject("application_go", resourceCulture);
@@ -254,17 +261,17 @@ namespace FdoToolbox.Core.Properties {
         ///		&lt;PropertyList&gt;
         ///			{6}
         ///		&lt;/PropertyList&gt;
+        ///		&lt;Prefix&gt;{7}&lt;/Prefix&gt;
         ///	&lt;/PrimarySource&gt;
         ///	&lt;SecondarySource&gt;
-        ///		&lt;Name&gt;{7}&lt;/Name&gt;
-        ///		&lt;Driver&gt;{8}&lt;/Driver&gt;
-        ///		&lt;ConnectionString&gt;{9}&lt;/ConnectionString&gt;
-        ///		&lt;Table&gt;{10}&lt;/Table&gt;
+        ///		&lt;Name&gt;{8}&lt;/Name&gt;
+        ///		&lt;Driver&gt;{9}&lt;/Driver&gt;
+        ///		&lt;ConnectionString&gt;{10}&lt;/ConnectionString&gt;
+        ///		&lt;Table&gt;{11}&lt;/Table&gt;
         ///		&lt;ColumnList&gt;
-        ///			{11}  
+        ///			{12}  
         ///		&lt;/ColumnList&gt;
-        ///	&lt;/SecondarySource&gt;
-        ///	&lt;Target&gt;        /// [rest of string was truncated]&quot;;.
+        ///		&lt;Pre [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DbJoinTask {
             get {

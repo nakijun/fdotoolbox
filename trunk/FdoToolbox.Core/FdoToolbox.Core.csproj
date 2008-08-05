@@ -78,6 +78,12 @@
     <Compile Include="Controls\DbDataPreviewCtl.Designer.cs">
       <DependentUpon>DbDataPreviewCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PreferencesCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PreferencesCtl.Designer.cs">
+      <DependentUpon>PreferencesCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SpatialJoinCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -344,6 +350,7 @@
     <Compile Include="Utility\WKTParser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\application_form_edit.png" />
     <Content Include="Resources\APP_ABOUT.txt" />
     <Content Include="Resources\BulkCopyTask.xml" />
     <Content Include="Resources\ClassMapping.xml" />
@@ -410,6 +417,10 @@
     <EmbeddedResource Include="Controls\DbDataPreviewCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DbDataPreviewCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PreferencesCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PreferencesCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SpatialBulkCopyCtl.resx">
       <SubType>Designer</SubType>
