@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.IO;
+using FdoToolbox.Core.Configuration;
+using System.Xml.Serialization;
 
 namespace FdoToolbox.Core.ClientServices
 {
@@ -212,45 +214,73 @@ namespace FdoToolbox.Core.ClientServices
 
         public void Save()
         {
-            string prefXml = Properties.Resources.Preferences;
-            StringBuilder doublePref = new StringBuilder();
-            StringBuilder integerPref = new StringBuilder();
-            StringBuilder stringPref = new StringBuilder();
-            StringBuilder booleanPref = new StringBuilder();
+            Preferences prefs = new Preferences();
+            List<BooleanPref> bprefs = new List<BooleanPref>();
+            List<StringPref> sprefs = new List<StringPref>();
+            List<DoublePref> dprefs = new List<DoublePref>();
+            List<IntegerPref> iprefs = new List<IntegerPref>();
+            
             List<string> doubleNames = this.GetDoublePrefNames();
             foreach (string pref in doubleNames)
             {
                 double? value = this.GetDoublePref(pref);
-                if(value.HasValue)
-                    doublePref.Append(string.Format("<Pref name=\"{0}\" value=\"{1}\" />\n", pref, value.Value));
+                if (value.HasValue)
+                {
+                    DoublePref dp = new DoublePref();
+                    dp.name = pref;
+                    dp.value = value.Value;
+                    dprefs.Add(dp);
+                }
             }
             List<string> integerNames = this.GetIntegerPrefNames();
             foreach (string pref in integerNames)
             {
                 int? value = this.GetIntegerPref(pref);
                 if (value.HasValue)
-                    integerPref.Append(string.Format("<Pref name=\"{0}\" value=\"{1}\" />\n", pref, value.Value));
+                {
+                    IntegerPref ip = new IntegerPref();
+                    ip.name = pref;
+                    ip.value = value.Value.ToString();
+                    iprefs.Add(ip);
+                }
             }
             List<string> stringNames = this.GetStringPrefNames();
             foreach (string pref in stringNames)
             {
                 string value = this.GetStringPref(pref);
                 if (value != null)
-                    stringPref.Append(string.Format("<Pref name=\"{0}\" value=\"{1}\" />\n", pref, value));
+                {
+                    StringPref sp = new StringPref();
+                    sp.name = pref;
+                    sp.value = value;
+                    sprefs.Add(sp);
+                }
             }
             List<string> booleanNames = this.GetBooleanPrefNames();
             foreach (string pref in booleanNames)
             {
                 bool? value = this.GetBooleanPref(pref);
                 if (value.HasValue)
-                    booleanPref.Append(string.Format("<Pref name=\"{0}\" value=\"{1}\" />\n", pref, value.Value));
+                {
+                    BooleanPref bp = new BooleanPref();
+                    bp.name = pref;
+                    bp.value = value.Value;
+                    bprefs.Add(bp);
+                }
             }
-            prefXml = string.Format(prefXml,
-                stringPref.ToString(),
-                doublePref.ToString(),
-                integerPref.ToString(),
-                booleanPref.ToString());
-            File.WriteAllText("Preferences.xml", prefXml);
+
+            prefs.BooleanPrefs = bprefs.ToArray();
+            prefs.DoublePrefs = dprefs.ToArray();
+            prefs.IntegerPrefs = iprefs.ToArray();
+            prefs.StringPrefs = sprefs.ToArray();
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Preferences));
+            using (XmlTextWriter writer = new XmlTextWriter("Preferences.xml", Encoding.UTF8))
+            {
+                writer.Indentation = 4;
+                writer.Formatting = Formatting.Indented;
+                serializer.Serialize(writer, prefs);
+            }
         }
     }
 }

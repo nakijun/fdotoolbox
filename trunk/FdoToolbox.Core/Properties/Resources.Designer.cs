@@ -140,35 +140,6 @@ namespace FdoToolbox.Core.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;BulkCopyTask name=&quot;{0}&quot;&gt;
-        ///	&lt;!-- Source connection information --&gt;
-        ///	&lt;Source&gt;
-        ///		&lt;Provider&gt;{1}&lt;/Provider&gt;
-        ///		&lt;ConnectionString&gt;{2}&lt;/ConnectionString&gt;
-        ///		&lt;Schema&gt;{3}&lt;/Schema&gt;
-        ///		&lt;SpatialContextList&gt;
-        ///			{4}		  
-        ///		&lt;/SpatialContextList&gt;
-        ///	&lt;/Source&gt;
-        ///	&lt;!-- Target connection information --&gt;
-        ///	&lt;Target&gt;
-        ///		&lt;Provider&gt;{5}&lt;/Provider&gt;
-        ///		&lt;ConnectionString&gt;{6}&lt;/ConnectionString&gt;
-        ///		&lt;Schema&gt;{7}&lt;/Schema&gt;
-        ///	&lt;/Target&gt;
-        ///	&lt;!-- Class mappings --&gt;
-        ///	&lt;ClassMappings&gt;
-        ///		{8}
-        ///	&lt;/ClassMapp [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string BulkCopyTask {
-            get {
-                return ResourceManager.GetString("BulkCopyTask", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Bitmap chart_organisation {
             get {
                 object obj = ResourceManager.GetObject("chart_organisation", resourceCulture);
@@ -187,23 +158,6 @@ namespace FdoToolbox.Core.Properties {
             get {
                 object obj = ResourceManager.GetObject("chart_organisation_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;Mapping&gt;
-        ///	&lt;DeleteTarget&gt;{0}&lt;/DeleteTarget&gt;
-        ///	&lt;SourceClass&gt;{1}&lt;/SourceClass&gt;
-        ///	&lt;TargetClass&gt;{2}&lt;/TargetClass&gt;
-        ///	&lt;Properties&gt;
-        ///		{3}
-        ///	&lt;/Properties&gt;
-        ///	&lt;SourceFilter&gt;{4}&lt;/SourceFilter&gt;
-        ///&lt;/Mapping&gt;.
-        /// </summary>
-        internal static string ClassMapping {
-            get {
-                return ResourceManager.GetString("ClassMapping", resourceCulture);
             }
         }
         
@@ -246,36 +200,6 @@ namespace FdoToolbox.Core.Properties {
             get {
                 object obj = ResourceManager.GetObject("database_table", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;DatabaseJoinTask name=&quot;{0}&quot;&gt;
-        ///	&lt;PrimarySource&gt;
-        ///		&lt;Name&gt;{1}&lt;/Name&gt;
-        ///		&lt;Provider&gt;{2}&lt;/Provider&gt;
-        ///		&lt;ConnectionString&gt;{3}&lt;/ConnectionString&gt;
-        ///		&lt;FeatureSchema&gt;{4}&lt;/FeatureSchema&gt;
-        ///		&lt;Class&gt;{5}&lt;/Class&gt;
-        ///		&lt;PropertyList&gt;
-        ///			{6}
-        ///		&lt;/PropertyList&gt;
-        ///		&lt;Prefix&gt;{7}&lt;/Prefix&gt;
-        ///	&lt;/PrimarySource&gt;
-        ///	&lt;SecondarySource&gt;
-        ///		&lt;Name&gt;{8}&lt;/Name&gt;
-        ///		&lt;Driver&gt;{9}&lt;/Driver&gt;
-        ///		&lt;ConnectionString&gt;{10}&lt;/ConnectionString&gt;
-        ///		&lt;Table&gt;{11}&lt;/Table&gt;
-        ///		&lt;ColumnList&gt;
-        ///			{12}  
-        ///		&lt;/ColumnList&gt;
-        ///		&lt;Pre [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DbJoinTask {
-            get {
-                return ResourceManager.GetString("DbJoinTask", resourceCulture);
             }
         }
         
@@ -440,41 +364,6 @@ namespace FdoToolbox.Core.Properties {
             get {
                 object obj = ResourceManager.GetObject("plugin_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;Preferences&gt;
-        ///	&lt;StringPrefs&gt;
-        ///		{0}
-        ///	&lt;/StringPrefs&gt;
-        ///	&lt;DoublePrefs&gt;
-        ///		{1}
-        ///	&lt;/DoublePrefs&gt;
-        ///	&lt;IntegerPrefs&gt;
-        ///		{2}
-        ///	&lt;/IntegerPrefs&gt;
-        ///	&lt;BooleanPrefs&gt;
-        ///		{3}   
-        ///	&lt;/BooleanPrefs&gt;
-        ///&lt;/Preferences&gt;.
-        /// </summary>
-        internal static string Preferences {
-            get {
-                return ResourceManager.GetString("Preferences", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;PropertyMapping&gt;
-        ///	&lt;SourceProperty&gt;{0}&lt;/SourceProperty&gt;
-        ///	&lt;TargetProperty&gt;{1}&lt;/TargetProperty&gt;
-        ///&lt;/PropertyMapping&gt;.
-        /// </summary>
-        internal static string PropertyMapping {
-            get {
-                return ResourceManager.GetString("PropertyMapping", resourceCulture);
             }
         }
         

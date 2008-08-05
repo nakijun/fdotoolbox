@@ -24,6 +24,9 @@ using OSGeo.FDO.Connections;
 using System.Xml;
 using OSGeo.FDO.ClientServices;
 using FdoToolbox.Core.Common;
+using System.Xml.Serialization;
+using FdoToolbox.Core.Configuration;
+using System.IO;
 
 namespace FdoToolbox.Core.IO
 {
@@ -39,14 +42,15 @@ namespace FdoToolbox.Core.IO
         /// <returns>The spatial connection</returns>
         public static SpatialConnectionInfo LoadConnection(string file)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(file);
-            string name = doc.SelectSingleNode("//Connection/Name").InnerText;
-            string provider = doc.SelectSingleNode("//Connection/Provider").InnerText;
-            string connStr = doc.SelectSingleNode("//Connection/ConnectionString").InnerText;
-            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(provider);
-            conn.ConnectionString = connStr;
-            return new SpatialConnectionInfo(name, conn);
+            Connection c = null;
+            XmlSerializer serializer = new XmlSerializer(typeof(Connection));
+            using (StreamReader reader = new StreamReader(file))
+            {
+                c = (Connection)serializer.Deserialize(reader);
+            }
+            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(c.Provider);
+            conn.ConnectionString = c.ConnectionString;
+            return new SpatialConnectionInfo(c.Name, conn);
         }
 
         /// <summary>
@@ -56,16 +60,19 @@ namespace FdoToolbox.Core.IO
         /// <param name="file">The file to save it to</param>
         public static void SaveConnection(SpatialConnectionInfo cinfo, string file)
         {
-            string xmlTemplate =
-@"<?xml version=""1.0""?>
-<Connection>
-    <Name>{0}</Name>
-    <Provider>{1}</Provider>
-    <ConnectionString>{2}</ConnectionString>
-</Connection>
-";
-            string xml = string.Format(xmlTemplate, cinfo.Name, cinfo.Connection.ConnectionInfo.ProviderName, cinfo.Connection.ConnectionString);
-            System.IO.File.WriteAllText(file, xml, Encoding.UTF8);
+            XmlSerializer serializer = new XmlSerializer(typeof(Connection));
+            using (XmlTextWriter writer = new XmlTextWriter(file, Encoding.UTF8))
+            {
+                writer.Indentation = 4;
+                writer.Formatting = Formatting.Indented;
+
+                Connection c = new Connection();
+                c.Name = cinfo.Name;
+                c.Provider = cinfo.Connection.ConnectionInfo.ProviderName;
+                c.ConnectionString = cinfo.Connection.ConnectionString;
+
+                serializer.Serialize(writer, c);
+            }
         }
     }
 }
