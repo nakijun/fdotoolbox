@@ -98,6 +98,7 @@ namespace FdoToolbox.Core.Modules
         public const string CMD_DELETE_SCHEMA = "delschema";
         public const string CMD_PREVIEWCLASS = "previewclass";
         public const string CMD_CREATEJOIN = "createdbjoin";
+        public const string CMD_PREFERENCES = "preferences";
         #endregion
 
         public override string Name
@@ -714,6 +715,14 @@ namespace FdoToolbox.Core.Modules
         public void CreateDbJoin()
         {
             BaseDocumentCtl ctl = new SpatialJoinCtl();
+            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+        }
+
+        [Command(CoreModule.CMD_PREFERENCES, "Preferences", ImageResourceName = "application_form_edit")]
+        public void ShowPreferences()
+        {
+            //TODO: make single instance
+            PreferencesCtl ctl = new PreferencesCtl();
             HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
         }
 

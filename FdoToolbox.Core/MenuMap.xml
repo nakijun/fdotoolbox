@@ -23,6 +23,7 @@ DO NOT DELETE THIS FILE!!!
 		</SubMenu>
 		<Command name="csmanager" />
 		<Command name="extload" />
+		<Command name="preferences" />
 	</Menu>
 	<Menu name="Express">
 		<SubMenu name="Connect" resource="database_connect">
