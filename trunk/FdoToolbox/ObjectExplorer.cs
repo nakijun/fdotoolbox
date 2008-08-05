@@ -86,6 +86,7 @@ namespace FdoToolbox
             string tooltip = string.Format("Driver: {0}\nConnection String: {1}", connInfo.MetaData.DriverString, connInfo.MetaData.ConnectionString);
             node.ToolTipText = tooltip;
             node.Expand();
+            GetDatabaseConnectionsNode().Expand();
         }
 
         private void GetDatabaseNodes(TreeNode node, MyMeta.dbRoot root)
@@ -197,6 +198,7 @@ namespace FdoToolbox
             GetSchemaNodes(node);
             GetSpatialConnectionsNode().Nodes.Add(node);
             node.Expand();
+            GetSpatialConnectionsNode().Expand();
         }
 
         private void GetSchemaNodes(TreeNode connNode)
