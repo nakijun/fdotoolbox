@@ -72,7 +72,43 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         public void ValidateTaskParameters()
         {
-            
+            // The following must be true in order to proceed:
+            //
+            // 1 - Target must support IApplySchema
+            // 2 - Target class must not be blank
+            // 3 - Target class must not already exist
+            // 4 - If no prefixes are defined, there must be no clashes in property/column names
+
+            using (FeatureService targetService = new FeatureService(_Options.Target.Connection))
+            {
+                if (!targetService.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema))
+                    throw new TaskValidationException("Target connection does not support IApplySchema");
+
+                if (string.IsNullOrEmpty(_Options.TargetClassName))
+                {
+                    throw new TaskValidationException("Target class name is not defined");
+                }
+                else
+                {
+                    ClassDefinition classDef = targetService.GetClassByName(_Options.TargetSchema, _Options.TargetClassName);
+                    if (classDef != null)
+                        throw new TaskValidationException("Cannot create joined class. A class named " + _Options.TargetClassName + " already exists");
+                }
+            }
+
+            if (string.IsNullOrEmpty(_Options.SecondaryPrefix))
+            {
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                foreach (string str in _Options.GetPropertyNames())
+                {
+                    dict.Add(str, "");
+                }
+                foreach (string str in _Options.GetColumnNames())
+                {
+                    if (dict.ContainsKey(str))
+                        throw new TaskValidationException("There is a name clash between at least one column/property");
+                }
+            }
         }
 
         private ClassDefinition _PrimaryClass;
