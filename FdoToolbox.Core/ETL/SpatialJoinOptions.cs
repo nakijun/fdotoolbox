@@ -194,12 +194,18 @@ namespace FdoToolbox.Core.ETL
         }
     }
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.1432")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public enum SpatialJoinCardinality
     {
         OneToOne,
         OneToMany
     }
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.1432")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     public enum SpatialJoinType
     {
         Inner,
