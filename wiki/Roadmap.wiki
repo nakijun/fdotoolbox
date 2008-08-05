@@ -1,11 +1,11 @@
 #summary Planned features for upcoming releases
 
 === 0.5 ===
- * Create Database Join Tasks.
+ * ~~Create Database Join Tasks.~~
       * ~~Support OLEDB data sources~~
-      * Supported Join Types
-            * Inner Join
-            * Left Outer Join
+      * ~~Supported Join Types~~
+            * ~~Inner Join~~
+            * ~~Left Outer Join~~
 
 === Future ===
  * Advanced bulk copy options
