@@ -89,6 +89,7 @@ namespace FdoToolbox.Core
             dict.SetStringPref(PreferenceNames.PREF_STR_WORKING_DIRECTORY, this.AppPath);
             dict.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, Path.Combine(this.AppPath, "FDO\\"));
             dict.SetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, true);
+            dict.SetStringPref(PreferenceNames.PREF_STR_SESSION_DIRECTORY, Path.Combine(this.AppPath, "Session"));
         }
 
         protected IPreferenceDictionary _PrefDict;

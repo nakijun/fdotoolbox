@@ -31,6 +31,7 @@ using FdoToolbox.Core.Modules;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Commands;
 using FdoToolbox.Core.IO;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core
 {
@@ -110,6 +111,7 @@ namespace FdoToolbox.Core
 #endif
                     InitMenus();
                     LoadDefinedModules();
+                    AppSession.Restore();
                     _init = true;
                 }
                 catch (Exception ex)
@@ -286,6 +288,7 @@ namespace FdoToolbox.Core
 
         protected override void Cleanup()
         {
+            AppSession.Persist();
             _OpenFileDialog.Dispose();
             _OpenFolderDialog.Dispose();
             _SaveFileDialog.Dispose();

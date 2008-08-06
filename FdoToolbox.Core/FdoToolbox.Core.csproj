@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientServices\AppSession.cs" />
     <Compile Include="Configuration\BulkCopyTask.cs" />
     <Compile Include="Configuration\DbConnection.cs" />
     <Compile Include="Configuration\DbJoinTask.cs" />
