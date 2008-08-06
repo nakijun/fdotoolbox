@@ -26,7 +26,38 @@ using OSGeo.FDO.Expression;
 using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands;
-
+#region overview
+/**
+ * Spatial Join overview
+ * 
+ * A spatial join task is initialized with a SpatialJoinOptions object that
+ * defines the parameters of the spatial join operation. The main join
+ * parameters are:
+ * 
+ * - The "Left" FDO connection
+ * - The "Right" database connection
+ * - The "Target" FDO connection (this can be the "Left" connection)
+ * - What type of join (Left Outer | Inner)
+ * - What to do when there is a match (1:1 | 1:m)
+ * - The properties/columns to read on both sides.
+ * - The properties/columns to join on
+ * - The class to create on the target connection.
+ * - Prefixes to prevent property/column name clashes.
+ * 
+ * When the join executes, data from the "Right" connection is read into
+ * a DataTable. Table definition information is also stored in this DataTable.
+ * 
+ * Data from the "Left" connection is a standard FDO ISelect query, producing
+ * an IFeatureReader.
+ * 
+ * Using the column definitions from the "Right" DataTable and the property 
+ * definitions of the "Left" IFeatureReader's class definition. We create the
+ * joined feature class on the "Target" connection. 
+ * 
+ * Then we start iterating through the "Left" source. Processing each
+ * result with the given join rules.
+ */
+#endregion
 namespace FdoToolbox.Core.ETL
 {
     /// <summary>
@@ -53,6 +84,9 @@ namespace FdoToolbox.Core.ETL
 
         private SpatialJoinOptions _Options;
 
+        /// <summary>
+        /// The options that drive the join task
+        /// </summary>
         public SpatialJoinOptions Options
         {
             get { return _Options; }
