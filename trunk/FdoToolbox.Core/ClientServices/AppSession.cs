@@ -32,8 +32,15 @@ using System.Data.OleDb;
 
 namespace FdoToolbox.Core.ClientServices
 {
+    /// <summary>
+    /// Helper class to persist session settings (spatial/non-spatial connections and
+    /// tasks)
+    /// </summary>
     public sealed class AppSession
     {
+        /// <summary>
+        /// Load whatever saved settings from the session directory
+        /// </summary>
         public static void Restore()
         {
             try
@@ -109,6 +116,9 @@ namespace FdoToolbox.Core.ClientServices
             }
         }
 
+        /// <summary>
+        /// Save all connections and tasks to the session directory
+        /// </summary>
         public static void Persist()
         {
             string path = HostApplication.Instance.Preferences.GetStringPref(PreferenceNames.PREF_STR_SESSION_DIRECTORY);
