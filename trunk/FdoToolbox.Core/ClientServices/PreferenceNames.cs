@@ -31,6 +31,7 @@ namespace FdoToolbox.Core.ClientServices
         #region string preferences
         public const string PREF_STR_WORKING_DIRECTORY = "pref_str_working_dir";
         public const string PREF_STR_FDO_HOME = "pref_str_fdo_home";
+        public const string PREF_STR_SESSION_DIRECTORY = "pref_str_session_dir";
         #endregion
 
         #region integer preferences
