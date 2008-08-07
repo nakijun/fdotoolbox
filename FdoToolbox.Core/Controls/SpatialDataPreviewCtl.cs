@@ -160,6 +160,9 @@ namespace FdoToolbox.Core.Controls
                     {
                         select.Distinct = chkDistinct.Checked;
                         select.SetFeatureClassName(classDef.Name);
+                        if (!string.IsNullOrEmpty(txtAggFilter.Text))
+                            select.SetFilter(txtAggFilter.Text);
+
                         NameValueCollection aggParams = GetAggregateParameters();
                         foreach (string identifier in aggParams.AllKeys)
                         {
@@ -855,6 +858,20 @@ namespace FdoToolbox.Core.Controls
         private void btnUncheckAllProperties_Click(object sender, EventArgs e)
         {
             CheckAllProperties(false);
+        }
+
+        private void btnAggFilter_Click(object sender, EventArgs e)
+        {
+            ClassDefinition classDef = cmbAggClass.SelectedItem as ClassDefinition;
+            if (classDef != null)
+            {
+                string filterText = txtAggFilter.Text;
+                string newFilter = ExpressionDlg.EditExpression(this.BoundConnection, classDef, filterText, ExpressionMode.Filter);
+                if (!string.IsNullOrEmpty(newFilter))
+                {
+                    txtAggFilter.Text = newFilter;
+                }
+            }
         }
     }
 }
