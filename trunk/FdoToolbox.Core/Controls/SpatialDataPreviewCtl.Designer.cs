@@ -55,13 +55,17 @@ namespace FdoToolbox.Core.Controls
             this.cmbSchema = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pageAggregates = new System.Windows.Forms.TabPage();
-            this.btnClearAggregates = new System.Windows.Forms.Button();
-            this.btnDeleteExpr = new System.Windows.Forms.Button();
-            this.btnAddExpr = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdExpressions = new System.Windows.Forms.DataGridView();
             this.COL_EXPR = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.COL_ALIAS = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.chkDistinct = new System.Windows.Forms.CheckBox();
+            this.btnAddExpr = new System.Windows.Forms.Button();
+            this.btnDeleteExpr = new System.Windows.Forms.Button();
+            this.btnClearAggregates = new System.Windows.Forms.Button();
+            this.btnAggFilter = new System.Windows.Forms.Button();
+            this.txtAggFilter = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.cmbAggSchema = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cmbAggClass = new System.Windows.Forms.ComboBox();
@@ -79,6 +83,7 @@ namespace FdoToolbox.Core.Controls
             ((System.ComponentModel.ISupportInitialize)(this.grdComputedFields)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.pageAggregates.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdExpressions)).BeginInit();
             this.pageSQL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdPreview)).BeginInit();
@@ -410,11 +415,10 @@ namespace FdoToolbox.Core.Controls
             // 
             // pageAggregates
             // 
-            this.pageAggregates.Controls.Add(this.btnClearAggregates);
-            this.pageAggregates.Controls.Add(this.btnDeleteExpr);
-            this.pageAggregates.Controls.Add(this.btnAddExpr);
-            this.pageAggregates.Controls.Add(this.grdExpressions);
-            this.pageAggregates.Controls.Add(this.chkDistinct);
+            this.pageAggregates.Controls.Add(this.groupBox4);
+            this.pageAggregates.Controls.Add(this.btnAggFilter);
+            this.pageAggregates.Controls.Add(this.txtAggFilter);
+            this.pageAggregates.Controls.Add(this.label7);
             this.pageAggregates.Controls.Add(this.cmbAggSchema);
             this.pageAggregates.Controls.Add(this.label6);
             this.pageAggregates.Controls.Add(this.cmbAggClass);
@@ -427,44 +431,22 @@ namespace FdoToolbox.Core.Controls
             this.pageAggregates.Text = "Aggregates";
             this.pageAggregates.UseVisualStyleBackColor = true;
             // 
-            // btnClearAggregates
+            // groupBox4
             // 
-            this.btnClearAggregates.Location = new System.Drawing.Point(139, 167);
-            this.btnClearAggregates.Name = "btnClearAggregates";
-            this.btnClearAggregates.Size = new System.Drawing.Size(59, 23);
-            this.btnClearAggregates.TabIndex = 10;
-            this.btnClearAggregates.Text = "Clear";
-            this.btnClearAggregates.UseVisualStyleBackColor = true;
-            this.btnClearAggregates.Click += new System.EventHandler(this.btnClearAggregates_Click);
-            // 
-            // btnDeleteExpr
-            // 
-            this.btnDeleteExpr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDeleteExpr.Enabled = false;
-            this.btnDeleteExpr.Image = global::FdoToolbox.Core.Properties.Resources.cross;
-            this.btnDeleteExpr.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDeleteExpr.Location = new System.Drawing.Point(70, 167);
-            this.btnDeleteExpr.Name = "btnDeleteExpr";
-            this.btnDeleteExpr.Size = new System.Drawing.Size(63, 23);
-            this.btnDeleteExpr.TabIndex = 9;
-            this.btnDeleteExpr.Text = "Delete";
-            this.btnDeleteExpr.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnDeleteExpr.UseVisualStyleBackColor = true;
-            this.btnDeleteExpr.Click += new System.EventHandler(this.btnDeleteExpr_Click);
-            // 
-            // btnAddExpr
-            // 
-            this.btnAddExpr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAddExpr.Image = global::FdoToolbox.Core.Properties.Resources.add;
-            this.btnAddExpr.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddExpr.Location = new System.Drawing.Point(9, 167);
-            this.btnAddExpr.Name = "btnAddExpr";
-            this.btnAddExpr.Size = new System.Drawing.Size(55, 23);
-            this.btnAddExpr.TabIndex = 7;
-            this.btnAddExpr.Text = "Add";
-            this.btnAddExpr.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnAddExpr.UseVisualStyleBackColor = true;
-            this.btnAddExpr.Click += new System.EventHandler(this.btnAddExpr_Click);
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.grdExpressions);
+            this.groupBox4.Controls.Add(this.chkDistinct);
+            this.groupBox4.Controls.Add(this.btnAddExpr);
+            this.groupBox4.Controls.Add(this.btnDeleteExpr);
+            this.groupBox4.Controls.Add(this.btnClearAggregates);
+            this.groupBox4.Location = new System.Drawing.Point(9, 60);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(447, 130);
+            this.groupBox4.TabIndex = 14;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Aggregate Expressions";
             // 
             // grdExpressions
             // 
@@ -477,9 +459,9 @@ namespace FdoToolbox.Core.Controls
             this.grdExpressions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.COL_EXPR,
             this.COL_ALIAS});
-            this.grdExpressions.Location = new System.Drawing.Point(9, 34);
+            this.grdExpressions.Location = new System.Drawing.Point(6, 19);
             this.grdExpressions.Name = "grdExpressions";
-            this.grdExpressions.Size = new System.Drawing.Size(447, 127);
+            this.grdExpressions.Size = new System.Drawing.Size(435, 78);
             this.grdExpressions.TabIndex = 6;
             this.grdExpressions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdExpressions_CellContentClick);
             this.grdExpressions.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdExpressions_CellContentClick);
@@ -499,12 +481,80 @@ namespace FdoToolbox.Core.Controls
             // chkDistinct
             // 
             this.chkDistinct.AutoSize = true;
-            this.chkDistinct.Location = new System.Drawing.Point(117, 136);
+            this.chkDistinct.Location = new System.Drawing.Point(203, 103);
             this.chkDistinct.Name = "chkDistinct";
             this.chkDistinct.Size = new System.Drawing.Size(61, 17);
             this.chkDistinct.TabIndex = 5;
             this.chkDistinct.Text = "Distinct";
             this.chkDistinct.UseVisualStyleBackColor = true;
+            // 
+            // btnAddExpr
+            // 
+            this.btnAddExpr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAddExpr.Image = global::FdoToolbox.Core.Properties.Resources.add;
+            this.btnAddExpr.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAddExpr.Location = new System.Drawing.Point(6, 101);
+            this.btnAddExpr.Name = "btnAddExpr";
+            this.btnAddExpr.Size = new System.Drawing.Size(55, 23);
+            this.btnAddExpr.TabIndex = 7;
+            this.btnAddExpr.Text = "Add";
+            this.btnAddExpr.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnAddExpr.UseVisualStyleBackColor = true;
+            this.btnAddExpr.Click += new System.EventHandler(this.btnAddExpr_Click);
+            // 
+            // btnDeleteExpr
+            // 
+            this.btnDeleteExpr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDeleteExpr.Enabled = false;
+            this.btnDeleteExpr.Image = global::FdoToolbox.Core.Properties.Resources.cross;
+            this.btnDeleteExpr.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDeleteExpr.Location = new System.Drawing.Point(67, 101);
+            this.btnDeleteExpr.Name = "btnDeleteExpr";
+            this.btnDeleteExpr.Size = new System.Drawing.Size(63, 23);
+            this.btnDeleteExpr.TabIndex = 9;
+            this.btnDeleteExpr.Text = "Delete";
+            this.btnDeleteExpr.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDeleteExpr.UseVisualStyleBackColor = true;
+            this.btnDeleteExpr.Click += new System.EventHandler(this.btnDeleteExpr_Click);
+            // 
+            // btnClearAggregates
+            // 
+            this.btnClearAggregates.Location = new System.Drawing.Point(136, 101);
+            this.btnClearAggregates.Name = "btnClearAggregates";
+            this.btnClearAggregates.Size = new System.Drawing.Size(59, 23);
+            this.btnClearAggregates.TabIndex = 10;
+            this.btnClearAggregates.Text = "Clear";
+            this.btnClearAggregates.UseVisualStyleBackColor = true;
+            this.btnClearAggregates.Click += new System.EventHandler(this.btnClearAggregates_Click);
+            // 
+            // btnAggFilter
+            // 
+            this.btnAggFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAggFilter.Location = new System.Drawing.Point(426, 32);
+            this.btnAggFilter.Name = "btnAggFilter";
+            this.btnAggFilter.Size = new System.Drawing.Size(30, 23);
+            this.btnAggFilter.TabIndex = 13;
+            this.btnAggFilter.Text = "...";
+            this.btnAggFilter.UseVisualStyleBackColor = true;
+            this.btnAggFilter.Click += new System.EventHandler(this.btnAggFilter_Click);
+            // 
+            // txtAggFilter
+            // 
+            this.txtAggFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAggFilter.Location = new System.Drawing.Point(41, 34);
+            this.txtAggFilter.Name = "txtAggFilter";
+            this.txtAggFilter.Size = new System.Drawing.Size(379, 20);
+            this.txtAggFilter.TabIndex = 12;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 37);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(29, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "Filter";
             // 
             // cmbAggSchema
             // 
@@ -598,6 +648,8 @@ namespace FdoToolbox.Core.Controls
             this.groupBox2.ResumeLayout(false);
             this.pageAggregates.ResumeLayout(false);
             this.pageAggregates.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdExpressions)).EndInit();
             this.pageSQL.ResumeLayout(false);
             this.pageSQL.PerformLayout();
@@ -649,5 +701,9 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.CheckedListBox chkPropertyNames;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button btnAggFilter;
+        private System.Windows.Forms.TextBox txtAggFilter;
+        private System.Windows.Forms.Label label7;
     }
 }
