@@ -617,5 +617,10 @@ namespace FdoToolbox.Core.ETL
         public event TaskProgressMessageEventHandler OnTaskMessage;
        
         public event TaskProgressMessageEventHandler OnLogTaskMessage;
+
+        public bool IsCountable
+        {
+            get { return true; }
+        }
     }
 }

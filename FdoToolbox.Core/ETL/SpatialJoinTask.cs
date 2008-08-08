@@ -628,5 +628,10 @@ namespace FdoToolbox.Core.ETL
             if (_PrimaryClass != null)
                 _PrimaryClass.Dispose();
         }
+
+        public bool IsCountable
+        {
+            get { return false; }
+        }
     }
 }
