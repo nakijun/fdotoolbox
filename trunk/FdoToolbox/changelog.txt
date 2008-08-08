@@ -1,3 +1,13 @@
+- Enhancements:
+	- Tasks and connections are persisted and restored on each session.
+	- Data Preview: Filtering support for Select Aggregates
+	- Save/Load support for non-spatial connections
+	- XML schemas for configuration files
+	
+- Fixes:
+
+- Other:
+
 v0.5.0
 ------
 - Enhancements:
