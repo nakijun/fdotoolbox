@@ -42,6 +42,10 @@ namespace FdoToolbox.Core
         /// The type of task
         /// </summary>
         TaskType TaskType { get; }
+        /// <summary>
+        /// Returns true if the progress of this task is countable
+        /// </summary>
+        bool IsCountable { get; }
         
         event TaskPercentageEventHandler OnItemProcessed;
         event TaskProgressMessageEventHandler OnTaskMessage;

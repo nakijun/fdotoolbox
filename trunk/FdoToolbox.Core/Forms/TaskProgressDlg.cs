@@ -41,6 +41,7 @@ namespace FdoToolbox.Core.Forms
             : this()
         {
             _Task = task;
+            progressBar.Style = (_Task.IsCountable) ? ProgressBarStyle.Continuous : ProgressBarStyle.Marquee;
             this.Text = (task.TaskType == TaskType.BulkCopy) ? "Bulk Copy in progress" : "Database join in progress";
             _Task.OnTaskMessage += new TaskProgressMessageEventHandler(OnTaskMessage);
             _Task.OnItemProcessed += new TaskPercentageEventHandler(OnItemProcessed);
@@ -67,6 +68,7 @@ namespace FdoToolbox.Core.Forms
 
         void WorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            progressBar.Style = ProgressBarStyle.Continuous;
             if (e.Cancelled)
             {
                 lblMessage.Text = "Bulk Copy Cancelled";
