@@ -410,11 +410,21 @@
     <None Include="Resources\application_go.png" />
     <None Include="Resources\application_edit.png" />
     <None Include="Resources\accept.png" />
-    <None Include="Schemas\BulkCopyTask.xsd" />
-    <None Include="Schemas\DbConnection.xsd" />
-    <None Include="Schemas\DbJoinTask.xsd" />
-    <None Include="Schemas\Preferences.xsd" />
-    <None Include="Schemas\SpatialConnection.xsd" />
+    <None Include="Schemas\BulkCopyTask.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Schemas\DbConnection.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Schemas\DbJoinTask.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Schemas\Preferences.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Schemas\SpatialConnection.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\DatabaseConnectCtl.resx">
