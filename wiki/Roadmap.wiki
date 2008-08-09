@@ -20,3 +20,4 @@
  * Product-specific extension modules
  * MapGuide Enterprise/Open Source integration
  * Linux port of command-line utilities
+ * Star schema support
