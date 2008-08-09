@@ -276,6 +276,12 @@ namespace FdoToolbox.Core.IO
                 options.CoerceDataTypes = bcp.BulkCopyOptions.CoerceDataTypes;
                 options.CopySpatialContexts = bcp.BulkCopyOptions.CopySpatialContexts;
                 options.GlobalSpatialFilter = bcp.BulkCopyOptions.GlobalSpatialFilter;
+                int size = 0;
+                if(int.TryParse(bcp.BulkCopyOptions.BatchInsertSize, out size))
+                    options.BatchInsertSize = size;
+                else
+                    options.BatchInsertSize = 0;
+
                 if (options.CopySpatialContexts)
                 {
                     foreach (string context in bcp.Source.SpatialContextList)
@@ -386,7 +392,7 @@ namespace FdoToolbox.Core.IO
             bcp.BulkCopyOptions.CopySpatialContexts = task.Options.CopySpatialContexts;
             bcp.BulkCopyOptions.CoerceDataTypes = task.Options.CoerceDataTypes;
             bcp.BulkCopyOptions.GlobalSpatialFilter = task.Options.GlobalSpatialFilter;
-            
+            bcp.BulkCopyOptions.BatchInsertSize = task.Options.BatchInsertSize.ToString();
             if (task.Options.CopySpatialContexts)
             {
                 List<string> contexts = new List<string>();

@@ -46,6 +46,7 @@
 			<xs:element name="CopySpatialContexts" type="xs:boolean" nillable="false" />
 			<xs:element name="CoerceDataTypes" type="xs:boolean" nillable="false" default="false" />
 			<xs:element name="GlobalSpatialFilter" type="xs:string" nillable="true" />
+			<xs:element name="BatchInsertSize" type="xs:integer" minOccurs="0" maxOccurs="1" />
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="SpatialContextList">
