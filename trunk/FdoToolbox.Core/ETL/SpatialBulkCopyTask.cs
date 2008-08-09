@@ -293,6 +293,8 @@ namespace FdoToolbox.Core.ETL
                 {
                     string prop = "FeatureCount";
                     select.SetFeatureClassName(copyOpts.ClassName);
+                    if(theFilter != null)
+                        select.Filter = theFilter;
                     //Count() requires a property name, so pluck the first property name from the copy options
                     select.PropertyNames.Add(new ComputedIdentifier(prop, Expression.Parse("COUNT(" + copyOpts.PropertyNames[0] + ")")));
                     using (IDataReader reader = select.Execute())
