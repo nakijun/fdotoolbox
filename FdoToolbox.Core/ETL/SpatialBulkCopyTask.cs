@@ -283,31 +283,10 @@ namespace FdoToolbox.Core.ETL
             long count = 0;
             // Try to get the count in this order of precedence:
             //
-            // 1. ISelectAggregates - Count() function
-            // 2. SQL - select count(*) from table
+            // 1. SQL - select count(*) from table
+            // 2. ISelectAggregates - Count() function
             // 3. Brute force counting
-            if((Array.IndexOf<int>(srcConn.CommandCapabilities.Commands, (int)CommandType.CommandType_SelectAggregates) >= 0) &&
-                srcConn.ExpressionCapabilities.Functions.Contains("Count"))
-            {
-                using(ISelectAggregates select = srcConn.CreateCommand(CommandType.CommandType_SelectAggregates) as ISelectAggregates)
-                {
-                    string prop = "FeatureCount";
-                    select.SetFeatureClassName(copyOpts.ClassName);
-                    if(theFilter != null)
-                        select.Filter = theFilter;
-                    //Count() requires a property name, so pluck the first property name from the copy options
-                    select.PropertyNames.Add(new ComputedIdentifier(prop, Expression.Parse("COUNT(" + copyOpts.PropertyNames[0] + ")")));
-                    using (IDataReader reader = select.Execute())
-                    {
-                        if(reader.ReadNext())
-                        {
-                            count = reader.GetInt64(prop);
-                        }
-                        reader.Close();
-                    }
-                }
-            }
-            else if (Array.IndexOf<int>(srcConn.CommandCapabilities.Commands, (int)CommandType.CommandType_SQLCommand) >= 0)
+            if (Array.IndexOf<int>(srcConn.CommandCapabilities.Commands, (int)CommandType.CommandType_SQLCommand) >= 0)
             {
                 using (ISQLCommand cmd = srcConn.CreateCommand(CommandType.CommandType_SQLCommand) as ISQLCommand)
                 {
@@ -321,6 +300,27 @@ namespace FdoToolbox.Core.ETL
                         if(reader.ReadNext())
                         {
                             count = reader.GetInt64(col);
+                        }
+                        reader.Close();
+                    }
+                }
+            }
+            else if ((Array.IndexOf<int>(srcConn.CommandCapabilities.Commands, (int)CommandType.CommandType_SelectAggregates) >= 0) &&
+                      srcConn.ExpressionCapabilities.Functions.Contains("Count"))
+            {
+                using (ISelectAggregates select = srcConn.CreateCommand(CommandType.CommandType_SelectAggregates) as ISelectAggregates)
+                {
+                    string prop = "FeatureCount";
+                    select.SetFeatureClassName(copyOpts.ClassName);
+                    if (theFilter != null)
+                        select.Filter = theFilter;
+                    //Count() requires a property name, so pluck the first property name from the copy options
+                    select.PropertyNames.Add(new ComputedIdentifier(prop, Expression.Parse("COUNT(" + copyOpts.PropertyNames[0] + ")")));
+                    using (IDataReader reader = select.Execute())
+                    {
+                        if (reader.ReadNext())
+                        {
+                            count = reader.GetInt64(prop);
                         }
                         reader.Close();
                     }
