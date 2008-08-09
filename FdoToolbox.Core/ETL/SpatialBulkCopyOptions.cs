@@ -53,6 +53,7 @@ namespace FdoToolbox.Core.ETL
         {
             _Source = source;
             _Target = target;
+            _BatchInsertSize = 0;
             _SourceClasses = new List<ClassCopyOptions>();
             _SourceSpatialContexts = new List<string>();
         }
@@ -73,7 +74,7 @@ namespace FdoToolbox.Core.ETL
             _SourceClasses = new List<ClassCopyOptions>();
             _SourceSpatialContexts = new List<string>();
             _ExpressMode = true;
-
+            _BatchInsertSize = 0;
             IConnection src = null;
             IConnection dest = null;
 
@@ -139,7 +140,18 @@ namespace FdoToolbox.Core.ETL
             get { return _GlobalSpatialFilter; }
             set { _GlobalSpatialFilter = value; }
         }
-	
+
+        private int _BatchInsertSize;
+
+        /// <summary>
+        /// The size of the batch parameter collection. If less than or equal to 0,
+        /// batch parameters will be avoided.
+        /// </summary>
+        public int BatchInsertSize
+        {
+            get { return _BatchInsertSize; }
+            set { _BatchInsertSize = value; }
+        }
 
         /// <summary>
         /// Deletes a SHP file and all its related files
