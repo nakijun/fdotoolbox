@@ -53,9 +53,23 @@ namespace FdoToolbox.Core.ClientServices
             _GeomFactory = new FgfGeometryFactory();
         }
 
+        ~FeatureService()
+        {
+            Dispose(false);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _GeomFactory.Dispose();
+            }
+        }
+
         public void Dispose()
         {
-            _GeomFactory.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -607,6 +621,16 @@ namespace FdoToolbox.Core.ClientServices
             }
 
             return computedEnvelope;
+        }
+
+        public bool SupportsBatchInsertion()
+        {
+            bool supported = false;
+            using (IInsert insert = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert)
+            {
+                supported = (insert.BatchParameterValues != null);
+            }
+            return supported;
         }
     }
 }
