@@ -177,6 +177,8 @@ namespace FdoToolbox.Core.Configuration {
         
         private string globalSpatialFilterField;
         
+        private string batchInsertSizeField;
+        
         public BulkCopyOptions() {
             this.coerceDataTypesField = false;
         }
@@ -211,6 +213,17 @@ namespace FdoToolbox.Core.Configuration {
             }
             set {
                 this.globalSpatialFilterField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
+        public string BatchInsertSize {
+            get {
+                return this.batchInsertSizeField;
+            }
+            set {
+                this.batchInsertSizeField = value;
             }
         }
     }

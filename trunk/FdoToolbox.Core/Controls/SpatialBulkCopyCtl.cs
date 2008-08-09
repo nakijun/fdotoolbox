@@ -100,7 +100,7 @@ namespace FdoToolbox.Core.Controls
         {
             cmbSrcConn.SelectedItem = task.Options.Source.Name; 
             cmbDestConn.SelectedItem = task.Options.Target.Name;
-
+            numBatchSize.Value = task.Options.BatchInsertSize;
             cmbSrcSchema.SelectedText = task.Options.SourceSchemaName;
             cmbDestSchema.SelectedText = task.Options.TargetSchemaName;
             txtGlobalFilter.Text = task.Options.GlobalSpatialFilter;
