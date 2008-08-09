@@ -49,6 +49,7 @@ namespace FdoToolbox.Core.Forms
             bgWorker.DoWork += new DoWorkEventHandler(DoWork);
             bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(WorkerCompleted);
             bgWorker.ProgressChanged += new ProgressChangedEventHandler(ProgressChanged);
+            this.Disposed += delegate { bgWorker.Dispose(); };
         }
 
         void OnLogTaskMessage(string msg)
