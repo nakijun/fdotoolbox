@@ -32,6 +32,7 @@ using FdoToolbox.Core.Forms;
 using FdoToolbox.Core.ETL;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
+using OSGeo.FDO.Commands.Feature;
 #region overview
 /*
  * The bulk copy control is the front-end to the BulkCopyTask class.
@@ -170,14 +171,22 @@ namespace FdoToolbox.Core.Controls
         {
             string connName = cmbDestConn.SelectedItem.ToString();
             IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(connName);
-            FeatureService service = new FeatureService(conn);
-            FeatureSchemaCollection schemas = service.DescribeSchema();
-            cmbDestSchema.DataSource = schemas;
-            if (schemas.Count == 0)
+            using (FeatureService service = new FeatureService(conn))
             {
-                AppConsole.Alert("Warning", "There are no schemas in the target connection. If you save this task, all source classes will be copied");
-                ctxTargetClasses.Items.Clear();
-                ResetClassNodes();
+                FeatureSchemaCollection schemas = service.DescribeSchema();
+                cmbDestSchema.DataSource = schemas;
+                if (schemas.Count == 0)
+                {
+                    AppConsole.Alert("Warning", "There are no schemas in the target connection. If you save this task, all source classes will be copied");
+                    ctxTargetClasses.Items.Clear();
+                    ResetClassNodes();
+                }
+                // There is no actual capability atm to indicate support for batch insertion
+                // 
+                // So we'll only enable the batch size field under the two conditions:
+                //  1. Connection support parameters
+                //  2. IInserts created from this connection have a non-null BatchParameterValueCollection
+                numBatchSize.Enabled = service.SupportsBatchInsertion();
             }
         }
 
@@ -595,7 +604,8 @@ namespace FdoToolbox.Core.Controls
                     HostApplication.Instance.SpatialConnectionManager.GetConnection(destConnName)
                 )
             );
-
+            if (numBatchSize.Enabled)
+                options.BatchInsertSize = Convert.ToInt32(numBatchSize.Value);
             if (!string.IsNullOrEmpty(txtGlobalFilter.Text.Trim()))
                 options.GlobalSpatialFilter = txtGlobalFilter.Text.Trim();
             options.CoerceDataTypes = chkCoerceDataTypes.Checked;

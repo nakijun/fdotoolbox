@@ -244,18 +244,57 @@ namespace FdoToolbox.Core.ETL
                         IInsert insert = destConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert;
                         PropertyDefinitionCollection propDefs = classDef.Properties;
 
+                        insert.SetFeatureClassName(copyOpts.TargetClassName);
+
                         Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
                         for (int i = 0; i < propDefs.Count; i++)
                         {
                             cachedPropertyNames.Add(i, propDefs[i].Name);
                         }
 
+                        //If batch insert size defined, prepare insert command for
+                        //batch insertion.
+                        if (_Options.BatchInsertSize > 0)
+                        {
+                            foreach (int key in cachedPropertyNames.Keys)
+                            { 
+                                string name = cachedPropertyNames[key];
+                                string paramName = PARAM_PREFIX + name;
+                                insert.PropertyValues.Add(new PropertyValue(name, new Parameter(paramName)));
+                            }
+                        }
+
                         //Loop through the feature reader and process each
                         //result
                         int oldpc = 0;
-                        while (sourceReader.ReadNext())
+                        bool hasMore = sourceReader.ReadNext();
+                        while (hasMore)
                         {
-                            copied += ProcessReader(cachedPropertyNames, propDefs, insert, copyOpts, sourceReader);
+                            //No batch size, do vanilla IInsert
+                            if (_Options.BatchInsertSize <= 0)
+                            {
+                                copied += ProcessReader(cachedPropertyNames, propDefs, insert, copyOpts, sourceReader);
+                                hasMore = sourceReader.ReadNext();
+                            }
+                            else //batched insert
+                            {
+                                insert.BatchParameterValues.Clear();
+                                int batchCount = 0;
+                                //Load up batched values
+                                do
+                                {
+                                    ProcessReaderBatched(cachedPropertyNames, propDefs, insert, copyOpts, sourceReader);
+                                    hasMore = sourceReader.ReadNext();
+                                    batchCount++;
+                                }
+                                while (batchCount < _Options.BatchInsertSize && hasMore);
+                                //Execute batch
+                                using (IFeatureReader insReader = insert.Execute())
+                                {
+                                    copied += batchCount;
+                                    insReader.Close();
+                                }
+                            }
                             int pc = (int)(((double)copied / (double)count) * 100);
                             //Only update progress counter when % changes
                             if(pc != oldpc)
@@ -450,6 +489,11 @@ namespace FdoToolbox.Core.ETL
             //Validate each source class copy option specified.
             SendMessage("Validating Bulk Copy Options");
 
+            FeatureService destService = new FeatureService(destConn);
+
+            if (_Options.BatchInsertSize > 0 && !destService.SupportsBatchInsertion())
+                throw new TaskValidationException("Target connection does not support batch insertion");
+
             if (string.IsNullOrEmpty(_Options.SourceSchemaName))
                 throw new TaskValidationException("Source schema name not defined");
 
@@ -569,12 +613,81 @@ namespace FdoToolbox.Core.ETL
             return null;
         }
 
+        const string PARAM_PREFIX = "param_";
+
+        private void ProcessReaderBatched(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
+        {
+            ParameterValueCollection propVals = new ParameterValueCollection();
+            foreach (int key in cachedPropertyNames.Keys)
+            {
+                string name = cachedPropertyNames[key];
+                PropertyDefinition def = propDefs[key];
+                if (!sourceReader.IsNull(name))
+                {
+                    string target = copyOpts.GetTargetPropertyName(name);
+                    string paramName = PARAM_PREFIX + target;
+                    if (string.IsNullOrEmpty(target))
+                        target = name;
+
+                    DataPropertyDefinition dataDef = def as DataPropertyDefinition;
+                    GeometricPropertyDefinition geomDef = def as GeometricPropertyDefinition;
+                    if (dataDef != null)
+                    {
+                        switch (dataDef.DataType)
+                        {
+                            case DataType.DataType_BLOB:
+                                propVals.Add(new ParameterValue(paramName, new BLOBValue(sourceReader.GetLOB(name).Data)));
+                                break;
+                            case DataType.DataType_Boolean:
+                                propVals.Add(new ParameterValue(paramName, new BooleanValue(sourceReader.GetBoolean(name))));
+                                break;
+                            case DataType.DataType_Byte:
+                                propVals.Add(new ParameterValue(paramName, new ByteValue(sourceReader.GetByte(name))));
+                                break;
+                            case DataType.DataType_CLOB:
+                                propVals.Add(new ParameterValue(paramName, new CLOBValue(sourceReader.GetLOB(name).Data)));
+                                break;
+                            case DataType.DataType_DateTime:
+                                propVals.Add(new ParameterValue(paramName, new DateTimeValue(sourceReader.GetDateTime(name))));
+                                break;
+                            case DataType.DataType_Decimal:
+                                propVals.Add(new ParameterValue(paramName, new DecimalValue(sourceReader.GetDouble(name))));
+                                break;
+                            case DataType.DataType_Double:
+                                propVals.Add(new ParameterValue(paramName, new DecimalValue(sourceReader.GetDouble(name))));
+                                break;
+                            case DataType.DataType_Int16:
+                                propVals.Add(new ParameterValue(paramName, new Int16Value(sourceReader.GetInt16(name))));
+                                break;
+                            case DataType.DataType_Int32:
+                                propVals.Add(new ParameterValue(paramName, new Int32Value(sourceReader.GetInt32(name))));
+                                break;
+                            case DataType.DataType_Int64:
+                                propVals.Add(new ParameterValue(paramName, new Int64Value(sourceReader.GetInt64(name))));
+                                break;
+                            case DataType.DataType_Single:
+                                propVals.Add(new ParameterValue(paramName, new SingleValue(sourceReader.GetSingle(dataDef.Name))));
+                                break;
+                            case DataType.DataType_String:
+                                propVals.Add(new ParameterValue(paramName, new StringValue(sourceReader.GetString(dataDef.Name))));
+                                break;
+                        }
+                    }
+                    else if (geomDef != null)
+                    {
+                        byte[] value = sourceReader.GetGeometry(name);
+                        propVals.Add(new ParameterValue(paramName, new GeometryValue(value)));
+                    }
+                }
+            }
+            insert.BatchParameterValues.Add(propVals);
+        }
+
         private int ProcessReader(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
         {
             int inserted = 0;
             string targetClass = copyOpts.TargetClassName;
 
-            insert.SetFeatureClassName(targetClass);
             insert.PropertyValues.Clear();
             foreach (int key in cachedPropertyNames.Keys)
             {
