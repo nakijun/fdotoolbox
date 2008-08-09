@@ -40,6 +40,7 @@ using System.IO;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Utility;
+using OSGeo.FDO.Commands.SQL;
 #region overview
 /*
  * Bulk Copy overview
@@ -224,21 +225,7 @@ namespace FdoToolbox.Core.ETL
                 }
 
                 //Get count of features to copy
-                int count = 0;
-                using (ISelect select = srcConn.CreateCommand(CommandType.CommandType_Select) as ISelect)
-                {
-                    select.SetFeatureClassName(copyOpts.ClassName);
-                    if (theFilter != null)
-                        select.Filter = theFilter;
-
-                    using (IFeatureReader reader = select.Execute())
-                    {
-                        while (reader.ReadNext())
-                        {
-                            count++;
-                        }
-                    }
-                }
+                long count = GetFeatureCount(srcConn, copyOpts, theFilter);
                 //Select from source class
                 using (ISelect select = srcConn.CreateCommand(CommandType.CommandType_Select) as ISelect)
                 {
@@ -289,6 +276,73 @@ namespace FdoToolbox.Core.ETL
             }
             watch.Stop();
             SendMessage("Bulk Copy: " + total + " features copied in " + watch.ElapsedMilliseconds + "ms");
+        }
+
+        private static long GetFeatureCount(IConnection srcConn, ClassCopyOptions copyOpts, Filter theFilter)
+        {
+            long count = 0;
+            // Try to get the count in this order of precedence:
+            //
+            // 1. ISelectAggregates - Count() function
+            // 2. SQL - select count(*) from table
+            // 3. Brute force counting
+            if((Array.IndexOf<int>(srcConn.CommandCapabilities.Commands, (int)CommandType.CommandType_SelectAggregates) >= 0) &&
+                srcConn.ExpressionCapabilities.Functions.Contains("Count"))
+            {
+                using(ISelectAggregates select = srcConn.CreateCommand(CommandType.CommandType_SelectAggregates) as ISelectAggregates)
+                {
+                    string prop = "FeatureCount";
+                    select.SetFeatureClassName(copyOpts.ClassName);
+                    //Count() requires a property name, so pluck the first property name from the copy options
+                    select.PropertyNames.Add(new ComputedIdentifier(prop, Expression.Parse("COUNT(" + copyOpts.PropertyNames[0] + ")")));
+                    using (IDataReader reader = select.Execute())
+                    {
+                        if(reader.ReadNext())
+                        {
+                            count = reader.GetInt64(prop);
+                        }
+                        reader.Close();
+                    }
+                }
+            }
+            else if (Array.IndexOf<int>(srcConn.CommandCapabilities.Commands, (int)CommandType.CommandType_SQLCommand) >= 0)
+            {
+                using (ISQLCommand cmd = srcConn.CreateCommand(CommandType.CommandType_SQLCommand) as ISQLCommand)
+                {
+                    string col = "FeatureCount";
+                    cmd.SQLStatement = string.Format("SELECT COUNT(*) AS {0} FROM {1}", col, copyOpts.ClassName);
+                    if(theFilter != null)
+                        cmd.SQLStatement += string.Format(" WHERE {0}", theFilter.ToString());
+
+                    using(ISQLDataReader reader = cmd.ExecuteReader())
+                    {
+                        if(reader.ReadNext())
+                        {
+                            count = reader.GetInt64(col);
+                        }
+                        reader.Close();
+                    }
+                }
+            }
+            else
+            {
+                using (ISelect select = srcConn.CreateCommand(CommandType.CommandType_Select) as ISelect)
+                {
+                    select.SetFeatureClassName(copyOpts.ClassName);
+                    if (theFilter != null)
+                        select.Filter = theFilter;
+
+                    using (IFeatureReader reader = select.Execute())
+                    {
+                        while (reader.ReadNext())
+                        {
+                            count++;
+                        }
+                        reader.Close();
+                    }
+                }
+            }
+            return count;
         }
 
         /// <summary>
