@@ -382,6 +382,7 @@ namespace FdoToolbox.Core.IO
                     PropertyMapping pm = new PropertyMapping();
                     pm.SourceProperty = propertyName;
                     pm.TargetProperty = tp;
+                    pms.Add(pm);
                 }
                 m.Properties = pms.ToArray();
 

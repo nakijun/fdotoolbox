@@ -29,7 +29,7 @@ namespace FdoToolbox.Core.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Classes");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Classes");
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -47,6 +47,8 @@ namespace FdoToolbox.Core.Controls
             this.mTreeView = new System.Windows.Forms.TreeView();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.numBatchSize = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtGlobalFilter = new System.Windows.Forms.TextBox();
             this.chkSourceContextList = new System.Windows.Forms.CheckedListBox();
@@ -61,18 +63,16 @@ namespace FdoToolbox.Core.Controls
             this.ctxDeleteBeforeCopy = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.trueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.falseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label7 = new System.Windows.Forms.Label();
-            this.numBatchSize = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.grpSource.SuspendLayout();
             this.grpTarget.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.ctxClassFilter.SuspendLayout();
             this.ctxDeleteBeforeCopy.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -235,10 +235,10 @@ namespace FdoToolbox.Core.Controls
             this.mTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mTreeView.Location = new System.Drawing.Point(3, 16);
             this.mTreeView.Name = "mTreeView";
-            treeNode2.Name = "NODE_CLASSES";
-            treeNode2.Text = "Classes";
+            treeNode1.Name = "NODE_CLASSES";
+            treeNode1.Text = "Classes";
             this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.mTreeView.ShowNodeToolTips = true;
             this.mTreeView.Size = new System.Drawing.Size(265, 343);
             this.mTreeView.TabIndex = 0;
@@ -271,6 +271,27 @@ namespace FdoToolbox.Core.Controls
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(240, 185);
             this.panel1.TabIndex = 0;
+            // 
+            // numBatchSize
+            // 
+            this.numBatchSize.Location = new System.Drawing.Point(104, 66);
+            this.numBatchSize.Maximum = new decimal(new int[] {
+            -1593835521,
+            466537709,
+            54210,
+            0});
+            this.numBatchSize.Name = "numBatchSize";
+            this.numBatchSize.Size = new System.Drawing.Size(127, 20);
+            this.numBatchSize.TabIndex = 10;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(4, 68);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(90, 13);
+            this.label7.TabIndex = 9;
+            this.label7.Text = "Batch Insert Size:";
             // 
             // label6
             // 
@@ -387,22 +408,6 @@ namespace FdoToolbox.Core.Controls
             this.falseToolStripMenuItem.Text = "False";
             this.falseToolStripMenuItem.Click += new System.EventHandler(this.DeleteBeforeCopyDisable_Click);
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(4, 68);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(90, 13);
-            this.label7.TabIndex = 9;
-            this.label7.Text = "Batch Insert Size:";
-            // 
-            // numBatchSize
-            // 
-            this.numBatchSize.Location = new System.Drawing.Point(104, 66);
-            this.numBatchSize.Name = "numBatchSize";
-            this.numBatchSize.Size = new System.Drawing.Size(127, 20);
-            this.numBatchSize.TabIndex = 10;
-            // 
             // SpatialBulkCopyCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -426,10 +431,10 @@ namespace FdoToolbox.Core.Controls
             this.groupBox3.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ctxClassFilter.ResumeLayout(false);
             this.ctxDeleteBeforeCopy.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).EndInit();
             this.ResumeLayout(false);
 
         }
