@@ -33,6 +33,19 @@ namespace FdoToolbox.Core
     {
         public BaseApplication()
         {
+#if DEBUG
+            //HACK: It's not picking up the DBMS paths from the PATH environment
+            //variable when running in debug mode, so set the paths explicitly here
+            string oracle_bin = "C:\\oraclexe\\app\\oracle\\product\\10.2.0\\server\\bin";
+            string mysql_bin = "C:\\Program Files\\MySQL\\MySQL Server 5.0\\bin";
+            string path = Environment.GetEnvironmentVariable("PATH");
+            path = string.Format(
+                "{0};{1};{2}",
+                path,
+                oracle_bin,
+                mysql_bin);
+            Environment.SetEnvironmentVariable("PATH", path);
+#endif
             InitializePrefs();
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             CheckFdoPath();
