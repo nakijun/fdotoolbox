@@ -625,7 +625,7 @@ namespace FdoToolbox.Core.Controls
                     TreeNode optionsNode = classNode.Nodes[IDX_OPTIONS];
                     TreeNode propertiesNode = classNode.Nodes[IDX_PROPERTIES];
 
-                    ClassCopyOptions cOptions = new ClassCopyOptions(GetSourceClassByName(classNode.Tag.ToString()));
+                    ClassCopyOptions cOptions = new ClassCopyOptions(GetSourceClassByName(classNode.Name.ToString()));
                     cOptions.TargetClassName = classNode.Tag.ToString();
                     foreach (TreeNode propertyNode in propertiesNode.Nodes)
                     {
