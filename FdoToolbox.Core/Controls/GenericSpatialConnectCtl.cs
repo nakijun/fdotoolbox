@@ -126,7 +126,7 @@ namespace FdoToolbox.Core.Controls
                         throw new FdoConnectionException("Pending Parameters were not filled in");
                     }
                 }
-                if (conn.Open() == OSGeo.FDO.Connections.ConnectionState.ConnectionState_Open)
+                if (conn.ConnectionState == OSGeo.FDO.Connections.ConnectionState.ConnectionState_Open || conn.Open() == OSGeo.FDO.Connections.ConnectionState.ConnectionState_Open)
                 {
                     HostApplication.Instance.SpatialConnectionManager.AddConnection(txtName.Text, conn);
                     this.Close();
