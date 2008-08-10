@@ -83,7 +83,15 @@ namespace FdoToolbox.Core.Forms
 
         void DoWork(object sender, DoWorkEventArgs e)
         {
-            _Task.Execute();
+            try
+            {
+                _Task.Execute();
+            }
+            catch (Exception ex)
+            {
+                OnTaskMessage(ex.Message);
+                bgWorker.CancelAsync();
+            }
         }
 
         void OnTaskMessage(string msg)
