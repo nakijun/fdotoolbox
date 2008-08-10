@@ -3,10 +3,11 @@
 	- Data Preview: Filtering support for Select Aggregates
 	- Save/Load support for non-spatial connections
 	- XML schemas for configuration files
+	- Bulk Copy: Support for batched insertions. Insert performance is better under batched mode (upwards of 10x faster in Oracle!), but this is not supported by all providers.
 	
 - Fixes:
-
-- Other:
+	- Bulk Copy: Improved counting process by avoiding the brute force approach if a faster alternative is available.
+	- Bulk Copy: Fixed improper property/class mapping
 
 v0.5.0
 ------
