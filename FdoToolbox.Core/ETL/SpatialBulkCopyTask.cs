@@ -259,8 +259,9 @@ namespace FdoToolbox.Core.ETL
                             foreach (int key in cachedPropertyNames.Keys)
                             { 
                                 string name = cachedPropertyNames[key];
-                                string paramName = PARAM_PREFIX + name;
-                                insert.PropertyValues.Add(new PropertyValue(name, new Parameter(paramName)));
+                                string targetName = copyOpts.GetTargetPropertyName(name);
+                                string paramName = PARAM_PREFIX + targetName;
+                                insert.PropertyValues.Add(new PropertyValue(targetName, new Parameter(paramName)));
                             }
                         }
 
