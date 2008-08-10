@@ -9,6 +9,10 @@ A: See Issue 21
 
 A: When connecting to Oracle, leave the OracleSchema and KingFdoClass propeties blank.
 
+=== Q: Select Aggregates do not work in the Data Preview (using OSGeo.KingOracle) ===
+
+A: The Data Preview's UI (and many others) are driven by the connection's capabilities, thus preventing you from doing illegal/unsupported actions. Basically [http://trac.osgeo.org/fdo/ticket/376 the provider is falsely reporting that Select Aggregates is supported, when it actually isn't]
+
 === Q: What is the difference between Lite and Full releases? ===
 
 A: Lite releases do not include the FDO binaries, you will need the [[http://fdo.osgeo.org FDO binaries]]. You may be prompted for the directory containing the FDO binaries, this is a one-off thing.
