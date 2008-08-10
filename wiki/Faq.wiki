@@ -5,6 +5,10 @@
 
 A: See Issue 21
 
+=== Q: I can't see schemas/classes in Oracle (using OSGeo.KingOracle) ===
+
+A: When connecting to Oracle, leave the OracleSchema and KingFdoClass propeties blank.
+
 === Q: What is the difference between Lite and Full releases? ===
 
 A: Lite releases do not include the FDO binaries, you will need the [[http://fdo.osgeo.org FDO binaries]]. You may be prompted for the directory containing the FDO binaries, this is a one-off thing.
