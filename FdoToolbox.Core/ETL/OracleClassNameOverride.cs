@@ -20,34 +20,21 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OSGeo.FDO.Connections;
-using FdoToolbox.Core.ETL;
 
-namespace FdoToolbox.Core.Utility
+namespace FdoToolbox.Core.ETL
 {
     /// <summary>
-    /// Utility class to create override objects
+    /// Class name override for Oracle. Class names in oracle are in the 
+    /// format [user]~[class]~[geometry_field]. Thus if we want to do raw
+    /// SQL queries, we need to extract the middle component of the class
+    /// name.
     /// </summary>
-    public sealed class OverrideFactory
+    public class OracleClassNameOverride : IClassNameOverride
     {
-        public static ICopySpatialContextOverride GetCopySpatialContextOverride(IConnection targetConn)
+        public string GetClassName(string fullName)
         {
-            string providerName = targetConn.ConnectionInfo.ProviderName;
-            if (providerName.Contains("OSGeo.SHP"))
-                return new ShpCopySpatialContextOverride();
-            else if (providerName.Contains("OSGeo.MySQL"))
-                return new MySqlCopySpatialContextOverride();
-            else
-                return null;
-        }
-
-        public static IClassNameOverride GetClassNameOverride(IConnection conn)
-        {
-            string providerName = conn.ConnectionInfo.ProviderName;
-            if (providerName.Contains("OSGeo.KingOracle"))
-                return new OracleClassNameOverride();
-            else
-                return null;
+            string[] tokens = fullName.Split('~');
+            return tokens[1];
         }
     }
 }
