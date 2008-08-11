@@ -257,14 +257,14 @@ namespace FdoToolbox.Core.Modules
                     try
                     {
                         service.LoadSchemasFromXml(schemaFile);
+                        AppConsole.Alert("Load schemas", "Schemas loaded into connection " + connInfo.Name);
+                        HostApplication.Instance.Shell.ObjectExplorer.RefreshSpatialConnection(connInfo.Name);
                     }
                     catch (OSGeo.FDO.Common.Exception ex)
                     {
                         AppConsole.Alert("Error", ex.Message);
                         AppConsole.WriteException(ex);
                     }
-                    AppConsole.Alert("Load schemas", "Schemas loaded into connection " + connInfo.Name);
-                    HostApplication.Instance.Shell.ObjectExplorer.RefreshSpatialConnection(connInfo.Name);
                 }
             }
         }

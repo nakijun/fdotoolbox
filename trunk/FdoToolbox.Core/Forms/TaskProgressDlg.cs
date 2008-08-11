@@ -90,6 +90,7 @@ namespace FdoToolbox.Core.Forms
             catch (Exception ex)
             {
                 OnTaskMessage(ex.Message);
+                AppConsole.WriteException(ex);
                 bgWorker.CancelAsync();
             }
         }
