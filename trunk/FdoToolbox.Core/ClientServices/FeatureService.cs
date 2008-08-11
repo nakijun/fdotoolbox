@@ -303,7 +303,7 @@ namespace FdoToolbox.Core.ClientServices
             FeatureSchema schema = GetSchemaByName(schemaName);
             if (schema != null)
             {
-                schema.WriteXml(schemaName);
+                schema.WriteXml(xmlFile);
             }
             else
             {
