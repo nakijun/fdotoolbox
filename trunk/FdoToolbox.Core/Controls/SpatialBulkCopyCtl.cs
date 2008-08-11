@@ -98,11 +98,26 @@ namespace FdoToolbox.Core.Controls
 
         private void LoadSettings(SpatialBulkCopyTask task)
         {
-            cmbSrcConn.SelectedItem = task.Options.Source.Name; 
-            cmbDestConn.SelectedItem = task.Options.Target.Name;
+            int srcidx = cmbSrcConn.Items.IndexOf(task.Options.Source.Name);
+            int destidx = cmbDestConn.Items.IndexOf(task.Options.Target.Name);
+
+            if (srcidx < 0)
+                throw new TaskValidationException("Could not find source connection: " + task.Options.Source.Name);
+
+            if (destidx < 0)
+                throw new TaskValidationException("Could not find target connection: " + task.Options.Target.Name);
+
+            cmbSrcConn.SelectedIndex = srcidx;
+            cmbDestConn.SelectedIndex = destidx;
+
             numBatchSize.Value = task.Options.BatchInsertSize;
+
             cmbSrcSchema.SelectedText = task.Options.SourceSchemaName;
             cmbDestSchema.SelectedText = task.Options.TargetSchemaName;
+
+            //Why is selected index changed not firing?????
+            cmbSrcSchema_SelectedIndexChanged(this, EventArgs.Empty);
+
             txtGlobalFilter.Text = task.Options.GlobalSpatialFilter;
             chkCopySpatialContexts.Checked = task.Options.CopySpatialContexts;
             if (task.Options.CopySpatialContexts)
@@ -118,7 +133,8 @@ namespace FdoToolbox.Core.Controls
             foreach (ClassCopyOptions classCopyOption in copts)
             {
                 //Map the class node
-                TreeNode classNode = GetRootNode().Nodes[classCopyOption.ClassName];
+                TreeNode root = GetRootNode();
+                TreeNode classNode = root.Nodes[classCopyOption.ClassName];
                 MapClassNode(classCopyOption.TargetClassName, classNode);
                 TreeNode optionsNode = classNode.Nodes[IDX_OPTIONS];
                 TreeNode propertiesNode = classNode.Nodes[IDX_PROPERTIES];
