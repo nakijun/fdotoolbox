@@ -351,7 +351,7 @@ namespace FdoToolbox.Core.ETL
                     cmd.SQLStatement = string.Format("SELECT COUNT(*) AS {0} FROM {1}", col, tableName);
                     if(theFilter != null)
                         cmd.SQLStatement += string.Format(" WHERE {0}", theFilter.ToString());
-
+                    AppConsole.WriteLine("Issuing SQL: {0}", cmd.SQLStatement);
                     using(ISQLDataReader reader = cmd.ExecuteReader())
                     {
                         if(reader.ReadNext())
