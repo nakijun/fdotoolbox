@@ -50,15 +50,25 @@ namespace FdoToolbox.Core.ETL
             FeatureService srcService = new FeatureService(srcConn);
             FeatureService destService = new FeatureService(destConn);
             List<SpatialContextInfo> srcContexts = srcService.GetSpatialContexts();
-            srcContexts.ForEach(delegate(SpatialContextInfo ctx)
+            List<SpatialContextInfo> destContexts = destService.GetSpatialContexts();
+            foreach(SpatialContextInfo ctx in srcContexts)
             {
                 if (spatialContextNames.Contains(ctx.Name))
                 {
                     try
                     {
-                        //Destroy then create
-                        destService.DestroySpatialContext(ctx.Name);
-                        destService.CreateSpatialContext(ctx, false);
+                        //Find target spatial context of the same name
+                        SpatialContextInfo sci = destContexts.Find(delegate(SpatialContextInfo s) { return s.Name == ctx.Name; });
+                        if (sci != null)
+                        {
+                            //If found, destroy then create
+                            destService.DestroySpatialContext(ctx.Name);
+                            destService.CreateSpatialContext(ctx, false);
+                        }
+                        else
+                        {
+                            destService.CreateSpatialContext(ctx, false);
+                        }
                     }
                     catch (OSGeo.FDO.Common.Exception ex)
                     {
@@ -66,7 +76,7 @@ namespace FdoToolbox.Core.ETL
                         AppConsole.WriteLine("Ignoring that context");
                     }
                 }
-            });
+            }
         }
     }
 }
