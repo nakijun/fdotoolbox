@@ -76,24 +76,22 @@ namespace FdoToolbox.Core
                     _shell.Title = this.Name;
                     _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
 
-                    _CsCatalog = new CoordSysCatalog();
-                    _TabManager = new SpatialConnectionBoundTabManager();
-
                     InitConsole();
-                    InitMessageHandlers();
-
                     bool? timestamp = this.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
                     AppConsole.Out.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
                     AppConsole.Err.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
                     AppConsole.WriteLine("Loading modules");
 
+                    _CsCatalog = new CoordSysCatalog();
+                    _TabManager = new SpatialConnectionBoundTabManager();
+
+                    InitMessageHandlers();
+
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
                     ModuleManager.LoadModule(new AdoNetModule());
-#if DEBUG
-                    ModuleManager.LoadModule(new TestModule());
-#endif
+
                     InitMenus();
                     LoadDefinedModules();
                     AppSession.Restore();

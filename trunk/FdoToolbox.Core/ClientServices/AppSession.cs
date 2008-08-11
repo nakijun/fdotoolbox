@@ -48,6 +48,9 @@ namespace FdoToolbox.Core.ClientServices
                 string path = HostApplication.Instance.Preferences.GetStringPref(PreferenceNames.PREF_STR_SESSION_DIRECTORY);
                 if (!Directory.Exists(path))
                     return;
+                if (Directory.GetFiles(path).Length == 0)
+                    return;
+
                 string[] taskfiles = Directory.GetFiles(path, "*.task");
                 string[] connfiles = Directory.GetFiles(path, "*.conn");
                 string[] dbconnfiles = Directory.GetFiles(path, "*.dbconn");

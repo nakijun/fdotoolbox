@@ -355,7 +355,6 @@
     <Compile Include="Common\SpatialContextInfo.cs" />
     <Compile Include="IO\TaskLoader.cs" />
     <Compile Include="ClientServices\TaskManager.cs" />
-    <Compile Include="Modules\TestModule.cs" />
     <Compile Include="Utility\WKTParser.cs" />
   </ItemGroup>
   <ItemGroup>
