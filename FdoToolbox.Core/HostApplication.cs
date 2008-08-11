@@ -79,22 +79,7 @@ namespace FdoToolbox.Core
                     _CsCatalog = new CoordSysCatalog();
                     _TabManager = new SpatialConnectionBoundTabManager();
 
-                    //Set streams for Application Console
-                    AppConsole.In = new TextConsoleInputStream(_shell.ConsoleWindow.InputTextBox);
-                    AppConsole.Out = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
-                    AppConsole.Err = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
-                    AppConsole.Err.TextColor = System.Drawing.Color.Red;
-
-                    AppConsole.DoConfirm += delegate(string title, string text)
-                    {
-                        return MessageBox.Show(text, title, MessageBoxButtons.YesNo) == DialogResult.Yes;
-                    };
-
-                    AppConsole.DoAlert += delegate(string title, string text)
-                    {
-                        MessageBox.Show(text, title);
-                    };
-
+                    InitConsole();
                     InitMessageHandlers();
 
                     bool? timestamp = this.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
@@ -123,6 +108,25 @@ namespace FdoToolbox.Core
                 if (this.OnAppInitialized != null)
                     this.OnAppInitialized(this, EventArgs.Empty);
             }
+        }
+
+        private void InitConsole()
+        {
+            //Set streams for Application Console
+            AppConsole.In = new TextConsoleInputStream(_shell.ConsoleWindow.InputTextBox);
+            AppConsole.Out = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
+            AppConsole.Err = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
+            AppConsole.Err.TextColor = System.Drawing.Color.Red;
+
+            AppConsole.DoConfirm += delegate(string title, string text)
+            {
+                return MessageBox.Show(text, title, MessageBoxButtons.YesNo) == DialogResult.Yes;
+            };
+
+            AppConsole.DoAlert += delegate(string title, string text)
+            {
+                MessageBox.Show(text, title);
+            };
         }
 
         private void Application_ApplicationExit(object sender, EventArgs e)
@@ -392,6 +396,18 @@ namespace FdoToolbox.Core
             SpatialConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
             {
                 AppConsole.WriteLine("Connection {0} renamed to {1}", oldName, newName);
+            };
+            DatabaseConnectionManager.ConnectionAdded += delegate(string name)
+            {
+                AppConsole.WriteLine("Database connection added: {0}", name);
+            };
+            DatabaseConnectionManager.ConnectionRemoved += delegate(string name)
+            {
+                AppConsole.WriteLine("Database connection removed: {0}", name);
+            };
+            DatabaseConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
+            {
+                AppConsole.WriteLine("Database connection {0} renamed to {1}", oldName, newName);
             };
         }
 

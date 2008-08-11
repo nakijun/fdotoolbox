@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using FdoToolbox.Core;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox
 {
@@ -32,10 +33,17 @@ namespace FdoToolbox
         [STAThread]
         static void Main()
         {
+            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+            watch.Start();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             HostApplication app = HostApplication.Instance;
             app.Initialize(new FormMain());
+
+            watch.Stop();
+            AppConsole.WriteLine("Application initialized in {0}ms", watch.ElapsedMilliseconds);
+            
             app.Run();
         }
     }
