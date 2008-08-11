@@ -96,6 +96,8 @@
     <Compile Include="Controls\SpatialJoinCtl.Designer.cs">
       <DependentUpon>SpatialJoinCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ETL\IClassNameOverride.cs" />
+    <Compile Include="ETL\OracleClassNameOverride.cs" />
     <Compile Include="ETL\SpatialJoinOptions.cs" />
     <Compile Include="ETL\SpatialJoinTask.cs" />
     <Compile Include="IDbConnectionManager.cs" />

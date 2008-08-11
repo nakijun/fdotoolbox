@@ -100,6 +100,7 @@ namespace FdoToolbox.Core.ETL
             _SrcService = new FeatureService(options.Source.Connection);
             _DestService = new FeatureService(options.Target.Connection);
             this.CopySpatialContextOverride = OverrideFactory.GetCopySpatialContextOverride(options.Target.Connection);
+            this.ClassNameOverride = OverrideFactory.GetClassNameOverride(options.Source.Connection);
         }
 
         /// <summary>
@@ -132,7 +133,18 @@ namespace FdoToolbox.Core.ETL
             get { return _CopySpatialContextOverride; }
             set { _CopySpatialContextOverride = value; }
         }
-	
+
+        private IClassNameOverride _ClassNameOverride;
+
+        /// <summary>
+        /// A custom class name override method. Use this to get the underlying
+        /// class name for certain FDO providers (eg. Oracle)
+        /// </summary>
+        public IClassNameOverride ClassNameOverride
+        {
+            get { return _ClassNameOverride; }
+            set { _ClassNameOverride = value; }
+        }
 
         private ClassCollection _SourceClasses;
         private ClassCopyOptions[] _ClassesToCopy;
@@ -246,10 +258,14 @@ namespace FdoToolbox.Core.ETL
 
                         insert.SetFeatureClassName(copyOpts.TargetClassName);
 
+                        //The class definition inside the reader *may* not always contain
+                        //only the properties we specified, so only cache the ones that
+                        //match the original property list
                         Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
                         for (int i = 0; i < propDefs.Count; i++)
                         {
-                            cachedPropertyNames.Add(i, propDefs[i].Name);
+                            if(Array.IndexOf<string>(propNames, propDefs[i].Name) >= 0)
+                                cachedPropertyNames.Add(i, propDefs[i].Name);
                         }
 
                         //If batch insert size defined, prepare insert command for
@@ -318,7 +334,7 @@ namespace FdoToolbox.Core.ETL
             SendMessage("Bulk Copy: " + total + " features copied in " + watch.ElapsedMilliseconds + "ms");
         }
 
-        private static long GetFeatureCount(IConnection srcConn, ClassCopyOptions copyOpts, Filter theFilter)
+        private long GetFeatureCount(IConnection srcConn, ClassCopyOptions copyOpts, Filter theFilter)
         {
             long count = 0;
             // Try to get the count in this order of precedence:
@@ -330,8 +346,9 @@ namespace FdoToolbox.Core.ETL
             {
                 using (ISQLCommand cmd = srcConn.CreateCommand(CommandType.CommandType_SQLCommand) as ISQLCommand)
                 {
-                    string col = "FeatureCount";
-                    cmd.SQLStatement = string.Format("SELECT COUNT(*) AS {0} FROM {1}", col, copyOpts.ClassName);
+                    string col = "FEATURECOUNT";
+                    string tableName = (this.ClassNameOverride != null) ? this.ClassNameOverride.GetClassName(copyOpts.ClassName) : copyOpts.ClassName;
+                    cmd.SQLStatement = string.Format("SELECT COUNT(*) AS {0} FROM {1}", col, tableName);
                     if(theFilter != null)
                         cmd.SQLStatement += string.Format(" WHERE {0}", theFilter.ToString());
 
@@ -350,7 +367,7 @@ namespace FdoToolbox.Core.ETL
             {
                 using (ISelectAggregates select = srcConn.CreateCommand(CommandType.CommandType_SelectAggregates) as ISelectAggregates)
                 {
-                    string prop = "FeatureCount";
+                    string prop = "FEATURECOUNT";
                     select.SetFeatureClassName(copyOpts.ClassName);
                     if (theFilter != null)
                         select.Filter = theFilter;
