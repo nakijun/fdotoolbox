@@ -21,43 +21,40 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using FdoToolbox.Core.ClientServices;
-using FdoToolbox.Core.IO;
-using FdoToolbox.Core;
 
 namespace FdoToolbox.Tests
 {
-    public abstract class BaseTest
+    [TestFixture]
+    public class ConnectionLoaderTests : BaseTest
     {
-        [TestFixtureSetUp]
-        public void TestSetup()
+        [Test]
+        public void TestBadDbConnectionString()
         {
-            AppConsole.Out = new CmdConsoleOutputStream();
-            AppConsole.Err = new CmdConsoleErrorStream();
-            AppConsole.DoAlert += new AlertHandler(AppConsole_DoAlert);
-            AppConsole.DoConfirm += new ConfirmHandler(AppConsole_DoConfirm);
+            Assert.Fail("Not implemented");
         }
 
-        private IHostApplication _App;
-
-        public IHostApplication App
+        [Test]
+        public void TestBadSpatialConnectionString()
         {
-            get 
-            {
-                if (_App == null)
-                    _App = new MockApplication();
-                return _App; 
-            }
+            Assert.Fail("Not implemented");
         }
 
-        bool AppConsole_DoConfirm(string title, string message)
+        [Test]
+        public void TestBadFdoProvider()
         {
-            return true;
+            Assert.Fail("Not implemented");
         }
 
-        void AppConsole_DoAlert(string title, string message)
+        [Test]
+        public void TestLoadDbConnNameAlreadyExists()
         {
-            Console.WriteLine("[{0}] {1}", title, message);
+            Assert.Fail("Not implemented");
+        }
+
+        [Test]
+        public void TestLoadSpatialConnNameAlreadyExists()
+        {
+            Assert.Fail("Not implemented");
         }
     }
 }

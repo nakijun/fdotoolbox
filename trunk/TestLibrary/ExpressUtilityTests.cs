@@ -28,7 +28,7 @@ using OSGeo.FDO.Schema;
 using FdoToolbox.Core.ClientServices;
 using System.IO;
 
-namespace TestLibrary
+namespace FdoToolbox.Tests
 {
     [Category("FdoToolboxCore")]
     [TestFixture]

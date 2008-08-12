@@ -21,43 +21,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using FdoToolbox.Core.ClientServices;
-using FdoToolbox.Core.IO;
-using FdoToolbox.Core;
 
 namespace FdoToolbox.Tests
 {
-    public abstract class BaseTest
+    [TestFixture]
+    public class PreferenceTest : BaseTest
     {
-        [TestFixtureSetUp]
-        public void TestSetup()
+        [Test]
+        public void TestPersist()
         {
-            AppConsole.Out = new CmdConsoleOutputStream();
-            AppConsole.Err = new CmdConsoleErrorStream();
-            AppConsole.DoAlert += new AlertHandler(AppConsole_DoAlert);
-            AppConsole.DoConfirm += new ConfirmHandler(AppConsole_DoConfirm);
-        }
-
-        private IHostApplication _App;
-
-        public IHostApplication App
-        {
-            get 
-            {
-                if (_App == null)
-                    _App = new MockApplication();
-                return _App; 
-            }
-        }
-
-        bool AppConsole_DoConfirm(string title, string message)
-        {
-            return true;
-        }
-
-        void AppConsole_DoAlert(string title, string message)
-        {
-            Console.WriteLine("[{0}] {1}", title, message);
+            Assert.Fail("Not implemented");
         }
     }
 }

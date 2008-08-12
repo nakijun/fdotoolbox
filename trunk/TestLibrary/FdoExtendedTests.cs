@@ -29,7 +29,7 @@ using OSGeo.FDO.Commands.Schema;
 using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Common;
 
-namespace TestLibrary
+namespace FdoToolbox.Tests
 {
     // Tests features of the FDO API that may not be covered or adequately covered
     // by the FDO test suite. Consider this a testbed for features
