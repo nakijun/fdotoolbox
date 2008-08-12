@@ -8,6 +8,7 @@ using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Forms;
 using System.IO;
 using FdoToolbox.Core.IO;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Core.Modules
 {
@@ -22,6 +23,7 @@ namespace FdoToolbox.Core.Modules
         public const string DB_DATA_PREVIEW = "dbdatapreview";
         public const string DB_LOAD_CONNECTION = "dbloadconn";
         public const string DB_SAVE_CONNECTION = "dbsaveconn";
+        public const string DB_POINT_CONVERT = "dbconverttopoints";
 
         #endregion
 
@@ -127,6 +129,23 @@ namespace FdoToolbox.Core.Modules
                 }
                 HostApplication.Instance.DatabaseConnectionManager.AddConnection(connInfo);
                 AppConsole.WriteLine("Connection loaded from {0}", connDef);
+            }
+        }
+
+        [Command(AdoNetModule.DB_POINT_CONVERT, "Convert to Point Feature Class", ImageResourceName = "shape_handles")]
+        public void ConvertToPoints()
+        {
+            DbConnectionInfo dbConnInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            if (dbConnInfo != null)
+            {
+                string database = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabase();
+                string table = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedTable();
+                DbToPointCopyOptions options = CopyDbToPointsDlg.GetCopyOptions(dbConnInfo, database, table);
+                if (options != null)
+                {
+                    DbToPointCopyTask task = new DbToPointCopyTask(options);
+                    new TaskProgressDlg(task).Run();
+                }
             }
         }
     }

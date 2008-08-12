@@ -63,25 +63,8 @@ namespace FdoToolbox.Core.ETL
     /// <summary>
     /// Task that joins/merges a spatial data source with a non-spatial data source
     /// </summary>
-    public class SpatialJoinTask : ITask, IDisposable
+    public class SpatialJoinTask : TaskBase, IDisposable
     {
-        private string _Name;
-
-        /// <summary>
-        /// The name of the task
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                _Name = value;
-            }
-        }
-
         private SpatialJoinOptions _Options;
 
         /// <summary>
@@ -104,7 +87,7 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// Validates the join task parameters
         /// </summary>
-        public void ValidateTaskParameters()
+        public override void ValidateTaskParameters()
         {
             // The following must be true in order to proceed:
             //
@@ -150,7 +133,7 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// Execute the task
         /// </summary>
-        public void Execute()
+        public override void Execute()
         {
             //TODO: Use data readers on both sides of the join instead of loading
             //the secondary source into a potentially big DataTable. Of course that
@@ -212,21 +195,6 @@ namespace FdoToolbox.Core.ETL
 
             SendMessage(inserted + " features processed");
         }
-
-        private void SendMessage(string msg)
-        {
-            if (this.OnTaskMessage != null)
-                this.OnTaskMessage(msg);
-            if (this.OnLogTaskMessage != null)
-                this.OnLogTaskMessage(msg);
-        }
-
-        private void SendCount(int count)
-        {
-            if (this.OnItemProcessed != null)
-                this.OnItemProcessed(count);
-        }
-
 
         /// <summary>
         /// Constructs the search expression to be used on the secondary table
@@ -612,16 +580,10 @@ namespace FdoToolbox.Core.ETL
             return table;
         }
 
-        public TaskType TaskType
+        public override TaskType TaskType
         {
             get { return TaskType.DbJoin; }
         }
-
-        public event TaskPercentageEventHandler OnItemProcessed;
-
-        public event TaskProgressMessageEventHandler OnTaskMessage;
-
-        public event TaskProgressMessageEventHandler OnLogTaskMessage;
 
         public void Dispose()
         {
@@ -629,7 +591,7 @@ namespace FdoToolbox.Core.ETL
                 _PrimaryClass.Dispose();
         }
 
-        public bool IsCountable
+        public override bool IsCountable
         {
             get { return false; }
         }

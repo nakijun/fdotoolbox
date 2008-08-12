@@ -44,7 +44,35 @@ namespace FdoToolbox.Core.Common
             this.Connection = conn;
             this.Driver = driver;
             _Meta = new MyMeta.dbRoot();
+            _Meta.LanguageMappingFileName = HostApplication.Instance.LanguageMappingFile;
+            _Meta.DbTargetMappingFileName = HostApplication.Instance.DbTargetsFile;
+            _Meta.Language = "C#";
+            _Meta.DbTarget = driver.ToUpper();
             _Meta.Connect(this.Driver, this.Connection.ConnectionString);
+        }
+
+        public MyMeta.IDatabase GetDatabase(string name)
+        {
+            foreach (MyMeta.IDatabase db in _Meta.Databases)
+            {
+                if (db.Name == name)
+                    return db;
+            }
+            return null;
+        }
+
+        public MyMeta.ITable GetTable(string dbName, string tableName)
+        {
+            MyMeta.IDatabase db = GetDatabase(dbName);
+            if (db != null)
+            {
+                foreach (MyMeta.ITable table in db.Tables)
+                {
+                    if (table.Name == tableName)
+                        return table;
+                }
+            }
+            return null;
         }
     }
 }

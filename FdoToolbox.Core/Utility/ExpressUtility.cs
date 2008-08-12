@@ -68,17 +68,15 @@ namespace FdoToolbox.Core
         /// <param name="sdfFile"></param>
         public static void ApplySchemaToSDF(string schemaFile, string sdfFile)
         {
-            try
+            IConnection conn = CreateSDFConnection(sdfFile, false);
+            conn.Open();
+            using (conn)
             {
-                IConnection conn = CreateSDFConnection(sdfFile, false);
-                conn.Open();
-                FeatureService service = new FeatureService(conn);
-                service.LoadSchemasFromXml(schemaFile);
-            }
-            catch (OSGeo.FDO.Common.Exception ex)
-            {
-                AppConsole.WriteLine(ex.Message);
-                AppConsole.WriteException(ex);
+                using (FeatureService service = new FeatureService(conn))
+                {
+                    service.LoadSchemasFromXml(schemaFile);
+                }
+                conn.Close();
             }
         }
 
@@ -87,44 +85,44 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="selectedSchema"></param>
         /// <param name="sdfFile"></param>
-        public static void ApplySchemaToNewSDF(FeatureSchema selectedSchema, string sdfFile)
+        public static IConnection ApplySchemaToNewSDF(FeatureSchema selectedSchema, string sdfFile)
         {
-            try
-            {
-                if (ExpressUtility.CreateSDF(sdfFile))
-                {   
-                    IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
+            if (ExpressUtility.CreateSDF(sdfFile))
+            {   
+                IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
+
+                try
+                {
                     conn.Open();
                     FeatureService service = new FeatureService(conn);
                     service.ApplySchema(FeatureService.CloneSchema(selectedSchema));
 
-                    if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
-                    {
-                        string name = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
-                        name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
-                        CoreModule.AddConnection(conn, name);
-                    }
-                    else
-                    {
-                        conn.Dispose();
-                    }
+                    return conn;
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new Exception("Unable to create SDF file at " + sdfFile);
+                    conn.Dispose();
+                    throw ex;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                AppConsole.Alert("Error", ex.Message);
-                AppConsole.WriteException(ex);
+                throw new Exception("Unable to create SDF file at " + sdfFile);
             }
         }
 
         public static bool CreateSDF(string fileName)
         {
-            if (System.IO.File.Exists(fileName))
-                System.IO.File.Delete(fileName);
+            try
+            {
+                if (System.IO.File.Exists(fileName))
+                    System.IO.File.Delete(fileName);
+            }
+            catch (System.IO.IOException ex)
+            {
+                AppConsole.WriteException(ex);
+                return false;
+            }
             bool result = false;
             IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SDF");
             using (conn)

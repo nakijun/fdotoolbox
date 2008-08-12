@@ -96,10 +96,19 @@
     <Compile Include="Controls\SpatialJoinCtl.Designer.cs">
       <DependentUpon>SpatialJoinCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ETL\DbToPointCopyOptions.cs" />
+    <Compile Include="ETL\DbToPointCopyTask.cs" />
     <Compile Include="ETL\IClassNameOverride.cs" />
     <Compile Include="ETL\OracleClassNameOverride.cs" />
     <Compile Include="ETL\SpatialJoinOptions.cs" />
     <Compile Include="ETL\SpatialJoinTask.cs" />
+    <Compile Include="ETL\TaskBase.cs" />
+    <Compile Include="Forms\CopyDbToPointsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CopyDbToPointsDlg.Designer.cs">
+      <DependentUpon>CopyDbToPointsDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="IDbConnectionManager.cs" />
     <Compile Include="IO\DbConnLoader.cs" />
     <Compile Include="Modules\AdoNetModule.cs" />
@@ -370,6 +379,8 @@
     <Content Include="OEMenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\DbTargets.xml" />
+    <Content Include="Resources\Languages.xml" />
     <None Include="Resources\database_edit.png" />
     <None Include="Resources\application_side_boxes.png" />
     <None Include="Resources\application_xp_terminal.png" />
@@ -508,6 +519,10 @@
     <EmbeddedResource Include="Forms\CoordinateSystemPicker.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CoordinateSystemPicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CopyDbToPointsDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CopyDbToPointsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CSInfoDlg.resx">
       <SubType>Designer</SubType>

@@ -42,7 +42,7 @@ namespace FdoToolbox.Core.Forms
         {
             _Task = task;
             progressBar.Style = (_Task.IsCountable) ? ProgressBarStyle.Continuous : ProgressBarStyle.Marquee;
-            this.Text = (task.TaskType == TaskType.BulkCopy) ? "Bulk Copy in progress" : "Database join in progress";
+            this.Text = (task.TaskType == TaskType.SpatialBulkCopy) ? "Bulk Copy in progress" : "Database join in progress";
             _Task.OnTaskMessage += new TaskProgressMessageEventHandler(OnTaskMessage);
             _Task.OnItemProcessed += new TaskPercentageEventHandler(OnItemProcessed);
             _Task.OnLogTaskMessage += new TaskProgressMessageEventHandler(OnLogTaskMessage);

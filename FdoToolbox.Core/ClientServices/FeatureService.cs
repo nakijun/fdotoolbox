@@ -49,6 +49,8 @@ namespace FdoToolbox.Core.ClientServices
         /// <param name="conn"></param>
         public FeatureService(IConnection conn)
         {
+            if (conn.ConnectionState != ConnectionState.ConnectionState_Open)
+                throw new FeatureServiceException("Connection must be open");
             _conn = conn;
             _GeomFactory = new FgfGeometryFactory();
         }
@@ -112,6 +114,9 @@ namespace FdoToolbox.Core.ClientServices
         /// <returns></returns>
         public static FeatureSchema CloneSchema(FeatureSchema fs)
         {
+            if (fs == null)
+                throw new ArgumentNullException("fs");
+
             FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
             using (IoMemoryStream stream = new IoMemoryStream())
             {
@@ -631,6 +636,11 @@ namespace FdoToolbox.Core.ClientServices
                 supported = (insert.BatchParameterValues != null);
             }
             return supported;
+        }
+
+        public T CreateCommand<T>(OSGeo.FDO.Commands.CommandType commandType) where T : OSGeo.FDO.Commands.ICommand
+        {
+            return (T)_conn.CreateCommand(commandType);
         }
     }
 }

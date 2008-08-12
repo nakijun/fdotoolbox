@@ -81,7 +81,7 @@ using OSGeo.FDO.Commands.SQL;
 #endregion
 namespace FdoToolbox.Core.ETL
 {
-    public class SpatialBulkCopyTask : ITask
+    public class SpatialBulkCopyTask : TaskBase
     {
         private SpatialBulkCopyOptions _Options;
 
@@ -95,7 +95,7 @@ namespace FdoToolbox.Core.ETL
         /// <param name="options"></param>
         public SpatialBulkCopyTask(string name, SpatialBulkCopyOptions options)
         {
-            _Name = name;
+            this.Name = name;
             _Options = options;
             _SrcService = new FeatureService(options.Source.Connection);
             _DestService = new FeatureService(options.Target.Connection);
@@ -109,17 +109,6 @@ namespace FdoToolbox.Core.ETL
         public SpatialBulkCopyOptions Options
         {
             get { return _Options; }
-        }
-
-        private string _Name;
-
-        /// <summary>
-        /// The name of the task
-        /// </summary>
-        public string Name
-        {
-            get { return _Name; }
-            set { _Name = value; }
         }
 
         private ICopySpatialContextOverride _CopySpatialContextOverride;
@@ -153,7 +142,7 @@ namespace FdoToolbox.Core.ETL
         /// Validate the task parameters. Any exceptions thrown should
         /// prevent execution.
         /// </summary>
-        public void ValidateTaskParameters()
+        public override void ValidateTaskParameters()
         {
             IConnection srcConn = _Options.Source.Connection;
             IConnection destConn = _Options.Target.Connection;
@@ -164,7 +153,7 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// Execute the task. Must validate the task first before executing.
         /// </summary>
-        public void Execute()
+        public override void Execute()
         {
             Stopwatch watch = new Stopwatch();
             watch.Start();
@@ -780,32 +769,12 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// The type of task (BulkCopy)
         /// </summary>
-        public TaskType TaskType
+        public override TaskType TaskType
         {
-            get { return TaskType.BulkCopy; }
+            get { return TaskType.SpatialBulkCopy; }
         }
 
-        private void SendMessage(string msg)
-        {
-            if (this.OnTaskMessage != null)
-                this.OnTaskMessage(msg);
-            if (this.OnLogTaskMessage != null)
-                this.OnLogTaskMessage(msg);
-        }
-
-        private void SendCount(int count)
-        {
-            if (this.OnItemProcessed != null)
-                this.OnItemProcessed(count);
-        }
-
-        public event TaskPercentageEventHandler OnItemProcessed;
-
-        public event TaskProgressMessageEventHandler OnTaskMessage;
-       
-        public event TaskProgressMessageEventHandler OnLogTaskMessage;
-
-        public bool IsCountable
+        public override bool IsCountable
         {
             get { return true; }
         }

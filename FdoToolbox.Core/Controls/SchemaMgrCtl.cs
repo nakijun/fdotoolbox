@@ -261,8 +261,28 @@ namespace FdoToolbox.Core.Controls
             if (selectedSchema != null)
             {
                 string sdfFile = HostApplication.Instance.SaveFile("Save schema to SDF", "SDF File (*.sdf)|*.sdf");
-                if(sdfFile != null)
-                    ExpressUtility.ApplySchemaToNewSDF(selectedSchema, sdfFile);
+                if (sdfFile != null)
+                {
+                    try
+                    {
+                        IConnection conn = ExpressUtility.ApplySchemaToNewSDF(selectedSchema, sdfFile);
+                        if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
+                        {
+                            string name = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
+                            name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
+                            CoreModule.AddConnection(conn, name);
+                        }
+                        else
+                        {
+                            conn.Dispose();
+                        } 
+                    }
+                    catch (Exception ex)
+                    {
+                        AppConsole.Alert("Error", ex.Message);
+                        AppConsole.WriteException(ex);
+                    }
+                }
             }
         }
 
