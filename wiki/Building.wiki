@@ -10,4 +10,10 @@ To build in debug mode. Run the build_debug.bat file, this will also run copy_th
 
 To build in release mode. Run the build_release.bat file, this will also run copy_thirdparty_release.bat which will copy the prerequisite libraries. The output directory will be "out\Release"
 
+To build the unit tests. Run the build_test.bat file, this will also run copy_thirdparty_test.bat which will copy the prerequisite libraries. The output directory will be "out\Test". To run the unit tests, type:
+
+nunit-console.exe TestLibrary.dll
+
+or load and run TestLibrary.dll in the NUnit GUI application.
+
 Run the clean.bat to delete the output directory and any intermediate files created during the build process.
