@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using FdoToolbox.Core;
 using WeifenLuo.WinFormsUI.Docking;
 using FdoToolbox.Core.Controls;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox
 {
@@ -143,7 +144,7 @@ namespace FdoToolbox
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            HostApplication.Instance.Quit();
+            AppGateway.RunningApplication.Quit();
         }
     }
 }

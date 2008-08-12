@@ -78,7 +78,7 @@ namespace FdoToolbox.Core.Controls
 
         protected override void OnLoad(EventArgs e)
         {
-            FeatureService service = HostApplication.Instance.SpatialConnectionManager.CreateService(this.BoundConnection.Name);
+            FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(this.BoundConnection.Name);
             cmbSchema.DataSource = service.DescribeSchema();
             cmbAggSchema.DataSource = service.DescribeSchema();
             SetSelectedClass();

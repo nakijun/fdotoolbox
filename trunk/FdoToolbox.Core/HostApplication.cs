@@ -39,7 +39,7 @@ namespace FdoToolbox.Core
     /// Host Application class/controller. The gateway object to all the
     /// services provided by the application.
     /// </summary>
-    public class HostApplication : BaseApplication
+    internal class HostApplication : BaseApplication, IHostApplication
     {
         private IShell _shell;
         private IModuleMgr _moduleMgr;
@@ -48,8 +48,7 @@ namespace FdoToolbox.Core
         private IDbConnectionManager _dbConnMgr;
         private ISpatialConnectionBoundTabManager _TabManager;
         private ICoordinateSystemCatalog _CsCatalog;
-        private static HostApplication _Instance;
-
+        
         private HostApplication() : base()
         {
             InitializeDialogs();
@@ -60,6 +59,20 @@ namespace FdoToolbox.Core
             _moduleMgr = new ModuleMgr();
             _taskMgr = new TaskManager();
             _MenuStateMgr = new MenuStateMgr();
+        }
+
+        private static HostApplication _Instance;
+
+        internal static HostApplication Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                {
+                    _Instance = new HostApplication();
+                }
+                return _Instance;
+            }
         }
 
         /// <summary>
@@ -308,16 +321,6 @@ namespace FdoToolbox.Core
                 (_connMgr as IDisposable).Dispose();
 
             base.Cleanup();
-        }
-
-        public static HostApplication Instance
-        {
-            get
-            {
-                if (_Instance == null)
-                    _Instance = new HostApplication();
-                return _Instance;
-            }
         }
 
         /// <summary>

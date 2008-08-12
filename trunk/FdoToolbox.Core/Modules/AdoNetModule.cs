@@ -45,21 +45,21 @@ namespace FdoToolbox.Core.Modules
         public void Connect()
         {
             DatabaseConnectCtl ctl = new DatabaseConnectCtl();
-            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(AdoNetModule.DB_REFRESH_CONNECTION, "Refresh connection", ImageResourceName = "page_refresh")]
         public void RefreshConnection()
         {
-            DbConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DbConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
-                HostApplication.Instance.Shell.ObjectExplorer.RefreshDatabaseConnection(connInfo.Name);
+                AppGateway.RunningApplication.Shell.ObjectExplorer.RefreshDatabaseConnection(connInfo.Name);
         }
 
         [Command(AdoNetModule.DB_RENAME_CONNECTION, "Rename connection")]
         public void RenameConnection()
         {
-            DbConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DbConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
             {
                 string oldName = connInfo.Name;
@@ -67,8 +67,8 @@ namespace FdoToolbox.Core.Modules
                 if (!string.IsNullOrEmpty(newName) && oldName != newName)
                 {
                     string reason = string.Empty;
-                    if (HostApplication.Instance.DatabaseConnectionManager.CanRenameConnection(oldName, newName, ref reason))
-                        HostApplication.Instance.DatabaseConnectionManager.RenameConnection(oldName, newName);
+                    if (AppGateway.RunningApplication.DatabaseConnectionManager.CanRenameConnection(oldName, newName, ref reason))
+                        AppGateway.RunningApplication.DatabaseConnectionManager.RenameConnection(oldName, newName);
                     else
                         AppConsole.Alert("Error", reason);
                 }
@@ -78,31 +78,31 @@ namespace FdoToolbox.Core.Modules
         [Command(AdoNetModule.DB_REMOVE_CONNECTION, "Remove connection", ImageResourceName = "cross")]
         public void RemoveConnection()
         { 
-            DbConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DbConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
-                HostApplication.Instance.DatabaseConnectionManager.RemoveConnection(connInfo.Name);
+                AppGateway.RunningApplication.DatabaseConnectionManager.RemoveConnection(connInfo.Name);
         }
 
         [Command(AdoNetModule.DB_DATA_PREVIEW, "Data Preview", ImageResourceName = "zoom")]
         public void DataPreview()
         {
             //TODO: Don't create directly
-            DbConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DbConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
             {
                 string key = "PREVIEW";
                 BaseDocumentCtl ctl = new DbDataPreviewCtl(connInfo, key);
-                HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+                AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
             }
         }
 
         [Command(AdoNetModule.DB_SAVE_CONNECTION, "Save Connection", ImageResourceName = "disk")]
         public void SaveConnection()
         {
-            DbConnectionInfo connInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DbConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
             {
-                string connDef = HostApplication.Instance.SaveFile("Save connection information", "Connection information (*.dbconn)|*.dbconn");
+                string connDef = AppGateway.RunningApplication.SaveFile("Save connection information", "Connection information (*.dbconn)|*.dbconn");
                 if (connDef != null)
                 {
                     if (File.Exists(connDef))
@@ -116,18 +116,18 @@ namespace FdoToolbox.Core.Modules
         [Command(AdoNetModule.DB_LOAD_CONNECTION, "Load Connection", ImageResourceName = "folder")]
         public void LoadConnection()
         {
-            string connDef = HostApplication.Instance.OpenFile("Load connection information", "Connection information (*.dbconn)|*.dbconn");
+            string connDef = AppGateway.RunningApplication.OpenFile("Load connection information", "Connection information (*.dbconn)|*.dbconn");
             if (File.Exists(connDef))
             {
                 DbConnectionInfo connInfo = DbConnLoader.LoadConnection(connDef);
-                DbConnectionInfo conn = HostApplication.Instance.DatabaseConnectionManager.GetConnection(connInfo.Name);
+                DbConnectionInfo conn = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(connInfo.Name);
                 if (conn != null)
                 {
                     AppConsole.Write("A connection named {0} already exists. ", connInfo.Name);
-                    connInfo.Name = HostApplication.Instance.DatabaseConnectionManager.CreateUniqueName();
+                    connInfo.Name = AppGateway.RunningApplication.DatabaseConnectionManager.CreateUniqueName();
                     AppConsole.WriteLine("Attempting to load as {0} instead", connInfo.Name);
                 }
-                HostApplication.Instance.DatabaseConnectionManager.AddConnection(connInfo);
+                AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(connInfo);
                 AppConsole.WriteLine("Connection loaded from {0}", connDef);
             }
         }
@@ -135,11 +135,11 @@ namespace FdoToolbox.Core.Modules
         [Command(AdoNetModule.DB_POINT_CONVERT, "Convert to Point Feature Class", ImageResourceName = "shape_handles")]
         public void ConvertToPoints()
         {
-            DbConnectionInfo dbConnInfo = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DbConnectionInfo dbConnInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (dbConnInfo != null)
             {
-                string database = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedDatabase();
-                string table = HostApplication.Instance.Shell.ObjectExplorer.GetSelectedTable();
+                string database = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabase();
+                string table = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedTable();
                 DbToPointCopyOptions options = CopyDbToPointsDlg.GetCopyOptions(dbConnInfo, database, table);
                 if (options != null)
                 {

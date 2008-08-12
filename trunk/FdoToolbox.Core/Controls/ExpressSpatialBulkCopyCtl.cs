@@ -41,8 +41,8 @@ namespace FdoToolbox.Core.Controls
         {
             InitializeComponent();
             this.Title = "Express Bulk Copy";
-            openFileDialog.InitialDirectory = HostApplication.Instance.AppPath;
-            saveFileDialog.InitialDirectory = HostApplication.Instance.AppPath;
+            openFileDialog.InitialDirectory = AppGateway.RunningApplication.AppPath;
+            saveFileDialog.InitialDirectory = AppGateway.RunningApplication.AppPath;
         }
 
         public ExpressSpatialBulkCopyCtl(ExpressProvider source, ExpressProvider target)

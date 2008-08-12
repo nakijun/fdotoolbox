@@ -39,7 +39,7 @@ namespace FdoToolbox.Core.ClientServices
 
         public CoordSysCatalog()
         {
-            dbpath = Path.Combine(HostApplication.Instance.AppPath, DB_FILE);
+            dbpath = Path.Combine(AppGateway.RunningApplication.AppPath, DB_FILE);
             _ConnectionString = string.Format("Data Source={0};Version=3;Compress=True;FailIfMissing=true", dbpath);
         }
 

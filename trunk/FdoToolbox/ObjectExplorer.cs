@@ -43,16 +43,16 @@ namespace FdoToolbox
         public ObjectExplorer()
         {
             InitializeComponent();
-            HostApplication.Instance.ModuleManager.ModuleLoaded += new ModuleEventHandler(OnModuleLoaded);
-            HostApplication.Instance.ModuleManager.ModuleUnloaded += new ModuleEventHandler(OnModuleUnloaded);
-            HostApplication.Instance.SpatialConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnSpatialConnectionAdded);
-            HostApplication.Instance.SpatialConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnSpatialConnectionRemoved);
-            HostApplication.Instance.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnSpatialConnectionRenamed);
-            HostApplication.Instance.DatabaseConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnDatabaseConnectionAdded);
-            HostApplication.Instance.DatabaseConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnDatabaseConnectionRemoved);
-            HostApplication.Instance.DatabaseConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnDatabaseConnectionRenamed);
-            HostApplication.Instance.TaskManager.TaskAdded += new TaskEventHandler(OnTaskAdded);
-            HostApplication.Instance.TaskManager.TaskRemoved += new TaskEventHandler(OnTaskRemoved);
+            AppGateway.RunningApplication.ModuleManager.ModuleLoaded += new ModuleEventHandler(OnModuleLoaded);
+            AppGateway.RunningApplication.ModuleManager.ModuleUnloaded += new ModuleEventHandler(OnModuleUnloaded);
+            AppGateway.RunningApplication.SpatialConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnSpatialConnectionAdded);
+            AppGateway.RunningApplication.SpatialConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnSpatialConnectionRemoved);
+            AppGateway.RunningApplication.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnSpatialConnectionRenamed);
+            AppGateway.RunningApplication.DatabaseConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnDatabaseConnectionAdded);
+            AppGateway.RunningApplication.DatabaseConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnDatabaseConnectionRemoved);
+            AppGateway.RunningApplication.DatabaseConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnDatabaseConnectionRenamed);
+            AppGateway.RunningApplication.TaskManager.TaskAdded += new TaskEventHandler(OnTaskAdded);
+            AppGateway.RunningApplication.TaskManager.TaskRemoved += new TaskEventHandler(OnTaskRemoved);
         }
 
         void OnDatabaseConnectionRenamed(string oldName, string newName)
@@ -74,7 +74,7 @@ namespace FdoToolbox
 
         void OnDatabaseConnectionAdded(string name)
         {
-            DbConnectionInfo connInfo = HostApplication.Instance.DatabaseConnectionManager.GetConnection(name);
+            DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
             node.ImageIndex = node.SelectedImageIndex = IMG_IDX_CONNECTION;
@@ -203,7 +203,7 @@ namespace FdoToolbox
 
         private void GetSchemaNodes(TreeNode connNode)
         {
-            FeatureService service = HostApplication.Instance.SpatialConnectionManager.CreateService(connNode.Name);
+            FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connNode.Name);
             if (service != null)
             {
                 connNode.ToolTipText = string.Format("Provider: {0}\nConnection String: {1}", service.Connection.ConnectionInfo.ProviderName, service.Connection.ConnectionString);
@@ -346,7 +346,7 @@ namespace FdoToolbox
             else
             {
                 Debug.Assert(node.Parent == GetTasksNode());
-                return HostApplication.Instance.TaskManager.GetTask(node.Text);
+                return AppGateway.RunningApplication.TaskManager.GetTask(node.Text);
             }
         }
 
@@ -360,7 +360,7 @@ namespace FdoToolbox
             else
             {
                 Debug.Assert(node.Parent == GetModulesNode());
-                return HostApplication.Instance.ModuleManager.GetLoadedModule(node.Text);
+                return AppGateway.RunningApplication.ModuleManager.GetLoadedModule(node.Text);
             }
         }
 
@@ -388,7 +388,7 @@ namespace FdoToolbox
             TreeNode node = GetSpatialConnectionsNode().Nodes[name];
             node.Nodes.Clear();
 
-            IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(node.Name);
+            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(node.Name);
             if (conn != null)
             {
                 conn.Close();
@@ -415,7 +415,7 @@ namespace FdoToolbox
                 if (connNode.Parent == GetDatabaseConnectionsNode())
                 {
                     string name = connNode.Name;
-                    DbConnectionInfo connInfo = HostApplication.Instance.DatabaseConnectionManager.GetConnection(connNode.Name);
+                    DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(connNode.Name);
                     if (connInfo != null)
                         return connInfo;
                     else
@@ -442,7 +442,7 @@ namespace FdoToolbox
                 if (connNode.Parent == GetSpatialConnectionsNode())
                 {
                     string name = connNode.Name;
-                    IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(connNode.Name);
+                    IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connNode.Name);
                     if (conn != null)
                         return new SpatialConnectionInfo(name, conn);
                     else
@@ -497,7 +497,7 @@ namespace FdoToolbox
             menuItem.Click += delegate { cmd.Execute(); };
             if (cmdNode.Attributes["displayName"] != null)
                 menuItem.Text = cmdNode.Attributes["displayName"].Value;
-            HostApplication.Instance.MenuStateManager.RegisterMenuItem(cmd.Name, menuItem);
+            AppGateway.RunningApplication.MenuStateManager.RegisterMenuItem(cmd.Name, menuItem);
             return menuItem;
         }
 
@@ -515,7 +515,7 @@ namespace FdoToolbox
                     {
                         case "Command":
                             string cmdName = node.Attributes["name"].Value;
-                            Command cmd = HostApplication.Instance.ModuleManager.GetCommand(cmdName);
+                            Command cmd = AppGateway.RunningApplication.ModuleManager.GetCommand(cmdName);
                             if (cmd != null && (cmd.InvocationType != CommandInvocationType.Console))
                             {
                                 if (tstrip != null)
@@ -615,12 +615,12 @@ namespace FdoToolbox
             SpatialConnectionInfo connInfo = GetSelectedSpatialConnection();
             if (connInfo != null)
             {
-                IModuleMgr modMgr = HostApplication.Instance.ModuleManager;
+                IModuleMgr modMgr = AppGateway.RunningApplication.ModuleManager;
                 ICollection<string> cmdNames = modMgr.GetCommandNames();
                 foreach (string cmd in cmdNames)
                 {
                     bool canExec = modMgr.IsCommandExecutable(cmd, connInfo.Connection);
-                    HostApplication.Instance.MenuStateManager.EnableCommand(cmd, canExec);
+                    AppGateway.RunningApplication.MenuStateManager.EnableCommand(cmd, canExec);
                 }
             }
         }

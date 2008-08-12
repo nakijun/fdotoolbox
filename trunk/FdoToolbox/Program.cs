@@ -38,7 +38,7 @@ namespace FdoToolbox
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            HostApplication app = HostApplication.Instance;
+            IHostApplication app = AppGateway.RunningApplication;
             app.Initialize(new FormMain());
 
             watch.Stop();

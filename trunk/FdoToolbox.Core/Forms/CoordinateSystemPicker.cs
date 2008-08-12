@@ -24,6 +24,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -36,7 +37,7 @@ namespace FdoToolbox.Core.Forms
 
         protected override void OnLoad(EventArgs e)
         {
-            grdProjections.DataSource = HostApplication.Instance.CoordinateSystemCatalog.GetAllProjections();
+            grdProjections.DataSource = AppGateway.RunningApplication.CoordinateSystemCatalog.GetAllProjections();
             base.OnLoad(e);
         }
 

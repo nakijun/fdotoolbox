@@ -19,33 +19,28 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
-using System.Windows.Forms;
-using System.Reflection;
-using FdoToolbox.Core.ClientServices;
 
-namespace FdoToolbox.Core.Forms
+namespace FdoToolbox.Core.ClientServices
 {
-    public partial class AboutDialog : Form
+    /// <summary>
+    /// Application gateway. Use this class to obtain a reference to the 
+    /// running application
+    /// </summary>
+    public sealed class AppGateway
     {
-        public AboutDialog()
-        {
-            InitializeComponent();
-        }
+        private static IHostApplication _AppInstance = null;
 
-        private void AboutDialog_Load(object sender, EventArgs e)
+        public static IHostApplication RunningApplication
         {
-            lblAppVersion.Text = "Version " + AppGateway.RunningApplication.Version;
-            lblProjectUrl.Text = AppGateway.RunningApplication.ProjectUrl;
-            txtAbout.Text = Properties.Resources.APP_ABOUT;
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.OK;
+            get
+            {
+                if (_AppInstance == null)
+                {
+                    _AppInstance = HostApplication.Instance;
+                }
+                return _AppInstance;
+            }
         }
     }
 }
