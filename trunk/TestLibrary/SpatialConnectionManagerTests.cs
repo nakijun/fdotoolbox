@@ -28,6 +28,7 @@ using System.IO;
 
 namespace TestLibrary
 {
+    [Category("FdoToolboxCore")]
     [TestFixture]
     public class SpatialConnectionManagerTests : BaseTest
     {

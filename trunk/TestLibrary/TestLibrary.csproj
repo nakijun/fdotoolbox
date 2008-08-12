@@ -57,6 +57,7 @@
     <Compile Include="ExpressUtilityTests.cs" />
     <Compile Include="FeatureServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FdoExtendedTests.cs" />
     <Compile Include="SpatialConnectionManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
