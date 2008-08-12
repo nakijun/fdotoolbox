@@ -31,13 +31,15 @@ using OSGeo.FDO.Common;
 
 namespace TestLibrary
 {
-    // Tests features of the FDO API that may not be covered
+    // Tests features of the FDO API that may not be covered or adequately covered
     // by the FDO test suite. Consider this a testbed for features
     // of FDO that we want to use in FdoToolbox.
     //
-    // Do not expect these tests to pass. If any do pass, those
-    // APIs being tested are suitable for consumption, otherwise they
-    // simply expose issues of the underlying FDO API that need to be
+    // Do not expect these tests to pass. If any do pass, those APIs being tested 
+    // are suitable for consumption, and the affected tests will be moved to the
+    // FeatureService test fixture.
+    //
+    // Otherwise they simply expose issues of the underlying FDO API that need to be
     // addressed asap.
 
     [Category("RawFdo")]
