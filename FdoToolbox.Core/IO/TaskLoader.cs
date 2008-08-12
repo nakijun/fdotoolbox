@@ -125,9 +125,9 @@ namespace FdoToolbox.Core.IO
                 }
                 else
                 {
-                    HostApplication.Instance.SpatialConnectionManager.AddConnection(priConnInfo.Name, priConnInfo.Connection);
-                    HostApplication.Instance.SpatialConnectionManager.AddConnection(targetConnInfo.Name, targetConnInfo.Connection);
-                    HostApplication.Instance.DatabaseConnectionManager.AddConnection(secConnInfo);
+                    AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(priConnInfo.Name, priConnInfo.Connection);
+                    AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(targetConnInfo.Name, targetConnInfo.Connection);
+                    AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(secConnInfo);
                 }
 
                 SpatialJoinOptions options = new SpatialJoinOptions();
@@ -162,9 +162,9 @@ namespace FdoToolbox.Core.IO
                 AppConsole.WriteException(ex);
                 if (!consoleMode)
                 {
-                    HostApplication.Instance.SpatialConnectionManager.RemoveConnection(priName);
-                    HostApplication.Instance.SpatialConnectionManager.RemoveConnection(targetName);
-                    HostApplication.Instance.DatabaseConnectionManager.RemoveConnection(secName);
+                    AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(priName);
+                    AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(targetName);
+                    AppGateway.RunningApplication.DatabaseConnectionManager.RemoveConnection(secName);
                 }
                 return null;
             }
@@ -232,8 +232,8 @@ namespace FdoToolbox.Core.IO
         /// <returns>The Bulk Copy task, null if loading failed</returns>
         private static SpatialBulkCopyTask LoadBulkCopy(string configFile, bool consoleMode)
         {
-            string srcName = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
-            string destName = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
+            string srcName = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
+            string destName = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
             
             try
             {
@@ -260,7 +260,7 @@ namespace FdoToolbox.Core.IO
                 }
                 else
                 {
-                    ISpatialConnectionMgr mgr = HostApplication.Instance.SpatialConnectionManager;
+                    ISpatialConnectionMgr mgr = AppGateway.RunningApplication.SpatialConnectionManager;
                     mgr.AddConnection(srcName, srcConn);
                     mgr.AddConnection(destName, destConn);
                 }
@@ -317,8 +317,8 @@ namespace FdoToolbox.Core.IO
                 AppConsole.WriteException(ex);
                 if (!consoleMode)
                 {
-                    HostApplication.Instance.SpatialConnectionManager.RemoveConnection(srcName);
-                    HostApplication.Instance.SpatialConnectionManager.RemoveConnection(destName);
+                    AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(srcName);
+                    AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(destName);
                 }
                 return null;
             }

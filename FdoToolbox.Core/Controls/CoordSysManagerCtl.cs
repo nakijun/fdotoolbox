@@ -39,7 +39,7 @@ namespace FdoToolbox.Core.Controls
 
         protected override void OnLoad(EventArgs e)
         {
-            grdProjections.DataSource = HostApplication.Instance.CoordinateSystemCatalog.GetAllProjections();
+            grdProjections.DataSource = AppGateway.RunningApplication.CoordinateSystemCatalog.GetAllProjections();
             base.OnLoad(e);
         }
 
@@ -61,7 +61,7 @@ namespace FdoToolbox.Core.Controls
             CoordinateSystem cs = CSInfoDlg.NewCoordinateSystem();
             if (cs != null)
             {
-                HostApplication.Instance.CoordinateSystemCatalog.AddProjection(cs);
+                AppGateway.RunningApplication.CoordinateSystemCatalog.AddProjection(cs);
                 AppConsole.Alert("Added", "Coordinate System Added");
                 CheckButtonStatus();
             }
@@ -75,7 +75,7 @@ namespace FdoToolbox.Core.Controls
                 string oldName = cs.Name;
                 if(CSInfoDlg.EditCooridinateSystem(cs))
                 {
-                    if (HostApplication.Instance.CoordinateSystemCatalog.UpdateProjection(cs, oldName))
+                    if (AppGateway.RunningApplication.CoordinateSystemCatalog.UpdateProjection(cs, oldName))
                     {
                         AppConsole.Alert("Updated", "Coordinate System Updated");
                         CheckButtonStatus();
@@ -89,7 +89,7 @@ namespace FdoToolbox.Core.Controls
             CoordinateSystem cs = this.SelectedCS;
             if (cs != null)
             {
-                if (HostApplication.Instance.CoordinateSystemCatalog.DeleteProjection(cs))
+                if (AppGateway.RunningApplication.CoordinateSystemCatalog.DeleteProjection(cs))
                 {
                     AppConsole.Alert("Deleted", "Coordinate System Deleted");
                     CheckButtonStatus();

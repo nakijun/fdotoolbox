@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientServices\AppGateway.cs" />
     <Compile Include="ClientServices\AppSession.cs" />
     <Compile Include="Configuration\BulkCopyTask.cs" />
     <Compile Include="Configuration\DbConnection.cs" />
@@ -110,6 +111,7 @@
       <DependentUpon>CopyDbToPointsDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="IDbConnectionManager.cs" />
+    <Compile Include="IHostApplication.cs" />
     <Compile Include="IO\DbConnLoader.cs" />
     <Compile Include="Modules\AdoNetModule.cs" />
     <Compile Include="ClientServices\AppConsole.cs" />

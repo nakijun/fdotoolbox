@@ -38,13 +38,13 @@ namespace FdoToolbox.Core.Controls
             string name = txtName.Text;
             string connStr = txtConnStr.Text;
             IDbConnection conn = new OleDbConnection(connStr);
-            if (HostApplication.Instance.DatabaseConnectionManager.GetConnection(name) == null)
+            if (AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name) == null)
             {
                 btnConnect.Enabled = false;
                 try
                 {
                     DbConnectionInfo connInfo = new DbConnectionInfo(name, conn, driver);
-                    HostApplication.Instance.DatabaseConnectionManager.AddConnection(connInfo);
+                    AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(connInfo);
                 }
                 catch (Exception ex)
                 {

@@ -24,6 +24,7 @@ using System.Reflection;
 using System.IO;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.Commands;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Modules
 {
@@ -169,13 +170,13 @@ namespace FdoToolbox.Core.Modules
             string asmPath = assemblyFile;
             //Is this thing rooted? :-)
             if (!System.IO.Path.IsPathRooted(assemblyFile))
-                asmPath = System.IO.Path.Combine(HostApplication.Instance.AppPath, asmPath);
+                asmPath = System.IO.Path.Combine(AppGateway.RunningApplication.AppPath, asmPath);
             Assembly asm = Assembly.LoadFile(asmPath);
             LoadExtension(asm);
 
             string uiExtensionFile = assemblyFile.Replace(".dll", ".UIExtension");
             if (File.Exists(uiExtensionFile))
-                HostApplication.Instance.ExtendUI(uiExtensionFile);
+                AppGateway.RunningApplication.ExtendUI(uiExtensionFile);
         }
 
         public bool IsCommandExecutable(string cmdName, IConnection conn)

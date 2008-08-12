@@ -77,11 +77,11 @@ namespace FdoToolbox.Core.Modules
         public void SdfConnect()
         {
             IConnection conn = null;
-            string sdfFile = HostApplication.Instance.OpenFile("Create SDF connection", "SDF Files (*.sdf)|*.sdf");
+            string sdfFile = AppGateway.RunningApplication.OpenFile("Create SDF connection", "SDF Files (*.sdf)|*.sdf");
             if(File.Exists(sdfFile))
             {
                 conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
-                ISpatialConnectionMgr mgr = HostApplication.Instance.SpatialConnectionManager;
+                ISpatialConnectionMgr mgr = AppGateway.RunningApplication.SpatialConnectionManager;
                 string name = mgr.CreateUniqueName();
                 name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                 CoreModule.AddConnection(conn, name);
@@ -92,11 +92,11 @@ namespace FdoToolbox.Core.Modules
         public void ShpConnect()
         {
             IConnection conn = null;            
-            string shpFile = HostApplication.Instance.OpenFile("Create SHP connection", "SHP Files (*.shp)|*.shp");
+            string shpFile = AppGateway.RunningApplication.OpenFile("Create SHP connection", "SHP Files (*.shp)|*.shp");
             if(File.Exists(shpFile))
             {
                 conn = ExpressUtility.CreateSHPConnection(shpFile);
-                ISpatialConnectionMgr mgr = HostApplication.Instance.SpatialConnectionManager;
+                ISpatialConnectionMgr mgr = AppGateway.RunningApplication.SpatialConnectionManager;
                 string name = mgr.CreateUniqueName();
                 name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                 CoreModule.AddConnection(conn, name);
@@ -106,14 +106,14 @@ namespace FdoToolbox.Core.Modules
         [Command(ExpressModule.CMD_SDFCREATE, "Create SDF", Description = "Creates a new SDF file")]
         public void CreateSDF()
         {
-            string sdfFile = HostApplication.Instance.SaveFile("Create SDF", "SDF File (*.sdf)|*.sdf");
+            string sdfFile = AppGateway.RunningApplication.SaveFile("Create SDF", "SDF File (*.sdf)|*.sdf");
             if (sdfFile != null)
             {
                 if (ExpressUtility.CreateSDF(sdfFile))
                 {
                     if (AppConsole.Confirm("Create SDF", "SDF File created at " + sdfFile + ". Create a connection to it?"))
                     {
-                        string name = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
+                        string name = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
                         name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
                         IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
                         CoreModule.AddConnection(conn, name);
@@ -136,7 +136,7 @@ namespace FdoToolbox.Core.Modules
             //Because of this, we have to force the user to *explicity*
             //create a Class Definition up-front as part of the process.
 
-            string shpFile = HostApplication.Instance.SaveFile("Create SHP file", "SHP Files (*.shp)|*.shp");
+            string shpFile = AppGateway.RunningApplication.SaveFile("Create SHP file", "SHP Files (*.shp)|*.shp");
             if(shpFile != null)
             {
                 //If file exists, the user would've been asked to
@@ -168,7 +168,7 @@ namespace FdoToolbox.Core.Modules
                         service.ApplySchema(schema);
                         if (AppConsole.Confirm("Create SHP", "New SHP file created at: " + shpFile + ". Create a connection?"))
                         {
-                            string name = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
+                            string name = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
                             name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
                             CoreModule.AddConnection(conn, name);
                             return; //Save this connection, don't dispose
@@ -185,13 +185,13 @@ namespace FdoToolbox.Core.Modules
         {
             IConnection conn = null;
             FolderBrowserDialog diag = new FolderBrowserDialog();
-            diag.SelectedPath = HostApplication.Instance.AppPath;
+            diag.SelectedPath = AppGateway.RunningApplication.AppPath;
             diag.Description = "Select the directory that contains the SHP files";
             diag.ShowNewFolderButton = false;
             if (diag.ShowDialog() == DialogResult.OK)
             {
                 conn = ExpressUtility.CreateSHPConnection(diag.SelectedPath);
-                ISpatialConnectionMgr mgr = HostApplication.Instance.SpatialConnectionManager;
+                ISpatialConnectionMgr mgr = AppGateway.RunningApplication.SpatialConnectionManager;
                 string name = mgr.CreateUniqueName();
                 name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                 CoreModule.AddConnection(conn, name);
@@ -202,28 +202,28 @@ namespace FdoToolbox.Core.Modules
         public void SdfToSdf()
         {
             ExpressSpatialBulkCopyCtl ctl = new ExpressSpatialBulkCopyCtl(ExpressProvider.SDF, ExpressProvider.SDF);
-            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(ExpressModule.CMD_SHP2SHP, "SHP to SHP", "Copy feature data from an SHP data source to another SHP data source")]
         public void ShpToShp()
         {
             ExpressSpatialBulkCopyCtl ctl = new ExpressSpatialBulkCopyCtl(ExpressProvider.SHP, ExpressProvider.SHP);
-            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(ExpressModule.CMD_SHP2SDF, "SHP to SDF", "Copy feature data from an SHP data source to an SDF data source")]
         public void ShpToSdf()
         {
             ExpressSpatialBulkCopyCtl ctl = new ExpressSpatialBulkCopyCtl(ExpressProvider.SHP, ExpressProvider.SDF);
-            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(ExpressModule.CMD_SDF2SHP, "SDF to SHP", "Copy feature data from an SDF data source to an SHP data source")]
         public void SdfToShp()
         {
             ExpressSpatialBulkCopyCtl ctl = new ExpressSpatialBulkCopyCtl(ExpressProvider.SDF, ExpressProvider.SHP);
-            HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
+            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
         }
     }
 }

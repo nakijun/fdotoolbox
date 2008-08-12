@@ -24,6 +24,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -52,7 +53,7 @@ namespace FdoToolbox.Core.Forms
                 errorProvider1.SetError(txtWKT, "Required");
                 return;
             }
-            if (HostApplication.Instance.CoordinateSystemCatalog.ProjectionExists(txtName.Text))
+            if (AppGateway.RunningApplication.CoordinateSystemCatalog.ProjectionExists(txtName.Text))
             {
                 errorProvider1.SetError(txtName, "A coordinate system of that name already exists");
                 return;

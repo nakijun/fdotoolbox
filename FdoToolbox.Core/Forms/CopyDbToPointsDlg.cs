@@ -48,7 +48,7 @@ namespace FdoToolbox.Core.Forms
             : this()
         {
             _source = source;
-            cmbTargetConnection.DataSource = new List<string>(HostApplication.Instance.SpatialConnectionManager.GetConnectionNames());
+            cmbTargetConnection.DataSource = new List<string>(AppGateway.RunningApplication.SpatialConnectionManager.GetConnectionNames());
             txtDatabase.Text = db;
             txtTable.Text = table;
             chk3d_CheckedChanged(this, EventArgs.Empty);
@@ -76,7 +76,7 @@ namespace FdoToolbox.Core.Forms
 
         public DbToPointCopyOptions GetCopyOptions()
         {
-            IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
+            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
             SpatialConnectionInfo spConnInfo = new SpatialConnectionInfo(cmbTargetConnection.SelectedItem.ToString(), conn);
             DbToPointCopyOptions options = new DbToPointCopyOptions(_source, spConnInfo);
             options.ClassName = txtClass.Text;
@@ -124,7 +124,7 @@ namespace FdoToolbox.Core.Forms
 
         private void cmbTargetConnection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
+            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
             if (conn != null)
             {
                 using (FeatureService service = new FeatureService(conn))

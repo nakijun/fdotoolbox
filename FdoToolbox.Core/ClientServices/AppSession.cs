@@ -45,7 +45,7 @@ namespace FdoToolbox.Core.ClientServices
         {
             try
             {
-                string path = HostApplication.Instance.Preferences.GetStringPref(PreferenceNames.PREF_STR_SESSION_DIRECTORY);
+                string path = AppGateway.RunningApplication.Preferences.GetStringPref(PreferenceNames.PREF_STR_SESSION_DIRECTORY);
                 if (!Directory.Exists(path))
                     return;
                 if (Directory.GetFiles(path).Length == 0)
@@ -58,7 +58,7 @@ namespace FdoToolbox.Core.ClientServices
                 foreach (string file in taskfiles)
                 {
                     ITask task = TaskLoader.LoadTask(file, false);
-                    HostApplication.Instance.TaskManager.AddTask(task);
+                    AppGateway.RunningApplication.TaskManager.AddTask(task);
                 }
                 //Now process each connection file, but don't use the loader
                 //classes as we don't want to load a connection twice
@@ -69,7 +69,7 @@ namespace FdoToolbox.Core.ClientServices
                     {
                         Connection c = (Connection)connSerializer.Deserialize(reader);
                         //See if it exist already by name
-                        IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(c.Name);
+                        IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(c.Name);
                         if (conn != null)
                         {
                             //Connection we are about to load exists
@@ -84,7 +84,7 @@ namespace FdoToolbox.Core.ClientServices
                         conn = FeatureAccessManager.GetConnectionManager().CreateConnection(c.Provider);
                         conn.ConnectionString = c.ConnectionString;
                         conn.Open();
-                        HostApplication.Instance.SpatialConnectionManager.AddConnection(c.Name, conn);
+                        AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(c.Name, conn);
                     }
                 }
                 //Repeat for database connections
@@ -95,7 +95,7 @@ namespace FdoToolbox.Core.ClientServices
                     {
                         DbConnection c = (DbConnection)dbConnSerializer.Deserialize(reader);
                         //See if it exist already by name
-                        DbConnectionInfo connInfo = HostApplication.Instance.DatabaseConnectionManager.GetConnection(c.Name);
+                        DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(c.Name);
                         if (connInfo != null)
                         {
                             //Connection we are about to load exists
@@ -109,7 +109,7 @@ namespace FdoToolbox.Core.ClientServices
                         //Connection doesn't exist, so add it
                         IDbConnection conn = new OleDbConnection(c.ConnectionString);
                         connInfo = new DbConnectionInfo(c.Name, conn, c.Driver);
-                        HostApplication.Instance.DatabaseConnectionManager.AddConnection(connInfo);
+                        AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(connInfo);
                     }
                 }
             }
@@ -124,7 +124,7 @@ namespace FdoToolbox.Core.ClientServices
         /// </summary>
         public static void Persist()
         {
-            string path = HostApplication.Instance.Preferences.GetStringPref(PreferenceNames.PREF_STR_SESSION_DIRECTORY);
+            string path = AppGateway.RunningApplication.Preferences.GetStringPref(PreferenceNames.PREF_STR_SESSION_DIRECTORY);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             //Clear out existing files
@@ -143,23 +143,23 @@ namespace FdoToolbox.Core.ClientServices
             {
                 File.Delete(file);
             }
-            ICollection<string> fdoConnNames = HostApplication.Instance.SpatialConnectionManager.GetConnectionNames();
-            ICollection<string> dbConnNames = HostApplication.Instance.DatabaseConnectionManager.GetConnectionNames();
-            ICollection<string> taskNames = HostApplication.Instance.TaskManager.TaskNames;
+            ICollection<string> fdoConnNames = AppGateway.RunningApplication.SpatialConnectionManager.GetConnectionNames();
+            ICollection<string> dbConnNames = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnectionNames();
+            ICollection<string> taskNames = AppGateway.RunningApplication.TaskManager.TaskNames;
             foreach (string connName in fdoConnNames)
             {
-                IConnection conn = HostApplication.Instance.SpatialConnectionManager.GetConnection(connName);
+                IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connName);
                 SpatialConnectionInfo connInfo = new SpatialConnectionInfo(connName, conn);
                 SpatialConnLoader.SaveConnection(connInfo, Path.Combine(path, connName + ".conn"));
             }
             foreach (string connName in dbConnNames)
             {
-                DbConnectionInfo connInfo = HostApplication.Instance.DatabaseConnectionManager.GetConnection(connName);
+                DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(connName);
                 DbConnLoader.SaveConnection(connInfo, Path.Combine(path, connName + ".dbconn"));
             }
             foreach (string taskName in taskNames)
             {
-                ITask task = HostApplication.Instance.TaskManager.GetTask(taskName);
+                ITask task = AppGateway.RunningApplication.TaskManager.GetTask(taskName);
                 TaskLoader.SaveTask(task, Path.Combine(path, taskName + ".task"));
             }
         }

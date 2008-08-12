@@ -34,8 +34,8 @@ namespace FdoToolbox.Core.Controls
         {
             _ControlInstances = new Dictionary<Type, List<ISpatialConnectionBoundCtl>>();
             _ControlTypes = new List<Type>();
-            HostApplication.Instance.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(ConnectionManager_ConnectionRenamed);
-            HostApplication.Instance.SpatialConnectionManager.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(ConnectionManager_BeforeConnectionRemove);
+            AppGateway.RunningApplication.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(ConnectionManager_ConnectionRenamed);
+            AppGateway.RunningApplication.SpatialConnectionManager.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(ConnectionManager_BeforeConnectionRemove);
         }
 
         public void RemoveTab(ISpatialConnectionBoundCtl ctl)
@@ -92,7 +92,7 @@ namespace FdoToolbox.Core.Controls
             control = _ControlInstances[tabType].Find(delegate(ISpatialConnectionBoundCtl ctl) { return ctl.GetKey() == key; });
             if (control == null)
             {
-                ISpatialConnectionMgr connMgr = HostApplication.Instance.SpatialConnectionManager;
+                ISpatialConnectionMgr connMgr = AppGateway.RunningApplication.SpatialConnectionManager;
                 
                 //We're expecting a constructor with the following signature:
                 // (ConnectionInfo, string)

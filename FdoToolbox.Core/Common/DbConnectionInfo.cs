@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Common
 {
@@ -44,8 +45,8 @@ namespace FdoToolbox.Core.Common
             this.Connection = conn;
             this.Driver = driver;
             _Meta = new MyMeta.dbRoot();
-            _Meta.LanguageMappingFileName = HostApplication.Instance.LanguageMappingFile;
-            _Meta.DbTargetMappingFileName = HostApplication.Instance.DbTargetsFile;
+            _Meta.LanguageMappingFileName = AppGateway.RunningApplication.LanguageMappingFile;
+            _Meta.DbTargetMappingFileName = AppGateway.RunningApplication.DbTargetsFile;
             _Meta.Language = "C#";
             _Meta.DbTarget = driver.ToUpper();
             _Meta.Connect(this.Driver, this.Connection.ConnectionString);

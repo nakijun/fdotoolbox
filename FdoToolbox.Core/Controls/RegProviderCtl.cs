@@ -37,7 +37,7 @@ namespace FdoToolbox.Core.Controls
         {
             InitializeComponent();
             this.Title = "Register Provider";
-            openFileDialog.InitialDirectory = HostApplication.Instance.AppPath;
+            openFileDialog.InitialDirectory = AppGateway.RunningApplication.AppPath;
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)

@@ -61,7 +61,7 @@ namespace FdoToolbox.Core.Controls
             _bsClasses = new BindingSource();
             _bsSchemas = new BindingSource();
             _BoundConnection = conn;
-            _Service = HostApplication.Instance.SpatialConnectionManager.CreateService(_BoundConnection.Name);
+            _Service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(_BoundConnection.Name);
             _Schemas = _Service.DescribeSchema();
             _bsSchemas.DataSource = _Schemas;
             lstSchemas.DataSource = _bsSchemas;
@@ -244,7 +244,7 @@ namespace FdoToolbox.Core.Controls
             FeatureSchema selectedSchema = lstSchemas.SelectedItem as FeatureSchema;
             if (selectedSchema != null)
             {
-                string fileName = HostApplication.Instance.SaveFile("Save schema to XML", "Feature Schema Definition (*.schema)|*.schema");
+                string fileName = AppGateway.RunningApplication.SaveFile("Save schema to XML", "Feature Schema Definition (*.schema)|*.schema");
                 if(fileName != null)
                 {
                     if (File.Exists(fileName))
@@ -260,7 +260,7 @@ namespace FdoToolbox.Core.Controls
             FeatureSchema selectedSchema = lstSchemas.SelectedItem as FeatureSchema;
             if (selectedSchema != null)
             {
-                string sdfFile = HostApplication.Instance.SaveFile("Save schema to SDF", "SDF File (*.sdf)|*.sdf");
+                string sdfFile = AppGateway.RunningApplication.SaveFile("Save schema to SDF", "SDF File (*.sdf)|*.sdf");
                 if (sdfFile != null)
                 {
                     try
@@ -268,7 +268,7 @@ namespace FdoToolbox.Core.Controls
                         IConnection conn = ExpressUtility.ApplySchemaToNewSDF(selectedSchema, sdfFile);
                         if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
                         {
-                            string name = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
+                            string name = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
                             name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                             CoreModule.AddConnection(conn, name);
                         }

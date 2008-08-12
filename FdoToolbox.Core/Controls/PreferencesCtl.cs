@@ -44,7 +44,7 @@ namespace FdoToolbox.Core.Controls
 
         private void LoadPreferences()
         {
-            IPreferenceDictionary dict = HostApplication.Instance.Preferences;
+            IPreferenceDictionary dict = AppGateway.RunningApplication.Preferences;
             List<string> stringPrefs = dict.GetStringPrefNames();
             List<string> boolPrefs = dict.GetBooleanPrefNames();
             List<string> doublePrefs = dict.GetDoublePrefNames();
@@ -78,7 +78,7 @@ namespace FdoToolbox.Core.Controls
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            IPreferenceDictionary dict = HostApplication.Instance.Preferences;
+            IPreferenceDictionary dict = AppGateway.RunningApplication.Preferences;
             foreach (DataGridViewRow row in grdPreferences.Rows)
             {
                 string name = row.Cells[0].Value.ToString();
