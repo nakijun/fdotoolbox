@@ -28,7 +28,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Expression;
 using System.IO;
 
-namespace TestLibrary
+namespace FdoToolbox.Tests
 {
     [Category("FdoToolboxCore")]
     [TestFixture]
@@ -190,6 +190,18 @@ namespace TestLibrary
                 if (File.Exists("Test.sdf"))
                     File.Delete("Test.sdf");
             }
+        }
+
+        [Test]
+        public void TestCreateSpatialContext()
+        {
+            Assert.Fail("Not implemented");
+        }
+
+        [Test]
+        public void TestUpdateSpatialContext()
+        {
+            Assert.Fail("Not implemented");
         }
     }
 }

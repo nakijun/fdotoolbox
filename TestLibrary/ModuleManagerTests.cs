@@ -21,43 +21,32 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using FdoToolbox.Core.ClientServices;
-using FdoToolbox.Core.IO;
 using FdoToolbox.Core;
 
 namespace FdoToolbox.Tests
 {
-    public abstract class BaseTest
+    [TestFixture]
+    public class ModuleManagerTests : BaseTest
     {
-        [TestFixtureSetUp]
-        public void TestSetup()
+        [Test]
+        [ExpectedException(typeof(ModuleLoadException))]
+        public void TestLoadBadModuleDuplicateCmdName()
         {
-            AppConsole.Out = new CmdConsoleOutputStream();
-            AppConsole.Err = new CmdConsoleErrorStream();
-            AppConsole.DoAlert += new AlertHandler(AppConsole_DoAlert);
-            AppConsole.DoConfirm += new ConfirmHandler(AppConsole_DoConfirm);
+            Assert.Fail("Not implemented");
         }
 
-        private IHostApplication _App;
-
-        public IHostApplication App
+        [Test]
+        [ExpectedException(typeof(ModuleLoadException))]
+        public void TestLoadBadModuleNoSuchInterface()
         {
-            get 
-            {
-                if (_App == null)
-                    _App = new MockApplication();
-                return _App; 
-            }
+            Assert.Fail("Not implemented");
         }
 
-        bool AppConsole_DoConfirm(string title, string message)
+        [Test]
+        [ExpectedException(typeof(ModuleLoadException))]
+        public void TestLoadBadModuleInvalidAssembly()
         {
-            return true;
-        }
-
-        void AppConsole_DoAlert(string title, string message)
-        {
-            Console.WriteLine("[{0}] {1}", title, message);
+            Assert.Fail("Not implemented");
         }
     }
 }

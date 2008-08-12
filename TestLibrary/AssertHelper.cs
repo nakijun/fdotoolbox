@@ -25,7 +25,7 @@ using NUnit.Framework;
 using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Expression;
 
-namespace TestLibrary
+namespace FdoToolbox.Tests
 {
     public sealed class AssertHelper
     {
