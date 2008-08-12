@@ -56,6 +56,13 @@ namespace FdoToolbox.Core
         public SpatialJoinException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    public class DbToSpatialException : Exception
+    {
+        public DbToSpatialException() : base() { }
+        public DbToSpatialException(string msg) : base(msg) { }
+        public DbToSpatialException(string msg, Exception inner) : base(msg, inner) { }
+    }
+
     public class UnsupportedException : Exception
     {
         public UnsupportedException() : base() { }

@@ -5,7 +5,14 @@
 	- XML schemas for configuration files
 	- Bulk Copy: Support for batched insertions. Insert performance is better under batched mode (upwards of 10x faster in Oracle!), but this is not supported by all providers.
 	
+- Other:
+	- Data Preview: Grid pane now resides in a tab.
+
 - Fixes:
+	- MySQL copy spatial context fixes.
+	- Saving schema was saving with the schema name instead of the chosen file name.
+	- Fixed improper property mapping in Bulk Copy Control.
+	- Oracle-specific overrides
 	- Bulk Copy: Improved counting process by avoiding the brute force approach if a faster alternative is available.
 	- Bulk Copy: Fixed improper property/class mapping
 

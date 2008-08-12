@@ -359,7 +359,7 @@ namespace FdoToolbox.Core.Modules
             }
             switch (task.TaskType)
             {
-                case TaskType.BulkCopy:
+                case TaskType.SpatialBulkCopy:
                     {
                         BaseDocumentCtl ctl = new SpatialBulkCopyCtl((SpatialBulkCopyTask)task);
                         HostApplication.Instance.Shell.ShowDocumentWindow(ctl);
@@ -671,8 +671,25 @@ namespace FdoToolbox.Core.Modules
                         if (File.Exists(sdfFile))
                             File.Delete(sdfFile);
 
-                        ExpressUtility.ApplySchemaToNewSDF(schema, sdfFile);
-                        AppConsole.Alert("Save to SDF", "Schema applied to new SDF file: " + sdfFile);
+                        try
+                        {
+                            IConnection conn = ExpressUtility.ApplySchemaToNewSDF(schema, sdfFile);
+                            if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
+                            {
+                                string name = HostApplication.Instance.SpatialConnectionManager.CreateUniqueName();
+                                name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
+                                CoreModule.AddConnection(conn, name);
+                            }
+                            else
+                            {
+                                conn.Dispose();
+                            } 
+                        }
+                        catch (Exception ex)
+                        {
+                            AppConsole.Alert("Error", ex.Message);
+                            AppConsole.WriteException(ex);
+                        }
                     }
                 }
             }

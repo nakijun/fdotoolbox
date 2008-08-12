@@ -28,7 +28,7 @@ namespace FdoToolbox.Core.ClientServices
     /// <summary>
     /// FDO Connection Manager
     /// </summary>
-    public class SpatialConnectionMgr : ISpatialConnectionMgr, IDisposable
+    public class SpatialConnectionMgr : ISpatialConnectionMgr
     {
         private int counter = 0;
 
@@ -116,9 +116,9 @@ namespace FdoToolbox.Core.ClientServices
         public void RenameConnection(string oldName, string newName)
         {
             if (!_ConnectionDict.ContainsKey(oldName))
-                throw new ArgumentException("The connection to be renamed could not be found: " + oldName);
+                throw new FdoConnectionException("The connection to be renamed could not be found: " + oldName);
             if (_ConnectionDict.ContainsKey(newName))
-                throw new ArgumentException("Cannot rename connection " + oldName + " to " + newName + " as a connection of that name already exists");
+                throw new FdoConnectionException("Cannot rename connection " + oldName + " to " + newName + " as a connection of that name already exists");
 
             IConnection conn = _ConnectionDict[oldName];
             _ConnectionDict.Remove(oldName);

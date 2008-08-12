@@ -74,7 +74,7 @@ namespace FdoToolbox.Core.IO
         {
             switch (task.TaskType)
             {
-                case TaskType.BulkCopy:
+                case TaskType.SpatialBulkCopy:
                     SaveBulkCopy((SpatialBulkCopyTask)task, file);
                     break;
                 case TaskType.DbJoin:

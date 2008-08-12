@@ -107,6 +107,8 @@ DO NOT DELETE THIS FILE!!!
 		</SelectedDatabase>
 		<SelectedTable>
 			<Command name="dbdatapreview" />
+			<Separator/>
+			<Command name="dbconverttopoints" />
 		</SelectedTable>
 	</ContextMenus>
 </ObjectExplorer>

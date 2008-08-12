@@ -94,6 +94,13 @@ namespace FdoToolbox.Core
 
                     InitMenus();
                     LoadDefinedModules();
+
+                    if (!File.Exists(this.LanguageMappingFile))
+                        File.WriteAllText(this.LanguageMappingFile, Properties.Resources.Languages);
+
+                    if (!File.Exists(this.DbTargetsFile))
+                        File.WriteAllText(this.DbTargetsFile, Properties.Resources.DbTargets);
+
                     AppSession.Restore();
                     _init = true;
                 }
@@ -545,6 +552,10 @@ namespace FdoToolbox.Core
         /// Project home page
         /// </summary>
         public string ProjectUrl { get { return "http://code.google.com/p/fdotoolbox"; } }
+
+        public string LanguageMappingFile { get { return Path.Combine(this.AppPath, "Languages.xml"); } }
+
+        public string DbTargetsFile { get { return Path.Combine(this.AppPath, "DbTargets.xml"); } }
 
         /// <summary>
         /// The coordinate system catalog

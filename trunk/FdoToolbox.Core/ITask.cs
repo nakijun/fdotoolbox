@@ -58,7 +58,21 @@ namespace FdoToolbox.Core
 
     public enum TaskType
     {
-        BulkCopy,
-        DbJoin
+        /// <summary>
+        /// A Spatial bulk copy task
+        /// </summary>
+        SpatialBulkCopy,
+        /// <summary>
+        /// A database join task
+        /// </summary>
+        DbJoin,
+        /// <summary>
+        /// A non-spatial -> spatial bulk copy task
+        /// </summary>
+        NonSpatialToSpatialBulkCopy,
+        /// <summary>
+        /// A spatial -> non-spatial bulk copy task
+        /// </summary>
+        SpatialToNonSpatialBulkCopy
     }
 }
