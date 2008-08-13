@@ -28,6 +28,7 @@ namespace FdoToolbox.Core.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -52,9 +53,11 @@ namespace FdoToolbox.Core.Forms
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // btnOK
@@ -171,14 +174,17 @@ namespace FdoToolbox.Core.Forms
             // cmbTargetSchema
             // 
             this.cmbTargetSchema.DisplayMember = "Name";
+            this.cmbTargetSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTargetSchema.FormattingEnabled = true;
             this.cmbTargetSchema.Location = new System.Drawing.Point(89, 57);
             this.cmbTargetSchema.Name = "cmbTargetSchema";
             this.cmbTargetSchema.Size = new System.Drawing.Size(121, 21);
             this.cmbTargetSchema.TabIndex = 4;
+            this.cmbTargetSchema.ValueMember = "Name";
             // 
             // cmbTargetConnection
             // 
+            this.cmbTargetConnection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTargetConnection.FormattingEnabled = true;
             this.cmbTargetConnection.Location = new System.Drawing.Point(89, 29);
             this.cmbTargetConnection.Name = "cmbTargetConnection";
@@ -242,6 +248,7 @@ namespace FdoToolbox.Core.Forms
             // 
             // cmbZ
             // 
+            this.cmbZ.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbZ.FormattingEnabled = true;
             this.cmbZ.Location = new System.Drawing.Point(89, 73);
             this.cmbZ.Name = "cmbZ";
@@ -250,6 +257,7 @@ namespace FdoToolbox.Core.Forms
             // 
             // cmbY
             // 
+            this.cmbY.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbY.FormattingEnabled = true;
             this.cmbY.Location = new System.Drawing.Point(89, 46);
             this.cmbY.Name = "cmbY";
@@ -258,6 +266,7 @@ namespace FdoToolbox.Core.Forms
             // 
             // cmbX
             // 
+            this.cmbX.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbX.FormattingEnabled = true;
             this.cmbX.Location = new System.Drawing.Point(89, 19);
             this.cmbX.Name = "cmbX";
@@ -291,6 +300,10 @@ namespace FdoToolbox.Core.Forms
             this.label7.TabIndex = 0;
             this.label7.Text = "X Column";
             // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
+            // 
             // CopyDbToPointsDlg
             // 
             this.AcceptButton = this.btnOK;
@@ -307,13 +320,14 @@ namespace FdoToolbox.Core.Forms
             this.MinimizeBox = false;
             this.Name = "CopyDbToPointsDlg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Convert table";
+            this.Text = "Convert Table";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -344,5 +358,6 @@ namespace FdoToolbox.Core.Forms
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }

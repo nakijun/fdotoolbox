@@ -110,7 +110,7 @@ namespace FdoToolbox.Core.Forms
         }
 #endif
 
-        public void Run()
+        public DialogResult Run()
         {
             bool valid = true;
             try
@@ -127,7 +127,11 @@ namespace FdoToolbox.Core.Forms
             if (valid)
             {
                 bgWorker.RunWorkerAsync();
-                this.ShowDialog();
+                return this.ShowDialog();
+            }
+            else
+            {
+                return DialogResult.Cancel;
             }
         }
 
