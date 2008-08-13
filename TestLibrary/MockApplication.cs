@@ -21,11 +21,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Core;
+using FdoToolbox.Core.ClientServices;
+using System.IO;
 
 namespace FdoToolbox.Tests
 {
-    public class MockApplication : IHostApplication
+    public class MockApplication : BaseApplication, IHostApplication
     {
+        private IShell _shell;
+        //private IModuleMgr _moduleMgr;
+        private ITaskManager _taskMgr;
+        private ISpatialConnectionMgr _connMgr;
+        private IDbConnectionManager _dbConnMgr;
+        //private ISpatialConnectionBoundTabManager _TabManager;
+        private ICoordinateSystemCatalog _CsCatalog;
+
+        public MockApplication()
+        {
+            _dbConnMgr = new DbConnectionManager();
+            _connMgr = new SpatialConnectionMgr();
+        }
+
         public void Initialize(IShell shell)
         {
             throw new Exception("The method or operation is not implemented.");
@@ -65,12 +81,12 @@ namespace FdoToolbox.Tests
 
         public ISpatialConnectionMgr SpatialConnectionManager
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return _connMgr; }
         }
 
         public IDbConnectionManager DatabaseConnectionManager
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return _dbConnMgr; }
         }
 
         public FdoToolbox.Core.Controls.ISpatialConnectionBoundTabManager TabManager
@@ -79,11 +95,6 @@ namespace FdoToolbox.Tests
         }
 
         public ICoordinateSystemCatalog CoordinateSystemCatalog
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
-
-        public FdoToolbox.Core.ClientServices.IPreferenceDictionary Preferences
         {
             get { throw new Exception("The method or operation is not implemented."); }
         }
@@ -103,11 +114,6 @@ namespace FdoToolbox.Tests
             throw new Exception("The method or operation is not implemented.");
         }
 
-        public string AppPath
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
-
         public string Name
         {
             get { throw new Exception("The method or operation is not implemented."); }
@@ -125,12 +131,12 @@ namespace FdoToolbox.Tests
 
         public string LanguageMappingFile
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return Path.Combine(this.AppPath, "Languages.xml"); }
         }
 
         public string DbTargetsFile
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return Path.Combine(this.AppPath, "DbTargets.xml"); }
         }
 
         public string OpenFile(string title, string filter)
@@ -151,6 +157,11 @@ namespace FdoToolbox.Tests
         public string SaveDirectory(string prompt)
         {
             throw new Exception("The method or operation is not implemented.");
+        }
+
+        protected override void CheckFdoPath()
+        {
+            this.Preferences.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, this.AppPath);
         }
     }
 }

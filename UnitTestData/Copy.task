@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BulkCopyTask xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SDF2SDF">
+    <Source name="SDF_Countries">
+        <Provider>OSGeo.SDF.3.3</Provider>
+        <ConnectionString>File=C:\Workspace\FdoToolbox\TestData\SDF\World_Countries.sdf;ReadOnly=FALSE</ConnectionString>
+        <Schema>SHP_Schema</Schema>
+        <SpatialContextList>
+            <Name>Default</Name>
+        </SpatialContextList>
+    </Source>
+    <Target name="Target">
+        <Provider>OSGeo.SDF.3.3</Provider>
+        <ConnectionString>File=C:\Workspace\FdoToolbox\out\Debug\Target.sdf;ReadOnly=FALSE</ConnectionString>
+        <Schema>SHP_Schema</Schema>
+    </Target>
+    <ClassMappings>
+        <Mapping>
+            <DeleteTarget>false</DeleteTarget>
+            <SourceClass>World_Countries</SourceClass>
+            <TargetClass>World_Countries</TargetClass>
+            <Properties>
+                <PropertyMapping>
+                    <SourceProperty>SHPGEOM</SourceProperty>
+                    <TargetProperty>SHPGEOM</TargetProperty>
+                </PropertyMapping>
+                <PropertyMapping>
+                    <SourceProperty>MAPKEY</SourceProperty>
+                    <TargetProperty>MAPKEY</TargetProperty>
+                </PropertyMapping>
+                <PropertyMapping>
+                    <SourceProperty>NAME</SourceProperty>
+                    <TargetProperty>NAME</TargetProperty>
+                </PropertyMapping>
+                <PropertyMapping>
+                    <SourceProperty>KEY</SourceProperty>
+                    <TargetProperty>KEY</TargetProperty>
+                </PropertyMapping>
+            </Properties>
+        </Mapping>
+    </ClassMappings>
+    <BulkCopyOptions>
+        <CopySpatialContexts>true</CopySpatialContexts>
+        <CoerceDataTypes>false</CoerceDataTypes>
+        <GlobalSpatialFilter xsi:nil="true" />
+        <BatchInsertSize>0</BatchInsertSize>
+    </BulkCopyOptions>
+</BulkCopyTask>

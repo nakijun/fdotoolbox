@@ -1,0 +1,5 @@
+<Connection>
+	<Name>foobar</Name>
+	<Provider>Foo.Bar.1.0</Provider>
+	<ConnectionString>File=Foo.sdf</ConnectionString>
+</Connection>

@@ -28,6 +28,135 @@ using System.IO;
 
 namespace FdoToolbox.Tests
 {
+    public class MockSpatialConnection : IConnection
+    {
+        public MockSpatialConnection()
+        {
+            _connstate = ConnectionState.ConnectionState_Closed;
+        }
+
+        public ITransaction BeginTransaction()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public void Close()
+        {
+            _connstate = ConnectionState.ConnectionState_Closed;   
+        }
+
+        public OSGeo.FDO.Connections.Capabilities.ICommandCapabilities CommandCapabilities
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public OSGeo.FDO.Common.Io.IoStream Configuration
+        {
+            set { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public OSGeo.FDO.Connections.Capabilities.IConnectionCapabilities ConnectionCapabilities
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public IConnectionInfo ConnectionInfo
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public ConnectionState ConnectionState
+        {
+            get { return _connstate; }
+        }
+
+        private string _ConnStr;
+
+        public string ConnectionString
+        {
+            get
+            {
+                return _ConnStr;
+            }
+            set
+            {
+                _ConnStr = value;
+            }
+        }
+
+        private int timeout;
+
+        public int ConnectionTimeout
+        {
+            get
+            {
+                return timeout;
+            }
+            set
+            {
+                timeout = value;
+            }
+        }
+
+        public OSGeo.FDO.Commands.ICommand CreateCommand(OSGeo.FDO.Commands.CommandType commandType)
+        {
+            return null;
+        }
+
+        public OSGeo.FDO.Commands.Schema.PhysicalSchemaMapping CreateSchemaMapping()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public OSGeo.FDO.Connections.Capabilities.IExpressionCapabilities ExpressionCapabilities
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public OSGeo.FDO.Connections.Capabilities.IFilterCapabilities FilterCapabilities
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public void Flush()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public OSGeo.FDO.Connections.Capabilities.IGeometryCapabilities GeometryCapabilities
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        private ConnectionState _connstate;
+
+        public ConnectionState Open()
+        {
+            _connstate = ConnectionState.ConnectionState_Open;
+            return _connstate;
+        }
+
+        public OSGeo.FDO.Connections.Capabilities.IRasterCapabilities RasterCapabilities
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public OSGeo.FDO.Connections.Capabilities.ISchemaCapabilities SchemaCapabilities
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public OSGeo.FDO.Connections.Capabilities.ITopologyCapabilities TopologyCapabilities
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public void Dispose()
+        {
+            Close();
+        }
+    }
+
     [Category("FdoToolboxCore")]
     [TestFixture]
     public class SpatialConnectionManagerTests : BaseTest
@@ -36,80 +165,38 @@ namespace FdoToolbox.Tests
         [ExpectedException(typeof(FdoConnectionException))]
         public void TestAddIdenticalConnectionNames()
         {
-            string file1 = "Test1.sdf";
-            string file2 = "Test2.sdf";
+            ISpatialConnectionMgr mgr = new SpatialConnectionMgr();
 
-            try
+            IConnection conn1 = new MockSpatialConnection();
+            IConnection conn2 = new MockSpatialConnection();
+            using (mgr)
             {
-                ISpatialConnectionMgr mgr = new SpatialConnectionMgr();
-
-                bool result = ExpressUtility.CreateSDF(file1);
-                Assert.IsTrue(result);
-
-                result = ExpressUtility.CreateSDF(file2);
-                Assert.IsTrue(result);
-
-                IConnection conn1 = ExpressUtility.CreateSDFConnection(file1, false);
-                IConnection conn2 = ExpressUtility.CreateSDFConnection(file2, false);
-
-                using (mgr)
-                {
-                    mgr.AddConnection("Conn1", conn1);
-                    mgr.AddConnection("Conn1", conn2);
-                }
-            }
-            finally
-            {
-                if (File.Exists(file1))
-                    File.Delete(file1);
-
-                if (File.Exists(file2))
-                    File.Delete(file2);
+                mgr.AddConnection("Conn1", conn1);
+                mgr.AddConnection("Conn1", conn2);
             }
         }
 
         [Test]
         public void TestRenameToVacantConnectionName()
         {
-            string file1 = "Test1.sdf";
-            string file2 = "Test2.sdf";
+            ISpatialConnectionMgr mgr = new SpatialConnectionMgr();
 
-            try
+            IConnection conn1 = new MockSpatialConnection();
+            IConnection conn2 = new MockSpatialConnection();
+            using (mgr)
             {
-                ISpatialConnectionMgr mgr = new SpatialConnectionMgr();
-
-                bool result = ExpressUtility.CreateSDF(file1);
-                Assert.IsTrue(result);
-
-                result = ExpressUtility.CreateSDF(file2);
-                Assert.IsTrue(result);
-
-                IConnection conn1 = ExpressUtility.CreateSDFConnection(file1, false);
-                IConnection conn2 = ExpressUtility.CreateSDFConnection(file2, false);
-
-                using (mgr)
+                mgr.ConnectionRenamed += delegate(string oldName, string newName)
                 {
-                    mgr.ConnectionRenamed += delegate(string oldName, string newName)
-                    {
-                        Assert.AreNotEqual(oldName, newName);
-                    };
+                    Assert.AreNotEqual(oldName, newName);
+                };
 
-                    mgr.AddConnection("Conn1", conn1);
-                    mgr.AddConnection("Conn2", conn2);
+                mgr.AddConnection("Conn1", conn1);
+                mgr.AddConnection("Conn2", conn2);
 
-                    mgr.RenameConnection("Conn2", "Conn3");
+                mgr.RenameConnection("Conn2", "Conn3");
 
-                    Assert.IsNull(mgr.GetConnection("Conn2"));
-                    Assert.IsNotNull(mgr.GetConnection("Conn3"));
-                }
-            }
-            finally
-            {
-                if (File.Exists(file1))
-                    File.Delete(file1);
-
-                if (File.Exists(file2))
-                    File.Delete(file2);
+                Assert.IsNull(mgr.GetConnection("Conn2"));
+                Assert.IsNotNull(mgr.GetConnection("Conn3"));
             }
         }
 
@@ -117,42 +204,21 @@ namespace FdoToolbox.Tests
         [ExpectedException(typeof(FdoConnectionException))]
         public void TestRenameToExistingConnectionName()
         {
-            string file1 = "Test1.sdf";
-            string file2 = "Test2.sdf";
+            ISpatialConnectionMgr mgr = new SpatialConnectionMgr();
 
-            try
+            IConnection conn1 = new MockSpatialConnection();
+            IConnection conn2 = new MockSpatialConnection();
+            using (mgr)
             {
-                ISpatialConnectionMgr mgr = new SpatialConnectionMgr();
-
-                bool result = ExpressUtility.CreateSDF(file1);
-                Assert.IsTrue(result);
-
-                result = ExpressUtility.CreateSDF(file2);
-                Assert.IsTrue(result);
-
-                IConnection conn1 = ExpressUtility.CreateSDFConnection(file1, false);
-                IConnection conn2 = ExpressUtility.CreateSDFConnection(file2, false);
-
-                using (mgr)
+                mgr.ConnectionRenamed += delegate(string oldName, string newName)
                 {
-                    mgr.ConnectionRenamed += delegate(string oldName, string newName)
-                    {
-                        Assert.Fail("Rename should have failed");
-                    };
+                    Assert.Fail("Rename should have failed");
+                };
 
-                    mgr.AddConnection("Conn1", conn1);
-                    mgr.AddConnection("Conn2", conn2);
+                mgr.AddConnection("Conn1", conn1);
+                mgr.AddConnection("Conn2", conn2);
 
-                    mgr.RenameConnection("Conn2", "Conn1");
-                }
-            }
-            finally
-            {
-                if (File.Exists(file1))
-                    File.Delete(file1);
-
-                if (File.Exists(file2))
-                    File.Delete(file2);
+                mgr.RenameConnection("Conn2", "Conn1");
             }
         }
     }

@@ -21,16 +21,147 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core;
 
 namespace FdoToolbox.Tests
 {
     [TestFixture]
     public class PreferenceTest : BaseTest
     {
+        const string PREF_BOOL = "pref_bool";
+        const string PREF_DOUBLE = "pref_double";
+        const string PREF_INT = "pref_int";
+        const string PREF_STR = "pref_str";
+
+        const bool BOOL_VALUE = true;
+        const double DOUBLE_VALUE = 2.3458935943;
+        const int INT_VALUE = 42;
+        const string STR_VALUE = "foobar";
+
         [Test]
-        public void TestPersist()
+        [ExpectedException(typeof(PreferenceException))]
+        public void TestInvalidBoolean()
         {
-            Assert.Fail("Not implemented");
+            IPreferenceDictionary dict = new PreferenceDictionary();
+            InitializeDefault(dict);
+
+            bool val = dict.GetBooleanPref("foobar");
+        }
+
+        [Test]
+        [ExpectedException(typeof(PreferenceException))]
+        public void TestInvalidDouble()
+        {
+            IPreferenceDictionary dict = new PreferenceDictionary();
+            InitializeDefault(dict);
+
+            double val = dict.GetDoublePref("foobar");
+        }
+
+        [Test]
+        [ExpectedException(typeof(PreferenceException))]
+        public void TestInvalidInteger()
+        {
+            IPreferenceDictionary dict = new PreferenceDictionary();
+            InitializeDefault(dict);
+
+            int val = dict.GetIntegerPref("foobar");
+        }
+
+        [Test]
+        [ExpectedException(typeof(PreferenceException))]
+        public void TestInvalidString()
+        {
+            IPreferenceDictionary dict = new PreferenceDictionary();
+            InitializeDefault(dict);
+
+            string val = dict.GetStringPref("foobar");
+        }
+
+        [Test]
+        [ExpectedException(typeof(PreferenceException))]
+        public void TestInvalidNullStringValue()
+        {
+            IPreferenceDictionary dict = new PreferenceDictionary();
+            dict.SetStringPref("foo", null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(PreferenceException))]
+        public void TestInvalidEmptyStringValue()
+        {
+            IPreferenceDictionary dict = new PreferenceDictionary();
+            dict.SetStringPref("foo", string.Empty);
+        }
+
+        [Test]
+        public void TestInvalidNullPreference()
+        {
+            IPreferenceDictionary dict = new PreferenceDictionary();
+            try
+            {
+                dict.SetBooleanPref(null, BOOL_VALUE);
+                Assert.Fail("ArgumentNullException not thrown");
+            }
+            catch (ArgumentNullException) { }
+
+            try
+            {
+                dict.SetDoublePref(null, DOUBLE_VALUE);
+                Assert.Fail("ArgumentNullException not thrown");
+            }
+            catch (ArgumentNullException) { }
+
+            try
+            {
+                dict.SetIntegerPref(null, INT_VALUE);
+                Assert.Fail("ArgumentNullException not thrown");
+            }
+            catch (ArgumentNullException) { }
+
+            try
+            {
+                dict.SetStringPref(null, STR_VALUE);
+                Assert.Fail("ArgumentNullException not thrown");
+            }
+            catch (ArgumentNullException) { }
+
+            try
+            {
+                dict.GetBooleanPref(null);
+                Assert.Fail("ArgumentNullException not thrown");
+            }
+            catch (ArgumentNullException) { }
+
+            try
+            {
+                dict.GetDoublePref(null);
+                Assert.Fail("ArgumentNullException not thrown");
+            }
+            catch (ArgumentNullException) { }
+
+            try
+            {
+                dict.GetIntegerPref(null);
+                Assert.Fail("ArgumentNullException not thrown");
+            }
+            catch (ArgumentNullException) { }
+
+            try
+            {
+                dict.GetStringPref(null);
+                Assert.Fail("ArgumentNullException not thrown");
+            }
+            catch (ArgumentNullException) { }
+        }
+
+        private void InitializeDefault(IPreferenceDictionary dict)
+        {
+            dict.SetStringPref(PREF_STR, STR_VALUE);
+            dict.SetBooleanPref(PREF_BOOL, BOOL_VALUE);
+            dict.SetDoublePref(PREF_DOUBLE, DOUBLE_VALUE);
+            dict.SetIntegerPref(PREF_INT, INT_VALUE);
         }
     }
 }

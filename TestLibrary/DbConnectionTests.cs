@@ -21,28 +21,45 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using FdoToolbox.Core.Common;
+using FdoToolbox.Core.ClientServices;
+using System.IO;
+using System.Data.OleDb;
 
 namespace FdoToolbox.Tests
 {
     [TestFixture]
     public class DbConnectionTests : BaseTest
     {
+        private DbConnectionInfo CreateConnection()
+        {
+            string connStr = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0}",
+                Path.Combine(AppGateway.RunningApplication.AppPath, "Cities.mdb"));
+
+            return new DbConnectionInfo("Cities", new OleDbConnection(connStr), "Access");
+        }
+
         [Test]
         public void TestNonExistentDatabase()
         {
-            Assert.Fail("Not implemented");
+            DbConnectionInfo connInfo = CreateConnection();
+            connInfo.Connection.Open();
+            using (connInfo.Connection)
+            {
+                Assert.IsNull(connInfo.GetDatabase("Foobar"));
+            }
         }
 
         [Test]
         public void TestNonExistentTable()
         {
-            Assert.Fail("Not implemented");
-        }
-
-        [Test]
-        public void TestNonExistentColumn()
-        {
-            Assert.Fail("Not implemented");
+            DbConnectionInfo connInfo = CreateConnection();
+            connInfo.Connection.Open();
+            using (connInfo.Connection)
+            {
+                Assert.IsNotNull(connInfo.GetDatabase("Cities.mdb"));
+                Assert.IsNull(connInfo.GetTable("Cities.mdb", "Foobar"));
+            }
         }
     }
 }
