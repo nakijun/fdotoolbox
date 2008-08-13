@@ -16,6 +16,8 @@ nunit-console.exe TestLibrary.dll
 
 or load and run TestLibrary.dll in the NUnit GUI application.
 
-or run the TestRunner.exe application which will execute the unit tests. Additionally you can set the TestRunner project as the starup project to allow for debugging of unit tests.
+or run the TestRunner.exe application which will execute the unit tests. Additionally you can set the TestRunner project as the startup project to allow for debugging of unit tests.
 
 Run the clean.bat to delete the output directory and any intermediate files created during the build process.
+
+Run the clean_test.bat to only delete the test-related output files.
