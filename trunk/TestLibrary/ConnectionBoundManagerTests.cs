@@ -25,6 +25,7 @@ using NUnit.Framework;
 namespace FdoToolbox.Tests
 {
     [TestFixture]
+    [Category("FdoToolboxCore")]
     public class ConnectionBoundManagerTests : BaseTest
     {
         [Test]

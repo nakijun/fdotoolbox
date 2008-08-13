@@ -28,6 +28,10 @@ using System.IO;
 using OSGeo.FDO.Commands.Schema;
 using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Common;
+using OSGeo.FDO.Commands.Feature;
+using OSGeo.FDO.Commands;
+using OSGeo.FDO.Expression;
+using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Tests
 {
@@ -49,7 +53,7 @@ namespace FdoToolbox.Tests
         [Test]
         public void TestPropertyDeleteRaw()
         {
-            string file = "Test.sdf";
+            string file = "Test1.sdf";
             IConnection conn = null;
             try
             {
@@ -171,8 +175,13 @@ namespace FdoToolbox.Tests
             }
             finally
             {
+                AppConsole.WriteLine("Cleaning up");
                 if (conn != null)
+                {
+                    if (conn.ConnectionState == ConnectionState.ConnectionState_Open)
+                        conn.Close();
                     conn.Dispose();
+                }
                 if (File.Exists(file))
                     File.Delete(file);
             }
@@ -181,7 +190,7 @@ namespace FdoToolbox.Tests
         [Test]
         public void TestClassDeleteRaw()
         {
-            string file = "Test.sdf";
+            string file = "Test2.sdf";
             IConnection conn = null;
             try
             {
@@ -305,13 +314,16 @@ namespace FdoToolbox.Tests
                 Assert.IsTrue(schemas[0].Classes.Count == 1, "Expected 1 class (Class1) in schema");
                 idx = schemas[0].Classes.IndexOf("Class2");
                 Assert.IsTrue(idx < 0, "Class2 was not deleted");
-
-                conn.Close();
             }
             finally
             {
+                AppConsole.WriteLine("Cleaning up");
                 if (conn != null)
+                {
+                    if (conn.ConnectionState == ConnectionState.ConnectionState_Open)
+                        conn.Close();
                     conn.Dispose();
+                }
                 if (File.Exists(file))
                     File.Delete(file);
             }

@@ -29,6 +29,7 @@ using FdoToolbox.Core.ETL;
 namespace FdoToolbox.Tests
 {
     [TestFixture]
+    [Category("FdoToolboxCore")]
     public class TaskTests : BaseTest
     {
         [Test]

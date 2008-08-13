@@ -29,6 +29,7 @@ using System.Data.OleDb;
 namespace FdoToolbox.Tests
 {
     [TestFixture]
+    [Category("FdoToolboxCore")]
     public class DbConnectionTests : BaseTest
     {
         private DbConnectionInfo CreateConnection()

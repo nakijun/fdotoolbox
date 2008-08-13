@@ -25,6 +25,7 @@ using NUnit.Framework;
 namespace FdoToolbox.Tests
 {
     [TestFixture]
+    [Category("FdoToolboxCore")]
     public class OverrideTests : BaseTest
     {
         [Test(Description = "Test that the correct override is loaded")]

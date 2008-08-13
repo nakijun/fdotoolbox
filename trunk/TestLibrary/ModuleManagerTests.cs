@@ -30,6 +30,7 @@ using FdoToolbox.Core.ClientServices;
 namespace FdoToolbox.Tests
 {
     [TestFixture]
+    [Category("FdoToolboxCore")]
     public class ModuleManagerTests : BaseTest
     {
         [Test]
