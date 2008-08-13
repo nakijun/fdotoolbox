@@ -103,6 +103,13 @@ namespace FdoToolbox.Core.Forms
                 lblMessage.Text = msg;
         }
 
+#if DEBUG
+        public override string ToString()
+        {
+            return "progressdlg";
+        }
+#endif
+
         public void Run()
         {
             bool valid = true;
@@ -132,6 +139,8 @@ namespace FdoToolbox.Core.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             bgWorker.CancelAsync();
+            _Task.ExecutingThread.Abort();
+            //_Task.ExecutingThread.Join();
             this.DialogResult = DialogResult.Cancel;
         }
     }

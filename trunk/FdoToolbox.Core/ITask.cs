@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace FdoToolbox.Core
 {
@@ -46,7 +47,11 @@ namespace FdoToolbox.Core
         /// Returns true if the progress of this task is countable
         /// </summary>
         bool IsCountable { get; }
-        
+        /// <summary>
+        /// The thread that this task is executing on.
+        /// </summary>
+        Thread ExecutingThread { get; }
+
         event TaskPercentageEventHandler OnItemProcessed;
         event TaskProgressMessageEventHandler OnTaskMessage;
         event TaskProgressMessageEventHandler OnLogTaskMessage;
@@ -58,6 +63,10 @@ namespace FdoToolbox.Core
 
     public enum TaskType
     {
+        /// <summary>
+        /// A dummy task
+        /// </summary>
+        Dummy,
         /// <summary>
         /// A Spatial bulk copy task
         /// </summary>
