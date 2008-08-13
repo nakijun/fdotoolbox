@@ -26,6 +26,7 @@ using OSGeo.FDO.Expression;
 using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands;
+using System.Threading;
 #region overview
 /**
  * Spatial Join overview
@@ -130,70 +131,86 @@ namespace FdoToolbox.Core.ETL
 
         private ClassDefinition _PrimaryClass;
 
-        /// <summary>
-        /// Execute the task
-        /// </summary>
-        public override void Execute()
+        public override void DoExecute()
         {
-            //TODO: Use data readers on both sides of the join instead of loading
-            //the secondary source into a potentially big DataTable. Of course that
-            //would change the whole implementation, but it would/should be more
-            //efficient.
-
-            //Read both sources
-            SendMessage("Reading primary source");
-            OSGeo.FDO.Commands.Feature.IFeatureReader primaryReader = LoadPrimarySource();
-            SendMessage("Reading secondary source");
-            System.Data.DataTable secondaryTable = LoadSecondarySource();
-            SendMessage("Creating joined feature class");
-            CreateJoinedFeatureClass(primaryReader, secondaryTable);
-
-            string[] joinedColumns = _Options.GetJoinedColumns();
-            string[] joinedProperties = _Options.GetJoinedProperties();
-
-            int inserted = 0;
-
-            IInsert insertCmd = _Options.Target.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert;
-            insertCmd.SetFeatureClassName(_Options.TargetClassName);
-            SendMessage("Joining...");
-            using (primaryReader)
-            using (secondaryTable)
-            using (insertCmd)
+            OSGeo.FDO.Commands.Feature.IFeatureReader primaryReader = null;
+            System.Data.DataTable secondaryTable = null;
+            IInsert insertCmd = null;
+            try
             {
-                while (primaryReader.ReadNext())
+                //TODO: Use data readers on both sides of the join instead of loading
+                //the secondary source into a potentially big DataTable. Of course that
+                //would change the whole implementation, but it would/should be more
+                //efficient.
+
+                //Read both sources
+                SendMessage("Reading primary source");
+                primaryReader = LoadPrimarySource();
+                SendMessage("Reading secondary source");
+                secondaryTable = LoadSecondarySource();
+                SendMessage("Creating joined feature class");
+                CreateJoinedFeatureClass(primaryReader, secondaryTable);
+
+                string[] joinedColumns = _Options.GetJoinedColumns();
+                string[] joinedProperties = _Options.GetJoinedProperties();
+
+                int inserted = 0;
+
+                insertCmd = _Options.Target.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert;
+                insertCmd.SetFeatureClassName(_Options.TargetClassName);
+                SendMessage("Joining...");
+                using (primaryReader)
+                using (secondaryTable)
+                using (insertCmd)
                 {
-                    //Find matches
-                    string expr = BuildSecondarySearchExpression(primaryReader, joinedProperties);
-                    DataRow[] matchedRows = secondaryTable.Select(expr);
-                    //No matches
-                    if (matchedRows.Length == 0)
+                    while (primaryReader.ReadNext())
                     {
-                        if (_Options.JoinType == SpatialJoinType.Inner)
-                            continue;
-                        else if (_Options.JoinType == SpatialJoinType.LeftOuter)
-                            inserted += DoJoinedInsert(insertCmd, primaryReader, null);
-                    }
-                    else //There is at least one match
-                    {
-                        // 1:1 perform merged insert with first matching row
-                        if (_Options.Cardinality == SpatialJoinCardinality.OneToOne)
+                        //Find matches
+                        string expr = BuildSecondarySearchExpression(primaryReader, joinedProperties);
+                        DataRow[] matchedRows = secondaryTable.Select(expr);
+                        //No matches
+                        if (matchedRows.Length == 0)
                         {
-                            inserted += DoJoinedInsert(insertCmd, primaryReader, matchedRows[0]);
+                            if (_Options.JoinType == SpatialJoinType.Inner)
+                                continue;
+                            else if (_Options.JoinType == SpatialJoinType.LeftOuter)
+                                inserted += DoJoinedInsert(insertCmd, primaryReader, null);
                         }
-                        // 1:m perform merged insert with each matching row
-                        else if (_Options.Cardinality == SpatialJoinCardinality.OneToMany)
+                        else //There is at least one match
                         {
-                            foreach (DataRow matchedRow in matchedRows)
+                            // 1:1 perform merged insert with first matching row
+                            if (_Options.Cardinality == SpatialJoinCardinality.OneToOne)
                             {
-                                inserted += DoJoinedInsert(insertCmd, primaryReader, matchedRow);
+                                inserted += DoJoinedInsert(insertCmd, primaryReader, matchedRows[0]);
+                            }
+                            // 1:m perform merged insert with each matching row
+                            else if (_Options.Cardinality == SpatialJoinCardinality.OneToMany)
+                            {
+                                foreach (DataRow matchedRow in matchedRows)
+                                {
+                                    inserted += DoJoinedInsert(insertCmd, primaryReader, matchedRow);
+                                }
                             }
                         }
                     }
+                    primaryReader.Close();
                 }
-                primaryReader.Close();
-            }
 
-            SendMessage(inserted + " features processed");
+                SendMessage(inserted + " features processed");
+            }
+            catch (ThreadAbortException)
+            {
+                Thread.ResetAbort();
+            }
+            finally
+            {
+                if (primaryReader != null)
+                    primaryReader.Dispose();
+                if (secondaryTable != null)
+                    secondaryTable.Dispose();
+                if (insertCmd != null)
+                    insertCmd.Dispose();
+            }
         }
 
         /// <summary>

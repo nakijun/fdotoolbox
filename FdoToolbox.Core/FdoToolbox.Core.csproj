@@ -252,6 +252,7 @@
     <Compile Include="Common\DataStoreInfo.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Modules\ExpressModule.cs" />
+    <Compile Include="Modules\TestModule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

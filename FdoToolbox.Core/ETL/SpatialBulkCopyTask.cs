@@ -41,6 +41,7 @@ using FdoToolbox.Core.Common;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Utility;
 using OSGeo.FDO.Commands.SQL;
+using System.Threading;
 #region overview
 /*
  * Bulk Copy overview
@@ -150,177 +151,199 @@ namespace FdoToolbox.Core.ETL
             ValidateBulkCopyOptions(srcConn, destConn);
         }
 
-        /// <summary>
-        /// Execute the task. Must validate the task first before executing.
-        /// </summary>
-        public override void Execute()
+        public override void DoExecute()
         {
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-
-            IConnection srcConn = _Options.Source.Connection;
-            IConnection destConn = _Options.Target.Connection;
-            
-            if (_Options.CopySpatialContexts)
+            IDelete srcDelete = null;
+            ISelect srcSelect = null;
+            IInsert insertCmd = null;
+            IFeatureReader srcReader = null;
+            IFeatureReader insReader = null;
+            try
             {
-                if (this.CopySpatialContextOverride != null)
-                    this.CopySpatialContextOverride.CopySpatialContexts(srcConn, destConn, _Options.SourceSpatialContexts);
-                else
-                    CopySpatialContexts(_Options.Source, _Options.Target);
-            }
-            //If target schema is undefined, create it
-            if (_Options.ApplySchemaToTarget)
-            {
-                SendMessage("Applying schema for target (this may take a while)");
-                _DestService.ApplySchema(CreateTargetSchema(_Options.SourceSchemaName, srcConn));
-                SendMessage("Target Schema Applied");
-            }
-            SendMessage("Begin bulk copy of classes");
-            int total = 0;
-            int classesCopied = 1;
-            string globFilter = _Options.GlobalSpatialFilter;
-            foreach (ClassCopyOptions copyOpts in _ClassesToCopy)
-            {
-                int copied = 0;
-                SendMessage(string.Format("Bulk Copying class {0} of {1}: {2}", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName));
-                string [] propNames = copyOpts.PropertyNames;
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
 
-                //See if we need to delete
-                if (copyOpts.DeleteClassData)
+                IConnection srcConn = _Options.Source.Connection;
+                IConnection destConn = _Options.Target.Connection;
+
+                if (_Options.CopySpatialContexts)
                 {
-                    SendMessage("Deleting data in feature class: " + copyOpts.TargetClassName);
-                    using (IDelete cmd = destConn.CreateCommand(CommandType.CommandType_Delete) as IDelete)
+                    if (this.CopySpatialContextOverride != null)
+                        this.CopySpatialContextOverride.CopySpatialContexts(srcConn, destConn, _Options.SourceSpatialContexts);
+                    else
+                        CopySpatialContexts(_Options.Source, _Options.Target);
+                }
+                //If target schema is undefined, create it
+                if (_Options.ApplySchemaToTarget)
+                {
+                    SendMessage("Applying schema for target (this may take a while)");
+                    _DestService.ApplySchema(CreateTargetSchema(_Options.SourceSchemaName, srcConn));
+                    SendMessage("Target Schema Applied");
+                }
+                SendMessage("Begin bulk copy of classes");
+                int total = 0;
+                int classesCopied = 1;
+                string globFilter = _Options.GlobalSpatialFilter;
+                foreach (ClassCopyOptions copyOpts in _ClassesToCopy)
+                {
+                    int copied = 0;
+                    SendMessage(string.Format("Bulk Copying class {0} of {1}: {2}", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName));
+                    string[] propNames = copyOpts.PropertyNames;
+
+                    //See if we need to delete
+                    if (copyOpts.DeleteClassData)
                     {
-                        cmd.SetFeatureClassName(copyOpts.TargetClassName);
-                        //cmd.Filter = Filter.Parse("1 = 1");
-                        cmd.Execute();
-                    }
-                    SendMessage("Done deleting");
-                }
-
-                //Determine the filter
-                Filter theFilter = null;
-                Filter spatialFilter = null;
-                if (!string.IsNullOrEmpty(globFilter) && copyOpts.SourceClassDefinition.ClassType == ClassType.ClassType_FeatureClass)
-                {
-                    spatialFilter = Filter.Parse(((FeatureClass)copyOpts.SourceClassDefinition).GeometryProperty.Name + " " + globFilter);
-                }
-                Filter attrFilter = null;
-                if (!string.IsNullOrEmpty(copyOpts.AttributeFilter))
-                    attrFilter = Filter.Parse(copyOpts.AttributeFilter);
-
-                //Logical AND both attribute and spatial filters
-                if (attrFilter != null && spatialFilter != null)
-                {
-                    theFilter = Filter.Parse("(" + attrFilter.ToString() + ") AND (" + spatialFilter.ToString() + ")");
-                }
-                //Set spatial filter
-                else if (attrFilter == null && spatialFilter != null)
-                {
-                    theFilter = spatialFilter;
-                }
-                //Set attribute filter
-                else if (attrFilter != null && spatialFilter == null)
-                {
-                    theFilter = attrFilter;
-                }
-
-                //Get count of features to copy
-                long count = GetFeatureCount(srcConn, copyOpts, theFilter);
-                //Select from source class
-                using (ISelect select = srcConn.CreateCommand(CommandType.CommandType_Select) as ISelect)
-                {
-                    select.SetFeatureClassName(copyOpts.ClassName);
-                    if(theFilter != null)
-                        select.Filter = theFilter;
-
-                    foreach (string propName in propNames)
-                    {
-                        select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
-                    }
-                    using (IFeatureReader sourceReader = select.Execute())
-                    {
-                        //Cache for subsequent iterations
-                        ClassDefinition classDef = sourceReader.GetClassDefinition();
-                        IInsert insert = destConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert;
-                        PropertyDefinitionCollection propDefs = classDef.Properties;
-
-                        insert.SetFeatureClassName(copyOpts.TargetClassName);
-
-                        //The class definition inside the reader *may* not always contain
-                        //only the properties we specified, so only cache the ones that
-                        //match the original property list
-                        Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
-                        for (int i = 0; i < propDefs.Count; i++)
+                        SendMessage("Deleting data in feature class: " + copyOpts.TargetClassName);
+                        using (srcDelete = destConn.CreateCommand(CommandType.CommandType_Delete) as IDelete)
                         {
-                            if(Array.IndexOf<string>(propNames, propDefs[i].Name) >= 0)
-                                cachedPropertyNames.Add(i, propDefs[i].Name);
+                            srcDelete.SetFeatureClassName(copyOpts.TargetClassName);
+                            //cmd.Filter = Filter.Parse("1 = 1");
+                            srcDelete.Execute();
                         }
+                        SendMessage("Done deleting");
+                    }
 
-                        //If batch insert size defined, prepare insert command for
-                        //batch insertion.
-                        if (_Options.BatchInsertSize > 0)
+                    //Determine the filter
+                    Filter theFilter = null;
+                    Filter spatialFilter = null;
+                    if (!string.IsNullOrEmpty(globFilter) && copyOpts.SourceClassDefinition.ClassType == ClassType.ClassType_FeatureClass)
+                    {
+                        spatialFilter = Filter.Parse(((FeatureClass)copyOpts.SourceClassDefinition).GeometryProperty.Name + " " + globFilter);
+                    }
+                    Filter attrFilter = null;
+                    if (!string.IsNullOrEmpty(copyOpts.AttributeFilter))
+                        attrFilter = Filter.Parse(copyOpts.AttributeFilter);
+
+                    //Logical AND both attribute and spatial filters
+                    if (attrFilter != null && spatialFilter != null)
+                    {
+                        theFilter = Filter.Parse("(" + attrFilter.ToString() + ") AND (" + spatialFilter.ToString() + ")");
+                    }
+                    //Set spatial filter
+                    else if (attrFilter == null && spatialFilter != null)
+                    {
+                        theFilter = spatialFilter;
+                    }
+                    //Set attribute filter
+                    else if (attrFilter != null && spatialFilter == null)
+                    {
+                        theFilter = attrFilter;
+                    }
+
+                    //Get count of features to copy
+                    long count = GetFeatureCount(srcConn, copyOpts, theFilter);
+                    //Select from source class
+                    using (srcSelect = srcConn.CreateCommand(CommandType.CommandType_Select) as ISelect)
+                    {
+                        srcSelect.SetFeatureClassName(copyOpts.ClassName);
+                        if (theFilter != null)
+                            srcSelect.Filter = theFilter;
+
+                        foreach (string propName in propNames)
                         {
-                            foreach (int key in cachedPropertyNames.Keys)
-                            { 
-                                string name = cachedPropertyNames[key];
-                                string targetName = copyOpts.GetTargetPropertyName(name);
-                                string paramName = PARAM_PREFIX + targetName;
-                                insert.PropertyValues.Add(new PropertyValue(targetName, new Parameter(paramName)));
-                            }
+                            srcSelect.PropertyNames.Add((Identifier)Identifier.Parse(propName));
                         }
-
-                        //Loop through the feature reader and process each
-                        //result
-                        int oldpc = 0;
-                        bool hasMore = sourceReader.ReadNext();
-                        while (hasMore)
+                        using (srcReader = srcSelect.Execute())
                         {
-                            //No batch size, do vanilla IInsert
-                            if (_Options.BatchInsertSize <= 0)
+                            //Cache for subsequent iterations
+                            ClassDefinition classDef = srcReader.GetClassDefinition();
+                            insertCmd = destConn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert;
+                            PropertyDefinitionCollection propDefs = classDef.Properties;
+
+                            insertCmd.SetFeatureClassName(copyOpts.TargetClassName);
+
+                            //The class definition inside the reader *may* not always contain
+                            //only the properties we specified, so only cache the ones that
+                            //match the original property list
+                            Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
+                            for (int i = 0; i < propDefs.Count; i++)
                             {
-                                copied += ProcessReader(cachedPropertyNames, propDefs, insert, copyOpts, sourceReader);
-                                hasMore = sourceReader.ReadNext();
+                                if (Array.IndexOf<string>(propNames, propDefs[i].Name) >= 0)
+                                    cachedPropertyNames.Add(i, propDefs[i].Name);
                             }
-                            else //batched insert
+
+                            //If batch insert size defined, prepare insert command for
+                            //batch insertion.
+                            if (_Options.BatchInsertSize > 0)
                             {
-                                insert.BatchParameterValues.Clear();
-                                int batchCount = 0;
-                                //Load up batched values
-                                do
+                                foreach (int key in cachedPropertyNames.Keys)
                                 {
-                                    ProcessReaderBatched(cachedPropertyNames, propDefs, insert, copyOpts, sourceReader);
-                                    hasMore = sourceReader.ReadNext();
-                                    batchCount++;
-                                }
-                                while (batchCount < _Options.BatchInsertSize && hasMore);
-                                //Execute batch
-                                using (IFeatureReader insReader = insert.Execute())
-                                {
-                                    copied += batchCount;
-                                    insReader.Close();
+                                    string name = cachedPropertyNames[key];
+                                    string targetName = copyOpts.GetTargetPropertyName(name);
+                                    string paramName = PARAM_PREFIX + targetName;
+                                    insertCmd.PropertyValues.Add(new PropertyValue(targetName, new Parameter(paramName)));
                                 }
                             }
-                            int pc = (int)(((double)copied / (double)count) * 100);
-                            //Only update progress counter when % changes
-                            if(pc != oldpc)
-                            {
-                                oldpc = pc;
-                                SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3}% of {4} features)", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName, oldpc, count));
-                                SendCount(oldpc);
-                            }
-                        }
 
-                        //Clean them up
-                        insert.Dispose();
-                        sourceReader.Close();
+                            //Loop through the feature reader and process each
+                            //result
+                            int oldpc = 0;
+                            bool hasMore = srcReader.ReadNext();
+                            while (hasMore)
+                            {
+                                //No batch size, do vanilla IInsert
+                                if (_Options.BatchInsertSize <= 0)
+                                {
+                                    copied += ProcessReader(cachedPropertyNames, propDefs, insertCmd, copyOpts, srcReader);
+                                    hasMore = srcReader.ReadNext();
+                                }
+                                else //batched insert
+                                {
+                                    insertCmd.BatchParameterValues.Clear();
+                                    int batchCount = 0;
+                                    //Load up batched values
+                                    do
+                                    {
+                                        ProcessReaderBatched(cachedPropertyNames, propDefs, insertCmd, copyOpts, srcReader);
+                                        hasMore = srcReader.ReadNext();
+                                        batchCount++;
+                                    }
+                                    while (batchCount < _Options.BatchInsertSize && hasMore);
+                                    //Execute batch
+                                    using (insReader = insertCmd.Execute())
+                                    {
+                                        copied += batchCount;
+                                        insReader.Close();
+                                    }
+                                }
+                                int pc = (int)(((double)copied / (double)count) * 100);
+                                //Only update progress counter when % changes
+                                if (pc != oldpc)
+                                {
+                                    oldpc = pc;
+                                    SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3}% of {4} features)", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName, oldpc, count));
+                                    SendCount(oldpc);
+                                }
+                            }
+
+                            //Clean them up
+                            insertCmd.Dispose();
+                            srcReader.Close();
+                        }
                     }
+                    classesCopied++;
+                    total += copied;
                 }
-                classesCopied++;
-                total += copied;
+                watch.Stop();
+                SendMessage("Bulk Copy: " + total + " features copied in " + watch.ElapsedMilliseconds + "ms");
             }
-            watch.Stop();
-            SendMessage("Bulk Copy: " + total + " features copied in " + watch.ElapsedMilliseconds + "ms");
+            catch (ThreadAbortException)
+            {
+                Thread.ResetAbort();
+            }
+            finally
+            {
+                if (srcDelete != null)
+                    srcDelete.Dispose();
+                if (srcSelect != null)
+                    srcSelect.Dispose();
+                if (insertCmd != null)
+                    insertCmd.Dispose();
+                if (srcReader != null)
+                    srcReader.Dispose();
+                if (insReader != null)
+                    insReader.Dispose();
+            }
         }
 
         private long GetFeatureCount(IConnection srcConn, ClassCopyOptions copyOpts, Filter theFilter)

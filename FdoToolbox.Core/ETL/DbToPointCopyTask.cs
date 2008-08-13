@@ -131,7 +131,7 @@ namespace FdoToolbox.Core.ETL
 
         const string GEOM_PROP = "Geometry";
 
-        public override void Execute()
+        public override void DoExecute()
         {
             FeatureService service = new FeatureService(this.Options.Target.Connection);
             List<string> columns = GetColumnList();

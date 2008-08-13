@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -35,7 +36,23 @@ namespace FdoToolbox.Core.ETL
 
         public abstract void ValidateTaskParameters();
 
-        public abstract void Execute();
+        /// <summary>
+        /// Assigns the executing thread to the thread that invoked this method
+        /// and then begins execution.
+        /// </summary>
+        public void Execute()
+        {
+            this.ExecutingThread = Thread.CurrentThread;
+            DoExecute();
+        }
+
+        /// <summary>
+        /// Perform the actual execution. Be warned that the thread invoking 
+        /// this method can be cancelled at any time by the user. The implementation
+        /// must catch ThreadAbortException, call Thread.ResetAbort() and perform 
+        /// any necessary cleanups.
+        /// </summary>
+        public abstract void DoExecute();
 
         public abstract TaskType TaskType
         {
@@ -65,6 +82,14 @@ namespace FdoToolbox.Core.ETL
         {
             if (this.OnItemProcessed != null)
                 this.OnItemProcessed(count);
+        }
+
+        private Thread _RunningThread;
+
+        public Thread ExecutingThread
+        {
+            get { return _RunningThread; }
+            protected set { _RunningThread = value; }
         }
     }
 }

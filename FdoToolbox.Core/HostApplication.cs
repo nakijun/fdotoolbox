@@ -104,7 +104,9 @@ namespace FdoToolbox.Core
                     ModuleManager.LoadModule(new CoreModule());
                     ModuleManager.LoadModule(new ExpressModule());
                     ModuleManager.LoadModule(new AdoNetModule());
-
+#if DEBUG
+                    ModuleManager.LoadModule(new TestModule());
+#endif
                     InitMenus();
                     LoadDefinedModules();
 
