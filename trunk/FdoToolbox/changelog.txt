@@ -7,8 +7,11 @@
 	
 - Other:
 	- Data Preview: Grid pane now resides in a tab.
+	- Added a unit test suite. Not all tests currently pass, as they are still being implemented and retrofitted. 
+	  Unit tests for the FDO API are *not* guaranteed to pass. Unit tests are only built in the debug configuration.
 
 - Fixes:
+	- Running tasks are now actually cancellable.
 	- MySQL copy spatial context fixes.
 	- Saving schema was saving with the schema name instead of the chosen file name.
 	- Fixed improper property mapping in Bulk Copy Control.
