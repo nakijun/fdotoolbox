@@ -44,7 +44,7 @@ namespace FdoToolbox.Tests
      This test suite is not run by default in the TestRunner.exe
      */
 
-    [TestFixture("FDO API Stress Tests")]
+    [TestFixture(Description = "FDO API Stress Tests")]
     [Category("Stress")]
     public class FdoStressTests : BaseTest
     {
