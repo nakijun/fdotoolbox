@@ -108,6 +108,7 @@ namespace FdoToolbox.Tests
     }
 
     [TestFixture]
+    [Category("FdoToolboxCore")]
     public class DbConnectionManagerTests : BaseTest
     {
         [Test]

@@ -45,6 +45,11 @@ namespace FdoToolbox.Core.ClientServices
 
         private FgfGeometryFactory _GeomFactory;
 
+        public FgfGeometryFactory GeometryFactory
+        {
+            get { return _GeomFactory; }
+        }
+
         /// <summary>
         /// Constructor. The passed connection must already be open.
         /// </summary>

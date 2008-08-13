@@ -28,6 +28,7 @@ using FdoToolbox.Core.Common;
 namespace FdoToolbox.Tests
 {
     [TestFixture]
+    [Category("FdoToolboxCore")]
     public class ConnectionLoaderTests : BaseTest
     {
         [Test]

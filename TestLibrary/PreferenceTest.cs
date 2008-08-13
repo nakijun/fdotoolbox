@@ -27,6 +27,7 @@ using FdoToolbox.Core;
 namespace FdoToolbox.Tests
 {
     [TestFixture]
+    [Category("FdoToolboxCore")]
     public class PreferenceTest : BaseTest
     {
         const string PREF_BOOL = "pref_bool";
