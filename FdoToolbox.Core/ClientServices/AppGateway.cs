@@ -42,6 +42,9 @@ namespace FdoToolbox.Core.ClientServices
                 return _AppInstance;
             }
 #if DEBUG
+            //In debug mode, the test library needs to be able to plug in
+            //a mock implementation of IHostApplication, so make a setter
+            //available only for debug mode.
             set
             {
                 _AppInstance = value;
