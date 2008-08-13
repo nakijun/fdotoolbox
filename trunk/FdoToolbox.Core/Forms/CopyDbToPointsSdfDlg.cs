@@ -24,31 +24,29 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using FdoToolbox.Core.ETL;
 using FdoToolbox.Core.Common;
-using FdoToolbox.Core.ClientServices;
-using OSGeo.FDO.Schema;
+using FdoToolbox.Core.ETL;
 using OSGeo.FDO.Connections;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Forms
 {
-    public partial class CopyDbToPointsDlg : Form
+    public partial class CopyDbToPointsSdfDlg : Form
     {
         private DbConnectionInfo _source;
 
-        internal CopyDbToPointsDlg()
+        internal CopyDbToPointsSdfDlg()
         {
             InitializeComponent();
         }
 
-        internal CopyDbToPointsDlg(
+        public CopyDbToPointsSdfDlg(
             DbConnectionInfo source, 
             string db,
             string table)
             : this()
         {
             _source = source;
-            cmbTargetConnection.DataSource = new List<string>(AppGateway.RunningApplication.SpatialConnectionManager.GetConnectionNames());
             txtDatabase.Text = db;
             txtTable.Text = table;
             chk3d_CheckedChanged(this, EventArgs.Empty);
@@ -74,42 +72,25 @@ namespace FdoToolbox.Core.Forms
             base.OnLoad(e);
         }
 
-        public DbToPointCopyOptions GetCopyOptions()
+        public List<string> GetColumns()
         {
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
-            SpatialConnectionInfo spConnInfo = new SpatialConnectionInfo(cmbTargetConnection.SelectedItem.ToString(), conn);
-            DbToPointCopyOptions options = new DbToPointCopyOptions(_source, spConnInfo);
-            options.ClassName = txtClass.Text;
-            options.Database = txtDatabase.Text;
-            options.SchemaName = cmbTargetSchema.SelectedValue.ToString();
-            options.Table = txtTable.Text;
-            options.XColumn = cmbX.SelectedItem.ToString();
-            options.YColumn = cmbY.SelectedItem.ToString();
-            if (chk3d.Checked)
-                options.ZColumn = cmbZ.SelectedItem.ToString();
-
+            List<string> columns = new List<string>();
             foreach (object obj in chkColumns.CheckedItems)
             {
-                options.ColumnList.Add(obj.ToString());
+                columns.Add(obj.ToString());
             }
-
-            return options;
+            return columns;
         }
 
-        public static DbToPointCopyOptions GetCopyOptions(DbConnectionInfo source, string db, string table)
-        {
-            CopyDbToPointsDlg diag = new CopyDbToPointsDlg(source, db, table);
-            if (diag.ShowDialog() == DialogResult.OK)
-            {
-                return diag.GetCopyOptions();
-            }
-            return null;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-        }
+        public string FilePath { get { return txtFilePath.Text; } }
+        public string ClassName { get { return txtClass.Text; } }
+        public string SchemaName { get { return txtSchema.Text; } }
+        public string Database { get { return txtDatabase.Text; } }
+        public string Table { get { return txtTable.Text; } }
+        public string XColumn { get { return cmbX.SelectedItem.ToString(); } }
+        public string YColumn { get { return cmbY.SelectedItem.ToString(); } }
+        public string ZColumn { get { return cmbZ.SelectedItem.ToString(); } }
+        public bool ThreeDimensions { get { return chk3d.Checked; } }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
@@ -119,26 +100,18 @@ namespace FdoToolbox.Core.Forms
 
         private bool ValidateFields()
         {
-            errorProvider.Clear();
             bool valid = true;
-            if (string.IsNullOrEmpty(txtClass.Text))
-            {
-                errorProvider.SetError(txtClass, "Required");
-                valid = false;
-            }
             return valid;
         }
 
-        private void cmbTargetConnection_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
-            if (conn != null)
-            {
-                using (FeatureService service = new FeatureService(conn))
-                {
-                    cmbTargetSchema.DataSource = service.DescribeSchema();
-                }
-            }
+            this.DialogResult = DialogResult.Cancel;
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            txtFilePath.Text = AppGateway.RunningApplication.SaveFile("Save SDF", "SDF files (*.sdf)|*.sdf");
         }
     }
 }

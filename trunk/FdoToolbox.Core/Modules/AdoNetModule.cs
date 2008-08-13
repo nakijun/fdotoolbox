@@ -9,6 +9,8 @@ using FdoToolbox.Core.Forms;
 using System.IO;
 using FdoToolbox.Core.IO;
 using FdoToolbox.Core.ETL;
+using OSGeo.FDO.Schema;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Core.Modules
 {
@@ -24,6 +26,7 @@ namespace FdoToolbox.Core.Modules
         public const string DB_LOAD_CONNECTION = "dbloadconn";
         public const string DB_SAVE_CONNECTION = "dbsaveconn";
         public const string DB_POINT_CONVERT = "dbconverttopoints";
+        public const string DB_POINT_CONVERT_SDF = "dbconverttosdf";
 
         #endregion
 
@@ -132,9 +135,14 @@ namespace FdoToolbox.Core.Modules
             }
         }
 
-        [Command(AdoNetModule.DB_POINT_CONVERT, "Convert to Point Feature Class", ImageResourceName = "shape_handles")]
+        [Command(AdoNetModule.DB_POINT_CONVERT, "Convert to Point Feature Class", Description = "Copies the table to a new Point feature class in an FDO data source", ImageResourceName = "shape_handles")]
         public void ConvertToPoints()
         {
+            if (AppGateway.RunningApplication.SpatialConnectionManager.GetConnectionNames().Count == 0)
+            {
+                AppConsole.Alert("Error", "Cannot database table to points. There are no FDO data sources open");
+                return;
+            }
             DbConnectionInfo dbConnInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (dbConnInfo != null)
             {
@@ -144,6 +152,43 @@ namespace FdoToolbox.Core.Modules
                 if (options != null)
                 {
                     DbToPointCopyTask task = new DbToPointCopyTask(options);
+                    new TaskProgressDlg(task).Run();
+                }
+            }
+        }
+
+        [Command(AdoNetModule.DB_POINT_CONVERT_SDF, "Convert to Point Feature SDF", Description = "Copies the table to a new Point feature class in a new SDF file", ImageResourceName = "shape_handles")]
+        public void ConvertToPointsSdf()
+        {
+            DbConnectionInfo dbConnInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            if (dbConnInfo != null)
+            {
+                string database = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabase();
+                string table = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedTable();
+                CopyDbToPointsSdfDlg diag = new CopyDbToPointsSdfDlg(dbConnInfo, database, table);
+                if (diag.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    FeatureSchema schema = new FeatureSchema(diag.SchemaName, "");
+
+                    IConnection conn = ExpressUtility.ApplySchemaToNewSDF(schema, diag.FilePath);
+                    conn.Open();
+
+                    string name = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
+                    SpatialConnectionInfo connInfo = new SpatialConnectionInfo(name, conn);
+
+                    DbToPointCopyOptions options = new DbToPointCopyOptions(dbConnInfo, connInfo);
+                    options.ClassName = diag.ClassName;
+                    options.ColumnList.AddRange(diag.GetColumns());
+                    options.Database = diag.Database;
+                    options.SchemaName = diag.SchemaName;
+                    options.Table = diag.Table;
+                    options.XColumn = diag.XColumn;
+                    options.YColumn = diag.YColumn;
+                    if (diag.ThreeDimensions)
+                        options.ZColumn = diag.ZColumn;
+
+                    DbToPointCopyTask task = new DbToPointCopyTask(options);
+
                     new TaskProgressDlg(task).Run();
                 }
             }
