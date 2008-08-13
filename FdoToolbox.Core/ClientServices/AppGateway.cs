@@ -41,6 +41,12 @@ namespace FdoToolbox.Core.ClientServices
                 }
                 return _AppInstance;
             }
+#if DEBUG
+            set
+            {
+                _AppInstance = value;
+            }
+#endif
         }
     }
 }

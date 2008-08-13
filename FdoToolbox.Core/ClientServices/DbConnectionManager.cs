@@ -6,7 +6,7 @@ using System.Data;
 
 namespace FdoToolbox.Core.ClientServices
 {
-    public class DbConnectionManager : IDbConnectionManager, IDisposable
+    public class DbConnectionManager : IDbConnectionManager
     {
         private int counter = 0;
 
@@ -73,9 +73,9 @@ namespace FdoToolbox.Core.ClientServices
         public void RenameConnection(string oldName, string newName)
         {
             if (!_Connections.ContainsKey(oldName))
-                throw new ArgumentException("The connection to be renamed could not be found: " + oldName);
+                throw new DbConnectionException("The connection to be renamed could not be found: " + oldName);
             if (_Connections.ContainsKey(newName))
-                throw new ArgumentException("Cannot rename connection " + oldName + " to " + newName + " as a connection of that name already exists");
+                throw new DbConnectionException("Cannot rename connection " + oldName + " to " + newName + " as a connection of that name already exists");
 
             DbConnectionInfo conn = _Connections[oldName];
             _Connections.Remove(oldName);

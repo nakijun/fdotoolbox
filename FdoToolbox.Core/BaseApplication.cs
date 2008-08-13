@@ -118,9 +118,10 @@ namespace FdoToolbox.Core
         public string AppPath 
         { 
             get 
-            { 
+            {
+                Uri uri = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
                 return System.IO.Path.GetDirectoryName(
-                    System.Reflection.Assembly.GetExecutingAssembly().Location); 
+                    uri.LocalPath);
             } 
         }
 

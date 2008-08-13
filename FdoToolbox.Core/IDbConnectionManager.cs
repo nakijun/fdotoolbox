@@ -5,7 +5,7 @@ using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core
 {
-    public interface IDbConnectionManager
+    public interface IDbConnectionManager : IDisposable
     {
         string CreateUniqueName();
         void AddConnection(DbConnectionInfo conn);

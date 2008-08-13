@@ -167,16 +167,27 @@ namespace FdoToolbox.Core.Modules
 
         public void LoadExtension(string assemblyFile)
         {
-            string asmPath = assemblyFile;
-            //Is this thing rooted? :-)
-            if (!System.IO.Path.IsPathRooted(assemblyFile))
-                asmPath = System.IO.Path.Combine(AppGateway.RunningApplication.AppPath, asmPath);
-            Assembly asm = Assembly.LoadFile(asmPath);
-            LoadExtension(asm);
+            try
+            {
+                string asmPath = assemblyFile;
+                //Is this thing rooted? :-)
+                if (!System.IO.Path.IsPathRooted(assemblyFile))
+                    asmPath = System.IO.Path.Combine(AppGateway.RunningApplication.AppPath, asmPath);
+                Assembly asm = Assembly.LoadFile(asmPath);
+                LoadExtension(asm);
 
-            string uiExtensionFile = assemblyFile.Replace(".dll", ".UIExtension");
-            if (File.Exists(uiExtensionFile))
-                AppGateway.RunningApplication.ExtendUI(uiExtensionFile);
+                string uiExtensionFile = assemblyFile.Replace(".dll", ".UIExtension");
+                if (File.Exists(uiExtensionFile))
+                    AppGateway.RunningApplication.ExtendUI(uiExtensionFile);
+            }
+            catch (ModuleLoadException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new ModuleLoadException("Error loading assembly", ex);
+            }
         }
 
         public bool IsCommandExecutable(string cmdName, IConnection conn)

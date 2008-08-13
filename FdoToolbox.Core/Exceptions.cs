@@ -63,6 +63,13 @@ namespace FdoToolbox.Core
         public DbToSpatialException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    public class PreferenceException : Exception
+    {
+        public PreferenceException() : base() { }
+        public PreferenceException(string msg) : base(msg) { }
+        public PreferenceException(string msg, Exception inner) : base(msg, inner) { }
+    }
+
     public class UnsupportedException : Exception
     {
         public UnsupportedException() : base() { }
