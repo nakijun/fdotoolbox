@@ -9,7 +9,7 @@ namespace TestRunner
         [STAThread]
         static void Main(string[] args)
         {
-            NUnit.ConsoleRunner.Runner.Main(new string[] { "TestLibrary.dll" });
+            NUnit.ConsoleRunner.Runner.Main(new string[] { "/labels", "TestLibrary.dll" });
         }
     }
 }
