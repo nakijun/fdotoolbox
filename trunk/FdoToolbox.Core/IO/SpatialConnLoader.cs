@@ -50,6 +50,7 @@ namespace FdoToolbox.Core.IO
             }
             IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(c.Provider);
             conn.ConnectionString = c.ConnectionString;
+            conn.Open();
             return new SpatialConnectionInfo(c.Name, conn);
         }
 

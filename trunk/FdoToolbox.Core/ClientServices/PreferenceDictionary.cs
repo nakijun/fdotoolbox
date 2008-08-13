@@ -37,9 +37,9 @@ namespace FdoToolbox.Core.ClientServices
         void SetBooleanPref(string name, bool value);
         void SetStringPref(string name, string value);
 
-        double? GetDoublePref(string name);
-        int? GetIntegerPref(string name);
-        bool? GetBooleanPref(string name);
+        double GetDoublePref(string name);
+        int GetIntegerPref(string name);
+        bool GetBooleanPref(string name);
         string GetStringPref(string name);
 
         List<string> GetDoublePrefNames();
@@ -146,6 +146,8 @@ namespace FdoToolbox.Core.ClientServices
 
         public void SetStringPref(string name, string pref)
         {
+            if (string.IsNullOrEmpty(pref))
+                throw new PreferenceException("pref value cannot be empty or null: " + name);
             _StringPrefs[name] = pref;
         }
 
@@ -164,32 +166,36 @@ namespace FdoToolbox.Core.ClientServices
             _BooleanPrefs[name] = pref;
         }
 
-        public bool? GetBooleanPref(string name)
+        public bool GetBooleanPref(string name)
         {
             if (_BooleanPrefs.ContainsKey(name))
                 return _BooleanPrefs[name];
-            return null;
+
+            throw new PreferenceException(name);
         }
 
-        public int? GetIntegerPref(string name)
+        public int GetIntegerPref(string name)
         {
             if (_IntegerPrefs.ContainsKey(name))
                 return _IntegerPrefs[name];
-            return null;
+
+            throw new PreferenceException(name);
         }
 
-        public double? GetDoublePref(string name)
+        public double GetDoublePref(string name)
         {
             if (_DoublePrefs.ContainsKey(name))
                 return _DoublePrefs[name];
-            return null;
+
+            throw new PreferenceException(name);
         }
 
         public string GetStringPref(string name)
         {
             if (_StringPrefs.ContainsKey(name))
                 return _StringPrefs[name];
-            return null;
+
+            throw new PreferenceException(name);
         }
 
         public List<string> GetDoublePrefNames()
@@ -223,50 +229,34 @@ namespace FdoToolbox.Core.ClientServices
             List<string> doubleNames = this.GetDoublePrefNames();
             foreach (string pref in doubleNames)
             {
-                double? value = this.GetDoublePref(pref);
-                if (value.HasValue)
-                {
-                    DoublePref dp = new DoublePref();
-                    dp.name = pref;
-                    dp.value = value.Value;
-                    dprefs.Add(dp);
-                }
+                DoublePref dp = new DoublePref();
+                dp.name = pref;
+                dp.value = this.GetDoublePref(pref);
+                dprefs.Add(dp);
             }
             List<string> integerNames = this.GetIntegerPrefNames();
             foreach (string pref in integerNames)
             {
-                int? value = this.GetIntegerPref(pref);
-                if (value.HasValue)
-                {
-                    IntegerPref ip = new IntegerPref();
-                    ip.name = pref;
-                    ip.value = value.Value.ToString();
-                    iprefs.Add(ip);
-                }
+                IntegerPref ip = new IntegerPref();
+                ip.name = pref;
+                ip.value = this.GetIntegerPref(pref).ToString();
+                iprefs.Add(ip);
             }
             List<string> stringNames = this.GetStringPrefNames();
             foreach (string pref in stringNames)
             {
-                string value = this.GetStringPref(pref);
-                if (value != null)
-                {
-                    StringPref sp = new StringPref();
-                    sp.name = pref;
-                    sp.value = value;
-                    sprefs.Add(sp);
-                }
+                StringPref sp = new StringPref();
+                sp.name = pref;
+                sp.value = this.GetStringPref(pref); ;
+                sprefs.Add(sp);
             }
             List<string> booleanNames = this.GetBooleanPrefNames();
             foreach (string pref in booleanNames)
             {
-                bool? value = this.GetBooleanPref(pref);
-                if (value.HasValue)
-                {
-                    BooleanPref bp = new BooleanPref();
-                    bp.name = pref;
-                    bp.value = value.Value;
-                    bprefs.Add(bp);
-                }
+                BooleanPref bp = new BooleanPref();
+                bp.name = pref;
+                bp.value = this.GetBooleanPref(pref);
+                bprefs.Add(bp);
             }
 
             prefs.BooleanPrefs = bprefs.ToArray();

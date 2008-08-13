@@ -90,9 +90,9 @@ namespace FdoToolbox.Core
                     _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
 
                     InitConsole();
-                    bool? timestamp = this.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
-                    AppConsole.Out.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
-                    AppConsole.Err.TimestampEntries = timestamp.HasValue ? timestamp.Value : false;
+                    bool timestamp = this.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
+                    AppConsole.Out.TimestampEntries = timestamp;
+                    AppConsole.Err.TimestampEntries = timestamp;
                     AppConsole.WriteLine("FDO Toolbox. Version {0}", this.Version);
                     AppConsole.WriteLine("Loading modules");
 

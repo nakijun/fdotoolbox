@@ -38,7 +38,9 @@ namespace FdoToolbox.Core.Common
         {
             get { return _Meta; }
         }
-
+#if DEBUG
+        public DbConnectionInfo() { }
+#endif
         public DbConnectionInfo(string name, IDbConnection conn, string driver)
         {
             this.Name = name;

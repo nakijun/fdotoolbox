@@ -70,7 +70,7 @@ namespace FdoToolbox.Core.Modules
         {
             try
             {
-                bool? timestamp = AppGateway.RunningApplication.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
+                bool timestamp = AppGateway.RunningApplication.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
                 AppGateway.RunningApplication.Preferences.SetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, false);
                 for (int i = 0; i < 100; i++)
                 {
@@ -81,8 +81,7 @@ namespace FdoToolbox.Core.Modules
                         Thread.Sleep(500);
                     }
                 }
-                if (timestamp.HasValue)
-                    AppGateway.RunningApplication.Preferences.SetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, timestamp.Value);
+                AppGateway.RunningApplication.Preferences.SetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, timestamp);
 
                 SendMessage("Task completed");
             }
