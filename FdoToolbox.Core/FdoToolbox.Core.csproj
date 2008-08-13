@@ -62,6 +62,9 @@
   <ItemGroup>
     <Compile Include="ClientServices\AppGateway.cs" />
     <Compile Include="ClientServices\AppSession.cs" />
+    <Compile Include="Common\IncompatibleSchema.cs" />
+    <Compile Include="Common\IncompatibleClass.cs" />
+    <Compile Include="Common\IncompatibleProperty.cs" />
     <Compile Include="Configuration\BulkCopyTask.cs" />
     <Compile Include="Configuration\DbConnection.cs" />
     <Compile Include="Configuration\DbJoinTask.cs" />
