@@ -22,6 +22,10 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using FdoToolbox.Core;
+using FdoToolbox.Core.Modules;
+using FdoToolbox.Core.Commands;
+using System.IO;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Tests
 {
@@ -32,21 +36,75 @@ namespace FdoToolbox.Tests
         [ExpectedException(typeof(ModuleLoadException))]
         public void TestLoadBadModuleDuplicateCmdName()
         {
-            Assert.Fail("Not implemented");
-        }
-
-        [Test]
-        [ExpectedException(typeof(ModuleLoadException))]
-        public void TestLoadBadModuleNoSuchInterface()
-        {
-            Assert.Fail("Not implemented");
+            IModuleMgr mgr = new ModuleMgr();
+            mgr.LoadModule(new MockModule1());
+            mgr.LoadModule(new MockModule2());
         }
 
         [Test]
         [ExpectedException(typeof(ModuleLoadException))]
         public void TestLoadBadModuleInvalidAssembly()
         {
-            Assert.Fail("Not implemented");
+            IModuleMgr mgr = new ModuleMgr();
+            string file = Path.Combine(AppGateway.RunningApplication.AppPath, "Test.xml");
+            Console.WriteLine("Loading: {0}", file);
+            mgr.LoadExtension(file);
+        }
+    }
+
+    public class MockModule1 : ModuleBase
+    {
+        public override string Name
+        {
+            get { return "mock1"; }
+        }
+
+        public override string Description
+        {
+            get { return "mock module 1"; }
+        }
+
+        public override void Initialize()
+        {
+            
+        }
+
+        public override void Cleanup()
+        {
+            
+        }
+
+        [Command("test", "test")]
+        public void Test()
+        {
+        }
+    }
+
+    public class MockModule2 : ModuleBase
+    {
+        public override string Name
+        {
+            get { return "mock2"; }
+        }
+
+        public override string Description
+        {
+            get { return "mock module 2"; }
+        }
+
+        public override void Initialize()
+        {
+
+        }
+
+        public override void Cleanup()
+        {
+
+        }
+
+        [Command("test", "test")]
+        public void Test()
+        {
         }
     }
 }

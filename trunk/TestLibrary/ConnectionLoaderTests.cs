@@ -21,6 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using OSGeo.FDO.Connections;
+using FdoToolbox.Core.IO;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Tests
 {
@@ -28,33 +31,30 @@ namespace FdoToolbox.Tests
     public class ConnectionLoaderTests : BaseTest
     {
         [Test]
+        [ExpectedException]
         public void TestBadDbConnectionString()
         {
-            Assert.Fail("Not implemented");
+            string file = "DbConnBadConnectionString.dbconn";
+            DbConnectionInfo connInfo = DbConnLoader.LoadConnection(file);
+            using (connInfo.Connection) { }
         }
 
         [Test]
+        [ExpectedException(typeof(OSGeo.FDO.Common.Exception))]
         public void TestBadSpatialConnectionString()
         {
-            Assert.Fail("Not implemented");
+            string file = "SpatialConnBadConnectionString.conn";
+            SpatialConnectionInfo connInfo = SpatialConnLoader.LoadConnection(file);
+            using (connInfo.Connection) { }
         }
 
         [Test]
+        [ExpectedException(typeof(OSGeo.FDO.Common.Exception))]
         public void TestBadFdoProvider()
         {
-            Assert.Fail("Not implemented");
-        }
-
-        [Test]
-        public void TestLoadDbConnNameAlreadyExists()
-        {
-            Assert.Fail("Not implemented");
-        }
-
-        [Test]
-        public void TestLoadSpatialConnNameAlreadyExists()
-        {
-            Assert.Fail("Not implemented");
+            string file = "SpatialConnBadProvider.conn";
+            SpatialConnectionInfo connInfo = SpatialConnLoader.LoadConnection(file);
+            using (connInfo.Connection) { }
         }
     }
 }

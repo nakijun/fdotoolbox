@@ -22,6 +22,9 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using FdoToolbox.Core;
+using FdoToolbox.Core.IO;
+using System.IO;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Tests
 {
@@ -31,13 +34,37 @@ namespace FdoToolbox.Tests
         [Test]
         public void TestLoadTask()
         {
-            Assert.Fail("Not implemented");
+            string file = "Target.sdf";
+            try
+            {
+                bool result = ExpressUtility.CreateSDF(file);
+                Assert.IsTrue(result);
+
+                ITask task = TaskLoader.LoadTask("Join.task", true);
+                Assert.IsNotNull(task);
+                SpatialJoinTask join = (SpatialJoinTask)task;
+                join.Options.PrimarySource.Connection.Dispose();
+                join.Options.SecondarySource.Connection.Dispose();
+                join.Options.Target.Connection.Dispose();
+
+                task = TaskLoader.LoadTask("Copy.task", true);
+                SpatialBulkCopyTask bcp = (SpatialBulkCopyTask)task;
+                bcp.Options.Source.Connection.Dispose();
+                bcp.Options.Target.Connection.Dispose();
+                Assert.IsNotNull(task);
+            }
+            finally
+            {
+                if (File.Exists(file))
+                    File.Delete(file);
+            }
         }
 
         [Test]
         public void TestMalformedTask()
         {
-            Assert.Fail("Not implemented");
+            ITask task = TaskLoader.LoadTask("Test.xml", true);
+            Assert.IsNull(task);
         }
 
         [Test]
@@ -195,24 +222,6 @@ namespace FdoToolbox.Tests
         [Test]
         [ExpectedException(typeof(TaskValidationException))]
         public void TestValidateJoinFailInvalidJoinPair()
-        {
-            Assert.Fail("Not implemented");
-        }
-
-        [Test(Description = "Test that the correct override is loaded")]
-        public void TestLoadBcpTaskMySql()
-        {
-            Assert.Fail("Not implemented");
-        }
-
-        [Test(Description = "Test that the correct override is loaded")]
-        public void TestLoadBcpTaskOracle()
-        {
-            Assert.Fail("Not implemented");
-        }
-
-        [Test(Description = "Test that the correct override is loaded")]
-        public void TestLoadBcpTaskShp()
         {
             Assert.Fail("Not implemented");
         }

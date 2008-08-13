@@ -195,13 +195,118 @@ namespace FdoToolbox.Tests
         [Test]
         public void TestCreateSpatialContext()
         {
-            Assert.Fail("Not implemented");
+            string file = "Test.sdf";
+            try
+            {
+                bool result = ExpressUtility.CreateSDF(file);
+                Assert.IsTrue(result);
+
+                SpatialContextInfo ctx = new SpatialContextInfo();
+                ctx.Name = "Default";
+                ctx.CoordinateSystem = "";
+                ctx.CoordinateSystemWkt = "";
+                ctx.Description = "Default Spatial Context";
+                ctx.ExtentType = OSGeo.FDO.Commands.SpatialContext.SpatialContextExtentType.SpatialContextExtentType_Dynamic;
+                ctx.XYTolerance = 0.0001;
+                ctx.ZTolerance = 0.0001;
+
+                IConnection conn = ExpressUtility.CreateSDFConnection(file, false);
+                conn.Open();
+                Assert.IsTrue(conn.ConnectionState == ConnectionState.ConnectionState_Open);
+                using (conn)
+                {
+                    using (FeatureService service = new FeatureService(conn))
+                    {
+                        service.CreateSpatialContext(ctx, false);
+
+                        List<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                        SpatialContextInfo sc = service.GetSpatialContext(ctx.Name);
+
+                        Assert.IsNotNull(sc);
+                        Assert.AreEqual(sc.CoordinateSystem, ctx.CoordinateSystem);
+                        Assert.AreEqual(sc.CoordinateSystemWkt, ctx.CoordinateSystemWkt);
+                        Assert.AreEqual(sc.Description, ctx.Description);
+                        Assert.AreEqual(sc.ExtentGeometryText, ctx.ExtentGeometryText);
+                        Assert.AreEqual(sc.ExtentType, ctx.ExtentType);
+                        Assert.AreEqual(sc.Name, ctx.Name);
+                        Assert.AreEqual(sc.XYTolerance, ctx.XYTolerance);
+                        Assert.AreEqual(sc.ZTolerance, ctx.ZTolerance);
+                    }
+                }
+            }
+            finally
+            {
+                if (File.Exists(file))
+                    File.Delete(file);
+            }
         }
 
         [Test]
         public void TestUpdateSpatialContext()
         {
-            Assert.Fail("Not implemented");
+            string file = "Test.sdf";
+            try
+            {
+                bool result = ExpressUtility.CreateSDF(file);
+                Assert.IsTrue(result);
+
+                SpatialContextInfo ctx = new SpatialContextInfo();
+                ctx.Name = "Default";
+                ctx.CoordinateSystem = "";
+                ctx.CoordinateSystemWkt = "";
+                ctx.Description = "Default Spatial Context";
+                ctx.ExtentType = OSGeo.FDO.Commands.SpatialContext.SpatialContextExtentType.SpatialContextExtentType_Dynamic;
+                ctx.XYTolerance = 0.0001;
+                ctx.ZTolerance = 0.0001;
+
+                IConnection conn = ExpressUtility.CreateSDFConnection(file, false);
+                conn.Open();
+                Assert.IsTrue(conn.ConnectionState == ConnectionState.ConnectionState_Open);
+                using (conn)
+                {
+                    using (FeatureService service = new FeatureService(conn))
+                    {
+                        service.CreateSpatialContext(ctx, false);
+
+                        List<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                        SpatialContextInfo sc = service.GetSpatialContext(ctx.Name);
+
+                        Assert.IsNotNull(sc);
+                        Assert.AreEqual(sc.CoordinateSystem, ctx.CoordinateSystem);
+                        Assert.AreEqual(sc.CoordinateSystemWkt, ctx.CoordinateSystemWkt);
+                        Assert.AreEqual(sc.Description, ctx.Description);
+                        Assert.AreEqual(sc.ExtentGeometryText, ctx.ExtentGeometryText);
+                        Assert.AreEqual(sc.ExtentType, ctx.ExtentType);
+                        Assert.AreEqual(sc.Name, ctx.Name);
+                        Assert.AreEqual(sc.XYTolerance, ctx.XYTolerance);
+                        Assert.AreEqual(sc.ZTolerance, ctx.ZTolerance);
+
+                        sc.XYTolerance = 0.2;
+                        sc.ZTolerance = 0.3;
+                        sc.Description = "Foobar";
+
+                        service.CreateSpatialContext(sc, true);
+
+                        ctx = service.GetSpatialContext(sc.Name);
+                        Assert.IsNotNull(ctx);
+                        Assert.AreEqual(sc.CoordinateSystem, ctx.CoordinateSystem);
+                        Assert.AreEqual(sc.CoordinateSystemWkt, ctx.CoordinateSystemWkt);
+                        Assert.AreEqual(sc.Description, ctx.Description);
+                        Assert.AreEqual(sc.ExtentGeometryText, ctx.ExtentGeometryText);
+                        Assert.AreEqual(sc.ExtentType, ctx.ExtentType);
+                        Assert.AreEqual(sc.IsActive, ctx.IsActive);
+                        Assert.AreEqual(sc.Name, ctx.Name);
+                        Assert.AreEqual(sc.XYTolerance, ctx.XYTolerance);
+                        Assert.AreEqual(sc.ZTolerance, ctx.ZTolerance);
+
+                    }
+                }
+            }
+            finally
+            {
+                if (!File.Exists(file))
+                    File.Delete(file);
+            }
         }
     }
 }

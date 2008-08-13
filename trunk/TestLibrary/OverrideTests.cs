@@ -21,33 +21,28 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using FdoToolbox.Core.ClientServices;
-using FdoToolbox.Core.IO;
-using FdoToolbox.Core;
 
 namespace FdoToolbox.Tests
 {
-    public abstract class BaseTest
+    [TestFixture]
+    public class OverrideTests : BaseTest
     {
-        [TestFixtureSetUp]
-        public void TestSetup()
+        [Test(Description = "Test that the correct override is loaded")]
+        public void TestLoadBcpTaskMySql()
         {
-            AppGateway.RunningApplication = new MockApplication();
-
-            AppConsole.Out = new CmdConsoleOutputStream();
-            AppConsole.Err = new CmdConsoleErrorStream();
-            AppConsole.DoAlert += new AlertHandler(AppConsole_DoAlert);
-            AppConsole.DoConfirm += new ConfirmHandler(AppConsole_DoConfirm);
+            Assert.Fail("Not implemented");
         }
 
-        bool AppConsole_DoConfirm(string title, string message)
+        [Test(Description = "Test that the correct override is loaded")]
+        public void TestLoadBcpTaskOracle()
         {
-            return true;
+            Assert.Fail("Not implemented");
         }
 
-        void AppConsole_DoAlert(string title, string message)
+        [Test(Description = "Test that the correct override is loaded")]
+        public void TestLoadBcpTaskShp()
         {
-            Console.WriteLine("[{0}] {1}", title, message);
+            Assert.Fail("Not implemented");
         }
     }
 }
