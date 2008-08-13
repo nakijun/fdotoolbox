@@ -100,6 +100,7 @@
     <Compile Include="Controls\SpatialJoinCtl.Designer.cs">
       <DependentUpon>SpatialJoinCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ETL\DataTypeComparer.cs" />
     <Compile Include="ETL\DbToPointCopyOptions.cs" />
     <Compile Include="ETL\DbToPointCopyTask.cs" />
     <Compile Include="ETL\IClassNameOverride.cs" />
