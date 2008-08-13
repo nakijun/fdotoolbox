@@ -20,6 +20,9 @@ DO NOT DELETE THIS FILE!!!
 			</SubMenu>
 			<SubMenu name="Task" resource="application_go">
 				<Command name="createbcp" />
+				<Command name="createdbjoin" />
+				<Separator/>
+				<Command name="loadtask" />
 			</SubMenu>
 			<SubMenu name="Data Store" resource="database">
 				<Command name="sdfcreate" displayName="SDF" />
@@ -38,6 +41,12 @@ DO NOT DELETE THIS FILE!!!
 				<Command name="connect" displayName="Custom" />
 			</Menu>
 			<Command name="loadconn" />
+			<Separator/>
+			<Menu name="Create Data Store" resource="database">
+				<Command name="sdfcreate" displayName="SDF" />
+				<Command name="shpcreate" displayName="SHP" />
+				<Command name="mkdstore" displayName="Custom" />
+			</Menu>
 		</Connections>
 		<Tasks>
 			<Menu name="New" resource="application_go">
@@ -108,7 +117,10 @@ DO NOT DELETE THIS FILE!!!
 		<SelectedTable>
 			<Command name="dbdatapreview" />
 			<Separator/>
-			<Command name="dbconverttopoints" />
+			<SubMenu name="Convert table">
+				<Command name="dbconverttopoints" />
+				<Command name="dbconverttosdf" />
+			</SubMenu>
 		</SelectedTable>
 	</ContextMenus>
 </ObjectExplorer>
