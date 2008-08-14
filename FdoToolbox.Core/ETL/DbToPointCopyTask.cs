@@ -55,6 +55,9 @@ namespace FdoToolbox.Core.ETL
 
                 if (classDef != null)
                     throw new TaskValidationException("A class named " + this.Options.ClassName + " already exists");
+
+                if (!service.SupportsCommand(CommandType.CommandType_ApplySchema))
+                    throw new TaskValidationException("Target does not support the IApplySchema command");
             }
 
             System.Data.IDbCommand cmd = this.Options.Source.Connection.CreateCommand();
