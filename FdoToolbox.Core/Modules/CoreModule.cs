@@ -99,6 +99,9 @@ namespace FdoToolbox.Core.Modules
         public const string CMD_PREVIEWCLASS = "previewclass";
         public const string CMD_CREATEJOIN = "createdbjoin";
         public const string CMD_PREFERENCES = "preferences";
+        public const string CMD_REMOVEALLSPATIALCONNECTIONS = "removeallspatialconnections";
+        public const string CMD_REMOVEALLTASKS = "removealltasks";
+
         #endregion
 
         public override string Name
@@ -741,6 +744,28 @@ namespace FdoToolbox.Core.Modules
             //TODO: make single instance
             PreferencesCtl ctl = new PreferencesCtl();
             AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
+        }
+
+        [Command(CoreModule.CMD_REMOVEALLSPATIALCONNECTIONS, "Remove All Connections", ImageResourceName = "cross")]
+        public void RemoveAllSpatialConnections()
+        {
+            ICollection<string> names = AppGateway.RunningApplication.SpatialConnectionManager.GetConnectionNames();
+            List<string> connNames = new List<string>(names);
+            foreach (string n in connNames)
+            {
+                AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(n);
+            }
+        }
+        
+        [Command(CoreModule.CMD_REMOVEALLTASKS, "Remove All Tasks", ImageResourceName = "cross")]
+        public void RemoveAllTasks()
+        {
+            ICollection<string> names = AppGateway.RunningApplication.TaskManager.TaskNames;
+            List<string> taskNames = new List<string>(names);
+            foreach (string n in taskNames)
+            {
+                AppGateway.RunningApplication.TaskManager.RemoveTask(n);
+            }
         }
 
         public bool IsCommandExecutable(string cmdName, IConnection conn)

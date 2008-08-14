@@ -27,6 +27,7 @@ namespace FdoToolbox.Core.Modules
         public const string DB_SAVE_CONNECTION = "dbsaveconn";
         public const string DB_POINT_CONVERT = "dbconverttopoints";
         public const string DB_POINT_CONVERT_SDF = "dbconverttosdf";
+        public const string DB_REMOVE_ALL_CONNECTIONS = "dbremoveallconnections";
 
         #endregion
 
@@ -84,6 +85,17 @@ namespace FdoToolbox.Core.Modules
             DbConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
                 AppGateway.RunningApplication.DatabaseConnectionManager.RemoveConnection(connInfo.Name);
+        }
+        
+        [Command(AdoNetModule.DB_REMOVE_ALL_CONNECTIONS, "Remove All Connections", ImageResourceName = "cross")]
+        public void RemoveAllDbConnections()
+        {
+            ICollection<string> names = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnectionNames();
+            List<string> connNames = new List<string>(names);
+            foreach (string n in connNames)
+            {
+                AppGateway.RunningApplication.DatabaseConnectionManager.RemoveConnection(n);
+            }
         }
 
         [Command(AdoNetModule.DB_DATA_PREVIEW, "Data Preview", ImageResourceName = "zoom")]
