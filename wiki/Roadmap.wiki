@@ -3,7 +3,7 @@
 === 0.6 ===
  * Spatial -> Non-Spatial bulk copy
  * Non-Spatial -> Spatial bulk copy
- * Non-Spatial -> Spatial (Point Features) conversion 
+ * ~~Non-Spatial -> Spatial (Point Features) conversion~~
 
 === Future ===
  * Advanced bulk copy options
