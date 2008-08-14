@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Module auto-load file. Place paths to assemblies that you want to automatically
+load when FDO Toolbox starts up.
+-->
+<ModuleList>
+    <!--
+    <Module>TestModule.dll</Module>
+    -->
+</ModuleList>
