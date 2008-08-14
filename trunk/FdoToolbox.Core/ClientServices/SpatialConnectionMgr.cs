@@ -79,6 +79,10 @@ namespace FdoToolbox.Core.ClientServices
                 conn.Dispose();
                 if (this.ConnectionRemoved != null)
                     this.ConnectionRemoved(name);
+
+                //Reset counter if no connections left
+                if (_ConnectionDict.Count == 0)
+                    counter = 0;
             }
         }
 
