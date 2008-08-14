@@ -40,13 +40,14 @@ DO NOT DELETE THIS FILE!!!
 				<Command name="shpdirconnect" displayName="SHP (directory)" />
 				<Command name="connect" displayName="Custom" />
 			</Menu>
-			<Command name="loadconn" />
-			<Separator/>
 			<Menu name="Create Data Store" resource="database">
 				<Command name="sdfcreate" displayName="SDF" />
 				<Command name="shpcreate" displayName="SHP" />
 				<Command name="mkdstore" displayName="Custom" />
 			</Menu>
+			<Command name="loadconn" />
+			<Separator/>
+			<Command name="removeallspatialconnections" />
 		</Connections>
 		<Tasks>
 			<Menu name="New" resource="application_go">
@@ -54,6 +55,8 @@ DO NOT DELETE THIS FILE!!!
 				<Command name="createdbjoin" />
 			</Menu>
 			<Command name="loadtask" />
+			<Separator/>
+			<Command name="removealltasks" />
 		</Tasks>
 		<Modules>
 			<Command name="extload" />
@@ -101,6 +104,8 @@ DO NOT DELETE THIS FILE!!!
 		<DatabaseConnections>
 			<Command name="dbconnect" />
 			<Command name="dbloadconn" />
+			<Separator/>
+			<Command name="dbremoveallconnections" />
 		</DatabaseConnections>
 		<SelectedDatabaseConnection>
 			<Command name="dbrefreshconn" />
