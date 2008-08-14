@@ -1,4 +1,5 @@
 - Enhancements:
+	- Non-Spatial data support: Copy database tables to Point Feature Classes.
 	- Tasks and connections are persisted and restored on each session.
 	- Data Preview: Filtering support for Select Aggregates
 	- Save/Load support for non-spatial connections
@@ -18,6 +19,7 @@
 	- Oracle-specific overrides
 	- Bulk Copy: Improved counting process by avoiding the brute force approach if a faster alternative is available.
 	- Bulk Copy: Fixed improper property/class mapping
+	- Bulk Copy: If copying full schema, if any classes in it have no identity properties. An auto-generated property will be automatically created for it.
 
 v0.5.0
 ------
