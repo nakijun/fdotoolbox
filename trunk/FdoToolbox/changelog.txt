@@ -1,4 +1,8 @@
 - Enhancements:
+	- New "Remove All" command for:
+		- FDO connections
+		- ADO.net connections
+		- Tasks
 	- Non-Spatial data support: Copy database tables to Point Feature Classes.
 	- Tasks and connections are persisted and restored on each session.
 	- Data Preview: Filtering support for Select Aggregates
@@ -7,6 +11,7 @@
 	- Bulk Copy: Support for batched insertions. Insert performance is better under batched mode (upwards of 10x faster in Oracle!), but this is not supported by all providers.
 	
 - Other:
+	- Object explorer menu updates
 	- Data Preview: Grid pane now resides in a tab.
 	- Added a unit test suite. Not all tests currently pass, as they are still being implemented and retrofitted. 
 	  Unit tests for the FDO API are *not* guaranteed to pass. Unit tests are only built in the debug configuration.
@@ -15,8 +20,8 @@
 	- Running tasks are now actually cancellable.
 	- MySQL copy spatial context fixes.
 	- Saving schema was saving with the schema name instead of the chosen file name.
-	- Fixed improper property mapping in Bulk Copy Control.
-	- Oracle-specific overrides
+	- Fixed incorrect property mapping in Bulk Copy Control.
+	- Bulk Copy: Oracle-specific overrides
 	- Bulk Copy: Improved counting process by avoiding the brute force approach if a faster alternative is available.
 	- Bulk Copy: Fixed improper property/class mapping
 	- Bulk Copy: If copying full schema, if any classes in it have no identity properties. An auto-generated property will be automatically created for it.
