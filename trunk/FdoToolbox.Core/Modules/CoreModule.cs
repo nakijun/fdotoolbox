@@ -116,16 +116,20 @@ namespace FdoToolbox.Core.Modules
 
         public override void Initialize() 
         {
-            AppGateway.RunningApplication.OnAppInitialized += delegate
+            _App = AppGateway.RunningApplication;
+
+            _App.OnAppInitialized += delegate
             {
                 AppConsole.WriteLine("Type \"{0}\" for a list of all available commands", CMD_CMDLIST);
             };
 
-            AppGateway.RunningApplication.TabManager.RegisterTabType(typeof(SpatialDataPreviewCtl));
-            AppGateway.RunningApplication.TabManager.RegisterTabType(typeof(DataStoreMgrCtl));
-            AppGateway.RunningApplication.TabManager.RegisterTabType(typeof(SchemaMgrCtl));
-            AppGateway.RunningApplication.TabManager.RegisterTabType(typeof(SpatialContextCtl));
+            _App.TabManager.RegisterTabType(typeof(SpatialDataPreviewCtl));
+            _App.TabManager.RegisterTabType(typeof(DataStoreMgrCtl));
+            _App.TabManager.RegisterTabType(typeof(SchemaMgrCtl));
+            _App.TabManager.RegisterTabType(typeof(SpatialContextCtl));
         }
+
+        private IHostApplication _App;
 
         public override void Cleanup() { }
 
@@ -153,30 +157,30 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_ABOUT, "About", Description = "About this application", ImageResourceName = "information")]
         public void About()
         {
-            AppGateway.RunningApplication.About();
+            _App.About();
         }
 
         [Command(CoreModule.CMD_QUIT, "Quit", Description = "Quit this application", ShortcutKeys = Keys.Alt | Keys.F4)]
         public void Quit()
         {
-            AppGateway.RunningApplication.Quit();
+            _App.Quit();
         }
 
         [Command(CoreModule.CMD_CONNECT, "Connect to Data", Description = "Creates a connection to an FDO-supported data source using the generic connection dialog", ImageResourceName = "database_connect")]
         public void DataConnect()
         {
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(new GenericSpatialConnectCtl());
+            _App.Shell.ShowDocumentWindow(new GenericSpatialConnectCtl());
         }
 
         [Command(CoreModule.CMD_EXTLOAD, "Load Extension", Description = "Loads a custom extension", ImageResourceName = "plugin", ShortcutKeys = Keys.F2)]
         public void LoadExtension()
         {
-            string assemblyFile = AppGateway.RunningApplication.OpenFile("Load Extension Module", ".net Assembly (*.dll)|*.dll");
+            string assemblyFile = _App.OpenFile("Load Extension Module", ".net Assembly (*.dll)|*.dll");
             if(File.Exists(assemblyFile))
             {
                 try
                 {
-                    AppGateway.RunningApplication.ModuleManager.LoadExtension(assemblyFile);
+                    _App.ModuleManager.LoadExtension(assemblyFile);
                 }
                 catch (ModuleLoadException ex)
                 {
@@ -194,13 +198,13 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_CREATEDATASTORE, "Create Data Store", Description = "Creates a new FDO data store", ImageResourceName = "database")]
         public void CreateDataStore()
         {
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(new GenericCreateDataStoreCtl());
+            _App.Shell.ShowDocumentWindow(new GenericCreateDataStoreCtl());
         }
 
         [Command(CoreModule.CMD_CMDLIST, "List Commands", "List all available commands", InvocationType = CommandInvocationType.Console)]
         public void CommandList()
         {
-            ICollection<string> cmdNames = AppGateway.RunningApplication.ModuleManager.GetCommandNames();
+            ICollection<string> cmdNames = _App.ModuleManager.GetCommandNames();
             AppConsole.WriteLine("Registered Commands:\n");
             foreach (string name in cmdNames)
             {
@@ -212,13 +216,13 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_CLEAR, "Clear Console", "Clears the Application Console")]
         public void ClearConsole()
         {
-            AppGateway.RunningApplication.Shell.ConsoleWindow.TextWindow.Clear();
+            _App.Shell.ConsoleWindow.TextWindow.Clear();
         }
 
         [Command(CoreModule.CMD_REGPROVIDER, "Register Provider", "Add a new FDO Provider into the registry")]
         public void RegisterProvider()
         {
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(new RegProviderCtl());
+            _App.Shell.ShowDocumentWindow(new RegProviderCtl());
         }
 
         [Command(CoreModule.CMD_UNREGPROVIDER, "Unregister Provider", "Removes an installed FDO Provider from the registry")]
@@ -250,18 +254,18 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_LOADSCHEMA, "Load Schema", ImageResourceName = "folder")]
         public void LoadSchema()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo != null)
             {
-                FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
-                string schemaFile = AppGateway.RunningApplication.OpenFile("Load schemas from XML", "Feature Schema Definition (*.schema)|*.schema");
+                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                string schemaFile = _App.OpenFile("Load schemas from XML", "Feature Schema Definition (*.schema)|*.schema");
                 if (File.Exists(schemaFile))
                 {
                     try
                     {
                         service.LoadSchemasFromXml(schemaFile);
                         AppConsole.Alert("Load schemas", "Schemas loaded into connection " + connInfo.Name);
-                        AppGateway.RunningApplication.Shell.ObjectExplorer.RefreshSpatialConnection(connInfo.Name);
+                        _App.Shell.ObjectExplorer.RefreshSpatialConnection(connInfo.Name);
                     }
                     catch (OSGeo.FDO.Common.Exception ex)
                     {
@@ -275,11 +279,11 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_SAVESCHEMA, "Save Schema", ImageResourceName = "disk", InvocationType = CommandInvocationType.UI)]
         public void SaveSchema()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo != null)
             {
-                FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
-                string schemaFile = AppGateway.RunningApplication.SaveFile("Save schemas to XML", "Feature Schema Definition (*.schema)|*.schema");
+                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                string schemaFile = _App.SaveFile("Save schemas to XML", "Feature Schema Definition (*.schema)|*.schema");
                 if (schemaFile != null)
                 {
                     if (File.Exists(schemaFile))
@@ -302,19 +306,19 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_MANSCHEMA, "Manage Schemas", ImageResourceName = "chart_organisation", InvocationType = CommandInvocationType.UI)]
         public void ManageSchema()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
-            string schemaName = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSchema();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                ISpatialConnectionBoundCtl ctl = AppGateway.RunningApplication.TabManager.CreateTab(typeof(SchemaMgrCtl), connInfo);
+                ISpatialConnectionBoundCtl ctl = _App.TabManager.CreateTab(typeof(SchemaMgrCtl), connInfo);
 
                 SchemaMgrCtl schemaCtl = (SchemaMgrCtl)ctl.WrappedControl;
                 schemaCtl.SetInitialSchema(schemaName);
                 schemaCtl.OnSchemasApplied += delegate
                 {
-                    AppGateway.RunningApplication.Shell.ObjectExplorer.RefreshSpatialConnection(connInfo.Name);
+                    _App.Shell.ObjectExplorer.RefreshSpatialConnection(connInfo.Name);
                 };
-                AppGateway.RunningApplication.Shell.ShowDocumentWindow(schemaCtl);
+                _App.Shell.ShowDocumentWindow(schemaCtl);
             }
         }
 
@@ -327,7 +331,7 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_MODINFO, "Module Information", "Display information about a loaded module", ImageResourceName = "information", InvocationType = CommandInvocationType.UI)]
         public void ModuleInfo()
         {
-            IModule mod = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedModule();
+            IModule mod = _App.Shell.ObjectExplorer.GetSelectedModule();
             //invoked from console
             if (mod == null)
             {
@@ -336,25 +340,25 @@ namespace FdoToolbox.Core.Modules
             }
 
             BaseDocumentCtl ctl = new ModuleInfoCtl(mod);
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
+            _App.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(CoreModule.CMD_CREATEBCP, "Create Bulk Copy", Description = "Create a new Bulk Copy Task", ImageResourceName = "table_go")]
         public void CreateBulkCopy()
         {
-            if (AppGateway.RunningApplication.SpatialConnectionManager.GetConnectionNames().Count < 2)
+            if (_App.SpatialConnectionManager.GetConnectionNames().Count < 2)
             {
                 AppConsole.Alert("Error", "Cannot create a bulk copy task. At least two open connections are required");
                 return;
             }
             SpatialBulkCopyCtl ctl = new SpatialBulkCopyCtl();
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
+            _App.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(CoreModule.CMD_EDITTASK, "Edit Task", InvocationType = CommandInvocationType.UI)]
         public void EditTask()
         {
-            ITask task = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedTask();
+            ITask task = _App.Shell.ObjectExplorer.GetSelectedTask();
             if (task == null)
             {
                 AppConsole.WriteLine("Please select the task from the Object Explorer before invoking this command");
@@ -365,14 +369,14 @@ namespace FdoToolbox.Core.Modules
                 case TaskType.SpatialBulkCopy:
                     {
                         BaseDocumentCtl ctl = new SpatialBulkCopyCtl((SpatialBulkCopyTask)task);
-                        AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
+                        _App.Shell.ShowDocumentWindow(ctl);
                     }
                     break;
                 case TaskType.DbJoin:
                     {
                         SpatialJoinCtl ctl = new SpatialJoinCtl();
                         ctl.LoadSettings((SpatialJoinTask)task);
-                        AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
+                        _App.Shell.ShowDocumentWindow(ctl);
                     }
                     break;
                 default:
@@ -386,7 +390,7 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_EXECUTETASK, "Execute Task", ImageResourceName = "application_go", InvocationType = CommandInvocationType.UI)]
         public void ExecuteTask()
         {
-            ITask task = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedTask();
+            ITask task = _App.Shell.ObjectExplorer.GetSelectedTask();
             if (task == null)
             {
                 AppConsole.WriteLine("Please select the task from the Object Explorer before invoking this command");
@@ -399,39 +403,39 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_DELETETASK, "Delete Task", ImageResourceName = "cross", InvocationType = CommandInvocationType.UI)]
         public void DeleteTask()
         {
-            ITask task = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedTask();
+            ITask task = _App.Shell.ObjectExplorer.GetSelectedTask();
             if (task == null)
             {
                 AppConsole.WriteLine("Please select the task from the Object Explorer before invoking this command");
                 return;
             }
-            AppGateway.RunningApplication.TaskManager.RemoveTask(task.Name);
+            _App.TaskManager.RemoveTask(task.Name);
             
         }
 
         [Command(CoreModule.CMD_DATAPREVIEW, "Data Preview", ImageResourceName = "zoom", InvocationType = CommandInvocationType.UI)]
         public void DataPreview()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo == null)
             {
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            ISpatialConnectionBoundCtl ctl = AppGateway.RunningApplication.TabManager.CreateTab(typeof(SpatialDataPreviewCtl), connInfo);
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl.WrappedControl);
+            ISpatialConnectionBoundCtl ctl = _App.TabManager.CreateTab(typeof(SpatialDataPreviewCtl), connInfo);
+            _App.Shell.ShowDocumentWindow(ctl.WrappedControl);
         }
 
         [Command(CoreModule.CMD_LOADTASK, "Load Task", ImageResourceName = "folder")]
         public void LoadTask()
         {
-            string taskDef = AppGateway.RunningApplication.OpenFile("Load Task", "Task Definition (*.task)|*.task");
+            string taskDef = _App.OpenFile("Load Task", "Task Definition (*.task)|*.task");
             if(File.Exists(taskDef))
             {
                 ITask task = TaskLoader.LoadTask(taskDef, false);
                 if (task != null)
                 {
-                    AppGateway.RunningApplication.TaskManager.AddTask(task);
+                    _App.TaskManager.AddTask(task);
                     AppConsole.WriteLine("Task loaded from {0}", taskDef);
                 }
             }
@@ -440,13 +444,13 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_SAVETASK, "Save Task", ImageResourceName = "disk", InvocationType = CommandInvocationType.UI)]
         public void SaveTask()
         {
-            ITask task = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedTask();
+            ITask task = _App.Shell.ObjectExplorer.GetSelectedTask();
             if (task == null)
             {
                 AppConsole.WriteLine("Please select the task from the Object Explorer before invoking this command");
                 return;
             }
-            string taskDef = AppGateway.RunningApplication.SaveFile("Save Task", "Task Definition (*.task)|*.task");
+            string taskDef = _App.SaveFile("Save Task", "Task Definition (*.task)|*.task");
             if (taskDef != null)
             {
                 if (File.Exists(taskDef))
@@ -459,18 +463,18 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_LOADCONN, "Load Connection", ImageResourceName = "folder")]
         public void LoadConnection()
         {
-            string connDef = AppGateway.RunningApplication.OpenFile("Load connection information", "Connection information (*.conn)|*.conn");
+            string connDef = _App.OpenFile("Load connection information", "Connection information (*.conn)|*.conn");
             if(File.Exists(connDef))
             {
                 SpatialConnectionInfo connInfo = SpatialConnLoader.LoadConnection(connDef);
-                IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connInfo.Name);
+                IConnection conn = _App.SpatialConnectionManager.GetConnection(connInfo.Name);
                 if (conn != null)
                 {
                     AppConsole.Write("A connection named {0} already exists. ", connInfo.Name);
-                    connInfo.Name = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
+                    connInfo.Name = _App.SpatialConnectionManager.CreateUniqueName();
                     AppConsole.WriteLine("Attempting to load as {0} instead", connInfo.Name);
                 }
-                AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(connInfo.Name, connInfo.Connection);
+                _App.SpatialConnectionManager.AddConnection(connInfo.Name, connInfo.Connection);
                 AppConsole.WriteLine("Connection loaded from {0}", connDef);
             }
         }
@@ -478,13 +482,13 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_SAVECONN, "Save Connection", ImageResourceName = "disk", InvocationType = CommandInvocationType.UI)]
         public void SaveConnection()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo == null)
             {
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            string connDef = AppGateway.RunningApplication.SaveFile("Save connection information", "Connection information (*.conn)|*.conn");
+            string connDef = _App.SaveFile("Save connection information", "Connection information (*.conn)|*.conn");
             if (connDef != null)
             {
                 if (File.Exists(connDef))
@@ -497,32 +501,32 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_REMOVECONN, "Remove Connection", ImageResourceName = "cross", InvocationType = CommandInvocationType.UI)]
         public void RemoveConnection()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo == null)
             {
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(connInfo.Name);
+            _App.SpatialConnectionManager.RemoveConnection(connInfo.Name);
         }
 
         [Command(CoreModule.CMD_MANAGESPATIALCONTEXTS, "Manage Spatial Contexts", InvocationType = CommandInvocationType.UI)]
         public void SpatialContextInfo()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo == null)
             {
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            ISpatialConnectionBoundCtl ctl = AppGateway.RunningApplication.TabManager.CreateTab(typeof(SpatialContextCtl), connInfo);
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl.WrappedControl);
+            ISpatialConnectionBoundCtl ctl = _App.TabManager.CreateTab(typeof(SpatialContextCtl), connInfo);
+            _App.Shell.ShowDocumentWindow(ctl.WrappedControl);
         }
 
         [Command(CoreModule.CMD_RENAMECONNECTION, "Rename Connection", InvocationType = CommandInvocationType.UI)]
         public void RenameConnection()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo == null)
             {
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
@@ -533,8 +537,8 @@ namespace FdoToolbox.Core.Modules
             if (!string.IsNullOrEmpty(newName) && oldName != newName)
             {
                 string reason = string.Empty;
-                if (AppGateway.RunningApplication.SpatialConnectionManager.CanRenameConnection(oldName, newName, ref reason))
-                    AppGateway.RunningApplication.SpatialConnectionManager.RenameConnection(oldName, newName);
+                if (_App.SpatialConnectionManager.CanRenameConnection(oldName, newName, ref reason))
+                    _App.SpatialConnectionManager.RenameConnection(oldName, newName);
                 else
                     AppConsole.Alert("Error", reason);
             }
@@ -543,35 +547,35 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_REFRESHCONN, "Refresh Connection", Description = "Refresh the selected connection", InvocationType = CommandInvocationType.UI, ImageResourceName = "page_refresh")]
         public void RefreshConnection()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo == null)
             {
                 AppConsole.WriteLine("Please select the connection from the Object Explorer before invoking this command");
                 return;
             }
-            AppGateway.RunningApplication.Shell.ObjectExplorer.RefreshSpatialConnection(connInfo.Name);
+            _App.Shell.ObjectExplorer.RefreshSpatialConnection(connInfo.Name);
         }
 
         [Command(CoreModule.CMD_SHOWOBJECTEXPLORER, "Show Object Explorer", ShortcutKeys = Keys.Control | Keys.D1, ImageResourceName = "application_side_boxes")]
         public void ShowObjectExplorer()
         {
-            AppGateway.RunningApplication.Shell.ObjectExplorer.UnHide();
+            _App.Shell.ObjectExplorer.UnHide();
         }
 
         [Command(CoreModule.CMD_SHOWCONSOLE, "Show Application Console", ShortcutKeys = Keys.Control | Keys.D2, ImageResourceName = "application_xp_terminal")]
         public void ShowConsole()
         {
-            AppGateway.RunningApplication.Shell.ConsoleWindow.UnHide();
+            _App.Shell.ConsoleWindow.UnHide();
         }
 
         [Command(CoreModule.CMD_MANAGEDATASTORES, "Manage Data Stores", InvocationType = CommandInvocationType.UI, ImageResourceName = "database_edit")]
         public void ManageDataStores()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo != null)
             {
-                ISpatialConnectionBoundCtl ctl = AppGateway.RunningApplication.TabManager.CreateTab(typeof(DataStoreMgrCtl), connInfo);
-                AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl.WrappedControl);
+                ISpatialConnectionBoundCtl ctl = _App.TabManager.CreateTab(typeof(DataStoreMgrCtl), connInfo);
+                _App.Shell.ShowDocumentWindow(ctl.WrappedControl);
             }
         }
 
@@ -579,17 +583,17 @@ namespace FdoToolbox.Core.Modules
         public void ManageCoordinateSystems()
         {
             CoordSysManagerCtl ctl = new CoordSysManagerCtl();
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
+            _App.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(CoreModule.CMD_EDITSCHEMA_ATTRIBUTES, "Edit Schema Attributes", Description = "Edit the attributes of this schema", InvocationType = CommandInvocationType.UI, ImageResourceName = "application_edit")]
         public void EditSchemaAttributes()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
-            string schemaName = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSchema();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
                 FeatureSchema theSchema = service.GetSchemaByName(schemaName);
                 if (theSchema != null)
                 {
@@ -610,12 +614,12 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_EDITCLASS_ATTRIBUTES, "Edit Class Attributes", Description = "Edit the attributes of this class", InvocationType = CommandInvocationType.UI, ImageResourceName = "application_edit")]
         public void EditClassAttributes()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
-            string schemaName = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSchema();
-            string className = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedClass();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
+            string className = _App.Shell.ObjectExplorer.GetSelectedClass();
             if (connInfo != null)
             {
-                FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
                 ClassDefinition theClass = service.GetClassByName(schemaName, className);
                 if (theClass != null)
                 {
@@ -636,15 +640,15 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_SAVE_SCHEMA_XML, "Save schema as XML", InvocationType = CommandInvocationType.UI, ImageResourceName = "page_white_code")]
         public void SaveSchemaAsXml()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
-            string schemaName = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSchema();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
                 FeatureSchema schema = service.GetSchemaByName(schemaName);
                 if (schema != null)
                 {
-                    string file = AppGateway.RunningApplication.SaveFile("Save schema", "Feature Schema Definition (*.schema)|*.schema");
+                    string file = _App.SaveFile("Save schema", "Feature Schema Definition (*.schema)|*.schema");
                     if (file != null)
                     {
                         if (File.Exists(file))
@@ -660,15 +664,15 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_SAVE_SCHEMA_SDF, "Save schema as SDF", InvocationType = CommandInvocationType.UI, ImageResourceName = "database")]
         public void SaveSchemaAsSdf()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
-            string schemaName = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSchema();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
                 FeatureSchema schema = service.GetSchemaByName(schemaName);
                 if (schema != null)
                 {
-                    string sdfFile = AppGateway.RunningApplication.SaveFile("Save schema to SDF", "SDF files (*.sdf)|*.sdf");
+                    string sdfFile = _App.SaveFile("Save schema to SDF", "SDF files (*.sdf)|*.sdf");
                     if (sdfFile != null)
                     {
                         if (File.Exists(sdfFile))
@@ -679,7 +683,7 @@ namespace FdoToolbox.Core.Modules
                             IConnection conn = ExpressUtility.ApplySchemaToNewSDF(schema, sdfFile);
                             if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
                             {
-                                string name = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
+                                string name = _App.SpatialConnectionManager.CreateUniqueName();
                                 name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                                 CoreModule.AddConnection(conn, name);
                             }
@@ -701,11 +705,11 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_DELETE_SCHEMA, "Delete Schema", InvocationType = CommandInvocationType.UI, ImageResourceName = "cross")]
         public void DeleteSchema()
         { 
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
-            string schemaName = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSchema();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null && !string.IsNullOrEmpty(schemaName))
             {
-                FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
                 service.DestroySchema(schemaName);
                 AppConsole.Alert("Delete Schema", "Schema Deleted");
             }
@@ -714,19 +718,19 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_PREVIEWCLASS, "Class Data Preview", InvocationType = CommandInvocationType.UI, ImageResourceName = "zoom")]
         public void PreviewClass()
         {
-            SpatialConnectionInfo connInfo = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSpatialConnection();
-            string schemaName = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedSchema();
-            string className = AppGateway.RunningApplication.Shell.ObjectExplorer.GetSelectedClass();
+            SpatialConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
+            string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
+            string className = _App.Shell.ObjectExplorer.GetSelectedClass();
             if (connInfo != null)
             {
-                FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
                 ClassDefinition theClass = service.GetClassByName(schemaName, className);
                 if (theClass != null)
                 {
-                    ISpatialConnectionBoundCtl ctl = AppGateway.RunningApplication.TabManager.CreateTab(typeof(SpatialDataPreviewCtl), connInfo);
+                    ISpatialConnectionBoundCtl ctl = _App.TabManager.CreateTab(typeof(SpatialDataPreviewCtl), connInfo);
                     SpatialDataPreviewCtl dpreview = (SpatialDataPreviewCtl)ctl.WrappedControl;
                     dpreview.SetInitialClass(schemaName, className);
-                    AppGateway.RunningApplication.Shell.ShowDocumentWindow(dpreview);
+                    _App.Shell.ShowDocumentWindow(dpreview);
                 }
             }
         }
@@ -735,7 +739,7 @@ namespace FdoToolbox.Core.Modules
         public void CreateDbJoin()
         {
             BaseDocumentCtl ctl = new SpatialJoinCtl();
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
+            _App.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(CoreModule.CMD_PREFERENCES, "Preferences", ImageResourceName = "application_form_edit")]
@@ -743,28 +747,28 @@ namespace FdoToolbox.Core.Modules
         {
             //TODO: make single instance
             PreferencesCtl ctl = new PreferencesCtl();
-            AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
+            _App.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(CoreModule.CMD_REMOVEALLSPATIALCONNECTIONS, "Remove All Connections", ImageResourceName = "cross")]
         public void RemoveAllSpatialConnections()
         {
-            ICollection<string> names = AppGateway.RunningApplication.SpatialConnectionManager.GetConnectionNames();
+            ICollection<string> names = _App.SpatialConnectionManager.GetConnectionNames();
             List<string> connNames = new List<string>(names);
             foreach (string n in connNames)
             {
-                AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(n);
+                _App.SpatialConnectionManager.RemoveConnection(n);
             }
         }
         
         [Command(CoreModule.CMD_REMOVEALLTASKS, "Remove All Tasks", ImageResourceName = "cross")]
         public void RemoveAllTasks()
         {
-            ICollection<string> names = AppGateway.RunningApplication.TaskManager.TaskNames;
+            ICollection<string> names = _App.TaskManager.TaskNames;
             List<string> taskNames = new List<string>(names);
             foreach (string n in taskNames)
             {
-                AppGateway.RunningApplication.TaskManager.RemoveTask(n);
+                _App.TaskManager.RemoveTask(n);
             }
         }
 
