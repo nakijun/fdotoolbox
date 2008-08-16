@@ -15,7 +15,7 @@ A: The Data Preview's UI (and many others) are driven by the connection's capabi
 
 === Q: What is the difference between Lite and Full releases? ===
 
-A: Lite releases do not include the FDO binaries, you will need the [[http://fdo.osgeo.org FDO binaries]]. You may be prompted for the directory containing the FDO binaries, this is a one-off thing.
+A: Lite releases do not include the FDO binaries, you will need the [http://fdo.osgeo.org FDO binaries]. You may be prompted for the directory containing the FDO binaries, this is a one-off thing.
 
 === Q: What is the release cycle for Lite and Full releases? === 
 
@@ -23,4 +23,4 @@ A: Every release will have a Lite version. Only major point releases (0.4, 0.5, 
 
 === Q: Can I run FDO Toolbox in Linux (via Mono)? ===
 
-A: No, as the FDO managed wrapper libraries are mixed-mode assemblies and Mono will most likely [http://www.jprl.com/Blog/archive/development/mono/2008/Jan-27.html never support the capability]
+A: No, as the FDO managed wrapper libraries are mixed-mode assemblies and Mono will most likely [http://www.jprl.com/Blog/archive/development/mono/2008/Jan-27.html never support the capability]. However certain parts of FDO Toolbox (such as command-line utilities) are on the roadmap to be ported to linux.
