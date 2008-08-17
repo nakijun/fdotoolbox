@@ -3,11 +3,11 @@
 
 === Q: I get "Memory allocation failed" when previewing data ===
 
-A: See Issue 21
+A: See Issue 21. There should be no problems previewing data if you omit the geometry properties in the standard query, or if you are querying via raw SQL.
 
 === Q: I can't see schemas/classes in Oracle (using OSGeo.KingOracle) ===
 
-A: When connecting to Oracle, leave the OracleSchema and KingFdoClass propeties blank.
+A: When connecting to Oracle, leave the OracleSchema and KingFdoClass properties blank.
 
 === Q: Select Aggregates do not work in the Data Preview (using OSGeo.KingOracle) ===
 
