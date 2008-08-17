@@ -73,7 +73,7 @@ namespace FdoToolbox.Core.Controls
             set
             {
                 _TargetProvider = value;
-                grpTarget.Text = "Source (" + value + ")";
+                grpTarget.Text = "Target (" + value + ")";
             }
         }
 
