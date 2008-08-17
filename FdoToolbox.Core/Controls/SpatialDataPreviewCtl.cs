@@ -38,6 +38,7 @@ using OSGeo.FDO.Expression;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Modules;
 using FdoToolbox.Core.Common;
+using System.Threading;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -52,7 +53,6 @@ namespace FdoToolbox.Core.Controls
         internal SpatialDataPreviewCtl()
         {
             InitializeComponent();
-            cmbLimit.SelectedIndex = 0;
             _GeomFactory = new FgfGeometryFactory();
             this.Disposed += delegate { _GeomFactory.Dispose(); };
         }
@@ -61,7 +61,6 @@ namespace FdoToolbox.Core.Controls
             : base(conn, key)
         {
             InitializeComponent();
-            cmbLimit.SelectedIndex = 0;
             _GeomFactory = new FgfGeometryFactory();
             this.Disposed += delegate { _GeomFactory.Dispose(); };
             _BoundConnection = conn;
@@ -114,39 +113,12 @@ namespace FdoToolbox.Core.Controls
                 AppConsole.Alert("Error", "Only SQL SELECT statements are allowed for data previewing");
                 return;
             }
-            using (ISQLCommand sqlCmd = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand) as ISQLCommand)
-            {
-                try
-                {
-                    sqlCmd.SQLStatement = sql;
-                    using (ISQLDataReader reader = sqlCmd.ExecuteReader())
-                    {
-                        DataTable table = new DataTable();
-                        PrepareGrid(table, reader);
-                        try
-                        {
-                            while (reader.ReadNext())
-                            {
-                                ProcessSQLReader(table, reader);
-                            }
-                        }
-                        catch (OSGeo.FDO.Common.Exception ex)
-                        {
-                            throw ex;
-                        }
-                        finally
-                        {
-                            reader.Close();
-                            grdPreview.DataSource = table;
-                        }
-                    }
-                }
-                catch (OSGeo.FDO.Common.Exception ex)
-                {
-                    AppConsole.Alert("Error", ex.Message);
-                    AppConsole.WriteException(ex);
-                }
-            }
+            SQLFeatureQuery qry = new SQLFeatureQuery();
+            qry.SQLText = sql;
+            ClearGrid();
+            btnQuery.Enabled = false;
+            btnClear.Enabled = false;
+            bgSql.RunWorkerAsync(qry);
         }
 
         private void QueryAggregate()
@@ -271,7 +243,7 @@ namespace FdoToolbox.Core.Controls
                     row[identifier] = null;
                 }
             }
-            table.Rows.Add(row);
+            bgSql.ReportProgress(0, row);
         }
 
         private void ProcessDataReader(DataTable table, NameValueCollection aggParams, OSGeo.FDO.Commands.Feature.IDataReader reader)
@@ -443,68 +415,35 @@ namespace FdoToolbox.Core.Controls
                 AppConsole.Alert("Error", "Invalid filter. Please correct");
                 return;
             }
-            int limit = Convert.ToInt32(cmbLimit.SelectedItem.ToString());
-            using (ISelect select = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
+            int limit = Convert.ToInt32(numLimit.Value);
+            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
+            if (classDef != null)
             {
-                try
-                {
-                    ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
-                    if (classDef != null)
-                    {
-                        select.SetFeatureClassName(classDef.Name);
-                        if (!string.IsNullOrEmpty(txtFilter.Text))
-                            select.SetFilter(txtFilter.Text);
+                StandardFeatureQuery qry = new StandardFeatureQuery();
+                qry.Limit = limit;
+                qry.ClassName = classDef.Name;
+                qry.Filter = txtFilter.Text;
+                qry.PropertyNames = GetCheckedProperties();
 
-                        select.PropertyNames.Clear();
-                        List<string> propertyNames = GetCheckedProperties();
-                        foreach (string propName in propertyNames)
-                        {
-                            select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
-                        }
-
-                        NameValueCollection computed = GetComputedFields();
-                        foreach (string alias in computed.AllKeys)
-                        {
-                            select.PropertyNames.Add(new ComputedIdentifier(alias, Expression.Parse(computed[alias])));   
-                        }
-
-                        using (IFeatureReader reader = select.Execute())
-                        {
-                            DataTable table = new DataTable(cmbClass.SelectedItem.ToString());
-                            int count = 0;
-                            ClassDefinition cd = reader.GetClassDefinition();
-                            PrepareGrid(table, cd);
-                            Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
-                            for (int i = 0; i < cd.Properties.Count; i++)
-                            {
-                                cachedPropertyNames.Add(i, cd.Properties[i].Name);
-                            }
-                            try
-                            {
-                                while (reader.ReadNext() && count < limit)
-                                {
-                                    ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
-                                    count++;
-                                }
-                            }
-                            catch (OSGeo.FDO.Common.Exception ex)
-                            {
-                                throw ex;
-                            }
-                            finally
-                            {
-                                reader.Close();
-                                grdPreview.DataSource = table;
-                            }
-                        }
-                    }
-                }
-                catch (OSGeo.FDO.Common.Exception ex)
-                {
-                    AppConsole.Alert("Error", ex.Message);
-                    AppConsole.WriteException(ex);
-                }
+                grpQuery.Enabled = false;
+                btnQuery.Enabled = false;
+                btnClear.Enabled = false;
+                ClearGrid();
+                bgStandard.RunWorkerAsync(qry);
             }
+        }
+
+        class StandardFeatureQuery
+        {
+            public string ClassName;
+            public string Filter;
+            public List<string> PropertyNames;
+            public int Limit;
+        }
+
+        class SQLFeatureQuery
+        {
+            public string SQLText;
         }
 
         private List<string> GetCheckedProperties()
@@ -610,7 +549,7 @@ namespace FdoToolbox.Core.Controls
                     row[name] = null;
                 }
             }
-            table.Rows.Add(row);
+            bgStandard.ReportProgress(0, row);
         }
 
         private void cmbSchema_SelectedIndexChanged(object sender, EventArgs e)
@@ -650,7 +589,13 @@ namespace FdoToolbox.Core.Controls
 
         private void btnClear_Click(object sender, EventArgs e)
         {
+            ClearGrid();
+        }
+
+        private void ClearGrid()
+        {
             grdPreview.DataSource = null;
+            lblCount.Text = "";
         }
 
         private void cmbAggSchema_SelectedIndexChanged(object sender, EventArgs e)
@@ -871,6 +816,218 @@ namespace FdoToolbox.Core.Controls
                 {
                     txtAggFilter.Text = newFilter;
                 }
+            }
+        }
+
+        private void bgStandard_DoWork(object sender, DoWorkEventArgs e)
+        {
+            StandardFeatureQuery qry = e.Argument as StandardFeatureQuery;
+            int limit = qry.Limit;
+            using (ISelect select = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
+            {
+                select.SetFeatureClassName(qry.ClassName);
+                if (!string.IsNullOrEmpty(qry.Filter))
+                    select.Filter = Filter.Parse(qry.Filter);
+
+                select.PropertyNames.Clear();
+                foreach (string propName in qry.PropertyNames)
+                {
+                    select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
+                }
+
+                using (IFeatureReader reader = select.Execute())
+                {
+                    DataTable table = new DataTable(qry.ClassName);
+                    int count = 0;
+                    ClassDefinition cd = reader.GetClassDefinition();
+                    PrepareGrid(table, cd);
+                    Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
+                    for (int i = 0; i < cd.Properties.Count; i++)
+                    {
+                        cachedPropertyNames.Add(i, cd.Properties[i].Name);
+                    }
+                    try
+                    {
+                        if (limit > 0)
+                        {
+                            while (reader.ReadNext() && count < limit)
+                            {
+                                if (bgStandard.CancellationPending)
+                                {
+                                    e.Cancel = true;
+                                    return;
+                                }
+
+                                ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
+                                count++;
+                                if (count % 50 == 0)
+                                    Thread.Sleep(75);
+                            }
+                        }
+                        else
+                        {
+                            while (reader.ReadNext())
+                            {
+                                if (bgStandard.CancellationPending)
+                                {
+                                    e.Cancel = true;
+                                    return;
+                                }
+
+                                ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
+                                count++;
+                                if (count % 50 == 0)
+                                    Thread.Sleep(75);
+                            }
+                        }
+                    }
+                    catch (OSGeo.FDO.Common.Exception ex)
+                    {
+                        throw ex;
+                    }
+                    finally
+                    {
+                        reader.Close();
+                    }
+                }
+            }
+        }
+
+        private void bgStandard_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            DataRow row = e.UserState as DataRow;
+            if (grdPreview.Rows.Count == 0)
+            {
+                DataTable table = new DataTable();
+                table.Merge(row.Table);
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = table;
+                grdPreview.DataSource = bs;
+
+                table.Rows.Add(row.ItemArray);
+            }
+            else
+            {
+                DataTable table = (grdPreview.DataSource as BindingSource).DataSource as DataTable;
+                table.Rows.Add(row.ItemArray);
+                lblCount.Text = table.Rows.Count + " results found";
+            }
+        }
+
+        private void bgStandard_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            grpQuery.Enabled = true;
+            btnQuery.Enabled = true;
+            btnClear.Enabled = true;
+
+            if (e.Error != null)
+            {
+                AppConsole.Alert("Error", e.Error.ToString());
+                AppConsole.WriteException(e.Error);
+            }
+            else if (e.Cancelled)
+            {
+                AppConsole.WriteLine("Standard data query cancelled");
+            }
+        }
+
+        private void bgSql_DoWork(object sender, DoWorkEventArgs e)
+        {
+            SQLFeatureQuery qry = e.Argument as SQLFeatureQuery;
+
+            using (ISQLCommand sqlCmd = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand) as ISQLCommand)
+            {
+                sqlCmd.SQLStatement = qry.SQLText;
+                int count = 0;
+                using (ISQLDataReader reader = sqlCmd.ExecuteReader())
+                {
+                    DataTable table = new DataTable();
+                    PrepareGrid(table, reader);
+                    try
+                    {
+                        while (reader.ReadNext())
+                        {
+                            if (bgSql.CancellationPending)
+                            {
+                                e.Cancel = true;
+                                return;
+                            }
+
+                            ProcessSQLReader(table, reader);
+                            count++;
+
+                            if (count % 50 == 0)
+                                Thread.Sleep(75);
+                        }
+                    }
+                    catch (OSGeo.FDO.Common.Exception ex)
+                    {
+                        throw ex;
+                    }
+                    finally
+                    {
+                        reader.Close();
+                    }
+                }
+            }
+        }
+
+        private void bgSql_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            DataRow row = e.UserState as DataRow;
+            if (grdPreview.Rows.Count == 0)
+            {
+                DataTable table = new DataTable();
+                table.Merge(row.Table);
+
+                BindingSource bs = new BindingSource();
+                bs.DataSource = table;
+                grdPreview.DataSource = bs;
+
+                table.Rows.Add(row.ItemArray);
+            }
+            else
+            {
+                DataTable table = (grdPreview.DataSource as BindingSource).DataSource as DataTable;
+                table.Rows.Add(row.ItemArray);
+                lblCount.Text = table.Rows.Count + " results found";
+            }
+        }
+
+        private void bgSql_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            grpQuery.Enabled = true;
+            btnQuery.Enabled = true;
+            btnClear.Enabled = true;
+
+            if (e.Error != null)
+            {
+                AppConsole.Alert("Error", e.Error.ToString());
+                AppConsole.WriteException(e.Error);
+            }
+            else if (e.Cancelled)
+            {
+                AppConsole.WriteLine("SQL data query cancelled");
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            switch (tabQueryMode.SelectedIndex)
+            {
+                case TAB_SQL:
+                    {
+                        if (bgSql.IsBusy)
+                            bgSql.CancelAsync();
+                    }
+                    break;
+                case TAB_STANDARD:
+                    {
+                        if (bgStandard.IsBusy)
+                            bgStandard.CancelAsync();
+                    }
+                    break;
             }
         }
     }
