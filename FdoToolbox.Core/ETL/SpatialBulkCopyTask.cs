@@ -202,7 +202,7 @@ namespace FdoToolbox.Core.ETL
                     SendMessage("Target Schema Applied");
                 }
                 SendMessage("Begin bulk copy of classes");
-                int total = 0;
+                long total = 0;
                 int classesCopied = 1;
                 string globFilter = _Options.GlobalSpatialFilter;
                 foreach (ClassCopyOptions copyOpts in _ClassesToCopy)
@@ -332,7 +332,11 @@ namespace FdoToolbox.Core.ETL
                                 if (pc != oldpc)
                                 {
                                     oldpc = pc;
+                                #if DEBUG
+                                    SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3} of {4} features)", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName, copied, count));
+                                #else
                                     SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3}% of {4} features)", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName, oldpc, count));
+                                #endif
                                     SendCount(oldpc);
                                 }
                             }
@@ -405,7 +409,7 @@ namespace FdoToolbox.Core.ETL
                     if (theFilter != null)
                         select.Filter = theFilter;
                     //Count() requires a property name, so pluck the first property name from the copy options
-                    select.PropertyNames.Add(new ComputedIdentifier(prop, Expression.Parse("COUNT(" + copyOpts.PropertyNames[0] + ")")));
+                    select.PropertyNames.Add(new ComputedIdentifier(prop, Expression.Parse("COUNT(" + copyOpts.SourceClassDefinition.IdentityProperties[0].Name + ")")));
                     using (IDataReader reader = select.Execute())
                     {
                         if (reader.ReadNext())
