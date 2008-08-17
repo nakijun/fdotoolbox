@@ -229,57 +229,44 @@ namespace FdoToolbox.Core.Controls
                         bool required = conn.ConnectionInfo.ConnectionProperties.IsPropertyRequired(name);
                         bool enumerable = conn.ConnectionInfo.ConnectionProperties.IsPropertyEnumerable(name);
                         string defaultValue = conn.ConnectionInfo.ConnectionProperties.GetPropertyDefault(name);
-                        bool canGetValues = true;
-                        string[] values = null;
-                        try
+                        if (enumerable)
                         {
-                            values = conn.ConnectionInfo.ConnectionProperties.EnumeratePropertyValues(name);
-                        }
-                        catch
-                        {
-                            _PendingProperties.Add(name);
-                            canGetValues = false;
-                        }
-                        if (required)
-                        {
-                            if (enumerable)
+                            bool canGetValues = true;
+                            string[] values = null;
+                            try
                             {
-                                if (canGetValues)
+                                values = conn.ConnectionInfo.ConnectionProperties.EnumeratePropertyValues(name);
+                            }
+                            catch
+                            {
+                                _PendingProperties.Add(name);
+                                canGetValues = false;
+                            }
+                            if (canGetValues)
+                            {
+                                if (required)
                                 {
                                     DataGridViewRow row = AddRequiredEnumerableProperty(localized, defaultValue, values);
-                                    if(values.Length > 0)
+                                    if (values.Length > 0)
                                         row.Cells[1].Value = values[0];
                                 }
+                                else
+                                {
+                                    AddOptionalEnumerableProperty(localized, defaultValue, values);
+                                }
                             }
-                            else
-                                AddRequiredProperty(localized, defaultValue);
                         }
                         else
                         {
-                            if (enumerable)
+                            if (required)
                             {
-                                if(canGetValues)
-                                    AddOptionalEnumerableProperty(localized, defaultValue, values);
+                                AddRequiredProperty(localized, defaultValue);
                             }
                             else
+                            {
                                 AddProperty(localized, defaultValue);
+                            }
                         }
-                            
-                        /*
-                        string localized = conn.ConnectionInfo.ConnectionProperties.GetLocalizedName(name);
-                        bool required = conn.ConnectionInfo.ConnectionProperties.IsPropertyRequired(name);
-                        bool enumerable = conn.ConnectionInfo.ConnectionProperties.IsPropertyEnumerable(name);
-                        string defaultValue = conn.ConnectionInfo.ConnectionProperties.GetPropertyDefault(name);
-                        string[] values = conn.ConnectionInfo.ConnectionProperties.EnumeratePropertyValues(name);
-                        if (required && !enumerable)
-                            AddRequiredProperty(localized, defaultValue);
-                        else if (required && enumerable)
-                            AddRequiredEnumerableProperty(localized, defaultValue, values);
-                        else if (!required && enumerable)
-                            AddOptionalEnumerableProperty(localized, defaultValue, values);
-                        else
-                            AddProperty(localized, defaultValue);
-                         */
                     }
                     btnTest.Enabled = btnConnect.Enabled = true;
                 }
