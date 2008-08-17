@@ -111,13 +111,13 @@ namespace FdoToolbox.Core.Controls
             // 
             // lblWarning
             // 
-            this.lblWarning.AutoSize = true;
             this.lblWarning.ForeColor = System.Drawing.Color.Red;
             this.lblWarning.Location = new System.Drawing.Point(21, 58);
             this.lblWarning.Name = "lblWarning";
-            this.lblWarning.Size = new System.Drawing.Size(309, 13);
+            this.lblWarning.Size = new System.Drawing.Size(389, 29);
             this.lblWarning.TabIndex = 4;
-            this.lblWarning.Text = "Warning: This file and any related files (SHP only) will be deleted";
+            this.lblWarning.Text = "Warning: This file and any related files (SHP only) will be deleted in the direct" +
+                "ory of the specified file";
             // 
             // btnBrowseTarget
             // 
@@ -201,7 +201,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.errorProvider.ContainerControl = this;
             // 
-            // ExpressBulkCopyCtl
+            // ExpressSpatialBulkCopyCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -210,7 +210,7 @@ namespace FdoToolbox.Core.Controls
             this.Controls.Add(this.btnExecute);
             this.Controls.Add(this.grpTarget);
             this.Controls.Add(this.grpSource);
-            this.Name = "ExpressBulkCopyCtl";
+            this.Name = "ExpressSpatialBulkCopyCtl";
             this.Size = new System.Drawing.Size(423, 312);
             this.grpSource.ResumeLayout(false);
             this.grpSource.PerformLayout();
