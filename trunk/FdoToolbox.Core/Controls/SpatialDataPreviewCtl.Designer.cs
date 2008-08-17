@@ -29,11 +29,13 @@ namespace FdoToolbox.Core.Controls
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.lblCount = new System.Windows.Forms.Label();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnQuery = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.grpQuery = new System.Windows.Forms.GroupBox();
             this.tabQueryMode = new System.Windows.Forms.TabControl();
             this.pageStandard = new System.Windows.Forms.TabPage();
+            this.numLimit = new System.Windows.Forms.NumericUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.grdComputedFields = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -48,7 +50,6 @@ namespace FdoToolbox.Core.Controls
             this.btnEditFilter = new System.Windows.Forms.Button();
             this.txtFilter = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.cmbLimit = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbClass = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -75,12 +76,16 @@ namespace FdoToolbox.Core.Controls
             this.tabResults = new System.Windows.Forms.TabControl();
             this.TAB_RESULTS_GRID = new System.Windows.Forms.TabPage();
             this.grdPreview = new System.Windows.Forms.DataGridView();
+            this.bgStandard = new System.ComponentModel.BackgroundWorker();
+            this.bgSql = new System.ComponentModel.BackgroundWorker();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.grpQuery.SuspendLayout();
             this.tabQueryMode.SuspendLayout();
             this.pageStandard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numLimit)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdComputedFields)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -104,9 +109,11 @@ namespace FdoToolbox.Core.Controls
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btnCancel);
+            this.splitContainer1.Panel1.Controls.Add(this.lblCount);
             this.splitContainer1.Panel1.Controls.Add(this.btnClear);
             this.splitContainer1.Panel1.Controls.Add(this.btnQuery);
-            this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.grpQuery);
             // 
             // splitContainer1.Panel2
             // 
@@ -114,6 +121,14 @@ namespace FdoToolbox.Core.Controls
             this.splitContainer1.Size = new System.Drawing.Size(494, 345);
             this.splitContainer1.SplitterDistance = 275;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // lblCount
+            // 
+            this.lblCount.AutoSize = true;
+            this.lblCount.Location = new System.Drawing.Point(10, 250);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(0, 13);
+            this.lblCount.TabIndex = 3;
             // 
             // btnClear
             // 
@@ -131,7 +146,7 @@ namespace FdoToolbox.Core.Controls
             this.btnQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnQuery.Image = global::FdoToolbox.Core.Properties.Resources.application_go;
             this.btnQuery.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQuery.Location = new System.Drawing.Point(358, 245);
+            this.btnQuery.Location = new System.Drawing.Point(288, 245);
             this.btnQuery.Name = "btnQuery";
             this.btnQuery.Size = new System.Drawing.Size(47, 23);
             this.btnQuery.TabIndex = 1;
@@ -140,18 +155,18 @@ namespace FdoToolbox.Core.Controls
             this.btnQuery.UseVisualStyleBackColor = true;
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
             // 
-            // groupBox1
+            // grpQuery
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.grpQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.tabQueryMode);
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(486, 239);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Data Query Parameters";
+            this.grpQuery.Controls.Add(this.tabQueryMode);
+            this.grpQuery.Location = new System.Drawing.Point(3, 3);
+            this.grpQuery.Name = "grpQuery";
+            this.grpQuery.Size = new System.Drawing.Size(486, 239);
+            this.grpQuery.TabIndex = 0;
+            this.grpQuery.TabStop = false;
+            this.grpQuery.Text = "Data Query Parameters";
             // 
             // tabQueryMode
             // 
@@ -167,12 +182,12 @@ namespace FdoToolbox.Core.Controls
             // 
             // pageStandard
             // 
+            this.pageStandard.Controls.Add(this.numLimit);
             this.pageStandard.Controls.Add(this.groupBox3);
             this.pageStandard.Controls.Add(this.groupBox2);
             this.pageStandard.Controls.Add(this.btnEditFilter);
             this.pageStandard.Controls.Add(this.txtFilter);
             this.pageStandard.Controls.Add(this.label4);
-            this.pageStandard.Controls.Add(this.cmbLimit);
             this.pageStandard.Controls.Add(this.label3);
             this.pageStandard.Controls.Add(this.cmbClass);
             this.pageStandard.Controls.Add(this.label2);
@@ -185,6 +200,18 @@ namespace FdoToolbox.Core.Controls
             this.pageStandard.TabIndex = 0;
             this.pageStandard.Text = "Standard";
             this.pageStandard.UseVisualStyleBackColor = true;
+            // 
+            // numLimit
+            // 
+            this.numLimit.Location = new System.Drawing.Point(58, 32);
+            this.numLimit.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numLimit.Name = "numLimit";
+            this.numLimit.Size = new System.Drawing.Size(57, 20);
+            this.numLimit.TabIndex = 20;
             // 
             // groupBox3
             // 
@@ -352,20 +379,6 @@ namespace FdoToolbox.Core.Controls
             this.label4.Size = new System.Drawing.Size(29, 13);
             this.label4.TabIndex = 6;
             this.label4.Text = "Filter";
-            // 
-            // cmbLimit
-            // 
-            this.cmbLimit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLimit.FormattingEnabled = true;
-            this.cmbLimit.Items.AddRange(new object[] {
-            "10",
-            "20",
-            "50",
-            "100"});
-            this.cmbLimit.Location = new System.Drawing.Point(58, 33);
-            this.cmbLimit.Name = "cmbLimit";
-            this.cmbLimit.Size = new System.Drawing.Size(57, 21);
-            this.cmbLimit.TabIndex = 5;
             // 
             // label3
             // 
@@ -640,7 +653,7 @@ namespace FdoToolbox.Core.Controls
             this.TAB_RESULTS_GRID.Padding = new System.Windows.Forms.Padding(3);
             this.TAB_RESULTS_GRID.Size = new System.Drawing.Size(484, 38);
             this.TAB_RESULTS_GRID.TabIndex = 0;
-            this.TAB_RESULTS_GRID.Text = "Grid";
+            this.TAB_RESULTS_GRID.Text = "Data Query Results";
             this.TAB_RESULTS_GRID.UseVisualStyleBackColor = true;
             // 
             // grdPreview
@@ -655,6 +668,36 @@ namespace FdoToolbox.Core.Controls
             this.grdPreview.Size = new System.Drawing.Size(478, 32);
             this.grdPreview.TabIndex = 1;
             // 
+            // bgStandard
+            // 
+            this.bgStandard.WorkerReportsProgress = true;
+            this.bgStandard.WorkerSupportsCancellation = true;
+            this.bgStandard.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgStandard_DoWork);
+            this.bgStandard.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgStandard_RunWorkerCompleted);
+            this.bgStandard.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgStandard_ProgressChanged);
+            // 
+            // bgSql
+            // 
+            this.bgSql.WorkerReportsProgress = true;
+            this.bgSql.WorkerSupportsCancellation = true;
+            this.bgSql.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgSql_DoWork);
+            this.bgSql.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgSql_RunWorkerCompleted);
+            this.bgSql.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgSql_ProgressChanged);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Image = global::FdoToolbox.Core.Properties.Resources.cross;
+            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCancel.Location = new System.Drawing.Point(341, 245);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(64, 23);
+            this.btnCancel.TabIndex = 4;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // SpatialDataPreviewCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -663,12 +706,14 @@ namespace FdoToolbox.Core.Controls
             this.Name = "SpatialDataPreviewCtl";
             this.Size = new System.Drawing.Size(494, 345);
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.grpQuery.ResumeLayout(false);
             this.tabQueryMode.ResumeLayout(false);
             this.pageStandard.ResumeLayout(false);
             this.pageStandard.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numLimit)).EndInit();
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdComputedFields)).EndInit();
             this.groupBox2.ResumeLayout(false);
@@ -689,7 +734,7 @@ namespace FdoToolbox.Core.Controls
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox grpQuery;
         private System.Windows.Forms.TabControl tabQueryMode;
         private System.Windows.Forms.TabPage pageStandard;
         private System.Windows.Forms.TabPage pageAggregates;
@@ -699,7 +744,6 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.TextBox txtSQL;
         private System.Windows.Forms.TextBox txtFilter;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox cmbLimit;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbClass;
         private System.Windows.Forms.Label label2;
@@ -735,5 +779,10 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.TabControl tabResults;
         private System.Windows.Forms.TabPage TAB_RESULTS_GRID;
         private System.Windows.Forms.DataGridView grdPreview;
+        private System.Windows.Forms.NumericUpDown numLimit;
+        private System.ComponentModel.BackgroundWorker bgStandard;
+        private System.ComponentModel.BackgroundWorker bgSql;
+        private System.Windows.Forms.Label lblCount;
+        private System.Windows.Forms.Button btnCancel;
     }
 }
