@@ -1,3 +1,17 @@
+v0.5.6
+------
+
+- Enhancements:
+	- Data Preview: Lifted feature limit and make loading of preview data run from a background worker thread.
+
+- Fixes:
+	- Fixed incorrect totals for certain bulk copy tasks.
+	- Fixed UI text in the Express Bulk Copy control.
+	- Fixed potential crash in Generic Connect/Create Data Store controls for certain providers.
+
+v0.5.5
+------
+
 - Enhancements:
 	- New "Remove All" command for:
 		- FDO connections
