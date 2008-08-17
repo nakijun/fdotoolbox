@@ -1,0 +1,5 @@
+<DbConnection>
+	<Name>foobar</Name>
+	<Driver>Access</Driver>
+	<ConnectionString>Foo=Bar</ConnectionString>
+</DbConnection>
