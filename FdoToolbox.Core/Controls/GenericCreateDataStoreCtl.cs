@@ -205,24 +205,30 @@ namespace FdoToolbox.Core.Controls
                             bool required = cmd.DataStoreProperties.IsPropertyRequired(name);
                             bool enumerable = cmd.DataStoreProperties.IsPropertyEnumerable(name);
                             string defaultValue = cmd.DataStoreProperties.GetPropertyDefault(name);
-                            string[] values = cmd.DataStoreProperties.EnumeratePropertyValues(name);
-                            if (required)
+                            if (enumerable)
                             {
-                                if (enumerable)
+                                string[] values = cmd.DataStoreProperties.EnumeratePropertyValues(name);
+                                if (required)
                                 {
                                     DataGridViewRow row = AddRequiredEnumerableProperty(grdDataStoreProperties, localized, defaultValue, values);
                                     if (values.Length > 0)
                                         row.Cells[1].Value = values[0];
                                 }
                                 else
-                                    AddRequiredProperty(grdDataStoreProperties, localized, defaultValue);
+                                {
+                                    AddOptionalEnumerableProperty(grdDataStoreProperties, localized, defaultValue, values);
+                                }
                             }
                             else
                             {
-                                if (enumerable)
-                                    AddOptionalEnumerableProperty(grdDataStoreProperties, localized, defaultValue, values);
+                                if (required)
+                                {
+                                    AddRequiredProperty(grdDataStoreProperties, localized, defaultValue);
+                                }
                                 else
+                                {
                                     AddProperty(grdDataStoreProperties, localized, defaultValue);
+                                }
                             }
                         }
                     }
@@ -257,39 +263,43 @@ namespace FdoToolbox.Core.Controls
                     bool required = conn.ConnectionInfo.ConnectionProperties.IsPropertyRequired(name);
                     bool enumerable = conn.ConnectionInfo.ConnectionProperties.IsPropertyEnumerable(name);
                     string defaultValue = conn.ConnectionInfo.ConnectionProperties.GetPropertyDefault(name);
-                    bool canGetValues = true;
-                    string[] values = null;
-                    try
+                    
+                    if (enumerable)
                     {
-                        values = conn.ConnectionInfo.ConnectionProperties.EnumeratePropertyValues(name);
-                    }
-                    catch
-                    {
-                        canGetValues = false;
-                    }
-                    if (required)
-                    {
-                        if (enumerable)
+                        bool canGetValues = true;
+                        string[] values = null;
+                        try
                         {
-                            if (canGetValues)
+                            values = conn.ConnectionInfo.ConnectionProperties.EnumeratePropertyValues(name);
+                        }
+                        catch
+                        {
+                            canGetValues = false;
+                        }
+                        if (canGetValues)
+                        {
+                            if (required)
                             {
                                 DataGridViewRow row = AddRequiredEnumerableProperty(grdConnectProperties, localized, defaultValue, values);
                                 if (values.Length > 0)
                                     row.Cells[1].Value = values[0];
                             }
+                            else
+                            {
+                                AddOptionalEnumerableProperty(grdConnectProperties, localized, defaultValue, values);
+                            }
                         }
-                        else
-                            AddRequiredProperty(grdConnectProperties, localized, defaultValue);
                     }
                     else
                     {
-                        if (enumerable)
+                        if (required)
                         {
-                            if (canGetValues)
-                                AddOptionalEnumerableProperty(grdConnectProperties, localized, defaultValue, values);
+                            AddRequiredProperty(grdConnectProperties, localized, defaultValue);
                         }
                         else
+                        {
                             AddProperty(grdConnectProperties, localized, defaultValue);
+                        }
                     }
                 }
                 btnCreate.Enabled = true;
