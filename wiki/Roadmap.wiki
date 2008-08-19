@@ -1,19 +1,20 @@
 #summary Planned features for upcoming releases
 
 === 0.6 ===
- * Spatial -> Non-Spatial bulk copy
- * Non-Spatial -> Spatial bulk copy
+ * Extra Bulk Copy options
+      * Property Value Mappings
  * ~~Non-Spatial -> Spatial (Point Features) conversion~~
 
 === Future ===
+ * Spatial -> Non-Spatial bulk copy
+ * Non-Spatial -> Spatial bulk copy 
  * Advanced bulk copy options
       * Data type coercion of mapped properties
  * Pipeable console commands
  * Raster Provider support
  * KML support
  * Visual Preview of FDO Data Sources
- * Extra Bulk Copy options
-      * Property Value Mappings
+
  * Chainable tasks
  * Coordinate System Re-Projection
  * Provider-specific extension modules
@@ -21,3 +22,4 @@
  * MapGuide Enterprise/Open Source integration
  * Linux port of command-line utilities
  * Star schema support
+ * LINQ support
