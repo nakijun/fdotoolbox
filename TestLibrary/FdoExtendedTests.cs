@@ -32,6 +32,7 @@ using OSGeo.FDO.Commands.Feature;
 using OSGeo.FDO.Commands;
 using OSGeo.FDO.Expression;
 using OSGeo.FDO.Geometry;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Tests
 {

@@ -30,6 +30,7 @@ using System.IO;
 using OSGeo.FDO.Common;
 using OSGeo.FDO.ClientServices;
 using FdoToolbox.Core.Common;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Tests
 {

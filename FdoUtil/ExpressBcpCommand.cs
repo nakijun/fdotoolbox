@@ -27,6 +27,7 @@ using OSGeo.FDO.Schema;
 using FdoToolbox.Core.ETL;
 using FdoToolbox.Core.Commands;
 using FdoToolbox.Core.Common;
+using FdoToolbox.Core.Utility;
 
 namespace FdoUtil
 {

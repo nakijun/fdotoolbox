@@ -25,6 +25,7 @@ using FdoToolbox.Core;
 using FdoToolbox.Core.IO;
 using System.IO;
 using FdoToolbox.Core.ETL;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Tests
 {

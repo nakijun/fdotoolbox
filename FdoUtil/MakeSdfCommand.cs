@@ -23,6 +23,7 @@ using System.Text;
 using FdoToolbox.Core;
 using System.IO;
 using FdoToolbox.Core.Commands;
+using FdoToolbox.Core.Utility;
 
 namespace FdoUtil
 {

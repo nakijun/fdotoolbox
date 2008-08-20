@@ -27,6 +27,7 @@ using System.Collections.Specialized;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core.ClientServices;
 using System.IO;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Tests
 {
