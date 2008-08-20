@@ -26,6 +26,9 @@ using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Tests
 {
+    /*
+     This test fixture tests the FGF conversion (to WKB and FGF text) facilities
+     */
     [TestFixture]
     [Category("FdoToolboxCore")]
     public class GeometryTests
