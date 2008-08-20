@@ -33,6 +33,7 @@ using OSGeo.FDO.Commands.Feature;
 using OSGeo.FDO.Expression;
 using OSGeo.FDO.Connections.Capabilities;
 using FdoToolbox.Core.Common;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.ClientServices
 {

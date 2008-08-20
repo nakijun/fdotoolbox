@@ -37,7 +37,7 @@ using OSGeo.FDO.Commands;
 using OSGeo.FDO.Expression;
 using OSGeo.FDO.Geometry;
 
-namespace FdoToolbox.Core
+namespace FdoToolbox.Core.Utility
 {
     /// <summary>
     /// Utility class to supplement the Express Extension Module
@@ -165,7 +165,7 @@ namespace FdoToolbox.Core
                 throw new ArgumentException("The given DataTable object has no table name");
 
             //Create ClassDefinition from table definition
-            FeatureClass fc = new FeatureClass(table.TableName);
+            FeatureClass fc = new FeatureClass(table.TableName, "");
             foreach (System.Data.DataColumn col in table.Columns)
             {
                 if (col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_PROPERTY] != null
@@ -214,14 +214,14 @@ namespace FdoToolbox.Core
                     else if (col.DataType == typeof(string))
                     {
                         dp.DataType = DataType.DataType_String;
-                        dp.DefaultValue = col.DefaultValue;
+                        dp.DefaultValue = col.DefaultValue.ToString();
                         dp.Length = col.MaxLength;
                     }
                     else
                         throw new Exception("Unsupported data type: " + col.DataType);
 
                     fc.Properties.Add(dp);
-                    if (col.ExtendedProperties[FdoMetaDataNames.FDO_IDENTITY_PROPERTY] != null || (table.PrimaryKey != null && Array.IndexOf<System.Data.DataColumn>(table.PrimaryKey, col)))
+                    if (col.ExtendedProperties[FdoMetaDataNames.FDO_IDENTITY_PROPERTY] != null || (table.PrimaryKey != null && Array.IndexOf<System.Data.DataColumn>(table.PrimaryKey, col) >= 0))
                     {
                         fc.IdentityProperties.Add(dp);
                     }
@@ -252,7 +252,7 @@ namespace FdoToolbox.Core
                                 string name = col.ColumnName;
                                 if (col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_PROPERTY] != null)
                                 {
-                                    string fgfText = row[col];
+                                    string fgfText = row[col].ToString();
                                     byte[] fgf = null;
                                     using (IGeometry geom = factory.CreateGeometry(fgfText))
                                     {

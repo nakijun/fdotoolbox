@@ -32,6 +32,7 @@ using System.IO;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Commands;
 using FdoToolbox.Core.Common;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.Modules
 {

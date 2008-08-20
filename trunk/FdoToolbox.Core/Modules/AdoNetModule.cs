@@ -11,6 +11,7 @@ using FdoToolbox.Core.IO;
 using FdoToolbox.Core.ETL;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Connections;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.Modules
 {

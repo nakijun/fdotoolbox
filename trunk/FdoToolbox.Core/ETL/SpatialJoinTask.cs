@@ -27,6 +27,7 @@ using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands;
 using System.Threading;
+using FdoToolbox.Core.Utility;
 #region overview
 /**
  * Spatial Join overview
