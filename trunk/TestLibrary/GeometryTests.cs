@@ -24,7 +24,7 @@ using NUnit.Framework;
 using OSGeo.FDO.Geometry;
 using FdoToolbox.Core.Utility;
 
-namespace UnitTests
+namespace FdoToolbox.Tests
 {
     [TestFixture]
     public class GeometryTests
