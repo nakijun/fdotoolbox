@@ -48,6 +48,7 @@ namespace FdoToolbox.Tests
 
     [Category("RawFdo")]
     [TestFixture]
+    [Explicit]
     public class FdoExtendedTests : BaseTest
     {
         [Test]

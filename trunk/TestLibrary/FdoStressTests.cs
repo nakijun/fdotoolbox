@@ -46,6 +46,7 @@ namespace FdoToolbox.Tests
 
     [TestFixture(Description = "FDO API Stress Tests")]
     [Category("Stress")]
+    [Explicit]
     public class FdoStressTests : BaseTest
     {
         [Test]
