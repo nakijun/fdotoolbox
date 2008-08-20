@@ -27,6 +27,7 @@ using FdoToolbox.Core.Utility;
 namespace FdoToolbox.Tests
 {
     [TestFixture]
+    [Category("FdoToolboxCore")]
     public class GeometryTests
     {
         const int FDO_DIM_XY = 0;
