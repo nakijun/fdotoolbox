@@ -34,6 +34,7 @@ using System.IO;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Modules;
 using FdoToolbox.Core.Common;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.Controls
 {

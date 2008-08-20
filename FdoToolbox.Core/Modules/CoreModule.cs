@@ -37,6 +37,7 @@ using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Commands;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.IO;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.Modules
 {

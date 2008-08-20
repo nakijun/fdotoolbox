@@ -29,6 +29,7 @@ using OSGeo.FDO.Commands;
 using System.IO;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.ETL
 {
