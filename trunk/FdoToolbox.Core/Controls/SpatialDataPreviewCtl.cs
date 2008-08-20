@@ -39,6 +39,7 @@ using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Modules;
 using FdoToolbox.Core.Common;
 using System.Threading;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -525,23 +526,8 @@ namespace FdoToolbox.Core.Controls
                     }
                     else if (geomDef != null)
                     {
-                        byte[] binGeom = reader.GetGeometry(name);
-                        using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(binGeom))
-                        {
-                            //FIXME: 
-                            //The line below when called many times over will eventually
-                            //cause "Memory allocation failed"
-                            //
-                            //API docs state that calling get_Text() on a 
-                            //large number of IGeometry objects that are retained 
-                            //in memory may cause a noticable increase in memory 
-                            //consumption. 
-                            //
-                            //Does not calling Dispose() or wrapping the
-                            //IGeometry in a using block solve this problem?
-                            string text = geom.Text;
-                            row[name] = text;
-                        }
+                        byte[] fgf = reader.GetGeometry(name);
+                        row[name] = FdoGeometryUtil.GetFgfText(fgf);
                     }
                 }
                 else
@@ -861,7 +847,7 @@ namespace FdoToolbox.Core.Controls
                                 ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
                                 count++;
                                 if (count % 50 == 0)
-                                    Thread.Sleep(75);
+                                    Thread.Sleep(90);
                             }
                         }
                         else

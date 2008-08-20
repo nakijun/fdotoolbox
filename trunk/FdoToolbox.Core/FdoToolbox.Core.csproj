@@ -369,6 +369,7 @@
     <Compile Include="Modules\ModuleBase.cs" />
     <Compile Include="Modules\ModuleMgr.cs" />
     <Compile Include="ETL\MySqlCopySpatialContextOverride.cs" />
+    <Compile Include="Utility\FdoGeometryUtil.cs" />
     <Compile Include="Utility\FeatureReaderHelper.cs" />
     <Compile Include="Utility\OverrideFactory.cs" />
     <Compile Include="ClientServices\PreferenceDictionary.cs" />

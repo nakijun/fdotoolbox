@@ -59,6 +59,7 @@
     <Compile Include="ConnectionLoaderTests.cs" />
     <Compile Include="DbConnectionTests.cs" />
     <Compile Include="FdoStressTests.cs" />
+    <Compile Include="GeometryTests.cs" />
     <Compile Include="MockApplication.cs" />
     <Compile Include="ModuleManagerTests.cs" />
     <Compile Include="OverrideTests.cs" />
