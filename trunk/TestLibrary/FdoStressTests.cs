@@ -31,6 +31,7 @@ using OSGeo.FDO.Commands;
 using OSGeo.FDO.Common;
 using FdoToolbox.Core;
 using System.IO;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Tests
 {
