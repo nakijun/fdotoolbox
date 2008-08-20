@@ -31,7 +31,7 @@ using OSGeo.FDO.Schema;
 namespace FdoToolbox.Core.Utility
 {
     /// <summary>
-    /// Utility class to convert fgf geometries to wkb geometries 
+    /// Utility class to convert fgf geometries to other forms
     /// and vice versa.
     /// </summary>
     public class FdoGeometryUtil
@@ -40,6 +40,11 @@ namespace FdoToolbox.Core.Utility
         const int FDO_DIM_Z = 1;
         const int FDO_DIM_M = 2;
 
+        /// <summary>
+        /// Converts a FGF binary to a WKB binary
+        /// </summary>
+        /// <param name="fgf"></param>
+        /// <returns></returns>
         public static byte[] Fgf2Wkb(byte[] fgf)
         {
             byte[] wkb = null;
@@ -131,6 +136,11 @@ namespace FdoToolbox.Core.Utility
             return wkb;
         }
 
+        /// <summary>
+        /// Gets the FGF text form of an FGF binary
+        /// </summary>
+        /// <param name="fgf"></param>
+        /// <returns></returns>
         public static string GetFgfText(byte[] fgf)
         {
             StringBuilder wkt = new StringBuilder();
@@ -581,9 +591,14 @@ namespace FdoToolbox.Core.Utility
                 throw new System.Exception("Unknown dimensionality type");
         }
 
+        /// <summary>
+        /// Gets the WKB text from the given FGF binary
+        /// </summary>
+        /// <param name="fgf"></param>
+        /// <returns></returns>
         public static string GetWkbText(byte[] fgf)
         {
-            return string.Empty;
+            throw new NotImplementedException();
         }
     }
 }
