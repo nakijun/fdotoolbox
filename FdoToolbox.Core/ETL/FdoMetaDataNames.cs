@@ -228,7 +228,7 @@ namespace FdoToolbox.Core.ETL
             for (int i = 0; i < propCount; i++)
             {
                 string propName = reader.GetColumnName(i);
-                DataType dtype = reader.GetColumnType(i);
+                DataType dtype = reader.GetColumnType(propName);
                 DataColumn col = new DataColumn(propName);
                 col.AllowDBNull = true;
                 col.DataType = GetDataTypeForProperty(dtype);

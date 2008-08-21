@@ -1025,6 +1025,11 @@ namespace FdoToolbox.Core.Controls
 
         private void saveToSDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (grdPreview.DataSource == null || (grdPreview.DataSource as BindingSource).DataSource == null)
+            {
+                AppConsole.Alert("Unable to save", "Nothing to save");
+                return;
+            }
             DataTable table = (grdPreview.DataSource as BindingSource).DataSource as DataTable;
             if (table.Rows.Count == 0)
             {
@@ -1052,6 +1057,11 @@ namespace FdoToolbox.Core.Controls
                 ITask task = new DataTableToFlatFileTask(options);
                 new TaskProgressDlg(task).Run();
             }
+        }
+
+        private void tabQueryMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            splitSave.Visible = (tabQueryMode.SelectedIndex == TAB_STANDARD);
         }
     }
 }
