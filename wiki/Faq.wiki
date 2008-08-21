@@ -3,7 +3,13 @@
 
 === Q: I get "Memory allocation failed" when previewing data ===
 
-A: See Issue 21. There should be no problems previewing data if you omit the geometry properties in the standard query, or if you are querying via raw SQL.
+This has been fixed in the trunk build and will be avaialble in the first release after 0.5.6.
+
+=== Q: I get errors bulk copying between different providers (when it attempts to apply the schema) ===
+
+This is a current shortcoming of the bulk copy feature as various FDO providers do not necessary support the same set of data types. For example: MySQL supports Int64 auto-generated properties, trying to bulk copy MySQL to SDF with this property will fail as SDF does not support Int64 properties.
+
+Better warnings about incompatible schemas (with details about incompatible features) will definitely be in a future release. I am still figuring out the best way to resolve this issue in the most practical manner.
 
 === Q: I can't see schemas/classes in Oracle (using OSGeo.KingOracle) ===
 
