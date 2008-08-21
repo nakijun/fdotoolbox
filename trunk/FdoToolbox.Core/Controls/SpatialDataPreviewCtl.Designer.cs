@@ -227,6 +227,7 @@ namespace FdoToolbox.Core.Controls
             this.tabQueryMode.SelectedIndex = 0;
             this.tabQueryMode.Size = new System.Drawing.Size(480, 220);
             this.tabQueryMode.TabIndex = 0;
+            this.tabQueryMode.SelectedIndexChanged += new System.EventHandler(this.tabQueryMode_SelectedIndexChanged);
             // 
             // pageStandard
             // 
