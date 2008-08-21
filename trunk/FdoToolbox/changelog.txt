@@ -1,3 +1,7 @@
+- Enhancements:
+	- Data Preview: Data Query results can be saved to SDF (only in standard mode at the moment)
+	- New FGF text parser in fully managed code (used by Data Preview) and certain ETL tasks.
+
 v0.5.6
 ------
 
