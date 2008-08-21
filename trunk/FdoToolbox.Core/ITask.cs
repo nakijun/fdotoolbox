@@ -82,6 +82,10 @@ namespace FdoToolbox.Core
         /// <summary>
         /// A spatial -> non-spatial bulk copy task
         /// </summary>
-        SpatialToNonSpatialBulkCopy
+        SpatialToNonSpatialBulkCopy,
+        /// <summary>
+        /// An ado.net datatable -> feature class copy task
+        /// </summary>
+        DataTableToFeatureClass
     }
 }

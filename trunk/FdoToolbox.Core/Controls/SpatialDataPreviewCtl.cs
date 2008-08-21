@@ -40,6 +40,8 @@ using FdoToolbox.Core.Modules;
 using FdoToolbox.Core.Common;
 using System.Threading;
 using FdoToolbox.Core.Utility;
+using FdoToolbox.Core.ETL;
+using System.IO;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -464,10 +466,7 @@ namespace FdoToolbox.Core.Controls
         /// <param name="classDefinition"></param>
         private void PrepareGrid(DataTable table, ClassDefinition classDefinition)
         {
-            foreach (PropertyDefinition def in classDefinition.Properties)
-            {
-                table.Columns.Add(def.Name);
-            }
+            FdoMetaData.CreateTableFromClass(table, classDefinition);
         }
 
         private void ProcessFeatureReader(DataTable table, PropertyDefinitionCollection propDefs, Dictionary<int, string> cachedPropertyNames, IFeatureReader reader)
@@ -528,6 +527,12 @@ namespace FdoToolbox.Core.Controls
                     {
                         byte[] fgf = reader.GetGeometry(name);
                         row[name] = FdoGeometryUtil.GetFgfText(fgf);
+                        /*
+                        using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(fgf))
+                        {
+                            string text = geom.Text;
+                            row[name] = text;
+                        }*/
                     }
                 }
                 else
@@ -885,6 +890,7 @@ namespace FdoToolbox.Core.Controls
             if (grdPreview.Rows.Count == 0)
             {
                 DataTable table = new DataTable();
+                table.TableName = row.Table.TableName;
                 table.Merge(row.Table);
 
                 BindingSource bs = new BindingSource();
@@ -1014,6 +1020,37 @@ namespace FdoToolbox.Core.Controls
                             bgStandard.CancelAsync();
                     }
                     break;
+            }
+        }
+
+        private void saveToSDFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DataTable table = (grdPreview.DataSource as BindingSource).DataSource as DataTable;
+            if (table.Rows.Count == 0)
+            {
+                AppConsole.Alert("Unable to save", "Nothing to save");
+                return;
+            }
+            if (saveQueryDlg.ShowDialog() == DialogResult.OK)
+            {
+                string file = saveQueryDlg.FileName;
+                string ext = Path.GetExtension(file);
+
+                DataTableConversionOptions options = null;
+                if (ext.ToLower() == ".sdf")
+                    options = new DataTableConversionOptions(table, "OSGeo.SDF", file);
+                else if (ext.ToLower() == ".shp")
+                    options = new DataTableConversionOptions(table, "OSGeo.SHP", file);
+                else
+                {
+                    AppConsole.Alert("Error", "Unsupported file extension");
+                    return;
+                }
+                options.SchemaName = "Default";
+                options.ClassName = table.TableName;
+                options.UseFdoMetaData = true;
+                ITask task = new DataTableToFlatFileTask(options);
+                new TaskProgressDlg(task).Run();
             }
         }
     }
