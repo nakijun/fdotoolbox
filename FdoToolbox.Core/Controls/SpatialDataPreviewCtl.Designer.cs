@@ -28,7 +28,12 @@ namespace FdoToolbox.Core.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitSave = new FdoToolbox.Core.Controls.SplitButton();
+            this.ctxSave = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.saveToSDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.lblCount = new System.Windows.Forms.Label();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnQuery = new System.Windows.Forms.Button();
@@ -78,10 +83,11 @@ namespace FdoToolbox.Core.Controls
             this.grdPreview = new System.Windows.Forms.DataGridView();
             this.bgStandard = new System.ComponentModel.BackgroundWorker();
             this.bgSql = new System.ComponentModel.BackgroundWorker();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.saveQueryDlg = new System.Windows.Forms.SaveFileDialog();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.ctxSave.SuspendLayout();
             this.grpQuery.SuspendLayout();
             this.tabQueryMode.SuspendLayout();
             this.pageStandard.SuspendLayout();
@@ -109,6 +115,7 @@ namespace FdoToolbox.Core.Controls
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.splitSave);
             this.splitContainer1.Panel1.Controls.Add(this.btnCancel);
             this.splitContainer1.Panel1.Controls.Add(this.lblCount);
             this.splitContainer1.Panel1.Controls.Add(this.btnClear);
@@ -121,6 +128,47 @@ namespace FdoToolbox.Core.Controls
             this.splitContainer1.Size = new System.Drawing.Size(494, 345);
             this.splitContainer1.SplitterDistance = 275;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // splitSave
+            // 
+            this.splitSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitSave.AutoSize = true;
+            this.splitSave.ContextMenuStrip = this.ctxSave;
+            this.splitSave.Location = new System.Drawing.Point(195, 245);
+            this.splitSave.Name = "splitSave";
+            this.splitSave.Size = new System.Drawing.Size(87, 23);
+            this.splitSave.TabIndex = 5;
+            this.splitSave.Text = "Save Query";
+            this.splitSave.UseVisualStyleBackColor = true;
+            // 
+            // ctxSave
+            // 
+            this.ctxSave.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveToSDFToolStripMenuItem});
+            this.ctxSave.Name = "ctxSave";
+            this.ctxSave.Size = new System.Drawing.Size(134, 26);
+            // 
+            // saveToSDFToolStripMenuItem
+            // 
+            this.saveToSDFToolStripMenuItem.Image = global::FdoToolbox.Core.Properties.Resources.disk;
+            this.saveToSDFToolStripMenuItem.Name = "saveToSDFToolStripMenuItem";
+            this.saveToSDFToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.saveToSDFToolStripMenuItem.Text = "Save to SDF";
+            this.saveToSDFToolStripMenuItem.Click += new System.EventHandler(this.saveToSDFToolStripMenuItem_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Image = global::FdoToolbox.Core.Properties.Resources.cross;
+            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCancel.Location = new System.Drawing.Point(341, 245);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(64, 23);
+            this.btnCancel.TabIndex = 4;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // lblCount
             // 
@@ -684,19 +732,9 @@ namespace FdoToolbox.Core.Controls
             this.bgSql.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgSql_RunWorkerCompleted);
             this.bgSql.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgSql_ProgressChanged);
             // 
-            // btnCancel
+            // saveQueryDlg
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Image = global::FdoToolbox.Core.Properties.Resources.cross;
-            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(341, 245);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(64, 23);
-            this.btnCancel.TabIndex = 4;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.saveQueryDlg.Filter = "SDF Files (*.sdf)|*.sdf|SHP Files(*.shp)|*.shp";
             // 
             // SpatialDataPreviewCtl
             // 
@@ -709,6 +747,7 @@ namespace FdoToolbox.Core.Controls
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
+            this.ctxSave.ResumeLayout(false);
             this.grpQuery.ResumeLayout(false);
             this.tabQueryMode.ResumeLayout(false);
             this.pageStandard.ResumeLayout(false);
@@ -784,5 +823,9 @@ namespace FdoToolbox.Core.Controls
         private System.ComponentModel.BackgroundWorker bgSql;
         private System.Windows.Forms.Label lblCount;
         private System.Windows.Forms.Button btnCancel;
+        private SplitButton splitSave;
+        private System.Windows.Forms.ContextMenuStrip ctxSave;
+        private System.Windows.Forms.ToolStripMenuItem saveToSDFToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveQueryDlg;
     }
 }

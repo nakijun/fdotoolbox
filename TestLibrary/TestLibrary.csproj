@@ -60,6 +60,7 @@
     <Compile Include="DbConnectionTests.cs" />
     <Compile Include="FdoStressTests.cs" />
     <Compile Include="GeometryTests.cs" />
+    <Compile Include="MetaDataTest.cs" />
     <Compile Include="MockApplication.cs" />
     <Compile Include="ModuleManagerTests.cs" />
     <Compile Include="OverrideTests.cs" />

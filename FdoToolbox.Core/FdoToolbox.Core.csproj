@@ -100,6 +100,11 @@
     <Compile Include="Controls\SpatialJoinCtl.Designer.cs">
       <DependentUpon>SpatialJoinCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ETL\DataTableConversionOptions.cs" />
+    <Compile Include="ETL\DataTableToFlatFileTask.cs" />
     <Compile Include="ETL\DataTypeComparer.cs" />
     <Compile Include="ETL\DbToPointCopyOptions.cs" />
     <Compile Include="ETL\DbToPointCopyTask.cs" />
@@ -370,7 +375,7 @@
     <Compile Include="Modules\ModuleMgr.cs" />
     <Compile Include="ETL\MySqlCopySpatialContextOverride.cs" />
     <Compile Include="Utility\FdoGeometryUtil.cs" />
-    <Compile Include="Utility\FdoMetaDataNames.cs" />
+    <Compile Include="ETL\FdoMetaDataNames.cs" />
     <Compile Include="Utility\FeatureReaderHelper.cs" />
     <Compile Include="Utility\OverrideFactory.cs" />
     <Compile Include="ClientServices\PreferenceDictionary.cs" />
