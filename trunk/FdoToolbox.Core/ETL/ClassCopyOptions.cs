@@ -76,6 +76,7 @@ namespace FdoToolbox.Core.ETL
             _ClassDef = classDef;
             _PropertyMappings = new NameValueCollection();
             _PropertyDefinitions = new Dictionary<string, PropertyDefinition>();
+            _DataTypeMappings = new Dictionary<string, DataTypeMapping>();
         }
 
         /// <summary>
@@ -163,6 +164,20 @@ namespace FdoToolbox.Core.ETL
         {
             _PropertyMappings.Add(srcProp.Name, targetProp);
             _PropertyDefinitions.Add(srcProp.Name, srcProp);
+        }
+
+        private Dictionary<string, DataTypeMapping> _DataTypeMappings;
+
+        internal void AddDataTypeMapping(DataTypeMapping mapping)
+        {
+            _DataTypeMappings[mapping.SourceProperty] = mapping;
+        }
+
+        internal DataTypeMapping GetDataTypeMapping(string sourcePropertyName)
+        {
+            if(_DataTypeMappings.ContainsKey(sourcePropertyName))
+                return _DataTypeMappings[sourcePropertyName];
+            return null;
         }
     }
 }

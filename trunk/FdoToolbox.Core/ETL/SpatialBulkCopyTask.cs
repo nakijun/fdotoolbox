@@ -199,8 +199,33 @@ namespace FdoToolbox.Core.ETL
                         }
                     }
                     _DestService.ApplySchema(targetSchema);
+                    _Options.TargetSchemaName = targetSchema.Name;
                     SendMessage("Target Schema Applied");
                 }
+                
+                //Map data types
+                SendMessage("Mapping source - target data types");
+                foreach (ClassCopyOptions copyOpts in _ClassesToCopy)
+                {
+                    ClassDefinition srcClass = copyOpts.SourceClassDefinition;
+                    ClassDefinition targetClass = _DestService.GetClassByName(_Options.TargetSchemaName, copyOpts.TargetClassName);
+                    foreach (string srcPropName in copyOpts.PropertyNames)
+                    {
+                        string targetPropName = copyOpts.GetTargetPropertyName(srcPropName);
+                        PropertyDefinition srcProp = srcClass.Properties[srcClass.Properties.IndexOf(srcPropName)];
+                        PropertyDefinition targetProp = targetClass.Properties[targetClass.Properties.IndexOf(targetPropName)];
+
+                        if (srcProp.PropertyType == PropertyType.PropertyType_DataProperty)
+                        {
+                            DataPropertyDefinition srcData = srcProp as DataPropertyDefinition;
+                            DataPropertyDefinition targetData = targetProp as DataPropertyDefinition;
+                            DataTypeMapping mapping = new DataTypeMapping(srcData, targetData);
+                            copyOpts.AddDataTypeMapping(mapping);
+                        }
+                    }
+                }
+                SendMessage("Mapping completed");
+                
                 SendMessage("Begin bulk copy of classes");
                 long total = 0;
                 int classesCopied = 1;
@@ -277,10 +302,16 @@ namespace FdoToolbox.Core.ETL
                             //only the properties we specified, so only cache the ones that
                             //match the original property list
                             Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
+                            Dictionary<int, string> cachedDataPropertyNames = new Dictionary<int, string>();
                             for (int i = 0; i < propDefs.Count; i++)
                             {
-                                if (Array.IndexOf<string>(propNames, propDefs[i].Name) >= 0)
-                                    cachedPropertyNames.Add(i, propDefs[i].Name);
+                                string pName = propDefs[i].Name;
+                                if (Array.IndexOf<string>(propNames, pName) >= 0)
+                                {
+                                    cachedPropertyNames.Add(i, pName);
+                                    if (propDefs[i].PropertyType == PropertyType.PropertyType_DataProperty)
+                                        cachedDataPropertyNames.Add(i, pName);
+                                }
                             }
 
                             //If batch insert size defined, prepare insert command for
@@ -332,7 +363,7 @@ namespace FdoToolbox.Core.ETL
                                 if (pc != oldpc)
                                 {
                                     oldpc = pc;
-                                #if DEBUG
+                                #if DEBUG || TEST
                                     SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3} of {4} features)", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName, copied, count));
                                 #else
                                     SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3}% of {4} features)", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName, oldpc, count));
@@ -622,26 +653,150 @@ namespace FdoToolbox.Core.ETL
                 if (propNames.Length == 0)
                     throw new TaskValidationException("Nothing to copy from class " + className + " in schema " + _Options.SourceSchemaName);
 
-                foreach (string propName in propNames)
+                if (_Options.ApplySchemaToTarget)
                 {
-                    int pidx = classDef.Properties.IndexOf(propName);
-                    if (pidx < 0)
+                    foreach (string propName in propNames)
                     {
-                        throw new TaskValidationException("Unable to find source property " + propName + " in class " + classDef.Name + " of schema " + _Options.SourceSchemaName);
-                    }
-                    else
-                    {
-                        PropertyDefinition propDef = classDef.Properties[pidx];
-                        if (propDef.PropertyType == PropertyType.PropertyType_DataProperty)
+                        int pidx = classDef.Properties.IndexOf(propName);
+                        if (pidx < 0)
                         {
-                            DataType dtype = (propDef as DataPropertyDefinition).DataType;
-                            if (Array.IndexOf<DataType>(destConn.SchemaCapabilities.DataTypes, dtype) < 0)
-                                throw new TaskValidationException(string.Format("Source class {0} has a property {1} whose data type {2} is not supported by the target connection", classDef.Name, propDef.Name, dtype));
+                            throw new TaskValidationException("Unable to find source property " + propName + " in class " + classDef.Name + " of schema " + _Options.SourceSchemaName);
+                        }
+                        else
+                        {
+                            PropertyDefinition propDef = classDef.Properties[pidx];
+                            if (propDef.PropertyType == PropertyType.PropertyType_DataProperty)
+                            {
+                                DataType dtype = (propDef as DataPropertyDefinition).DataType;
+                                if (Array.IndexOf<DataType>(destConn.SchemaCapabilities.DataTypes, dtype) < 0)
+                                    throw new TaskValidationException(string.Format("Source class {0} has a property {1} whose data type {2} is not supported by the target connection", classDef.Name, propDef.Name, dtype));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ClassDefinition targetClass = destService.GetClassByName(_Options.TargetSchemaName, copyOpts.TargetClassName);
+                    if (targetClass == null)
+                        throw new TaskValidationException("Unable to find target class: " + copyOpts.TargetClassName);
+
+                    foreach (string propName in propNames)
+                    {
+                        int sidx = classDef.Properties.IndexOf(propName);
+                        if (sidx < 0)
+                            throw new TaskValidationException("Unable to find source property " + propName + " in class " + classDef.Name + " of schema " + _Options.SourceSchemaName);
+                        string tprop = copyOpts.GetTargetPropertyName(propName);
+                        int tidx = targetClass.Properties.IndexOf(tprop);
+                        if (tidx < 0)
+                            throw new TaskValidationException("Unable to find target property " + tprop + " in class " + copyOpts.TargetClassName);
+
+                        PropertyDefinition srcProp = classDef.Properties[sidx];
+                        PropertyDefinition tgProp = targetClass.Properties[tidx];
+                        if (srcProp.PropertyType == PropertyType.PropertyType_DataProperty)
+                        {
+                            if (tgProp.PropertyType != PropertyType.PropertyType_DataProperty)
+                                throw new TaskValidationException("Target property " + tgProp.QualifiedName + " is not the same property type as property " + srcProp.QualifiedName);
+                            DataType srcType = (srcProp as DataPropertyDefinition).DataType;
+                            DataType tgType = (tgProp as DataPropertyDefinition).DataType;
+                            if (!IsConvertable(srcType, tgType))
+                                throw new TaskValidationException("Data Type of " + srcProp.QualifiedName + " (" + srcType + ") cannot be converted to (" + tgType + ")");
                         }
                     }
                 }
             }
             SendMessage("Validation Completed");
+        }
+
+        public static bool IsConvertable(DataType srcType, DataType tgType)
+        {
+            if (srcType == tgType)
+                return true;
+
+            switch (srcType)
+            {
+                //BLOB - n/a (Target must be BLOB)
+                case DataType.DataType_BLOB:
+                    return tgType == DataType.DataType_BLOB;
+                //Boolean
+                case DataType.DataType_Boolean:
+                    return tgType == DataType.DataType_Boolean ||
+                           tgType == DataType.DataType_String ||
+                           tgType == DataType.DataType_Byte ||
+                           tgType == DataType.DataType_Int16 ||
+                           tgType == DataType.DataType_Int32 ||
+                           tgType == DataType.DataType_Int64;
+                //Byte
+                case DataType.DataType_Byte:
+                    return tgType == DataType.DataType_Byte ||
+                           tgType == DataType.DataType_String ||
+                           tgType == DataType.DataType_Int16 ||
+                           tgType == DataType.DataType_Int32 ||
+                           tgType == DataType.DataType_Int64;
+                //CLOB
+                case DataType.DataType_CLOB:
+                    return tgType == DataType.DataType_CLOB;
+                //DateTime
+                case DataType.DataType_DateTime:
+                    return tgType == DataType.DataType_DateTime ||
+                           tgType == DataType.DataType_String;
+                //Decimal
+                case DataType.DataType_Decimal:
+                    return tgType == DataType.DataType_Decimal ||
+                           tgType == DataType.DataType_String ||
+                           tgType == DataType.DataType_Single ||
+                           tgType == DataType.DataType_Double ||
+                           tgType == DataType.DataType_Int16 ||
+                           tgType == DataType.DataType_Int32 ||
+                           tgType == DataType.DataType_Int64;
+                //Double
+                case DataType.DataType_Double:
+                    return tgType == DataType.DataType_Double ||
+                           tgType == DataType.DataType_String ||
+                           tgType == DataType.DataType_Single ||
+                           tgType == DataType.DataType_Decimal ||
+                           tgType == DataType.DataType_Int16 ||
+                           tgType == DataType.DataType_Int32 ||
+                           tgType == DataType.DataType_Int64;
+                //Int16
+                case DataType.DataType_Int16:
+                    return tgType == DataType.DataType_Int16 ||
+                           tgType == DataType.DataType_String ||
+                           tgType == DataType.DataType_Double ||
+                           tgType == DataType.DataType_Decimal ||
+                           tgType == DataType.DataType_Single ||
+                           tgType == DataType.DataType_Int32 ||
+                           tgType == DataType.DataType_Int64;
+                //Int32
+                case DataType.DataType_Int32:
+                    return tgType == DataType.DataType_Int32 ||
+                           tgType == DataType.DataType_String ||
+                           tgType == DataType.DataType_Double ||
+                           tgType == DataType.DataType_Decimal ||
+                           tgType == DataType.DataType_Single ||
+                           tgType == DataType.DataType_Int16 ||
+                           tgType == DataType.DataType_Int64;
+                //Int64
+                case DataType.DataType_Int64:
+                    return tgType == DataType.DataType_Int64 ||
+                           tgType == DataType.DataType_String ||
+                           tgType == DataType.DataType_Double ||
+                           tgType == DataType.DataType_Decimal ||
+                           tgType == DataType.DataType_Single ||
+                           tgType == DataType.DataType_Int16 ||
+                           tgType == DataType.DataType_Int32;
+                //Single
+                case DataType.DataType_Single:
+                    return tgType == DataType.DataType_String ||
+                           tgType == DataType.DataType_Double ||
+                           tgType == DataType.DataType_Decimal ||
+                           tgType == DataType.DataType_Int16 ||
+                           tgType == DataType.DataType_Int32 ||
+                           tgType == DataType.DataType_Int64;
+                //String
+                case DataType.DataType_String:
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -765,43 +920,116 @@ namespace FdoToolbox.Core.ETL
                     GeometricPropertyDefinition geomDef = def as GeometricPropertyDefinition;
                     if (dataDef != null)
                     {
+                        DataTypeMapping mapping = copyOpts.GetDataTypeMapping(name);
                         switch (dataDef.DataType)
                         {
                             case DataType.DataType_BLOB:
-                                insert.PropertyValues.Add(new PropertyValue(target, new BLOBValue(sourceReader.GetLOB(name).Data)));
+                                {
+                                    byte[] value = sourceReader.GetLOB(name).Data;
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new BLOBValue(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Boolean:
-                                insert.PropertyValues.Add(new PropertyValue(target, new BooleanValue(sourceReader.GetBoolean(name))));
+                                {
+                                    bool value = sourceReader.GetBoolean(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new BooleanValue(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Byte:
-                                insert.PropertyValues.Add(new PropertyValue(target, new ByteValue(sourceReader.GetByte(name))));
+                                {
+                                    byte value = sourceReader.GetByte(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new ByteValue(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_CLOB:
-                                insert.PropertyValues.Add(new PropertyValue(target, new CLOBValue(sourceReader.GetLOB(name).Data)));
+                                {
+                                    byte[] value = sourceReader.GetLOB(name).Data;
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new CLOBValue(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_DateTime:
-                                insert.PropertyValues.Add(new PropertyValue(target, new DateTimeValue(sourceReader.GetDateTime(name))));
+                                {
+                                    DateTime value = sourceReader.GetDateTime(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new DateTimeValue(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Decimal:
-                                insert.PropertyValues.Add(new PropertyValue(target, new DecimalValue(sourceReader.GetDouble(name))));
+                                {
+                                    double value = sourceReader.GetDouble(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new DecimalValue(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Double:
-                                insert.PropertyValues.Add(new PropertyValue(target, new DecimalValue(sourceReader.GetDouble(name))));
+                                {
+                                    double value = sourceReader.GetDouble(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new DoubleValue(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Int16:
-                                insert.PropertyValues.Add(new PropertyValue(target, new Int16Value(sourceReader.GetInt16(name))));
+                                {
+                                    short value = sourceReader.GetInt16(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new Int16Value(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Int32:
-                                insert.PropertyValues.Add(new PropertyValue(target, new Int32Value(sourceReader.GetInt32(name))));
+                                {
+                                    int value = sourceReader.GetInt32(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new Int32Value(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Int64:
-                                insert.PropertyValues.Add(new PropertyValue(target, new Int64Value(sourceReader.GetInt64(name))));
+                                {
+                                    long value = sourceReader.GetInt64(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new Int64Value(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Single:
-                                insert.PropertyValues.Add(new PropertyValue(target, new SingleValue(sourceReader.GetSingle(dataDef.Name))));
+                                {
+                                    float value = sourceReader.GetSingle(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new SingleValue(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_String:
-                                insert.PropertyValues.Add(new PropertyValue(target, new StringValue(sourceReader.GetString(dataDef.Name))));
+                                {
+                                    string value = sourceReader.GetString(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        insert.PropertyValues.Add(new PropertyValue(target, new StringValue(value)));
+                                    else
+                                        insert.PropertyValues.Add(new PropertyValue(target, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                         }
                     }
@@ -819,6 +1047,263 @@ namespace FdoToolbox.Core.ETL
                 insertResult.Close();
             }
             return inserted;
+        }
+
+#if TEST
+        public static ValueExpression GetConvertedValue(DataTypeMapping mapping, object obj)
+#else
+        private static ValueExpression GetConvertedValue(DataTypeMapping mapping, object obj)
+#endif
+        {
+            try
+            {
+                switch (mapping.SourceDataType)
+                {
+                    case DataType.DataType_BLOB:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_BLOB:
+                                    return new BLOBValue((byte[])obj);
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_Boolean:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_Boolean:
+                                    return new BooleanValue(Convert.ToBoolean(obj));
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                case DataType.DataType_Byte:
+                                    return new ByteValue(Convert.ToByte(obj));
+                                case DataType.DataType_Int16:
+                                    return new Int16Value(Convert.ToInt16(obj));
+                                case DataType.DataType_Int32:
+                                    return new Int32Value(Convert.ToInt32(obj));
+                                case DataType.DataType_Int64:
+                                    return new Int64Value(Convert.ToInt64(obj));
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_Byte:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_Byte:
+                                    return new ByteValue(Convert.ToByte(obj));
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                case DataType.DataType_Int16:
+                                    return new Int16Value(Convert.ToInt16(obj));
+                                case DataType.DataType_Int32:
+                                    return new Int32Value(Convert.ToInt32(obj));
+                                case DataType.DataType_Int64:
+                                    return new Int64Value(Convert.ToInt64(obj));
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_CLOB:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_CLOB:
+                                    return new CLOBValue((byte[])obj);
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_DateTime:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_DateTime:
+                                    return new DateTimeValue(Convert.ToDateTime(obj));
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_Decimal:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_Decimal:
+                                    return new DecimalValue(Convert.ToDouble(obj));
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                case DataType.DataType_Single:
+                                    return new SingleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_Double:
+                                    return new DoubleValue(Convert.ToDouble(obj));
+                                case DataType.DataType_Int16:
+                                    return new Int16Value(Convert.ToInt16(obj));
+                                case DataType.DataType_Int32:
+                                    return new Int32Value(Convert.ToInt32(obj));
+                                case DataType.DataType_Int64:
+                                    return new Int64Value(Convert.ToInt64(obj));
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_Double:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_Double:
+                                    return new DoubleValue(Convert.ToDouble(obj));
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                case DataType.DataType_Single:
+                                    return new SingleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_Decimal:
+                                    return new DecimalValue(Convert.ToDouble(obj));
+                                case DataType.DataType_Int16:
+                                    return new Int16Value(Convert.ToInt16(obj));
+                                case DataType.DataType_Int32:
+                                    return new Int32Value(Convert.ToInt32(obj));
+                                case DataType.DataType_Int64:
+                                    return new Int64Value(Convert.ToInt64(obj));
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_Int16:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_Int16:
+                                    return new Int16Value(Convert.ToInt16(obj));
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                case DataType.DataType_Double:
+                                    return new DoubleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_Decimal:
+                                    return new DecimalValue(Convert.ToDouble(obj));
+                                case DataType.DataType_Single:
+                                    return new SingleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_Int32:
+                                    return new Int32Value(Convert.ToInt32(obj));
+                                case DataType.DataType_Int64:
+                                    return new Int64Value(Convert.ToInt64(obj));
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_Int32:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_Int32:
+                                    return new Int32Value(Convert.ToInt32(obj));
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                case DataType.DataType_Double:
+                                    return new DoubleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_Decimal:
+                                    return new DecimalValue(Convert.ToDouble(obj));
+                                case DataType.DataType_Single:
+                                    return new SingleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_Int16:
+                                    return new Int16Value(Convert.ToInt16(obj));
+                                case DataType.DataType_Int64:
+                                    return new Int64Value(Convert.ToInt64(obj));
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_Int64:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_Int64:
+                                    return new Int64Value(Convert.ToInt64(obj));
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                case DataType.DataType_Double:
+                                    return new DoubleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_Decimal:
+                                    return new DecimalValue(Convert.ToDouble(obj));
+                                case DataType.DataType_Single:
+                                    return new SingleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_Int16:
+                                    return new Int16Value(Convert.ToInt16(obj));
+                                case DataType.DataType_Int32:
+                                    return new Int32Value(Convert.ToInt32(obj));
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_Single:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_Single:
+                                    return new SingleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                case DataType.DataType_Double:
+                                    return new DoubleValue(Convert.ToSingle(obj));
+                                case DataType.DataType_Decimal:
+                                    return new DecimalValue(Convert.ToDouble(obj));
+                                case DataType.DataType_Int16:
+                                    return new Int16Value(Convert.ToInt16(obj));
+                                case DataType.DataType_Int32:
+                                    return new Int32Value(Convert.ToInt32(obj));
+                                case DataType.DataType_Int64:
+                                    return new Int64Value(Convert.ToInt64(obj));
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                    case DataType.DataType_String:
+                        {
+                            switch (mapping.TargetDataType)
+                            {
+                                case DataType.DataType_String:
+                                    return new StringValue(obj.ToString());
+                                case DataType.DataType_Boolean:
+                                    return new BooleanValue(Convert.ToBoolean(obj));
+                                case DataType.DataType_Byte:
+                                    return new ByteValue(Convert.ToByte(obj));
+                                case DataType.DataType_DateTime:
+                                    return new DateTimeValue(Convert.ToDateTime(obj));
+                                case DataType.DataType_Decimal:
+                                    return new DecimalValue(Convert.ToDouble(obj));
+                                case DataType.DataType_Double:
+                                    return new DoubleValue(Convert.ToDouble(obj));
+                                case DataType.DataType_Int16:
+                                    return new Int16Value(Convert.ToInt16(obj));
+                                case DataType.DataType_Int32:
+                                    return new Int32Value(Convert.ToInt32(obj));
+                                case DataType.DataType_Int64:
+                                    return new Int64Value(Convert.ToInt64(obj));
+                                case DataType.DataType_Single:
+                                    return new SingleValue(Convert.ToSingle(obj));
+                                default:
+                                    throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
+                            }
+                        }
+                }
+            }
+            catch (InvalidCastException ex)
+            {
+                throw new BulkCopyException("Invalid conversion", ex);
+            }
+            catch (OverflowException ex)
+            {
+                throw new BulkCopyException("Invalid conversion", ex);
+            }
+            catch (FormatException ex)
+            {
+                throw new BulkCopyException("Invalid conversion", ex);
+            }
+            throw new BulkCopyException("Cannot convert " + mapping.SourceDataType + " to " + mapping.TargetDataType);
         }
 
         /// <summary>
