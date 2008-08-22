@@ -545,6 +545,13 @@ namespace FdoToolbox.Core.ETL
             SendMessage("Validating Bulk Copy Options");
 
             FeatureService destService = new FeatureService(destConn);
+            if (_Options.ApplySchemaToTarget)
+            {
+                FeatureSchema targetSchema = CreateTargetSchema(_Options.SourceSchemaName, srcConn);
+                IncompatibleSchema schema = null;
+                if (!destService.CanApplySchema(targetSchema, out schema))
+                    throw new TaskValidationException("The source schema cannot be applied to the target:\n\n" + schema.ToString());
+            }
 
             if (_Options.BatchInsertSize > 0 && !destService.SupportsBatchInsertion())
                 throw new TaskValidationException("Target connection does not support batch insertion");
