@@ -90,19 +90,18 @@ namespace FdoToolbox.Core
             {
                 dict.LoadPreferences(file);
             }
-            else
-            {
-                InitializeDefaultPrefs(dict);
-            }
+            InitializeDefaultPrefs(dict);
             _PrefDict = dict;
         }
 
         private void InitializeDefaultPrefs(PreferenceDictionary dict)
         {
-            dict.SetStringPref(PreferenceNames.PREF_STR_WORKING_DIRECTORY, this.AppPath);
-            dict.SetStringPref(PreferenceNames.PREF_STR_FDO_HOME, Path.Combine(this.AppPath, "FDO\\"));
-            dict.SetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, true);
-            dict.SetStringPref(PreferenceNames.PREF_STR_SESSION_DIRECTORY, Path.Combine(this.AppPath, "Session"));
+            dict.SetDefaultValue(PreferenceNames.PREF_STR_WORKING_DIRECTORY, this.AppPath);
+            dict.SetDefaultValue(PreferenceNames.PREF_STR_FDO_HOME, Path.Combine(this.AppPath, "FDO\\"));
+            dict.SetDefaultValue(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, true);
+            dict.SetDefaultValue(PreferenceNames.PREF_STR_SESSION_DIRECTORY, Path.Combine(this.AppPath, "Session"));
+            dict.SetDefaultValue(PreferenceNames.PREF_INT_WARN_DATASET, 2500);
+            dict.SetDefaultValue(PreferenceNames.PREF_STR_LOG_PATH, Path.Combine(this.AppPath, "Logs\\"));
         }
 
         protected IPreferenceDictionary _PrefDict;
