@@ -33,15 +33,13 @@ namespace FdoToolbox.Core.Forms
             this.btnCancel = new System.Windows.Forms.Button();
             this.bgWorker = new System.ComponentModel.BackgroundWorker();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.lblCounter = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblMessage
             // 
-            this.lblMessage.AutoSize = true;
             this.lblMessage.Location = new System.Drawing.Point(13, 13);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(0, 13);
+            this.lblMessage.Size = new System.Drawing.Size(332, 48);
             this.lblMessage.TabIndex = 0;
             // 
             // btnOK
@@ -80,20 +78,11 @@ namespace FdoToolbox.Core.Forms
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 3;
             // 
-            // lblCounter
-            // 
-            this.lblCounter.AutoSize = true;
-            this.lblCounter.Location = new System.Drawing.Point(13, 38);
-            this.lblCounter.Name = "lblCounter";
-            this.lblCounter.Size = new System.Drawing.Size(0, 13);
-            this.lblCounter.TabIndex = 4;
-            // 
             // TaskProgressDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(357, 128);
-            this.Controls.Add(this.lblCounter);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
@@ -104,7 +93,6 @@ namespace FdoToolbox.Core.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "TaskProgressDlg";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -115,6 +103,5 @@ namespace FdoToolbox.Core.Forms
         private System.Windows.Forms.Button btnCancel;
         private System.ComponentModel.BackgroundWorker bgWorker;
         private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.Label lblCounter;
     }
 }

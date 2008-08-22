@@ -31,6 +31,7 @@ using OSGeo.FDO.Commands;
 using OSGeo.FDO.Expression;
 using FdoToolbox.Core.Utility;
 using System.Threading;
+using System.Data;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -107,21 +108,32 @@ namespace FdoToolbox.Core.ETL
 
                     foreach (System.Data.DataRow row in table.Rows)
                     {
+                        bool doinsert = true;
                         insert.PropertyValues.Clear();
                         foreach (System.Data.DataColumn col in table.Columns)
                         {
                             if (row[col] != null)
                             {
                                 string name = col.ColumnName;
-                                if (col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_PROPERTY] != null)
+                                if (FdoMetaData.HasMetaData(col, FdoMetaDataNames.FDO_GEOMETRY_PROPERTY))
                                 {
                                     string fgfText = row[col].ToString();
-                                    byte[] fgf = null;
-                                    using (IGeometry geom = factory.CreateGeometry(fgfText))
+                                    try
                                     {
-                                        fgf = factory.GetFgf(geom);
+                                        byte[] fgf = null;
+                                        using (IGeometry geom = factory.CreateGeometry(fgfText))
+                                        {
+                                            fgf = factory.GetFgf(geom);
+                                        }
+                                        insert.PropertyValues.Add(new PropertyValue(name, new GeometryValue(fgf)));
                                     }
-                                    insert.PropertyValues.Add(new PropertyValue(name, new GeometryValue(fgf)));
+                                    catch (OSGeo.FDO.Common.Exception ex) 
+                                    {
+                                        //For one reason or another the FGF byte stream could not be parsed, 
+                                        //so abort this insert
+                                        doinsert = false;
+                                        LogOffendingRow(row, ex.Message);
+                                    }
                                 }
                                 else
                                 {
@@ -152,24 +164,40 @@ namespace FdoToolbox.Core.ETL
                                 }
                             }
                         }
-                        using (IFeatureReader reader = insert.Execute())
+                        if (doinsert)
                         {
-                            reader.Close();
-                            count++;
-                        }
+                            using (IFeatureReader reader = insert.Execute())
+                            {
+                                reader.Close();
+                                count++;
+                            }
 
-                        pc = (int)(((double)count / (double)table.Rows.Count) * 100);
-                        //Only update progress counter when % changes
-                        if (pc != oldpc)
-                        {
-                            oldpc = pc;
-                            SendMessage(string.Format("Copying DataTable to class: {0} ({1}% of {2} features)", _options.ClassName, oldpc, _options.Table.Rows.Count));
-                            SendCount(oldpc);
+                            pc = (int)(((double)count / (double)table.Rows.Count) * 100);
+                            //Only update progress counter when % changes
+                            if (pc != oldpc)
+                            {
+                                oldpc = pc;
+                                SendMessage(string.Format("Copying DataTable to class: {0} ({1}% of {2} features)", _options.ClassName, oldpc, _options.Table.Rows.Count));
+                                SendCount(oldpc);
+                            }
                         }
                     }
                     _conn.Close();
                 }
-                SendMessage("Copy complete");
+                //Log any offending rows
+                if (_OffendingRows != null && _OffendingRows.Count > 0)
+                {
+                    //TODO: Expose log path in preference variable
+                    string logFile = Path.Combine(Path.Combine(AppGateway.RunningApplication.AppPath, "\\Logs\\"), _options.File + ".log");
+                    if (File.Exists(logFile))
+                        File.Delete(logFile);
+                    File.WriteAllLines(logFile, _OffendingRows.ToArray());
+                    SendMessage("Copy complete. " + _OffendingRows.Count + " rows could not be copied. See " + logFile + " for more information.");
+                }
+                else
+                {
+                    SendMessage("Copy complete");
+                }
             }
             catch (OSGeo.FDO.Common.Exception ex)
             {
@@ -183,6 +211,36 @@ namespace FdoToolbox.Core.ETL
             {
                 factory.Dispose();
                 _conn.Dispose();
+            }
+        }
+
+        private List<string> _OffendingRows;
+
+        private void LogOffendingRow(System.Data.DataRow row, string message)
+        {
+            if (_OffendingRows == null)
+            {
+                _OffendingRows = new List<string>();
+            }
+            List<string> idNames = new List<string>();
+            string geomProperty = null;
+            //Get id properties
+            foreach (DataColumn col in row.Table.Columns)
+            {
+                if (FdoMetaData.HasMetaData(col, FdoMetaDataNames.FDO_IDENTITY_PROPERTY))
+                    idNames.Add(col.ColumnName);
+                else if (FdoMetaData.HasMetaData(col, FdoMetaDataNames.FDO_GEOMETRY_PROPERTY))
+                    geomProperty = col.ColumnName;
+            }
+            if (idNames.Count > 0 && !string.IsNullOrEmpty(geomProperty))
+            {
+                StringBuilder msg = new StringBuilder("Unable to write row: [" + message + "]\n\t");
+                foreach (string idprop in idNames)
+                {
+                    msg.Append("Identity Property (" + idprop + "): " + row[idprop] + "\n\t");
+                }
+                msg.Append("Geometry Property (" + geomProperty + "): " + row[geomProperty] + "\n\n");
+                _OffendingRows.Add(msg.ToString());
             }
         }
 
