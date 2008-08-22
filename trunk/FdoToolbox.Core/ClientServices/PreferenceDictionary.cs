@@ -62,11 +62,6 @@ namespace FdoToolbox.Core.ClientServices
         private Dictionary<string, int> _IntegerPrefs;
         private Dictionary<string, double> _DoublePrefs;
 
-        private Dictionary<string, bool> _DefaultBoolValues;
-        private Dictionary<string, string> _DefaultStringValues;
-        private Dictionary<string, int> _DefaultIntValues;
-        private Dictionary<string, double> _DefaultDoubleValues;
-
         public PreferenceDictionary()
         {
             _BooleanPrefs = new Dictionary<string, bool>();
