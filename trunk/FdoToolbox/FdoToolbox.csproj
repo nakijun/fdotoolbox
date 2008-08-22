@@ -30,7 +30,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
-    <OutputPath>bin\Test\</OutputPath>
+    <OutputPath>..\out\Test\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MyMeta, Version=1.3.0.0, Culture=neutral, PublicKeyToken=dbe33188b40af272, processorArchitecture=x86">

@@ -28,7 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
-    <OutputPath>bin\Test\</OutputPath>
+    <OutputPath>..\out\Test\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OSGeo.FDO, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">

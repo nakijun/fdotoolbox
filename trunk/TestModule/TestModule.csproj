@@ -29,7 +29,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
-    <OutputPath>bin\Test\</OutputPath>
+    <OutputPath>..\out\Test\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
