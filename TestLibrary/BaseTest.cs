@@ -32,7 +32,8 @@ namespace FdoToolbox.Tests
         [TestFixtureSetUp]
         public void TestSetup()
         {
-            AppGateway.RunningApplication = new MockApplication();
+            if(AppGateway.RunningApplication == null)
+                AppGateway.RunningApplication = new MockApplication();
 
             AppConsole.Out = new CmdConsoleOutputStream();
             AppConsole.Err = new CmdConsoleErrorStream();
