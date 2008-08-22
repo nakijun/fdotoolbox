@@ -187,8 +187,8 @@ namespace FdoToolbox.Core.ETL
                 //Log any offending rows
                 if (_OffendingRows != null && _OffendingRows.Count > 0)
                 {
-                    //TODO: Expose log path in preference variable
-                    string logFile = Path.Combine(Path.Combine(AppGateway.RunningApplication.AppPath, "\\Logs\\"), _options.File + ".log");
+                    string logpath = AppGateway.RunningApplication.Preferences.GetStringPref(PreferenceNames.PREF_STR_LOG_PATH);
+                    string logFile = Path.Combine(logpath, Path.GetFileName(_options.File) + ".log");
                     if (File.Exists(logFile))
                         File.Delete(logFile);
                     File.WriteAllLines(logFile, _OffendingRows.ToArray());

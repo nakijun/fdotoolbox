@@ -49,6 +49,9 @@ namespace FdoToolbox.Core
             InitializePrefs();
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             CheckFdoPath();
+            string logpath = this.Preferences.GetStringPref(PreferenceNames.PREF_STR_LOG_PATH);
+            if (!Directory.Exists(logpath))
+                Directory.CreateDirectory(logpath);
         }
 
         //This handler is called only when the common language runtime tries to bind to the assembly and fails.
