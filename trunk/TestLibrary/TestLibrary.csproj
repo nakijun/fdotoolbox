@@ -27,6 +27,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
+    <OutputPath>..\out\Test\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MyMeta, Version=1.3.0.0, Culture=neutral, PublicKeyToken=dbe33188b40af272, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -56,7 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BCPValueConversionTest.cs" />
     <Compile Include="ConnectionLoaderTests.cs" />
+    <Compile Include="DataTypeTests.cs" />
     <Compile Include="DbConnectionTests.cs" />
     <Compile Include="FdoStressTests.cs" />
     <Compile Include="GeometryTests.cs" />

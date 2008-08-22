@@ -28,7 +28,7 @@ using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Core.Modules
 {
-#if DEBUG
+#if DEBUG || TEST
     public class TestModule : ModuleBase
     {
         public override string Name

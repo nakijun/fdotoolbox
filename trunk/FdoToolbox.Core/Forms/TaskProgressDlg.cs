@@ -103,7 +103,7 @@ namespace FdoToolbox.Core.Forms
                 lblMessage.Text = msg;
         }
 
-#if DEBUG
+#if DEBUG || TEST
         public override string ToString()
         {
             return "progressdlg";

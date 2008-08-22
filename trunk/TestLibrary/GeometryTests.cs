@@ -619,7 +619,7 @@ namespace FdoToolbox.Tests
 
             //Our converted wkb should be the same as the wkb returned by FDO
             Assert.AreEqual(wkb.Length, convertedWkb.Length);
-            Assert.IsTrue(BinaryEquals(wkb, convertedWkb));
+            AssertHelper.BinaryEquals(wkb, convertedWkb);
 
             //The text created by our converted wkb should match the text
             //returned by FDO
@@ -627,19 +627,6 @@ namespace FdoToolbox.Tests
             Assert.AreEqual(fgfText, geom.Text);
 
             geom.Dispose();
-        }
-
-        private bool BinaryEquals(byte[] wkb, byte[] convertedWkb)
-        {
-            if (wkb.Length != convertedWkb.Length)
-                return false;
-
-            for (int i = 0; i < wkb.Length; i++)
-            {
-                if (wkb[i] != convertedWkb[i])
-                    return false;
-            }
-            return true;
         }
     }
 }

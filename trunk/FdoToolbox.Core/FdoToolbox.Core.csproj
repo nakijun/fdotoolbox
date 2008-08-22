@@ -28,6 +28,12 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
+    <OutputPath>..\out\Test\</OutputPath>
+    <DefineConstants>TEST</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MyMeta, Version=1.3.0.0, Culture=neutral, PublicKeyToken=dbe33188b40af272, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -106,6 +112,7 @@
     <Compile Include="ETL\DataTableConversionOptions.cs" />
     <Compile Include="ETL\DataTableToFlatFileTask.cs" />
     <Compile Include="ETL\DataTypeComparer.cs" />
+    <Compile Include="ETL\DataTypeMapping.cs" />
     <Compile Include="ETL\DbToPointCopyOptions.cs" />
     <Compile Include="ETL\DbToPointCopyTask.cs" />
     <Compile Include="ETL\IClassNameOverride.cs" />

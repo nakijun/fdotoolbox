@@ -33,7 +33,7 @@ namespace FdoToolbox.Core
     {
         public BaseApplication()
         {
-#if DEBUG
+#if DEBUG || TEST
             //HACK: It's not picking up the DBMS paths from the PATH environment
             //variable when running in debug mode, so set the paths explicitly here
             string oracle_bin = "C:\\oraclexe\\app\\oracle\\product\\10.2.0\\server\\bin";
