@@ -47,6 +47,11 @@ namespace FdoToolbox.Core.ClientServices
         List<string> GetBooleanPrefNames();
         List<string> GetStringPrefNames();
 
+        void SetDefaultValue(string name, string value);
+        void SetDefaultValue(string name, int value);
+        void SetDefaultValue(string name, double value);
+        void SetDefaultValue(string name, bool value);
+
         void Save();
     }
 
@@ -56,6 +61,11 @@ namespace FdoToolbox.Core.ClientServices
         private Dictionary<string, string> _StringPrefs;
         private Dictionary<string, int> _IntegerPrefs;
         private Dictionary<string, double> _DoublePrefs;
+
+        private Dictionary<string, bool> _DefaultBoolValues;
+        private Dictionary<string, string> _DefaultStringValues;
+        private Dictionary<string, int> _DefaultIntValues;
+        private Dictionary<string, double> _DefaultDoubleValues;
 
         public PreferenceDictionary()
         {
@@ -271,6 +281,30 @@ namespace FdoToolbox.Core.ClientServices
                 writer.Formatting = Formatting.Indented;
                 serializer.Serialize(writer, prefs);
             }
+        }
+
+        public void SetDefaultValue(string name, string value)
+        {
+            if (!_StringPrefs.ContainsKey(name))
+                _StringPrefs[name] = value;
+        }
+
+        public void SetDefaultValue(string name, int value)
+        {
+            if (!_IntegerPrefs.ContainsKey(name))
+                _IntegerPrefs[name] = value;
+        }
+
+        public void SetDefaultValue(string name, double value)
+        {
+            if (!_DoublePrefs.ContainsKey(name))
+                _DoublePrefs[name] = value;
+        }
+
+        public void SetDefaultValue(string name, bool value)
+        {
+            if (!_BooleanPrefs.ContainsKey(name))
+                _BooleanPrefs[name] = value;
         }
     }
 }
