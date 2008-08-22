@@ -112,7 +112,7 @@ namespace FdoToolbox.Core.ETL
                         insert.PropertyValues.Clear();
                         foreach (System.Data.DataColumn col in table.Columns)
                         {
-                            if (row[col] != null)
+                            if (row[col] != null && row[col] != DBNull.Value)
                             {
                                 string name = col.ColumnName;
                                 if (FdoMetaData.HasMetaData(col, FdoMetaDataNames.FDO_GEOMETRY_PROPERTY))

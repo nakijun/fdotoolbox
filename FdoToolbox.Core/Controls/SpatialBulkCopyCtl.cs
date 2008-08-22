@@ -326,6 +326,12 @@ namespace FdoToolbox.Core.Controls
                 TreeNode node = new TreeNode();
                 node.Name = PREFIX_PROPERTY + property.Name;
                 node.Text = property.Name + " (unmapped)";
+                string tooltip = "Property Type: " + property.PropertyType;
+                if (property.PropertyType == PropertyType.PropertyType_DataProperty)
+                {
+                    tooltip += "\nData Type: " + (property as DataPropertyDefinition).DataType;
+                }
+                node.ToolTipText = tooltip;
                 classNode.Nodes.Add(node);
             }
         }
@@ -446,7 +452,14 @@ namespace FdoToolbox.Core.Controls
                         continue;
                 }
                 ToolStripItem tsi = new ToolStripMenuItem();
-                tsi.Text = "Map property to: " + property.Name;
+                if (property.PropertyType == PropertyType.PropertyType_DataProperty)
+                {
+                    tsi.Text = "Map property to: " + property.Name + " (" + (property as DataPropertyDefinition).DataType + ")";
+                }
+                else
+                {
+                    tsi.Text = "Map property to: " + property.Name;
+                }
                 string srcClassName = sourceClassNode.Name;
                 string destClassName = targetClassDef.Name;
                 string newPropertyName = property.Name;
@@ -534,7 +547,7 @@ namespace FdoToolbox.Core.Controls
                         DataType srcDataType = (srcPropDef as DataPropertyDefinition).DataType;
                         DataType destDataType = (destPropDef as DataPropertyDefinition).DataType;
 
-                        if (srcDataType == destDataType)
+                        if (SpatialBulkCopyTask.IsConvertable(srcDataType, destDataType))
                         {
                             return true;
                         }
@@ -542,7 +555,7 @@ namespace FdoToolbox.Core.Controls
                         {
                             //TODO: For type coercion feature to be implemented, be more lenient 
                             //here and allow for certain data type combinations to work
-                            reason = "source and target properties are of different data types";
+                            reason = "source data type cannot be converted to target data type";
                             return false;
                         }
                     }
