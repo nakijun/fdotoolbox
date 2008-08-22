@@ -8,8 +8,8 @@
 === Future ===
  * Spatial -> Non-Spatial bulk copy
  * Non-Spatial -> Spatial bulk copy 
- * Advanced bulk copy options
-      * Data type coercion of mapped properties
+ * ~~Advanced bulk copy options~~
+      * ~~Data type coercion of mapped properties~~
  * Pipeable console commands
  * Raster Provider support
  * KML support
