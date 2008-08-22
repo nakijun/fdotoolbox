@@ -427,6 +427,7 @@ namespace FdoToolbox.Core.Controls
                 qry.ClassName = classDef.Name;
                 qry.Filter = txtFilter.Text;
                 qry.PropertyNames = GetCheckedProperties();
+                qry.ComputedPropertyNames = GetComputedFields();
 
                 grpQuery.Enabled = false;
                 btnQuery.Enabled = false;
@@ -441,6 +442,7 @@ namespace FdoToolbox.Core.Controls
             public string ClassName;
             public string Filter;
             public List<string> PropertyNames;
+            public NameValueCollection ComputedPropertyNames;
             public int Limit;
         }
 
@@ -537,7 +539,7 @@ namespace FdoToolbox.Core.Controls
                 }
                 else
                 {
-                    row[name] = null;
+                    row[name] = DBNull.Value;
                 }
             }
             bgStandard.ReportProgress(0, row);
@@ -824,6 +826,10 @@ namespace FdoToolbox.Core.Controls
                 foreach (string propName in qry.PropertyNames)
                 {
                     select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
+                }
+                foreach (string alias in qry.ComputedPropertyNames.AllKeys)
+                {
+                    select.PropertyNames.Add(new ComputedIdentifier(alias, Expression.Parse(qry.ComputedPropertyNames[alias])));
                 }
 
                 using (IFeatureReader reader = select.Execute())
