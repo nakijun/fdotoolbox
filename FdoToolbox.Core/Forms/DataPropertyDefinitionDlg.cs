@@ -102,6 +102,39 @@ namespace FdoToolbox.Core.Forms
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            errorProvider.Clear();
+            if (string.IsNullOrEmpty(txtName.Text))
+            {
+                errorProvider.SetError(txtName, "Required");
+                return;
+            }
+            
+            DataType dtype = (DataType)cmbDataType.SelectedItem;
+            if (dtype == DataType.DataType_BLOB ||
+                dtype == DataType.DataType_CLOB ||
+                dtype == DataType.DataType_String)
+            {
+                if (numLength.Value == 0)
+                {
+                    errorProvider.SetError(numLength, "Zero-length string, BLOB or CLOB");
+                    return;
+                }
+            }
+            else if (dtype == DataType.DataType_Decimal)
+            {
+                //Check zero length precision/scale
+                if (numPrecision.Value == 0)
+                {
+                    errorProvider.SetError(numPrecision, "Zero precision");
+                    return;
+                }
+                if (numScale.Value == 0)
+                {
+                    errorProvider.SetError(numScale, "Zero scale");
+                    return;
+                }
+            }
+
             //Set the class
             _Definition.Name = txtName.Text;
             _Definition.Description = txtDescription.Text;
@@ -109,7 +142,7 @@ namespace FdoToolbox.Core.Forms
             _Definition.IsSystem = chkSystem.Checked;
             _Definition.Nullable = chkNullable.Checked;
             _Definition.ReadOnly = chkReadOnly.Checked;
-            _Definition.DataType = (DataType)cmbDataType.SelectedItem;
+            _Definition.DataType = dtype;
             _Definition.DefaultValue = txtDefault.Text;
             _Definition.Scale = Convert.ToInt32(numScale.Value);
             _Definition.Precision = Convert.ToInt32(numPrecision.Value);
