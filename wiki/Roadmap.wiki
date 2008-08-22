@@ -14,7 +14,6 @@
  * Raster Provider support
  * KML support
  * Visual Preview of FDO Data Sources
-
  * Chainable tasks
  * Coordinate System Re-Projection
  * Provider-specific extension modules
@@ -23,3 +22,4 @@
  * Linux port of command-line utilities
  * Star schema support
  * LINQ support
+ * WPF user interface
