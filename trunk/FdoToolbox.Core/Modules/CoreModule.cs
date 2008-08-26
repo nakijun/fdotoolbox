@@ -102,6 +102,7 @@ namespace FdoToolbox.Core.Modules
         public const string CMD_PREFERENCES = "preferences";
         public const string CMD_REMOVEALLSPATIALCONNECTIONS = "removeallspatialconnections";
         public const string CMD_REMOVEALLTASKS = "removealltasks";
+        public const string CMD_INSERTDATA = "insertdata";
 
         #endregion
 
@@ -773,6 +774,35 @@ namespace FdoToolbox.Core.Modules
             }
         }
 
+        [Command(CoreModule.CMD_INSERTDATA, "Insert Data", ImageResourceName = "table")]
+        public void InsertData()
+        {
+            IObjectExplorer explorer = _App.Shell.ObjectExplorer;
+            SpatialConnectionInfo ci = explorer.GetSelectedSpatialConnection();
+            FeatureService service = _App.SpatialConnectionManager.CreateService(ci.Name);
+            string schemaName = explorer.GetSelectedSchema();
+            string className = explorer.GetSelectedClass();
+
+            ClassDefinition classDef = service.GetClassByName(schemaName, className);
+
+            if (classDef != null)
+            {
+                InsertScaffold frm = new InsertScaffold(classDef);
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        int inserted = service.InsertFeature(className, frm.GetValues(), frm.UseTransaction);
+                        AppConsole.Alert("Inserted", inserted + " features inserted into " + classDef.QualifiedName);
+                    }
+                    catch (FeatureServiceException ex)
+                    {
+                        AppConsole.Alert("Error", ex.ToString());
+                    }
+                }
+            }
+        }
+
         public bool IsCommandExecutable(string cmdName, IConnection conn)
         {
             bool executable = true;
@@ -791,6 +821,11 @@ namespace FdoToolbox.Core.Modules
                 case CMD_DELETE_SCHEMA:
                     {
                         executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_DestroySchema) >= 0);
+                    }
+                    break;
+                case CMD_INSERTDATA:
+                    {
+                        executable = (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_Insert) >= 0);
                     }
                     break;
             }

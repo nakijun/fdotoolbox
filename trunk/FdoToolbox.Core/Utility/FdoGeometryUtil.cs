@@ -23,6 +23,7 @@ using System.Text;
 using System.IO;
 using OSGeo.FDO.Common;
 using OSGeo.FDO.Schema;
+using OSGeo.FDO.Geometry;
 /**
  * FGF to WKT conversion code copied from:
  * 
@@ -599,6 +600,24 @@ namespace FdoToolbox.Core.Utility
         public static string GetWkbText(byte[] fgf)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the FGF binary from the given text
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static byte[] GetFgf(string str)
+        {
+            byte[] fgf = null;
+            using (FgfGeometryFactory factory = new FgfGeometryFactory())
+            {
+                using (IGeometry geom = factory.CreateGeometry(str))
+                {
+                    fgf = factory.GetFgf(geom);
+                }
+            }
+            return fgf;
         }
     }
 }
