@@ -51,22 +51,19 @@ namespace FdoToolbox.Core.Controls
         const int TAB_AGGREGATE = 1;
         const int TAB_SQL = 2;
 
-        private FgfGeometryFactory _GeomFactory;
+        private FeatureService _Service;
 
         internal SpatialDataPreviewCtl()
         {
             InitializeComponent();
-            _GeomFactory = new FgfGeometryFactory();
-            this.Disposed += delegate { _GeomFactory.Dispose(); };
         }
 
         public SpatialDataPreviewCtl(SpatialConnectionInfo conn, string key)
             : base(conn, key)
         {
             InitializeComponent();
-            _GeomFactory = new FgfGeometryFactory();
-            this.Disposed += delegate { _GeomFactory.Dispose(); };
             _BoundConnection = conn;
+            _Service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(this.BoundConnection.Name); 
             ToggleUI();
         }
 
@@ -80,9 +77,8 @@ namespace FdoToolbox.Core.Controls
 
         protected override void OnLoad(EventArgs e)
         {
-            FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(this.BoundConnection.Name);
-            cmbSchema.DataSource = service.DescribeSchema();
-            cmbAggSchema.DataSource = service.DescribeSchema();
+            cmbSchema.DataSource = _Service.DescribeSchema();
+            cmbAggSchema.DataSource = _Service.DescribeSchema();
             SetSelectedClass();
             base.OnLoad(e);
         }
@@ -129,48 +125,42 @@ namespace FdoToolbox.Core.Controls
             ClassDefinition classDef = cmbAggClass.SelectedItem as ClassDefinition;
             if (CheckValidAggregates() && classDef != null)
             {
-                using (ISelectAggregates select = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates) as ISelectAggregates)
+                try
                 {
-                    try
+                    FeatureAggregateOptions options = new FeatureAggregateOptions(classDef.Name);
+                    options.Distinct = chkDistinct.Checked;
+                    if(!string.IsNullOrEmpty(txtAggFilter.Text))
+                        options.Filter = txtAggFilter.Text;
+
+                    NameValueCollection aggParams = GetAggregateParameters();
+                    options.AddComputedProperty(aggParams);
+
+                    using (OSGeo.FDO.Commands.Feature.IDataReader reader = _Service.SelectAggregates(options))
                     {
-                        select.Distinct = chkDistinct.Checked;
-                        select.SetFeatureClassName(classDef.Name);
-                        if (!string.IsNullOrEmpty(txtAggFilter.Text))
-                            select.SetFilter(txtAggFilter.Text);
-
-                        NameValueCollection aggParams = GetAggregateParameters();
-                        foreach (string identifier in aggParams.AllKeys)
+                        DataTable table = new DataTable();
+                        PrepareGrid(table, reader);
+                        try
                         {
-                            select.PropertyNames.Add(new ComputedIdentifier(identifier, Expression.Parse(aggParams[identifier])));
-                        }
-
-                        using (OSGeo.FDO.Commands.Feature.IDataReader reader = select.Execute())
-                        {
-                            DataTable table = new DataTable();
-                            PrepareGrid(table, reader);
-                            try
+                            while (reader.ReadNext())
                             {
-                                while (reader.ReadNext())
-                                {
-                                    ProcessDataReader(table, aggParams, reader);
-                                }
-                            }
-                            catch (OSGeo.FDO.Common.Exception ex)
-                            {
-                                throw ex;
-                            }
-                            finally
-                            {
-                                reader.Close();
-                                grdPreview.DataSource = table;
+                                ProcessDataReader(table, aggParams, reader);
                             }
                         }
+                        catch (OSGeo.FDO.Common.Exception ex)
+                        {
+                            throw ex;
+                        }
+                        finally
+                        {
+                            reader.Close();
+                            grdPreview.DataSource = table;
+                        }
                     }
-                    catch (OSGeo.FDO.Common.Exception ex)
-                    {
-                        AppConsole.Alert("Error", ex.Message);
-                        AppConsole.WriteException(ex);
-                    }
+                }
+                catch (OSGeo.FDO.Common.Exception ex)
+                {
+                    AppConsole.Alert("Error", ex.Message);
+                    AppConsole.WriteException(ex);
                 }
             }
         }
@@ -233,10 +223,7 @@ namespace FdoToolbox.Core.Controls
                         case PropertyType.PropertyType_GeometricProperty:
                             {
                                 byte[] bGeom = reader.GetGeometry(identifier);
-                                using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(bGeom))
-                                {
-                                    row[identifier] = geom.Text;
-                                }
+                                row[identifier] = FdoGeometryUtil.GetFgfText(bGeom);
                             }
                             break;
                     }
@@ -306,10 +293,7 @@ namespace FdoToolbox.Core.Controls
                         case PropertyType.PropertyType_GeometricProperty:
                             {
                                 byte[] bGeom = reader.GetGeometry(identifier);
-                                using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(bGeom))
-                                {
-                                    row[identifier] = geom.Text;
-                                }
+                                row[identifier] = FdoGeometryUtil.GetFgfText(bGeom);
                             }
                             break;
                     }
@@ -422,12 +406,11 @@ namespace FdoToolbox.Core.Controls
             ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
             if (classDef != null)
             {
-                StandardFeatureQuery qry = new StandardFeatureQuery();
+                StandardFeatureQuery qry = new StandardFeatureQuery(classDef.Name);
                 qry.Limit = limit;
-                qry.ClassName = classDef.Name;
                 qry.Filter = txtFilter.Text;
-                qry.PropertyNames = GetCheckedProperties();
-                qry.ComputedPropertyNames = GetComputedFields();
+                qry.AddFeatureProperty(GetCheckedProperties());
+                qry.AddComputedProperty(GetComputedFields());
 
                 grpQuery.Enabled = false;
                 btnQuery.Enabled = false;
@@ -437,16 +420,20 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
-        class StandardFeatureQuery
+        public class StandardFeatureQuery : FeatureQueryOptions
         {
-            public string ClassName;
-            public string Filter;
-            public List<string> PropertyNames;
-            public NameValueCollection ComputedPropertyNames;
-            public int Limit;
+            private int _Limit;
+
+            public int Limit
+            {
+                get { return _Limit; }
+                set { _Limit = value; }
+            }
+
+            public StandardFeatureQuery(string className) : base(className) { }
         }
 
-        class SQLFeatureQuery
+        internal class SQLFeatureQuery
         {
             public string SQLText;
         }
@@ -816,76 +803,60 @@ namespace FdoToolbox.Core.Controls
         {
             StandardFeatureQuery qry = e.Argument as StandardFeatureQuery;
             int limit = qry.Limit;
-            using (ISelect select = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect)
+            
+            using (IFeatureReader reader = _Service.SelectFeatures(qry))
             {
-                select.SetFeatureClassName(qry.ClassName);
-                if (!string.IsNullOrEmpty(qry.Filter))
-                    select.Filter = Filter.Parse(qry.Filter);
-
-                select.PropertyNames.Clear();
-                foreach (string propName in qry.PropertyNames)
+                DataTable table = new DataTable(qry.ClassName);
+                int count = 0;
+                ClassDefinition cd = reader.GetClassDefinition();
+                PrepareGrid(table, cd);
+                Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
+                for (int i = 0; i < cd.Properties.Count; i++)
                 {
-                    select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
+                    cachedPropertyNames.Add(i, cd.Properties[i].Name);
                 }
-                foreach (string alias in qry.ComputedPropertyNames.AllKeys)
+                try
                 {
-                    select.PropertyNames.Add(new ComputedIdentifier(alias, Expression.Parse(qry.ComputedPropertyNames[alias])));
-                }
-
-                using (IFeatureReader reader = select.Execute())
-                {
-                    DataTable table = new DataTable(qry.ClassName);
-                    int count = 0;
-                    ClassDefinition cd = reader.GetClassDefinition();
-                    PrepareGrid(table, cd);
-                    Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
-                    for (int i = 0; i < cd.Properties.Count; i++)
+                    if (limit > 0)
                     {
-                        cachedPropertyNames.Add(i, cd.Properties[i].Name);
-                    }
-                    try
-                    {
-                        if (limit > 0)
+                        while (reader.ReadNext() && count < limit)
                         {
-                            while (reader.ReadNext() && count < limit)
+                            if (bgStandard.CancellationPending)
                             {
-                                if (bgStandard.CancellationPending)
-                                {
-                                    e.Cancel = true;
-                                    return;
-                                }
-
-                                ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
-                                count++;
-                                if (count % 50 == 0)
-                                    Thread.Sleep(90);
+                                e.Cancel = true;
+                                return;
                             }
-                        }
-                        else
-                        {
-                            while (reader.ReadNext())
-                            {
-                                if (bgStandard.CancellationPending)
-                                {
-                                    e.Cancel = true;
-                                    return;
-                                }
 
-                                ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
-                                count++;
-                                if (count % 50 == 0)
-                                    Thread.Sleep(75);
-                            }
+                            ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
+                            count++;
+                            if (count % 50 == 0)
+                                Thread.Sleep(90);
                         }
                     }
-                    catch (OSGeo.FDO.Common.Exception ex)
+                    else
                     {
-                        throw ex;
+                        while (reader.ReadNext())
+                        {
+                            if (bgStandard.CancellationPending)
+                            {
+                                e.Cancel = true;
+                                return;
+                            }
+
+                            ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
+                            count++;
+                            if (count % 50 == 0)
+                                Thread.Sleep(75);
+                        }
                     }
-                    finally
-                    {
-                        reader.Close();
-                    }
+                }
+                catch (OSGeo.FDO.Common.Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    reader.Close();
                 }
             }
         }
@@ -933,40 +904,35 @@ namespace FdoToolbox.Core.Controls
         private void bgSql_DoWork(object sender, DoWorkEventArgs e)
         {
             SQLFeatureQuery qry = e.Argument as SQLFeatureQuery;
-
-            using (ISQLCommand sqlCmd = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand) as ISQLCommand)
+            int count = 0;
+            using (ISQLDataReader reader = _Service.ExecuteSQLQuery(qry.SQLText))
             {
-                sqlCmd.SQLStatement = qry.SQLText;
-                int count = 0;
-                using (ISQLDataReader reader = sqlCmd.ExecuteReader())
+                DataTable table = new DataTable();
+                PrepareGrid(table, reader);
+                try
                 {
-                    DataTable table = new DataTable();
-                    PrepareGrid(table, reader);
-                    try
+                    while (reader.ReadNext())
                     {
-                        while (reader.ReadNext())
+                        if (bgSql.CancellationPending)
                         {
-                            if (bgSql.CancellationPending)
-                            {
-                                e.Cancel = true;
-                                return;
-                            }
-
-                            ProcessSQLReader(table, reader);
-                            count++;
-
-                            if (count % 50 == 0)
-                                Thread.Sleep(75);
+                            e.Cancel = true;
+                            return;
                         }
+
+                        ProcessSQLReader(table, reader);
+                        count++;
+
+                        if (count % 50 == 0)
+                            Thread.Sleep(75);
                     }
-                    catch (OSGeo.FDO.Common.Exception ex)
-                    {
-                        throw ex;
-                    }
-                    finally
-                    {
-                        reader.Close();
-                    }
+                }
+                catch (OSGeo.FDO.Common.Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    reader.Close();
                 }
             }
         }

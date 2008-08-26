@@ -34,6 +34,9 @@ using OSGeo.FDO.Expression;
 using OSGeo.FDO.Connections.Capabilities;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.Utility;
+using OSGeo.FDO.Commands.SQL;
+using OSGeo.FDO.Filter;
+using OSGeo.FDO.Commands;
 
 namespace FdoToolbox.Core.ClientServices
 {
@@ -636,6 +639,10 @@ namespace FdoToolbox.Core.ClientServices
             return computedEnvelope;
         }
 
+        /// <summary>
+        /// Returns true if this connection supports batch insertion. Returns false if otherwise.
+        /// </summary>
+        /// <returns></returns>
         public bool SupportsBatchInsertion()
         {
             bool supported = false;
@@ -646,6 +653,12 @@ namespace FdoToolbox.Core.ClientServices
             return supported;
         }
 
+        /// <summary>
+        /// Creates a FDO command 
+        /// </summary>
+        /// <typeparam name="T">The FDO command reference to create. This must match the command type specified by the <paramref name="commandType"/> parameter</typeparam>
+        /// <param name="commandType">The type of FDO commadn to create</param>
+        /// <returns></returns>
         public T CreateCommand<T>(OSGeo.FDO.Commands.CommandType commandType) where T : OSGeo.FDO.Commands.ICommand
         {
             return (T)_conn.CreateCommand(commandType);
@@ -844,6 +857,108 @@ namespace FdoToolbox.Core.ClientServices
             {
                 prop.Reasons.Add(propReason);
             }
+        }
+
+        /// <summary>
+        /// Selects features from this connection according to the criteria set in the FeatureQueryOptions argument
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public IFeatureReader SelectFeatures(FeatureQueryOptions options)
+        {
+            IFeatureReader reader = null;
+            ISelect select = CreateCommand<ISelect>(OSGeo.FDO.Commands.CommandType.CommandType_Select);
+            using (select)
+            {
+                SetSelectOptions(options, select);
+                reader = select.Execute();
+            }
+            return reader;
+        }
+
+        /// <summary>
+        /// Selects groups of features from this connection and applies filters to each of the groups 
+        /// according to the criteria set in the FeatureAggregateOptions argument
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public IDataReader SelectAggregates(FeatureAggregateOptions options)
+        {
+            if (!SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
+                throw new FeatureServiceException("This connection does not support Select Aggregate queries");
+
+            IDataReader reader = null;
+            ISelectAggregates select = CreateCommand<ISelectAggregates>(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates);
+            using (select)
+            {
+                SetSelectOptions(options, select);
+                reader = select.Execute();
+            }
+            return reader;
+        }
+
+        private static void SetSelectOptions(FeatureQueryOptions options, IBaseSelect select)
+        {
+            select.SetFeatureClassName(options.ClassName);
+
+            if (options.IsFilterSet)
+                select.Filter = Filter.Parse(options.Filter);
+
+            if (options.PropertyList.Length > 0)
+            {
+                select.PropertyNames.Clear();
+                foreach (string propName in options.PropertyList)
+                {
+                    select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
+                }
+            }
+
+            if (options.ComputedProperties.Count > 0)
+            {
+                foreach (string alias in options.ComputedProperties.Keys)
+                {
+                    select.PropertyNames.Add(new ComputedIdentifier(alias, options.ComputedProperties[alias]));
+                }
+            }
+
+            if (options.OrderBy.Length > 0)
+            {
+                foreach (string propertyName in options.OrderBy)
+                {
+                    select.Ordering.Add((Identifier)Identifier.Parse(propertyName));
+                }
+                select.OrderingOption = options.OrderOption;
+            }
+        }
+
+        public ISQLDataReader ExecuteSQLQuery(string sql)
+        {
+            if (!SupportsCommand(CommandType.CommandType_SQLCommand))
+                throw new FeatureServiceException("This connection does not support SQL queries");
+
+            ISQLDataReader reader = null;
+            ISQLCommand cmd = CreateCommand<ISQLCommand>(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand);
+            using (cmd)
+            {
+                cmd.SQLStatement = sql;
+                reader = cmd.ExecuteReader();
+            }
+            return reader;
+        }
+
+        public int ExecuteSQLNonQuery(string sql)
+        {
+            if (!SupportsCommand(CommandType.CommandType_SQLCommand))
+                throw new FeatureServiceException("This connection does not support SQL queries");
+
+            int result = default(int);
+            ISQLCommand cmd = CreateCommand<ISQLCommand>(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand);
+            using (cmd)
+            {
+                cmd.SQLStatement = sql;
+                result = cmd.ExecuteNonQuery();
+            }
+            return result;
         }
     }
 }
