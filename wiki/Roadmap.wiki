@@ -10,6 +10,7 @@
  * Non-Spatial -> Spatial bulk copy 
  * ~~Advanced bulk copy options~~
       * ~~Data type coercion of mapped properties~~
+ * Localization
  * Pipeable console commands
  * Raster Provider support
  * KML support
