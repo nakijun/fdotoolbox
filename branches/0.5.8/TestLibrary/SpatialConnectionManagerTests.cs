@@ -30,9 +30,17 @@ namespace FdoToolbox.Tests
 {
     public class MockSpatialConnection : IConnection
     {
+        private MockConnectionInfo _CInfo;
+
         public MockSpatialConnection()
         {
             _connstate = ConnectionState.ConnectionState_Closed;
+        }
+
+        public MockSpatialConnection(string provider)
+            : this()
+        {
+            _CInfo = new MockConnectionInfo(provider);
         }
 
         public ITransaction BeginTransaction()
@@ -62,7 +70,7 @@ namespace FdoToolbox.Tests
 
         public IConnectionInfo ConnectionInfo
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return _CInfo; }
         }
 
         public ConnectionState ConnectionState
@@ -154,6 +162,61 @@ namespace FdoToolbox.Tests
         public void Dispose()
         {
             Close();
+        }
+    }
+
+    public class MockConnectionInfo : IConnectionInfo
+    {
+        private string _Provider;
+
+        public MockConnectionInfo(string provider)
+        {
+            _Provider = provider;
+        }
+
+        public IConnectionPropertyDictionary ConnectionProperties
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public OSGeo.FDO.Common.StringCollection DependentFileNames
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public string FeatureDataObjectsVersion
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public ProviderDatastoreType ProviderDatastoreType
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public string ProviderDescription
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public string ProviderDisplayName
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public string ProviderName
+        {
+            get { return _Provider; }
+        }
+
+        public string ProviderVersion
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        public void Dispose()
+        {
+            throw new Exception("The method or operation is not implemented.");
         }
     }
 

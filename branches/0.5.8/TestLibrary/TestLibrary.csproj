@@ -74,7 +74,6 @@
     <Compile Include="PreferenceTest.cs" />
     <Compile Include="AssertHelper.cs" />
     <Compile Include="BaseTest.cs" />
-    <Compile Include="ConnectionBoundManagerTests.cs" />
     <Compile Include="DbConnectionManagerTests.cs" />
     <Compile Include="ExpressUtilityTests.cs" />
     <Compile Include="FeatureServiceTests.cs" />
