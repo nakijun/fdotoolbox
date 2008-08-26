@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- 
+Object Explorer menu definition file. 
+
+Edit this file to customise the Object Explorer menus.
+
+Commands that don't exist or cannot be executed from the user interface 
+won't be shown in the menu.
+
+DO NOT DELETE THIS FILE!!!
+-->
+<ObjectExplorer>
+	<Toolbar>
+		<Menu name="New" resource="page_white">
+			<SubMenu name="Connection" resource="database_connect">
+				<Command name="sdfconnect" displayName="SDF" />
+				<Command name="shpconnect" displayName="SHP" />
+				<Command name="shpdirconnect" displayName="SHP (directory)" />
+				<Command name="connect" displayName="Custom" />
+			</SubMenu>
+			<SubMenu name="Task" resource="application_go">
+				<Command name="createbcp" />
+				<Command name="createdbjoin" />
+				<Separator/>
+				<Command name="loadtask" />
+			</SubMenu>
+			<SubMenu name="Data Store" resource="database">
+				<Command name="sdfcreate" displayName="SDF" />
+				<Command name="shpcreate" displayName="SHP" />
+				<Command name="mkdstore" displayName="Custom" />
+			</SubMenu>
+		</Menu>
+		<Command name="extload" />
+	</Toolbar>
+	<ContextMenus>
+		<Connections>
+			<Menu name="New Connection" resource="database_connect">
+				<Command name="sdfconnect" displayName="SDF" />
+				<Command name="shpconnect" displayName="SHP" />
+				<Command name="shpdirconnect" displayName="SHP (directory)" />
+				<Command name="connect" displayName="Custom" />
+			</Menu>
+			<Menu name="Create Data Store" resource="database">
+				<Command name="sdfcreate" displayName="SDF" />
+				<Command name="shpcreate" displayName="SHP" />
+				<Command name="mkdstore" displayName="Custom" />
+			</Menu>
+			<Command name="loadconn" />
+			<Separator/>
+			<Command name="removeallspatialconnections" />
+		</Connections>
+		<Tasks>
+			<Menu name="New" resource="application_go">
+				<Command name="createbcp" />
+				<Command name="createdbjoin" />
+			</Menu>
+			<Command name="loadtask" />
+			<Separator/>
+			<Command name="removealltasks" />
+		</Tasks>
+		<Modules>
+			<Command name="extload" />
+		</Modules>
+		<SelectedConnection>
+			<Command name="refreshconn" />
+			<Separator/>
+			<Command name="datapreview" />
+			<Command name="manschema" />
+			<Command name="mansc" />
+			<Command name="mandstore" />
+			<Separator/>
+			<Command name="renameconn" />
+			<Command name="saveconn" />
+			<Separator/>
+			<Command name="saveschema" />
+			<Command name="loadschema" />
+			<Separator/>
+			<Command name="removeconn" />
+		</SelectedConnection>
+		<SelectedSchema>
+			<Command name="manschema" displayName="Manage" />
+			<Command name="delschema" displayName="Destroy" />
+			<Separator/>
+			<Menu name="Save" resource="disk">
+				<Command name="saveschemaxml" />
+				<Command name="saveschemasdf" />
+			</Menu>
+			<Separator/>
+			<Command name="editschemaattributes" />		  
+		</SelectedSchema>
+		<SelectedClass>
+			<Command name="previewclass" displayName="Data Preview" />
+			<Command name="editclassattributes" />
+      <Command name="insertdata" />
+		</SelectedClass>
+		<SelectedTask>
+			<Command name="exectask" />
+			<Command name="edittask" />
+			<Command name="deletetask" />
+			<Command name="savetask" />
+		</SelectedTask>
+		<SelectedModule>
+			<Command name="modinfo" />
+		</SelectedModule>
+		<DatabaseConnections>
+			<Command name="dbconnect" />
+			<Command name="dbloadconn" />
+			<Separator/>
+			<Command name="dbremoveallconnections" />
+		</DatabaseConnections>
+		<SelectedDatabaseConnection>
+			<Command name="dbrefreshconn" />
+			<Separator />
+			<Command name="dbdatapreview" />
+			<Separator />
+			<Command name="dbsaveconn" />
+			<Command name="dbrenameconn" />
+			<Command name="dbremoveconn" />
+		</SelectedDatabaseConnection>
+		<SelectedDatabase>
+			<Command name="dbdatapreview" />
+		</SelectedDatabase>
+		<SelectedTable>
+			<Command name="dbdatapreview" />
+			<Separator/>
+			<SubMenu name="Convert table">
+				<Command name="dbconverttopoints" />
+				<Command name="dbconverttosdf" />
+			</SubMenu>
+		</SelectedTable>
+	</ContextMenus>
+</ObjectExplorer>
