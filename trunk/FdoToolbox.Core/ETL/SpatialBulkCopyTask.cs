@@ -102,6 +102,7 @@ namespace FdoToolbox.Core.ETL
             _DestService = new FeatureService(options.Target.Connection);
             this.CopySpatialContextOverride = OverrideFactory.GetCopySpatialContextOverride(options.Target.Connection);
             this.ClassNameOverride = OverrideFactory.GetClassNameOverride(options.Source.Connection);
+            _ErrorMsgs = new List<string>();
         }
 
         /// <summary>
@@ -303,6 +304,7 @@ namespace FdoToolbox.Core.ETL
                             //match the original property list
                             Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
                             Dictionary<int, string> cachedDataPropertyNames = new Dictionary<int, string>();
+                            Dictionary<int, string> cachedIdentityPropertyNames = new Dictionary<int, string>();
                             for (int i = 0; i < propDefs.Count; i++)
                             {
                                 string pName = propDefs[i].Name;
@@ -310,7 +312,13 @@ namespace FdoToolbox.Core.ETL
                                 {
                                     cachedPropertyNames.Add(i, pName);
                                     if (propDefs[i].PropertyType == PropertyType.PropertyType_DataProperty)
+                                    {
                                         cachedDataPropertyNames.Add(i, pName);
+                                        if (classDef.IdentityProperties.Contains((DataPropertyDefinition)propDefs[i]))
+                                        {
+                                            cachedIdentityPropertyNames.Add(i, pName);
+                                        }
+                                    }
                                 }
                             }
 
@@ -336,7 +344,15 @@ namespace FdoToolbox.Core.ETL
                                 //No batch size, do vanilla IInsert
                                 if (_Options.BatchInsertSize <= 0)
                                 {
-                                    copied += ProcessReader(cachedPropertyNames, propDefs, insertCmd, copyOpts, srcReader);
+                                    try
+                                    {
+                                        int result = ProcessReader(cachedPropertyNames, propDefs, insertCmd, copyOpts, srcReader);
+                                        copied += result;
+                                    }
+                                    catch (BulkCopyException ex)
+                                    {
+                                        LogOffendingFeature(ex, cachedIdentityPropertyNames, propDefs, copyOpts, srcReader);
+                                    }
                                     hasMore = srcReader.ReadNext();
                                 }
                                 else //batched insert
@@ -346,9 +362,17 @@ namespace FdoToolbox.Core.ETL
                                     //Load up batched values
                                     do
                                     {
-                                        ProcessReaderBatched(cachedPropertyNames, propDefs, insertCmd, copyOpts, srcReader);
-                                        hasMore = srcReader.ReadNext();
-                                        batchCount++;
+                                        try
+                                        {
+                                            ParameterValueCollection propVals = ProcessReaderBatched(cachedPropertyNames, propDefs, insertCmd, copyOpts, srcReader);
+                                            insertCmd.BatchParameterValues.Add(propVals);
+                                            hasMore = srcReader.ReadNext();
+                                            batchCount++;
+                                        }
+                                        catch (BulkCopyException ex)
+                                        {
+                                            LogOffendingFeature(ex, cachedIdentityPropertyNames, propDefs, copyOpts, srcReader);
+                                        }
                                     }
                                     while (batchCount < _Options.BatchInsertSize && hasMore);
                                     //Execute batch
@@ -381,7 +405,21 @@ namespace FdoToolbox.Core.ETL
                     total += copied;
                 }
                 watch.Stop();
-                SendMessage("Bulk Copy: " + total + " features copied in " + watch.ElapsedMilliseconds + "ms");
+                if (_ErrorMsgs.Count == 0)
+                    SendMessage("Bulk Copy: " + total + " features copied in " + watch.ElapsedMilliseconds + "ms");
+                else
+                {
+                    string logPath = AppGateway.RunningApplication.Preferences.GetStringPref(PreferenceNames.PREF_STR_LOG_PATH);
+                    string logFile = Path.Combine(logPath, "bcp" + DateTime.Now.ToShortTimeString() + ".log");
+                    using (StreamWriter writer = new StreamWriter(logFile, false))
+                    {
+                        foreach (string msg in _ErrorMsgs)
+                        {
+                            writer.WriteLine(msg);
+                        }
+                    }
+                    SendMessage("Bulk Copy: " + total + " features copied in " + watch.ElapsedMilliseconds + "ms. " + _ErrorMsgs.Count + " features failed to copy. See " + logFile + " for more information");
+                }
             }
             catch (ThreadAbortException)
             {
@@ -832,7 +870,7 @@ namespace FdoToolbox.Core.ETL
 
         const string PARAM_PREFIX = "param_";
 
-        private void ProcessReaderBatched(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
+        private ParameterValueCollection ProcessReaderBatched(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
         {
             ParameterValueCollection propVals = new ParameterValueCollection();
             foreach (int key in cachedPropertyNames.Keys)
@@ -850,43 +888,116 @@ namespace FdoToolbox.Core.ETL
                     GeometricPropertyDefinition geomDef = def as GeometricPropertyDefinition;
                     if (dataDef != null)
                     {
+                        DataTypeMapping mapping = copyOpts.GetDataTypeMapping(name);
                         switch (dataDef.DataType)
                         {
                             case DataType.DataType_BLOB:
-                                propVals.Add(new ParameterValue(paramName, new BLOBValue(sourceReader.GetLOB(name).Data)));
+                                {
+                                    byte[] value = sourceReader.GetLOB(name).Data;
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new BLOBValue(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Boolean:
-                                propVals.Add(new ParameterValue(paramName, new BooleanValue(sourceReader.GetBoolean(name))));
+                                {
+                                    bool value = sourceReader.GetBoolean(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new BooleanValue(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Byte:
-                                propVals.Add(new ParameterValue(paramName, new ByteValue(sourceReader.GetByte(name))));
+                                {
+                                    byte value = sourceReader.GetByte(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new ByteValue(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_CLOB:
-                                propVals.Add(new ParameterValue(paramName, new CLOBValue(sourceReader.GetLOB(name).Data)));
+                                {
+                                    byte[] value = sourceReader.GetLOB(name).Data;
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new CLOBValue(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_DateTime:
-                                propVals.Add(new ParameterValue(paramName, new DateTimeValue(sourceReader.GetDateTime(name))));
+                                {
+                                    DateTime value = sourceReader.GetDateTime(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new DateTimeValue(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Decimal:
-                                propVals.Add(new ParameterValue(paramName, new DecimalValue(sourceReader.GetDouble(name))));
+                                {
+                                    double value = sourceReader.GetDouble(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new DecimalValue(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Double:
-                                propVals.Add(new ParameterValue(paramName, new DecimalValue(sourceReader.GetDouble(name))));
+                                {
+                                    double value = sourceReader.GetDouble(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new DecimalValue(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Int16:
-                                propVals.Add(new ParameterValue(paramName, new Int16Value(sourceReader.GetInt16(name))));
+                                {
+                                    short value = sourceReader.GetInt16(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new Int16Value(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Int32:
-                                propVals.Add(new ParameterValue(paramName, new Int32Value(sourceReader.GetInt32(name))));
+                                {
+                                    int value = sourceReader.GetInt32(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new Int32Value(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Int64:
-                                propVals.Add(new ParameterValue(paramName, new Int64Value(sourceReader.GetInt64(name))));
+                                {
+                                    long value = sourceReader.GetInt64(name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new Int64Value(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_Single:
-                                propVals.Add(new ParameterValue(paramName, new SingleValue(sourceReader.GetSingle(dataDef.Name))));
+                                {
+                                    float value = sourceReader.GetSingle(dataDef.Name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new SingleValue(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                             case DataType.DataType_String:
-                                propVals.Add(new ParameterValue(paramName, new StringValue(sourceReader.GetString(dataDef.Name))));
+                                {
+                                    string value = sourceReader.GetString(dataDef.Name);
+                                    if (mapping == null || (mapping.SourceDataType == mapping.TargetDataType))
+                                        propVals.Add(new ParameterValue(paramName, new StringValue(value)));
+                                    else
+                                        propVals.Add(new ParameterValue(paramName, GetConvertedValue(mapping, value)));
+                                }
                                 break;
                         }
                     }
@@ -897,7 +1008,7 @@ namespace FdoToolbox.Core.ETL
                     }
                 }
             }
-            insert.BatchParameterValues.Add(propVals);
+            return propVals;
         }
 
         private int ProcessReader(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
@@ -1049,10 +1160,57 @@ namespace FdoToolbox.Core.ETL
             return inserted;
         }
 
+        private List<string> _ErrorMsgs;
+
+        private void LogOffendingFeature(BulkCopyException ex, Dictionary<int, string> cachedIdentityPropertyNames, PropertyDefinitionCollection propDefs, ClassCopyOptions copyOpts, IFeatureReader srcReader)
+        {
+            StringBuilder msg = new StringBuilder("Error: " + ex.Message + "\n\tIdentity Properties:\n");
+            foreach (int pidx in cachedIdentityPropertyNames.Keys)
+            {
+                DataPropertyDefinition dp = propDefs[pidx] as DataPropertyDefinition;
+                string name = dp.Name;
+                switch (dp.DataType)
+                { 
+                    case DataType.DataType_BLOB:
+                        break;
+                    case DataType.DataType_Boolean:
+                        msg.AppendFormat("\t\t{0}: {1}\n", name, srcReader.GetBoolean(name));
+                        break;
+                    case DataType.DataType_Byte:
+                        msg.AppendFormat("\t\t{0}: {1}\n", name, srcReader.GetByte(name));
+                        break;
+                    case DataType.DataType_CLOB:
+                        break;
+                    case DataType.DataType_DateTime:
+                        break;
+                    case DataType.DataType_Decimal:
+                        break;
+                    case DataType.DataType_Double:
+                        msg.AppendFormat("\t\t{0}: {1}\n", name, srcReader.GetDouble(name));
+                        break;
+                    case DataType.DataType_Int16:
+                        msg.AppendFormat("\t\t{0}: {1}\n", name, srcReader.GetInt16(name));
+                        break;
+                    case DataType.DataType_Int32:
+                        msg.AppendFormat("\t\t{0}: {1}\n", name, srcReader.GetInt32(name));
+                        break;
+                    case DataType.DataType_Int64:
+                        msg.AppendFormat("\t\t{0}: {1}\n", name, srcReader.GetInt64(name));
+                        break;
+                    case DataType.DataType_Single:
+                        break;
+                    case DataType.DataType_String:
+                        msg.AppendFormat("\t\t{0}: {1}\n", name, srcReader.GetString(name));
+                        break;
+                }
+            }
+            _ErrorMsgs.Add(msg.ToString());
+        }
+
 #if TEST
-        public static ValueExpression GetConvertedValue(DataTypeMapping mapping, object obj)
+        public static LiteralValue GetConvertedValue(DataTypeMapping mapping, object obj)
 #else
-        private static ValueExpression GetConvertedValue(DataTypeMapping mapping, object obj)
+        private static LiteralValue GetConvertedValue(DataTypeMapping mapping, object obj)
 #endif
         {
             try
