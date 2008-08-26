@@ -91,6 +91,7 @@ DO NOT DELETE THIS FILE!!!
 		<SelectedClass>
 			<Command name="previewclass" displayName="Data Preview" />
 			<Command name="editclassattributes" />
+      <Command name="insertdata" />
 		</SelectedClass>
 		<SelectedTask>
 			<Command name="exectask" />

@@ -970,5 +970,59 @@ namespace FdoToolbox.Core.ClientServices
             }
             return result;
         }
+
+        public int InsertFeature(string className, Dictionary<string, ValueExpression> values, bool useTransaction)
+        {
+            if (!SupportsCommand(CommandType.CommandType_Insert))
+                throw new FeatureServiceException("This connection does not support insert commands");
+
+            bool useTrans = (useTransaction && this.Connection.ConnectionCapabilities.SupportsTransactions());
+            int inserted = 0;
+
+            IInsert insert = CreateCommand<IInsert>(CommandType.CommandType_Insert);
+            using(insert)
+            {
+                insert.SetFeatureClassName(className);
+                foreach(string propName in values.Keys)
+                {
+                    insert.PropertyValues.Add(new PropertyValue(propName, values[propName]));
+                }
+                if (useTrans)
+                {
+                    ITransaction trans = this.Connection.BeginTransaction();
+                    using (trans)
+                    {
+                        try
+                        {
+                            using (IFeatureReader reader = insert.Execute())
+                            {
+                                while (reader.ReadNext()) { inserted++; }
+                            }
+                            trans.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            trans.Rollback();
+                            throw new FeatureServiceException("Error inserting new feature", ex);
+                        }
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        using (IFeatureReader reader = insert.Execute())
+                        {
+                            while (reader.ReadNext()) { inserted++; }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new FeatureServiceException("Error inserting new feature", ex);
+                    }
+                }
+            }
+            return inserted;
+        }
     }
 }
