@@ -930,7 +930,12 @@ namespace FdoToolbox.Core.ClientServices
                 select.OrderingOption = options.OrderOption;
             }
         }
-
+        
+        /// <summary>
+        /// Executes the SQL SELECT statement on this connection.
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
         public ISQLDataReader ExecuteSQLQuery(string sql)
         {
             if (!SupportsCommand(CommandType.CommandType_SQLCommand))
@@ -946,6 +951,11 @@ namespace FdoToolbox.Core.ClientServices
             return reader;
         }
 
+        /// <summary>
+        /// Executes SQL statements NOT including SELECT statements. 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
         public int ExecuteSQLNonQuery(string sql)
         {
             if (!SupportsCommand(CommandType.CommandType_SQLCommand))
