@@ -81,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FdoExtendedTests.cs" />
     <Compile Include="SpatialConnectionManagerTests.cs" />
+    <Compile Include="TableTests.cs" />
     <Compile Include="TaskTests.cs" />
   </ItemGroup>
   <ItemGroup>
