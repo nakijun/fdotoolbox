@@ -1,7 +1,21 @@
+v0.5.8
+------
+
 - Enhancements:
 	- Data Preview: Data Query results can be saved to SDF (only in standard mode at the moment)
-	- New FGF text parser in fully managed code (used by Data Preview) and certain ETL tasks.
-
+	- New FGF binary -> text parser in fully managed code (used by Data Preview) and certain ETL tasks.
+	- New ad-hoc data entry form for inserting new feature data into feature classes.
+	- Bulk Copy: Source properties can now be mapped to most target properties regardless of data type. 
+	  This can naturally lead to data conversion errors as a result. These errors are logged during the bulk 
+	  copy process.
+    - New Preference variable: pref_str_log_path
+    - Bulk Copy: The source schema is now validated against the target to see if it can be applied as is.
+    
+- Fix:
+	- Prevent creation of zero-length string, BLOB and CLOB data properties.
+	- Added mandatory check for Data Property name.
+	- Data Preview: Computed properties did not show.
+	
 v0.5.6
 ------
 
