@@ -21,6 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using FdoToolbox.Core.ETL;
+using FdoToolbox.Core.Common;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Tests
 {
@@ -31,19 +34,85 @@ namespace FdoToolbox.Tests
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskMySql()
         {
-            Assert.Fail("Not implemented");
+            SpatialConnectionInfo source = new MockSdfConnection();
+            SpatialConnectionInfo target = new MockMySqlConnection();
+
+            source.Connection.Open();
+            target.Connection.Open();
+
+            SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(source, target);
+            SpatialBulkCopyTask task = new SpatialBulkCopyTask("TEST", options);
+
+            Assert.IsNotNull(task.CopySpatialContextOverride);
+            Assert.IsTrue(task.CopySpatialContextOverride is MySqlCopySpatialContextOverride);
         }
 
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskOracle()
         {
-            Assert.Fail("Not implemented");
+            SpatialConnectionInfo source = new MockOracleConnection();
+            SpatialConnectionInfo target = new MockSdfConnection();
+
+            source.Connection.Open();
+            target.Connection.Open();
+
+            SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(source, target);
+            SpatialBulkCopyTask task = new SpatialBulkCopyTask("TEST", options);
+
+            Assert.IsNotNull(task.ClassNameOverride);
+            Assert.IsTrue(task.ClassNameOverride is OracleClassNameOverride);
         }
 
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskShp()
         {
-            Assert.Fail("Not implemented");
+            SpatialConnectionInfo source = new MockSdfConnection();
+            SpatialConnectionInfo target = new MockShpConnection();
+
+            source.Connection.Open();
+            target.Connection.Open();
+
+            SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(source, target);
+            SpatialBulkCopyTask task = new SpatialBulkCopyTask("TEST", options);
+
+            Assert.IsNotNull(task.CopySpatialContextOverride);
+            Assert.IsTrue(task.CopySpatialContextOverride is ShpCopySpatialContextOverride);
+        }
+    }
+
+    class MockSdfConnection : SpatialConnectionInfo 
+    {
+        public MockSdfConnection()
+            : base("Foo", null)
+        {
+            this.Connection = new MockSpatialConnection("OSGeo.SDF");
+        }
+    }
+
+    class MockMySqlConnection : SpatialConnectionInfo
+    {
+        public MockMySqlConnection()
+            : base("Foo", null)
+        {
+            this.Connection = new MockSpatialConnection("OSGeo.MySQL");
+        }
+    }
+
+    class MockShpConnection : SpatialConnectionInfo
+    {
+        public MockShpConnection()
+            : base("Foo", null)
+        {
+            this.Connection = new MockSpatialConnection("OSGeo.SHP");
+        }
+    }
+
+    class MockOracleConnection : SpatialConnectionInfo
+    {
+        public MockOracleConnection()
+            : base("Foo", null)
+        {
+            this.Connection = new MockSpatialConnection("OSGeo.KingOracle");
         }
     }
 }
