@@ -31,7 +31,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <OutputPath>..\out\Test\</OutputPath>
     <DefineConstants>TEST</DefineConstants>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
@@ -70,6 +70,18 @@
     <Compile Include="ClientServices\AppGateway.cs" />
     <Compile Include="ClientServices\AppSession.cs" />
     <Compile Include="ClientServices\FeatureQueryOptions.cs" />
+    <Compile Include="Common\FdoDataTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\FdoColumns.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\FdoFeatureTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\FdoTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Common\IncompatibleSchema.cs" />
     <Compile Include="Common\IncompatibleClass.cs" />
     <Compile Include="Common\IncompatibleProperty.cs" />
