@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Iesi.Collections.Generic;
 
 namespace FdoToolbox.Core.Common
 {
@@ -39,12 +40,19 @@ namespace FdoToolbox.Core.Common
         {
             get { return _Reasons; }
         }
-	
+
+        private ISet<IncompatiblePropertyReason> _ReasonCodes;
+
+        public ISet<IncompatiblePropertyReason> ReasonCodes
+        {
+            get { return _ReasonCodes; }
+        }
 
         public IncompatibleProperty(string name, string reason)
         {
             this.Name = name;
             _Reasons = new List<string>();
+            _ReasonCodes = new HashedSet<IncompatiblePropertyReason>();
             _Reasons.Add(reason);
         }
 
