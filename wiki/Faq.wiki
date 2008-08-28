@@ -3,7 +3,7 @@
 
 === Q: I get errors bulk copying between different providers (when it attempts to apply the schema) ===
 
-A: This is a current shortcoming of the bulk copy feature as various FDO providers do not necessary support the same set of data types. For example: MySQL supports Int64 auto-generated properties, trying to bulk copy MySQL to SDF with this property will fail as SDF does not support Int64 properties.
+A: This is a current shortcoming of the bulk copy feature as various FDO providers do not necessary support the same set of data types. For example: MySQL supports Int64 auto-generated properties, trying to bulk copy MySQL to SDF with this property will fail as SDF does not support Int64 auto-generated properties.
 
 Better warnings about incompatible schemas (with details about incompatible features) will definitely be in a future release. I am still figuring out the best way to resolve this issue in the most practical manner.
 
@@ -30,6 +30,10 @@ A: Not at this point in time
 A: Not at this point in time
 
 === Q: Does FDO Toolbox support class inheritance? ===
+
+A: Not at this point in time
+
+=== Q: Does FDO Toolbox support creation of Schema Mappings? ===
 
 A: Not at this point in time
 
