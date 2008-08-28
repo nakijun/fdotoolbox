@@ -10,6 +10,11 @@
  * Non-Spatial -> Spatial bulk copy 
  * ~~Advanced bulk copy options~~
       * ~~Data type coercion of mapped properties~~
+ * Additional Property support
+      * Object Properties
+      * Association Properties
+      * Raster Properties
+ * Schema Mapping support
  * Localization
  * Pipeable console commands
  * Raster Provider support
