@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Iesi.Collections.Generic;
 
 namespace FdoToolbox.Core.Common
 {
@@ -46,7 +47,13 @@ namespace FdoToolbox.Core.Common
         {
             get { return _Reasons; }
         }
-	
+
+        private ISet<IncompatibleClassReason> _ReasonCodes;
+
+        public ISet<IncompatibleClassReason> ReasonCodes
+        {
+            get { return _ReasonCodes; }
+        }
 
         public IncompatibleClass(string name, string reason)
         {
@@ -54,6 +61,7 @@ namespace FdoToolbox.Core.Common
             _Properties = new List<IncompatibleProperty>();
             _Reasons = new List<string>();
             _Reasons.Add(reason);
+            _ReasonCodes = new HashedSet<IncompatibleClassReason>();
         }
 
         public override string ToString()
