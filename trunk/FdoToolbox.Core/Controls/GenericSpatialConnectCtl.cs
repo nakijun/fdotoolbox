@@ -56,10 +56,13 @@ namespace FdoToolbox.Core.Controls
             string str = "";
             foreach (DataGridViewRow row in grdConnectProperties.Rows)
             {
-                if (string.IsNullOrEmpty(str))
-                    str += string.Format("{0}={1}", row.Cells[0].Value, row.Cells[1].Value);
-                else
-                    str += string.Format(";{0}={1}", row.Cells[0].Value, row.Cells[1].Value);
+                if (row.Cells[1].Value != null && !string.IsNullOrEmpty(row.Cells[1].Value.ToString()))
+                {
+                    if (string.IsNullOrEmpty(str))
+                        str += string.Format("{0}={1}", row.Cells[0].Value, row.Cells[1].Value);
+                    else
+                        str += string.Format(";{0}={1}", row.Cells[0].Value, row.Cells[1].Value);
+                }
             }
             return str;
         }

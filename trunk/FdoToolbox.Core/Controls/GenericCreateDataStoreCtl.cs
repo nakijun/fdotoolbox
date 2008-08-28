@@ -97,7 +97,9 @@ namespace FdoToolbox.Core.Controls
                             {
                                 string name = row.Cells[0].Value.ToString();
                                 string value = row.Cells[1].Value.ToString();
-                                conn.ConnectionInfo.ConnectionProperties.SetProperty(name, value);
+
+                                if(!string.IsNullOrEmpty(value))
+                                    conn.ConnectionInfo.ConnectionProperties.SetProperty(name, value);
                             }
                             conn.Open();
                         }
@@ -108,7 +110,9 @@ namespace FdoToolbox.Core.Controls
                             {
                                 string name = row.Cells[0].Value.ToString();
                                 string value = row.Cells[1].Value.ToString();
-                                cmd.DataStoreProperties.SetProperty(name, value);
+
+                                if (!string.IsNullOrEmpty(value))
+                                    cmd.DataStoreProperties.SetProperty(name, value);
                             }
                             cmd.Execute();
                             AppConsole.Alert("Create Data Store", "Data Store successfully created");
