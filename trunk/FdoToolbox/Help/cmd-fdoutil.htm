@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title></title>
+		<link rel="stylesheet" href="style-common.css" />
+	</head>
+	<body>
+	    <div id="header">
+	        <h2>Using FdoUtil.exe</h2>
+	    </div>
+	    <div id="mainContent">
+	        <div id="contents">
+	            <h3>Contents</h3>
+	            <ul>
+	                <li><a href="#intro">Introduction</a></li>
+	                <li><a href="#applyschema">ApplySchema</a></li>
+	                <li><a href="#createdatastore">CreateDataStore</a></li>
+	                <li><a href="#destroy">Destroy</a></li>
+	                <li><a href="#dumpschema">DumpSchema</a></li>
+	                <li><a href="#expressbcp">ExpressBCP</a></li>
+	                <li><a href="#makesdf">MakeSdf</a></li>
+	                <li><a href="#runtask">RunTask</a></li>
+	                <li><a href="#registerprovider">RegisterProvider</a></li>
+	                <li><a href="#unregisterprovider">UnregisterProvider</a></li>
+	            </ul>
+	        </div>
+	        
+	        <h3 id="intro">Introduction</h3>
+	        <h3 id="applyschema">ApplySchema</h3>
+	        <div>
+	            <p>
+	            Description: Applies a schema definition xml file to a FDO data source
+                </p>
+                <p>
+                Usage: <pre>FdoUtil.exe -cmd:ApplySchema -file:&lt;schema definition file&gt; -provider:&lt;provider&gt; -connection:&lt;connection string&gt; [-quiet] [-test]</pre>
+                </p>
+                <p>
+                Notes: This will only work on providers that implement the IApplySchema command.
+                </p>
+            </div>
+	        <h3 id="createdatastore">CreateDataStore</h3>
+	        <div>
+	        <p>
+	        Description: Create a new FDO data store
+            </p>
+            <p>
+            Usage: <pre>FdoUtil.exe -cmd:CreateDataStore -provider:&lt;provider&gt; -properties:&lt;data store properties&gt; [-connection:&lt;connection string&gt;] [-quiet] [-test]</pre>
+            </p>
+            <p>
+            Notes:
+            </p>
+            <p>
+            The -properties parameter is a the same format as the connection string
+            eg. For OSGeo.MySQL: -properties:DataStore=mydatastore
+            </p>
+            <p>
+            The -connection parameter is only required for rdbms-based providers. Usually rdbms-based 
+            providers require a DataStore parameter as part of the connection. This is not required
+            in this case.
+            </p>
+	        </div>
+	        <h3 id="destroy">Destroy</h3>
+	        <div>
+	        <p>
+	        Description: Destroys a datastore in an FDO data source
+            </p>
+            <p>
+            Usage: <pre>FdoUtil.exe -cmd:Destroy -provider:&lt;provider&gt; -properties:&lt;data store properties&gt; [-connection:&lt;connection string&gt;] [-quiet]</pre>
+            </p>
+            <p>
+            Notes: 
+            </p>
+            <p>
+            The -properties parameter is a the same format as the connection string
+            eg. For OSGeo.MySQL: -properties:DataStore=mydatastore
+            </p>
+            <p>
+            The -connection parameter is only required for rdbms-based providers. Usually rdbms-based 
+            providers require a DataStore parameter as part of the connection. This is not required
+            in this case.
+            </p>
+	        </div>
+	        <h3 id="dumpschema">DumpSchema</h3>
+	        <div>
+	        <p>
+	        Description: Writes a schema in a FDO data store to an XML file
+            </p>
+            <p>
+            Usage: <pre>FdoUtil.exe -cmd:DumpSchema -file:&lt;schema file&gt; -provider:&lt;provider&gt; -connection:&lt;connection string&gt; -schema:&lt;selected schema&gt; [-quiet]</pre>
+            </p>
+            <p>
+            Notes: n/a
+            </p>
+	        </div>
+	        <h3 id="expressbcp">ExpressBCP</h3>
+	        <div>
+	        <p>
+            Description: Copies the contents of a feature schema (or optionally, a list of classes within) into a 
+            flat-file data store.
+            </p>
+            <p>
+            Usage: <pre>FdoUtil.exe -cmd:ExpressBCP -src_provider:&lt;provider name&gt; -src_conn:&lt;connection
+            string&gt; -dest_provider:&lt;provider name&gt; -dest_file:&lt;file&gt; -schema:&lt;source
+            schema name&gt; [-classes:&lt;comma-separated list of class names&gt;]
+            [-copy_srs:&lt;source spatial context name&gt;] [-quiet]</pre>
+            </p>
+            <p>
+            Notes:
+            </p>
+            <p>
+            If the -classes parameter is omitted, all classes under the given schema
+            will be copied
+            </p>
+            <p>
+            Any class names not found will be ignored during the copy process.
+            </p>
+            <p>
+            For this initial version, no attribute or any spatial filtering will be
+            performed.
+            </p>
+            <p>
+            The dest_provider parameter can only be the following (at the moment):
+            </p>
+            <p>
+            - OSGeo.SDF
+            </p>
+	        </div>
+	        <h3 id="makesdf">MakeSdf</h3>
+	        <div>
+	        <p>
+	        Description: Create a new SDF with the option of applying a schema to it.
+            </p>
+            <p>
+            Usage: <pre>FdoUtil.exe -cmd:MakeSdf -path:&lt;path to sdf file&gt; [-schema:&lt;path to schema file&gt;] [-quiet]</pre>
+            </p>
+            <p>
+            Notes: If the -schema parameter points to an non-existent file or is not valid, schema
+            application will not take place.
+            </p>
+	        </div>
+	        <h3 id="runtask">RunTask</h3>
+	        <div>
+	        <p>
+	        Description: Loads and executes a Task Definition
+            </p><p>
+            Usage: <pre>FdoUtil.exe -cmd:RunTask -file:&lt;task definition file&gt; [-log:&lt;log file&gt;] [-quiet]</pre>
+            </p><p>
+            Notes: 
+            </p><p>
+            For bulk copy tasks, both the source and target connections must be valid 
+            connections. Otherwise execution will fail.
+            </p>
+	        </div>
+	        <h3 id="registerprovider">RegisterProvider</h3>
+	        <div>
+	        <p>
+	        Description: Registers a new FDO provider
+            </p><p>
+            Usage: <pre>FdoUtil.exe -cmd:RegisterProvider -name:&lt;Provider Name&gt; -displayName:&lt;Display Name&gt; -description:&lt;description&gt; -libraryPath:&lt;Path to provider dll&gt; -version:&lt;version&gt; -fdoVersion:&lt;fdo version&gt; -isManaged:&lt;true|false&gt;</pre>
+            </p><p>
+            Notes: n/a
+            </p>
+	        </div>
+	        <h3 id="unregisterprovider">UnregisterProvider</h3>
+	        <div>
+	        <p>
+	        Description: Unregisters a FDO provider
+            </p><p>
+            Usage: <pre>FdoUtil.exe -cmd:UnregisterProvider -name:&lt;Provider Name&gt;</pre>
+            </p><p>
+            Notes: The provider name must be fully qualified (inc. version number) otherwise un-registration will fail.
+            </p>
+	        </div>
+	    </div>
+	</body>
+</html>
