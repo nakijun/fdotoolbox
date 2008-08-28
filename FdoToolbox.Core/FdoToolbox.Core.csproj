@@ -113,6 +113,12 @@
     <Compile Include="Controls\DbDataPreviewCtl.Designer.cs">
       <DependentUpon>DbDataPreviewCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\HelpCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\HelpCtl.Designer.cs">
+      <DependentUpon>HelpCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PreferencesCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -431,7 +437,10 @@
     <Content Include="OEMenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\arrow_right1.png" />
+    <None Include="Resources\arrow_left.png" />
     <Content Include="Resources\DbTargets.xml" />
+    <None Include="Resources\house.png" />
     <Content Include="Resources\Languages.xml" />
     <None Include="Resources\database_edit.png" />
     <None Include="Resources\application_side_boxes.png" />
@@ -504,6 +513,10 @@
     <EmbeddedResource Include="Controls\DbDataPreviewCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DbDataPreviewCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\HelpCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>HelpCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PreferencesCtl.resx">
       <SubType>Designer</SubType>

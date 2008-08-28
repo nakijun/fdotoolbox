@@ -327,7 +327,8 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_HELP, "Help", "Show the help documentation", ImageResourceName = "help")]
         public void ShowHelp()
         {
-            AppConsole.Alert("Help", "Help documentation is currently unavailable");
+            HelpCtl help = new HelpCtl();
+            _App.Shell.ShowDocumentWindow(help);
         }
 
         [Command(CoreModule.CMD_MODINFO, "Module Information", "Display information about a loaded module", ImageResourceName = "information", InvocationType = CommandInvocationType.UI)]
