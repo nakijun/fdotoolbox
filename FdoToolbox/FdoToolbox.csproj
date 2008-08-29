@@ -206,6 +206,9 @@
     <Content Include="Help\dev-extension-modules.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\user-create-data.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Help\index.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

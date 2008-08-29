@@ -24,9 +24,62 @@
 	                <li><a href="#unregisterprovider">UnregisterProvider</a></li>
 	            </ul>
 	        </div>
-	        
-	        <h3 id="intro">Introduction</h3>
-	        <h3 id="applyschema">ApplySchema</h3>
+	        <h5 id="intro">Introduction</h5>
+	        <div>
+	            <p>
+	            The general invocation for FdoUtil.exe is as follows:
+                </p>
+                <pre>
+                FdoUtil.exe -cmd:&lt;command name&gt; [-quiet] [-test] &lt;command parameters&gt;
+                </pre>
+	            <p>The valid list of commands for FdoUtil.exe include:</p>
+	            <ul>
+                    <li>ApplySchema</li>
+                    <li>CreateDataStore</li>
+                    <li>Destroy</li>
+                    <li>DumpSchema</li>
+                    <li>ExpressBCP</li>
+                    <li>MakeSdf</li>
+                    <li>RunTask</li>
+                    <li>RegisterProvider</li>
+                    <li>UnregisterProvider</li>
+                </ul>
+                <p>
+                Where applicable, the -test switch performs a FDO capability check to determine if 
+                execution can go ahead.
+                </p>
+                <p>
+                Where applicable, the -quiet switch will suppress all console output. This is not 
+                entirely the case however for debug builds of the command-line utilities
+                </p>
+                <p>
+                If a given parameter value contains multiple words, enclose the string with quotes.
+                </p>
+                <p>
+                eg. -description:"This is a multi word parameter value"
+                </p>
+                <p>
+                All command-line utilities will return 0 for successful execution and will return a non-zero value
+                otherwise. Consult CommandStatus.cs for the list of return codes.
+                </p>
+                <p>
+                For commands that require a connection string parameter (see below) the connection 
+                string is of the following format:
+                </p>
+                <p>
+                [Name1]=[Value1];[Name2]=[Value2];...
+                </p>
+                <p>
+                Some examples:
+                </p>
+                <ul>
+                    <li>SDF: <pre>-connection:File=C:\Test\Test.sdf</pre></li>
+                    <li>SHP: <pre>-connection:DefaultFileLocation=C:\Test\Test.shp</pre></li>
+                    <li>MySQL: <pre>-connection:Username=root;Password=1234;Service=localhost:3306;DataStore=mydatastore</pre></li>
+                </ul>
+                </p>
+	        </div>
+	        <h5 id="applyschema">ApplySchema</h5>
 	        <div>
 	            <p>
 	            Description: Applies a schema definition xml file to a FDO data source
@@ -38,7 +91,7 @@
                 Notes: This will only work on providers that implement the IApplySchema command.
                 </p>
             </div>
-	        <h3 id="createdatastore">CreateDataStore</h3>
+	        <h5 id="createdatastore">CreateDataStore</h5>
 	        <div>
 	        <p>
 	        Description: Create a new FDO data store
@@ -59,7 +112,7 @@
             in this case.
             </p>
 	        </div>
-	        <h3 id="destroy">Destroy</h3>
+	        <h5 id="destroy">Destroy</h5>
 	        <div>
 	        <p>
 	        Description: Destroys a datastore in an FDO data source
@@ -80,7 +133,7 @@
             in this case.
             </p>
 	        </div>
-	        <h3 id="dumpschema">DumpSchema</h3>
+	        <h5 id="dumpschema">DumpSchema</h5>
 	        <div>
 	        <p>
 	        Description: Writes a schema in a FDO data store to an XML file
@@ -92,7 +145,7 @@
             Notes: n/a
             </p>
 	        </div>
-	        <h3 id="expressbcp">ExpressBCP</h3>
+	        <h5 id="expressbcp">ExpressBCP</h5>
 	        <div>
 	        <p>
             Description: Copies the contents of a feature schema (or optionally, a list of classes within) into a 
@@ -125,7 +178,7 @@
             - OSGeo.SDF
             </p>
 	        </div>
-	        <h3 id="makesdf">MakeSdf</h3>
+	        <h5 id="makesdf">MakeSdf</h5>
 	        <div>
 	        <p>
 	        Description: Create a new SDF with the option of applying a schema to it.
@@ -138,7 +191,7 @@
             application will not take place.
             </p>
 	        </div>
-	        <h3 id="runtask">RunTask</h3>
+	        <h5 id="runtask">RunTask</h5>
 	        <div>
 	        <p>
 	        Description: Loads and executes a Task Definition
@@ -151,7 +204,7 @@
             connections. Otherwise execution will fail.
             </p>
 	        </div>
-	        <h3 id="registerprovider">RegisterProvider</h3>
+	        <h5 id="registerprovider">RegisterProvider</h5>
 	        <div>
 	        <p>
 	        Description: Registers a new FDO provider
@@ -161,7 +214,7 @@
             Notes: n/a
             </p>
 	        </div>
-	        <h3 id="unregisterprovider">UnregisterProvider</h3>
+	        <h5 id="unregisterprovider">UnregisterProvider</h5>
 	        <div>
 	        <p>
 	        Description: Unregisters a FDO provider
