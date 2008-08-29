@@ -30,24 +30,60 @@ namespace FdoToolbox.Core.Utility
     /// </summary>
     public sealed class OverrideFactory
     {
+        private static Dictionary<string, Type> _CopySpatialContextOverrides;
+
+        private static Dictionary<string, Type> _ClassNameOverrides;
+
+        static OverrideFactory()
+        {
+            _CopySpatialContextOverrides = new Dictionary<string, Type>();
+            _ClassNameOverrides = new Dictionary<string, Type>();
+
+            RegisterClassNameOverride("OSGeo.KingOracle", typeof(OracleClassNameOverride));
+            RegisterCopySpatialContextOverride("OSGeo.MySQL", typeof(MySqlCopySpatialContextOverride));
+            RegisterCopySpatialContextOverride("OSGeo.SHP", typeof(ShpCopySpatialContextOverride));
+            RegisterCopySpatialContextOverride("OSGeo.SQLServerSpatial", typeof(MsSqlCopySpatialContextOverride));
+
+            RegisterClassNameOverride("OSGeo.KingOracle.3.3", typeof(OracleClassNameOverride));
+            RegisterCopySpatialContextOverride("OSGeo.MySQL.3.3", typeof(MySqlCopySpatialContextOverride));
+            RegisterCopySpatialContextOverride("OSGeo.SHP.3.3", typeof(ShpCopySpatialContextOverride));
+            RegisterCopySpatialContextOverride("OSGeo.SQLServerSpatial.3.3", typeof(MsSqlCopySpatialContextOverride));
+        }
+
+        public static void RegisterCopySpatialContextOverride(string providerName, Type overrideType)
+        {
+            if(!Array.Exists<Type>(overrideType.GetInterfaces(), delegate(Type t) { return t == typeof(ICopySpatialContextOverride); }))
+                throw new ArgumentException("The given type does not implement ICopySpatialContextOverride");
+
+            _CopySpatialContextOverrides[providerName] = overrideType;
+        }
+
+        public static void RegisterClassNameOverride(string providerName, Type overrideType)
+        {
+            if (!Array.Exists<Type>(overrideType.GetInterfaces(), delegate(Type t) { return t == typeof(IClassNameOverride); }))
+                throw new ArgumentException("The given type does not implement IClassNameOverride");
+
+            _ClassNameOverrides[providerName] = overrideType;
+        }
+
         public static ICopySpatialContextOverride GetCopySpatialContextOverride(IConnection targetConn)
         {
             string providerName = targetConn.ConnectionInfo.ProviderName;
-            if (providerName.Contains("OSGeo.SHP"))
-                return new ShpCopySpatialContextOverride();
-            else if (providerName.Contains("OSGeo.MySQL"))
-                return new MySqlCopySpatialContextOverride();
-            else
-                return null;
+            if (_CopySpatialContextOverrides.ContainsKey(providerName))
+            {
+                return (ICopySpatialContextOverride)Activator.CreateInstance(_CopySpatialContextOverrides[providerName]);
+            }
+            return null;
         }
 
         public static IClassNameOverride GetClassNameOverride(IConnection conn)
         {
             string providerName = conn.ConnectionInfo.ProviderName;
-            if (providerName.Contains("OSGeo.KingOracle"))
-                return new OracleClassNameOverride();
-            else
-                return null;
+            if (_ClassNameOverrides.ContainsKey(providerName))
+            {
+                return (IClassNameOverride)Activator.CreateInstance(_ClassNameOverrides[providerName]);
+            }
+            return null;
         }
     }
 }
