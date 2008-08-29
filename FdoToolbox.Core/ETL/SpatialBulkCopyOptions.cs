@@ -295,6 +295,20 @@ namespace FdoToolbox.Core.ETL
             return _SourceClasses.ToArray();
         }
 
+        private bool _AlterSchema;
+
+        /// <summary>
+        /// If true, will alter the source schema before applying to the target connection
+        /// if the source schema is not compatible. Otherwise an exception will be thrown
+        /// if the source schema is not compatbile.
+        /// </summary>
+        public bool AlterSchema
+        {
+            get { return _AlterSchema; }
+            set { _AlterSchema = value; }
+        }
+	
+
         public void Dispose()
         {
             //Since connections in express mode are created outside of the

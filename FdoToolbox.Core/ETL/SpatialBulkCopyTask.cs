@@ -179,6 +179,23 @@ namespace FdoToolbox.Core.ETL
                 {
                     SendMessage("Applying schema for target (this may take a while)");
                     FeatureSchema targetSchema = CreateTargetSchema(_Options.SourceSchemaName, srcConn);
+                    if (_Options.AlterSchema)
+                    {
+                        SendMessage("Altering schema to be compatible with target connection");
+                        using (FeatureService destService = new FeatureService(destConn))
+                        {
+                            IncompatibleSchema incSchema = null;
+                            if (!destService.CanApplySchema(targetSchema, out incSchema))
+                            {
+                                targetSchema = destService.AlterSchema(targetSchema, incSchema);
+                                SendMessage("Schema altered");
+                            }
+                            else
+                            {
+                                SendMessage("No alterations needed");
+                            }
+                        }
+                    }
                     foreach (ClassDefinition classDef in targetSchema.Classes)
                     {
                         if (classDef.IdentityProperties.Count == 0)
@@ -349,7 +366,7 @@ namespace FdoToolbox.Core.ETL
                                         int result = ProcessReader(cachedPropertyNames, propDefs, insertCmd, copyOpts, srcReader);
                                         copied += result;
                                     }
-                                    catch (BulkCopyException ex)
+                                    catch (Exception ex)
                                     {
                                         LogOffendingFeature(ex, cachedIdentityPropertyNames, propDefs, copyOpts, srcReader);
                                     }
@@ -369,7 +386,7 @@ namespace FdoToolbox.Core.ETL
                                             hasMore = srcReader.ReadNext();
                                             batchCount++;
                                         }
-                                        catch (BulkCopyException ex)
+                                        catch (Exception ex)
                                         {
                                             LogOffendingFeature(ex, cachedIdentityPropertyNames, propDefs, copyOpts, srcReader);
                                         }
@@ -410,7 +427,7 @@ namespace FdoToolbox.Core.ETL
                 else
                 {
                     string logPath = AppGateway.RunningApplication.Preferences.GetStringPref(PreferenceNames.PREF_STR_LOG_PATH);
-                    string logFile = Path.Combine(logPath, "bcp" + DateTime.Now.ToShortTimeString() + ".log");
+                    string logFile = Path.Combine(logPath, "BCP_" + this.Name + ".log");
                     using (StreamWriter writer = new StreamWriter(logFile, false))
                     {
                         foreach (string msg in _ErrorMsgs)
@@ -614,7 +631,8 @@ namespace FdoToolbox.Core.ETL
             SendMessage("Validating Bulk Copy Options");
 
             FeatureService destService = new FeatureService(destConn);
-            if (_Options.ApplySchemaToTarget)
+            //Check that the source schema can be applied if we are not going to alter it.
+            if (_Options.ApplySchemaToTarget && !_Options.AlterSchema)
             {
                 FeatureSchema targetSchema = CreateTargetSchema(_Options.SourceSchemaName, srcConn);
                 IncompatibleSchema schema = null;
@@ -1162,7 +1180,7 @@ namespace FdoToolbox.Core.ETL
 
         private List<string> _ErrorMsgs;
 
-        private void LogOffendingFeature(BulkCopyException ex, Dictionary<int, string> cachedIdentityPropertyNames, PropertyDefinitionCollection propDefs, ClassCopyOptions copyOpts, IFeatureReader srcReader)
+        private void LogOffendingFeature(Exception ex, Dictionary<int, string> cachedIdentityPropertyNames, PropertyDefinitionCollection propDefs, ClassCopyOptions copyOpts, IFeatureReader srcReader)
         {
             StringBuilder msg = new StringBuilder("Error: " + ex.Message + "\n\tIdentity Properties:\n");
             foreach (int pidx in cachedIdentityPropertyNames.Keys)

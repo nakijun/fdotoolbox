@@ -142,6 +142,7 @@
     <Compile Include="ETL\DbToPointCopyOptions.cs" />
     <Compile Include="ETL\DbToPointCopyTask.cs" />
     <Compile Include="ETL\IClassNameOverride.cs" />
+    <Compile Include="ETL\MsSqlCopySpatialContextOverride.cs" />
     <Compile Include="ETL\OracleClassNameOverride.cs" />
     <Compile Include="ETL\SpatialJoinOptions.cs" />
     <Compile Include="ETL\SpatialJoinTask.cs" />

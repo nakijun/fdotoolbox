@@ -613,6 +613,7 @@ namespace FdoToolbox.Core.Controls
 
             string srcConnName = cmbSrcConn.SelectedItem.ToString();
             string destConnName = cmbDestConn.SelectedItem.ToString();
+            IConnection srcConn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(srcConnName);
             IConnection destConn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(destConnName);
             if (!destConn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
             {
@@ -626,11 +627,11 @@ namespace FdoToolbox.Core.Controls
             SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(
                 new SpatialConnectionInfo(
                     srcConnName,
-                    AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(srcConnName)
+                    srcConn
                 ),
                 new SpatialConnectionInfo(
                     destConnName,
-                    AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(destConnName)
+                    destConn
                 )
             );
             if (numBatchSize.Enabled)
@@ -681,10 +682,41 @@ namespace FdoToolbox.Core.Controls
                     options.AddClassCopyOption(cOptions);
                 }
             }
-            options.SourceSchemaName = (cmbSrcSchema.SelectedItem as FeatureSchema).Name;
+            FeatureSchema srcSchema = cmbSrcSchema.SelectedItem as FeatureSchema;
+            options.SourceSchemaName = srcSchema.Name;
             FeatureSchema destSchema = (cmbDestSchema.SelectedItem as FeatureSchema);
             if (destSchema != null)
                 options.TargetSchemaName = destSchema.Name;
+
+            //If copy full source schema, check that it can be applied to target.
+            if (options.ApplySchemaToTarget)
+            {
+                using (FeatureService destService = new FeatureService(destConn))
+                {
+                    IncompatibleSchema incSchema = null;
+                    if (!destService.CanApplySchema(srcSchema, out incSchema))
+                    {
+                        if (AppConsole.Confirm("Incompatible schema", "The source schema has incompatible elements:\n\n" + incSchema.ToString() + "\nThe source schema will be altered to be compatible with the target connection. Proceed?"))
+                        {
+                            try
+                            {
+                                FeatureSchema alteredSchema = destService.AlterSchema(srcSchema, incSchema);
+                                //Alter works. So do it again when task executes.
+                                options.AlterSchema = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                AppConsole.Alert("Alter Schema Error", ex.Message + "\nCannot save this task");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
            
             SpatialBulkCopyTask bcptask = new SpatialBulkCopyTask(txtName.Text, options);
             if(update)
