@@ -37,16 +37,19 @@ namespace FdoToolbox.Core.Forms
             // 
             // lblMessage
             // 
-            this.lblMessage.Location = new System.Drawing.Point(13, 13);
+            this.lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblMessage.Location = new System.Drawing.Point(12, 13);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(332, 48);
+            this.lblMessage.Size = new System.Drawing.Size(356, 60);
             this.lblMessage.TabIndex = 0;
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.Enabled = false;
-            this.btnOK.Location = new System.Drawing.Point(189, 93);
+            this.btnOK.Location = new System.Drawing.Point(212, 105);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 1;
@@ -57,7 +60,7 @@ namespace FdoToolbox.Core.Forms
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(270, 93);
+            this.btnCancel.Location = new System.Drawing.Point(293, 105);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -72,9 +75,11 @@ namespace FdoToolbox.Core.Forms
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(12, 64);
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.Location = new System.Drawing.Point(12, 76);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(333, 23);
+            this.progressBar.Size = new System.Drawing.Size(356, 23);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar.TabIndex = 3;
             // 
@@ -82,7 +87,7 @@ namespace FdoToolbox.Core.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(357, 128);
+            this.ClientSize = new System.Drawing.Size(380, 140);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
