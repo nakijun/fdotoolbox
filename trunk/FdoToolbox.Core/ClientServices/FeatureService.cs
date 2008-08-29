@@ -461,7 +461,7 @@ namespace FdoToolbox.Core.ClientServices
                 create.CoordinateSystemWkt = ctx.CoordinateSystemWkt;
                 create.Description = ctx.Description;
                 create.ExtentType = ctx.ExtentType;
-                if (create.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static)
+                if (create.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static || !string.IsNullOrEmpty(ctx.ExtentGeometryText))
                 {
                     geom = _GeomFactory.CreateGeometry(ctx.ExtentGeometryText);
                     create.Extent = _GeomFactory.GetFgf(geom);
