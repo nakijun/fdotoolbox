@@ -146,7 +146,7 @@ namespace FdoToolbox.Core.Forms
             foreach (DataGridViewRow row in grdProperties.Rows)
             {
                 string name = row.Cells[0].Value.ToString();
-                string value = row.Cells[1].Value.ToString();
+                string value = (row.Cells[1].Value != null) ? row.Cells[1].Value.ToString() : string.Empty;
                 nvc.Add(name, value);
             }
             return nvc;
