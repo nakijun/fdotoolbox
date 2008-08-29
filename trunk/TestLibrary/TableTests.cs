@@ -172,7 +172,7 @@ namespace FdoToolbox.Tests
 
             table.PrimaryKey = new DataColumn[] { idCol };
 
-            Class c = table.GetClassDefinition();
+            Class c = (Class)table.GetClassDefinition();
 
             Assert.AreEqual("Foo", c.Name);
             Assert.AreEqual("Bar", c.Description);
@@ -249,7 +249,7 @@ namespace FdoToolbox.Tests
             table.PrimaryKey = new DataColumn[] { idCol };
             table.GeometryColumn = geomCol;
 
-            FeatureClass c = table.GetClassDefinition();
+            FeatureClass c = (FeatureClass)table.GetClassDefinition();
 
             Assert.AreEqual("Foo", c.Name);
             Assert.AreEqual("Bar", c.Description);

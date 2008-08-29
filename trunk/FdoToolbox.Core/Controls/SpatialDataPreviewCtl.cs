@@ -806,10 +806,9 @@ namespace FdoToolbox.Core.Controls
             
             using (IFeatureReader reader = _Service.SelectFeatures(qry))
             {
-                DataTable table = new DataTable(qry.ClassName);
-                int count = 0;
                 ClassDefinition cd = reader.GetClassDefinition();
-                PrepareGrid(table, cd);
+                FdoDataTable table = TableFactory.CreateTable(cd);
+                int count = 0;
                 Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
                 for (int i = 0; i < cd.Properties.Count; i++)
                 {
