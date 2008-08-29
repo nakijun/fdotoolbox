@@ -90,6 +90,7 @@
     <Compile Include="Common\IncompatibleSchema.cs" />
     <Compile Include="Common\IncompatibleClass.cs" />
     <Compile Include="Common\IncompatibleProperty.cs" />
+    <Compile Include="Common\TableFactory.cs" />
     <Compile Include="Configuration\BulkCopyTask.cs" />
     <Compile Include="Configuration\DbConnection.cs" />
     <Compile Include="Configuration\DbJoinTask.cs" />

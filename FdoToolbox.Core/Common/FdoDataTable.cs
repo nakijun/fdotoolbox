@@ -192,7 +192,7 @@ namespace FdoToolbox.Core.Common
                     case PropertyType.PropertyType_DataProperty:
                         classDef.Properties.Add((col as FdoDataColumn).GetPropertyDefinition());
                         if (Array.IndexOf<DataColumn>(this.PrimaryKey, col) >= 0)
-                            classDef.IdentityProperties.Add((col as FdoDataColumn).GetPropertyDefinition()); 
+                            classDef.IdentityProperties.Add((col as FdoDataColumn).GetPropertyDefinition() as DataPropertyDefinition); 
                         break;
                     case PropertyType.PropertyType_GeometricProperty:
                         classDef.Properties.Add((col as FdoGeometryColumn).GetPropertyDefinition());
