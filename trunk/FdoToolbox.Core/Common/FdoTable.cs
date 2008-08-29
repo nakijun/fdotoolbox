@@ -24,7 +24,7 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Core.Common
 {
-    public class FdoTable : FdoDataTable<Class>
+    public class FdoTable : FdoDataTable
     {
         public FdoTable(string name, string description) : base(name, description) { }
 
@@ -33,7 +33,7 @@ namespace FdoToolbox.Core.Common
             InitFromClass(cls);
         }
 
-        protected override Class CreateClassDefinition()
+        protected override ClassDefinition CreateClassDefinition()
         {
             return new Class(this.TableName, this.Description);
         }

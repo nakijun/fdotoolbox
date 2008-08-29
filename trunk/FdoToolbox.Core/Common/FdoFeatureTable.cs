@@ -24,7 +24,7 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Core.Common
 {
-    public class FdoFeatureTable : FdoDataTable<FeatureClass>
+    public class FdoFeatureTable : FdoDataTable
     {
         public FdoFeatureTable(string name, string description) : base(name, description) { }
 
@@ -33,10 +33,14 @@ namespace FdoToolbox.Core.Common
             InitFromClass(fc);
         }
 
-        public override void InitFromClass(FeatureClass classDef)
+        public override void InitFromClass(ClassDefinition classDef)
         {
+            if (classDef.ClassType != ClassType.ClassType_FeatureClass)
+                throw new ArgumentException("The class is not a feature class");
+
             base.InitFromClass(classDef);
-            this.GeometryColumn = (FdoGeometryColumn)this.Columns[classDef.GeometryProperty.Name];
+            FeatureClass fc = classDef as FeatureClass;
+            this.GeometryColumn = (FdoGeometryColumn)this.Columns[fc.GeometryProperty.Name];
         }
 
         private FdoGeometryColumn _GeomColumn;
@@ -47,15 +51,15 @@ namespace FdoToolbox.Core.Common
             set { _GeomColumn = value; }
         }
 
-        public override FeatureClass GetClassDefinition()
+        public override ClassDefinition GetClassDefinition()
         {
-            FeatureClass classDef = base.GetClassDefinition();
+            FeatureClass classDef = (FeatureClass)base.GetClassDefinition();
             int gidx = classDef.Properties.IndexOf(_GeomColumn.ColumnName);
             classDef.GeometryProperty = (GeometricPropertyDefinition)classDef.Properties[gidx];
             return classDef;
         }
 
-        protected override FeatureClass CreateClassDefinition()
+        protected override ClassDefinition CreateClassDefinition()
         {
             return new FeatureClass(this.TableName, this.Description);
         }

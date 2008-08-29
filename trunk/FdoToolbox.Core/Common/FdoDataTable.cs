@@ -31,7 +31,7 @@ namespace FdoToolbox.Core.Common
     /// Extension of DataTable to allow more FDO specific functionality. FDO specific information
     /// is stored as table/column metadata.
     /// </summary>
-    public abstract class FdoDataTable<T> : System.Data.DataTable where T : ClassDefinition
+    public abstract class FdoDataTable : System.Data.DataTable 
     {
         internal FdoDataTable() : base() { }
 
@@ -47,7 +47,7 @@ namespace FdoToolbox.Core.Common
             set { this.ExtendedProperties[FdoMetaDataNames.FDO_CLASS_DESCRIPTION] = value; }
         }
 
-        public virtual void InitFromClass(T classDef)
+        public virtual void InitFromClass(ClassDefinition classDef)
         {
             this.TableName = classDef.Name;
             this.Description = classDef.Description;
@@ -99,7 +99,7 @@ namespace FdoToolbox.Core.Common
         public void LoadFromFeatureReader(IFeatureReader reader)
         {
             ClassDefinition classDef = reader.GetClassDefinition();
-            InitFromClass((T)classDef);
+            InitFromClass(classDef);
 
             while (reader.ReadNext())
             {
@@ -179,9 +179,9 @@ namespace FdoToolbox.Core.Common
             this.Rows.Add(row);
         }
 
-        public virtual T GetClassDefinition()
+        public virtual ClassDefinition GetClassDefinition()
         {
-            T classDef = CreateClassDefinition();
+            ClassDefinition classDef = CreateClassDefinition();
             classDef.Name = this.TableName;
             classDef.Description = this.Description;
             foreach (DataColumn col in this.Columns)
@@ -202,6 +202,6 @@ namespace FdoToolbox.Core.Common
             return classDef;
         }
 
-        protected abstract T CreateClassDefinition();
+        protected abstract ClassDefinition CreateClassDefinition();
     }
 }
