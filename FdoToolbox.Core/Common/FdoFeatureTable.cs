@@ -40,7 +40,8 @@ namespace FdoToolbox.Core.Common
 
             base.InitFromClass(classDef);
             FeatureClass fc = classDef as FeatureClass;
-            this.GeometryColumn = (FdoGeometryColumn)this.Columns[fc.GeometryProperty.Name];
+            if(fc.GeometryProperty != null)
+                this.GeometryColumn = (FdoGeometryColumn)this.Columns[fc.GeometryProperty.Name];
         }
 
         private FdoGeometryColumn _GeomColumn;
