@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Schema;
 using System.Data;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Core.Common
 {
@@ -38,6 +39,28 @@ namespace FdoToolbox.Core.Common
             : base()
         {
             InitFromTable(table);
+            if (FdoMetaData.HasMetaData(table, FdoMetaDataNames.FDO_FEATURE_CLASS_GEOMETRY_PROPERTY))
+            {
+                string name = FdoMetaData.GetMetaData<string>(table, FdoMetaDataNames.FDO_FEATURE_CLASS_GEOMETRY_PROPERTY);
+                DataColumn col = this.Columns[name];
+                if (col is FdoGeometryColumn)
+                {
+                    this.GeometryColumn = col as FdoGeometryColumn;
+                }
+                else
+                {
+                    //Convert to FdoGeometryColumn and replace original reference
+                    FdoGeometryColumn gc = new FdoGeometryColumn(col.ColumnName, col.Caption);
+                    gc.HasElevation = FdoMetaData.GetMetaData<bool>(col, FdoMetaDataNames.FDO_GEOMETRY_HAS_ELEVATION);
+                    gc.HasMeasure = FdoMetaData.GetMetaData<bool>(col, FdoMetaDataNames.FDO_GEOMETRY_HAS_MEASURE);
+                    gc.ReadOnly = FdoMetaData.GetMetaData<bool>(col, FdoMetaDataNames.FDO_GEOMETRY_READONLY);
+                    gc.SpatialContextAssociation = FdoMetaData.GetMetaData<string>(col, FdoMetaDataNames.FDO_GEOMETRY_SPATIAL_CONTEXT);
+                    gc.GeometryTypes = FdoMetaData.GetMetaData<int>(col, FdoMetaDataNames.FDO_GEOMETRY_TYPE);
+                    this.GeometryColumn = gc;
+                    this.Columns.Remove(name);
+                    this.Columns.Add(gc);
+                }
+            }
         }
 
         public override void InitFromClass(ClassDefinition classDef)

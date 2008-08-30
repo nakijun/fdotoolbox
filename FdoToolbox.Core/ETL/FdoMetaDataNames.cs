@@ -30,6 +30,8 @@ namespace FdoToolbox.Core.ETL
         public const string FDO_CLASS_TYPE = "FDO_CLASS_TYPE";
         public const string FDO_CLASS_DESCRIPTION = "FDO_CLASS_DESCRIPTION";
 
+        public const string FDO_FEATURE_CLASS_GEOMETRY_PROPERTY = "FDO_FEATURE_CLASS_GEOMETRY_PROPERTY";
+
         public const string FDO_IDENTITY_PROPERTY = "FDO_IDENTITY_PROPERTY";
 
         public const string FDO_PROPERTY_TYPE = "FDO_PROPERTY_TYPE";
@@ -174,6 +176,11 @@ namespace FdoToolbox.Core.ETL
             col.ExtendedProperties[key] = value;
         }
 
+        public static void SetMetaData(DataTable table, string key, object value)
+        {
+            table.ExtendedProperties[key] = value;
+        }
+
         public static void CreateTableFromClass(DataTable table, ClassDefinition classDef)
         {
             table.TableName = classDef.Name;
@@ -288,6 +295,13 @@ namespace FdoToolbox.Core.ETL
                     }
                 }
             }
+
+            if (classDef is FeatureClass)
+            {
+                GeometricPropertyDefinition gp = (classDef as FeatureClass).GeometryProperty;
+                if(gp != null)
+                    SetMetaData(table, FdoMetaDataNames.FDO_FEATURE_CLASS_GEOMETRY_PROPERTY, gp.Name);
+            }
         }
 
         public static object GetMetaData(DataTable table, string key)
@@ -303,6 +317,11 @@ namespace FdoToolbox.Core.ETL
         public static T GetMetaData<T>(DataColumn col, string key)
         {
             return (T)col.ExtendedProperties[key];
+        }
+
+        public static T GetMetaData<T>(DataTable table, string key)
+        {
+            return (T)table.ExtendedProperties[key];
         }
     }
 }
