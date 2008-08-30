@@ -693,6 +693,9 @@ namespace FdoToolbox.Core.ClientServices
                         }
                     }
                     AlterClass(ref classDef, incClass.ReasonCodes);
+                    //Finally make sure the data properties lie within the limits of this
+                    //connection
+                    FixDataProperties(ref classDef);
                 }
                 else
                 {
@@ -1354,6 +1357,58 @@ namespace FdoToolbox.Core.ClientServices
                 }
             }
             return inserted;
+        }
+
+        /// <summary>
+        /// Checks and modifies the lengths of any [blob/clob/string/decimal] data 
+        /// properties inside the class definition so that it lies within the limits 
+        /// defined in this connection.
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <returns></returns>
+        public void FixDataProperties(ref ClassDefinition classDef)
+        {
+            ISchemaCapabilities caps = this.Connection.SchemaCapabilities;
+            foreach (PropertyDefinition propDef in classDef.Properties)
+            {
+                DataPropertyDefinition dp = propDef as DataPropertyDefinition;
+                if (dp != null)
+                {
+                    switch (dp.DataType)
+                    {
+                        case DataType.DataType_BLOB:
+                            {
+                                int length = (int)caps.get_MaximumDataValueLength(DataType.DataType_BLOB);
+                                if (dp.Length > length)
+                                    dp.Length = length;
+                            }
+                            break;
+                        case DataType.DataType_CLOB:
+                            {
+                                int length = (int)caps.get_MaximumDataValueLength(DataType.DataType_CLOB);
+                                if (dp.Length > length)
+                                    dp.Length = length;
+                            }
+                            break;
+                        case DataType.DataType_String:
+                            {
+                                int length = (int)caps.get_MaximumDataValueLength(DataType.DataType_String);
+                                if (dp.Length > length)
+                                    dp.Length = length;
+                            }
+                            break;
+                        case DataType.DataType_Decimal:
+                            {
+                                if (dp.Precision > caps.MaximumDecimalPrecision)
+                                    dp.Precision = caps.MaximumDecimalPrecision;
+
+                                if (dp.Scale > caps.MaximumDecimalScale)
+                                    dp.Scale = caps.MaximumDecimalScale;
+                            }
+                            break;
+                    }
+                }
+            }
         }
     }
 }

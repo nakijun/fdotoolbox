@@ -146,7 +146,7 @@ namespace FdoToolbox.Core.Common
             return GetDataTypeFromType(this.DataType);
         }
 
-        private DataType GetDataTypeFromType(Type t)
+        public static DataType GetDataTypeFromType(Type t)
         {
             //No CLOB
             if (t == typeof(byte[]))
@@ -175,7 +175,7 @@ namespace FdoToolbox.Core.Common
                 throw new ArgumentException("Could not find corresponding DataType for Type: " + t);
         }
 
-        private Type GetTypeFromDataType(DataType dt)
+        public static Type GetTypeFromDataType(DataType dt)
         {
             Type t = null;
             switch (dt)

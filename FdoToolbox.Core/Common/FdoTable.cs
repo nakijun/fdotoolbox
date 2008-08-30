@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Schema;
+using System.Data;
 
 namespace FdoToolbox.Core.Common
 {
@@ -33,9 +34,19 @@ namespace FdoToolbox.Core.Common
             InitFromClass(cls);
         }
 
+        public FdoTable(DataTable table)
+        {
+            InitFromTable(table);
+        }
+
         protected override ClassDefinition CreateClassDefinition()
         {
             return new Class(this.TableName, this.Description);
+        }
+
+        protected override ClassType GetClassType()
+        {
+            return ClassType.ClassType_Class;
         }
     }
 }

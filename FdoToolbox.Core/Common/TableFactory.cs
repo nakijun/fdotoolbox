@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Schema;
+using System.Data;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Core.Common
 {
@@ -36,6 +38,37 @@ namespace FdoToolbox.Core.Common
                     return new FdoFeatureTable((FeatureClass)classDef);
                 default:
                     throw new NotSupportedException();
+            }
+        }
+
+        /// <summary>
+        /// Converts a raw DataTable into a FdoDataTable. Please note that if the raw
+        /// DataTable has DataColumns whose MaxLength is undefined, they will be set to
+        /// int.MaxValue and may cause failure when the converted ClassDefinition is used
+        /// in an IApplySchema call. If this is the case, run this ClassDefinition through
+        /// the FixDataProperties() method of FeatureService
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public static FdoDataTable CreateTable(DataTable table)
+        {
+            object value = FdoMetaData.GetMetaData(table, FdoMetaDataNames.FDO_CLASS_TYPE);
+            if (value != null)
+            {
+                ClassType ctype = (ClassType)value;
+                switch (ctype)
+                {
+                    case ClassType.ClassType_Class:
+                        return new FdoTable(table);
+                    case ClassType.ClassType_FeatureClass:
+                        return new FdoFeatureTable(table);
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+            else
+            {
+                return new FdoTable(table);
             }
         }
     }
