@@ -31,10 +31,20 @@ namespace FdoToolbox.Core.Commands
     /// </summary>
     public abstract class SpatialConnectionCommand : ConsoleCommand
     {
-        protected string _provider;
-        protected string _connStr;
+        private string _provider;
+        private string _connStr;
 
-        public SpatialConnectionCommand(string provider, string connStr)
+        public string Provider
+        {
+            get { return _provider; }
+        }
+
+        public string ConnectionString
+        {
+            get { return _connStr; }
+        }
+
+        protected SpatialConnectionCommand(string provider, string connStr)
         {
             _provider = provider;
             _connStr = connStr;
