@@ -31,7 +31,7 @@ namespace FdoToolbox.Core
     /// </summary>
     public abstract class BaseApplication
     {
-        public BaseApplication()
+        protected BaseApplication()
         {
 #if DEBUG || TEST
             //HACK: It's not picking up the DBMS paths from the PATH environment

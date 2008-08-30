@@ -40,7 +40,7 @@ namespace FdoToolbox.Core
         /// <summary>
         /// Constructor
         /// </summary>
-        public ConsoleApplication() : base()
+        protected ConsoleApplication() : base()
         {
             AppConsole.Out = new CmdConsoleOutputStream();
             AppConsole.Err = new CmdConsoleErrorStream();
@@ -159,7 +159,7 @@ namespace FdoToolbox.Core
         /// <param name="prefix"></param>
         /// <param name="args"></param>
         /// <returns>The argument value if found, otherwise null</returns>
-        protected string GetArgument(string prefix, string [] args)
+        protected static string GetArgument(string prefix, string [] args)
         {
             if (args.Length == 0)
                 return null;
@@ -180,7 +180,7 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="strSwitch"></param>
         /// <returns></returns>
-        protected bool IsSwitchDefined(string strSwitch, string [] args)
+        protected static bool IsSwitchDefined(string strSwitch, string [] args)
         {
             if (args.Length == 0)
                 return false;
@@ -211,7 +211,16 @@ namespace FdoToolbox.Core
 
         public void Dispose()
         {
-            this.Preferences.Save();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.Preferences.Save();
+            }
         }
     }
 }

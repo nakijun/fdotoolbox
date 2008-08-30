@@ -18,88 +18,113 @@
 // 
 #endregion
 using System;
+using System.Runtime.Serialization;
 
 namespace FdoToolbox.Core
 {
+    [Serializable]
     public class ModuleLoadException : Exception
     {
+        protected ModuleLoadException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public ModuleLoadException() : base() { }
         public ModuleLoadException(string msg) : base(msg) { }
         public ModuleLoadException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class FdoConnectionException : Exception
     {
+        protected FdoConnectionException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public FdoConnectionException() : base() { }
         public FdoConnectionException(string msg) : base(msg) { }
         public FdoConnectionException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class DbConnectionException : Exception
     {
+        protected DbConnectionException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public DbConnectionException() : base() { }
         public DbConnectionException(string msg) : base(msg) { }
         public DbConnectionException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class BulkCopyException : Exception
     {
+        protected BulkCopyException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public BulkCopyException() : base() { }
         public BulkCopyException(string msg) : base(msg) { }
         public BulkCopyException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class SpatialJoinException : Exception
     {
+        protected SpatialJoinException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public SpatialJoinException() : base() { }
         public SpatialJoinException(string msg) : base(msg) { }
         public SpatialJoinException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class DbToSpatialException : Exception
     {
+        protected DbToSpatialException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public DbToSpatialException() : base() { }
         public DbToSpatialException(string msg) : base(msg) { }
         public DbToSpatialException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class PreferenceException : Exception
     {
+        protected PreferenceException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public PreferenceException() : base() { }
         public PreferenceException(string msg) : base(msg) { }
         public PreferenceException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class UnsupportedException : Exception
     {
+        protected UnsupportedException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public UnsupportedException() : base() { }
         public UnsupportedException(string msg) : base(msg) { }
         public UnsupportedException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class TaskLoaderException : Exception
     {
+        protected TaskLoaderException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public TaskLoaderException() : base() { }
         public TaskLoaderException(string msg) : base(msg) { }
         public TaskLoaderException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class TaskValidationException : Exception
     {
+        protected TaskValidationException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public TaskValidationException() : base() { }
         public TaskValidationException(string msg) : base(msg) { }
         public TaskValidationException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class FeatureServiceException : Exception
     {
+        protected FeatureServiceException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public FeatureServiceException() : base() { }
         public FeatureServiceException(string msg) : base(msg) { }
         public FeatureServiceException(string msg, Exception inner) : base(msg, inner) { }
     }
 
+    [Serializable]
     public class DataTableConversionException : Exception
     {
+        protected DataTableConversionException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public DataTableConversionException() : base() { }
         public DataTableConversionException(string msg) : base(msg) { }
         public DataTableConversionException(string msg, Exception inner) : base(msg, inner) { }
