@@ -30,7 +30,7 @@ namespace FdoUtil
     {
         private IConsoleCommand _Command;
 
-        private void ThrowIfEmpty(string value, string parameter)
+        private static void ThrowIfEmpty(string value, string parameter)
         {
             if(string.IsNullOrEmpty(value))
                 throw new ArgumentException("Missing required parameter: " + parameter);
@@ -175,7 +175,7 @@ namespace FdoUtil
                                 srcClasses.Add(classes);
                             }
                         }
-                        _Command = new ExpressBcpCommand(srcProvider, srcConnStr, srcSchema, destProvider, destFile, srcClasses, srcSpatialContext);
+                        _Command = new ExpressBcpCommand(srcProvider, srcConnStr, srcSchema, destProvider, destFile, srcClasses.AsReadOnly(), srcSpatialContext);
                     }
                     break;
                 case "CreateDataStore":

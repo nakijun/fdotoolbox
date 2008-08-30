@@ -28,6 +28,7 @@ using FdoToolbox.Core.ETL;
 using FdoToolbox.Core.Commands;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.Utility;
+using System.Collections.ObjectModel;
 
 namespace FdoUtil
 {
@@ -38,7 +39,7 @@ namespace FdoUtil
         private string _SrcSchema;
         private string _DestProvider;
         private string _DestFile;
-        private List<string> _SrcClasses;
+        private ReadOnlyCollection<string> _SrcClasses;
         private string _SrcSpatialContext;
 
         public ExpressBcpCommand(
@@ -47,7 +48,7 @@ namespace FdoUtil
             string srcSchema,
             string destProvider,
             string destFile,
-            List<string> classes,
+            ReadOnlyCollection<string> classes,
             string srcSpatialContext
             )
         {
