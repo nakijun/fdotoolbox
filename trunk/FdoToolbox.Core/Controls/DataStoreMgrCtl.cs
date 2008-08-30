@@ -29,6 +29,7 @@ using FdoToolbox.Core.Forms;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Modules;
 using FdoToolbox.Core.Common;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -66,7 +67,7 @@ namespace FdoToolbox.Core.Controls
         private void ListDataStores()
         {
             FeatureService service = new FeatureService(this.BoundConnection.Connection);
-            List<DataStoreInfo> stores = service.ListDataStores(true);
+            ReadOnlyCollection<DataStoreInfo> stores = service.ListDataStores(true);
             grdDataStores.DataSource = stores;
         }
 

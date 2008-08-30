@@ -32,8 +32,10 @@ namespace FdoToolbox.Core.ClientServices
     /// Application console class. Output is redirected
     /// to the application console window.
     /// </summary>
-    public class AppConsole
+    public sealed class AppConsole
     {
+        private AppConsole() { }
+
         private static IConsoleInputStream _In;
 
         public static IConsoleInputStream In

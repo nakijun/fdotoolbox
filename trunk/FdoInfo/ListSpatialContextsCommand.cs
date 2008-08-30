@@ -24,6 +24,7 @@ using FdoToolbox.Core;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Commands;
+using System.Collections.ObjectModel;
 
 namespace FdoInfo
 {
@@ -49,7 +50,7 @@ namespace FdoInfo
 
             using (FeatureService service = new FeatureService(conn))
             {
-                List<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                ReadOnlyCollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
                 AppConsole.WriteLine("\nSpatial Contexts in connection: {0}", contexts.Count);
                 foreach (SpatialContextInfo ctx in contexts)
                 {

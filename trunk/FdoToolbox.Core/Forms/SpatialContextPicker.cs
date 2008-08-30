@@ -28,6 +28,7 @@ using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.SpatialContext;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.ClientServices;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -46,8 +47,11 @@ namespace FdoToolbox.Core.Forms
         {
             FeatureService service = new FeatureService(conn);
             lstNames.Items.Clear();
-            List<SpatialContextInfo> contexts = service.GetSpatialContexts();
-            contexts.ForEach(delegate(SpatialContextInfo ctx) { lstNames.Items.Add(ctx.Name); });
+            ReadOnlyCollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
+            foreach (SpatialContextInfo ctx in contexts)
+            {
+                lstNames.Items.Add(ctx.Name);
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

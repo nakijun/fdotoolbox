@@ -31,6 +31,7 @@ using FdoToolbox.Core.Forms;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Modules;
 using FdoToolbox.Core.Common;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -94,8 +95,11 @@ namespace FdoToolbox.Core.Controls
         private void LoadSpatialContexts()
         {
             _bsContexts.Clear();
-            List<SpatialContextInfo> context = _Service.GetSpatialContexts();
-            context.ForEach(delegate(SpatialContextInfo ctx) { _bsContexts.Add(ctx); });
+            ReadOnlyCollection<SpatialContextInfo> contexts = _Service.GetSpatialContexts();
+            foreach (SpatialContextInfo ctx in contexts)
+            {
+                _bsContexts.Add(ctx);
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)

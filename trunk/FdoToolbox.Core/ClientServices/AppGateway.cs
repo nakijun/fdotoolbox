@@ -29,7 +29,9 @@ namespace FdoToolbox.Core.ClientServices
     /// </summary>
     public sealed class AppGateway
     {
-        private static IHostApplication _AppInstance = null;
+        private AppGateway() { }
+
+        private static IHostApplication _AppInstance;
 
         public static IHostApplication RunningApplication
         {

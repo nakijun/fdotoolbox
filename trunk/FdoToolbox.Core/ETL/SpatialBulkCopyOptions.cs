@@ -30,6 +30,7 @@ using System.IO;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.Utility;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -218,7 +219,7 @@ namespace FdoToolbox.Core.ETL
                 {
                     using (FeatureService service = new FeatureService(_Source.Connection))
                     {
-                        List<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                        ReadOnlyCollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
                         _SourceSpatialContexts.Clear();
                         _SourceSpatialContexts.Add(contexts[0].Name);
                     }

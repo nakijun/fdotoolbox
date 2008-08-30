@@ -24,6 +24,7 @@ using System.Xml;
 using System.IO;
 using FdoToolbox.Core.Configuration;
 using System.Xml.Serialization;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ClientServices
 {
@@ -42,10 +43,10 @@ namespace FdoToolbox.Core.ClientServices
         bool GetBooleanPref(string name);
         string GetStringPref(string name);
 
-        List<string> GetDoublePrefNames();
-        List<string> GetIntegerPrefNames();
-        List<string> GetBooleanPrefNames();
-        List<string> GetStringPrefNames();
+        ICollection<string> DoublePreferences { get; }
+        ICollection<string> IntegerPreferences { get; }
+        ICollection<string> BooleanPreferences { get; }
+        ICollection<string> StringPreferences { get; }
 
         void SetDefaultValue(string name, string value);
         void SetDefaultValue(string name, int value);
@@ -149,26 +150,26 @@ namespace FdoToolbox.Core.ClientServices
             }
         }
 
-        public void SetStringPref(string name, string pref)
+        public void SetStringPref(string name, string value)
         {
-            if (string.IsNullOrEmpty(pref))
+            if (string.IsNullOrEmpty(value))
                 throw new PreferenceException("pref value cannot be empty or null: " + name);
-            _StringPrefs[name] = pref;
+            _StringPrefs[name] = value;
         }
 
-        public void SetDoublePref(string name, double pref)
+        public void SetDoublePref(string name, double value)
         {
-            _DoublePrefs[name] = pref;
+            _DoublePrefs[name] = value;
         }
 
-        public void SetIntegerPref(string name, int pref)
+        public void SetIntegerPref(string name, int value)
         {
-            _IntegerPrefs[name] = pref;
+            _IntegerPrefs[name] = value;
         }
 
-        public void SetBooleanPref(string name, bool pref)
+        public void SetBooleanPref(string name, bool value)
         {
-            _BooleanPrefs[name] = pref;
+            _BooleanPrefs[name] = value;
         }
 
         public bool GetBooleanPref(string name)
@@ -203,24 +204,36 @@ namespace FdoToolbox.Core.ClientServices
             throw new PreferenceException(name);
         }
 
-        public List<string> GetDoublePrefNames()
+        public ICollection<string> DoublePreferences
         {
-            return new List<string>(_DoublePrefs.Keys);
+            get
+            {
+                return _DoublePrefs.Keys;
+            }
         }
 
-        public List<string> GetIntegerPrefNames()
+        public ICollection<string> IntegerPreferences
         {
-            return new List<string>(_IntegerPrefs.Keys);
+            get
+            {
+                return _IntegerPrefs.Keys;
+            }
         }
 
-        public List<string> GetBooleanPrefNames()
+        public ICollection<string> BooleanPreferences
         {
-            return new List<string>(_BooleanPrefs.Keys);
+            get
+            {
+                return _BooleanPrefs.Keys;
+            }
         }
 
-        public List<string> GetStringPrefNames()
+        public ICollection<string> StringPreferences
         {
-            return new List<string>(_StringPrefs.Keys);
+            get
+            {
+                return _StringPrefs.Keys;
+            }
         }
 
         public void Save()
@@ -231,32 +244,28 @@ namespace FdoToolbox.Core.ClientServices
             List<DoublePref> dprefs = new List<DoublePref>();
             List<IntegerPref> iprefs = new List<IntegerPref>();
             
-            List<string> doubleNames = this.GetDoublePrefNames();
-            foreach (string pref in doubleNames)
+            foreach (string pref in this.DoublePreferences)
             {
                 DoublePref dp = new DoublePref();
                 dp.name = pref;
                 dp.value = this.GetDoublePref(pref);
                 dprefs.Add(dp);
             }
-            List<string> integerNames = this.GetIntegerPrefNames();
-            foreach (string pref in integerNames)
+            foreach (string pref in this.IntegerPreferences)
             {
                 IntegerPref ip = new IntegerPref();
                 ip.name = pref;
                 ip.value = this.GetIntegerPref(pref).ToString();
                 iprefs.Add(ip);
             }
-            List<string> stringNames = this.GetStringPrefNames();
-            foreach (string pref in stringNames)
+            foreach (string pref in this.StringPreferences)
             {
                 StringPref sp = new StringPref();
                 sp.name = pref;
                 sp.value = this.GetStringPref(pref); ;
                 sprefs.Add(sp);
             }
-            List<string> booleanNames = this.GetBooleanPrefNames();
-            foreach (string pref in booleanNames)
+            foreach (string pref in this.BooleanPreferences)
             {
                 BooleanPref bp = new BooleanPref();
                 bp.name = pref;

@@ -23,6 +23,7 @@ using System.Text;
 using OSGeo.FDO.Expression;
 using System.Collections.Specialized;
 using OSGeo.FDO.Commands;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ClientServices
 {
@@ -41,9 +42,9 @@ namespace FdoToolbox.Core.ClientServices
 
         private List<string> _PropertyList;
 
-        public string[] PropertyList
+        public ReadOnlyCollection<string> PropertyList
         {
-            get { return _PropertyList.ToArray(); }
+            get { return _PropertyList.AsReadOnly(); }
         }
 
         private Dictionary<string, Expression> _ComputedProperties;
@@ -113,9 +114,9 @@ namespace FdoToolbox.Core.ClientServices
 
         private List<string> _OrderBy;
 
-        public string[] OrderBy
+        public ReadOnlyCollection<string> OrderBy
         {
-            get { return _OrderBy.ToArray(); }
+            get { return _OrderBy.AsReadOnly(); }
         }
 
         private OrderingOption _OrderingOption;

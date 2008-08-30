@@ -38,6 +38,8 @@ namespace FdoToolbox.Core.ClientServices
     /// </summary>
     public sealed class AppSession
     {
+        private AppSession() { }
+
         /// <summary>
         /// Load whatever saved settings from the session directory
         /// </summary>

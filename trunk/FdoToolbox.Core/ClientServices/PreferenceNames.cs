@@ -26,8 +26,10 @@ namespace FdoToolbox.Core.ClientServices
     /// <summary>
     /// Master preference name list
     /// </summary>
-    public class PreferenceNames
+    public sealed class PreferenceNames
     {
+        private PreferenceNames() { }
+
         #region string preferences
         public const string PREF_STR_WORKING_DIRECTORY = "pref_str_working_dir";
         public const string PREF_STR_FDO_HOME = "pref_str_fdo_home";
