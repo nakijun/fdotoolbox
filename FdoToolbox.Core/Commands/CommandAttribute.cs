@@ -30,14 +30,13 @@ namespace FdoToolbox.Core.Commands
     /// method.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class CommandAttribute : Attribute
+    public sealed class CommandAttribute : Attribute
     {
         private string _Name;
 
         public string Name
         {
             get { return _Name; }
-            set { _Name = value; }
         }
 
         private string _DisplayName;
@@ -45,7 +44,6 @@ namespace FdoToolbox.Core.Commands
         public string DisplayName
         {
             get { return _DisplayName; }
-            set { _DisplayName = value; }
         }
 
         private string _Description;
@@ -75,12 +73,12 @@ namespace FdoToolbox.Core.Commands
             set { _ImageResourceName = value; }
         }
 
-        private CommandInvocationType _InvcationType;
+        private CommandInvocationType _InvocationType;
 
         public CommandInvocationType InvocationType
         {
-            get { return _InvcationType; }
-            set { _InvcationType = value; }
+            get { return _InvocationType; }
+            set { _InvocationType = value; }
         }
 	
 
@@ -90,9 +88,9 @@ namespace FdoToolbox.Core.Commands
         /// <param name="name">The name of the command</param>
         public CommandAttribute(string name, string displayName)
         {
-            this.InvocationType = CommandInvocationType.All;
-            this.Name = name;
-            this.DisplayName = displayName;
+            _InvocationType = CommandInvocationType.All;
+            _Name = name;
+            _DisplayName = displayName;
         }
 
         /// <summary>
@@ -102,10 +100,10 @@ namespace FdoToolbox.Core.Commands
         /// <param name="displayName">The display name of the command (Shown in menus)</param>
         public CommandAttribute(string name, string displayName, string description)
         {
-            this.InvocationType = CommandInvocationType.All;
-            this.Name = name;
-            this.DisplayName = displayName;
-            this.Description = description;
+            _InvocationType = CommandInvocationType.All;
+            _Name = name;
+            _DisplayName = displayName;
+            _Description = description;
         }
     }
 }
