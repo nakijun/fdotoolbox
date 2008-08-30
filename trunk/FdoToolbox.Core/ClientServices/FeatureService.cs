@@ -1152,7 +1152,7 @@ namespace FdoToolbox.Core.ClientServices
                     if (incSchema == null)
                         incSchema = new IncompatibleSchema(schema.Name);
 
-                    incSchema.Classes.Add(cls);
+                    incSchema.AddClass(cls);
                 }
             }
 
@@ -1164,7 +1164,7 @@ namespace FdoToolbox.Core.ClientServices
             if (cls == null)
                 cls = new IncompatibleClass(className, classReason);
             else
-                cls.Reasons.Add(classReason);
+                cls.AddReason(classReason);
 
             cls.ReasonCodes.Add(rcode);
         }
@@ -1174,18 +1174,18 @@ namespace FdoToolbox.Core.ClientServices
             if (cls == null)
                 cls = new IncompatibleClass(className, classReason);
             else
-                cls.Reasons.Add(classReason);
+                cls.AddReason(classReason);
 
-            IncompatibleProperty prop = cls.Properties.Find(delegate(IncompatibleProperty p) { return p.Name == propName; });
+            IncompatibleProperty prop = cls.FindProperty(propName);
             if (prop == null)
             {
                 prop = new IncompatibleProperty(propName, propReason);
                 prop.ReasonCodes.Add(rcode);
-                cls.Properties.Add(prop);
+                cls.AddProperty(prop);
             }
             else
             {
-                prop.Reasons.Add(propReason);
+                prop.AddReason(propReason);
                 prop.ReasonCodes.Add(rcode);
             }
         }

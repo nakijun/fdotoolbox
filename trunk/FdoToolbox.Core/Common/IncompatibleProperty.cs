@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Iesi.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Common
 {
@@ -36,9 +37,9 @@ namespace FdoToolbox.Core.Common
 
         private List<string> _Reasons;
 
-        public List<string> Reasons
+        public ReadOnlyCollection<string> Reasons
         {
-            get { return _Reasons; }
+            get { return _Reasons.AsReadOnly(); }
         }
 
         private ISet<IncompatiblePropertyReason> _ReasonCodes;
@@ -70,6 +71,11 @@ namespace FdoToolbox.Core.Common
                 }
             }
             return sb.ToString();
+        }
+
+        public void AddReason(string propReason)
+        {
+            _Reasons.Add(propReason);
         }
     }
 }
