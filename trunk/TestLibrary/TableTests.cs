@@ -28,6 +28,7 @@ using OSGeo.FDO.Connections;
 using OSGeo.FDO.ClientServices;
 using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Commands.Feature;
+using FdoToolbox.Core;
 
 namespace FdoToolbox.Tests
 {
@@ -48,6 +49,7 @@ namespace FdoToolbox.Tests
             Assert.AreEqual("Foo", table.TableName);
             Assert.AreEqual("Bar", table.Description);
             Assert.AreEqual(3, table.Columns.Count);
+            Assert.AreEqual(1, table.PrimaryKey.Length);
 
             Assert.IsNotNull(table.Columns["ID"]);
             Assert.IsNotNull(table.Columns["Name"]);
@@ -101,6 +103,7 @@ namespace FdoToolbox.Tests
             Assert.AreEqual("Foo", table.TableName);
             Assert.AreEqual("Bar", table.Description);
             Assert.AreEqual(4, table.Columns.Count);
+            Assert.AreEqual(1, table.PrimaryKey.Length);
 
             Assert.IsNotNull(table.Columns["ID"]);
             Assert.IsNotNull(table.Columns["Name"]);
@@ -211,6 +214,123 @@ namespace FdoToolbox.Tests
             Assert.IsFalse(pRatio.ReadOnly);
             Assert.IsTrue(pRatio.Nullable);
             
+        }
+
+        [Test]
+        [ExpectedException(typeof(DataTableConversionException))]
+        public void TestBadRawTable()
+        {
+            DataTable table = new DataTable();
+            FdoDataTable fdoTable = TableFactory.CreateTable(table);
+            ClassDefinition classDef = fdoTable.GetClassDefinition();
+            Assert.Fail("Should not have got to this point");
+         }
+
+        [Test]
+        public void TestRawTableToClass()
+        {
+            DataTable table = new DataTable();
+            table.TableName = "Foobar";
+
+            DataColumn colA = new DataColumn("A", typeof(int));
+            DataColumn colB = new DataColumn("B", typeof(byte[]));
+            DataColumn colC = new DataColumn("C", typeof(bool));
+            DataColumn colD = new DataColumn("D", typeof(byte));
+            DataColumn colE = new DataColumn("E", typeof(DateTime));
+            DataColumn colF = new DataColumn("F", typeof(decimal));
+            DataColumn colG = new DataColumn("G", typeof(float));
+            DataColumn colH = new DataColumn("H", typeof(short));
+            DataColumn colI = new DataColumn("I", typeof(long));
+            DataColumn colJ = new DataColumn("J", typeof(string));
+            DataColumn colK = new DataColumn("K", typeof(double));
+
+            table.Columns.Add(colA);
+            table.Columns.Add(colB);
+            table.Columns.Add(colC);
+            table.Columns.Add(colD);
+            table.Columns.Add(colE);
+            table.Columns.Add(colF);
+            table.Columns.Add(colG);
+            table.Columns.Add(colH);
+            table.Columns.Add(colI);
+            table.Columns.Add(colJ);
+            table.Columns.Add(colK);
+
+            table.PrimaryKey = new DataColumn[] { colA };
+
+            FdoDataTable fdoTable = TableFactory.CreateTable(table);
+            ClassDefinition classDef = fdoTable.GetClassDefinition();
+
+            Assert.AreEqual(ClassType.ClassType_Class, classDef.ClassType);
+            Assert.AreEqual(fdoTable.TableName, classDef.Name);
+            Assert.AreEqual(fdoTable.Description, classDef.Description);
+            Assert.AreEqual(fdoTable.Columns.Count, classDef.Properties.Count);
+            Assert.AreEqual(fdoTable.PrimaryKey.Length, classDef.IdentityProperties.Count);
+
+            int a = classDef.Properties.IndexOf("A");
+            int b = classDef.Properties.IndexOf("B");
+            int c = classDef.Properties.IndexOf("C");
+            int d = classDef.Properties.IndexOf("D");
+            int e = classDef.Properties.IndexOf("E");
+            int f = classDef.Properties.IndexOf("F");
+            int g = classDef.Properties.IndexOf("G");
+            int h = classDef.Properties.IndexOf("H");
+            int i = classDef.Properties.IndexOf("I");
+            int j = classDef.Properties.IndexOf("J");
+            int k = classDef.Properties.IndexOf("K");
+
+            Assert.IsTrue(a >= 0);
+            Assert.IsTrue(b >= 0);
+            Assert.IsTrue(c >= 0);
+            Assert.IsTrue(d >= 0);
+            Assert.IsTrue(e >= 0);
+            Assert.IsTrue(f >= 0);
+            Assert.IsTrue(g >= 0);
+            Assert.IsTrue(h >= 0);
+            Assert.IsTrue(i >= 0);
+            Assert.IsTrue(j >= 0);
+            Assert.IsTrue(k >= 0);
+
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[a].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[b].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[c].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[d].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[e].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[f].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[g].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[h].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[i].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[j].PropertyType);
+            Assert.AreEqual(PropertyType.PropertyType_DataProperty, classDef.Properties[k].PropertyType);
+
+            DataPropertyDefinition dpa = classDef.Properties[a] as DataPropertyDefinition;
+            DataPropertyDefinition dpb = classDef.Properties[b] as DataPropertyDefinition;
+            DataPropertyDefinition dpc = classDef.Properties[c] as DataPropertyDefinition;
+            DataPropertyDefinition dpd = classDef.Properties[d] as DataPropertyDefinition;
+            DataPropertyDefinition dpe = classDef.Properties[e] as DataPropertyDefinition;
+            DataPropertyDefinition dpf = classDef.Properties[f] as DataPropertyDefinition;
+            DataPropertyDefinition dpg = classDef.Properties[g] as DataPropertyDefinition;
+            DataPropertyDefinition dph = classDef.Properties[h] as DataPropertyDefinition;
+            DataPropertyDefinition dpi = classDef.Properties[i] as DataPropertyDefinition;
+            DataPropertyDefinition dpj = classDef.Properties[j] as DataPropertyDefinition;
+            DataPropertyDefinition dpk = classDef.Properties[k] as DataPropertyDefinition;
+
+            Assert.AreEqual(DataType.DataType_Int32, dpa.DataType);
+            Assert.AreEqual(DataType.DataType_BLOB, dpb.DataType);
+            Assert.AreEqual(DataType.DataType_Boolean, dpc.DataType);
+            Assert.AreEqual(DataType.DataType_Byte, dpd.DataType);
+            Assert.AreEqual(DataType.DataType_DateTime, dpe.DataType);
+            Assert.AreEqual(DataType.DataType_Decimal, dpf.DataType);
+            Assert.AreEqual(DataType.DataType_Single, dpg.DataType);
+            Assert.AreEqual(DataType.DataType_Int16, dph.DataType);
+            Assert.AreEqual(DataType.DataType_Int64, dpi.DataType);
+            Assert.AreEqual(DataType.DataType_String, dpj.DataType);
+            Assert.AreEqual(DataType.DataType_Double, dpk.DataType);
+
+            Assert.AreEqual(int.MaxValue, dpb.Length);
+            Assert.AreEqual(int.MaxValue, dpj.Length);
+            Assert.AreEqual(int.MaxValue, dpf.Scale);
+            Assert.AreEqual(int.MaxValue, dpf.Precision);
         }
 
         [Test]

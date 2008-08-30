@@ -97,4 +97,11 @@ namespace FdoToolbox.Core
         public FeatureServiceException(string msg) : base(msg) { }
         public FeatureServiceException(string msg, Exception inner) : base(msg, inner) { }
     }
+
+    public class DataTableConversionException : Exception
+    {
+        public DataTableConversionException() : base() { }
+        public DataTableConversionException(string msg) : base(msg) { }
+        public DataTableConversionException(string msg, Exception inner) : base(msg, inner) { }
+    }
 }

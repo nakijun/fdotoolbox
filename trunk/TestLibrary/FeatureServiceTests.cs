@@ -1048,10 +1048,10 @@ namespace FdoToolbox.Tests
             Expect.AtLeastOnce.On(mockSchemaCapabilities).GetProperty("SupportsUniqueValueConstraints").Will(Return.Value(false));
             Expect.AtLeastOnce.On(mockSchemaCapabilities).GetProperty("SupportsValueConstraintsList").Will(Return.Value(false));
 
-            Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_BLOB).Will(Return.Value((long)int.MaxValue));
+            Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_BLOB).Will(Return.Value((long)1000000000));
             Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_Boolean).Will(Return.Value((long)sizeof(bool)));
             Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_Byte).Will(Return.Value((long)sizeof(byte)));
-            Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_CLOB).Will(Return.Value((long)int.MaxValue));
+            Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_CLOB).Will(Return.Value((long)500000000));
 
             Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_Decimal).Will(Return.Value((long)sizeof(decimal)));
             Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_Double).Will(Return.Value((long)sizeof(double)));
@@ -1059,12 +1059,76 @@ namespace FdoToolbox.Tests
             Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_Int32).Will(Return.Value((long)sizeof(int)));
             Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_Int64).Will(Return.Value((long)sizeof(long)));
             Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_Single).Will(Return.Value((long)sizeof(float)));
-            Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_String).Will(Return.Value((long)int.MaxValue));
+            Expect.AtLeastOnce.On(mockSchemaCapabilities).Method("get_MaximumDataValueLength").With(DataType.DataType_String).Will(Return.Value((long)1289403958));
 
             IConnection conn = mock.NewMock<IConnection>();
             Expect.AtLeastOnce.On(conn).GetProperty("ConnectionState").Will(Return.Value(ConnectionState.ConnectionState_Open));
             Expect.AtLeastOnce.On(conn).GetProperty("SchemaCapabilities").Will(Return.Value(mockSchemaCapabilities));
             return conn;
+        }
+
+        [Test]
+        public void TestFixDataProperty()
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            table.TableName = "Foobar";
+            table.Columns.Add("BLOB", typeof(byte[]));
+            table.Columns.Add("str", typeof(string));
+            table.Columns.Add("dec", typeof(decimal));
+            table.Columns.Add("ID", typeof(int));
+            table.PrimaryKey = new System.Data.DataColumn[] { table.Columns["ID"] };
+
+            FdoDataTable fdoTable = TableFactory.CreateTable(table);
+            ClassDefinition classDef = fdoTable.GetClassDefinition();
+
+            Assert.AreEqual("Foobar", classDef.Name);
+
+            int iblob = classDef.Properties.IndexOf("BLOB");
+            int istr = classDef.Properties.IndexOf("str");
+            int idec = classDef.Properties.IndexOf("dec");
+            int iid = classDef.Properties.IndexOf("ID");
+
+            Assert.IsTrue(iblob >= 0);
+            Assert.IsTrue(istr >= 0);
+            Assert.IsTrue(idec >= 0);
+            Assert.IsTrue(iid >= 0);
+
+            DataPropertyDefinition blob = classDef.Properties[iblob] as DataPropertyDefinition;
+            DataPropertyDefinition str = classDef.Properties[istr] as DataPropertyDefinition;
+            DataPropertyDefinition dec = classDef.Properties[idec] as DataPropertyDefinition;
+            DataPropertyDefinition id = classDef.Properties[iid] as DataPropertyDefinition;
+
+            Assert.IsNotNull(blob);
+            Assert.IsNotNull(str);
+            Assert.IsNotNull(dec);
+            Assert.IsNotNull(id);
+
+            Assert.AreEqual(int.MaxValue, blob.Length);
+            Assert.AreEqual(int.MaxValue, str.Length);
+            Assert.AreEqual(int.MaxValue, dec.Scale);
+            Assert.AreEqual(int.MaxValue, dec.Precision);
+
+            IConnection conn = CreateMockedConnection();
+            using (FeatureService service = new FeatureService(conn))
+            {
+                service.FixDataProperties(ref classDef);
+
+                blob = classDef.Properties[iblob] as DataPropertyDefinition;
+                str = classDef.Properties[istr] as DataPropertyDefinition;
+                dec = classDef.Properties[idec] as DataPropertyDefinition;
+                id = classDef.Properties[iid] as DataPropertyDefinition;
+
+                Assert.IsNotNull(blob);
+                Assert.IsNotNull(str);
+                Assert.IsNotNull(dec);
+                Assert.IsNotNull(id);
+
+                //The lengths should now fall within the connection's limits.
+                Assert.IsTrue(blob.Length < int.MaxValue);
+                Assert.IsTrue(str.Length < int.MaxValue);
+                Assert.IsTrue(dec.Scale < int.MaxValue);
+                Assert.IsTrue(dec.Precision < int.MaxValue);
+            }
         }
 
         [Test]

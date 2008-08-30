@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Schema;
+using System.Data;
 
 namespace FdoToolbox.Core.Common
 {
@@ -33,10 +34,16 @@ namespace FdoToolbox.Core.Common
             InitFromClass(fc);
         }
 
+        public FdoFeatureTable(DataTable table)
+            : base()
+        {
+            InitFromTable(table);
+        }
+
         public override void InitFromClass(ClassDefinition classDef)
         {
             if (classDef.ClassType != ClassType.ClassType_FeatureClass)
-                throw new ArgumentException("The class is not a feature class");
+                throw new DataTableConversionException("The class is not a feature class");
 
             base.InitFromClass(classDef);
             FeatureClass fc = classDef as FeatureClass;
@@ -63,6 +70,11 @@ namespace FdoToolbox.Core.Common
         protected override ClassDefinition CreateClassDefinition()
         {
             return new FeatureClass(this.TableName, this.Description);
+        }
+
+        protected override ClassType GetClassType()
+        {
+            return ClassType.ClassType_FeatureClass;
         }
     }
 }

@@ -27,6 +27,7 @@ namespace FdoToolbox.Core.ETL
 {
     public class FdoMetaDataNames
     {
+        public const string FDO_CLASS_TYPE = "FDO_CLASS_TYPE";
         public const string FDO_CLASS_DESCRIPTION = "FDO_CLASS_DESCRIPTION";
 
         public const string FDO_IDENTITY_PROPERTY = "FDO_IDENTITY_PROPERTY";
@@ -67,6 +68,11 @@ namespace FdoToolbox.Core.ETL
         public static bool HasMetaData(DataColumn col, string key)
         {
             return col.ExtendedProperties[key] != null;
+        }
+
+        public static bool HasMetaData(DataTable table, string key)
+        {
+            return table.ExtendedProperties[key] != null;
         }
 
         public static int GetGeometryType(DataColumn col)
@@ -282,6 +288,21 @@ namespace FdoToolbox.Core.ETL
                     }
                 }
             }
+        }
+
+        public static object GetMetaData(DataTable table, string key)
+        {
+            return table.ExtendedProperties[key];
+        }
+
+        public static object GetMetaData(DataColumn col, string key)
+        {
+            return col.ExtendedProperties[key];
+        }
+
+        public static T GetMetaData<T>(DataColumn col, string key)
+        {
+            return (T)col.ExtendedProperties[key];
         }
     }
 }
