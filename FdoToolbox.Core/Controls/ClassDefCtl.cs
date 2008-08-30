@@ -129,13 +129,13 @@ namespace FdoToolbox.Core.Controls
                     FeatureClassExtendedInfoCtl ctl = new FeatureClassExtendedInfoCtl(GetGeometryPropertyList());
                     //Hook on to binding source change event so that
                     //we can sync the property list on the extended info control
-                    
-                    ctl.GeometryPropertyList = GetGeometryPropertyList();
+
+                    ctl.SetGeometryPropertyList(GetGeometryPropertyList());
                     ListChangedEventHandler listChanged =  delegate(object sender, ListChangedEventArgs e)
                     {
                         if (e.ListChangedType == ListChangedType.ItemAdded || e.ListChangedType == ListChangedType.ItemDeleted)
                         {
-                            ctl.GeometryPropertyList = GetGeometryPropertyList();
+                            ctl.SetGeometryPropertyList(GetGeometryPropertyList());
                         }
                     };
                     _BoundProperties.ListChanged += listChanged;
@@ -158,49 +158,6 @@ namespace FdoToolbox.Core.Controls
                     defs.Add((GeometricPropertyDefinition)def);
             }
             return defs;
-        }
-
-        /*
-        public override string Title
-        {
-            get
-            {
-                string title = string.Empty;
-                title = SetTitle(title);
-                return title;
-            }
-        }*/
-
-        private void SetTitle()
-        {
-            switch (_ClassDef.ClassType)
-            {
-                case ClassType.ClassType_Class:
-                    this.Title = "Class Definition - " + _ClassDef.Name;
-                    break;
-                case ClassType.ClassType_FeatureClass:
-                    this.Title = "Feature Class Definition - " + _ClassDef.Name;
-                    break;
-                case ClassType.ClassType_NetworkClass:
-                    this.Title = "Network Class Definition - " + _ClassDef.Name;
-                    break;
-                case ClassType.ClassType_NetworkLayerClass:
-                    this.Title = "Network Layer Class Definition - " + _ClassDef.Name;
-                    break;
-                case ClassType.ClassType_NetworkLinkClass:
-                    this.Title = "Network Link Class Definition - " + _ClassDef.Name;
-                    break;
-                case ClassType.ClassType_NetworkNodeClass:
-                    this.Title = "Network Node Class Definition - " + _ClassDef.Name;
-                    break;
-            }
-        }
-
-        private int counter = 0;
-
-        private string GetGeneratedPropertyName()
-        {
-            return "Property" + (counter++);
         }
 
         private void NewDataProperty_Click(object sender, EventArgs e)
@@ -240,8 +197,9 @@ namespace FdoToolbox.Core.Controls
             PropertyDefinition def = GetSelectedProperty();
             if (def != null)
             {
-                if (def.PropertyType == PropertyType.PropertyType_DataProperty && _ClassDef.IdentityProperties.Contains((DataPropertyDefinition)def))
-                    _ClassDef.IdentityProperties.Remove((DataPropertyDefinition)def);
+                DataPropertyDefinition dp = def as DataPropertyDefinition;
+                if (dp != null && _ClassDef.IdentityProperties.Contains(dp))
+                    _ClassDef.IdentityProperties.Remove(dp);
                 _BoundProperties.Remove(def);
             }
         }
@@ -336,14 +294,15 @@ namespace FdoToolbox.Core.Controls
             switch (_ClassDef.ClassType)
             {
                 case ClassType.ClassType_FeatureClass:
-                    Control ctl = this.ExtensionControl;
-                    Debug.Assert(ctl != null);
-                    Debug.Assert(ctl is FeatureClassExtendedInfoCtl);
-                    GeometricPropertyDefinition def = ((FeatureClassExtendedInfoCtl)ctl).GeometryProperty;
-                    if (def == null)
                     {
-                        ((FeatureClassExtendedInfoCtl)ctl).FlagError(errorProvider, "Please select a geometry property");
-                        valid = false;
+                        Control ctl = this.ExtensionControl;
+                        FeatureClassExtendedInfoCtl extCtl = (FeatureClassExtendedInfoCtl)ctl;
+                        GeometricPropertyDefinition def = extCtl.GeometryProperty;
+                        if (def == null)
+                        {
+                            extCtl.FlagError(errorProvider, "Please select a geometry property");
+                            valid = false;
+                        }
                     }
                     break;
             }
@@ -384,10 +343,11 @@ namespace FdoToolbox.Core.Controls
         private void btnMakeIdentity_Click(object sender, EventArgs e)
         {
             PropertyDefinition def = GetSelectedProperty();
-            if (def.PropertyType == PropertyType.PropertyType_DataProperty)
+            DataPropertyDefinition dp = def as DataPropertyDefinition;
+            if (dp != null)
             {
                 DataType[] supported = this.BoundConnection.Connection.SchemaCapabilities.SupportedIdentityPropertyTypes;
-                if (Array.IndexOf<DataType>(supported, ((DataPropertyDefinition)def).DataType) >= 0)
+                if (Array.IndexOf<DataType>(supported, (dp.DataType)) >= 0)
                 {
                     //Supports composite id (multiple identity properties)
                     if (this.BoundConnection.Connection.SchemaCapabilities.SupportsCompositeId)
@@ -402,7 +362,7 @@ namespace FdoToolbox.Core.Controls
                 }
                 else
                 {
-                    AppConsole.Alert("Error", "Cannot make identity property: " + ((DataPropertyDefinition)def).DataType + " not supported");
+                    AppConsole.Alert("Error", "Cannot make identity property: " + dp.DataType + " not supported");
                 }
             }
             else

@@ -146,9 +146,9 @@ namespace FdoToolbox.Core.Controls
                                 ProcessDataReader(table, aggParams, reader);
                             }
                         }
-                        catch (OSGeo.FDO.Common.Exception ex)
+                        catch (OSGeo.FDO.Common.Exception)
                         {
-                            throw ex;
+                            throw;
                         }
                         finally
                         {
@@ -236,7 +236,7 @@ namespace FdoToolbox.Core.Controls
             bgSql.ReportProgress(0, row);
         }
 
-        private void ProcessDataReader(DataTable table, NameValueCollection aggParams, OSGeo.FDO.Commands.Feature.IDataReader reader)
+        private static void ProcessDataReader(DataTable table, NameValueCollection aggParams, OSGeo.FDO.Commands.Feature.IDataReader reader)
         {
             DataRow row = table.NewRow();
             foreach (string identifier in aggParams.AllKeys)
@@ -311,7 +311,7 @@ namespace FdoToolbox.Core.Controls
         /// </summary>
         /// <param name="table"></param>
         /// <param name="reader"></param>
-        private void PrepareGrid(DataTable table, OSGeo.FDO.Commands.Feature.IDataReader reader)
+        private static void PrepareGrid(DataTable table, OSGeo.FDO.Commands.Feature.IDataReader reader)
         {
             int propCount = reader.GetPropertyCount();
             for (int i = 0; i < propCount; i++)
@@ -326,7 +326,7 @@ namespace FdoToolbox.Core.Controls
         /// </summary>
         /// <param name="table"></param>
         /// <param name="reader"></param>
-        private void PrepareGrid(DataTable table, ISQLDataReader reader)
+        private static void PrepareGrid(DataTable table, ISQLDataReader reader)
         {
             int propCount = reader.GetColumnCount();
             for (int i = 0; i < propCount; i++)
@@ -453,14 +453,13 @@ namespace FdoToolbox.Core.Controls
         /// </summary>
         /// <param name="table"></param>
         /// <param name="classDefinition"></param>
-        private void PrepareGrid(DataTable table, ClassDefinition classDefinition)
+        private static void PrepareGrid(DataTable table, ClassDefinition classDefinition)
         {
             FdoMetaData.CreateTableFromClass(table, classDefinition);
         }
 
         private void ProcessFeatureReader(DataTable table, PropertyDefinitionCollection propDefs, Dictionary<int, string> cachedPropertyNames, IFeatureReader reader)
         {
-            ClassDefinition classDef = reader.GetClassDefinition();
             DataRow row = table.NewRow();
             foreach (int key in cachedPropertyNames.Keys)
             {
@@ -627,7 +626,7 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
-        private int counter = 0;
+        private int counter;
 
         private void btnAddExpr_Click(object sender, EventArgs e)
         {
@@ -849,9 +848,9 @@ namespace FdoToolbox.Core.Controls
                         }
                     }
                 }
-                catch (OSGeo.FDO.Common.Exception ex)
+                catch (OSGeo.FDO.Common.Exception)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {
@@ -927,9 +926,9 @@ namespace FdoToolbox.Core.Controls
                             Thread.Sleep(75);
                     }
                 }
-                catch (OSGeo.FDO.Common.Exception ex)
+                catch (OSGeo.FDO.Common.Exception)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {

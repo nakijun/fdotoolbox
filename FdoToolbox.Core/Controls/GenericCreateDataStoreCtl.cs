@@ -132,7 +132,7 @@ namespace FdoToolbox.Core.Controls
             this.Close();
         }
 
-        private void InitializeGrid(DataGridView grid)
+        private static void InitializeGrid(DataGridView grid)
         {
             grid.Rows.Clear();
             grid.Columns.Clear();
@@ -149,19 +149,19 @@ namespace FdoToolbox.Core.Controls
             grid.Columns.Add(colValue);
         }
 
-        private DataGridViewRow AddRequiredProperty(DataGridView grid, string name, string defaultValue)
+        private static DataGridViewRow AddRequiredProperty(DataGridView grid, string name, string defaultValue)
         {
             //TODO: Attach a validation scheme
             return AddProperty(grid, name, defaultValue);
         }
 
-        private DataGridViewRow AddRequiredEnumerableProperty(DataGridView grid, string name, string defaultValue, IEnumerable<string> values)
+        private static DataGridViewRow AddRequiredEnumerableProperty(DataGridView grid, string name, string defaultValue, IEnumerable<string> values)
         {
             //TODO: Attach a validation scheme
             return AddOptionalEnumerableProperty(grid, name, defaultValue, values);
         }
 
-        private DataGridViewRow AddOptionalEnumerableProperty(DataGridView grid, string name, string defaultValue, IEnumerable<string> values)
+        private static DataGridViewRow AddOptionalEnumerableProperty(DataGridView grid, string name, string defaultValue, IEnumerable<string> values)
         {
             DataGridViewRow row = new DataGridViewRow();
             DataGridViewTextBoxCell nameCell = new DataGridViewTextBoxCell();
@@ -176,7 +176,7 @@ namespace FdoToolbox.Core.Controls
             return row;
         }
 
-        private DataGridViewRow AddProperty(DataGridView grid, string name, string defaultValue)
+        private static DataGridViewRow AddProperty(DataGridView grid, string name, string defaultValue)
         {
             DataGridViewRow row = new DataGridViewRow();
             DataGridViewTextBoxCell nameCell = new DataGridViewTextBoxCell();
