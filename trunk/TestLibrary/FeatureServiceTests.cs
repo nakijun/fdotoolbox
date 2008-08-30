@@ -33,6 +33,7 @@ using FdoToolbox.Core.Common;
 using FdoToolbox.Core.Utility;
 using OSGeo.FDO.Connections.Capabilities;
 using NMock2;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Tests
 {
@@ -225,7 +226,7 @@ namespace FdoToolbox.Tests
                     {
                         service.CreateSpatialContext(ctx, false);
 
-                        List<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                        ReadOnlyCollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
                         SpatialContextInfo sc = service.GetSpatialContext(ctx.Name);
 
                         Assert.IsNotNull(sc);
@@ -274,7 +275,7 @@ namespace FdoToolbox.Tests
                     {
                         service.CreateSpatialContext(ctx, false);
 
-                        List<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                        ReadOnlyCollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
                         SpatialContextInfo sc = service.GetSpatialContext(ctx.Name);
 
                         Assert.IsNotNull(sc);
