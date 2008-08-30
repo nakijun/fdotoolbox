@@ -25,6 +25,7 @@ using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Commands;
+using System.Collections.ObjectModel;
 
 namespace FdoInfo
 {
@@ -57,7 +58,7 @@ namespace FdoInfo
 
             using (FeatureService service = new FeatureService(conn))
             {
-                List<DataStoreInfo> datastores = service.ListDataStores(_FdoOnly);
+                ReadOnlyCollection<DataStoreInfo> datastores = service.ListDataStores(_FdoOnly);
                 AppConsole.WriteLine("Listing datastores:\n");
                 foreach (DataStoreInfo dstore in datastores)
                 {

@@ -23,6 +23,7 @@ using System.Text;
 using System.Diagnostics;
 using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Connections;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -42,8 +43,8 @@ namespace FdoToolbox.Core.ETL
             Debug.Assert(destConn.ConnectionInfo.ProviderName.Contains("OSGeo.SQLServerSpatial"));
             FeatureService srcService = new FeatureService(srcConn);
             FeatureService destService = new FeatureService(destConn);
-            List<SpatialContextInfo> srcContexts = srcService.GetSpatialContexts();
-            List<SpatialContextInfo> destContexts = destService.GetSpatialContexts();
+            ReadOnlyCollection<SpatialContextInfo> srcContexts = srcService.GetSpatialContexts();
+            ReadOnlyCollection<SpatialContextInfo> destContexts = destService.GetSpatialContexts();
             foreach (SpatialContextInfo ctx in srcContexts)
             {
                 if (spatialContextNames.Contains(ctx.Name))
@@ -51,7 +52,7 @@ namespace FdoToolbox.Core.ETL
                     try
                     {
                         //Find target spatial context of the same name
-                        SpatialContextInfo sci = destContexts.Find(delegate(SpatialContextInfo s) { return s.Name == ctx.Name; });
+                        SpatialContextInfo sci = destService.GetSpatialContext(ctx.Name);
                         if (sci != null)
                         {
                             //If found, destroy then create

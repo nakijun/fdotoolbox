@@ -33,6 +33,7 @@ using FdoToolbox.Core.ETL;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
 using OSGeo.FDO.Commands.Feature;
+using System.Collections.ObjectModel;
 #region overview
 /*
  * The bulk copy control is the front-end to the BulkCopyTask class.
@@ -173,11 +174,11 @@ namespace FdoToolbox.Core.Controls
             else
             {
                 chkSourceContextList.Items.Clear();
-                List<SpatialContextInfo> contexts = service.GetSpatialContexts();
-                contexts.ForEach(delegate(SpatialContextInfo ctx)
+                ReadOnlyCollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                foreach (SpatialContextInfo ctx in contexts)
                 {
                     chkSourceContextList.Items.Add(ctx.Name, false);
-                });
+                }
                 btnSave.Enabled = true;
                 cmbSrcSchema.DataSource = schemas;
             }

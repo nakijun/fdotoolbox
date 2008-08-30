@@ -30,7 +30,7 @@ namespace FdoToolbox.Core.ClientServices
     /// </summary>
     public class SpatialConnectionMgr : ISpatialConnectionMgr
     {
-        private int counter = 0;
+        private int counter;
 
         private Dictionary<string, IConnection> _ConnectionDict;
 
@@ -109,12 +109,21 @@ namespace FdoToolbox.Core.ClientServices
 
         public void Dispose()
         {
-            foreach (string name in GetConnectionNames())
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                _ConnectionDict[name].Close();
-                _ConnectionDict[name].Dispose();
+                foreach (string name in GetConnectionNames())
+                {
+                    _ConnectionDict[name].Close();
+                    _ConnectionDict[name].Dispose();
+                }
+                _ConnectionDict.Clear();
             }
-            _ConnectionDict.Clear();
         }
 
         public void RenameConnection(string oldName, string newName)

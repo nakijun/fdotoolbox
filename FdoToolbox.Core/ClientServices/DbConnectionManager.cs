@@ -8,7 +8,7 @@ namespace FdoToolbox.Core.ClientServices
 {
     public class DbConnectionManager : IDbConnectionManager
     {
-        private int counter = 0;
+        private int counter;
 
         private Dictionary<string, DbConnectionInfo> _Connections;
 
@@ -111,12 +111,21 @@ namespace FdoToolbox.Core.ClientServices
 
         public void Dispose()
         {
-            foreach (string name in GetConnectionNames())
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                _Connections[name].Connection.Close();
-                _Connections[name].Connection.Dispose();
+                foreach (string name in GetConnectionNames())
+                {
+                    _Connections[name].Connection.Close();
+                    _Connections[name].Connection.Dispose();
+                }
+                _Connections.Clear();
             }
-            _Connections.Clear();
         }
     }
 }

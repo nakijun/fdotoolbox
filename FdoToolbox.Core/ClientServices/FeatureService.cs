@@ -38,6 +38,7 @@ using OSGeo.FDO.Commands.SQL;
 using OSGeo.FDO.Filter;
 using OSGeo.FDO.Commands;
 using Iesi.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ClientServices
 {
@@ -418,7 +419,7 @@ namespace FdoToolbox.Core.ClientServices
         /// Enumerates all spatial contexts in the current connection
         /// </summary>
         /// <returns></returns>
-        public List<SpatialContextInfo> GetSpatialContexts()
+        public ReadOnlyCollection<SpatialContextInfo> GetSpatialContexts()
         {
             List<SpatialContextInfo> contexts = new List<SpatialContextInfo>();
             using (IGetSpatialContexts get = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
@@ -433,7 +434,7 @@ namespace FdoToolbox.Core.ClientServices
                     }
                 }
             }
-            return contexts;
+            return contexts.AsReadOnly();
         }
 
         /// <summary>
@@ -443,8 +444,13 @@ namespace FdoToolbox.Core.ClientServices
         /// <returns>The spatial context information if found. null if otherwise</returns>
         public SpatialContextInfo GetSpatialContext(string name)
         {
-            List<SpatialContextInfo> contexts = GetSpatialContexts();
-            return contexts.Find(delegate(SpatialContextInfo info) { return info.Name == name; });
+            ReadOnlyCollection<SpatialContextInfo> contexts = GetSpatialContexts();
+            foreach (SpatialContextInfo info in contexts)
+            {
+                if (info.Name == name)
+                    return info;
+            }
+            return null;
         }
 
         /// <summary>
@@ -550,7 +556,7 @@ namespace FdoToolbox.Core.ClientServices
         /// </summary>
         /// <param name="onlyFdoEnabled">If true, only fdo-enabled datastores are returned</param>
         /// <returns>A list of datastores</returns>
-        public List<DataStoreInfo> ListDataStores(bool onlyFdoEnabled)
+        public ReadOnlyCollection<DataStoreInfo> ListDataStores(bool onlyFdoEnabled)
         {
             List<DataStoreInfo> stores = new List<DataStoreInfo>();
             using (IListDataStores dlist = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ListDataStores) as IListDataStores)
@@ -575,7 +581,7 @@ namespace FdoToolbox.Core.ClientServices
                     }
                 }
             }
-            return stores;
+            return new ReadOnlyCollection<DataStoreInfo>(stores);
         }
 
         /// <summary>
@@ -660,17 +666,16 @@ namespace FdoToolbox.Core.ClientServices
         /// <typeparam name="T">The FDO command reference to create. This must match the command type specified by the <paramref name="commandType"/> parameter</typeparam>
         /// <param name="commandType">The type of FDO commadn to create</param>
         /// <returns></returns>
-        public T CreateCommand<T>(OSGeo.FDO.Commands.CommandType commandType) where T : OSGeo.FDO.Commands.ICommand
+        public T CreateCommand<T>(OSGeo.FDO.Commands.CommandType commandType) where T : class, OSGeo.FDO.Commands.ICommand
         {
-            return (T)_conn.CreateCommand(commandType);
+            return _conn.CreateCommand(commandType) as T;
         }
 
         public FeatureSchema AlterSchema(FeatureSchema schema, IncompatibleSchema incompatibleSchema)
         {
             //Clone the incoming schema so we can work with the cloned copy
             FeatureSchema altSchema = CloneSchema(schema);
-            ISchemaCapabilities caps = this.Connection.SchemaCapabilities;
-
+            
             //Process each incompatible class
             foreach (IncompatibleClass incClass in incompatibleSchema.Classes)
             {
@@ -1012,9 +1017,9 @@ namespace FdoToolbox.Core.ClientServices
                 {
                     string propName = propDef.Name;
                     DataPropertyDefinition dataDef = propDef as DataPropertyDefinition;
-                    AssociationPropertyDefinition assocDef = propDef as AssociationPropertyDefinition;
-                    GeometricPropertyDefinition geomDef = propDef as GeometricPropertyDefinition;
-                    RasterPropertyDefinition rasterDef = propDef as RasterPropertyDefinition;
+                    //AssociationPropertyDefinition assocDef = propDef as AssociationPropertyDefinition;
+                    //GeometricPropertyDefinition geomDef = propDef as GeometricPropertyDefinition;
+                    //RasterPropertyDefinition rasterDef = propDef as RasterPropertyDefinition;
                     ObjectPropertyDefinition objDef = propDef as ObjectPropertyDefinition;
                     if (!capabilities.SupportsAutoIdGeneration)
                     {
@@ -1059,8 +1064,7 @@ namespace FdoToolbox.Core.ClientServices
                     }
                     if (!capabilities.SupportsDefaultValue)
                     {
-                        if (propDef.PropertyType == PropertyType.PropertyType_DataProperty &&
-                            !string.IsNullOrEmpty((propDef as DataPropertyDefinition).DefaultValue))
+                        if (dataDef != null && !string.IsNullOrEmpty(dataDef.DefaultValue))
                         {
                             string classReason = "Class has properties with unsupported default values";
                             string propReason = "Default values not supported";
@@ -1219,6 +1223,13 @@ namespace FdoToolbox.Core.ClientServices
             using (select)
             {
                 SetSelectOptions(options, select);
+                select.Distinct = options.Distinct;
+                if(!string.IsNullOrEmpty(options.GroupFilter))
+                    select.GroupingFilter = Filter.Parse(options.GroupFilter);
+                foreach (string propName in options.GroupByProperties)
+                {
+                    select.Grouping.Add((Identifier)Identifier.Parse(propName));
+                }
                 reader = select.Execute();
             }
             return reader;
@@ -1231,7 +1242,7 @@ namespace FdoToolbox.Core.ClientServices
             if (options.IsFilterSet)
                 select.Filter = Filter.Parse(options.Filter);
 
-            if (options.PropertyList.Length > 0)
+            if (options.PropertyList.Count > 0)
             {
                 select.PropertyNames.Clear();
                 foreach (string propName in options.PropertyList)
@@ -1248,7 +1259,7 @@ namespace FdoToolbox.Core.ClientServices
                 }
             }
 
-            if (options.OrderBy.Length > 0)
+            if (options.OrderBy.Count > 0)
             {
                 foreach (string propertyName in options.OrderBy)
                 {

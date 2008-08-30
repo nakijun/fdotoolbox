@@ -45,27 +45,23 @@ namespace FdoToolbox.Core.Controls
         private void LoadPreferences()
         {
             IPreferenceDictionary dict = AppGateway.RunningApplication.Preferences;
-            List<string> stringPrefs = dict.GetStringPrefNames();
-            List<string> boolPrefs = dict.GetBooleanPrefNames();
-            List<string> doublePrefs = dict.GetDoublePrefNames();
-            List<string> intPrefs = dict.GetIntegerPrefNames();
-
-            foreach (string pref in stringPrefs)
+            
+            foreach (string pref in dict.StringPreferences)
             {
                 grdPreferences.Rows.Add(pref, dict.GetStringPref(pref), typeof(string));
             }
 
-            foreach (string pref in boolPrefs)
+            foreach (string pref in dict.BooleanPreferences)
             {
                 grdPreferences.Rows.Add(pref, dict.GetBooleanPref(pref), typeof(bool));
             }
 
-            foreach (string pref in doublePrefs)
+            foreach (string pref in dict.DoublePreferences)
             {
                 grdPreferences.Rows.Add(pref, dict.GetDoublePref(pref), typeof(double));
             }
 
-            foreach (string pref in intPrefs)
+            foreach (string pref in dict.IntegerPreferences)
             {
                 grdPreferences.Rows.Add(pref, dict.GetIntegerPref(pref), typeof(int));
             }

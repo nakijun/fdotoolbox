@@ -42,6 +42,7 @@ using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Utility;
 using OSGeo.FDO.Commands.SQL;
 using System.Threading;
+using System.Collections.ObjectModel;
 #region overview
 /*
  * Bulk Copy overview
@@ -566,10 +567,9 @@ namespace FdoToolbox.Core.ETL
             }
             else
             {
-                List<SpatialContextInfo> srcContexts = _SrcService.GetSpatialContexts();
                 foreach (string ctxName in _Options.SourceSpatialContexts)
                 {
-                    SpatialContextInfo srcContext = srcContexts.Find(delegate(SpatialContextInfo ctx) { return ctx.Name == ctxName; });
+                    SpatialContextInfo srcContext = _SrcService.GetSpatialContext(ctxName);
                     if (srcContext != null)
                     {
                         _DestService.CreateSpatialContext(srcContext, true);
