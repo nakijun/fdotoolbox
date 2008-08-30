@@ -43,14 +43,15 @@ namespace FdoToolbox.Core.Common
             {
                 string name = FdoMetaData.GetMetaData<string>(table, FdoMetaDataNames.FDO_FEATURE_CLASS_GEOMETRY_PROPERTY);
                 DataColumn col = this.Columns[name];
-                if (col is FdoGeometryColumn)
+                FdoGeometryColumn gc = col as FdoGeometryColumn;
+                if (gc != null)
                 {
-                    this.GeometryColumn = col as FdoGeometryColumn;
+                    this.GeometryColumn = gc;
                 }
                 else
                 {
                     //Convert to FdoGeometryColumn and replace original reference
-                    FdoGeometryColumn gc = new FdoGeometryColumn(col.ColumnName, col.Caption);
+                    gc = new FdoGeometryColumn(col.ColumnName, col.Caption);
                     gc.HasElevation = FdoMetaData.GetMetaData<bool>(col, FdoMetaDataNames.FDO_GEOMETRY_HAS_ELEVATION);
                     gc.HasMeasure = FdoMetaData.GetMetaData<bool>(col, FdoMetaDataNames.FDO_GEOMETRY_HAS_MEASURE);
                     gc.ReadOnly = FdoMetaData.GetMetaData<bool>(col, FdoMetaDataNames.FDO_GEOMETRY_READONLY);

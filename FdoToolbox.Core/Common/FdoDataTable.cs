@@ -33,9 +33,10 @@ namespace FdoToolbox.Core.Common
     /// </summary>
     public abstract class FdoDataTable : System.Data.DataTable 
     {
-        internal FdoDataTable() : base() { }
+        protected FdoDataTable() : base() { }
 
-        public FdoDataTable(string name, string description) : base() 
+        protected FdoDataTable(string name, string description)
+            : base() 
         {
             this.TableName = name;
             this.Description = description;
@@ -221,12 +222,19 @@ namespace FdoToolbox.Core.Common
                     switch (pt)
                     {
                         case PropertyType.PropertyType_DataProperty:
-                            classDef.Properties.Add((col as FdoDataColumn).GetPropertyDefinition());
-                            if (Array.IndexOf<DataColumn>(this.PrimaryKey, col) >= 0)
-                                classDef.IdentityProperties.Add((col as FdoDataColumn).GetPropertyDefinition() as DataPropertyDefinition);
+                            {
+                                FdoDataColumn dc = col as FdoDataColumn;
+                                PropertyDefinition pd = dc.GetPropertyDefinition();
+                                classDef.Properties.Add(pd);
+                                if (Array.IndexOf<DataColumn>(this.PrimaryKey, col) >= 0)
+                                    classDef.IdentityProperties.Add(pd as DataPropertyDefinition);
+                            }
                             break;
                         case PropertyType.PropertyType_GeometricProperty:
-                            classDef.Properties.Add((col as FdoGeometryColumn).GetPropertyDefinition());
+                            {
+                                FdoGeometryColumn gc = col as FdoGeometryColumn;
+                                classDef.Properties.Add(gc.GetPropertyDefinition());
+                            }
                             break;
                     }
                 }

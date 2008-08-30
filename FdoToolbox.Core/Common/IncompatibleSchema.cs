@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Common
 {
@@ -35,9 +36,9 @@ namespace FdoToolbox.Core.Common
 
         private List<IncompatibleClass> _Classes;
 
-        public List<IncompatibleClass> Classes
+        public ReadOnlyCollection<IncompatibleClass> Classes
         {
-            get { return _Classes; }
+            get { return _Classes.AsReadOnly(); }
         }
 
         public IncompatibleSchema(string name)
@@ -54,6 +55,11 @@ namespace FdoToolbox.Core.Common
                 sb.Append(cls.ToString() + "\n");
             }
             return sb.ToString();
+        }
+
+        public void AddClass(IncompatibleClass cls)
+        {
+            _Classes.Add(cls);
         }
     }
 }

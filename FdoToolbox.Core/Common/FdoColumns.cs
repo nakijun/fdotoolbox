@@ -29,7 +29,7 @@ namespace FdoToolbox.Core.Common
 {
     public abstract class FdoColumn : System.Data.DataColumn
     {
-        public FdoColumn() { }
+        protected FdoColumn() { }
 
         protected void LoadBaseAttributes(PropertyDefinition def)
         {

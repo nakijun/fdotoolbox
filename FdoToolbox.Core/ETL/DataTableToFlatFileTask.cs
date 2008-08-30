@@ -257,7 +257,6 @@ namespace FdoToolbox.Core.ETL
                 _OffendingRows = new List<string>();
             }
             List<string> idNames = new List<string>();
-            string geomProperty = null;
             //Get id properties
             foreach (DataColumn col in row.Table.PrimaryKey)
             {
