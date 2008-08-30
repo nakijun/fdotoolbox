@@ -48,6 +48,7 @@ namespace FdoToolbox.Core
         private IDbConnectionManager _dbConnMgr;
         private ISpatialConnectionBoundTabManager _TabManager;
         private ICoordinateSystemCatalog _CsCatalog;
+        private bool _init;
         
         private HostApplication() : base()
         {
@@ -86,7 +87,7 @@ namespace FdoToolbox.Core
                 try
                 {
                     _shell = shell;
-                    _shell.Title = this.Name;
+                    _shell.SetTitle(this.Name);
                     _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
 
                     InitConsole();
@@ -156,7 +157,7 @@ namespace FdoToolbox.Core
 
         private void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            OnApplicationException(e.Exception);
+            MessageBox.Show(e.Exception.ToString(), "Error");
         }
 
         protected override void CheckFdoPath()
@@ -179,13 +180,6 @@ namespace FdoToolbox.Core
                 }
             }
         }
-
-        protected void OnApplicationException(Exception ex)
-        {
-            MessageBox.Show(ex.ToString(), "Error");
-        }
-
-        private bool _init = false;
 
         private ToolStripMenuItem CreateSubMenu(ToolStripMenuItem menu, XmlNodeList nodes)
         {

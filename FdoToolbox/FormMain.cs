@@ -58,9 +58,9 @@ namespace FdoToolbox
             get { return this; }
         }
 
-        public string Title
+        public void SetTitle(string title)
         {
-            set { this.Text = value; }
+            this.Text = title;
         }
 
         public void SetStatusBarText(string text)

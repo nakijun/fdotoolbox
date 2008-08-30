@@ -29,7 +29,7 @@ namespace FdoToolbox.Core
     {
         IObjectExplorer ObjectExplorer { get; }
         IConsoleWindow ConsoleWindow { get; }
-        string Title { set; }
+        void SetTitle(string title);
 
         void SetStatusBarText(string text);
         MenuStrip MainMenu { get; }
