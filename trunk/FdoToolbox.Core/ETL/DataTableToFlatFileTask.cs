@@ -32,6 +32,7 @@ using OSGeo.FDO.Expression;
 using FdoToolbox.Core.Utility;
 using System.Threading;
 using System.Data;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -84,18 +85,36 @@ namespace FdoToolbox.Core.ETL
             try
             {
                 System.Data.DataTable table = _options.Table;
-
-                //Create ClassDefinition from table definition
-                ClassDefinition cls = CreateClass(table);
-
-                //Create schema for it
-                FeatureSchema schema = new FeatureSchema(_options.SchemaName, "");
-                schema.Classes.Add(cls);
-
                 _conn.Open();
-                using (FeatureService service = new FeatureService(_conn))
+                if (table is FdoDataTable)
+                {   
+                    using (FeatureService service = new FeatureService(_conn))
+                    {
+                        ClassDefinition cls = (table as FdoDataTable).GetClassDefinition();
+
+                        //Create schema for it
+                        FeatureSchema schema = new FeatureSchema(_options.SchemaName, "");
+                        schema.Classes.Add(cls);
+
+                        service.ApplySchema(schema);
+                    }
+                }
+                else
                 {
-                    service.ApplySchema(schema);
+                    FdoDataTable fdoTable = TableFactory.CreateTable(table);
+                    //Create ClassDefinition from table definition
+                    ClassDefinition cls = fdoTable.GetClassDefinition();
+
+                    using (FeatureService service = new FeatureService(_conn))
+                    {
+                        service.FixDataProperties(ref cls);
+
+                        //Create schema for it
+                        FeatureSchema schema = new FeatureSchema(_options.SchemaName, "");
+                        schema.Classes.Add(cls);
+
+                        service.ApplySchema(schema);
+                    }
                 }
 
                 int count = 0;
@@ -115,7 +134,7 @@ namespace FdoToolbox.Core.ETL
                             if (row[col] != null && row[col] != DBNull.Value)
                             {
                                 string name = col.ColumnName;
-                                if (FdoMetaData.HasMetaData(col, FdoMetaDataNames.FDO_GEOMETRY_PROPERTY))
+                                if (col is FdoGeometryColumn)
                                 {
                                     string fgfText = row[col].ToString();
                                     try
@@ -127,7 +146,7 @@ namespace FdoToolbox.Core.ETL
                                         }
                                         insert.PropertyValues.Add(new PropertyValue(name, new GeometryValue(fgf)));
                                     }
-                                    catch (OSGeo.FDO.Common.Exception ex) 
+                                    catch (OSGeo.FDO.Common.Exception ex)
                                     {
                                         //For one reason or another the FGF byte stream could not be parsed, 
                                         //so abort this insert
@@ -135,32 +154,47 @@ namespace FdoToolbox.Core.ETL
                                         LogOffendingRow(row, ex.Message);
                                     }
                                 }
-                                else
+                                else if (col is FdoDataColumn)
                                 {
+                                    FdoDataColumn dc = col as FdoDataColumn;
                                     object obj = row[col];
-                                    DataType dt = FdoMetaData.GetDataTypeForColumn(col);
-                                    if (dt == DataType.DataType_Boolean)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new BooleanValue(Convert.ToBoolean(obj))));
-                                    else if (dt == DataType.DataType_Byte)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new ByteValue(Convert.ToByte(obj))));
-                                    else if (dt == DataType.DataType_BLOB)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new BLOBValue((byte[])obj)));
-                                    else if (dt == DataType.DataType_DateTime)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new DateTimeValue(Convert.ToDateTime(obj))));
-                                    else if (dt == DataType.DataType_Decimal)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new DecimalValue(Convert.ToDouble(obj))));
-                                    else if (dt == DataType.DataType_Double)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new DoubleValue(Convert.ToDouble(obj))));
-                                    else if (dt == DataType.DataType_Int16)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new Int16Value(Convert.ToInt16(obj))));
-                                    else if (dt == DataType.DataType_Int32)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new Int32Value(Convert.ToInt32(obj))));
-                                    else if (dt == DataType.DataType_Int64)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new Int64Value(Convert.ToInt64(obj))));
-                                    else if (dt == DataType.DataType_Single)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new SingleValue(Convert.ToSingle(obj))));
-                                    else if (dt == DataType.DataType_String)
-                                        insert.PropertyValues.Add(new PropertyValue(name, new StringValue(Convert.ToString(obj))));
+                                    DataType dt = dc.GetDataType();
+                                    switch(dt)
+                                    {
+                                        case DataType.DataType_Boolean:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new BooleanValue(Convert.ToBoolean(obj))));
+                                            break;
+                                        case DataType.DataType_Byte:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new ByteValue(Convert.ToByte(obj))));
+                                            break;
+                                        case DataType.DataType_BLOB:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new BLOBValue((byte[])obj)));
+                                            break;
+                                        case DataType.DataType_DateTime:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new DateTimeValue(Convert.ToDateTime(obj))));
+                                            break;
+                                        case DataType.DataType_Decimal:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new DecimalValue(Convert.ToDouble(obj))));
+                                            break;
+                                        case DataType.DataType_Double:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new DoubleValue(Convert.ToDouble(obj))));
+                                            break;
+                                        case DataType.DataType_Int16:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new Int16Value(Convert.ToInt16(obj))));
+                                            break;
+                                        case DataType.DataType_Int32:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new Int32Value(Convert.ToInt32(obj))));
+                                            break;
+                                        case DataType.DataType_Int64:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new Int64Value(Convert.ToInt64(obj))));
+                                            break;
+                                        case DataType.DataType_Single:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new SingleValue(Convert.ToSingle(obj))));
+                                            break;
+                                        case DataType.DataType_String:
+                                            insert.PropertyValues.Add(new PropertyValue(name, new StringValue(Convert.ToString(obj))));
+                                            break;
+                                    }
                                 }
                             }
                         }
@@ -182,7 +216,6 @@ namespace FdoToolbox.Core.ETL
                             }
                         }
                     }
-                    _conn.Close();
                 }
                 //Log any offending rows
                 if (_OffendingRows != null && _OffendingRows.Count > 0)
@@ -210,6 +243,7 @@ namespace FdoToolbox.Core.ETL
             finally
             {
                 factory.Dispose();
+                _conn.Close();
                 _conn.Dispose();
             }
         }
@@ -225,97 +259,20 @@ namespace FdoToolbox.Core.ETL
             List<string> idNames = new List<string>();
             string geomProperty = null;
             //Get id properties
-            foreach (DataColumn col in row.Table.Columns)
+            foreach (DataColumn col in row.Table.PrimaryKey)
             {
-                if (FdoMetaData.HasMetaData(col, FdoMetaDataNames.FDO_IDENTITY_PROPERTY))
-                    idNames.Add(col.ColumnName);
-                else if (FdoMetaData.HasMetaData(col, FdoMetaDataNames.FDO_GEOMETRY_PROPERTY))
-                    geomProperty = col.ColumnName;
+                idNames.Add(col.ColumnName);
             }
-            if (idNames.Count > 0 && !string.IsNullOrEmpty(geomProperty))
+            if (idNames.Count > 0)
             {
                 StringBuilder msg = new StringBuilder("Unable to write row: [" + message + "]\n\t");
                 foreach (string idprop in idNames)
                 {
                     msg.Append("Identity Property (" + idprop + "): " + row[idprop] + "\n\t");
                 }
-                msg.Append("Geometry Property (" + geomProperty + "): " + row[geomProperty] + "\n\n");
+                //msg.Append("Geometry Property (" + geomProperty + "): " + row[geomProperty] + "\n\n");
                 _OffendingRows.Add(msg.ToString());
             }
-        }
-
-        private FeatureClass CreateClass(System.Data.DataTable table)
-        {
-            FeatureClass fc = new FeatureClass(_options.ClassName, "");
-            if (_options.UseFdoMetaData)
-            {
-                foreach (System.Data.DataColumn col in table.Columns)
-                {
-                    if (col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_PROPERTY] != null
-                     && col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_TYPE] != null
-                     && col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_HAS_ELEVATION] != null
-                     && col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_HAS_MEASURE] != null
-                     && col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_READONLY] != null)
-                    {
-                        GeometricPropertyDefinition gp = new GeometricPropertyDefinition(col.ColumnName, col.Caption);
-                        gp.GeometryTypes = Convert.ToInt32(col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_TYPE]);
-                        gp.HasElevation = Convert.ToBoolean(col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_HAS_ELEVATION]);
-                        gp.HasMeasure = Convert.ToBoolean(col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_HAS_MEASURE]);
-                        gp.ReadOnly = Convert.ToBoolean(col.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_READONLY]);
-                        fc.Properties.Add(gp);
-                    }
-                    else
-                    {
-                        DataPropertyDefinition dp = new DataPropertyDefinition(col.ColumnName, col.Caption);
-                        dp.IsAutoGenerated = FdoMetaData.IsAutoGenerated(col);
-                        dp.Nullable = FdoMetaData.IsNullable(col);
-                        dp.ReadOnly = FdoMetaData.IsReadOnly(col);
-                        dp.DataType = FdoMetaData.GetDataTypeForColumn(col);
-                        if (dp.DataType == DataType.DataType_String
-                        || dp.DataType == DataType.DataType_BLOB
-                        || dp.DataType == DataType.DataType_CLOB)
-                            dp.Length = FdoMetaData.GetLength(col);
-                        if (dp.DataType == DataType.DataType_Decimal)
-                        {
-                            dp.Scale = FdoMetaData.GetScale(col);
-                            dp.Precision = FdoMetaData.GetPrecision(col);
-                        }
-                        if (FdoMetaData.HasMetaData(col, FdoMetaDataNames.FDO_DATA_DEFAULT_VALUE))
-                            dp.DefaultValue = FdoMetaData.GetDefaultValue(col);
-
-                        fc.Properties.Add(dp);
-                        if (FdoMetaData.IsIdentityProperty(col))
-                            fc.IdentityProperties.Add(dp);
-                    }
-                }
-            }
-            else
-            {
-                Class cls = new Class(_options.ClassName, "");
-                //Infer from DataColumns
-                foreach (System.Data.DataColumn col in table.Columns)
-                {
-                    DataPropertyDefinition dp = new DataPropertyDefinition(col.ColumnName, col.Caption);
-                    dp.IsAutoGenerated = col.AutoIncrement;
-                    dp.Nullable = col.AllowDBNull;
-                    dp.ReadOnly = col.ReadOnly;
-                    dp.DataType = GetDataType(col.DataType);
-                    if (dp.DataType == DataType.DataType_BLOB || dp.DataType == DataType.DataType_CLOB || dp.DataType == DataType.DataType_String)
-                        dp.Length = col.MaxLength;
-                    if (dp.DataType == DataType.DataType_String)
-                        dp.DefaultValue = col.DefaultValue.ToString();
-                    if (dp.DataType == DataType.DataType_Decimal)
-                    {
-                        //DataColumn does not have this information so use the maximum supported value
-                        dp.Scale = _conn.SchemaCapabilities.MaximumDecimalScale;
-                        dp.Precision = _conn.SchemaCapabilities.MaximumDecimalPrecision;
-                    }
-                    cls.Properties.Add(dp);
-                    if (Array.IndexOf<System.Data.DataColumn>(table.PrimaryKey, col) >= 0)
-                        cls.IdentityProperties.Add(dp);
-                }
-            }
-            return fc;
         }
 
         private DataType GetDataType(Type type)

@@ -23,6 +23,7 @@ using System.Text;
 using FdoToolbox.Core.ETL;
 using OSGeo.FDO.Common;
 using OSGeo.FDO.Schema;
+using System.Data;
 
 namespace FdoToolbox.Core.Common
 {

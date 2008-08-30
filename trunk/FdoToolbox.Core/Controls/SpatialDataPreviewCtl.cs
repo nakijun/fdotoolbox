@@ -865,10 +865,12 @@ namespace FdoToolbox.Core.Controls
             DataRow row = e.UserState as DataRow;
             if (grdPreview.Rows.Count == 0)
             {
+                /*
                 DataTable table = new DataTable();
                 table.TableName = row.Table.TableName;
                 table.Merge(row.Table);
-
+                */
+                DataTable table = row.Table;
                 BindingSource bs = new BindingSource();
                 bs.DataSource = table;
                 grdPreview.DataSource = bs;
