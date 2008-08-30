@@ -47,7 +47,7 @@ namespace FdoToolbox.Core.Controls
             cmbTargetConnection.DataSource = new List<string>(AppGateway.RunningApplication.SpatialConnectionManager.GetConnectionNames());
         }
 
-        private bool update = false;
+        private bool update;
 
         public void LoadSettings(SpatialJoinTask task)
         {

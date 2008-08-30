@@ -35,15 +35,15 @@ namespace FdoToolbox.Core.Controls
             InitializeComponent();
         }
 
-        public FeatureClassExtendedInfoCtl(List<GeometricPropertyDefinition> defs)
+        public FeatureClassExtendedInfoCtl(IList<GeometricPropertyDefinition> defs)
             : this()
         {
-            this.GeometryPropertyList = defs;
+            this.SetGeometryPropertyList(defs);
         }
 
-        public List<GeometricPropertyDefinition> GeometryPropertyList
+        public void SetGeometryPropertyList(IList<GeometricPropertyDefinition> list)
         {
-            set { cmbGeometryProperty.DataSource = value; }
+            cmbGeometryProperty.DataSource = list;
         }
 
         public GeometricPropertyDefinition GeometryProperty

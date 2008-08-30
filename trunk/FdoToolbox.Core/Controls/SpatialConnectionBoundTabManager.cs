@@ -40,7 +40,7 @@ namespace FdoToolbox.Core.Controls
 
         public void RemoveTab(ISpatialConnectionBoundCtl ctl)
         {
-            bool removed = _ControlInstances[ctl.GetType()].Remove(ctl);
+            _ControlInstances[ctl.GetType()].Remove(ctl);
         }
 
         void ConnectionManager_ConnectionRenamed(string oldName, string newName)
