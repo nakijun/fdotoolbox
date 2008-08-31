@@ -71,9 +71,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BCPValueConversionTest.cs" />
+    <Compile Include="ConnectionBoundManagerTests.cs" />
     <Compile Include="ConnectionLoaderTests.cs" />
     <Compile Include="DataTypeTests.cs" />
-    <Compile Include="DbConnectionTests.cs" />
+    <Compile Include="DbConnectionManagerTests.cs" />
     <Compile Include="FdoStressTests.cs" />
     <Compile Include="GeometryTests.cs" />
     <Compile Include="MockApplication.cs" />
@@ -82,7 +83,6 @@
     <Compile Include="PreferenceTest.cs" />
     <Compile Include="AssertHelper.cs" />
     <Compile Include="BaseTest.cs" />
-    <Compile Include="DbConnectionManagerTests.cs" />
     <Compile Include="ExpressUtilityTests.cs" />
     <Compile Include="FeatureServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
