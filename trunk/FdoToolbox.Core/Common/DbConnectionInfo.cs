@@ -48,7 +48,7 @@ namespace FdoToolbox.Core.Common
             if (conn.State != ConnectionState.Open)
                 conn.Open();
 
-            DatabaseInfo db = new DatabaseInfo(conn.DataSource);
+            DatabaseInfo db = new DatabaseInfo(string.IsNullOrEmpty(conn.Database) ? conn.DataSource : conn.Database);
             using (DataTable tables = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new string [] { null, null, null, "TABLE"}))
             {
                 foreach (DataRow tableRow in tables.Rows)
