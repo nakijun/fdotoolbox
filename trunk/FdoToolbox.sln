@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLibrary", "TestLibrary\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner", "TestRunner\TestRunner.csproj", "{14EF3D6B-5001-457F-876B-BADC1A628CEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.UI", "FdoToolbox.UI\FdoToolbox.UI.csproj", "{ECC43DBA-E108-4AE6-BC8E-D67037A1B747}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,11 @@ Global
 		{14EF3D6B-5001-457F-876B-BADC1A628CEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14EF3D6B-5001-457F-876B-BADC1A628CEB}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{14EF3D6B-5001-457F-876B-BADC1A628CEB}.Test|Any CPU.Build.0 = Test|Any CPU
+		{ECC43DBA-E108-4AE6-BC8E-D67037A1B747}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECC43DBA-E108-4AE6-BC8E-D67037A1B747}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECC43DBA-E108-4AE6-BC8E-D67037A1B747}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECC43DBA-E108-4AE6-BC8E-D67037A1B747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECC43DBA-E108-4AE6-BC8E-D67037A1B747}.Test|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
