@@ -64,7 +64,7 @@ namespace FdoToolbox.Core.IO
             }
             ConsoleColor prevColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(s);
+            Console.Write(str);
             Console.ForegroundColor = prevColor;
         }
 
@@ -92,7 +92,7 @@ namespace FdoToolbox.Core.IO
             }
             ConsoleColor prevColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(s);
+            Console.WriteLine(str);
             Console.ForegroundColor = prevColor;
         }
 

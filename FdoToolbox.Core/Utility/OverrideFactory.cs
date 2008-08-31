@@ -28,27 +28,11 @@ namespace FdoToolbox.Core.Utility
     /// <summary>
     /// Utility class to create override objects
     /// </summary>
-    public sealed class OverrideFactory
+    public static class OverrideFactory
     {
-        private static Dictionary<string, Type> _CopySpatialContextOverrides;
+        private static Dictionary<string, Type> _CopySpatialContextOverrides = new Dictionary<string, Type>();
 
-        private static Dictionary<string, Type> _ClassNameOverrides;
-
-        static OverrideFactory()
-        {
-            _CopySpatialContextOverrides = new Dictionary<string, Type>();
-            _ClassNameOverrides = new Dictionary<string, Type>();
-
-            RegisterClassNameOverride("OSGeo.KingOracle", typeof(OracleClassNameOverride));
-            RegisterCopySpatialContextOverride("OSGeo.MySQL", typeof(MySqlCopySpatialContextOverride));
-            RegisterCopySpatialContextOverride("OSGeo.SHP", typeof(ShpCopySpatialContextOverride));
-            RegisterCopySpatialContextOverride("OSGeo.SQLServerSpatial", typeof(MsSqlCopySpatialContextOverride));
-
-            RegisterClassNameOverride("OSGeo.KingOracle.3.3", typeof(OracleClassNameOverride));
-            RegisterCopySpatialContextOverride("OSGeo.MySQL.3.3", typeof(MySqlCopySpatialContextOverride));
-            RegisterCopySpatialContextOverride("OSGeo.SHP.3.3", typeof(ShpCopySpatialContextOverride));
-            RegisterCopySpatialContextOverride("OSGeo.SQLServerSpatial.3.3", typeof(MsSqlCopySpatialContextOverride));
-        }
+        private static Dictionary<string, Type> _ClassNameOverrides = new Dictionary<string, Type>();
 
         public static void RegisterCopySpatialContextOverride(string providerName, Type overrideType)
         {
@@ -84,6 +68,18 @@ namespace FdoToolbox.Core.Utility
                 return (IClassNameOverride)Activator.CreateInstance(_ClassNameOverrides[providerName]);
             }
             return null;
+        }
+
+        public static void Initialize()
+        {
+            RegisterClassNameOverride("OSGeo.KingOracle", typeof(OracleClassNameOverride));
+            RegisterCopySpatialContextOverride("OSGeo.MySQL", typeof(MySqlCopySpatialContextOverride));
+            RegisterCopySpatialContextOverride("OSGeo.SHP", typeof(ShpCopySpatialContextOverride));
+            RegisterCopySpatialContextOverride("OSGeo.SQLServerSpatial", typeof(MsSqlCopySpatialContextOverride));
+
+            RegisterClassNameOverride("OSGeo.KingOracle.3.3", typeof(OracleClassNameOverride));
+            RegisterCopySpatialContextOverride("OSGeo.MySQL.3.3", typeof(MySqlCopySpatialContextOverride));
+            RegisterCopySpatialContextOverride("OSGeo.SHP.3.3", typeof(ShpCopySpatialContextOverride));
         }
     }
 }

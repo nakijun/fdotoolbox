@@ -42,13 +42,15 @@ namespace FdoToolbox.Core.Utility
     /// <summary>
     /// Utility class to supplement the Express Extension Module
     /// </summary>
-    public class ExpressUtility
+    public sealed class ExpressUtility
     {
         public const string PROVIDER_SDF = "OSGeo.SDF";
         public const string PROVIDER_SHP = "OSGeo.SHP";
 
         public const string CONN_FMT_SDF = "File={0}";
         public const string CONN_FMT_SHP = "DefaultFileLocation={0}";
+
+        private ExpressUtility() { }
 
         public static IConnection CreateSDFConnection(string sdfFile, bool readOnly)
         {
@@ -104,10 +106,10 @@ namespace FdoToolbox.Core.Utility
 
                     return conn;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     conn.Dispose();
-                    throw ex;
+                    throw;
                 }
             }
             else

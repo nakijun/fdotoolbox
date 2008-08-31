@@ -117,7 +117,7 @@ namespace FdoToolbox.Core.IO
 
         }
 
-        private void AppendColoredText(RichTextBox box, Color color, string text)
+        private static void AppendColoredText(RichTextBox box, Color color, string text)
         {
             if (box.InvokeRequired)
             {

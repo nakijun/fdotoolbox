@@ -26,6 +26,7 @@ using OSGeo.FDO.Commands;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.ClientServices;
 using System.Collections.ObjectModel;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.ETL
 {

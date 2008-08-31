@@ -52,7 +52,7 @@ namespace FdoToolbox.Core.Modules
         }
 
         [Command("test_runtask", "Test Run task")]
-        public void TestRunTask()
+        public static void TestRunTask()
         {
             DummyTask task = new DummyTask();
             new TaskProgressDlg(task).Run();

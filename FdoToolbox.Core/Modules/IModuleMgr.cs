@@ -23,6 +23,7 @@ using System.Text;
 using System.Reflection;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.Commands;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Modules
 {
@@ -36,19 +37,19 @@ namespace FdoToolbox.Core.Modules
         /// <summary>
         /// Gets the list of loaded modules
         /// </summary>
-        IModule[] LoadedModules { get; }
+        ReadOnlyCollection<IModule> LoadedModules { get; }
 
         /// <summary>
         /// Loads the module
         /// </summary>
         /// <param name="module"></param>
-        void LoadModule(IModule module);
+        void LoadModule(IModule extModule);
 
         /// <summary>
         /// Unloads the module
         /// </summary>
         /// <param name="module"></param>
-        void UnloadModule(IModule module);
+        void UnloadModule(IModule extModule);
 
         /// <summary>
         /// Gets a command (by name) from the global namespace
@@ -61,7 +62,7 @@ namespace FdoToolbox.Core.Modules
         /// Gets all the registered command names
         /// </summary>
         /// <returns></returns>
-        ICollection<string> GetCommandNames();
+        ICollection<string> CommandNames { get; }
 
         /// <summary>
         /// Loads a .net assembly and loads all IModule instances within

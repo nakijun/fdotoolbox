@@ -54,7 +54,7 @@ namespace FdoToolbox.Core.Modules
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ModuleBase() 
+        protected ModuleBase() 
         { 
             _CommandDictionary = new Dictionary<string, Command>(); 
             
@@ -67,11 +67,22 @@ namespace FdoToolbox.Core.Modules
                 if (cmdAttrs != null && cmdAttrs.Length == 1)
                 {
                     CommandAttribute attr = cmdAttrs[0];
+                    CommandExecuteHandler handler = null;
+                    
+                    if (method.IsStatic)
+                    {
+                        handler = (CommandExecuteHandler)Delegate.CreateDelegate(typeof(CommandExecuteHandler), method);
+                    }
+                    else
+                    {
+                        handler = (CommandExecuteHandler)Delegate.CreateDelegate(typeof(CommandExecuteHandler), this, method);
+                    }
+
                     Command cmd = new Command(
                         attr.Name,
                         attr.DisplayName,
                         attr.Description,
-                        (CommandExecuteHandler)Delegate.CreateDelegate(typeof(CommandExecuteHandler), this, method),
+                        handler,
                         this.Name
                     );
                     cmd.InvocationType = attr.InvocationType;

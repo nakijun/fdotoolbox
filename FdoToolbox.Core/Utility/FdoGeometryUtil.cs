@@ -35,11 +35,13 @@ namespace FdoToolbox.Core.Utility
     /// Utility class to convert fgf geometries to other forms
     /// and vice versa.
     /// </summary>
-    public class FdoGeometryUtil
+    public sealed class FdoGeometryUtil
     {
         const int FDO_DIM_XY = 0;
         const int FDO_DIM_Z = 1;
         const int FDO_DIM_M = 2;
+
+        private FdoGeometryUtil() { }
 
         /// <summary>
         /// Converts a FGF binary to a WKB binary

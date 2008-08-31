@@ -36,6 +36,8 @@ namespace FdoToolbox.Core.IO
     /// </summary>
     public sealed class DbConnLoader
     {
+        private DbConnLoader() { }
+
         /// <summary>
         /// Loads a connection from file
         /// </summary>

@@ -24,6 +24,7 @@ using NUnit.Framework;
 using FdoToolbox.Core.ETL;
 using FdoToolbox.Core.Common;
 using OSGeo.FDO.Connections;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Tests
 {
@@ -31,6 +32,12 @@ namespace FdoToolbox.Tests
     [Category("FdoToolboxCore")]
     public class OverrideTests : BaseTest
     {
+        [TestFixtureSetUp]
+        public void Setup()
+        {
+            OverrideFactory.Initialize();
+        }
+
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskMySql()
         {
