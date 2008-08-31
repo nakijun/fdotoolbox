@@ -55,12 +55,11 @@ namespace FdoToolbox.Core.ETL
         {
             _Source = source;
             _Target = target;
-            _BatchInsertSize = 0;
             _SourceClasses = new List<ClassCopyOptions>();
             _SourceSpatialContexts = new List<string>();
         }
 
-        private bool _ExpressMode = false;
+        private bool _ExpressMode;
 
         /// <summary>
         /// Constructor for express bulk copy tasks. The target will be created
@@ -76,7 +75,6 @@ namespace FdoToolbox.Core.ETL
             _SourceClasses = new List<ClassCopyOptions>();
             _SourceSpatialContexts = new List<string>();
             _ExpressMode = true;
-            _BatchInsertSize = 0;
             IConnection src = null;
             IConnection dest = null;
 
@@ -160,7 +158,7 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         /// <param name="path"></param>
         /// <param name="name"></param>
-        private void DeleteRelatedShpFiles(string path, string name)
+        private static void DeleteRelatedShpFiles(string path, string name)
         {
             string[] extensions = { "shp", "dbf", "prj", "shx", "idx", "cpg" };
             foreach (string ext in extensions)
@@ -186,11 +184,19 @@ namespace FdoToolbox.Core.ETL
         /// The name of the source spatial context to copy over if we are
         /// to copy spatial contexts
         /// </summary>
-        public List<string> SourceSpatialContexts
+        public ReadOnlyCollection<string> SourceSpatialContexts
         {
-            get { return _SourceSpatialContexts; }
+            get { return _SourceSpatialContexts.AsReadOnly(); }
         }
-	
+
+        /// <summary>
+        /// Adds a source spatial context to be copied
+        /// </summary>
+        /// <param name="context"></param>
+        public void AddSourceSpatialContext(string context)
+        {
+            _SourceSpatialContexts.Add(context);
+        }
 
         /// <summary>
         /// The target connection
@@ -291,9 +297,12 @@ namespace FdoToolbox.Core.ETL
         /// Gets all the classes to copy
         /// </summary>
         /// <returns></returns>
-        public ClassCopyOptions[] GetClassCopyOptions()
+        public ReadOnlyCollection<ClassCopyOptions> ClassCopyOptions
         {
-            return _SourceClasses.ToArray();
+            get
+            {
+                return _SourceClasses.AsReadOnly();
+            }
         }
 
         private bool _AlterSchema;
@@ -312,17 +321,26 @@ namespace FdoToolbox.Core.ETL
 
         public void Dispose()
         {
-            //Since connections in express mode are created outside of the
-            //connection manager's knowledge we have to clean them up explicitly
-            if (_ExpressMode)
-            {
-                if (this.Source.Connection.ConnectionState == ConnectionState.ConnectionState_Open)
-                    this.Source.Connection.Close();
-                if (this.Target.Connection.ConnectionState == ConnectionState.ConnectionState_Open)
-                    this.Target.Connection.Close();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-                this.Source.Connection.Dispose();
-                this.Target.Connection.Dispose();
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                //Since connections in express mode are created outside of the
+                //connection manager's knowledge we have to clean them up explicitly
+                if (_ExpressMode)
+                {
+                    if (this.Source.Connection.ConnectionState == ConnectionState.ConnectionState_Open)
+                        this.Source.Connection.Close();
+                    if (this.Target.Connection.ConnectionState == ConnectionState.ConnectionState_Open)
+                        this.Target.Connection.Close();
+
+                    this.Source.Connection.Dispose();
+                    this.Target.Connection.Dispose();
+                }
             }
         }
     }

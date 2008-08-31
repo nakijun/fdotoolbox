@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Core.Common;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -51,9 +52,27 @@ namespace FdoToolbox.Core.ETL
 
         private List<string> _ColumnList;
 
-        public List<string> ColumnList
+        public ReadOnlyCollection<string> ColumnList
         {
-            get { return _ColumnList; }
+            get { return _ColumnList.AsReadOnly(); }
+        }
+
+        /// <summary>
+        /// Adds a column to be copied
+        /// </summary>
+        /// <param name="column"></param>
+        public void AddColumn(string column)
+        {
+            _ColumnList.Add(column);
+        }
+
+        /// <summary>
+        /// Adds a list of columns to be copied
+        /// </summary>
+        /// <param name="columns"></param>
+        public void AddColumns(IEnumerable<string> columns)
+        {
+            _ColumnList.AddRange(columns);
         }
 
         private string _XColumn;

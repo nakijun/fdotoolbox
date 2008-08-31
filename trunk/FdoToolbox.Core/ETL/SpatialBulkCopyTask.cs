@@ -139,7 +139,7 @@ namespace FdoToolbox.Core.ETL
         }
 
         private ClassCollection _SourceClasses;
-        private ClassCopyOptions[] _ClassesToCopy;
+        private ReadOnlyCollection<ClassCopyOptions> _ClassesToCopy;
 
         /// <summary>
         /// Validate the task parameters. Any exceptions thrown should
@@ -147,10 +147,9 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         public override void ValidateTaskParameters()
         {
-            IConnection srcConn = _Options.Source.Connection;
             IConnection destConn = _Options.Target.Connection;
 
-            ValidateBulkCopyOptions(srcConn, destConn);
+            ValidateBulkCopyOptions(destConn);
         }
 
         public override void DoExecute()
@@ -179,7 +178,7 @@ namespace FdoToolbox.Core.ETL
                 if (_Options.ApplySchemaToTarget)
                 {
                     SendMessage("Applying schema for target (this may take a while)");
-                    FeatureSchema targetSchema = CreateTargetSchema(_Options.SourceSchemaName, srcConn);
+                    FeatureSchema targetSchema = CreateTargetSchema(_Options.SourceSchemaName);
                     if (_Options.AlterSchema)
                     {
                         SendMessage("Altering schema to be compatible with target connection");
@@ -252,8 +251,8 @@ namespace FdoToolbox.Core.ETL
                 foreach (ClassCopyOptions copyOpts in _ClassesToCopy)
                 {
                     int copied = 0;
-                    SendMessage(string.Format("Bulk Copying class {0} of {1}: {2}", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName));
-                    string[] propNames = copyOpts.PropertyNames;
+                    SendMessage(string.Format("Bulk Copying class {0} of {1}: {2}", classesCopied, _ClassesToCopy.Count, copyOpts.ClassName));
+                    ICollection<string> propNames = copyOpts.PropertyNames;
 
                     //See if we need to delete
                     if (copyOpts.DeleteClassData)
@@ -326,7 +325,7 @@ namespace FdoToolbox.Core.ETL
                             for (int i = 0; i < propDefs.Count; i++)
                             {
                                 string pName = propDefs[i].Name;
-                                if (Array.IndexOf<string>(propNames, pName) >= 0)
+                                if (propNames.Contains(pName))
                                 {
                                     cachedPropertyNames.Add(i, pName);
                                     if (propDefs[i].PropertyType == PropertyType.PropertyType_DataProperty)
@@ -369,7 +368,7 @@ namespace FdoToolbox.Core.ETL
                                     }
                                     catch (Exception ex)
                                     {
-                                        LogOffendingFeature(ex, cachedIdentityPropertyNames, propDefs, copyOpts, srcReader);
+                                        LogOffendingFeature(ex, cachedIdentityPropertyNames, propDefs, srcReader);
                                     }
                                     hasMore = srcReader.ReadNext();
                                 }
@@ -382,14 +381,14 @@ namespace FdoToolbox.Core.ETL
                                     {
                                         try
                                         {
-                                            ParameterValueCollection propVals = ProcessReaderBatched(cachedPropertyNames, propDefs, insertCmd, copyOpts, srcReader);
+                                            ParameterValueCollection propVals = ProcessReaderBatched(cachedPropertyNames, propDefs, copyOpts, srcReader);
                                             insertCmd.BatchParameterValues.Add(propVals);
                                             hasMore = srcReader.ReadNext();
                                             batchCount++;
                                         }
                                         catch (Exception ex)
                                         {
-                                            LogOffendingFeature(ex, cachedIdentityPropertyNames, propDefs, copyOpts, srcReader);
+                                            LogOffendingFeature(ex, cachedIdentityPropertyNames, propDefs, srcReader);
                                         }
                                     }
                                     while (batchCount < _Options.BatchInsertSize && hasMore);
@@ -406,9 +405,9 @@ namespace FdoToolbox.Core.ETL
                                 {
                                     oldpc = pc;
                                 #if DEBUG || TEST
-                                    SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3} of {4} features)", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName, copied, count));
+                                    SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3} of {4} features)", classesCopied, _ClassesToCopy.Count, copyOpts.ClassName, copied, count));
                                 #else
-                                    SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3}% of {4} features)", classesCopied, _ClassesToCopy.Length, copyOpts.ClassName, oldpc, count));
+                                    SendMessage(string.Format("Bulk Copying class {0} of {1}: {2} ({3}% of {4} features)", classesCopied, _ClassesToCopy.Count, copyOpts.ClassName, oldpc, count));
                                 #endif
                                     SendCount(oldpc);
                                 }
@@ -554,7 +553,7 @@ namespace FdoToolbox.Core.ETL
                 if (srcContext != null)
                 {
                     SendMessage("Found source spatial context: " + contextName);
-                    List<string> deleteList = new List<string>();
+                    
                     SpatialContextInfo destContext = _DestService.GetSpatialContext(contextName);
                     SendMessage("Deleting all target spatial contexts");
                     if (targetCanDestroySpatialContext)
@@ -584,7 +583,7 @@ namespace FdoToolbox.Core.ETL
         /// <param name="sourceSchemaName"></param>
         /// <param name="srcConn"></param>
         /// <returns></returns>
-        private FeatureSchema CreateTargetSchema(string sourceSchemaName, IConnection srcConn)
+        private FeatureSchema CreateTargetSchema(string sourceSchemaName)
         {
             SendMessage("Cloning source schema for target");
             FeatureSchema fs = _SrcService.GetSchemaByName(sourceSchemaName);
@@ -622,7 +621,7 @@ namespace FdoToolbox.Core.ETL
         /// <param name="destConn">The target connection</param>
         /// <param name="srcClasses">The classes to be copied</param>
         /// <param name="classesToCopy">The copy options for each specified class</param>
-        private void ValidateBulkCopyOptions(IConnection srcConn, IConnection destConn)
+        private void ValidateBulkCopyOptions(IConnection destConn)
         {
             //TODO: Validate length of data properties so that:
             //[source property length] <= [target property length]
@@ -634,7 +633,7 @@ namespace FdoToolbox.Core.ETL
             //Check that the source schema can be applied if we are not going to alter it.
             if (_Options.ApplySchemaToTarget && !_Options.AlterSchema)
             {
-                FeatureSchema targetSchema = CreateTargetSchema(_Options.SourceSchemaName, srcConn);
+                FeatureSchema targetSchema = CreateTargetSchema(_Options.SourceSchemaName);
                 IncompatibleSchema schema = null;
                 if (!destService.CanApplySchema(targetSchema, out schema))
                     throw new TaskValidationException("The source schema cannot be applied to the target:\n\n" + schema.ToString());
@@ -657,7 +656,7 @@ namespace FdoToolbox.Core.ETL
             if (_SourceClasses == null)
                 throw new TaskValidationException("Unable to get classes of feature schema: " + _Options.SourceSchemaName);
 
-            _ClassesToCopy = _Options.GetClassCopyOptions();
+            _ClassesToCopy = _Options.ClassCopyOptions;
             
             if (_Options.ApplySchemaToTarget)
             {
@@ -704,9 +703,9 @@ namespace FdoToolbox.Core.ETL
                     throw new TaskValidationException("Unable to find class " + className + " in schema " + _Options.SourceSchemaName);
 
                 ClassDefinition classDef = _SourceClasses[idx];
-                string[] propNames = copyOpts.PropertyNames;
+                ICollection<string> propNames = copyOpts.PropertyNames;
 
-                if (propNames.Length == 0)
+                if (propNames.Count == 0)
                     throw new TaskValidationException("Nothing to copy from class " + className + " in schema " + _Options.SourceSchemaName);
 
                 if (_Options.ApplySchemaToTarget)
@@ -861,7 +860,7 @@ namespace FdoToolbox.Core.ETL
         /// <param name="options"></param>
         /// <param name="srcClasses"></param>
         /// <returns></returns>
-        public static ClassCopyOptions[] GetAllClassCopyOptions(SpatialBulkCopyOptions options, ClassCollection srcClasses)
+        public static ReadOnlyCollection<ClassCopyOptions> GetAllClassCopyOptions(SpatialBulkCopyOptions options, ClassCollection srcClasses)
         {
             //Include *all* classes and *all* properties
             options.ClearClassCopyOptions();
@@ -869,7 +868,7 @@ namespace FdoToolbox.Core.ETL
             {
                 options.AddClassCopyOption(new ClassCopyOptions(classDef, true));
             }
-            return options.GetClassCopyOptions();
+            return options.ClassCopyOptions;
         }
 
         /// <summary>
@@ -888,7 +887,7 @@ namespace FdoToolbox.Core.ETL
 
         const string PARAM_PREFIX = "param_";
 
-        private ParameterValueCollection ProcessReaderBatched(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
+        private static ParameterValueCollection ProcessReaderBatched(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
         {
             ParameterValueCollection propVals = new ParameterValueCollection();
             foreach (int key in cachedPropertyNames.Keys)
@@ -1029,11 +1028,10 @@ namespace FdoToolbox.Core.ETL
             return propVals;
         }
 
-        private int ProcessReader(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
+        private static int ProcessReader(Dictionary<int, string> cachedPropertyNames, PropertyDefinitionCollection propDefs, IInsert insert, ClassCopyOptions copyOpts, IFeatureReader sourceReader)
         {
             int inserted = 0;
-            string targetClass = copyOpts.TargetClassName;
-
+            
             insert.PropertyValues.Clear();
             foreach (int key in cachedPropertyNames.Keys)
             {
@@ -1180,7 +1178,7 @@ namespace FdoToolbox.Core.ETL
 
         private List<string> _ErrorMsgs;
 
-        private void LogOffendingFeature(Exception ex, Dictionary<int, string> cachedIdentityPropertyNames, PropertyDefinitionCollection propDefs, ClassCopyOptions copyOpts, IFeatureReader srcReader)
+        private void LogOffendingFeature(Exception ex, Dictionary<int, string> cachedIdentityPropertyNames, PropertyDefinitionCollection propDefs, IFeatureReader srcReader)
         {
             StringBuilder msg = new StringBuilder("Error: " + ex.Message + "\n\tIdentity Properties:\n");
             foreach (int pidx in cachedIdentityPropertyNames.Keys)

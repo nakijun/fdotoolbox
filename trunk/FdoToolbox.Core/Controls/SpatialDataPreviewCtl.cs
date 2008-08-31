@@ -447,17 +447,7 @@ namespace FdoToolbox.Core.Controls
             }
             return propNames;
         }
-
-        /// <summary>
-        /// Prepares the data grid for standard query results
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="classDefinition"></param>
-        private static void PrepareGrid(DataTable table, ClassDefinition classDefinition)
-        {
-            FdoMetaData.CreateTableFromClass(table, classDefinition);
-        }
-
+        
         private void ProcessFeatureReader(DataTable table, PropertyDefinitionCollection propDefs, Dictionary<int, string> cachedPropertyNames, IFeatureReader reader)
         {
             DataRow row = table.NewRow();
@@ -1013,11 +1003,12 @@ namespace FdoToolbox.Core.Controls
                 string file = saveQueryDlg.FileName;
                 string ext = Path.GetExtension(file);
 
+                FdoDataTable fdoTable = table as FdoDataTable;
                 DataTableConversionOptions options = null;
                 if (ext.ToLower() == ".sdf")
-                    options = new DataTableConversionOptions(table, "OSGeo.SDF", file);
+                    options = new DataTableConversionOptions(fdoTable, "OSGeo.SDF", file);
                 else if (ext.ToLower() == ".shp")
-                    options = new DataTableConversionOptions(table, "OSGeo.SHP", file);
+                    options = new DataTableConversionOptions(fdoTable, "OSGeo.SHP", file);
                 else
                 {
                     AppConsole.Alert("Error", "Unsupported file extension");

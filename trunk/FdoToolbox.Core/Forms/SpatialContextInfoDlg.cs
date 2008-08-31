@@ -32,6 +32,7 @@ using OSGeo.FDO.Commands.Feature;
 using OSGeo.FDO.Expression;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.ClientServices;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -262,7 +263,7 @@ namespace FdoToolbox.Core.Forms
 
         private void btnCompute_Click(object sender, EventArgs e)
         {
-            List<ClassDefinition> classes = MultiClassPicker.GetClasses("Compute Extents", "Select the classes to compute extents", _BoundConnection);
+            ReadOnlyCollection<ClassDefinition> classes = MultiClassPicker.GetClasses("Compute Extents", "Select the classes to compute extents", _BoundConnection);
             if (classes.Count > 0)
             {
                 using (FeatureService service = new FeatureService(_BoundConnection.Connection))

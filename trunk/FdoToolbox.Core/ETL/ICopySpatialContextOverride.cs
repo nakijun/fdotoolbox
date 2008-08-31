@@ -21,11 +21,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Connections;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL
 {
     public interface ICopySpatialContextOverride
     {
-        void CopySpatialContexts(IConnection source, IConnection target, List<string> spatialContextNames);
+        void CopySpatialContexts(IConnection source, IConnection target, ReadOnlyCollection<string> spatialContextNames);
     }
 }

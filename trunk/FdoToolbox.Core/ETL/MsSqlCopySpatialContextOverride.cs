@@ -35,7 +35,7 @@ namespace FdoToolbox.Core.ETL
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <param name="spatialContextNames"></param>
-        public void CopySpatialContexts(IConnection srcConn, IConnection destConn, List<string> spatialContextNames)
+        public void CopySpatialContexts(IConnection srcConn, IConnection destConn, ReadOnlyCollection<string> spatialContextNames)
         {
             if (spatialContextNames.Count == 0)
                 return;

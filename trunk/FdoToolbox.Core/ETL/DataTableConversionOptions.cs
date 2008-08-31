@@ -21,17 +21,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.ETL
 {
     public class DataTableConversionOptions
     {
-        private DataTable _Table;
+        private FdoDataTable _Table;
 
         /// <summary>
         /// The source DataTable
         /// </summary>
-        public DataTable Table
+        public FdoDataTable Table
         {
             get { return _Table; }
             set { _Table = value; }
@@ -96,7 +97,7 @@ namespace FdoToolbox.Core.ETL
             set { _UseFdoMetaData = value; }
         }
 
-        public DataTableConversionOptions(DataTable table, string provider, string file) 
+        public DataTableConversionOptions(FdoDataTable table, string provider, string file) 
         {
             this.Table = table;
             this.FdoProvider = provider;

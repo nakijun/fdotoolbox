@@ -57,8 +57,9 @@ namespace FdoToolbox.Core.Forms
                 switch (propDef.PropertyType)
                 {
                     case PropertyType.PropertyType_DataProperty:
-                        if(!classDef.IdentityProperties.Contains(propDef as DataPropertyDefinition))
-                            AddDataField(propDef as DataPropertyDefinition);
+                        DataPropertyDefinition dp = propDef as DataPropertyDefinition;
+                        if(!classDef.IdentityProperties.Contains(dp))
+                            AddDataField(dp);
                         break;
                     case PropertyType.PropertyType_GeometricProperty:
                         AddGeometryField(propDef as GeometricPropertyDefinition);

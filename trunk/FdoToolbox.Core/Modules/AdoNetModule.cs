@@ -196,7 +196,7 @@ namespace FdoToolbox.Core.Modules
 
                     DbToPointCopyOptions options = new DbToPointCopyOptions(dbConnInfo, connInfo);
                     options.ClassName = diag.ClassName;
-                    options.ColumnList.AddRange(diag.GetColumns());
+                    options.AddColumns(diag.GetColumns());
                     options.Database = diag.Database;
                     options.SchemaName = diag.SchemaName;
                     options.Table = diag.Table;

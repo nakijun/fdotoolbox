@@ -239,16 +239,9 @@ namespace FdoToolbox.Core.ETL
             return expr;
         }
 
-        private string EscapeString(string str)
+        private static string EscapeString(string str)
         {
-            //If the string is null
-
-            if (str == null)
-                return str;
-
-            //If the string is empty
-
-            if (str == "")
+            if (string.IsNullOrEmpty(str))
                 return str;
 
             str = str.Replace("'", "''");
@@ -605,8 +598,17 @@ namespace FdoToolbox.Core.ETL
 
         public void Dispose()
         {
-            if (_PrimaryClass != null)
-                _PrimaryClass.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_PrimaryClass != null)
+                    _PrimaryClass.Dispose();
+            }
         }
 
         public override bool IsCountable

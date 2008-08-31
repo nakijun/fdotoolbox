@@ -90,7 +90,7 @@ namespace FdoToolbox.Core.Forms
 
             foreach (object obj in chkColumns.CheckedItems)
             {
-                options.ColumnList.Add(obj.ToString());
+                options.AddColumn(obj.ToString());
             }
 
             return options;
