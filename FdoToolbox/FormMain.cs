@@ -88,10 +88,10 @@ namespace FdoToolbox
                 ctl.WrappedControl.Dock = DockStyle.Fill;
                 
                 content.Controls.Add(ctl.WrappedControl);
-                ctl.WrappedControl.OnSetTabText += delegate(string title) { content.TabText = title; };
-                ctl.WrappedControl.OnClose += delegate { content.Close(); };
-                ctl.WrappedControl.OnAccept += delegate { content.DialogResult = DialogResult.OK; };
-                ctl.WrappedControl.OnCancel += delegate { content.DialogResult = DialogResult.Cancel; };
+                ctl.OnSetTabText += delegate(string title) { content.TabText = title; };
+                ctl.OnClose += delegate { content.Close(); };
+                ctl.OnAccept += delegate { content.DialogResult = DialogResult.OK; };
+                ctl.OnCancel += delegate { content.DialogResult = DialogResult.Cancel; };
                 content.Text = content.TabText = ctl.WrappedControl.Title;
             }
             content.Show(mDockPanel, DockState.Document);
@@ -112,16 +112,16 @@ namespace FdoToolbox
             return null;
         }
 
-        public void ShowDocumentWindow(BaseDocumentCtl ctl)
+        public void ShowDocumentWindow(IBaseDocumentCtl ctl)
         {
             if (ctl is ISpatialConnectionBoundCtl)
             {
                 ShowDocumentWindow(ctl as ISpatialConnectionBoundCtl);
                 return;
             }
-            ctl.Dock = DockStyle.Fill;
+            ctl.WrappedControl.Dock = DockStyle.Fill;
             DockContent content = new DockContent();
-            content.Controls.Add(ctl);
+            content.Controls.Add(ctl.WrappedControl);
             ctl.OnSetTabText += delegate(string title) { content.TabText = title; };
             ctl.OnClose += delegate { content.Close(); };
             ctl.OnAccept += delegate { content.DialogResult = DialogResult.OK; };
@@ -129,14 +129,7 @@ namespace FdoToolbox
             content.Text = content.TabText = ctl.Title;
             content.Show(mDockPanel, DockState.Document);
         }
-        /*
-        public List<IConnectionBoundCtl> GetConnectionBoundControlsByName(string name)
-        {
-            if (_BoundControls.ContainsKey(name))
-                return _BoundControls[name];
-            return null;
-        }
-        */
+        
         public IConsoleWindow ConsoleWindow
         {
             get { return _console; }

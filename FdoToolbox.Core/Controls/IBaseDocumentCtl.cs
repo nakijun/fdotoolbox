@@ -1,4 +1,4 @@
-#region LGPL Header
+﻿#region LGPL Header
 // Copyright (C) 2008, Jackie Ng
 // http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
 // 
@@ -18,20 +18,20 @@
 // 
 #endregion
 using System;
-using System.Collections.Generic;
-using System.Text;
-using OSGeo.FDO.Connections;
-using FdoToolbox.Core.Common;
+using System.Windows.Forms;
 
 namespace FdoToolbox.Core.Controls
 {
-    public interface ISpatialConnectionBoundCtl : IBaseDocumentCtl
+    public interface IBaseDocumentCtl
     {
-        SpatialConnectionInfo BoundConnection { get; }
-        void SetName(string name);
-        string GetKey();
-        void SetKey(string key);
-        string GetTabType();
-        BaseDocumentCtl WrappedControl { get; }
+        void Accept();
+        void Cancel();
+        void Close();
+        event EventHandler OnAccept;
+        event EventHandler OnCancel;
+        event EventHandler OnClose;
+        event TabTitleEventHandler OnSetTabText;
+        string Title { get; set; }
+        Control WrappedControl { get; }
     }
 }

@@ -29,7 +29,7 @@ namespace FdoToolbox.Core.Controls
 {
     public delegate void TabTitleEventHandler(string title);
 
-    public partial class BaseDocumentCtl : UserControl
+    public partial class BaseDocumentCtl : UserControl, IBaseDocumentCtl
     {
         public BaseDocumentCtl()
         {
@@ -77,6 +77,11 @@ namespace FdoToolbox.Core.Controls
         {
             if (this.OnClose != null)
                 this.OnClose(this, EventArgs.Empty);
+        }
+
+        public Control WrappedControl
+        {
+            get { return this; }
         }
     }
 }
