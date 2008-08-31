@@ -120,6 +120,7 @@
     <Compile Include="Controls\HelpCtl.Designer.cs">
       <DependentUpon>HelpCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\IBaseDocumentCtl.cs" />
     <Compile Include="Controls\PreferencesCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -661,12 +662,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FdoToolbox.Common\FdoToolbox.Common.csproj">
-      <Project>{38505392-8834-4D6F-988C-A7722F9CC4DB}</Project>
-      <Name>FdoToolbox.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

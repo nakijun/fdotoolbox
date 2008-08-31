@@ -35,6 +35,6 @@ namespace FdoToolbox.Core
         MenuStrip MainMenu { get; }
         ToolStripMenuItem GetRootMenuItem(string name);
 
-        void ShowDocumentWindow(BaseDocumentCtl ctl);
+        void ShowDocumentWindow(IBaseDocumentCtl ctl);
     }
 }
