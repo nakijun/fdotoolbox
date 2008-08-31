@@ -61,16 +61,28 @@ namespace FdoToolbox.Core.Forms
 
         protected override void OnLoad(EventArgs e)
         {
-            MyMeta.ITable table = _source.GetTable(txtDatabase.Text, txtTable.Text);
-            List<string> colNames = new List<string>();
-            foreach (MyMeta.IColumn col in table.Columns)
+            TableInfo table = _source.GetTable(txtTable.Text);
+
+            //MyMeta.ITable table = _source.GetTable(txtDatabase.Text, txtTable.Text);
+            if (table != null)
             {
-                colNames.Add(col.Name);
-                chkColumns.Items.Add(col.Name, false);
+                List<string> colNames = new List<string>();
+                foreach (ColumnInfo col in table.Columns)
+                {
+                    colNames.Add(col.Name);
+                    chkColumns.Items.Add(col.Name, false);
+                }
+                /*
+                List<string> colNames = new List<string>();
+                foreach (MyMeta.IColumn col in table.Columns)
+                {
+                    colNames.Add(col.Name);
+                    chkColumns.Items.Add(col.Name, false);
+                }*/
+                cmbX.DataSource = new List<string>(colNames);
+                cmbY.DataSource = new List<string>(colNames);
+                cmbZ.DataSource = new List<string>(colNames);
             }
-            cmbX.DataSource = new List<string>(colNames);
-            cmbY.DataSource = new List<string>(colNames);
-            cmbZ.DataSource = new List<string>(colNames);
             base.OnLoad(e);
         }
 

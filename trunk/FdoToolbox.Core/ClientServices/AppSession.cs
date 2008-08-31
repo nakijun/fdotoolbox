@@ -102,15 +102,13 @@ namespace FdoToolbox.Core.ClientServices
                         {
                             //Connection we are about to load exists
                             //skip it
-                            if (connInfo.Connection.ConnectionString == c.ConnectionString &&
-                                connInfo.Driver == c.Driver)
+                            if (connInfo.Connection.ConnectionString == c.ConnectionString)
                             {
                                 continue;
                             }
                         }
                         //Connection doesn't exist, so add it
-                        IDbConnection conn = new OleDbConnection(c.ConnectionString);
-                        connInfo = new DbConnectionInfo(c.Name, conn, c.Driver);
+                        connInfo = new DbConnectionInfo(c.Name, new OleDbConnection(c.ConnectionString));
                         AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(connInfo);
                     }
                 }

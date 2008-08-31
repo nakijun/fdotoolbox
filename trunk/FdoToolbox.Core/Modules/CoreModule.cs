@@ -428,7 +428,7 @@ namespace FdoToolbox.Core.Modules
                 return;
             }
             ISpatialConnectionBoundCtl ctl = _App.TabManager.CreateTab(typeof(SpatialDataPreviewCtl), connInfo);
-            _App.Shell.ShowDocumentWindow(ctl.WrappedControl);
+            _App.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(CoreModule.CMD_LOADTASK, "Load Task", ImageResourceName = "folder")]
@@ -525,7 +525,7 @@ namespace FdoToolbox.Core.Modules
                 return;
             }
             ISpatialConnectionBoundCtl ctl = _App.TabManager.CreateTab(typeof(SpatialContextCtl), connInfo);
-            _App.Shell.ShowDocumentWindow(ctl.WrappedControl);
+            _App.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(CoreModule.CMD_RENAMECONNECTION, "Rename Connection", InvocationType = CommandInvocationType.UI)]
@@ -580,7 +580,7 @@ namespace FdoToolbox.Core.Modules
             if (connInfo != null)
             {
                 ISpatialConnectionBoundCtl ctl = _App.TabManager.CreateTab(typeof(DataStoreMgrCtl), connInfo);
-                _App.Shell.ShowDocumentWindow(ctl.WrappedControl);
+                _App.Shell.ShowDocumentWindow(ctl);
             }
         }
 

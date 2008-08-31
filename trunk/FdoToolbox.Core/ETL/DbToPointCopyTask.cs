@@ -108,55 +108,6 @@ namespace FdoToolbox.Core.ETL
                 }
                 reader.Close();
             }
-            
-
-            /*
-            MyMeta.ITable table = this.Options.Source.GetTable(this.Options.Database, this.Options.Table);
-            foreach (string colName in this.Options.ColumnList)
-            {
-                bool found = false;
-                foreach (MyMeta.IColumn column in table.Columns)
-                {
-                    if (column.Name == colName)
-                        found = true;
-
-                    //If X, Y or Z column, make sure it is numeric
-                    if (column.Name == this.Options.XColumn || 
-                        column.Name == this.Options.YColumn ||
-                        column.Name == this.Options.ZColumn)
-                    {
-                        switch (column.LanguageType)
-                        {
-                            case "int":
-                                break;
-                            case "double":
-                                break;
-                            case "float":
-                                break;
-                            case "long":
-                                break;
-                            case "decimal":
-                                break;
-                            case "byte":
-                                break;
-                            case "short":
-                                break;
-                            default:
-                                throw new TaskValidationException(
-                                    string.Format(
-                                        "Column {0} is not a numeric column", 
-                                        colName));
-                        }
-                    }
-                }
-                if (!found)
-                    throw new TaskValidationException(
-                        string.Format(
-                            "Could not find column {0} in table {1}", 
-                            colName, 
-                            table.Name));
-            }
-             */
         }
 
         private static void CheckNumericColumn(System.Data.IDataReader reader, string name)

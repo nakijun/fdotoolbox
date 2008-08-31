@@ -111,12 +111,6 @@ namespace FdoToolbox.Core
                     InitMenus();
                     LoadDefinedModules();
 
-                    if (!File.Exists(this.LanguageMappingFile))
-                        File.WriteAllText(this.LanguageMappingFile, Properties.Resources.Languages);
-
-                    if (!File.Exists(this.DbTargetsFile))
-                        File.WriteAllText(this.DbTargetsFile, Properties.Resources.DbTargets);
-
                     AppSession.Restore();
                     _init = true;
                 }

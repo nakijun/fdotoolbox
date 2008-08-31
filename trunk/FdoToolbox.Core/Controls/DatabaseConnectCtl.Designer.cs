@@ -35,8 +35,6 @@ namespace FdoToolbox.Core.Controls
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.cmbDriver = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtConnStr = new System.Windows.Forms.TextBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
@@ -84,11 +82,9 @@ namespace FdoToolbox.Core.Controls
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.txtName);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.cmbDriver);
-            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(14, 17);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(483, 84);
+            this.groupBox1.Size = new System.Drawing.Size(483, 59);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Driver";
@@ -111,36 +107,15 @@ namespace FdoToolbox.Core.Controls
             this.label2.TabIndex = 2;
             this.label2.Text = "Name";
             // 
-            // cmbDriver
-            // 
-            this.cmbDriver.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbDriver.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDriver.FormattingEnabled = true;
-            this.cmbDriver.Location = new System.Drawing.Point(77, 46);
-            this.cmbDriver.Name = "cmbDriver";
-            this.cmbDriver.Size = new System.Drawing.Size(381, 21);
-            this.cmbDriver.TabIndex = 1;
-            this.cmbDriver.SelectedIndexChanged += new System.EventHandler(this.cmbDriver_SelectedIndexChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 49);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Driver";
-            // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.txtConnStr);
-            this.groupBox2.Location = new System.Drawing.Point(14, 107);
+            this.groupBox2.Location = new System.Drawing.Point(14, 82);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(483, 199);
+            this.groupBox2.Size = new System.Drawing.Size(483, 224);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Connection Properties";
@@ -154,7 +129,7 @@ namespace FdoToolbox.Core.Controls
             this.txtConnStr.Location = new System.Drawing.Point(23, 20);
             this.txtConnStr.Multiline = true;
             this.txtConnStr.Name = "txtConnStr";
-            this.txtConnStr.Size = new System.Drawing.Size(435, 152);
+            this.txtConnStr.Size = new System.Drawing.Size(435, 177);
             this.txtConnStr.TabIndex = 0;
             this.txtConnStr.Text = "Enter your connection string here";
             // 
@@ -191,8 +166,6 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cmbDriver;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtConnStr;
         private System.Windows.Forms.ErrorProvider errorProvider;
     }

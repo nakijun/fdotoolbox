@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using FdoToolbox.Core.ClientServices;
+using System.Data.Common;
+using System.Data.OleDb;
 
 namespace FdoToolbox.Core.Common
 {
@@ -16,66 +18,186 @@ namespace FdoToolbox.Core.Common
             set { _Name = value; }
         }
 
-        private IDbConnection _Connection;
+        private OleDbConnection _Connection;
 
-        public IDbConnection Connection
+        public OleDbConnection Connection
         {
             get { return _Connection; }
             set { _Connection = value; }
         }
 
-        private string _Driver;
-
-        public string Driver
-        {
-            get { return _Driver; }
-            set { _Driver = value; }
-        }
-
-        private MyMeta.dbRoot _Meta;
-
-        public MyMeta.dbRoot MetaData
-        {
-            get { return _Meta; }
-        }
 #if TEST
         public DbConnectionInfo() { }
 #endif
-        public DbConnectionInfo(string name, IDbConnection conn, string driver)
+        public DbConnectionInfo(string name, OleDbConnection conn)
         {
             this.Name = name;
             this.Connection = conn;
-            this.Driver = driver;
-            _Meta = new MyMeta.dbRoot();
-            _Meta.LanguageMappingFileName = AppGateway.RunningApplication.LanguageMappingFile;
-            _Meta.DbTargetMappingFileName = AppGateway.RunningApplication.DbTargetsFile;
-            _Meta.Language = "C#";
-            _Meta.DbTarget = driver.ToUpper();
-            _Meta.Connect(this.Driver, this.Connection.ConnectionString);
+
+            DiscoverSchema();
         }
 
-        public MyMeta.IDatabase GetDatabase(string name)
+        public void Refresh()
         {
-            foreach (MyMeta.IDatabase db in _Meta.Databases)
-            {
-                if (db.Name == name)
-                    return db;
-            }
-            return null;
+            DiscoverSchema();
         }
 
-        public MyMeta.ITable GetTable(string dbName, string tableName)
+        private void DiscoverSchema()
         {
-            MyMeta.IDatabase db = GetDatabase(dbName);
-            if (db != null)
+            OleDbConnection conn = this.Connection;
+            if (conn.State != ConnectionState.Open)
+                conn.Open();
+
+            DatabaseInfo db = new DatabaseInfo(conn.DataSource);
+            using (DataTable tables = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new string [] { null, null, null, "TABLE"}))
             {
-                foreach (MyMeta.ITable table in db.Tables)
+                foreach (DataRow tableRow in tables.Rows)
                 {
-                    if (table.Name == tableName)
-                        return table;
+                    string tableName = tableRow["TABLE_NAME"].ToString();
+                    TableInfo tbl = new TableInfo(tableName);
+
+                    List<string> pkNames = new List<string>();
+                    using (DataTable pks = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Primary_Keys, new string[] { null, null, tableName }))
+                    {
+                        foreach (DataRow pkRow in pks.Rows)
+                        {
+                            string colName = pkRow["COLUMN_NAME"].ToString();
+                            ColumnInfo col = new ColumnInfo(colName);
+                            col.IsPrimaryKey = true;
+                            tbl.AddColumn(col);
+                            pkNames.Add(col.Name);
+                        }
+                    }
+
+                    using (DataTable columns = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, new string[] { null, null, tableName, null }))
+                    {
+                        foreach (DataRow colRow in columns.Rows)
+                        {
+                            string colName = colRow["COLUMN_NAME"].ToString();
+                            if (!pkNames.Contains(colName))
+                            {
+                                ColumnInfo col = new ColumnInfo(colName);
+                                tbl.AddColumn(col);
+                            }
+                        }
+                    }
+
+                    db.AddTable(tbl);
                 }
             }
+            _Database = db;
+        }
+
+        private DatabaseInfo _Database;
+
+        public DatabaseInfo Database
+        {
+            get { return _Database; }
+        }
+
+        public TableInfo GetTable(string tableName)
+        {
+            foreach (TableInfo tbl in this.Database.Tables)
+            {
+                if (tbl.Name == tableName)
+                    return tbl;
+            }
             return null;
+        }
+    }
+
+    public class DatabaseInfo
+    {
+        private string _Name;
+
+        public string Name
+        {
+            get { return _Name; }
+        }
+
+        private List<TableInfo> _Tables;
+
+        public IEnumerable<TableInfo> Tables
+        {
+            get { return _Tables; }
+        }
+
+        public DatabaseInfo(string name)
+        {
+            _Tables = new List<TableInfo>();
+            _Name = name;
+        }
+
+        public void AddTable(TableInfo table)
+        {
+            _Tables.Add(table);
+        }
+    }
+
+    public class TableInfo
+    {
+        private List<ColumnInfo> _Columns;
+
+        public IEnumerable<ColumnInfo> Columns
+        {
+            get { return _Columns; }
+        }
+
+        private string _Name;
+
+        public string Name
+        {
+            get { return _Name; }
+        }
+
+        private string _Description;
+
+        public string Description
+        {
+            get { return _Description; }
+            set { _Description = value; }
+        }
+	
+        private bool _IsView;
+
+        public bool IsView
+        {
+            get { return _IsView; }
+            set { _IsView = value; }
+        }
+	
+        public TableInfo(string name)
+        {
+            _Name = name;
+            _Columns = new List<ColumnInfo>();
+        }
+
+        public void AddColumn(ColumnInfo column)
+        {
+            _Columns.Add(column);
+        }
+    }
+
+    public class ColumnInfo
+    {
+        private string _Name;
+
+        public string Name
+        {
+            get { return _Name; }
+        }
+
+        private bool _IsPrimaryKey;
+
+        public bool IsPrimaryKey
+        {
+            get { return _IsPrimaryKey; }
+            set { _IsPrimaryKey = value; }
+        }
+	
+        public ColumnInfo(string name)
+        {
+            _Name = name;
         }
     }
 }

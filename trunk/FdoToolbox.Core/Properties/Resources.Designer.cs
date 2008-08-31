@@ -81,8 +81,9 @@ namespace FdoToolbox.Core.Properties {
         ///- DockPanel Suite (c) Weifen Luo (http://sourceforge.net/projects/dockpanelsuite)
         ///- famfamfam silk icon set (c) Mark James (http://www.famfamfam.com/lab/icons/silk/)
         ///- ADO.NET 2.0 SQLite Data Provider (c) Robert Simpson (http://sqlite.phxsoftware.com)
-        ///- MyMeta (c) MyGeneration Software (http://sourceforge.net/projects/mygeneration)
-        ///- Iesi.Collections (c) Jason Smit [rest of string was truncated]&quot;;.
+        ///- Iesi.Collections (c) Jason Smith
+        ///
+        ///This application and its non-thirdparty components are licensed under the GNU  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string APP_ABOUT {
             get {
@@ -209,27 +210,6 @@ namespace FdoToolbox.Core.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;DbTargets&gt;
-        ///	&lt;DbTarget From=&quot;SQL&quot; To=&quot;SqlClient&quot;&gt;
-        ///		&lt;Type From=&quot;bigint&quot; To=&quot;SqlDbType.BigInt&quot; /&gt;
-        ///		&lt;Type From=&quot;binary&quot; To=&quot;SqlDbType.Binary&quot; /&gt;
-        ///		&lt;Type From=&quot;bit&quot; To=&quot;SqlDbType.Bit&quot; /&gt;
-        ///		&lt;Type From=&quot;char&quot; To=&quot;SqlDbType.Char&quot; /&gt;
-        ///		&lt;Type From=&quot;datetime&quot; To=&quot;SqlDbType.DateTime&quot; /&gt;
-        ///		&lt;Type From=&quot;decimal&quot; To=&quot;SqlDbType.Decimal&quot; /&gt;
-        ///		&lt;Type From=&quot;float&quot; To=&quot;SqlDbType.Float&quot; /&gt;
-        ///		&lt;Type From=&quot;image&quot; To=&quot;SqlDbType.Image&quot; /&gt;
-        ///		&lt;Type From=&quot;int&quot; To=&quot;SqlDbType.Int&quot; /&gt;
-        ///		 [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string DbTargets {
-            get {
-                return ResourceManager.GetString("DbTargets", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Bitmap disk {
             get {
                 object obj = ResourceManager.GetObject("disk", resourceCulture);
@@ -276,29 +256,6 @@ namespace FdoToolbox.Core.Properties {
             get {
                 object obj = ResourceManager.GetObject("key", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;Languages&gt;
-        ///	&lt;Language From=&quot;SQL&quot; To=&quot;C#&quot;&gt;
-        ///		&lt;Type From=&quot;bigint&quot; To=&quot;long&quot; /&gt;
-        ///		&lt;Type From=&quot;binary&quot; To=&quot;object&quot; /&gt;
-        ///		&lt;Type From=&quot;bit&quot; To=&quot;bool&quot; /&gt;
-        ///		&lt;Type From=&quot;char&quot; To=&quot;string&quot; /&gt;
-        ///		&lt;Type From=&quot;datetime&quot; To=&quot;DateTime&quot; /&gt;
-        ///		&lt;Type From=&quot;decimal&quot; To=&quot;decimal&quot; /&gt;
-        ///		&lt;Type From=&quot;float&quot; To=&quot;double&quot; /&gt;
-        ///		&lt;Type From=&quot;image&quot; To=&quot;byte[]&quot; /&gt;
-        ///		&lt;Type From=&quot;int&quot; To=&quot;int&quot; /&gt;
-        ///		&lt;Type From=&quot;money&quot; To=&quot;decimal&quot; /&gt;
-        ///		&lt;Type From=&quot;nchar&quot; To=&quot;string&quot; /&gt;
-        ///		&lt;Type From=&quot;ntext&quot;  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string Languages {
-            get {
-                return ResourceManager.GetString("Languages", resourceCulture);
             }
         }
         
