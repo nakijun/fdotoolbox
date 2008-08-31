@@ -411,7 +411,7 @@ namespace FdoToolbox.Core.ETL
                 foreach (DataColumn col in row.Table.Columns)
                 {
                     string propName = col.ColumnName;
-                    if (row[col] != null)
+                    if (row[col] != null && row[col] != DBNull.Value)
                     {
                         PropertyValue propVal = null;
                         if (col.DataType == typeof(byte[]))
