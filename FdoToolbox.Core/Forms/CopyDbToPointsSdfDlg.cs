@@ -28,6 +28,7 @@ using FdoToolbox.Core.Common;
 using FdoToolbox.Core.ETL;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.ClientServices;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -72,14 +73,14 @@ namespace FdoToolbox.Core.Forms
             base.OnLoad(e);
         }
 
-        public List<string> GetColumns()
+        public ReadOnlyCollection<string> GetColumns()
         {
             List<string> columns = new List<string>();
             foreach (object obj in chkColumns.CheckedItems)
             {
                 columns.Add(obj.ToString());
             }
-            return columns;
+            return columns.AsReadOnly();
         }
 
         public string FilePath { get { return txtFilePath.Text; } }

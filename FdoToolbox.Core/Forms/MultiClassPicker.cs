@@ -28,6 +28,7 @@ using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.ClientServices;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -68,17 +69,17 @@ namespace FdoToolbox.Core.Forms
             }
         }
 
-        public List<ClassDefinition> GetSelectedClasses()
+        public ReadOnlyCollection<ClassDefinition> GetSelectedClasses()
         {
             List<ClassDefinition> list = new List<ClassDefinition>();
             foreach(object obj in lstClasses.SelectedItems)
             {
                 list.Add((ClassDefinition)obj);
             }
-            return list;
+            return list.AsReadOnly();
         }
 
-        public static List<ClassDefinition> GetClasses(string title, string prompt, SpatialConnectionInfo connInfo)
+        public static ReadOnlyCollection<ClassDefinition> GetClasses(string title, string prompt, SpatialConnectionInfo connInfo)
         {
             MultiClassPicker diag = new MultiClassPicker(connInfo);
             diag.Text = title;

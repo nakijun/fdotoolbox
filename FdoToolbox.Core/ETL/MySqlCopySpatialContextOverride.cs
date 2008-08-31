@@ -42,7 +42,7 @@ namespace FdoToolbox.Core.ETL
     /// </summary>
     public class MySqlCopySpatialContextOverride : ICopySpatialContextOverride
     {
-        public void CopySpatialContexts(IConnection srcConn, IConnection destConn, List<string> spatialContextNames)
+        public void CopySpatialContexts(IConnection srcConn, IConnection destConn, ReadOnlyCollection<string> spatialContextNames)
         {
             if (spatialContextNames.Count == 0)
                 return;

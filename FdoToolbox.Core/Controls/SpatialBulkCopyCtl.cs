@@ -129,7 +129,7 @@ namespace FdoToolbox.Core.Controls
                         chkSourceContextList.SetItemChecked(idx, true);
                 }
             }
-            ClassCopyOptions[] copts = task.Options.GetClassCopyOptions();
+            ReadOnlyCollection<ClassCopyOptions> copts = task.Options.ClassCopyOptions;
             foreach (ClassCopyOptions classCopyOption in copts)
             {
                 //Map the class node
@@ -139,7 +139,7 @@ namespace FdoToolbox.Core.Controls
                 TreeNode optionsNode = classNode.Nodes[IDX_OPTIONS];
                 TreeNode propertiesNode = classNode.Nodes[IDX_PROPERTIES];
                 //Now map its properties
-                string[] srcProperties = classCopyOption.PropertyNames;
+                ICollection<string> srcProperties = classCopyOption.PropertyNames;
                 foreach (string sourceProp in srcProperties)
                 {
                     string key = PREFIX_PROPERTY + sourceProp;
@@ -645,7 +645,7 @@ namespace FdoToolbox.Core.Controls
             {
                 foreach (object item in chkSourceContextList.CheckedItems)
                 {
-                    options.SourceSpatialContexts.Add(item.ToString());
+                    options.AddSourceSpatialContext(item.ToString());
                 }
             }
             foreach (TreeNode classNode in GetRootNode().Nodes)

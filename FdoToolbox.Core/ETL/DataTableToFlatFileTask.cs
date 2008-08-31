@@ -84,37 +84,17 @@ namespace FdoToolbox.Core.ETL
             FgfGeometryFactory factory = new FgfGeometryFactory();
             try
             {
-                System.Data.DataTable table = _options.Table;
+                FdoDataTable table = _options.Table;
                 _conn.Open();
-                if (table is FdoDataTable)
-                {   
-                    using (FeatureService service = new FeatureService(_conn))
-                    {
-                        ClassDefinition cls = (table as FdoDataTable).GetClassDefinition();
-
-                        //Create schema for it
-                        FeatureSchema schema = new FeatureSchema(_options.SchemaName, "");
-                        schema.Classes.Add(cls);
-
-                        service.ApplySchema(schema);
-                    }
-                }
-                else
+                using (FeatureService service = new FeatureService(_conn))
                 {
-                    FdoDataTable fdoTable = TableFactory.CreateTable(table);
-                    //Create ClassDefinition from table definition
-                    ClassDefinition cls = fdoTable.GetClassDefinition();
+                    ClassDefinition cls = (table as FdoDataTable).GetClassDefinition();
 
-                    using (FeatureService service = new FeatureService(_conn))
-                    {
-                        service.FixDataProperties(ref cls);
+                    //Create schema for it
+                    FeatureSchema schema = new FeatureSchema(_options.SchemaName, "");
+                    schema.Classes.Add(cls);
 
-                        //Create schema for it
-                        FeatureSchema schema = new FeatureSchema(_options.SchemaName, "");
-                        schema.Classes.Add(cls);
-
-                        service.ApplySchema(schema);
-                    }
+                    service.ApplySchema(schema);
                 }
 
                 int count = 0;
@@ -232,9 +212,9 @@ namespace FdoToolbox.Core.ETL
                     SendMessage("Copy complete");
                 }
             }
-            catch (OSGeo.FDO.Common.Exception ex)
+            catch (OSGeo.FDO.Common.Exception)
             {
-                throw ex;
+                throw;
             }
             catch (ThreadAbortException)
             {
@@ -272,36 +252,6 @@ namespace FdoToolbox.Core.ETL
                 //msg.Append("Geometry Property (" + geomProperty + "): " + row[geomProperty] + "\n\n");
                 _OffendingRows.Add(msg.ToString());
             }
-        }
-
-        private DataType GetDataType(Type type)
-        {
-            if (type == typeof(bool))
-                return DataType.DataType_Boolean;
-            else if (type == typeof(byte))
-                return DataType.DataType_Byte;
-            else if (type == typeof(byte[]))
-                return DataType.DataType_BLOB;
-            else if (type == typeof(char[]))
-                return DataType.DataType_CLOB;
-            else if (type == typeof(DateTime))
-                return DataType.DataType_DateTime;
-            else if (type == typeof(decimal))
-                return DataType.DataType_Decimal;
-            else if (type == typeof(double))
-                return DataType.DataType_Double;
-            else if (type == typeof(short))
-                return DataType.DataType_Int16;
-            else if (type == typeof(int))
-                return DataType.DataType_Int32;
-            else if (type == typeof(long))
-                return DataType.DataType_Int64;
-            else if (type == typeof(float))
-                return DataType.DataType_Single;
-            else if (type == typeof(string))
-                return DataType.DataType_String;
-            else
-                throw new ArgumentException("Unable to get matching DataType for type: " + type);
         }
 
         public override TaskType TaskType

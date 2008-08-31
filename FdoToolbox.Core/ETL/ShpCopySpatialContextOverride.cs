@@ -25,6 +25,7 @@ using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Commands;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.ClientServices;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -34,7 +35,7 @@ namespace FdoToolbox.Core.ETL
     /// </summary>
     public class ShpCopySpatialContextOverride : ICopySpatialContextOverride
     {
-        public void CopySpatialContexts(IConnection srcConn, IConnection destConn, List<string> spatialContextNames)
+        public void CopySpatialContexts(IConnection srcConn, IConnection destConn, ReadOnlyCollection<string> spatialContextNames)
         {
             if (spatialContextNames.Count == 0)
                 return;

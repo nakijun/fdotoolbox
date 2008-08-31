@@ -36,6 +36,7 @@ using System.Data.OleDb;
 using FdoToolbox.Core.Configuration;
 using System.Xml.Serialization;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.IO
 {
@@ -286,7 +287,7 @@ namespace FdoToolbox.Core.IO
                 {
                     foreach (string context in bcp.Source.SpatialContextList)
                     {
-                        options.SourceSpatialContexts.Add(context);
+                        options.AddSourceSpatialContext(context);
                     }
                 }
 
@@ -367,7 +368,7 @@ namespace FdoToolbox.Core.IO
             bcp.Target.Provider = task.Options.Target.Connection.ConnectionInfo.ProviderName;
             bcp.Target.Schema = task.Options.TargetSchemaName;
             
-            ClassCopyOptions[] cOptions = task.Options.GetClassCopyOptions();
+            ReadOnlyCollection<ClassCopyOptions> cOptions = task.Options.ClassCopyOptions;
             foreach (ClassCopyOptions copt in cOptions)
             {
                 Mapping m = new Mapping();

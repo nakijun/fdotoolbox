@@ -89,7 +89,7 @@ namespace FdoUtil
                 options.CopySpatialContexts = !string.IsNullOrEmpty(_SrcSpatialContext);
 
                 if (options.CopySpatialContexts)
-                    options.SourceSpatialContexts.Add(_SrcSpatialContext);
+                    options.AddSourceSpatialContext(_SrcSpatialContext);
 
                 options.SourceSchemaName = _SrcSchema;
                 if (_SrcClasses.Count > 0)

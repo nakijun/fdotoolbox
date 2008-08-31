@@ -159,7 +159,7 @@ namespace FdoToolbox.Core.ETL
              */
         }
 
-        private void CheckNumericColumn(System.Data.IDataReader reader, string name)
+        private static void CheckNumericColumn(System.Data.IDataReader reader, string name)
         {
             if (!string.IsNullOrEmpty(name))
             {

@@ -55,7 +55,7 @@ namespace FdoToolbox.Core.Forms
             grdPendingProperties.Columns.Add(colValue);
         }
 
-        public PendingParameterDialog(List<string> propertyNames, IConnection conn) : this()
+        public PendingParameterDialog(IEnumerable<string> propertyNames, IConnection conn) : this()
         {
             Debug.Assert(conn.ConnectionState == OSGeo.FDO.Connections.ConnectionState.ConnectionState_Pending);
             foreach (string name in propertyNames)
@@ -140,7 +140,7 @@ namespace FdoToolbox.Core.Forms
             return nvc;
         }
 
-        public static NameValueCollection GetParameters(List<string> propertyNames, IConnection conn)
+        public static NameValueCollection GetParameters(IEnumerable<string> propertyNames, IConnection conn)
         {
             PendingParameterDialog diag = new PendingParameterDialog(propertyNames, conn);
             if (diag.ShowDialog() == DialogResult.OK)

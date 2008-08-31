@@ -30,7 +30,7 @@ namespace FdoToolbox.Core.ETL
     /// </summary>
     public class ClassCopyOptions
     {
-        private NameValueCollection _PropertyMappings;
+        private Dictionary<string, string> _PropertyMappings;
         private Dictionary<string, PropertyDefinition> _PropertyDefinitions;
 
         private ClassDefinition _ClassDef;
@@ -74,7 +74,7 @@ namespace FdoToolbox.Core.ETL
         public ClassCopyOptions(ClassDefinition classDef)
         {
             _ClassDef = classDef;
-            _PropertyMappings = new NameValueCollection();
+            _PropertyMappings = new Dictionary<string, string>();
             _PropertyDefinitions = new Dictionary<string, PropertyDefinition>();
             _DataTypeMappings = new Dictionary<string, DataTypeMapping>();
         }
@@ -128,11 +128,11 @@ namespace FdoToolbox.Core.ETL
         /// The properties of the source class to copy
         /// </summary>
         /// <returns></returns>
-        public string[] PropertyNames
+        public ICollection<string> PropertyNames
         {
             get
             {
-                return _PropertyMappings.AllKeys;
+                return _PropertyMappings.Keys;
             }
         }
 
