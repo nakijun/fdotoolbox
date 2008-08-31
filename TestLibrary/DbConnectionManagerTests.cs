@@ -25,85 +25,18 @@ using FdoToolbox.Core;
 using System.Data;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
+using System.Data.OleDb;
+using System.IO;
 
 namespace FdoToolbox.Tests
 {
-    public class MockDbConnection : IDbConnection
-    {
-        public IDbTransaction BeginTransaction(IsolationLevel il)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        public IDbTransaction BeginTransaction()
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        public void ChangeDatabase(string databaseName)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        private ConnectionState state;
-
-        public void Close()
-        {
-            state = ConnectionState.Closed;
-        }
-
-        private string _connstr;
-
-        public string ConnectionString
-        {
-            get
-            {
-                return _connstr;
-            }
-            set
-            {
-                _connstr = value;
-            }
-        }
-
-        public int ConnectionTimeout
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
-
-        public IDbCommand CreateCommand()
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        public string Database
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
-
-        public void Open()
-        {
-            state = ConnectionState.Open;
-        }
-
-        public ConnectionState State
-        {
-            get { return state; }
-        }
-
-        public void Dispose()
-        {
-            Close();
-        }
-    }
-
     public class MockDbConnectionInfo : DbConnectionInfo
     {
-        public MockDbConnectionInfo(string name, IDbConnection conn, string driver)
+        public MockDbConnectionInfo(string name, OleDbConnection conn)
+            : base()
         {
             this.Name = name;
             this.Connection = conn;
-            this.Driver = driver;
         }
     }
 
@@ -111,6 +44,14 @@ namespace FdoToolbox.Tests
     [Category("FdoToolboxCore")]
     public class DbConnectionManagerTests : BaseTest
     {
+        private OleDbConnection CreateOleDbConnection()
+        {
+            string connStr = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0}",
+                Path.Combine(AppGateway.RunningApplication.AppPath, "Cities.mdb"));
+
+            return new OleDbConnection(connStr);
+        }
+
         [Test]
         [ExpectedException(typeof(DbConnectionException))]
         public void TestAddIdenticalConnectionNames()
@@ -118,8 +59,8 @@ namespace FdoToolbox.Tests
             IDbConnectionManager mgr = new DbConnectionManager();
             using (mgr)
             {
-                DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", new MockDbConnection(), "foobar");
-                DbConnectionInfo conn2 = new MockDbConnectionInfo("Conn1", new MockDbConnection(), "snafu");
+                DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
+                DbConnectionInfo conn2 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
 
                 mgr.AddConnection(conn1);
                 mgr.AddConnection(conn2);
@@ -137,8 +78,8 @@ namespace FdoToolbox.Tests
                     Assert.AreNotEqual(oldName, newName);
                 };
 
-                DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", new MockDbConnection(), "foobar");
-                DbConnectionInfo conn2 = new MockDbConnectionInfo("Conn2", new MockDbConnection(), "snafu");
+                DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
+                DbConnectionInfo conn2 = new MockDbConnectionInfo("Conn2", CreateOleDbConnection());
 
                 mgr.AddConnection(conn1);
                 mgr.AddConnection(conn2);
@@ -164,8 +105,8 @@ namespace FdoToolbox.Tests
                     Assert.Fail("Rename should have failed");
                 };
 
-                DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", new MockDbConnection(), "foobar");
-                DbConnectionInfo conn2 = new MockDbConnectionInfo("Conn2", new MockDbConnection(), "snafu");
+                DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
+                DbConnectionInfo conn2 = new MockDbConnectionInfo("Conn2", CreateOleDbConnection());
 
                 mgr.AddConnection(conn1);
                 mgr.AddConnection(conn2);
