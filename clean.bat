@@ -16,6 +16,9 @@ rd /S /Q FdoToolbox\obj
 echo "Cleaning FdoToolbox.Core"
 rd /S /Q FdoToolbox.Core\bin
 rd /S /Q FdoToolbox.Core\obj
+echo "Cleaning FdoToolbox.UI"
+rd /S /Q FdoToolbox.UI\bin
+rd /S /Q FdoToolbox.UI\obj
 echo "Cleaning TestModule"
 rd /S /Q TestModule\bin
 rd /S /Q TestModule\obj
