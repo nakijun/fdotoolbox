@@ -114,11 +114,9 @@ namespace FdoToolbox.Core.IO
                 IConnection targetConn = FeatureAccessManager.GetConnectionManager().CreateConnection(djt.Target.Provider);
                 targetConn.ConnectionString = djt.Target.ConnectionString;
 
-                IDbConnection secConn = new OleDbConnection(djt.SecondarySource.ConnectionString);
-
                 SpatialConnectionInfo priConnInfo = new SpatialConnectionInfo(priName, priConn);
                 SpatialConnectionInfo targetConnInfo = new SpatialConnectionInfo(targetName, targetConn);
-                DbConnectionInfo secConnInfo = new DbConnectionInfo(secName, secConn, djt.SecondarySource.Driver);
+                DbConnectionInfo secConnInfo = new DbConnectionInfo(secName, new OleDbConnection(djt.SecondarySource.ConnectionString));
 
                 if (consoleMode)
                 {
@@ -195,7 +193,7 @@ namespace FdoToolbox.Core.IO
             
             djt.SecondarySource.ColumnList = task.Options.GetColumnNames();
             djt.SecondarySource.ConnectionString = task.Options.SecondarySource.Connection.ConnectionString;
-            djt.SecondarySource.Driver = task.Options.SecondarySource.Driver;
+            
             djt.SecondarySource.name = task.Options.SecondarySource.Name;
             djt.SecondarySource.Prefix = task.Options.SecondaryPrefix;
             djt.SecondarySource.Table = task.Options.TableName;

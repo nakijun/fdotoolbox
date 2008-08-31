@@ -112,7 +112,7 @@ namespace FdoToolbox.Core.Controls
             string priClass = (cmbPrimaryClass.SelectedItem as ClassDefinition).Name;
 
             DbConnectionInfo secConn = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(cmbSecondaryConnection.SelectedItem.ToString());
-            string secTable = (cmbSecondaryTable.SelectedItem as MyMeta.ITable).Name;
+            string secTable = (cmbSecondaryTable.SelectedItem as TableInfo).Name;
 
             IConnection tConn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
             SpatialConnectionInfo tConnInfo = new SpatialConnectionInfo(cmbTargetConnection.SelectedItem.ToString(), tConn);
@@ -240,7 +240,7 @@ namespace FdoToolbox.Core.Controls
             DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
             if (connInfo != null)
             {
-                cmbSecondaryTable.DataSource = connInfo.MetaData.DefaultDatabase.Tables;
+                cmbSecondaryTable.DataSource = connInfo.Database.Tables;
             }
         }
 
@@ -272,11 +272,11 @@ namespace FdoToolbox.Core.Controls
 
         private void cmbSecondaryTable_SelectedIndexChanged(object sender, EventArgs e)
         {
-            MyMeta.ITable table = cmbSecondaryTable.SelectedItem as MyMeta.ITable;
+            TableInfo table = cmbSecondaryTable.SelectedItem as TableInfo;
             if (table != null)
             {
                 chkSecondaryColumns.Items.Clear();
-                foreach (MyMeta.IColumn col in table.Columns)
+                foreach (ColumnInfo col in table.Columns)
                 {
                     chkSecondaryColumns.Items.Add(col.Name, false);
                 }

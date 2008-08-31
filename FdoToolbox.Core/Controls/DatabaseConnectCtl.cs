@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Data.OleDb;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.ClientServices;
+using System.Data.Common;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -17,7 +18,6 @@ namespace FdoToolbox.Core.Controls
         {
             InitializeComponent();
             this.Title = "New Database Connection";
-            cmbDriver.DataSource = Enum.GetValues(typeof(MyMeta.dbDriver));
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -34,16 +34,15 @@ namespace FdoToolbox.Core.Controls
                 return;
             }
 
-            string driver = cmbDriver.SelectedItem.ToString();
             string name = txtName.Text;
             string connStr = txtConnStr.Text;
-            IDbConnection conn = new OleDbConnection(connStr);
+            OleDbConnection conn = new OleDbConnection(connStr);
             if (AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name) == null)
             {
                 btnConnect.Enabled = false;
                 try
                 {
-                    DbConnectionInfo connInfo = new DbConnectionInfo(name, conn, driver);
+                    DbConnectionInfo connInfo = new DbConnectionInfo(name, conn);
                     AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(connInfo);
                 }
                 catch (Exception ex)

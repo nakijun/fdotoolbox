@@ -51,8 +51,7 @@ namespace FdoToolbox.Core.IO
             {
                 c = (DbConnection)serializer.Deserialize(reader);
             }
-            IDbConnection conn = new OleDbConnection(c.ConnectionString);
-            return new DbConnectionInfo(c.Name, conn, c.Driver);
+            return new DbConnectionInfo(c.Name, new OleDbConnection(c.ConnectionString));
         }
 
         /// <summary>
@@ -70,7 +69,6 @@ namespace FdoToolbox.Core.IO
 
                 DbConnection c = new DbConnection();
                 c.Name = cinfo.Name;
-                c.Driver = cinfo.Driver;
                 c.ConnectionString = cinfo.Connection.ConnectionString;
 
                 serializer.Serialize(writer, c);

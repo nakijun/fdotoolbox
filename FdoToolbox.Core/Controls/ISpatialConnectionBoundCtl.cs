@@ -32,6 +32,5 @@ namespace FdoToolbox.Core.Controls
         string GetKey();
         void SetKey(string key);
         string GetTabType();
-        BaseDocumentCtl WrappedControl { get; }
     }
 }

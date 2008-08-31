@@ -81,7 +81,7 @@ namespace FdoToolbox
         
         public void ShowDocumentWindow(ISpatialConnectionBoundCtl ctl)
         {
-            DockContent content = FindDocumentWindow(ctl.WrappedControl);
+            DockContent content = FindDocumentWindow(ctl);
             if (content == null)
             {
                 content = new DockContent();
@@ -92,12 +92,12 @@ namespace FdoToolbox
                 ctl.OnClose += delegate { content.Close(); };
                 ctl.OnAccept += delegate { content.DialogResult = DialogResult.OK; };
                 ctl.OnCancel += delegate { content.DialogResult = DialogResult.Cancel; };
-                content.Text = content.TabText = ctl.WrappedControl.Title;
+                content.Text = content.TabText = ctl.Title;
             }
             content.Show(mDockPanel, DockState.Document);
         }
 
-        private DockContent FindDocumentWindow(BaseDocumentCtl baseDocumentCtl)
+        private DockContent FindDocumentWindow(IBaseDocumentCtl baseDocumentCtl)
         {
             IDockContent [] documents = mDockPanel.DocumentsToArray();
             foreach (IDockContent dock in documents)
@@ -105,7 +105,7 @@ namespace FdoToolbox
                 DockContent content = dock as DockContent;
                 if (content != null)
                 {
-                    if (content.Controls.Contains(baseDocumentCtl))
+                    if (content.Controls.Contains(baseDocumentCtl.WrappedControl))
                         return content;
                 }
             }

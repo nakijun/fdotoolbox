@@ -60,11 +60,6 @@ namespace FdoToolbox.Core.Controls
 
         public void SetKey(string key) { _Key = key; }
 
-        public BaseDocumentCtl WrappedControl
-        {
-            get { return this; }
-        }
-
         public virtual string GetTabType()
         {
             throw new Exception("The method or operation is not implemented.");

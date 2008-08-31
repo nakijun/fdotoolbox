@@ -106,7 +106,7 @@ namespace FdoToolbox.Core.Controls
                 ConnectionEventHandler removeHandler = new ConnectionEventHandler(delegate(string connName)
                 {
                     if (control.BoundConnection.Name == connName)
-                        control.WrappedControl.Close();
+                        control.Close();
                 });
 
                 connMgr.ConnectionRemoved += removeHandler;
