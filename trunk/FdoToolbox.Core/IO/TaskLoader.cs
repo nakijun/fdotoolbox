@@ -45,6 +45,8 @@ namespace FdoToolbox.Core.IO
     /// </summary>
     public sealed class TaskLoader
     {
+        private TaskLoader() { }
+
         /// <summary>
         /// Load a task definition
         /// </summary>

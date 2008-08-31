@@ -129,6 +129,8 @@ namespace FdoToolbox.Core.Modules
             _App.TabManager.RegisterTabType(typeof(DataStoreMgrCtl));
             _App.TabManager.RegisterTabType(typeof(SchemaMgrCtl));
             _App.TabManager.RegisterTabType(typeof(SpatialContextCtl));
+
+            OverrideFactory.Initialize();
         }
 
         private IHostApplication _App;
@@ -192,7 +194,7 @@ namespace FdoToolbox.Core.Modules
         }
 
         [Command(CoreModule.CMD_GC, "Invoke Garbage Collector", Description = "Invoke the Garbage Collector to free up unused memory")]
-        public void InvokeGC()
+        public static void InvokeGC()
         {
             System.GC.Collect();
         }
@@ -206,7 +208,7 @@ namespace FdoToolbox.Core.Modules
         [Command(CoreModule.CMD_CMDLIST, "List Commands", "List all available commands", InvocationType = CommandInvocationType.Console)]
         public void CommandList()
         {
-            ICollection<string> cmdNames = _App.ModuleManager.GetCommandNames();
+            ICollection<string> cmdNames = _App.ModuleManager.CommandNames;
             AppConsole.WriteLine("Registered Commands:\n");
             foreach (string name in cmdNames)
             {
@@ -228,13 +230,13 @@ namespace FdoToolbox.Core.Modules
         }
 
         [Command(CoreModule.CMD_UNREGPROVIDER, "Unregister Provider", "Removes an installed FDO Provider from the registry")]
-        public void UnregisterProvider()
+        public static void UnregisterProvider()
         {
             new UnregProviderDlg().ShowDialog();
         }
 
         [Command(CoreModule.CMD_LISTPROVIDERS, "List Providers In Console", "Display all installed providers in the console", InvocationType = CommandInvocationType.Console)]
-        public void ListProviders()
+        public static void ListProviders()
         {
             using (ProviderCollection providers = FeatureAccessManager.GetProviderRegistry().GetProviders())
             {

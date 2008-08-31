@@ -25,6 +25,7 @@ using System.IO;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.Commands;
 using FdoToolbox.Core.ClientServices;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Modules
 {
@@ -54,64 +55,73 @@ namespace FdoToolbox.Core.Modules
         /// <summary>
         /// The list of currently loaded modules
         /// </summary>
-        public IModule[] LoadedModules
+        public ReadOnlyCollection<IModule> LoadedModules
         {
-            get { return _Modules.ToArray(); }
+            get { return _Modules.AsReadOnly(); }
         }
         
         /// <summary>
         /// Load an extension module
         /// </summary>
         /// <param name="module"></param>
-        public void LoadModule(IModule module)
+        public void LoadModule(IModule extModule)
         {
-            _Modules.Add(module);
-            module.Initialize();
+            _Modules.Add(extModule);
+            extModule.Initialize();
 
-            ICommandVerifier verifier = module as ICommandVerifier;
+            ICommandVerifier verifier = extModule as ICommandVerifier;
             if (verifier != null)
-                _CommandVerifiers.Add(module.Name, verifier);
+                _CommandVerifiers.Add(extModule.Name, verifier);
 
             //Add module commands to global namespace
-            ICollection<string> cmdNames = module.CommandNames;
+            ICollection<string> cmdNames = extModule.CommandNames;
             foreach (string name in cmdNames)
             {
                 if (_GlobalNamespace.ContainsKey(name))
                     throw new ModuleLoadException("A command named " + name + " is already defined in another loaded module");
                 else
-                    _GlobalNamespace.Add(name, module.GetCommand(name));
+                    _GlobalNamespace.Add(name, extModule.GetCommand(name));
             }
             if (this.ModuleLoaded != null)
-                this.ModuleLoaded(module);
+                this.ModuleLoaded(extModule);
         }
 
         /// <summary>
         /// Unloads an extension module
         /// </summary>
         /// <param name="module"></param>
-        public void UnloadModule(IModule module)
+        public void UnloadModule(IModule extModule)
         {
-            _Modules.Remove(module);
-            module.Cleanup();
+            _Modules.Remove(extModule);
+            extModule.Cleanup();
 
             //Remove module commands from global namespace
-            ICollection<string> cmdNames = module.CommandNames;
+            ICollection<string> cmdNames = extModule.CommandNames;
             foreach (string name in cmdNames)
             {
                 _GlobalNamespace.Remove(name);
             }
 
             if (this.ModuleUnloaded != null)
-                this.ModuleUnloaded(module);
+                this.ModuleUnloaded(extModule);
         }
 
         public void Dispose()
         {
-            foreach (IModule mod in _Modules)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                mod.Cleanup();
+                foreach (IModule mod in _Modules)
+                {
+                    mod.Cleanup();
+                }
+                _Modules.Clear();
             }
-            _Modules.Clear();
         }
 
         /// <summary>
@@ -130,9 +140,12 @@ namespace FdoToolbox.Core.Modules
         /// Get a list of commands in the global namespace
         /// </summary>
         /// <returns></returns>
-        public ICollection<string> GetCommandNames()
+        public ICollection<string> CommandNames
         {
-            return _GlobalNamespace.Keys;
+            get
+            {
+                return _GlobalNamespace.Keys;
+            }
         }
 
         public event ModuleEventHandler ModuleLoaded;
@@ -180,9 +193,9 @@ namespace FdoToolbox.Core.Modules
                 if (File.Exists(uiExtensionFile))
                     AppGateway.RunningApplication.ExtendUI(uiExtensionFile);
             }
-            catch (ModuleLoadException ex)
+            catch (ModuleLoadException)
             {
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {

@@ -75,7 +75,7 @@ namespace FdoToolbox.Core.Modules
         public override void Cleanup() { }
 
         [Command(ExpressModule.CMD_SDFCONNECT, "Connect to SDF", Description = "Connect to a SDF data source")]
-        public void SdfConnect()
+        public static void SdfConnect()
         {
             IConnection conn = null;
             string sdfFile = AppGateway.RunningApplication.OpenFile("Create SDF connection", "SDF Files (*.sdf)|*.sdf");
@@ -90,7 +90,7 @@ namespace FdoToolbox.Core.Modules
         }
 
         [Command(ExpressModule.CMD_SHPCONNECT, "Connect to SHP", Description = "Connect to a SHP data source")]
-        public void ShpConnect()
+        public static void ShpConnect()
         {
             IConnection conn = null;            
             string shpFile = AppGateway.RunningApplication.OpenFile("Create SHP connection", "SHP Files (*.shp)|*.shp");
@@ -105,7 +105,7 @@ namespace FdoToolbox.Core.Modules
         }
 
         [Command(ExpressModule.CMD_SDFCREATE, "Create SDF", Description = "Creates a new SDF file")]
-        public void CreateSDF()
+        public static void CreateSDF()
         {
             string sdfFile = AppGateway.RunningApplication.SaveFile("Create SDF", "SDF File (*.sdf)|*.sdf");
             if (sdfFile != null)
@@ -128,7 +128,7 @@ namespace FdoToolbox.Core.Modules
         }
 
         [Command(ExpressModule.CMD_SHPCREATE, "Create SHP", Description = "Creates a new SHP file")]
-        public void CreateSHP()
+        public static void CreateSHP()
         {
             //There is no actual CreateDataStore support for SHP.
             //Instead we use the technique described here:
@@ -182,7 +182,7 @@ namespace FdoToolbox.Core.Modules
 
         
         [Command(ExpressModule.CMD_SHPDIRCONNECT, "Connect to SHP (directory)", "Connect to a directory of SHP files")]
-        public void ShpDirConnect()
+        public static void ShpDirConnect()
         {
             IConnection conn = null;
             FolderBrowserDialog diag = new FolderBrowserDialog();
@@ -200,28 +200,28 @@ namespace FdoToolbox.Core.Modules
         }
 
         [Command(ExpressModule.CMD_SDF2SDF, "SDF to SDF", "Copy feature data from an SDF data source to another SDF data source")]
-        public void SdfToSdf()
+        public static void SdfToSdf()
         {
             ExpressSpatialBulkCopyCtl ctl = new ExpressSpatialBulkCopyCtl(ExpressProvider.SDF, ExpressProvider.SDF);
             AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(ExpressModule.CMD_SHP2SHP, "SHP to SHP", "Copy feature data from an SHP data source to another SHP data source")]
-        public void ShpToShp()
+        public static void ShpToShp()
         {
             ExpressSpatialBulkCopyCtl ctl = new ExpressSpatialBulkCopyCtl(ExpressProvider.SHP, ExpressProvider.SHP);
             AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(ExpressModule.CMD_SHP2SDF, "SHP to SDF", "Copy feature data from an SHP data source to an SDF data source")]
-        public void ShpToSdf()
+        public static void ShpToSdf()
         {
             ExpressSpatialBulkCopyCtl ctl = new ExpressSpatialBulkCopyCtl(ExpressProvider.SHP, ExpressProvider.SDF);
             AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);
         }
 
         [Command(ExpressModule.CMD_SDF2SHP, "SDF to SHP", "Copy feature data from an SDF data source to an SHP data source")]
-        public void SdfToShp()
+        public static void SdfToShp()
         {
             ExpressSpatialBulkCopyCtl ctl = new ExpressSpatialBulkCopyCtl(ExpressProvider.SDF, ExpressProvider.SHP);
             AppGateway.RunningApplication.Shell.ShowDocumentWindow(ctl);

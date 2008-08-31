@@ -35,6 +35,8 @@ namespace FdoToolbox.Core.IO
     /// </summary>
     public sealed class SpatialConnLoader
     {
+        private SpatialConnLoader() { }
+
         /// <summary>
         /// Loads a connection from file
         /// </summary>

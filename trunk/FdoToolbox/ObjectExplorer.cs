@@ -616,7 +616,7 @@ namespace FdoToolbox
             if (connInfo != null)
             {
                 IModuleMgr modMgr = AppGateway.RunningApplication.ModuleManager;
-                ICollection<string> cmdNames = modMgr.GetCommandNames();
+                ICollection<string> cmdNames = modMgr.CommandNames;
                 foreach (string cmd in cmdNames)
                 {
                     bool canExec = modMgr.IsCommandExecutable(cmd, connInfo.Connection);

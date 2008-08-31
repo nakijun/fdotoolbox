@@ -28,6 +28,8 @@ namespace FdoToolbox.Core.Utility
 {
     public sealed class FeatureReaderHelper
     {
+        private FeatureReaderHelper() { }
+
         public static void DumpReaderClass(IFeatureReader reader)
         {
             AppConsole.WriteLine("Feature Reader class dump:");
