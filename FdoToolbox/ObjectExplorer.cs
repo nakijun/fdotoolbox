@@ -166,9 +166,10 @@ namespace FdoToolbox
 
         private void GetSchemaNodes(TreeNode connNode)
         {
-            FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connNode.Name);
-            if (service != null)
+            FdoConnectionInfo connInfo = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connNode.Name);
+            if (connInfo != null)
             {
+                FeatureService service = connInfo.CreateFeatureService();
                 connNode.ToolTipText = string.Format("Provider: {0}\nConnection String: {1}", service.Connection.ConnectionInfo.ProviderName, service.Connection.ConnectionString);
                 FeatureSchemaCollection schemas = service.DescribeSchema();
                 foreach (FeatureSchema schema in schemas)
