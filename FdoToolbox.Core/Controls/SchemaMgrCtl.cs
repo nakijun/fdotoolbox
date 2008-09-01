@@ -62,7 +62,7 @@ namespace FdoToolbox.Core.Controls
             _bsClasses = new BindingSource();
             _bsSchemas = new BindingSource();
             _BoundConnection = conn;
-            _Service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(_BoundConnection.Name);
+            _Service = conn.CreateFeatureService();
             _Schemas = _Service.DescribeSchema();
             _bsSchemas.DataSource = _Schemas;
             lstSchemas.DataSource = _bsSchemas;

@@ -38,7 +38,6 @@ namespace FdoToolbox.Core.ClientServices
         public SpatialConnectionMgr() 
         {
             _ConnectionDict = new Dictionary<string, FdoConnectionInfo>();
-            _FeatureServices = new Dictionary<string, FeatureService>();
         }
 
         public void AddConnection(string name, OSGeo.FDO.Connections.IConnection conn)
@@ -67,16 +66,7 @@ namespace FdoToolbox.Core.ClientServices
 
                 FdoConnectionInfo conn = _ConnectionDict[name];
                 conn.Close();
-                
                 _ConnectionDict.Remove(name);
-
-                if (_FeatureServices.ContainsKey(name))
-                {
-                    FeatureService service = _FeatureServices[name];
-                    _FeatureServices.Remove(name);
-                    service.Dispose();
-                }
-
                 conn.Dispose();
                 if (this.ConnectionRemoved != null)
                     this.ConnectionRemoved(name);
@@ -138,13 +128,6 @@ namespace FdoToolbox.Core.ClientServices
             _ConnectionDict.Remove(oldName);
             _ConnectionDict.Add(newName, conn);
 
-            if (_FeatureServices.ContainsKey(oldName))
-            {
-                FeatureService service = _FeatureServices[oldName];
-                _FeatureServices.Remove(oldName);
-                _FeatureServices[newName] = service;
-            }
-
             if (this.ConnectionRenamed != null)
                 this.ConnectionRenamed(oldName, newName);
         }
@@ -166,17 +149,6 @@ namespace FdoToolbox.Core.ClientServices
             return true;
         }
 
-
         public event ConnectionBeforeRemoveHandler BeforeConnectionRemove;
-
-        private Dictionary<string, FeatureService> _FeatureServices;
-
-        public FeatureService CreateService(string name)
-        {
-            if (!_ConnectionDict.ContainsKey(name))
-                return null;
-
-            return _ConnectionDict[name].CreateFeatureService();
-        }
     }
 }

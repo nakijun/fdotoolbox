@@ -63,7 +63,7 @@ namespace FdoToolbox.Core.Controls
         {
             InitializeComponent();
             _BoundConnection = conn;
-            _Service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(this.BoundConnection.Name); 
+            _Service = conn.CreateFeatureService();
             ToggleUI();
         }
 
