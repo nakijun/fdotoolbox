@@ -70,6 +70,7 @@
     <Compile Include="ClientServices\AppGateway.cs" />
     <Compile Include="ClientServices\AppSession.cs" />
     <Compile Include="ClientServices\FeatureQueryOptions.cs" />
+    <Compile Include="Common\FdoConnectionInfo.cs" />
     <Compile Include="Common\IncompatibleClassReason.cs" />
     <Compile Include="Common\FdoDataTable.cs">
       <SubType>Component</SubType>
@@ -183,7 +184,6 @@
       <DependentUpon>SpatialConnectionBoundControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\SpatialConnectionCommand.cs" />
-    <Compile Include="Common\SpatialConnectionInfo.cs" />
     <Compile Include="IO\SpatialConnLoader.cs" />
     <Compile Include="ConsoleApplication.cs" />
     <Compile Include="Commands\ConsoleCommand.cs" />

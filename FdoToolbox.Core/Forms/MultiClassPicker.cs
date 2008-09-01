@@ -39,7 +39,7 @@ namespace FdoToolbox.Core.Forms
             InitializeComponent();
         }
 
-        public MultiClassPicker(SpatialConnectionInfo connInfo)
+        public MultiClassPicker(FdoConnectionInfo connInfo)
             : this()
         {
             FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
@@ -79,7 +79,7 @@ namespace FdoToolbox.Core.Forms
             return list.AsReadOnly();
         }
 
-        public static ReadOnlyCollection<ClassDefinition> GetClasses(string title, string prompt, SpatialConnectionInfo connInfo)
+        public static ReadOnlyCollection<ClassDefinition> GetClasses(string title, string prompt, FdoConnectionInfo connInfo)
         {
             MultiClassPicker diag = new MultiClassPicker(connInfo);
             diag.Text = title;

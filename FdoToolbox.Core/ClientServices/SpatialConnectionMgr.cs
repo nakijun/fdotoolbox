@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.Controls;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.ClientServices
 {
@@ -32,11 +33,11 @@ namespace FdoToolbox.Core.ClientServices
     {
         private int counter;
 
-        private Dictionary<string, IConnection> _ConnectionDict;
+        private Dictionary<string, FdoConnectionInfo> _ConnectionDict;
 
         public SpatialConnectionMgr() 
-        { 
-            _ConnectionDict = new Dictionary<string, IConnection>();
+        {
+            _ConnectionDict = new Dictionary<string, FdoConnectionInfo>();
             _FeatureServices = new Dictionary<string, FeatureService>();
         }
 
@@ -46,7 +47,8 @@ namespace FdoToolbox.Core.ClientServices
                 throw new FdoConnectionException("Unable to add connection named " + name + " to the connection manager");
             if (conn.ConnectionState != ConnectionState.ConnectionState_Open)
                 conn.Open();
-            _ConnectionDict.Add(name, conn);
+            FdoConnectionInfo connInfo = new FdoConnectionInfo(name, conn);
+            _ConnectionDict.Add(name, connInfo);
             if (this.ConnectionAdded != null)
                 this.ConnectionAdded(name);
         }
@@ -63,9 +65,8 @@ namespace FdoToolbox.Core.ClientServices
                         return;
                 }
 
-                IConnection conn = _ConnectionDict[name];
-                if (conn.ConnectionState == ConnectionState.ConnectionState_Open)
-                    conn.Close();
+                FdoConnectionInfo conn = _ConnectionDict[name];
+                conn.Close();
                 
                 _ConnectionDict.Remove(name);
 
@@ -86,7 +87,7 @@ namespace FdoToolbox.Core.ClientServices
             }
         }
 
-        public IConnection GetConnection(string name)
+        public FdoConnectionInfo GetConnection(string name)
         {
             if (_ConnectionDict.ContainsKey(name))
                 return _ConnectionDict[name];
@@ -133,7 +134,7 @@ namespace FdoToolbox.Core.ClientServices
             if (_ConnectionDict.ContainsKey(newName))
                 throw new FdoConnectionException("Cannot rename connection " + oldName + " to " + newName + " as a connection of that name already exists");
 
-            IConnection conn = _ConnectionDict[oldName];
+            FdoConnectionInfo conn = _ConnectionDict[oldName];
             _ConnectionDict.Remove(oldName);
             _ConnectionDict.Add(newName, conn);
 
@@ -175,10 +176,7 @@ namespace FdoToolbox.Core.ClientServices
             if (!_ConnectionDict.ContainsKey(name))
                 return null;
 
-            if (!_FeatureServices.ContainsKey(name))
-                _FeatureServices[name] = new FeatureService(GetConnection(name));
-                
-            return _FeatureServices[name];
+            return _ConnectionDict[name].CreateFeatureService();
         }
     }
 }

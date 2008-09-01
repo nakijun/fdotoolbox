@@ -352,11 +352,10 @@ namespace FdoToolbox
             TreeNode node = GetSpatialConnectionsNode().Nodes[name];
             node.Nodes.Clear();
 
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(node.Name);
+            FdoConnectionInfo conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(node.Name);
             if (conn != null)
             {
-                conn.Close();
-                conn.Open();
+                conn.Refresh();
             }
 
             GetSchemaNodes(node);
@@ -389,7 +388,7 @@ namespace FdoToolbox
             }
         }
 
-        public SpatialConnectionInfo GetSelectedSpatialConnection()
+        public FdoConnectionInfo GetSelectedSpatialConnection()
         {
             TreeNode connNode = mTreeView.SelectedNode;
             if (connNode == null || connNode.Level == 0)
@@ -406,11 +405,7 @@ namespace FdoToolbox
                 if (connNode.Parent == GetSpatialConnectionsNode())
                 {
                     string name = connNode.Name;
-                    IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connNode.Name);
-                    if (conn != null)
-                        return new SpatialConnectionInfo(name, conn);
-                    else
-                        return null;
+                    return AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connNode.Name);
                 }
                 return null;
             }
@@ -576,14 +571,14 @@ namespace FdoToolbox
 
         private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            SpatialConnectionInfo connInfo = GetSelectedSpatialConnection();
+            FdoConnectionInfo connInfo = GetSelectedSpatialConnection();
             if (connInfo != null)
             {
                 IModuleMgr modMgr = AppGateway.RunningApplication.ModuleManager;
                 ICollection<string> cmdNames = modMgr.CommandNames;
                 foreach (string cmd in cmdNames)
                 {
-                    bool canExec = modMgr.IsCommandExecutable(cmd, connInfo.Connection);
+                    bool canExec = modMgr.IsCommandExecutable(cmd, connInfo.InternalConnection);
                     AppGateway.RunningApplication.MenuStateManager.EnableCommand(cmd, canExec);
                 }
             }

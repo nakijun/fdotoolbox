@@ -55,7 +55,7 @@ namespace FdoToolbox.Core.Controls
         private FeatureSchemaCollection _Schemas;
         private FeatureService _Service;
 
-        public SchemaMgrCtl(SpatialConnectionInfo conn, string key)
+        public SchemaMgrCtl(FdoConnectionInfo conn, string key)
             : base(conn, key)
         {
             InitializeComponent();
@@ -88,7 +88,7 @@ namespace FdoToolbox.Core.Controls
         private void ToggleUI()
         {
             //Supported class types
-            ClassType[] ctypes = this.BoundConnection.Connection.SchemaCapabilities.ClassTypes;
+            ClassType[] ctypes = this.BoundConnection.InternalConnection.SchemaCapabilities.ClassTypes;
             featureClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_FeatureClass) >= 0;
             classNonFeatureToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_Class) >= 0;
             networkClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_NetworkClass) >= 0;
@@ -96,7 +96,7 @@ namespace FdoToolbox.Core.Controls
             networkLinkClassToolStripMenuItem.Visible = Array.IndexOf<ClassType>(ctypes, ClassType.ClassType_NetworkLinkClass) >= 0;
 
             //Schema modification
-            btnDeleteSchema.Visible = btnDeleteClass.Visible = btnEditClass.Visible = this.BoundConnection.Connection.SchemaCapabilities.SupportsSchemaModification;
+            btnDeleteSchema.Visible = btnDeleteClass.Visible = btnEditClass.Visible = this.BoundConnection.InternalConnection.SchemaCapabilities.SupportsSchemaModification;
         }
 
         private void CheckDirtyStatus()
@@ -164,8 +164,8 @@ namespace FdoToolbox.Core.Controls
 
         private void btnAddSchema_Click(object sender, EventArgs e)
         {
-            bool canAdd = this.BoundConnection.Connection.SchemaCapabilities.SupportsMultipleSchemas ||
-                        (!this.BoundConnection.Connection.SchemaCapabilities.SupportsMultipleSchemas && _bsSchemas.Count == 0);
+            bool canAdd = this.BoundConnection.InternalConnection.SchemaCapabilities.SupportsMultipleSchemas ||
+                        (!this.BoundConnection.InternalConnection.SchemaCapabilities.SupportsMultipleSchemas && _bsSchemas.Count == 0);
             if (canAdd)
             {
                 FeatureSchema schema = SchemaInfoDlg.NewSchema();

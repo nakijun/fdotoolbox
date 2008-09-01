@@ -41,21 +41,21 @@ namespace FdoToolbox.Core.Forms
     /// </summary>
     public partial class SpatialContextInfoDlg : Form
     {
-        private SpatialConnectionInfo _BoundConnection;
+        private FdoConnectionInfo _BoundConnection;
 
         internal SpatialContextInfoDlg()
         {
             InitializeComponent();
         }
 
-        public SpatialContextInfoDlg(SpatialConnectionInfo conn)
+        public SpatialContextInfoDlg(FdoConnectionInfo conn)
             : this()
         {
             _BoundConnection = conn;
-            cmbExtentType.DataSource = _BoundConnection.Connection.ConnectionCapabilities.SpatialContextTypes;
+            cmbExtentType.DataSource = _BoundConnection.InternalConnection.ConnectionCapabilities.SpatialContextTypes;
         }
 
-        public SpatialContextInfoDlg(SpatialConnectionInfo conn, SpatialContextInfo ctx)
+        public SpatialContextInfoDlg(FdoConnectionInfo conn, SpatialContextInfo ctx)
             : this(conn)
         {
             txtName.Enabled = false;
@@ -188,7 +188,7 @@ namespace FdoToolbox.Core.Forms
             }
         }
 
-        public static SpatialContextInfo Edit(SpatialConnectionInfo conn, SpatialContextInfo ctx)
+        public static SpatialContextInfo Edit(FdoConnectionInfo conn, SpatialContextInfo ctx)
         {
             SpatialContextInfoDlg dlg = new SpatialContextInfoDlg(conn, ctx);
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -225,7 +225,7 @@ namespace FdoToolbox.Core.Forms
             return null;
         }
 
-        public static SpatialContextInfo CreateNew(SpatialConnectionInfo conn)
+        public static SpatialContextInfo CreateNew(FdoConnectionInfo conn)
         {
             SpatialContextInfoDlg dlg = new SpatialContextInfoDlg(conn);
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -266,7 +266,7 @@ namespace FdoToolbox.Core.Forms
             ReadOnlyCollection<ClassDefinition> classes = MultiClassPicker.GetClasses("Compute Extents", "Select the classes to compute extents", _BoundConnection);
             if (classes.Count > 0)
             {
-                using (FeatureService service = new FeatureService(_BoundConnection.Connection))
+                using (FeatureService service = new FeatureService(_BoundConnection.InternalConnection))
                 {
                     IEnvelope env = service.ComputeEnvelope(classes);
                     if (env != null)

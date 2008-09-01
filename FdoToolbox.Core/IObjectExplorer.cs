@@ -44,7 +44,7 @@ namespace FdoToolbox.Core
         /// underlying connection object
         /// </summary>
         /// <returns></returns>
-        SpatialConnectionInfo GetSelectedSpatialConnection();
+        FdoConnectionInfo GetSelectedSpatialConnection();
 
         /// <summary>
         /// If a schema node is selected, returns the name of the

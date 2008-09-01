@@ -29,6 +29,6 @@ namespace FdoToolbox.Core.Controls
         void RemoveTab(ISpatialConnectionBoundCtl ctl);
         void RegisterTabType(Type tabtype);
         string GenerateKey(Type tabtype, string connName);
-        ISpatialConnectionBoundCtl CreateTab(Type tabtype, SpatialConnectionInfo connInfo);
+        ISpatialConnectionBoundCtl CreateTab(Type tabtype, FdoConnectionInfo connInfo);
     }
 }

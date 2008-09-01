@@ -46,14 +46,14 @@ namespace FdoToolbox.Core.Controls
 
         private FeatureSchema _ParentSchema;
 
-        private SpatialConnectionInfo _BoundConnection;
+        private FdoConnectionInfo _BoundConnection;
 
-        public SpatialConnectionInfo BoundConnection
+        public FdoConnectionInfo BoundConnection
         {
             get { return _BoundConnection; }
         }
 
-        public ClassDefCtl(ClassDefinition classDef, SpatialConnectionInfo conn)
+        public ClassDefCtl(ClassDefinition classDef, FdoConnectionInfo conn)
         {
             InitializeComponent();
             _BoundConnection = conn;
@@ -63,7 +63,7 @@ namespace FdoToolbox.Core.Controls
             ToggleUI();
         }
 
-        public ClassDefCtl(FeatureSchema schema, ClassType ctype, SpatialConnectionInfo conn)
+        public ClassDefCtl(FeatureSchema schema, ClassType ctype, FdoConnectionInfo conn)
         {
             InitializeComponent();
             switch (ctype)
@@ -96,9 +96,9 @@ namespace FdoToolbox.Core.Controls
 
         private void ToggleUI()
         {
-            associationPropertyToolStripMenuItem.Visible = this.BoundConnection.Connection.SchemaCapabilities.SupportsAssociationProperties;
-            objectPropertyToolStripMenuItem.Visible = this.BoundConnection.Connection.SchemaCapabilities.SupportsObjectProperties;
-            rasterPropertyToolStripMenuItem.Visible = this.BoundConnection.Connection.RasterCapabilities.SupportsRaster();
+            associationPropertyToolStripMenuItem.Visible = this.BoundConnection.InternalConnection.SchemaCapabilities.SupportsAssociationProperties;
+            objectPropertyToolStripMenuItem.Visible = this.BoundConnection.InternalConnection.SchemaCapabilities.SupportsObjectProperties;
+            rasterPropertyToolStripMenuItem.Visible = this.BoundConnection.InternalConnection.RasterCapabilities.SupportsRaster();
         }
 
         private void InitForm()
@@ -346,11 +346,11 @@ namespace FdoToolbox.Core.Controls
             DataPropertyDefinition dp = def as DataPropertyDefinition;
             if (dp != null)
             {
-                DataType[] supported = this.BoundConnection.Connection.SchemaCapabilities.SupportedIdentityPropertyTypes;
+                DataType[] supported = this.BoundConnection.InternalConnection.SchemaCapabilities.SupportedIdentityPropertyTypes;
                 if (Array.IndexOf<DataType>(supported, (dp.DataType)) >= 0)
                 {
                     //Supports composite id (multiple identity properties)
-                    if (this.BoundConnection.Connection.SchemaCapabilities.SupportsCompositeId)
+                    if (this.BoundConnection.InternalConnection.SchemaCapabilities.SupportsCompositeId)
                     {
                         if(!_BoundIdentityProperties.Contains(def))
                             _BoundIdentityProperties.Add(def);

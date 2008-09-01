@@ -39,8 +39,8 @@ namespace FdoToolbox.Core.ETL
     /// </summary>
     public class SpatialBulkCopyOptions : IDisposable
     {
-        private SpatialConnectionInfo _Source;
-        private SpatialConnectionInfo _Target;
+        private FdoConnectionInfo _Source;
+        private FdoConnectionInfo _Target;
 
         private string _TargetSchemaName;
         private string _SourceSchemaName;
@@ -51,7 +51,7 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        public SpatialBulkCopyOptions(SpatialConnectionInfo source, SpatialConnectionInfo target)
+        public SpatialBulkCopyOptions(FdoConnectionInfo source, FdoConnectionInfo target)
         {
             _Source = source;
             _Target = target;
@@ -124,8 +124,8 @@ namespace FdoToolbox.Core.ETL
 
             if (src != null && dest != null)
             {
-                this.Source = new SpatialConnectionInfo("SOURCE", src);
-                this.Target = new SpatialConnectionInfo("TARGET", dest);
+                this.Source = new FdoConnectionInfo("SOURCE", src);
+                this.Target = new FdoConnectionInfo("TARGET", dest);
             }
         }
 
@@ -172,7 +172,7 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// The source connection
         /// </summary>
-        public SpatialConnectionInfo Source
+        public FdoConnectionInfo Source
         {
             get { return _Source; }
             set { _Source = value; }
@@ -201,7 +201,7 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// The target connection
         /// </summary>
-        public SpatialConnectionInfo Target
+        public FdoConnectionInfo Target
         {
             get { return _Target; }
             set { _Target = value; }
@@ -223,7 +223,7 @@ namespace FdoToolbox.Core.ETL
                 _CopySpatialContexts = value;
                 if (_ExpressMode)
                 {
-                    using (FeatureService service = new FeatureService(_Source.Connection))
+                    using (FeatureService service = new FeatureService(_Source.InternalConnection))
                     {
                         ReadOnlyCollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
                         _SourceSpatialContexts.Clear();
@@ -333,13 +333,13 @@ namespace FdoToolbox.Core.ETL
                 //connection manager's knowledge we have to clean them up explicitly
                 if (_ExpressMode)
                 {
-                    if (this.Source.Connection.ConnectionState == ConnectionState.ConnectionState_Open)
-                        this.Source.Connection.Close();
-                    if (this.Target.Connection.ConnectionState == ConnectionState.ConnectionState_Open)
-                        this.Target.Connection.Close();
+                    if (this.Source.InternalConnection.ConnectionState == ConnectionState.ConnectionState_Open)
+                        this.Source.InternalConnection.Close();
+                    if (this.Target.InternalConnection.ConnectionState == ConnectionState.ConnectionState_Open)
+                        this.Target.InternalConnection.Close();
 
-                    this.Source.Connection.Dispose();
-                    this.Target.Connection.Dispose();
+                    this.Source.InternalConnection.Dispose();
+                    this.Target.InternalConnection.Dispose();
                 }
             }
         }

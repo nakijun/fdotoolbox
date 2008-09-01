@@ -26,16 +26,16 @@ namespace FdoToolbox.Core.ETL
 {
     public class SpatialJoinOptions
     {
-        private SpatialConnectionInfo _Target;
+        private FdoConnectionInfo _Target;
 
-        public SpatialConnectionInfo Target
+        public FdoConnectionInfo Target
         {
             get { return _Target; }
         }
 
-        private SpatialConnectionInfo _PrimarySource;
+        private FdoConnectionInfo _PrimarySource;
 
-        public SpatialConnectionInfo PrimarySource
+        public FdoConnectionInfo PrimarySource
         {
             get { return _PrimarySource; }
         }
@@ -96,7 +96,7 @@ namespace FdoToolbox.Core.ETL
             set { _SecondaryPrefix = value; }
         }
 
-        public void SetPrimary(SpatialConnectionInfo connInfo, string schemaName, string className)
+        public void SetPrimary(FdoConnectionInfo connInfo, string schemaName, string className)
         {
             _PrimarySource = connInfo;
             _SchemaName = schemaName;
@@ -109,7 +109,7 @@ namespace FdoToolbox.Core.ETL
             _TableName = tableName;
         }
 
-        public void SetTarget(SpatialConnectionInfo connInfo, string schemaName, string className)
+        public void SetTarget(FdoConnectionInfo connInfo, string schemaName, string className)
         {
             _Target = connInfo;
             _TargetSchema = schemaName;

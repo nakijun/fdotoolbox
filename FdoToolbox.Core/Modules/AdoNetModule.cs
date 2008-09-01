@@ -192,7 +192,7 @@ namespace FdoToolbox.Core.Modules
                     conn.Open();
 
                     string name = _App.SpatialConnectionManager.CreateUniqueName();
-                    SpatialConnectionInfo connInfo = new SpatialConnectionInfo(name, conn);
+                    FdoConnectionInfo connInfo = new FdoConnectionInfo(name, conn);
 
                     DbToPointCopyOptions options = new DbToPointCopyOptions(dbConnInfo, connInfo);
                     options.ClassName = diag.ClassName;

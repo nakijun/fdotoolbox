@@ -27,7 +27,7 @@ namespace FdoToolbox.Core.Controls
 {
     public interface ISpatialConnectionBoundCtl : IBaseDocumentCtl
     {
-        SpatialConnectionInfo BoundConnection { get; }
+        FdoConnectionInfo BoundConnection { get; }
         void SetName(string name);
         string GetKey();
         void SetKey(string key);

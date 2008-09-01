@@ -41,11 +41,11 @@ namespace FdoToolbox.Tests
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskMySql()
         {
-            SpatialConnectionInfo source = new MockSdfConnection();
-            SpatialConnectionInfo target = new MockMySqlConnection();
+            FdoConnectionInfo source = new MockSdfConnection();
+            FdoConnectionInfo target = new MockMySqlConnection();
 
-            source.Connection.Open();
-            target.Connection.Open();
+            source.InternalConnection.Open();
+            target.InternalConnection.Open();
 
             SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(source, target);
             SpatialBulkCopyTask task = new SpatialBulkCopyTask("TEST", options);
@@ -57,11 +57,11 @@ namespace FdoToolbox.Tests
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskOracle()
         {
-            SpatialConnectionInfo source = new MockOracleConnection();
-            SpatialConnectionInfo target = new MockSdfConnection();
+            FdoConnectionInfo source = new MockOracleConnection();
+            FdoConnectionInfo target = new MockSdfConnection();
 
-            source.Connection.Open();
-            target.Connection.Open();
+            source.InternalConnection.Open();
+            target.InternalConnection.Open();
 
             SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(source, target);
             SpatialBulkCopyTask task = new SpatialBulkCopyTask("TEST", options);
@@ -73,11 +73,11 @@ namespace FdoToolbox.Tests
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskShp()
         {
-            SpatialConnectionInfo source = new MockSdfConnection();
-            SpatialConnectionInfo target = new MockShpConnection();
+            FdoConnectionInfo source = new MockSdfConnection();
+            FdoConnectionInfo target = new MockShpConnection();
 
-            source.Connection.Open();
-            target.Connection.Open();
+            source.InternalConnection.Open();
+            target.InternalConnection.Open();
 
             SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(source, target);
             SpatialBulkCopyTask task = new SpatialBulkCopyTask("TEST", options);
@@ -87,39 +87,39 @@ namespace FdoToolbox.Tests
         }
     }
 
-    class MockSdfConnection : SpatialConnectionInfo 
+    class MockSdfConnection : FdoConnectionInfo 
     {
         public MockSdfConnection()
             : base("Foo", null)
         {
-            this.Connection = new MockSpatialConnection("OSGeo.SDF");
+            this.InternalConnection = new MockSpatialConnection("OSGeo.SDF");
         }
     }
 
-    class MockMySqlConnection : SpatialConnectionInfo
+    class MockMySqlConnection : FdoConnectionInfo
     {
         public MockMySqlConnection()
             : base("Foo", null)
         {
-            this.Connection = new MockSpatialConnection("OSGeo.MySQL");
+            this.InternalConnection = new MockSpatialConnection("OSGeo.MySQL");
         }
     }
 
-    class MockShpConnection : SpatialConnectionInfo
+    class MockShpConnection : FdoConnectionInfo
     {
         public MockShpConnection()
             : base("Foo", null)
         {
-            this.Connection = new MockSpatialConnection("OSGeo.SHP");
+            this.InternalConnection = new MockSpatialConnection("OSGeo.SHP");
         }
     }
 
-    class MockOracleConnection : SpatialConnectionInfo
+    class MockOracleConnection : FdoConnectionInfo
     {
         public MockOracleConnection()
             : base("Foo", null)
         {
-            this.Connection = new MockSpatialConnection("OSGeo.KingOracle");
+            this.InternalConnection = new MockSpatialConnection("OSGeo.KingOracle");
         }
     }
 }
