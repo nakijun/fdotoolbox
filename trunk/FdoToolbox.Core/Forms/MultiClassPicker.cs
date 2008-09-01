@@ -42,7 +42,7 @@ namespace FdoToolbox.Core.Forms
         public MultiClassPicker(FdoConnectionInfo connInfo)
             : this()
         {
-            FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(connInfo.Name);
+            FeatureService service = connInfo.CreateFeatureService();
             BindingSource bs = new BindingSource();
             bs.DataSource = service.DescribeSchema();
             cmbSchema.DataSource = bs;

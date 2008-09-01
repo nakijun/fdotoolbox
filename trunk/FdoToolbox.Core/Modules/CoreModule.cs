@@ -261,7 +261,7 @@ namespace FdoToolbox.Core.Modules
             FdoConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo != null)
             {
-                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = connInfo.CreateFeatureService();
                 string schemaFile = _App.OpenFile("Load schemas from XML", "Feature Schema Definition (*.schema)|*.schema");
                 if (File.Exists(schemaFile))
                 {
@@ -286,7 +286,7 @@ namespace FdoToolbox.Core.Modules
             FdoConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedSpatialConnection();
             if (connInfo != null)
             {
-                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = connInfo.CreateFeatureService();
                 string schemaFile = _App.SaveFile("Save schemas to XML", "Feature Schema Definition (*.schema)|*.schema");
                 if (schemaFile != null)
                 {
@@ -598,7 +598,7 @@ namespace FdoToolbox.Core.Modules
             string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = connInfo.CreateFeatureService();
                 FeatureSchema theSchema = service.GetSchemaByName(schemaName);
                 if (theSchema != null)
                 {
@@ -624,7 +624,7 @@ namespace FdoToolbox.Core.Modules
             string className = _App.Shell.ObjectExplorer.GetSelectedClass();
             if (connInfo != null)
             {
-                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = connInfo.CreateFeatureService();
                 ClassDefinition theClass = service.GetClassByName(schemaName, className);
                 if (theClass != null)
                 {
@@ -649,7 +649,7 @@ namespace FdoToolbox.Core.Modules
             string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = connInfo.CreateFeatureService();
                 FeatureSchema schema = service.GetSchemaByName(schemaName);
                 if (schema != null)
                 {
@@ -673,7 +673,7 @@ namespace FdoToolbox.Core.Modules
             string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null)
             {
-                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = connInfo.CreateFeatureService();
                 FeatureSchema schema = service.GetSchemaByName(schemaName);
                 if (schema != null)
                 {
@@ -714,7 +714,7 @@ namespace FdoToolbox.Core.Modules
             string schemaName = _App.Shell.ObjectExplorer.GetSelectedSchema();
             if (connInfo != null && !string.IsNullOrEmpty(schemaName))
             {
-                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = connInfo.CreateFeatureService();
                 service.DestroySchema(schemaName);
                 AppConsole.Alert("Delete Schema", "Schema Deleted");
             }
@@ -728,7 +728,7 @@ namespace FdoToolbox.Core.Modules
             string className = _App.Shell.ObjectExplorer.GetSelectedClass();
             if (connInfo != null)
             {
-                FeatureService service = _App.SpatialConnectionManager.CreateService(connInfo.Name);
+                FeatureService service = connInfo.CreateFeatureService();
                 ClassDefinition theClass = service.GetClassByName(schemaName, className);
                 if (theClass != null)
                 {
@@ -782,7 +782,7 @@ namespace FdoToolbox.Core.Modules
         {
             IObjectExplorer explorer = _App.Shell.ObjectExplorer;
             FdoConnectionInfo ci = explorer.GetSelectedSpatialConnection();
-            FeatureService service = _App.SpatialConnectionManager.CreateService(ci.Name);
+            FeatureService service = ci.CreateFeatureService();
             string schemaName = explorer.GetSelectedSchema();
             string className = explorer.GetSelectedClass();
 
