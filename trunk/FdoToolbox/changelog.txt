@@ -1,3 +1,14 @@
+- Enhancements:
+	- When bulk copying, the schema to be applied is checked for compatibility. If it is not compatible with
+	  the target connection, the incompatibilities are displayed with the option to alter it to be compatible.
+	- HTML help documentation. This is just the initial skeleton at the moment. More content will follow.
+	- New help browser for the HTML help documentation.
+
+- Other:
+	- Replaced MyMeta library with raw ADO.net for database introspection. As a result, there is a much
+	  improved performance gain when creating non-spatial connections.
+	- SQL Server 2008 bulk copy overrides
+
 v0.5.8
 ------
 
