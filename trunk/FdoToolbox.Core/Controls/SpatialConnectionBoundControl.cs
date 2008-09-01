@@ -30,7 +30,7 @@ namespace FdoToolbox.Core.Controls
 {
     public partial class SpatialConnectionBoundControl : BaseDocumentCtl, ISpatialConnectionBoundCtl
     {
-        protected SpatialConnectionInfo _BoundConnection;
+        protected FdoConnectionInfo _BoundConnection;
 
         protected string _Key;
 
@@ -39,14 +39,14 @@ namespace FdoToolbox.Core.Controls
             InitializeComponent();
         }
 
-        public SpatialConnectionBoundControl(SpatialConnectionInfo connInfo, string key)
+        public SpatialConnectionBoundControl(FdoConnectionInfo connInfo, string key)
             : this()
         {
             _BoundConnection = connInfo;
             _Key = key;
         }
 
-        public SpatialConnectionInfo BoundConnection
+        public FdoConnectionInfo BoundConnection
         {
             get { return _BoundConnection; }
         }

@@ -98,7 +98,7 @@ namespace FdoToolbox.Core.ETL
             // 3 - Target class must not already exist
             // 4 - If no prefixes are defined, there must be no clashes in property/column names
 
-            using (FeatureService targetService = new FeatureService(_Options.Target.Connection))
+            using (FeatureService targetService = new FeatureService(_Options.Target.InternalConnection))
             {
                 if (!targetService.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema))
                     throw new TaskValidationException("Target connection does not support IApplySchema");
@@ -157,7 +157,7 @@ namespace FdoToolbox.Core.ETL
 
                 int inserted = 0;
 
-                insertCmd = _Options.Target.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert;
+                insertCmd = _Options.Target.InternalConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert;
                 insertCmd.SetFeatureClassName(_Options.TargetClassName);
                 SendMessage("Joining...");
                 using (primaryReader)
@@ -320,7 +320,7 @@ namespace FdoToolbox.Core.ETL
             }
 
             //Now add class to target schema and apply it
-            using (FeatureService service = new FeatureService(_Options.Target.Connection))
+            using (FeatureService service = new FeatureService(_Options.Target.InternalConnection))
             {
                 FeatureSchema schema = service.GetSchemaByName(_Options.TargetSchema);
                 if (schema != null)
@@ -522,7 +522,7 @@ namespace FdoToolbox.Core.ETL
         /// <returns></returns>
         private OSGeo.FDO.Commands.Feature.IFeatureReader LoadPrimarySource()
         {
-            ISelect select = _Options.PrimarySource.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect;
+            ISelect select = _Options.PrimarySource.InternalConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select) as ISelect;
             select.SetFeatureClassName(_Options.ClassName);
             select.PropertyNames.Clear();
 

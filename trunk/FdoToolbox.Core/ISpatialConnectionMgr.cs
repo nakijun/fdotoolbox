@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core
 {
@@ -34,7 +35,7 @@ namespace FdoToolbox.Core
         string CreateUniqueName();
         void AddConnection(string name, IConnection conn);
         void RemoveConnection(string name);
-        IConnection GetConnection(string name);
+        FdoConnectionInfo GetConnection(string name);
         ICollection<string> GetConnectionNames();
         void RenameConnection(string oldName, string newName);
         bool CanRenameConnection(string oldName, string newName, ref string reason);

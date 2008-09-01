@@ -47,7 +47,7 @@ namespace FdoToolbox.Core.ETL
 	
         public override void ValidateTaskParameters()
         {
-            using (FeatureService service = new FeatureService(this.Options.Target.Connection))
+            using (FeatureService service = new FeatureService(this.Options.Target.InternalConnection))
             {
                 ClassDefinition classDef = service.GetClassByName(
                     this.Options.SchemaName,
@@ -139,7 +139,7 @@ namespace FdoToolbox.Core.ETL
 
         public override void DoExecute()
         {
-            FeatureService service = new FeatureService(this.Options.Target.Connection);
+            FeatureService service = new FeatureService(this.Options.Target.InternalConnection);
             List<string> columns = GetColumnList();
 
             System.Data.IDbCommand dbCmd = this.Options.Source.Connection.CreateCommand();

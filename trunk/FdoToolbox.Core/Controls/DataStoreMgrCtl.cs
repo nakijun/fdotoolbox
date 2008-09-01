@@ -42,20 +42,20 @@ namespace FdoToolbox.Core.Controls
             InitializeComponent();
         }
 
-        public DataStoreMgrCtl(SpatialConnectionInfo connInfo, string key)
+        public DataStoreMgrCtl(FdoConnectionInfo connInfo, string key)
             : base(connInfo, key)
         {
             InitializeComponent();
             _BoundConnection = connInfo;
-            _Service = new FeatureService(connInfo.Connection);
+            _Service = new FeatureService(connInfo.InternalConnection);
             ToggleUI();
             this.Disposed += delegate { _Service.Dispose(); };
         }
 
         private void ToggleUI()
         {
-            btnAdd.Enabled = (Array.IndexOf<int>(this.BoundConnection.Connection.CommandCapabilities.Commands, (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) >= 0);
-            btnDestroy.Enabled = (Array.IndexOf<int>(this.BoundConnection.Connection.CommandCapabilities.Commands, (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroyDataStore) >= 0);
+            btnAdd.Enabled = (Array.IndexOf<int>(this.BoundConnection.InternalConnection.CommandCapabilities.Commands, (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) >= 0);
+            btnDestroy.Enabled = (Array.IndexOf<int>(this.BoundConnection.InternalConnection.CommandCapabilities.Commands, (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroyDataStore) >= 0);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -66,7 +66,7 @@ namespace FdoToolbox.Core.Controls
 
         private void ListDataStores()
         {
-            FeatureService service = new FeatureService(this.BoundConnection.Connection);
+            FeatureService service = new FeatureService(this.BoundConnection.InternalConnection);
             ReadOnlyCollection<DataStoreInfo> stores = service.ListDataStores(true);
             grdDataStores.DataSource = stores;
         }
@@ -99,7 +99,7 @@ namespace FdoToolbox.Core.Controls
         {
             if (AppConsole.Confirm("Destroy Datastore", "Are you sure you want to destroy a datastore?\nYou will lose all data inside the datastore"))
             {
-                using (IDestroyDataStore destroy = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroyDataStore) as IDestroyDataStore)
+                using (IDestroyDataStore destroy = this.BoundConnection.InternalConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroyDataStore) as IDestroyDataStore)
                 {
                     NameValueCollection props = DictionaryDialog.GetParameters("Destroy parameters", destroy.DataStoreProperties);
                     if (props != null)
@@ -118,7 +118,7 @@ namespace FdoToolbox.Core.Controls
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            using (ICreateDataStore create = this.BoundConnection.Connection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) as ICreateDataStore)
+            using (ICreateDataStore create = this.BoundConnection.InternalConnection.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_CreateDataStore) as ICreateDataStore)
             {
                 NameValueCollection props = DictionaryDialog.GetParameters("Create parameters", create.DataStoreProperties);
                 if (props != null)

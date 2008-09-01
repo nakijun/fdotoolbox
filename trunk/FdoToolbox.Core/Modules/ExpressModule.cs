@@ -158,7 +158,7 @@ namespace FdoToolbox.Core.Modules
                     classDef.Name = className;
                     schema.Classes.Add(classDef);
                     //Use a dummy name for the connection
-                    SpatialConnectionInfo connInfo = new SpatialConnectionInfo(conn.GetHashCode().ToString(), conn);
+                    FdoConnectionInfo connInfo = new FdoConnectionInfo(conn.GetHashCode().ToString(), conn);
                     ClassDefCtl ctl = new ClassDefCtl(classDef, connInfo);
                     Form frm = FormFactory.CreateFormForControl(ctl);
                     if (frm.ShowDialog() == DialogResult.OK)

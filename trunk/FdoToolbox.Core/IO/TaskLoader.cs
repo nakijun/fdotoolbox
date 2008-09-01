@@ -114,20 +114,20 @@ namespace FdoToolbox.Core.IO
                 IConnection targetConn = FeatureAccessManager.GetConnectionManager().CreateConnection(djt.Target.Provider);
                 targetConn.ConnectionString = djt.Target.ConnectionString;
 
-                SpatialConnectionInfo priConnInfo = new SpatialConnectionInfo(priName, priConn);
-                SpatialConnectionInfo targetConnInfo = new SpatialConnectionInfo(targetName, targetConn);
+                FdoConnectionInfo priConnInfo = new FdoConnectionInfo(priName, priConn);
+                FdoConnectionInfo targetConnInfo = new FdoConnectionInfo(targetName, targetConn);
                 DbConnectionInfo secConnInfo = new DbConnectionInfo(secName, new OleDbConnection(djt.SecondarySource.ConnectionString));
 
                 if (consoleMode)
                 {
-                    priConnInfo.Connection.Open();
+                    priConnInfo.InternalConnection.Open();
                     secConnInfo.Connection.Open();
-                    targetConnInfo.Connection.Open();
+                    targetConnInfo.InternalConnection.Open();
                 }
                 else
                 {
-                    AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(priConnInfo.Name, priConnInfo.Connection);
-                    AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(targetConnInfo.Name, targetConnInfo.Connection);
+                    AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(priConnInfo.Name, priConnInfo.InternalConnection);
+                    AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(targetConnInfo.Name, targetConnInfo.InternalConnection);
                     AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(secConnInfo);
                 }
 
@@ -184,8 +184,8 @@ namespace FdoToolbox.Core.IO
             List<Join> joins = new List<Join>();
 
             djt.PrimarySource.name = task.Options.PrimarySource.Name;
-            djt.PrimarySource.Provider = task.Options.PrimarySource.Connection.ConnectionInfo.ProviderName;
-            djt.PrimarySource.ConnectionString = task.Options.PrimarySource.Connection.ConnectionString;
+            djt.PrimarySource.Provider = task.Options.PrimarySource.InternalConnection.ConnectionInfo.ProviderName;
+            djt.PrimarySource.ConnectionString = task.Options.PrimarySource.InternalConnection.ConnectionString;
             djt.PrimarySource.FeatureSchema = task.Options.SchemaName;
             djt.PrimarySource.Class = task.Options.ClassName;
             djt.PrimarySource.Prefix = task.Options.PrimaryPrefix;
@@ -199,10 +199,10 @@ namespace FdoToolbox.Core.IO
             djt.SecondarySource.Table = task.Options.TableName;
 
             djt.Target.Class = task.Options.TargetClassName;
-            djt.Target.ConnectionString = task.Options.Target.Connection.ConnectionString;
+            djt.Target.ConnectionString = task.Options.Target.InternalConnection.ConnectionString;
             djt.Target.FeatureSchema = task.Options.TargetSchema;
             djt.Target.name = task.Options.Target.Name;
-            djt.Target.Provider = task.Options.Target.Connection.ConnectionInfo.ProviderName;
+            djt.Target.Provider = task.Options.Target.InternalConnection.ConnectionInfo.ProviderName;
            
             foreach (string prop in task.Options.GetJoinedProperties())
             {
@@ -268,8 +268,8 @@ namespace FdoToolbox.Core.IO
 
                 string name = bcp.name;
 
-                SpatialConnectionInfo srcConnInfo = new SpatialConnectionInfo(srcName, srcConn);
-                SpatialConnectionInfo destConnInfo = new SpatialConnectionInfo(destName, destConn);
+                FdoConnectionInfo srcConnInfo = new FdoConnectionInfo(srcName, srcConn);
+                FdoConnectionInfo destConnInfo = new FdoConnectionInfo(destName, destConn);
 
                 SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(srcConnInfo, destConnInfo);
                 options.SourceSchemaName = bcp.Source.Schema;
@@ -358,14 +358,14 @@ namespace FdoToolbox.Core.IO
             bcp.Target = new CopyTarget();
             List<Mapping> mappings = new List<Mapping>();
 
-            bcp.Source.ConnectionString = task.Options.Source.Connection.ConnectionString;
+            bcp.Source.ConnectionString = task.Options.Source.InternalConnection.ConnectionString;
             bcp.Source.name = task.Options.Source.Name;
-            bcp.Source.Provider = task.Options.Source.Connection.ConnectionInfo.ProviderName;
+            bcp.Source.Provider = task.Options.Source.InternalConnection.ConnectionInfo.ProviderName;
             bcp.Source.Schema = task.Options.SourceSchemaName;
 
-            bcp.Target.ConnectionString = task.Options.Target.Connection.ConnectionString;
+            bcp.Target.ConnectionString = task.Options.Target.InternalConnection.ConnectionString;
             bcp.Target.name = task.Options.Target.Name;
-            bcp.Target.Provider = task.Options.Target.Connection.ConnectionInfo.ProviderName;
+            bcp.Target.Provider = task.Options.Target.InternalConnection.ConnectionInfo.ProviderName;
             bcp.Target.Schema = task.Options.TargetSchemaName;
             
             ReadOnlyCollection<ClassCopyOptions> cOptions = task.Options.ClassCopyOptions;

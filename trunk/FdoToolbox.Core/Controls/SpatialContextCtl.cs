@@ -59,7 +59,7 @@ namespace FdoToolbox.Core.Controls
 
         private FeatureService _Service;
 
-        public SpatialContextCtl(SpatialConnectionInfo conn, string key)
+        public SpatialContextCtl(FdoConnectionInfo conn, string key)
             : base(conn, key)
         {
             InitializeComponent();
@@ -69,15 +69,15 @@ namespace FdoToolbox.Core.Controls
             grdSpatialContexts.DataSource = _bsContexts;
             this.Disposed += delegate { _GeomFactory.Dispose(); };
             _BoundConnection = conn;
-            _Service = new FeatureService(conn.Connection);
+            _Service = new FeatureService(conn.InternalConnection);
             this.Disposed += delegate { _Service.Dispose(); };
         }
 
         private void ToggleUI()
         {
-            _CanCreate = Array.Exists<int>(this.BoundConnection.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext; })
-                        && this.BoundConnection.Connection.ConnectionCapabilities.SupportsMultipleSpatialContexts();
-            _CanDelete = Array.Exists<int>(this.BoundConnection.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext; });
+            _CanCreate = Array.Exists<int>(this.BoundConnection.InternalConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext; })
+                        && this.BoundConnection.InternalConnection.ConnectionCapabilities.SupportsMultipleSpatialContexts();
+            _CanDelete = Array.Exists<int>(this.BoundConnection.InternalConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext; });
             _CanEdit = (_bsContexts.Count > 0);
 
             btnCreate.Enabled = _CanCreate;
@@ -146,7 +146,7 @@ namespace FdoToolbox.Core.Controls
 
         private void CreateSpatialContext(SpatialContextInfo ctx, bool updateExisting)
         {
-            FeatureService service = new FeatureService(this.BoundConnection.Connection);
+            FeatureService service = new FeatureService(this.BoundConnection.InternalConnection);
             service.CreateSpatialContext(ctx, updateExisting);
 
             if (updateExisting)
@@ -160,7 +160,7 @@ namespace FdoToolbox.Core.Controls
                 AppConsole.Alert("Created", "New Spatial Context created: " + ctx.Name);
                 _bsContexts.Add(ctx);
             }
-            btnDelete.Enabled = _CanDelete && (this.BoundConnection.Connection.ConnectionCapabilities.SupportsMultipleSpatialContexts() || (grdSpatialContexts.Rows.Count == 0));
+            btnDelete.Enabled = _CanDelete && (this.BoundConnection.InternalConnection.ConnectionCapabilities.SupportsMultipleSpatialContexts() || (grdSpatialContexts.Rows.Count == 0));
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

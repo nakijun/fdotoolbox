@@ -106,16 +106,14 @@ namespace FdoToolbox.Core.Controls
 
             SpatialJoinOptions options = new SpatialJoinOptions();
 
-            IConnection priConn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbPrimaryConnection.SelectedItem.ToString());
-            SpatialConnectionInfo priConnInfo = new SpatialConnectionInfo(cmbPrimaryConnection.SelectedItem.ToString(), priConn);
+            FdoConnectionInfo priConnInfo = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbPrimaryConnection.SelectedItem.ToString());
             string priSchema = (cmbPrimarySchema.SelectedItem as FeatureSchema).Name;
             string priClass = (cmbPrimaryClass.SelectedItem as ClassDefinition).Name;
 
             DbConnectionInfo secConn = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(cmbSecondaryConnection.SelectedItem.ToString());
             string secTable = (cmbSecondaryTable.SelectedItem as TableInfo).Name;
 
-            IConnection tConn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
-            SpatialConnectionInfo tConnInfo = new SpatialConnectionInfo(cmbTargetConnection.SelectedItem.ToString(), tConn);
+            FdoConnectionInfo tConnInfo = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
             string tSchema = (cmbTargetSchema.SelectedItem as FeatureSchema).Name;
             string tClass = txtTargetClassName.Text;
 
@@ -211,10 +209,10 @@ namespace FdoToolbox.Core.Controls
         private void cmbPrimaryConnection_SelectedIndexChanged(object sender, EventArgs e)
         {
             string name = cmbPrimaryConnection.SelectedItem.ToString();
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(name);
+            FdoConnectionInfo conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(name);
             if (conn != null)
             {
-                using (FeatureService service = new FeatureService(conn))
+                using (FeatureService service = conn.CreateFeatureService())
                 {
                     cmbPrimarySchema.DataSource = service.DescribeSchema();
                 }
@@ -224,10 +222,10 @@ namespace FdoToolbox.Core.Controls
         private void cmbTargetConnection_SelectedIndexChanged(object sender, EventArgs e)
         {
             string name = cmbTargetConnection.SelectedItem.ToString();
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(name);
+            FdoConnectionInfo conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(name);
             if (conn != null)
             {
-                using (FeatureService service = new FeatureService(conn))
+                using (FeatureService service = conn.CreateFeatureService())
                 {
                     cmbTargetSchema.DataSource = service.DescribeSchema();
                 }

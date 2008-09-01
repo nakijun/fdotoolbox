@@ -35,15 +35,15 @@ namespace FdoToolbox.Core.Forms
     {
         private GeometricPropertyDefinition _Definition;
 
-        private SpatialConnectionInfo _BoundConnection;
+        private FdoConnectionInfo _BoundConnection;
 
-        internal GeometryPropertyDefinitionDlg(SpatialConnectionInfo conn)
+        internal GeometryPropertyDefinitionDlg(FdoConnectionInfo conn)
         {
             InitializeComponent();
             _BoundConnection = conn;
             _Definition = new GeometricPropertyDefinition(txtName.Text, txtDescription.Text);
             
-            GeometryType[] gtypes = _BoundConnection.Connection.GeometryCapabilities.GeometryTypes;
+            GeometryType[] gtypes = _BoundConnection.InternalConnection.GeometryCapabilities.GeometryTypes;
 
             //Array gtypes = Enum.GetValues(typeof(GeometricType));
             foreach (object val in gtypes)
@@ -52,7 +52,7 @@ namespace FdoToolbox.Core.Forms
             }
         }
 
-        internal GeometryPropertyDefinitionDlg(GeometricPropertyDefinition def, SpatialConnectionInfo conn)
+        internal GeometryPropertyDefinitionDlg(GeometricPropertyDefinition def, FdoConnectionInfo conn)
             : this(conn)
         {
             _Definition = def;
@@ -92,7 +92,7 @@ namespace FdoToolbox.Core.Forms
             }
         }
 
-        public static GeometricPropertyDefinition NewGeometryProperty(SpatialConnectionInfo conn)
+        public static GeometricPropertyDefinition NewGeometryProperty(FdoConnectionInfo conn)
         {
             GeometryPropertyDefinitionDlg dlg = new GeometryPropertyDefinitionDlg(conn);
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -102,7 +102,7 @@ namespace FdoToolbox.Core.Forms
             return null;
         }
 
-        public static void EditGeometryProperty(GeometricPropertyDefinition def, SpatialConnectionInfo conn)
+        public static void EditGeometryProperty(GeometricPropertyDefinition def, FdoConnectionInfo conn)
         {
             GeometryPropertyDefinitionDlg dlg = new GeometryPropertyDefinitionDlg(def, conn);
             dlg.ShowDialog();

@@ -88,8 +88,7 @@ namespace FdoToolbox.Core.Forms
 
         public DbToPointCopyOptions GetCopyOptions()
         {
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
-            SpatialConnectionInfo spConnInfo = new SpatialConnectionInfo(cmbTargetConnection.SelectedItem.ToString(), conn);
+            FdoConnectionInfo spConnInfo = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
             DbToPointCopyOptions options = new DbToPointCopyOptions(_source, spConnInfo);
             options.ClassName = txtClass.Text;
             options.Database = txtDatabase.Text;
@@ -143,10 +142,10 @@ namespace FdoToolbox.Core.Forms
 
         private void cmbTargetConnection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
+            FdoConnectionInfo conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
             if (conn != null)
             {
-                using (FeatureService service = new FeatureService(conn))
+                using (FeatureService service = conn.CreateFeatureService())
                 {
                     cmbTargetSchema.DataSource = service.DescribeSchema();
                 }

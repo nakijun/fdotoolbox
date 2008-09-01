@@ -99,10 +99,10 @@ namespace FdoToolbox.Core.ETL
         {
             this.Name = name;
             _Options = options;
-            _SrcService = new FeatureService(options.Source.Connection);
-            _DestService = new FeatureService(options.Target.Connection);
-            this.CopySpatialContextOverride = OverrideFactory.GetCopySpatialContextOverride(options.Target.Connection);
-            this.ClassNameOverride = OverrideFactory.GetClassNameOverride(options.Source.Connection);
+            _SrcService = new FeatureService(options.Source.InternalConnection);
+            _DestService = new FeatureService(options.Target.InternalConnection);
+            this.CopySpatialContextOverride = OverrideFactory.GetCopySpatialContextOverride(options.Target.InternalConnection);
+            this.ClassNameOverride = OverrideFactory.GetClassNameOverride(options.Source.InternalConnection);
             _ErrorMsgs = new List<string>();
         }
 
@@ -147,7 +147,7 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         public override void ValidateTaskParameters()
         {
-            IConnection destConn = _Options.Target.Connection;
+            IConnection destConn = _Options.Target.InternalConnection;
 
             ValidateBulkCopyOptions(destConn);
         }
@@ -164,8 +164,8 @@ namespace FdoToolbox.Core.ETL
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
 
-                IConnection srcConn = _Options.Source.Connection;
-                IConnection destConn = _Options.Target.Connection;
+                IConnection srcConn = _Options.Source.InternalConnection;
+                IConnection destConn = _Options.Target.InternalConnection;
 
                 if (_Options.CopySpatialContexts)
                 {
@@ -532,7 +532,7 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void CopySpatialContexts(SpatialConnectionInfo source, SpatialConnectionInfo target)
+        private void CopySpatialContexts(FdoConnectionInfo source, FdoConnectionInfo target)
         {
             if (_Options.SourceSpatialContexts.Count == 0)
             {
@@ -540,8 +540,8 @@ namespace FdoToolbox.Core.ETL
                 return;
             }
 
-            IConnection srcConn = source.Connection;
-            IConnection destConn = target.Connection;
+            IConnection srcConn = source.InternalConnection;
+            IConnection destConn = target.InternalConnection;
             SendMessage("Copying spatial contexts to destination");
             if (!destConn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
             {
@@ -645,7 +645,7 @@ namespace FdoToolbox.Core.ETL
             if (string.IsNullOrEmpty(_Options.SourceSchemaName))
                 throw new TaskValidationException("Source schema name not defined");
 
-            if (!Array.Exists<int>(_Options.Target.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)CommandType.CommandType_ApplySchema; }))
+            if (!Array.Exists<int>(_Options.Target.InternalConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)CommandType.CommandType_ApplySchema; }))
                 throw new TaskValidationException("Target connection does not support IApplySchema");
 
             if (_Options.CopySpatialContexts && _Options.SourceSpatialContexts.Count == 0)
@@ -668,7 +668,7 @@ namespace FdoToolbox.Core.ETL
             {
                 if (!checkedForDelete && copyOpts.DeleteClassData)
                 {
-                    if (!Array.Exists<int>(_Options.Target.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)CommandType.CommandType_Delete; }))
+                    if (!Array.Exists<int>(_Options.Target.InternalConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)CommandType.CommandType_Delete; }))
                         throw new TaskValidationException("Target connection does not support delete (IDelete)");
                     checkedForDelete = true;
                 }
@@ -878,7 +878,7 @@ namespace FdoToolbox.Core.ETL
         /// <returns></returns>
         public static ClassCollection GetSourceClasses(SpatialBulkCopyOptions options)
         {
-            FeatureService service = new FeatureService(options.Source.Connection);
+            FeatureService service = new FeatureService(options.Source.InternalConnection);
             FeatureSchema schema = service.GetSchemaByName(options.SourceSchemaName);
             if (schema != null)
                 return schema.Classes;

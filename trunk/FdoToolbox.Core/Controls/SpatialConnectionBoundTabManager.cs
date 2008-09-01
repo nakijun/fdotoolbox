@@ -81,7 +81,7 @@ namespace FdoToolbox.Core.Controls
                 cancel = !AppConsole.Confirm("Tabs still open", "There are tabs still open which rely on the connection you are about to close.\nIf you close the connection they will be closed too.\n\nClose connection?");
         }
 
-        public ISpatialConnectionBoundCtl CreateTab(Type tabType, SpatialConnectionInfo connInfo)
+        public ISpatialConnectionBoundCtl CreateTab(Type tabType, FdoConnectionInfo connInfo)
         {
             ISpatialConnectionBoundCtl control = null;
             if (!_ControlTypes.Contains(tabType))

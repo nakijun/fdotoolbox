@@ -58,7 +58,7 @@ namespace FdoToolbox.Core.Controls
             InitializeComponent();
         }
 
-        public SpatialDataPreviewCtl(SpatialConnectionInfo conn, string key)
+        public SpatialDataPreviewCtl(FdoConnectionInfo conn, string key)
             : base(conn, key)
         {
             InitializeComponent();
@@ -69,9 +69,9 @@ namespace FdoToolbox.Core.Controls
 
         private void ToggleUI()
         {
-            if (!this.BoundConnection.Connection.ConnectionCapabilities.SupportsSQL())
+            if (!this.BoundConnection.InternalConnection.ConnectionCapabilities.SupportsSQL())
                 tabQueryMode.TabPages.RemoveAt(TAB_SQL);
-            if (!Array.Exists<int>(this.BoundConnection.Connection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates; }))
+            if (!Array.Exists<int>(this.BoundConnection.InternalConnection.CommandCapabilities.Commands, delegate(int cmd) { return cmd == (int)OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates; }))
                 tabQueryMode.TabPages.RemoveAt(TAB_AGGREGATE);
         }
 

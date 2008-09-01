@@ -42,7 +42,7 @@ namespace FdoToolbox.Core.IO
         /// </summary>
         /// <param name="file">The connection settings file</param>
         /// <returns>The spatial connection</returns>
-        public static SpatialConnectionInfo LoadConnection(string file)
+        public static FdoConnectionInfo LoadConnection(string file)
         {
             Connection c = null;
             XmlSerializer serializer = new XmlSerializer(typeof(Connection));
@@ -53,7 +53,7 @@ namespace FdoToolbox.Core.IO
             IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(c.Provider);
             conn.ConnectionString = c.ConnectionString;
             conn.Open();
-            return new SpatialConnectionInfo(c.Name, conn);
+            return new FdoConnectionInfo(c.Name, conn);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace FdoToolbox.Core.IO
         /// </summary>
         /// <param name="cinfo">The spatial connection</param>
         /// <param name="file">The file to save it to</param>
-        public static void SaveConnection(SpatialConnectionInfo cinfo, string file)
+        public static void SaveConnection(FdoConnectionInfo cinfo, string file)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Connection));
             using (XmlTextWriter writer = new XmlTextWriter(file, Encoding.UTF8))
@@ -71,8 +71,8 @@ namespace FdoToolbox.Core.IO
 
                 Connection c = new Connection();
                 c.Name = cinfo.Name;
-                c.Provider = cinfo.Connection.ConnectionInfo.ProviderName;
-                c.ConnectionString = cinfo.Connection.ConnectionString;
+                c.Provider = cinfo.InternalConnection.ConnectionInfo.ProviderName;
+                c.ConnectionString = cinfo.InternalConnection.ConnectionString;
 
                 serializer.Serialize(writer, c);
             }

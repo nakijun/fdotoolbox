@@ -162,8 +162,8 @@ namespace FdoToolbox.Core.Controls
         private void cmbSrcConn_SelectedIndexChanged(object sender, EventArgs e)
         {
             string connName = cmbSrcConn.SelectedItem.ToString();
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connName);
-            FeatureService service = new FeatureService(conn);
+            FdoConnectionInfo conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connName);
+            FeatureService service = conn.CreateFeatureService();
             FeatureSchemaCollection schemas = service.DescribeSchema();
             if(schemas.Count == 0)
             {
@@ -186,8 +186,8 @@ namespace FdoToolbox.Core.Controls
         private void cmbDestConn_SelectedIndexChanged(object sender, EventArgs e)
         {
             string connName = cmbDestConn.SelectedItem.ToString();
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connName);
-            using (FeatureService service = new FeatureService(conn))
+            FdoConnectionInfo conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connName);
+            using (FeatureService service = conn.CreateFeatureService())
             {
                 FeatureSchemaCollection schemas = service.DescribeSchema();
                 cmbDestSchema.DataSource = schemas;
@@ -280,9 +280,8 @@ namespace FdoToolbox.Core.Controls
             string name = cmbSrcConn.SelectedItem.ToString();
             string schemaName = (cmbSrcSchema.SelectedItem as FeatureSchema).Name;
             string className = filterNode.Parent.Parent.Name;
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(name);
-            FeatureService service = AppGateway.RunningApplication.SpatialConnectionManager.CreateService(name);
-            SpatialConnectionInfo connInfo = new SpatialConnectionInfo(name, conn);
+            FdoConnectionInfo connInfo = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(name);
+            FeatureService service = connInfo.CreateFeatureService();
             ClassDefinition classDef = service.GetClassByName(schemaName, className);
             if (classDef != null)
             {
@@ -614,9 +613,9 @@ namespace FdoToolbox.Core.Controls
 
             string srcConnName = cmbSrcConn.SelectedItem.ToString();
             string destConnName = cmbDestConn.SelectedItem.ToString();
-            IConnection srcConn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(srcConnName);
-            IConnection destConn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(destConnName);
-            if (!destConn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
+            FdoConnectionInfo srcConn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(srcConnName);
+            FdoConnectionInfo destConn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(destConnName);
+            if (!destConn.InternalConnection.ConnectionCapabilities.SupportsMultipleSpatialContexts())
             {
                 if (chkSourceContextList.CheckedItems.Count > 1)
                 {
@@ -626,14 +625,8 @@ namespace FdoToolbox.Core.Controls
             }
             
             SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(
-                new SpatialConnectionInfo(
-                    srcConnName,
-                    srcConn
-                ),
-                new SpatialConnectionInfo(
-                    destConnName,
-                    destConn
-                )
+                srcConn,
+                destConn
             );
             if (numBatchSize.Enabled)
                 options.BatchInsertSize = Convert.ToInt32(numBatchSize.Value);
@@ -692,7 +685,7 @@ namespace FdoToolbox.Core.Controls
             //If copy full source schema, check that it can be applied to target.
             if (options.ApplySchemaToTarget)
             {
-                using (FeatureService destService = new FeatureService(destConn))
+                using (FeatureService destService = destConn.CreateFeatureService())
                 {
                     IncompatibleSchema incSchema = null;
                     if (!destService.CanApplySchema(srcSchema, out incSchema))
@@ -761,8 +754,8 @@ namespace FdoToolbox.Core.Controls
             if (chkCopySpatialContexts.Checked)
             {
                 string connName = cmbDestConn.SelectedItem.ToString();
-                IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connName);
-                if (!conn.ConnectionCapabilities.SupportsMultipleSpatialContexts())
+                FdoConnectionInfo conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connName);
+                if (!conn.InternalConnection.ConnectionCapabilities.SupportsMultipleSpatialContexts())
                 {
                     AppConsole.Alert("Warning", "The target connection does not support multiple spatial contexts\nSelect at most ONE spatial context from the list\nThe target spatial context and any data stored in that context will also be destroyed!");
                 }
@@ -772,8 +765,8 @@ namespace FdoToolbox.Core.Controls
         private void DeleteBeforeCopyEnable_Click(object sender, EventArgs e)
         {
             string name = cmbDestConn.SelectedItem.ToString();
-            IConnection conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(name);
-            using (FeatureService service = new FeatureService(conn))
+            FdoConnectionInfo conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(name);
+            using (FeatureService service = conn.CreateFeatureService())
             {
                 TreeNode delNode = mTreeView.SelectedNode;
                 if (service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Delete))

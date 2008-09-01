@@ -35,15 +35,15 @@ namespace FdoToolbox.Core.ETL
             set { _Source = value; }
         }
 
-        private SpatialConnectionInfo _Target;
+        private FdoConnectionInfo _Target;
 
-        public SpatialConnectionInfo Target
+        public FdoConnectionInfo Target
         {
             get { return _Target; }
             set { _Target = value; }
         }
 	
-        public DbToPointCopyOptions(DbConnectionInfo source, SpatialConnectionInfo target)
+        public DbToPointCopyOptions(DbConnectionInfo source, FdoConnectionInfo target)
         {
             this.Source = source;
             this.Target = target;

@@ -45,14 +45,14 @@ namespace FdoToolbox.Tests
                 ITask task = TaskLoader.LoadTask("Join.task", true);
                 Assert.IsNotNull(task);
                 SpatialJoinTask join = (SpatialJoinTask)task;
-                join.Options.PrimarySource.Connection.Dispose();
+                join.Options.PrimarySource.InternalConnection.Dispose();
                 join.Options.SecondarySource.Connection.Dispose();
-                join.Options.Target.Connection.Dispose();
+                join.Options.Target.InternalConnection.Dispose();
 
                 task = TaskLoader.LoadTask("Copy.task", true);
                 SpatialBulkCopyTask bcp = (SpatialBulkCopyTask)task;
-                bcp.Options.Source.Connection.Dispose();
-                bcp.Options.Target.Connection.Dispose();
+                bcp.Options.Source.InternalConnection.Dispose();
+                bcp.Options.Target.InternalConnection.Dispose();
                 Assert.IsNotNull(task);
             }
             finally

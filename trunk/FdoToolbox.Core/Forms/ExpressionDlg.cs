@@ -37,7 +37,7 @@ namespace FdoToolbox.Core.Forms
 {
     public partial class ExpressionDlg : Form
     {
-        private SpatialConnectionInfo _BoundConnection;
+        private FdoConnectionInfo _BoundConnection;
 
         private ClassDefinition _ClassDef;
 
@@ -50,7 +50,7 @@ namespace FdoToolbox.Core.Forms
             _ExprMode = ExpressionMode.Filter;
         }
 
-        public ExpressionDlg(SpatialConnectionInfo conn, ClassDefinition classDef, ExpressionMode mode)
+        public ExpressionDlg(FdoConnectionInfo conn, ClassDefinition classDef, ExpressionMode mode)
             : this()
         {
             _BoundConnection = conn;
@@ -58,7 +58,7 @@ namespace FdoToolbox.Core.Forms
             _ExprMode = mode;
         }
 
-        public SpatialConnectionInfo BoundConnection
+        public FdoConnectionInfo BoundConnection
         {
             get { return _BoundConnection; }
         }
@@ -69,11 +69,11 @@ namespace FdoToolbox.Core.Forms
         {
             if(this.BoundConnection != null)
             {   
-                FunctionDefinitionCollection funcs = this.BoundConnection.Connection.ExpressionCapabilities.Functions;
+                FunctionDefinitionCollection funcs = this.BoundConnection.InternalConnection.ExpressionCapabilities.Functions;
                 Array categories = Enum.GetValues(typeof(FunctionCategoryType));
-                ConditionType[] conditions = this.BoundConnection.Connection.FilterCapabilities.ConditionTypes;
-                DistanceOperations[] distanceOps = this.BoundConnection.Connection.FilterCapabilities.DistanceOperations;
-                SpatialOperations[] spatialOps = this.BoundConnection.Connection.FilterCapabilities.SpatialOperations;
+                ConditionType[] conditions = this.BoundConnection.InternalConnection.FilterCapabilities.ConditionTypes;
+                DistanceOperations[] distanceOps = this.BoundConnection.InternalConnection.FilterCapabilities.DistanceOperations;
+                SpatialOperations[] spatialOps = this.BoundConnection.InternalConnection.FilterCapabilities.SpatialOperations;
                 LoadFunctionCategories(categories);
                 LoadFunctionDefinitions(funcs);
                 LoadProperties();
@@ -449,7 +449,7 @@ namespace FdoToolbox.Core.Forms
             }
         }
 
-        public static string EditExpression(SpatialConnectionInfo conn, ClassDefinition classDef, string expr, ExpressionMode mode)
+        public static string EditExpression(FdoConnectionInfo conn, ClassDefinition classDef, string expr, ExpressionMode mode)
         {
             ExpressionDlg dlg = new ExpressionDlg(conn, classDef, mode);
             dlg.txtExpression.Text = expr;
@@ -460,7 +460,7 @@ namespace FdoToolbox.Core.Forms
             return null;
         }
 
-        public static string NewExpression(SpatialConnectionInfo conn, ClassDefinition classDef, ExpressionMode mode)
+        public static string NewExpression(FdoConnectionInfo conn, ClassDefinition classDef, ExpressionMode mode)
         {
             ExpressionDlg dlg = new ExpressionDlg(conn, classDef, mode);
             if (dlg.ShowDialog() == DialogResult.OK)
