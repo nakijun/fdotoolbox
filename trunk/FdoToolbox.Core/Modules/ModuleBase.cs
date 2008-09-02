@@ -60,7 +60,7 @@ namespace FdoToolbox.Core.Modules
             
             //Find all methods with [Command] attribute applied
             Type t = this.GetType();
-            MethodInfo[] methods = t.GetMethods();
+            MethodInfo[] methods = t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
             foreach (MethodInfo method in methods)
             {
                 CommandAttribute [] cmdAttrs = (CommandAttribute[])method.GetCustomAttributes(typeof(CommandAttribute), true);
