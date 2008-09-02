@@ -685,5 +685,10 @@ namespace FdoToolbox
 
             return null;
         }
+
+        public TreeNode GetSelectedNode()
+        {
+            return mTreeView.SelectedNode;
+        }
     }
 }
