@@ -60,6 +60,23 @@ namespace FdoToolbox
             AppGateway.RunningApplication.TaskManager.TaskRemoved += new TaskEventHandler(OnTaskRemoved);
             RegisterContextMenus();
             RegisterRootNodes();
+            RegisterImages();
+        }
+
+        private void RegisterImages()
+        {
+            RegisterImage(ObjectExplorerImages.IMG_CONNECTION, Properties.Resources.database_connect);
+            RegisterImage(ObjectExplorerImages.IMG_TASK, Properties.Resources.application_go);
+            RegisterImage(ObjectExplorerImages.IMG_MODULE, Properties.Resources.plugin);
+            RegisterImage(ObjectExplorerImages.IMG_SCHEMA, Properties.Resources.chart_organisation);
+            RegisterImage(ObjectExplorerImages.IMG_CLASS, Properties.Resources.database_table);
+            RegisterImage(ObjectExplorerImages.IMG_PROPERTY_DATA, Properties.Resources.table);
+            RegisterImage(ObjectExplorerImages.IMG_PROPERTY_IDENTITY, Properties.Resources.key);
+            RegisterImage(ObjectExplorerImages.IMG_PROPERTY_RASTER, Properties.Resources.image);
+            RegisterImage(ObjectExplorerImages.IMG_PROPERTY_GEOMETRY, Properties.Resources.shape_handles);
+            RegisterImage(ObjectExplorerImages.IMG_PROPERTY_ASSOCIATION, Properties.Resources.table_relationship);
+            RegisterImage(ObjectExplorerImages.IMG_PROPERTY_OBJECT, Properties.Resources.package);
+            RegisterImage(ObjectExplorerImages.IMG_DATABASE, Properties.Resources.database);
         }
 
         private TreeNode _FdoConnectionsNode;
@@ -79,10 +96,10 @@ namespace FdoToolbox
             _TasksNode.Text = "Tasks";
             _ModulesNode.Text = "Modules";
 
-            _FdoConnectionsNode.ImageIndex = _FdoConnectionsNode.SelectedImageIndex = IMG_IDX_CONNECTION;
-            _DbConnectionsNode.ImageIndex = _DbConnectionsNode.SelectedImageIndex = IMG_IDX_CONNECTION;
-            _TasksNode.ImageIndex = _TasksNode.SelectedImageIndex = IMG_IDX_TASK;
-            _ModulesNode.ImageIndex = _TasksNode.SelectedImageIndex = IMG_IDX_MODULE;
+            _FdoConnectionsNode.ImageKey = _FdoConnectionsNode.SelectedImageKey = ObjectExplorerImages.IMG_CONNECTION;
+            _DbConnectionsNode.ImageKey = _DbConnectionsNode.SelectedImageKey = ObjectExplorerImages.IMG_CONNECTION;
+            _TasksNode.ImageKey = _TasksNode.SelectedImageKey = ObjectExplorerImages.IMG_TASK;
+            _ModulesNode.ImageKey = _TasksNode.SelectedImageKey = ObjectExplorerImages.IMG_MODULE;
 
             _FdoConnectionsNode.ContextMenuStrip = new ContextMenuStrip();
             _DbConnectionsNode.ContextMenuStrip = new ContextMenuStrip();
@@ -127,7 +144,7 @@ namespace FdoToolbox
             DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
-            node.ImageIndex = node.SelectedImageIndex = IMG_IDX_CONNECTION;
+            node.ImageKey = node.SelectedImageKey = ObjectExplorerImages.IMG_CONNECTION;
             node.ContextMenuStrip = ctxSelectedDatabaseConnection;
 
             GetDatabaseNodes(node, connInfo.Database);
@@ -143,7 +160,7 @@ namespace FdoToolbox
         {
             TreeNode dbNode = new TreeNode();
             dbNode.Name = dbNode.Text = db.Name;
-            dbNode.ImageIndex = dbNode.SelectedImageIndex = IMG_IDX_DATABASE;
+            dbNode.ImageKey = dbNode.SelectedImageKey = ObjectExplorerImages.IMG_DATABASE;
             dbNode.ContextMenuStrip = ctxSelectedDatabase;
             GetTableNodes(dbNode, db);
             node.Nodes.Add(dbNode);
@@ -155,7 +172,7 @@ namespace FdoToolbox
             {
                 TreeNode tableNode = new TreeNode();
                 tableNode.Name = tableNode.Text = table.Name;
-                tableNode.ImageIndex = tableNode.SelectedImageIndex = IMG_IDX_CLASS;
+                tableNode.ImageKey = tableNode.SelectedImageKey = ObjectExplorerImages.IMG_CLASS;
                 tableNode.ContextMenuStrip = ctxSelectedTable;
                 GetColumnNodes(tableNode, table);
                 string tooltip = string.Format(table.IsView ? "View\nDescription: {0}" : "Table\nDescription: {0}", table.Description);
@@ -170,10 +187,10 @@ namespace FdoToolbox
             {
                 TreeNode colNode = new TreeNode();
                 colNode.Name = colNode.Text = column.Name;
-                int imageIndex = IMG_IDX_PROPERTY_DATA;
+                string key = ObjectExplorerImages.IMG_PROPERTY_IDENTITY;
                 if (column.IsPrimaryKey)
-                    imageIndex = IMG_IDX_PROPERTY_IDENTITY;
-                colNode.ImageIndex = colNode.SelectedImageIndex = imageIndex;
+                    key = ObjectExplorerImages.IMG_PROPERTY_IDENTITY;
+                colNode.ImageKey = colNode.SelectedImageKey = key;
                 tableNode.Nodes.Add(colNode);
             }
         }
@@ -194,7 +211,7 @@ namespace FdoToolbox
             TreeNode node = new TreeNode();
             node.Name = NODE_PREFIX_TASK + name;
             node.Text = name;
-            node.ImageIndex = node.SelectedImageIndex = IMG_IDX_TASK;
+            node.ImageKey = node.SelectedImageKey = ObjectExplorerImages.IMG_TASK;
             node.ContextMenuStrip = ctxSelectedTask;
             GetTasksNode().Nodes.Add(node);
         }
@@ -208,7 +225,7 @@ namespace FdoToolbox
         {
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
-            node.ImageIndex = node.SelectedImageIndex = IMG_IDX_CONNECTION;
+            node.ImageKey = node.SelectedImageKey = ObjectExplorerImages.IMG_CONNECTION;
             node.ContextMenuStrip = ctxSelectedSpatialConnection;
             GetSchemaNodes(node);
             GetSpatialConnectionsNode().Nodes.Add(node);
@@ -229,7 +246,7 @@ namespace FdoToolbox
                     TreeNode schemaNode = new TreeNode();
                     schemaNode.Name = schemaNode.Text = schema.Name;
                     schemaNode.ContextMenuStrip = ctxSelectedSchema;
-                    schemaNode.ImageIndex = schemaNode.SelectedImageIndex = IMG_IDX_SCHEMA;
+                    schemaNode.ImageKey = schemaNode.SelectedImageKey = ObjectExplorerImages.IMG_SCHEMA;
                     GetClassNodes(schema, schemaNode);
                     connNode.Nodes.Add(schemaNode);
                     schemaNode.Expand();
@@ -244,7 +261,7 @@ namespace FdoToolbox
                 TreeNode classNode = new TreeNode();
                 classNode.Name = classNode.Text = classDef.Name;
                 classNode.ContextMenuStrip = ctxSelectedClass;
-                classNode.ImageIndex = classNode.SelectedImageIndex = IMG_IDX_CLASS;
+                classNode.ImageKey = classNode.SelectedImageKey = ObjectExplorerImages.IMG_CLASS;
                 classNode.ToolTipText = string.Format("Type: {0}", classDef.ClassType);
                 GetPropertyNodes(classDef, classNode);
                 schemaNode.Nodes.Add(classNode);
@@ -262,34 +279,34 @@ namespace FdoToolbox
                     case PropertyType.PropertyType_DataProperty:
                         {
                             DataPropertyDefinition dataDef = propDef as DataPropertyDefinition;
-                            propertyNode.ImageIndex = propertyNode.SelectedImageIndex = IMG_IDX_PROPERTY_DATA;
+                            propertyNode.ImageKey = propertyNode.SelectedImageKey = ObjectExplorerImages.IMG_PROPERTY_DATA;
                             if (classDef.IdentityProperties.Contains(dataDef))
-                                propertyNode.ImageIndex = propertyNode.SelectedImageIndex = IMG_IDX_PROPERTY_IDENTITY;
+                                propertyNode.ImageKey = propertyNode.SelectedImageKey = ObjectExplorerImages.IMG_PROPERTY_IDENTITY;
                             propertyNode.ToolTipText = string.Format("Data Type: {0}\nLength: {1}\nAuto-Generated: {2}\nRead-Only: {3}", dataDef.DataType, dataDef.Length, dataDef.IsAutoGenerated, dataDef.ReadOnly);
                         }
                         break;
                     case PropertyType.PropertyType_GeometricProperty:
                         {
                             GeometricPropertyDefinition geomDef = propDef as GeometricPropertyDefinition;
-                            propertyNode.ImageIndex = propertyNode.SelectedImageIndex = IMG_IDX_PROPERTY_GEOMETRY;
+                            propertyNode.ImageKey = propertyNode.SelectedImageKey = ObjectExplorerImages.IMG_PROPERTY_GEOMETRY;
                             propertyNode.ToolTipText = string.Format("Has Elevation: {0}\nHas Measure: {1}\nRead-Only: {2}", geomDef.HasElevation, geomDef.HasMeasure, geomDef.ReadOnly);
                         }
                         break;
                     case PropertyType.PropertyType_RasterProperty:
                         {
-                            propertyNode.ImageIndex = propertyNode.SelectedImageIndex = IMG_IDX_PROPERTY_RASTER;
+                            propertyNode.ImageKey = propertyNode.SelectedImageKey = ObjectExplorerImages.IMG_PROPERTY_RASTER;
                             propertyNode.ToolTipText = "Raster Property";
                         }
                         break;
                     case PropertyType.PropertyType_ObjectProperty:
                         {
-                            propertyNode.ImageIndex = propertyNode.SelectedImageIndex = IMG_IDX_PROPERTY_OBJECT;
+                            propertyNode.ImageKey = propertyNode.SelectedImageKey = ObjectExplorerImages.IMG_PROPERTY_OBJECT;
                             propertyNode.ToolTipText = "Object Property";
                         }
                         break;
                     case PropertyType.PropertyType_AssociationProperty:
                         {
-                            propertyNode.ImageIndex = propertyNode.SelectedImageIndex = IMG_IDX_PROPERTY_ASSOCIATION;
+                            propertyNode.ImageKey = propertyNode.SelectedImageKey = ObjectExplorerImages.IMG_PROPERTY_ASSOCIATION;
                             propertyNode.ToolTipText = "Association Property";
                         }
                         break;
@@ -307,19 +324,6 @@ namespace FdoToolbox
         const string NODE_PREFIX_TASK = "TASK";
         const string NODE_PREFIX_MODULE = "MOD";
 
-        const int IMG_IDX_CONNECTION = 0;
-        const int IMG_IDX_TASK = 1;
-        const int IMG_IDX_MODULE = 2;
-        const int IMG_IDX_SCHEMA = 3;
-        const int IMG_IDX_CLASS = 4;
-        const int IMG_IDX_PROPERTY_DATA = 5;
-        const int IMG_IDX_PROPERTY_IDENTITY = 6;
-        const int IMG_IDX_PROPERTY_RASTER = 7;
-        const int IMG_IDX_PROPERTY_GEOMETRY = 8;
-        const int IMG_IDX_PROPERTY_ASSOCIATION = 9;
-        const int IMG_IDX_PROPERTY_OBJECT = 10;
-        const int IMG_IDX_DATABASE = 11;
-
         const int NODE_LEVEL_SCHEMA = 2;
         const int NODE_LEVEL_CLASS = 3;
 
@@ -333,7 +337,7 @@ namespace FdoToolbox
             modNode.Name = key;
             modNode.Text = module.Name;
             modNode.ToolTipText = module.Description;
-            modNode.ImageIndex = modNode.SelectedImageIndex = IMG_IDX_MODULE;
+            modNode.ImageKey = modNode.SelectedImageKey = ObjectExplorerImages.IMG_MODULE;
             modNode.ContextMenuStrip = ctxSelectedModule;
             
             TreeNode parent = GetModulesNode();
@@ -689,6 +693,14 @@ namespace FdoToolbox
         public TreeNode GetSelectedNode()
         {
             return mTreeView.SelectedNode;
+        }
+
+        public void RegisterImage(string key, Image image)
+        {
+            if (mImageList.Images.ContainsKey(key))
+                throw new ArgumentException("The Object Explorer image list already contains an image under the key: " + key);
+
+            mImageList.Images.Add(key, image);
         }
     }
 }
