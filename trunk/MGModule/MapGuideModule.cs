@@ -51,9 +51,7 @@ namespace MGModule
         void OnConnectionAdded(Uri host)
         {
             System.Windows.Forms.TreeNode mgNode = _App.Shell.ObjectExplorer.GetRootNode(MG_SERVERS);
-
             System.Windows.Forms.TreeNode connNode = CreateConnectionNode(host);
-
             mgNode.Nodes.Add(connNode);
         }
 
@@ -64,7 +62,7 @@ namespace MGModule
             connNode.Text = host.ToString();
             connNode.Tag = host;
             connNode.ContextMenuStrip = _App.Shell.ObjectExplorer.GetContextMenu(MG_FEATURE_SOURCES);
-
+            connNode.ToolTipText = "HTTP connection: " + host.ToString();
             PopulateFeatureSources(connNode, host);
             return connNode;
         }
@@ -81,6 +79,7 @@ namespace MGModule
                 fsNode.Text = doc.ResourceId;
                 fsNode.Name = doc.ResourceId;
                 fsNode.Tag = doc;
+                fsNode.ToolTipText = doc.ResourceId;
                 fsNode.ContextMenuStrip = _App.Shell.ObjectExplorer.GetContextMenu(MG_SELECTED_FEATURE_SOURCE);
 
                 connNode.Nodes.Add(fsNode);
