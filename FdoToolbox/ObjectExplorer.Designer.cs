@@ -29,7 +29,6 @@ namespace FdoToolbox
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ObjectExplorer));
             this.mToolStrip = new System.Windows.Forms.ToolStrip();
             this.mTreeView = new System.Windows.Forms.TreeView();
             this.mImageList = new System.Windows.Forms.ImageList(this.components);
@@ -67,20 +66,9 @@ namespace FdoToolbox
             // 
             // mImageList
             // 
-            this.mImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("mImageList.ImageStream")));
+            this.mImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.mImageList.ImageSize = new System.Drawing.Size(16, 16);
             this.mImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.mImageList.Images.SetKeyName(0, "database_connect.png");
-            this.mImageList.Images.SetKeyName(1, "application_go.png");
-            this.mImageList.Images.SetKeyName(2, "cog_go.png");
-            this.mImageList.Images.SetKeyName(3, "chart_organisation.png");
-            this.mImageList.Images.SetKeyName(4, "database_table.png");
-            this.mImageList.Images.SetKeyName(5, "table.png");
-            this.mImageList.Images.SetKeyName(6, "key.png");
-            this.mImageList.Images.SetKeyName(7, "image.png");
-            this.mImageList.Images.SetKeyName(8, "shape_handles.png");
-            this.mImageList.Images.SetKeyName(9, "table_relationship.png");
-            this.mImageList.Images.SetKeyName(10, "package.png");
-            this.mImageList.Images.SetKeyName(11, "database.png");
             // 
             // ctxSelectedModule
             // 

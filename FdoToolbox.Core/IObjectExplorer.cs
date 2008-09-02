@@ -147,5 +147,12 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <returns></returns>
         TreeNode GetSelectedNode();
+
+        /// <summary>
+        /// Registers a image that can be used for node icons in the Object Explorer
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="image"></param>
+        void RegisterImage(string key, System.Drawing.Image image);
     }
 }
