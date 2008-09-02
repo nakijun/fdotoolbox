@@ -28,6 +28,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MapGuideDotNetApi, Version=2.0.0.2308, Culture=neutral, PublicKeyToken=f526c48929fda856, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Maestro\MapGuideDotNetApi.dll</HintPath>
+    </Reference>
+    <Reference Include="OSGeo.MapGuide.MaestroAPI, Version=1.0.8.27397, Culture=neutral, PublicKeyToken=f526c48929fda856, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Maestro\OSGeo.MapGuide.MaestroAPI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
