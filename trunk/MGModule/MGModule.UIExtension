@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+UI Extension file for TestModule.dll
+
+This file must have the same name as the assembly containing the ModuleBase types.
+This file must end with a .UIExtension file extension.
+
+Commands defined here are APPENDED to any existing menus, otherwise they are created.
+-->
+<UIExtension>
+    <!--
+    Elements within <Shell> follow the same structure as MenuMap.xml
+    -->
+    <Shell>
+        
+    </Shell>
+    <!--
+    Elements within <ObjectExplorer> follow the same structure as OEMenuMap.xml
+    -->
+    <ObjectExplorer>
+        <Toolbar>
+            
+        </Toolbar>
+        <ContextMenus>
+            <ContextMenu attachTo="MG_SERVERS">
+                <Command name="mg_connect" />
+                <Command name="mg_disconnect" />
+            </ContextMenu>
+            <ContextMenu attachTo="MG_FEATURE_SOURCES">
+                <Command name="mg_refresh" />
+            </ContextMenu>
+            <ContextMenu attachTo="MG_SELECTED_FEATURE_SOURCE">
+                <Command name="mg_datapreview" />
+            </ContextMenu>
+        </ContextMenus>
+    </ObjectExplorer>
+</UIExtension>

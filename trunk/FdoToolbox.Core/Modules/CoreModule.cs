@@ -182,14 +182,7 @@ namespace FdoToolbox.Core.Modules
             string assemblyFile = _App.OpenFile("Load Extension Module", ".net Assembly (*.dll)|*.dll");
             if(File.Exists(assemblyFile))
             {
-                try
-                {
-                    _App.ModuleManager.LoadExtension(assemblyFile);
-                }
-                catch (ModuleLoadException ex)
-                {
-                    AppConsole.Alert("Error", ex.Message);
-                }
+                _App.ModuleManager.LoadExtension(assemblyFile);
             }
         }
 

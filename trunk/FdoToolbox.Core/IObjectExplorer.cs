@@ -141,5 +141,11 @@ namespace FdoToolbox.Core
         /// <param name="nodeName"></param>
         /// <returns></returns>
         ContextMenuStrip GetContextMenu(string nodeName);
+
+        /// <summary>
+        /// Gets the currently selected node in the Object Explorer
+        /// </summary>
+        /// <returns></returns>
+        TreeNode GetSelectedNode();
     }
 }
