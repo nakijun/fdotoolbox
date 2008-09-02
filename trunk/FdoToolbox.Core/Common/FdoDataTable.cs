@@ -254,13 +254,7 @@ namespace FdoToolbox.Core.Common
                     if (def.DataType == OSGeo.FDO.Schema.DataType.DataType_BLOB ||
                         def.DataType == OSGeo.FDO.Schema.DataType.DataType_CLOB ||
                         def.DataType == OSGeo.FDO.Schema.DataType.DataType_String)
-                        def.Length = col.MaxLength < 0 ? int.MaxValue : col.MaxLength;
-
-                    if (def.DataType == OSGeo.FDO.Schema.DataType.DataType_Decimal)
-                    {
-                        def.Precision = int.MaxValue;
-                        def.Scale = int.MaxValue;
-                    }
+                        def.Length = col.MaxLength;
 
                     classDef.Properties.Add(def);
                     if (Array.IndexOf<DataColumn>(this.PrimaryKey, col) >= 0)
