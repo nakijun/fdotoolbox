@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--
-UI Extension file for TestModule.dll
+UI Extension file for MGModule.dll
 
 This file must have the same name as the assembly containing the ModuleBase types.
 This file must end with a .UIExtension file extension.
@@ -16,6 +16,9 @@ Commands defined here are APPENDED to any existing menus, otherwise they are cre
     </Shell>
     <!--
     Elements within <ObjectExplorer> follow the same structure as OEMenuMap.xml
+    
+    The context menus referred by the attachTo attribute must have already been registered
+    with the Object Explorer
     -->
     <ObjectExplorer>
         <Toolbar>

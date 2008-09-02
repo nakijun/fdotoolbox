@@ -22,6 +22,9 @@ Commands defined here are APPENDED to any existing menus, otherwise they are cre
     </Shell>
     <!--
     Elements within <ObjectExplorer> follow the same structure as OEMenuMap.xml
+    
+    The context menus referred by the attachTo attribute must have already been registered
+    with the Object Explorer
     -->
     <ObjectExplorer>
         <Toolbar>
