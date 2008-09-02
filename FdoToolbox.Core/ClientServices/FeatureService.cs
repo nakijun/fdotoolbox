@@ -1377,7 +1377,7 @@ namespace FdoToolbox.Core.ClientServices
         /// </summary>
         /// <param name="classDef"></param>
         /// <returns></returns>
-        public void FixDataProperties(ref ClassDefinition classDef)
+        internal void FixDataProperties(ref ClassDefinition classDef)
         {
             ISchemaCapabilities caps = this.Connection.SchemaCapabilities;
             foreach (PropertyDefinition propDef in classDef.Properties)
@@ -1390,14 +1390,14 @@ namespace FdoToolbox.Core.ClientServices
                         case DataType.DataType_BLOB:
                             {
                                 int length = (int)caps.get_MaximumDataValueLength(DataType.DataType_BLOB);
-                                if (dp.Length > length)
+                                if (dp.Length > length && length > 0)
                                     dp.Length = length;
                             }
                             break;
                         case DataType.DataType_CLOB:
                             {
                                 int length = (int)caps.get_MaximumDataValueLength(DataType.DataType_CLOB);
-                                if (dp.Length > length)
+                                if (dp.Length > length && length > 0)
                                     dp.Length = length;
                             }
                             break;

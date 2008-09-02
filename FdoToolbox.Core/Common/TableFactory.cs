@@ -43,11 +43,8 @@ namespace FdoToolbox.Core.Common
 
         /// <summary>
         /// Converts a raw DataTable into a FdoDataTable. Please note that if the raw
-        /// DataTable has DataColumns whose MaxLength is undefined, they will be set to
-        /// int.MaxValue and may cause failure when the converted ClassDefinition is used
-        /// in an IApplySchema call. If this is the case, run this ClassDefinition through
-        /// the FixDataProperties() method of FeatureService
-        /// </summary>
+        /// DataTable has DataColumns whose MaxLength is undefined and whose Data Type
+        /// is string or byte[], conversion will fail. 
         /// <param name="table"></param>
         /// <returns></returns>
         public static FdoDataTable CreateTable(DataTable table)
