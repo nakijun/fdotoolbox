@@ -43,6 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\MgDataTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\IMgConnectionBoundCtl.cs" />
+    <Compile Include="Controls\MgDataPreviewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MgDataPreviewCtl.Designer.cs">
+      <DependentUpon>MgDataPreviewCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ConnectDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -50,8 +60,14 @@
       <DependentUpon>ConnectDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="MapGuideConnectionMgr.cs" />
+    <Compile Include="MapGuideImages.cs" />
     <Compile Include="MapGuideModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FdoToolbox.Core\FdoToolbox.Core.csproj">
@@ -60,9 +76,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\MgDataPreviewCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MgDataPreviewCtl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConnectDlg.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ConnectDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -71,7 +96,28 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
+    <None Include="Resources\table_key.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\server.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\server_connect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shape_handles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\table.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\database.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\database_table.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_organisation.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
