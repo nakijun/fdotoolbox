@@ -99,7 +99,7 @@ namespace FdoToolbox
             _FdoConnectionsNode.ImageKey = _FdoConnectionsNode.SelectedImageKey = ObjectExplorerImages.IMG_CONNECTION;
             _DbConnectionsNode.ImageKey = _DbConnectionsNode.SelectedImageKey = ObjectExplorerImages.IMG_CONNECTION;
             _TasksNode.ImageKey = _TasksNode.SelectedImageKey = ObjectExplorerImages.IMG_TASK;
-            _ModulesNode.ImageKey = _TasksNode.SelectedImageKey = ObjectExplorerImages.IMG_MODULE;
+            _ModulesNode.ImageKey = _ModulesNode.SelectedImageKey = ObjectExplorerImages.IMG_MODULE;
 
             _FdoConnectionsNode.ContextMenuStrip = new ContextMenuStrip();
             _DbConnectionsNode.ContextMenuStrip = new ContextMenuStrip();
