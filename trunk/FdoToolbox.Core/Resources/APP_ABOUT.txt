@@ -5,5 +5,6 @@ This application uses the following thirdparty libraries and resources:
 - famfamfam silk icon set (c) Mark James (http://www.famfamfam.com/lab/icons/silk/)
 - ADO.NET 2.0 SQLite Data Provider (c) Robert Simpson (http://sqlite.phxsoftware.com)
 - Iesi.Collections (c) Jason Smith
+- MapGuide Maestro API (c) Kenneth Skovhede (http://trac.osgeo.org/mapguide/wiki/maestro)
 
 This application and its non-thirdparty components are licensed under the GNU Lesser General Public Licence (see http://www.gnu.org/licenses/lgpl.html)
