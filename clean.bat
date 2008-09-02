@@ -22,3 +22,6 @@ rd /S /Q FdoToolbox.UI\obj
 echo "Cleaning TestModule"
 rd /S /Q TestModule\bin
 rd /S /Q TestModule\obj
+echo "Cleaning MGModule"
+rd /S /Q MGModule\bin
+rd /S /Q MGModule\obj
