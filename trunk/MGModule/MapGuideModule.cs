@@ -57,19 +57,19 @@ namespace MGModule
 
         private System.Windows.Forms.TreeNode CreateConnectionNode(Uri host)
         {
+            ServerConnectionI conn = _ConnMgr.GetConnection(host);
             System.Windows.Forms.TreeNode connNode = new System.Windows.Forms.TreeNode();
             connNode.Name = MG_FEATURE_SOURCES;
             connNode.Text = host.ToString();
             connNode.Tag = host;
             connNode.ContextMenuStrip = _App.Shell.ObjectExplorer.GetContextMenu(MG_FEATURE_SOURCES);
-            connNode.ToolTipText = "HTTP connection: " + host.ToString();
-            PopulateFeatureSources(connNode, host);
+            connNode.ToolTipText = conn.DisplayName;
+            PopulateFeatureSources(connNode, conn);
             return connNode;
         }
 
-        private void PopulateFeatureSources(System.Windows.Forms.TreeNode connNode, Uri host)
+        private void PopulateFeatureSources(System.Windows.Forms.TreeNode connNode, ServerConnectionI conn)
         {
-            ServerConnectionI conn = _ConnMgr.GetConnection(host);
             ResourceList featureSources = conn.GetRepositoryResources("Library://", "FeatureSource");
             connNode.Nodes.Clear();
             foreach (object res in featureSources.Items)
@@ -81,9 +81,28 @@ namespace MGModule
                 fsNode.Tag = doc;
                 fsNode.ToolTipText = doc.ResourceId;
                 fsNode.ContextMenuStrip = _App.Shell.ObjectExplorer.GetContextMenu(MG_SELECTED_FEATURE_SOURCE);
-
+                PopulateSchemaNodes(fsNode, conn);
                 connNode.Nodes.Add(fsNode);
             }
+        }
+
+        private void PopulateSchemaNodes(System.Windows.Forms.TreeNode fsNode, ServerConnectionI conn)
+        {
+            FeatureSourceDescription desc = conn.DescribeFeatureSource(fsNode.Name);
+            foreach (OSGeo.MapGuide.MaestroAPI.FeatureSourceDescription.FeatureSourceSchema
+                schema in desc.Schemas)
+            {
+                System.Windows.Forms.TreeNode schemaNode = new System.Windows.Forms.TreeNode();
+                schemaNode.Text = schemaNode.Name = schema.Schema;
+                schemaNode.ToolTipText = schema.Schema;
+                PopulateClassNodes(schemaNode, conn);
+                fsNode.Nodes.Add(schemaNode);
+            }
+        }
+
+        private void PopulateClassNodes(System.Windows.Forms.TreeNode schemaNode, ServerConnectionI conn)
+        {
+            
         }
 
         public override void Cleanup()
@@ -148,7 +167,8 @@ namespace MGModule
         {
             System.Windows.Forms.TreeNode node = _App.Shell.ObjectExplorer.GetSelectedNode();
             Uri host = node.Tag as Uri;
-            PopulateFeatureSources(node, host);
+            ServerConnectionI conn = _ConnMgr.GetConnection(host);
+            PopulateFeatureSources(node, conn);
         }
     }
 }
