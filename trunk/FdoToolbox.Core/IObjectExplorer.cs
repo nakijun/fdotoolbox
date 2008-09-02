@@ -112,5 +112,34 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <returns></returns>
         string GetSelectedTable();
+
+        /// <summary>
+        /// Register a new root node that will be accessible to the whole application. The
+        /// node to be registered must have a ContextMenuStrip attached.
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <param name="node"></param>
+        void RegisterRootNode(string nodeName, TreeNode node);
+
+        /// <summary>
+        /// Gets a registered root node
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <returns></returns>
+        TreeNode GetRootNode(string nodeName);
+
+        /// <summary>
+        /// Registers a context menu
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <param name="contextMenu"></param>
+        void RegisterContextMenu(string nodeName, ContextMenuStrip contextMenu);
+
+        /// <summary>
+        /// Gets a registered context menu
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <returns></returns>
+        ContextMenuStrip GetContextMenu(string nodeName);
     }
 }

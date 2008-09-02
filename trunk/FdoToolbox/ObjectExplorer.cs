@@ -40,9 +40,14 @@ namespace FdoToolbox
 {
     public partial class ObjectExplorer : DockContent, IObjectExplorer
     {
+        private Dictionary<string, TreeNode> _RootNodes;
+        private Dictionary<string, ContextMenuStrip> _ContextMenus;
+
         public ObjectExplorer()
         {
             InitializeComponent();
+            _RootNodes = new Dictionary<string, TreeNode>();
+            _ContextMenus = new Dictionary<string, ContextMenuStrip>();
             AppGateway.RunningApplication.ModuleManager.ModuleLoaded += new ModuleEventHandler(OnModuleLoaded);
             AppGateway.RunningApplication.ModuleManager.ModuleUnloaded += new ModuleEventHandler(OnModuleUnloaded);
             AppGateway.RunningApplication.SpatialConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnSpatialConnectionAdded);
@@ -53,6 +58,32 @@ namespace FdoToolbox
             AppGateway.RunningApplication.DatabaseConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnDatabaseConnectionRenamed);
             AppGateway.RunningApplication.TaskManager.TaskAdded += new TaskEventHandler(OnTaskAdded);
             AppGateway.RunningApplication.TaskManager.TaskRemoved += new TaskEventHandler(OnTaskRemoved);
+            RegisterContextMenus();
+            RegisterRootNodes();
+        }
+
+        private void RegisterRootNodes()
+        {
+            RegisterRootNode(ObjectExplorerNodeNames.FDO_CONNECTIONS, GetSpatialConnectionsNode());
+            RegisterRootNode(ObjectExplorerNodeNames.DB_CONNECTIONS, GetDatabaseConnectionsNode());
+            RegisterRootNode(ObjectExplorerNodeNames.TASKS, GetTasksNode());
+            RegisterRootNode(ObjectExplorerNodeNames.MODULES, GetModulesNode());
+        }
+
+        private void RegisterContextMenus()
+        {
+            _ContextMenus[ObjectExplorerNodeNames.DB_CONNECTIONS] = ctxDbConnections;
+            _ContextMenus[ObjectExplorerNodeNames.FDO_CONNECTIONS] = ctxFdoConnections;
+            _ContextMenus[ObjectExplorerNodeNames.MODULES] = ctxModules;
+            _ContextMenus[ObjectExplorerNodeNames.SELECTED_CLASS] = ctxSelectedClass;
+            _ContextMenus[ObjectExplorerNodeNames.SELECTED_DB] = ctxSelectedDatabase;
+            _ContextMenus[ObjectExplorerNodeNames.SELECTED_DB_CONNECTION] = ctxSelectedDatabaseConnection;
+            _ContextMenus[ObjectExplorerNodeNames.SELECTED_FDO_CONNECTION] = ctxSelectedSpatialConnection;
+            _ContextMenus[ObjectExplorerNodeNames.SELECTED_MODULE] = ctxSelectedModule;
+            _ContextMenus[ObjectExplorerNodeNames.SELECTED_SCHEMA] = ctxSelectedSchema;
+            _ContextMenus[ObjectExplorerNodeNames.SELECTED_TABLE] = ctxSelectedTable;
+            _ContextMenus[ObjectExplorerNodeNames.SELECTED_TASK] = ctxSelectedTask;
+            _ContextMenus[ObjectExplorerNodeNames.TASKS] = ctxTasks;
         }
 
         void OnDatabaseConnectionRenamed(string oldName, string newName)
@@ -418,32 +449,15 @@ namespace FdoToolbox
             doc.Load(menuMapFile);
 
             XmlNode toolbarNode = doc.SelectSingleNode("//ObjectExplorer/Toolbar");
-            XmlNode connCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/Connections");
-            XmlNode selConnCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedConnection");
-            XmlNode taskCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/Tasks");
-            XmlNode selTaskCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedTask");
-            XmlNode moduleCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/Modules");
-            XmlNode selModuleCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedModule");
-            XmlNode selSchemaCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedSchema");
-            XmlNode selClassCtxNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedClass");
-            XmlNode selDbConnNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedDatabaseConnection");
-            XmlNode dbConnNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/DatabaseConnections");
-            XmlNode selTableNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedTable");
-            XmlNode selDbNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedDatabase");
 
             ProcessMenuNode(mToolStrip, toolbarNode);
-            ProcessMenuNode(ctxFdoConnections, connCtxNode);
-            ProcessMenuNode(ctxSelectedSpatialConnection, selConnCtxNode);
-            ProcessMenuNode(ctxSelectedSchema, selSchemaCtxNode);
-            ProcessMenuNode(ctxSelectedClass, selClassCtxNode);
-            ProcessMenuNode(ctxTasks, taskCtxNode);
-            ProcessMenuNode(ctxSelectedTask, selTaskCtxNode);
-            ProcessMenuNode(ctxModules, moduleCtxNode);
-            ProcessMenuNode(ctxSelectedModule, selModuleCtxNode);
-            ProcessMenuNode(ctxSelectedDatabaseConnection, selDbConnNode);
-            ProcessMenuNode(ctxDbConnections, dbConnNode);
-            ProcessMenuNode(ctxSelectedTable, selTableNode);
-            ProcessMenuNode(ctxSelectedDatabase, selDbNode);
+
+            XmlNodeList contextMenuNodes = doc.SelectNodes("//ObjectExplorer/ContextMenus/ContextMenu");
+            foreach (XmlNode node in contextMenuNodes)
+            {
+                string name = node.Attributes["attachTo"].Value;
+                ProcessNode(doc, name);
+            }
         }
 
         private ToolStripMenuItem CreateMenuItem(Command cmd, XmlNode cmdNode)
@@ -531,38 +545,18 @@ namespace FdoToolbox
             }
         }
 
+        private void ProcessNode(XmlDocument doc, string name)
+        {
+            XmlNode menuNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/ContextMenu[@attachTo='" + name + "']");
+            if (_ContextMenus.ContainsKey(name))
+                ProcessMenuNode(_ContextMenus[name], menuNode);
+            else
+                throw new ArgumentException("No context menu has been registered under: " + name);
+        }
+
         public void ExtendUI(string uiExtensionFile)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load(uiExtensionFile);
-
-            XmlNode toolbarNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/Toolbar");
-            XmlNode connCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/Connections");
-            XmlNode selConnCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedConnection");
-            XmlNode taskCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/Tasks");
-            XmlNode selTaskCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedTask");
-            XmlNode moduleCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/Modules");
-            XmlNode selModuleCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedModule");
-            XmlNode selSchemaCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedSchema");
-            XmlNode selClassCtxNode = doc.SelectSingleNode("//UIExtension/ObjectExplorer/ContextMenus/SelectedClass");
-            XmlNode selDbConnNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedDatabaseConnection");
-            XmlNode dbConnNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/DatabaseConnections");
-            XmlNode selTableNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedTable");
-            XmlNode selDbNode = doc.SelectSingleNode("//ObjectExplorer/ContextMenus/SelectedDatabase");
-
-            ProcessMenuNode(mToolStrip, toolbarNode);
-            ProcessMenuNode(ctxFdoConnections, connCtxNode);
-            ProcessMenuNode(ctxSelectedSpatialConnection, selConnCtxNode);
-            ProcessMenuNode(ctxSelectedSchema, selSchemaCtxNode);
-            ProcessMenuNode(ctxSelectedClass, selClassCtxNode);
-            ProcessMenuNode(ctxTasks, taskCtxNode);
-            ProcessMenuNode(ctxSelectedTask, selTaskCtxNode);
-            ProcessMenuNode(ctxModules, moduleCtxNode);
-            ProcessMenuNode(ctxSelectedModule, selModuleCtxNode);
-            ProcessMenuNode(ctxSelectedDatabaseConnection, selDbConnNode);
-            ProcessMenuNode(ctxDbConnections, dbConnNode);
-            ProcessMenuNode(ctxSelectedTable, selTableNode);
-            ProcessMenuNode(ctxSelectedDatabase, selDbNode);
+            InitializeMenus(uiExtensionFile);
         }
 
         public void UnHide()
@@ -629,6 +623,42 @@ namespace FdoToolbox
 
             if (node.Level == NODE_LEVEL_TABLE && GetDatabaseConnectionsNode() == node.Parent.Parent.Parent)
                 return node.Name;
+
+            return null;
+        }
+
+        public void RegisterRootNode(string nodeName, TreeNode node)
+        {
+            if(_RootNodes.ContainsKey(nodeName) && _ContextMenus.ContainsKey(nodeName))
+                throw new ArgumentException("A root node named " + nodeName + " already has been registered");
+
+            if (node.ContextMenuStrip == null)
+                throw new ArgumentException("The given node has no context menu attached");
+
+            _RootNodes[nodeName] = node;
+            _ContextMenus[nodeName] = node.ContextMenuStrip;
+        }
+
+        public TreeNode GetRootNode(string nodeName)
+        {
+            if (_RootNodes.ContainsKey(nodeName))
+                return _RootNodes[nodeName];
+
+            return null;
+        }
+
+        public void RegisterContextMenu(string nodeName, ContextMenuStrip contextMenu)
+        {
+            if (_ContextMenus.ContainsKey(nodeName))
+                throw new ArgumentException("A context menu has already been registered under: " + nodeName);
+
+            _ContextMenus[nodeName] = contextMenu;
+        }
+
+        public ContextMenuStrip GetContextMenu(string nodeName)
+        {
+            if (_ContextMenus.ContainsKey(nodeName))
+                return _ContextMenus[nodeName];
 
             return null;
         }

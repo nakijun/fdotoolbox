@@ -78,6 +78,7 @@
     <Compile Include="ObjectExplorer.Designer.cs">
       <DependentUpon>ObjectExplorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="ObjectExplorerNodeNames.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ConsoleWindow.resx">
