@@ -28,13 +28,13 @@ Commands defined here are APPENDED to any existing menus, otherwise they are cre
             
         </Toolbar>
         <ContextMenus>
-            <Connections>
+            <ContextMenu attachTo="FDO_CONNECTIONS">
                 <Menu name="Test">
                     <Command name="foo" />
                     <Command name="bar" />
                 </Menu>
                 <Command name="foo" />
-            </Connections>
+            </ContextMenu>
         </ContextMenus>
     </ObjectExplorer>
 </UIExtension>

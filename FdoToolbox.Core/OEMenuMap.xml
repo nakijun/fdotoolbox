@@ -33,7 +33,7 @@ DO NOT DELETE THIS FILE!!!
 		<Command name="extload" />
 	</Toolbar>
 	<ContextMenus>
-		<Connections>
+		<ContextMenu attachTo="FDO_CONNECTIONS">
 			<Menu name="New Connection" resource="database_connect">
 				<Command name="sdfconnect" displayName="SDF" />
 				<Command name="shpconnect" displayName="SHP" />
@@ -48,8 +48,8 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="loadconn" />
 			<Separator/>
 			<Command name="removeallspatialconnections" />
-		</Connections>
-		<Tasks>
+		</ContextMenu>
+        <ContextMenu attachTo="TASKS">
 			<Menu name="New" resource="application_go">
 				<Command name="createbcp" />
 				<Command name="createdbjoin" />
@@ -57,12 +57,12 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="loadtask" />
 			<Separator/>
 			<Command name="removealltasks" />
-		</Tasks>
-		<Modules>
-			<Command name="extload" />
-		</Modules>
-		<SelectedConnection>
-			<Command name="refreshconn" />
+		</ContextMenu>
+        <ContextMenu attachTo="MODULES">
+            <Command name="extload" />
+        </ContextMenu>
+        <ContextMenu attachTo="SELECTED_FDO_CONNECTION">
+            <Command name="refreshconn" />
 			<Separator/>
 			<Command name="datapreview" />
 			<Command name="manschema" />
@@ -76,8 +76,8 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="loadschema" />
 			<Separator/>
 			<Command name="removeconn" />
-		</SelectedConnection>
-		<SelectedSchema>
+		</ContextMenu>
+		<ContextMenu attachTo="SELECTED_SCHEMA">
 			<Command name="manschema" displayName="Manage" />
 			<Command name="delschema" displayName="Destroy" />
 			<Separator/>
@@ -87,28 +87,28 @@ DO NOT DELETE THIS FILE!!!
 			</Menu>
 			<Separator/>
 			<Command name="editschemaattributes" />		  
-		</SelectedSchema>
-		<SelectedClass>
+		</ContextMenu>
+		<ContextMenu attachTo="SELECTED_CLASS">
 			<Command name="previewclass" displayName="Data Preview" />
 			<Command name="editclassattributes" />
-      <Command name="insertdata" />
-		</SelectedClass>
-		<SelectedTask>
+            <Command name="insertdata" />
+		</ContextMenu>
+		<ContextMenu attachTo="SELECTED_TASK">
 			<Command name="exectask" />
 			<Command name="edittask" />
 			<Command name="deletetask" />
 			<Command name="savetask" />
-		</SelectedTask>
-		<SelectedModule>
-			<Command name="modinfo" />
-		</SelectedModule>
-		<DatabaseConnections>
+		</ContextMenu>
+        <ContextMenu attachTo="SELECTED_MODULE">
+            <Command name="modinfo" />
+        </ContextMenu>
+        <ContextMenu attachTo="DB_CONNECTIONS">
 			<Command name="dbconnect" />
 			<Command name="dbloadconn" />
 			<Separator/>
 			<Command name="dbremoveallconnections" />
-		</DatabaseConnections>
-		<SelectedDatabaseConnection>
+		</ContextMenu>
+		<ContextMenu attachTo="SELECTED_DB_CONNECTION">
 			<Command name="dbrefreshconn" />
 			<Separator />
 			<Command name="dbdatapreview" />
@@ -116,17 +116,17 @@ DO NOT DELETE THIS FILE!!!
 			<Command name="dbsaveconn" />
 			<Command name="dbrenameconn" />
 			<Command name="dbremoveconn" />
-		</SelectedDatabaseConnection>
-		<SelectedDatabase>
+		</ContextMenu>
+		<ContextMenu attachTo="SELECTED_DB">
 			<Command name="dbdatapreview" />
-		</SelectedDatabase>
-		<SelectedTable>
-			<Command name="dbdatapreview" />
-			<Separator/>
-			<SubMenu name="Convert table">
-				<Command name="dbconverttopoints" />
-				<Command name="dbconverttosdf" />
-			</SubMenu>
-		</SelectedTable>
-	</ContextMenus>
+		</ContextMenu>
+        <ContextMenu attachTo="SELECTED_TABLE">
+            <Command name="dbdatapreview" />
+            <Separator/>
+            <SubMenu name="Convert table">
+                <Command name="dbconverttopoints" />
+                <Command name="dbconverttosdf" />
+            </SubMenu>
+        </ContextMenu>
+    </ContextMenus>
 </ObjectExplorer>
