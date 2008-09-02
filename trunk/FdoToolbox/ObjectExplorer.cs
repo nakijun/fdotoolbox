@@ -62,8 +62,33 @@ namespace FdoToolbox
             RegisterRootNodes();
         }
 
+        private TreeNode _FdoConnectionsNode;
+        private TreeNode _DbConnectionsNode;
+        private TreeNode _TasksNode;
+        private TreeNode _ModulesNode;
+
         private void RegisterRootNodes()
         {
+            _FdoConnectionsNode = new TreeNode();
+            _DbConnectionsNode = new TreeNode();
+            _TasksNode = new TreeNode();
+            _ModulesNode = new TreeNode();
+
+            _FdoConnectionsNode.Text = "FDO Data Sources";
+            _DbConnectionsNode.Text = "ADO.net Data Sources";
+            _TasksNode.Text = "Tasks";
+            _ModulesNode.Text = "Modules";
+
+            _FdoConnectionsNode.ImageIndex = _FdoConnectionsNode.SelectedImageIndex = IMG_IDX_CONNECTION;
+            _DbConnectionsNode.ImageIndex = _DbConnectionsNode.SelectedImageIndex = IMG_IDX_CONNECTION;
+            _TasksNode.ImageIndex = _TasksNode.SelectedImageIndex = IMG_IDX_TASK;
+            _ModulesNode.ImageIndex = _TasksNode.SelectedImageIndex = IMG_IDX_MODULE;
+
+            _FdoConnectionsNode.ContextMenuStrip = new ContextMenuStrip();
+            _DbConnectionsNode.ContextMenuStrip = new ContextMenuStrip();
+            _TasksNode.ContextMenuStrip = new ContextMenuStrip();
+            _ModulesNode.ContextMenuStrip = new ContextMenuStrip();
+
             RegisterRootNode(ObjectExplorerNodeNames.FDO_CONNECTIONS, GetSpatialConnectionsNode());
             RegisterRootNode(ObjectExplorerNodeNames.DB_CONNECTIONS, GetDatabaseConnectionsNode());
             RegisterRootNode(ObjectExplorerNodeNames.TASKS, GetTasksNode());
@@ -72,9 +97,6 @@ namespace FdoToolbox
 
         private void RegisterContextMenus()
         {
-            _ContextMenus[ObjectExplorerNodeNames.DB_CONNECTIONS] = ctxDbConnections;
-            _ContextMenus[ObjectExplorerNodeNames.FDO_CONNECTIONS] = ctxFdoConnections;
-            _ContextMenus[ObjectExplorerNodeNames.MODULES] = ctxModules;
             _ContextMenus[ObjectExplorerNodeNames.SELECTED_CLASS] = ctxSelectedClass;
             _ContextMenus[ObjectExplorerNodeNames.SELECTED_DB] = ctxSelectedDatabase;
             _ContextMenus[ObjectExplorerNodeNames.SELECTED_DB_CONNECTION] = ctxSelectedDatabaseConnection;
@@ -83,7 +105,6 @@ namespace FdoToolbox
             _ContextMenus[ObjectExplorerNodeNames.SELECTED_SCHEMA] = ctxSelectedSchema;
             _ContextMenus[ObjectExplorerNodeNames.SELECTED_TABLE] = ctxSelectedTable;
             _ContextMenus[ObjectExplorerNodeNames.SELECTED_TASK] = ctxSelectedTask;
-            _ContextMenus[ObjectExplorerNodeNames.TASKS] = ctxTasks;
         }
 
         void OnDatabaseConnectionRenamed(string oldName, string newName)
@@ -277,10 +298,10 @@ namespace FdoToolbox
             }
         }
 
-        TreeNode GetDatabaseConnectionsNode() { return mTreeView.Nodes.Find("NODE_DB_CONNECTIONS", false)[0]; }
-        TreeNode GetSpatialConnectionsNode() { return mTreeView.Nodes.Find("NODE_FDO_CONNECTIONS", false)[0]; }
-        TreeNode GetTasksNode() { return mTreeView.Nodes.Find("NODE_TASKS", false)[0]; }
-        TreeNode GetModulesNode() { return mTreeView.Nodes.Find("NODE_MODULES", false)[0]; }
+        TreeNode GetDatabaseConnectionsNode() { return _DbConnectionsNode; }
+        TreeNode GetSpatialConnectionsNode() { return _FdoConnectionsNode; }
+        TreeNode GetTasksNode() { return _TasksNode; }
+        TreeNode GetModulesNode() { return _ModulesNode; }
 
         const string NODE_PREFIX_CONNECTION = "CONN";
         const string NODE_PREFIX_TASK = "TASK";
@@ -637,6 +658,8 @@ namespace FdoToolbox
 
             _RootNodes[nodeName] = node;
             _ContextMenus[nodeName] = node.ContextMenuStrip;
+
+            mTreeView.Nodes.Add(node);
         }
 
         public TreeNode GetRootNode(string nodeName)
