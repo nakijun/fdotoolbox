@@ -172,6 +172,7 @@ namespace FdoToolbox.Core.Controls
             // 
             // lblCount
             // 
+            this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblCount.AutoSize = true;
             this.lblCount.Location = new System.Drawing.Point(10, 250);
             this.lblCount.Name = "lblCount";
