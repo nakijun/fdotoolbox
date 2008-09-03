@@ -14,6 +14,9 @@ Commands defined here are APPENDED to any existing menus, otherwise they are cre
     <Shell>
         <Menu name="MapGuide">
             <Command name="mg_connect_http" />
+            <!--
+            <Command name="mg_connect_local" />
+            -->
         </Menu>
     </Shell>
     <!--
@@ -24,11 +27,14 @@ Commands defined here are APPENDED to any existing menus, otherwise they are cre
     -->
     <ObjectExplorer>
         <Toolbar>
-            
+
         </Toolbar>
         <ContextMenus>
             <ContextMenu attachTo="MG_SERVERS">
                 <Command name="mg_connect_http" />
+                <!--
+                <Command name="mg_connect_local" />
+                -->
             </ContextMenu>
             <ContextMenu attachTo="MG_FEATURE_SOURCES">
                 <Command name="mg_refresh" />
