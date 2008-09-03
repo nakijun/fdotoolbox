@@ -12,7 +12,9 @@ Commands defined here are APPENDED to any existing menus, otherwise they are cre
     Elements within <Shell> follow the same structure as MenuMap.xml
     -->
     <Shell>
-        
+        <Menu name="MapGuide">
+            <Command name="mg_connect" />
+        </Menu>
     </Shell>
     <!--
     Elements within <ObjectExplorer> follow the same structure as OEMenuMap.xml
