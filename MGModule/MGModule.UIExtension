@@ -27,10 +27,10 @@ Commands defined here are APPENDED to any existing menus, otherwise they are cre
         <ContextMenus>
             <ContextMenu attachTo="MG_SERVERS">
                 <Command name="mg_connect" />
-                <Command name="mg_disconnect" />
             </ContextMenu>
             <ContextMenu attachTo="MG_FEATURE_SOURCES">
                 <Command name="mg_refresh" />
+                <Command name="mg_disconnect" />
             </ContextMenu>
             <ContextMenu attachTo="MG_SELECTED_FEATURE_SOURCE">
                 <Command name="mg_datapreview" />

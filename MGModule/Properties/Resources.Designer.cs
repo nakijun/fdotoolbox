@@ -81,6 +81,13 @@ namespace MGModule.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap page_refresh {
+            get {
+                object obj = ResourceManager.GetObject("page_refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap server {
             get {
                 object obj = ResourceManager.GetObject("server", resourceCulture);
@@ -91,6 +98,13 @@ namespace MGModule.Properties {
         internal static System.Drawing.Bitmap server_connect {
             get {
                 object obj = ResourceManager.GetObject("server_connect", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap server_delete {
+            get {
+                object obj = ResourceManager.GetObject("server_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -112,6 +126,13 @@ namespace MGModule.Properties {
         internal static System.Drawing.Bitmap table_key {
             get {
                 object obj = ResourceManager.GetObject("table_key", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap zoom {
+            get {
+                object obj = ResourceManager.GetObject("zoom", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
