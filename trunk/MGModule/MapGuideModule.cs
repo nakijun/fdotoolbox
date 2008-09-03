@@ -98,8 +98,15 @@ namespace MGModule
                 fsNode.ImageKey = fsNode.SelectedImageKey = MapGuideImages.MG_FEATURE_SOURCE;
                 fsNode.ToolTipText = doc.ResourceId;
                 fsNode.ContextMenuStrip = _App.Shell.ObjectExplorer.GetContextMenu(MG_SELECTED_FEATURE_SOURCE);
-                PopulateSchemaNodes(fsNode, conn);
-                connNode.Nodes.Add(fsNode);
+                try
+                {
+                    PopulateSchemaNodes(fsNode, conn);
+                    connNode.Nodes.Add(fsNode);
+                }
+                catch
+                {
+                    //TODO: Log this error
+                }
             }
         }
 
@@ -164,11 +171,17 @@ namespace MGModule
             _App.Shell.ObjectExplorer.RegisterRootNode(MG_SERVERS, mgNode);
         }
 
+        protected override System.Resources.ResourceManager GetResourceManager()
+        {
+            //We want to use this assembly's Resources.resx
+            return Properties.Resources.ResourceManager;
+        }
+
         private IHostApplication _App;
 
         private MapGuideConnectionMgr _ConnMgr;
 
-        [Command(MapGuideModule.CMD_MG_CONNECT, "Connect to a MapGuide Server")]
+        [Command(MapGuideModule.CMD_MG_CONNECT, "Connect to a MapGuide Server", ImageResourceName = "server_connect")]
         void Connect()
         {
             ConnectDlg dlg = new ConnectDlg();
@@ -187,13 +200,13 @@ namespace MGModule
             }
         }
 
-        [Command(MapGuideModule.CMD_MG_DISCONNECT, "Disconnect")]
+        [Command(MapGuideModule.CMD_MG_DISCONNECT, "Disconnect", ImageResourceName = "server_delete")]
         void Disconnect()
         {
 
         }
 
-        [Command(MapGuideModule.CMD_MG_DATAPREVIEW, "Data Preview")]
+        [Command(MapGuideModule.CMD_MG_DATAPREVIEW, "Data Preview", ImageResourceName = "zoom")]
         void DataPreview()
         {
             System.Windows.Forms.TreeNode fsNode = _App.Shell.ObjectExplorer.GetSelectedNode();
@@ -205,7 +218,7 @@ namespace MGModule
             _App.Shell.ShowDocumentWindow(ctl);
         }
 
-        [Command(MapGuideModule.CMD_MG_REFRESH, "Refresh")]
+        [Command(MapGuideModule.CMD_MG_REFRESH, "Refresh", ImageResourceName = "page_refresh")]
         void Refresh()
         {
             System.Windows.Forms.TreeNode node = _App.Shell.ObjectExplorer.GetSelectedNode();
