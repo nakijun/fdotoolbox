@@ -291,7 +291,9 @@ namespace FdoToolbox.Core
                         ToolStripMenuItem menu = new ToolStripMenuItem();
                         menu.Text = menu.Name = menuNode.Attributes["name"].Value;
                         menu = CreateSubMenu(menu, menuNode.ChildNodes);
-                        Shell.MainMenu.Items.Add(menu);
+                        //Insert before the last menu (Help)
+                        int idx = Shell.MainMenu.Items.Count - 1;
+                        Shell.MainMenu.Items.Insert(idx, menu);
                     }
                 }
             }
