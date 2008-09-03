@@ -113,26 +113,35 @@ namespace MGModule
         private void PopulateSchemaNodes(System.Windows.Forms.TreeNode fsNode, ServerConnectionI conn)
         {
             FeatureSourceDescription desc = conn.DescribeFeatureSource(fsNode.Name);
-            foreach (OSGeo.MapGuide.MaestroAPI.FeatureSourceDescription.FeatureSourceSchema
-                schema in desc.Schemas)
+            Dictionary<string, List<FeatureSourceDescription.FeatureSourceSchema>> classes = new Dictionary<string, List<FeatureSourceDescription.FeatureSourceSchema>>();
+            foreach (FeatureSourceDescription.FeatureSourceSchema schema in desc.Schemas)
+            {
+                if (!classes.ContainsKey(schema.Schema))
+                    classes[schema.Schema] = new List<FeatureSourceDescription.FeatureSourceSchema>();
+
+                classes[schema.Schema].Add(schema);
+            }
+
+            foreach (string schema in classes.Keys)
             {
                 System.Windows.Forms.TreeNode schemaNode = new System.Windows.Forms.TreeNode();
-                schemaNode.Text = schemaNode.Name = schema.Schema;
-                schemaNode.ToolTipText = schema.Schema;
+                schemaNode.Text = schemaNode.Name = schema;
+                schemaNode.ToolTipText = schema;
                 schemaNode.SelectedImageKey = schemaNode.ImageKey = MapGuideImages.MG_SCHEMA;
-                PopulateClassNodes(schemaNode, schema);
+                List<FeatureSourceDescription.FeatureSourceSchema> klasses = classes[schema];
+
+                foreach (FeatureSourceDescription.FeatureSourceSchema klass in klasses)
+                {
+                    System.Windows.Forms.TreeNode classNode = new System.Windows.Forms.TreeNode();
+                    classNode.Text = classNode.Name = klass.Name;
+                    classNode.ToolTipText = klass.Name;
+                    classNode.ImageKey = classNode.SelectedImageKey = MapGuideImages.MG_CLASS;
+                    PopulatePropertyNodes(classNode, klass.Columns);
+                    schemaNode.Nodes.Add(classNode);
+                }
+
                 fsNode.Nodes.Add(schemaNode);
             }
-        }
-
-        private void PopulateClassNodes(System.Windows.Forms.TreeNode schemaNode, FeatureSourceDescription.FeatureSourceSchema schema)
-        {
-            System.Windows.Forms.TreeNode classNode = new System.Windows.Forms.TreeNode();
-            classNode.Text = classNode.Name = schema.Name;
-            classNode.ToolTipText = schema.Name;
-            classNode.ImageKey = classNode.SelectedImageKey = MapGuideImages.MG_CLASS;
-            PopulatePropertyNodes(classNode, schema.Columns);
-            schemaNode.Nodes.Add(classNode);
         }
 
         private void PopulatePropertyNodes(System.Windows.Forms.TreeNode classNode, FeatureSetColumn[] properties)
