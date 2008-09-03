@@ -85,9 +85,7 @@ namespace FdoToolbox.Core.ETL
                 reader.Close();
             }
 
-            //TODO: MyMeta should be doing this job, but the column types are
-            //not being picked up, so for now do a select * and infer the schema 
-            //from the data reader.
+            //Get schema by sampling first row of a select * query
             cmd.CommandText = string.Format("SELECT * FROM {0}", this.Options.Table);
             using (System.Data.IDataReader reader = cmd.ExecuteReader())
             {
