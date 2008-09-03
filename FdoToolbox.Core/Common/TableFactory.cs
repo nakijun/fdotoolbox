@@ -65,6 +65,16 @@ namespace FdoToolbox.Core.Common
             }
             else
             {
+                foreach (DataColumn col in table.Columns)
+                {
+                    if (col.DataType == typeof(string) ||
+                        col.DataType == typeof(byte[]))
+                    {
+                        if (col.MaxLength <= 0)
+                            throw new DataTableConversionException("The given DataTable has zero or negative length string/BLOB columns");
+                    }
+                }
+
                 return new FdoTable(table);
             }
         }
