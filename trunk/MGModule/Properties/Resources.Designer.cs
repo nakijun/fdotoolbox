@@ -60,9 +60,23 @@ namespace MGModule.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap application_go {
+            get {
+                object obj = ResourceManager.GetObject("application_go", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap chart_organisation {
             get {
                 object obj = ResourceManager.GetObject("chart_organisation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap cross {
+            get {
+                object obj = ResourceManager.GetObject("cross", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

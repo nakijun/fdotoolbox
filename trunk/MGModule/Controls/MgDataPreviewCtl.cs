@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using FdoToolbox.Core.Controls;
 using OSGeo.MapGuide.MaestroAPI;
 using MGModule.Common;
+using Topology.Geometries;
 
 namespace MGModule.Controls
 {
@@ -38,10 +39,13 @@ namespace MGModule.Controls
             this.Title = "Feature Source Preview";
         }
 
+        private Color _RefreshBtnBackColor;
+
         public MgDataPreviewCtl(ServerConnectionI conn)
             : this()
         {
             _Conn = conn;
+            _RefreshBtnBackColor = btnRefresh.BackColor;
         }
 
         private string _FeatureSource;
@@ -64,6 +68,7 @@ namespace MGModule.Controls
 
         private void btnGo_Click(object sender, EventArgs e)
         {
+            tabPreview.SelectedIndex = IDX_TAB_GRID;
             string className = cmbFeatureClass.SelectedValue.ToString();
             List<string> columns = new List<string>();
             foreach (object obj in chkColumns.CheckedItems)
@@ -99,6 +104,36 @@ namespace MGModule.Controls
         private void btnClear_Click(object sender, EventArgs e)
         {
             grdPreview.DataSource = null;
+        }
+
+        private void RefreshMap()
+        {
+            string url = GetPreviewUrl();
+
+            webBrowser.Navigate(url);
+        }
+
+        private string GetPreviewUrl()
+        {
+            string root = this.BoundConnection.DisplayName;
+            
+            FeatureSourceDescription.FeatureSourceSchema schema = cmbFeatureClass.SelectedItem as FeatureSourceDescription.FeatureSourceSchema;
+            string resId = this.FeatureSourceId;
+            string sessionId = this.BoundConnection.SessionID;
+            //string pathTemplate = "/schemareport/describeschema.php?resId={0}&sessionId={1}&schemaName={2}&className={3}";
+            //return root + string.Format(pathTemplate, resId, sessionId, schema.Schema, schema.Name);
+            string pathTemplate = "/schemareport/describeschema.php?resId={0}&sessionId={1}";
+
+            return root + string.Format(pathTemplate, resId, sessionId);
+        }
+
+        const int IDX_TAB_GRID = 0;
+        const int IDX_TAB_MAP = 1;
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            btnRefresh.BackColor = _RefreshBtnBackColor;
+            RefreshMap();
         }
     }
 }

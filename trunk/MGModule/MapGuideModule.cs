@@ -61,6 +61,7 @@ namespace MGModule
         {
             System.Windows.Forms.TreeNode mgNode = _App.Shell.ObjectExplorer.GetRootNode(MG_SERVERS);
             mgNode.Nodes.RemoveByKey(host.ToString());
+            AppConsole.WriteLine("Disconnected from: {0}", host.ToString());
         }
 
         void OnConnectionAdded(Uri host)
@@ -68,14 +69,16 @@ namespace MGModule
             System.Windows.Forms.TreeNode mgNode = _App.Shell.ObjectExplorer.GetRootNode(MG_SERVERS);
             System.Windows.Forms.TreeNode connNode = CreateConnectionNode(host);
             mgNode.Nodes.Add(connNode);
+            ServerConnectionI conn = _ConnMgr.GetConnection(host);
+            AppConsole.WriteLine("Connected to: {0}", host.ToString());
         }
 
         private System.Windows.Forms.TreeNode CreateConnectionNode(Uri host)
         {
             ServerConnectionI conn = _ConnMgr.GetConnection(host);
             System.Windows.Forms.TreeNode connNode = new System.Windows.Forms.TreeNode();
-            connNode.Name = MG_FEATURE_SOURCES;
-            connNode.Text = host.ToString();
+            connNode.Name = host.ToString();
+            connNode.Text = conn.DisplayName;
             connNode.Tag = host;
             connNode.SelectedImageKey = connNode.ImageKey = MapGuideImages.MG_CONNECTION;
             connNode.ContextMenuStrip = _App.Shell.ObjectExplorer.GetContextMenu(MG_FEATURE_SOURCES);
@@ -212,7 +215,9 @@ namespace MGModule
         [Command(MapGuideModule.CMD_MG_DISCONNECT, "Disconnect", ImageResourceName = "server_delete")]
         void Disconnect()
         {
-
+            System.Windows.Forms.TreeNode connNode = _App.Shell.ObjectExplorer.GetSelectedNode();
+            Uri host = connNode.Tag as Uri;
+            _ConnMgr.RemoveConnection(host);
         }
 
         [Command(MapGuideModule.CMD_MG_DATAPREVIEW, "Data Preview", ImageResourceName = "zoom")]

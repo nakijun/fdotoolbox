@@ -41,6 +41,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Topology, Version=1.0.8.24721, Culture=neutral, PublicKeyToken=f526c48929fda856, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Maestro\Topology.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\MgDataTable.cs">
@@ -127,6 +131,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\page_refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_go.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

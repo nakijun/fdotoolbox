@@ -31,10 +31,10 @@ namespace MGModule.Controls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MgDataPreviewCtl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.btnCancel = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
-            this.btnGo = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkColumns = new System.Windows.Forms.CheckedListBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.txtFilter = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbFeatureClass = new System.Windows.Forms.ComboBox();
@@ -43,9 +43,13 @@ namespace MGModule.Controls
             this.TAB_GRID = new System.Windows.Forms.TabPage();
             this.grdPreview = new System.Windows.Forms.DataGridView();
             this.TAB_MAP = new System.Windows.Forms.TabPage();
+            this.mapPreviewPanel = new System.Windows.Forms.Panel();
+            this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.imgPreview = new System.Windows.Forms.ImageList(this.components);
-            this.label2 = new System.Windows.Forms.Label();
-            this.chkColumns = new System.Windows.Forms.CheckedListBox();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnGo = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -53,6 +57,9 @@ namespace MGModule.Controls
             this.tabPreview.SuspendLayout();
             this.TAB_GRID.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdPreview)).BeginInit();
+            this.TAB_MAP.SuspendLayout();
+            this.mapPreviewPanel.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -77,16 +84,6 @@ namespace MGModule.Controls
             this.splitContainer1.SplitterDistance = 217;
             this.splitContainer1.TabIndex = 0;
             // 
-            // btnCancel
-            // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(489, 184);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(59, 23);
-            this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -97,17 +94,6 @@ namespace MGModule.Controls
             this.btnClear.Text = "Clear Grid";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // btnGo
-            // 
-            this.btnGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGo.Location = new System.Drawing.Point(434, 184);
-            this.btnGo.Name = "btnGo";
-            this.btnGo.Size = new System.Drawing.Size(49, 23);
-            this.btnGo.TabIndex = 1;
-            this.btnGo.Text = "Go";
-            this.btnGo.UseVisualStyleBackColor = true;
-            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
             // 
             // groupBox1
             // 
@@ -126,6 +112,26 @@ namespace MGModule.Controls
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Data Query Parameters";
+            // 
+            // chkColumns
+            // 
+            this.chkColumns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkColumns.FormattingEnabled = true;
+            this.chkColumns.Location = new System.Drawing.Point(402, 60);
+            this.chkColumns.Name = "chkColumns";
+            this.chkColumns.Size = new System.Drawing.Size(192, 79);
+            this.chkColumns.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(399, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(54, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Properties";
             // 
             // txtFilter
             // 
@@ -205,13 +211,43 @@ namespace MGModule.Controls
             // 
             // TAB_MAP
             // 
+            this.TAB_MAP.Controls.Add(this.mapPreviewPanel);
             this.TAB_MAP.ImageKey = "map.png";
             this.TAB_MAP.Location = new System.Drawing.Point(4, 23);
             this.TAB_MAP.Name = "TAB_MAP";
-            this.TAB_MAP.Size = new System.Drawing.Size(644, 191);
+            this.TAB_MAP.Size = new System.Drawing.Size(612, 189);
             this.TAB_MAP.TabIndex = 1;
             this.TAB_MAP.Text = "Map Preview";
             this.TAB_MAP.UseVisualStyleBackColor = true;
+            // 
+            // mapPreviewPanel
+            // 
+            this.mapPreviewPanel.Controls.Add(this.webBrowser);
+            this.mapPreviewPanel.Controls.Add(this.toolStrip1);
+            this.mapPreviewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapPreviewPanel.Location = new System.Drawing.Point(0, 0);
+            this.mapPreviewPanel.Name = "mapPreviewPanel";
+            this.mapPreviewPanel.Size = new System.Drawing.Size(612, 189);
+            this.mapPreviewPanel.TabIndex = 0;
+            // 
+            // webBrowser
+            // 
+            this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser.Location = new System.Drawing.Point(0, 25);
+            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser.Name = "webBrowser";
+            this.webBrowser.Size = new System.Drawing.Size(612, 164);
+            this.webBrowser.TabIndex = 1;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnRefresh});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(612, 25);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Text = "toolStrip1";
             // 
             // imgPreview
             // 
@@ -220,25 +256,41 @@ namespace MGModule.Controls
             this.imgPreview.Images.SetKeyName(0, "application_view_columns.png");
             this.imgPreview.Images.SetKeyName(1, "map.png");
             // 
-            // label2
+            // btnCancel
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(399, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Columns";
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Image = global::MGModule.Properties.Resources.cross;
+            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCancel.Location = new System.Drawing.Point(480, 184);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(68, 23);
+            this.btnCancel.TabIndex = 3;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // chkColumns
+            // btnGo
             // 
-            this.chkColumns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkColumns.FormattingEnabled = true;
-            this.chkColumns.Location = new System.Drawing.Point(402, 60);
-            this.chkColumns.Name = "chkColumns";
-            this.chkColumns.Size = new System.Drawing.Size(192, 79);
-            this.chkColumns.TabIndex = 7;
+            this.btnGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGo.Image = global::MGModule.Properties.Resources.application_go;
+            this.btnGo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGo.Location = new System.Drawing.Point(425, 184);
+            this.btnGo.Name = "btnGo";
+            this.btnGo.Size = new System.Drawing.Size(49, 23);
+            this.btnGo.TabIndex = 1;
+            this.btnGo.Text = "Go";
+            this.btnGo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnGo.UseVisualStyleBackColor = true;
+            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Image = global::MGModule.Properties.Resources.page_refresh;
+            this.btnRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(65, 22);
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // MgDataPreviewCtl
             // 
@@ -255,6 +307,11 @@ namespace MGModule.Controls
             this.tabPreview.ResumeLayout(false);
             this.TAB_GRID.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdPreview)).EndInit();
+            this.TAB_MAP.ResumeLayout(false);
+            this.mapPreviewPanel.ResumeLayout(false);
+            this.mapPreviewPanel.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -277,5 +334,9 @@ namespace MGModule.Controls
         private System.Windows.Forms.DataGridView grdPreview;
         private System.Windows.Forms.CheckedListBox chkColumns;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel mapPreviewPanel;
+        private System.Windows.Forms.WebBrowser webBrowser;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton btnRefresh;
     }
 }
