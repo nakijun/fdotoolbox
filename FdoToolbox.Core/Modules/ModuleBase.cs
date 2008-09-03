@@ -102,7 +102,7 @@ namespace FdoToolbox.Core.Modules
         }
 
         /// <summary>
-        /// Returns the resource manager that all image resource queries will be
+        /// Returns the resource manager that all resource queries will be
         /// made to. By default this will return the ResourceManager of this assembly
         /// (the one containing this class). Subclasses should override this method
         /// to return their assembly-specific ResourceManager
