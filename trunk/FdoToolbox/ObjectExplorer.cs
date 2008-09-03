@@ -342,7 +342,6 @@ namespace FdoToolbox
             
             TreeNode parent = GetModulesNode();
             parent.Nodes.Add(modNode);
-            parent.Expand();
         }
         
         void OnModuleUnloaded(IModule module) 
