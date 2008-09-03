@@ -84,7 +84,7 @@ namespace MGModule
             connNode.Tag = host;
             connNode.SelectedImageKey = connNode.ImageKey = MapGuideImages.MG_CONNECTION;
             connNode.ContextMenuStrip = _App.Shell.ObjectExplorer.GetContextMenu(MG_FEATURE_SOURCES);
-            connNode.ToolTipText = conn.DisplayName;
+            connNode.ToolTipText = string.Format("{0}\n\nVersion: {1}", conn.DisplayName, conn.SiteVersion);
             PopulateFeatureSources(connNode, conn);
             return connNode;
         }
@@ -215,7 +215,7 @@ namespace MGModule
             }
         }
 
-        [Command(MapGuideModule.CMD_MG_CONNECT_LOCAL, "Connection to a local MapGuide Server", ImageResourceName = "server_connect")]
+        [Command(MapGuideModule.CMD_MG_CONNECT_LOCAL, "Connect to a local MapGuide Server", ImageResourceName = "server_connect")]
         void ConnectLocal()
         {
             LocalConnectDlg dlg = new LocalConnectDlg();
