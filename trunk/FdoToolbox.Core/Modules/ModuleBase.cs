@@ -25,6 +25,8 @@ using System.Windows.Forms;
 using System.Drawing;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.Commands;
+using System.Resources;
+using System.IO;
 
 namespace FdoToolbox.Core.Modules
 {
@@ -60,6 +62,7 @@ namespace FdoToolbox.Core.Modules
             
             //Find all methods with [Command] attribute applied
             Type t = this.GetType();
+            ResourceManager resMgr = GetResourceManager();
             MethodInfo[] methods = t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
             foreach (MethodInfo method in methods)
             {
@@ -88,14 +91,26 @@ namespace FdoToolbox.Core.Modules
                     cmd.InvocationType = attr.InvocationType;
                     if (!string.IsNullOrEmpty(attr.ImageResourceName))
                     {
-                        object resource = Properties.Resources.ResourceManager.GetObject(attr.ImageResourceName);
-                        if (resource != null)
-                            cmd.CommandImage = (Image)resource;
+                        object img = resMgr.GetObject(attr.ImageResourceName);
+                        if (img != null)
+                            cmd.CommandImage = (Image)img;
                     }
                     cmd.ShortcutKeys = attr.ShortcutKeys;
                     AddCommand(cmd);
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns the resource manager that all image resource queries will be
+        /// made to. By default this will return the ResourceManager of this assembly
+        /// (the one containing this class). Subclasses should override this method
+        /// to return their assembly-specific ResourceManager
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ResourceManager GetResourceManager()
+        {
+            return Properties.Resources.ResourceManager;
         }
 
         public ICollection<string> CommandNames
