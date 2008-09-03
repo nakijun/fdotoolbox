@@ -63,7 +63,6 @@ namespace FdoToolbox.Core.Forms
         {
             TableInfo table = _source.GetTable(txtTable.Text);
 
-            //MyMeta.ITable table = _source.GetTable(txtDatabase.Text, txtTable.Text);
             if (table != null)
             {
                 List<string> colNames = new List<string>();
@@ -72,13 +71,7 @@ namespace FdoToolbox.Core.Forms
                     colNames.Add(col.Name);
                     chkColumns.Items.Add(col.Name, false);
                 }
-                /*
-                List<string> colNames = new List<string>();
-                foreach (MyMeta.IColumn col in table.Columns)
-                {
-                    colNames.Add(col.Name);
-                    chkColumns.Items.Add(col.Name, false);
-                }*/
+                
                 cmbX.DataSource = new List<string>(colNames);
                 cmbY.DataSource = new List<string>(colNames);
                 cmbZ.DataSource = new List<string>(colNames);
