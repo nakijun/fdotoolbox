@@ -8,6 +8,7 @@ using FdoToolbox.Core;
 using MGModule.Forms;
 using FdoToolbox.Core.ClientServices;
 using MGModule.Controls;
+using System.IO;
 
 namespace MGModule
 {
@@ -15,7 +16,8 @@ namespace MGModule
     {
         #region Command Names
 
-        const string CMD_MG_CONNECT = "mg_connect";
+        const string CMD_MG_CONNECT_HTTP = "mg_connect_http";
+        const string CMD_MG_CONNECT_LOCAL = "mg_connect_local";
         const string CMD_MG_DISCONNECT = "mg_disconnect";
         const string CMD_MG_DATAPREVIEW = "mg_datapreview";
         const string CMD_MG_REFRESH = "mg_refresh";
@@ -57,14 +59,14 @@ namespace MGModule
             _App.Shell.ObjectExplorer.RegisterImage(MapGuideImages.MG_SERVERS, Properties.Resources.server);
         }
 
-        void OnConnectionRemoved(Uri host)
+        void OnConnectionRemoved(string host)
         {
             System.Windows.Forms.TreeNode mgNode = _App.Shell.ObjectExplorer.GetRootNode(MG_SERVERS);
             mgNode.Nodes.RemoveByKey(host.ToString());
             AppConsole.WriteLine("Disconnected from: {0}", host.ToString());
         }
 
-        void OnConnectionAdded(Uri host)
+        void OnConnectionAdded(string host)
         {
             System.Windows.Forms.TreeNode mgNode = _App.Shell.ObjectExplorer.GetRootNode(MG_SERVERS);
             System.Windows.Forms.TreeNode connNode = CreateConnectionNode(host);
@@ -73,11 +75,11 @@ namespace MGModule
             AppConsole.WriteLine("Connected to: {0}", host.ToString());
         }
 
-        private System.Windows.Forms.TreeNode CreateConnectionNode(Uri host)
+        private System.Windows.Forms.TreeNode CreateConnectionNode(string host)
         {
-            ServerConnectionI conn = _ConnMgr.GetConnection(host);
+            ServerConnectionI conn = _ConnMgr.GetConnection(host.ToString());
             System.Windows.Forms.TreeNode connNode = new System.Windows.Forms.TreeNode();
-            connNode.Name = host.ToString();
+            connNode.Name = host;
             connNode.Text = conn.DisplayName;
             connNode.Tag = host;
             connNode.SelectedImageKey = connNode.ImageKey = MapGuideImages.MG_CONNECTION;
@@ -193,30 +195,61 @@ namespace MGModule
 
         private MapGuideConnectionMgr _ConnMgr;
 
-        [Command(MapGuideModule.CMD_MG_CONNECT, "Connect to a MapGuide Server", ImageResourceName = "server_connect")]
-        void Connect()
+        [Command(MapGuideModule.CMD_MG_CONNECT_HTTP, "Connect to a remote MapGuide Server (HTTP)", ImageResourceName = "server_connect")]
+        void ConnectHttp()
         {
-            ConnectDlg dlg = new ConnectDlg();
+            HttpConnectDlg dlg = new HttpConnectDlg();
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 Uri site = dlg.SiteUrl;
                 string user = dlg.Username;
                 string pass = dlg.Password;
+                string siteStr = site.ToString();
 
-                ServerConnectionI conn = _ConnMgr.GetConnection(site);
+                ServerConnectionI conn = _ConnMgr.GetConnection(siteStr);
                 if (conn == null)
                 {
                     conn = new HttpServerConnection(site, user, pass, "en", true);
-                    _ConnMgr.AddConnection(site, conn);
+                    _ConnMgr.AddConnection(siteStr, conn);
                 }
             }
+        }
+
+        [Command(MapGuideModule.CMD_MG_CONNECT_LOCAL, "Connection to a local MapGuide Server", ImageResourceName = "server_connect")]
+        void ConnectLocal()
+        {
+            LocalConnectDlg dlg = new LocalConnectDlg();
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string ip = dlg.ServerIP;
+                string user = dlg.Username;
+                string pass = dlg.Password;
+                Version version = dlg.SiteVersion;
+
+                ServerConnectionI conn = _ConnMgr.GetConnection(ip);
+                if (conn == null)
+                {
+                    string confText = GetConfigForVersion(version);
+                    string configFile = System.IO.Path.GetTempFileName();
+                    confText = string.Format(confText, ip);
+
+                    //Write out temp config file
+                    File.WriteAllText(configFile, confText);
+                    conn = new LocalNativeConnection(configFile, user, pass, "en");
+                }
+            }
+        }
+
+        private string GetConfigForVersion(Version version)
+        {
+            throw new Exception("The method or operation is not implemented.");
         }
 
         [Command(MapGuideModule.CMD_MG_DISCONNECT, "Disconnect", ImageResourceName = "server_delete")]
         void Disconnect()
         {
             System.Windows.Forms.TreeNode connNode = _App.Shell.ObjectExplorer.GetSelectedNode();
-            Uri host = connNode.Tag as Uri;
+            string host = connNode.Tag.ToString();
             _ConnMgr.RemoveConnection(host);
         }
 
@@ -226,7 +259,7 @@ namespace MGModule
             System.Windows.Forms.TreeNode fsNode = _App.Shell.ObjectExplorer.GetSelectedNode();
             //Feature Source level, walk back up to connections level
             System.Windows.Forms.TreeNode connNode = fsNode.Parent;
-            ServerConnectionI conn = _ConnMgr.GetConnection(connNode.Tag as Uri);
+            ServerConnectionI conn = _ConnMgr.GetConnection(connNode.Tag.ToString());
             MgDataPreviewCtl ctl = new MgDataPreviewCtl(conn);
             ctl.FeatureSourceId = fsNode.Name;
             _App.Shell.ShowDocumentWindow(ctl);
@@ -236,7 +269,7 @@ namespace MGModule
         void Refresh()
         {
             System.Windows.Forms.TreeNode node = _App.Shell.ObjectExplorer.GetSelectedNode();
-            Uri host = node.Tag as Uri;
+            string host = node.Tag.ToString();
             ServerConnectionI conn = _ConnMgr.GetConnection(host);
             PopulateFeatureSources(node, conn);
         }

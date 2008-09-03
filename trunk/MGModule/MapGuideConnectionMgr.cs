@@ -24,47 +24,48 @@ using OSGeo.MapGuide.MaestroAPI;
 
 namespace MGModule
 {
-    public delegate void MgConnectionHandler(Uri host);
+    public delegate void MgConnectionHandler(string host);
 
     public class MapGuideConnectionMgr : IDisposable
     {
         public event MgConnectionHandler ConnectionAdded;
         public event MgConnectionHandler ConnectionRemoved;
 
-        private Dictionary<Uri, ServerConnectionI> _MGConnections;
+        private Dictionary<string, ServerConnectionI> _MGConnections;
 
         public MapGuideConnectionMgr()
         {
-            _MGConnections = new Dictionary<Uri, ServerConnectionI>();
+            _MGConnections = new Dictionary<string, ServerConnectionI>();
         }
 
-        public void AddConnection(Uri host, ServerConnectionI conn)
+        public void AddConnection(string key, ServerConnectionI conn)
         {
-            if (!_MGConnections.ContainsKey(host))
+            if (!_MGConnections.ContainsKey(key))
             {
-                _MGConnections.Add(host, conn);
+                conn.AutoRestartSession = true;
+                _MGConnections.Add(key, conn);
                 if (this.ConnectionAdded != null)
-                    this.ConnectionAdded(host);
+                    this.ConnectionAdded(key);
             }
             else
             {
-                throw new ArgumentException("A connection already exists at the host: " + host);
+                throw new ArgumentException("A connection already exists under the key: " + key);
             }
         }
 
-        public ServerConnectionI GetConnection(Uri host)
+        public ServerConnectionI GetConnection(string key)
         {
-            if (_MGConnections.ContainsKey(host))
-                return _MGConnections[host];
+            if (_MGConnections.ContainsKey(key))
+                return _MGConnections[key];
 
             return null;
         }
 
-        public void RemoveConnection(Uri host)
+        public void RemoveConnection(string key)
         {
-            bool removed = _MGConnections.Remove(host);
+            bool removed = _MGConnections.Remove(key);
             if (removed && this.ConnectionRemoved != null)
-                this.ConnectionRemoved(host);
+                this.ConnectionRemoved(key);
         }
 
         public void Dispose()
@@ -77,9 +78,9 @@ namespace MGModule
         {
             if (disposing)
             {
-                foreach (Uri uri in _MGConnections.Keys)
+                foreach (string key in _MGConnections.Keys)
                 {
-                    _MGConnections[uri].Dispose();
+                    _MGConnections[key].Dispose();
                 }
                 _MGConnections.Clear();
             }

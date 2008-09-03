@@ -68,6 +68,7 @@ namespace MGModule.Controls
 
         private void btnGo_Click(object sender, EventArgs e)
         {
+            lblCount.Text = "";
             tabPreview.SelectedIndex = IDX_TAB_GRID;
             string className = cmbFeatureClass.SelectedValue.ToString();
             List<string> columns = new List<string>();
@@ -79,6 +80,7 @@ namespace MGModule.Controls
             MgDataTable table = new MgDataTable();
             table.LoadFromReader(reader);
             grdPreview.DataSource = table;
+            lblCount.Text = table.Rows.Count + " features found";
         }
 
         private ServerConnectionI _Conn;
@@ -104,6 +106,7 @@ namespace MGModule.Controls
         private void btnClear_Click(object sender, EventArgs e)
         {
             grdPreview.DataSource = null;
+            lblCount.Text = "";
         }
 
         private void RefreshMap()

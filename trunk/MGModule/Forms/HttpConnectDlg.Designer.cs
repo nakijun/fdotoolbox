@@ -1,6 +1,6 @@
 namespace MGModule.Forms
 {
-    partial class ConnectDlg
+    partial class HttpConnectDlg
     {
         /// <summary>
         /// Required designer variable.
