@@ -31,7 +31,9 @@ namespace MGModule.Controls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MgDataPreviewCtl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
+            this.btnGo = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chkColumns = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,10 +48,9 @@ namespace MGModule.Controls
             this.mapPreviewPanel = new System.Windows.Forms.Panel();
             this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.imgPreview = new System.Windows.Forms.ImageList(this.components);
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnGo = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.ToolStripButton();
+            this.imgPreview = new System.Windows.Forms.ImageList(this.components);
+            this.lblCount = new System.Windows.Forms.Label();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -72,6 +73,7 @@ namespace MGModule.Controls
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.lblCount);
             this.splitContainer1.Panel1.Controls.Add(this.btnCancel);
             this.splitContainer1.Panel1.Controls.Add(this.btnClear);
             this.splitContainer1.Panel1.Controls.Add(this.btnGo);
@@ -84,6 +86,19 @@ namespace MGModule.Controls
             this.splitContainer1.SplitterDistance = 217;
             this.splitContainer1.TabIndex = 0;
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Image = global::MGModule.Properties.Resources.cross;
+            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCancel.Location = new System.Drawing.Point(480, 184);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(68, 23);
+            this.btnCancel.TabIndex = 3;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCancel.UseVisualStyleBackColor = true;
+            // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -94,6 +109,20 @@ namespace MGModule.Controls
             this.btnClear.Text = "Clear Grid";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnGo
+            // 
+            this.btnGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGo.Image = global::MGModule.Properties.Resources.application_go;
+            this.btnGo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGo.Location = new System.Drawing.Point(425, 184);
+            this.btnGo.Name = "btnGo";
+            this.btnGo.Size = new System.Drawing.Size(49, 23);
+            this.btnGo.TabIndex = 1;
+            this.btnGo.Text = "Go";
+            this.btnGo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnGo.UseVisualStyleBackColor = true;
+            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
             // 
             // groupBox1
             // 
@@ -249,40 +278,6 @@ namespace MGModule.Controls
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // imgPreview
-            // 
-            this.imgPreview.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgPreview.ImageStream")));
-            this.imgPreview.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgPreview.Images.SetKeyName(0, "application_view_columns.png");
-            this.imgPreview.Images.SetKeyName(1, "map.png");
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Image = global::MGModule.Properties.Resources.cross;
-            this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(480, 184);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(68, 23);
-            this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // btnGo
-            // 
-            this.btnGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGo.Image = global::MGModule.Properties.Resources.application_go;
-            this.btnGo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGo.Location = new System.Drawing.Point(425, 184);
-            this.btnGo.Name = "btnGo";
-            this.btnGo.Size = new System.Drawing.Size(49, 23);
-            this.btnGo.TabIndex = 1;
-            this.btnGo.Text = "Go";
-            this.btnGo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnGo.UseVisualStyleBackColor = true;
-            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
-            // 
             // btnRefresh
             // 
             this.btnRefresh.Image = global::MGModule.Properties.Resources.page_refresh;
@@ -292,6 +287,22 @@ namespace MGModule.Controls
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // imgPreview
+            // 
+            this.imgPreview.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgPreview.ImageStream")));
+            this.imgPreview.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgPreview.Images.SetKeyName(0, "application_view_columns.png");
+            this.imgPreview.Images.SetKeyName(1, "map.png");
+            // 
+            // lblCount
+            // 
+            this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblCount.AutoSize = true;
+            this.lblCount.Location = new System.Drawing.Point(18, 189);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(0, 13);
+            this.lblCount.TabIndex = 4;
+            // 
             // MgDataPreviewCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -300,6 +311,7 @@ namespace MGModule.Controls
             this.Name = "MgDataPreviewCtl";
             this.Size = new System.Drawing.Size(622, 439);
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -338,5 +350,6 @@ namespace MGModule.Controls
         private System.Windows.Forms.WebBrowser webBrowser;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btnRefresh;
+        private System.Windows.Forms.Label lblCount;
     }
 }

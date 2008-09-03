@@ -24,19 +24,28 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using OSGeo.MapGuide.MaestroAPI;
+using System.Net;
 
 namespace MGModule.Forms
 {
-    public partial class ConnectDlg : Form
+    public partial class LocalConnectDlg : Form
     {
-        public ConnectDlg()
+        public LocalConnectDlg()
         {
             InitializeComponent();
+            cmbVersion.DataSource = SiteVersions.SiteVersionNumbers;
+            txtIP.Text = "127.0.0.1";
         }
 
-        public Uri SiteUrl
+        public string ServerIP
         {
-            get { return new Uri(txtUrl.Text); }
+            get { return txtIP.Text; }
+        }
+
+        public Version SiteVersion
+        {
+            get { return cmbVersion.SelectedItem as Version; }
         }
 
         public string Username
@@ -49,14 +58,16 @@ namespace MGModule.Forms
             get { return txtPassword.Text; }
         }
 
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            IPAddress addr = IPAddress.Parse(txtIP.Text);
+            if(addr != null)
+                this.DialogResult = DialogResult.OK;
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.OK;
         }
     }
 }

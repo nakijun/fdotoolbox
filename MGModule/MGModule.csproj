@@ -57,11 +57,17 @@
     <Compile Include="Controls\MgDataPreviewCtl.Designer.cs">
       <DependentUpon>MgDataPreviewCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ConnectDlg.cs">
+    <Compile Include="Forms\HttpConnectDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ConnectDlg.Designer.cs">
-      <DependentUpon>ConnectDlg.cs</DependentUpon>
+    <Compile Include="Forms\HttpConnectDlg.Designer.cs">
+      <DependentUpon>HttpConnectDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LocalConnectDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LocalConnectDlg.Designer.cs">
+      <DependentUpon>LocalConnectDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="MapGuideConnectionMgr.cs" />
     <Compile Include="MapGuideImages.cs" />
@@ -84,9 +90,13 @@
       <SubType>Designer</SubType>
       <DependentUpon>MgDataPreviewCtl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ConnectDlg.resx">
+    <EmbeddedResource Include="Forms\HttpConnectDlg.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>ConnectDlg.cs</DependentUpon>
+      <DependentUpon>HttpConnectDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LocalConnectDlg.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>LocalConnectDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
