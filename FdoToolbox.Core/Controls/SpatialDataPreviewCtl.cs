@@ -77,7 +77,6 @@ namespace FdoToolbox.Core.Controls
 
         protected override void OnLoad(EventArgs e)
         {
-            chkMap.Checked = false;
             cmbSchema.DataSource = _Service.DescribeSchema();
             cmbAggSchema.DataSource = _Service.DescribeSchema();
             SetSelectedClass();
@@ -87,20 +86,87 @@ namespace FdoToolbox.Core.Controls
         private void btnQuery_Click(object sender, EventArgs e)
         {
             ClearGrid();
+            
             switch (tabQueryMode.SelectedIndex)
             {
                 case TAB_STANDARD:
-                    QueryStandard();
-                    if(chkMap.Checked)
-                        QueryMap();
+                    {
+                        if (ProceedWithQuery())
+                        {
+                            QueryStandard();
+                            if (chkMap.Checked)
+                                QueryMap();
+                        }
+                    }
                     break;
                 case TAB_AGGREGATE:
-                    QueryAggregate();
+                    {
+                        QueryAggregate();
+                    }
                     break;
                 case TAB_SQL:
-                    QuerySQL();
+                    {
+                        if (ProceedWithQuery())
+                            QuerySQL();
+                    }
                     break;
             }
+        }
+
+        private bool ProceedWithQuery()
+        {
+            long count = GetFeatureCount();
+            int limit = AppGateway.RunningApplication.Preferences.GetIntegerPref(PreferenceNames.PREF_INT_WARN_DATASET);
+            if (count > limit)
+                return AppConsole.Confirm("Warning", "The query you have defined will return a potentially large result set. Do you want to continue?");
+            return true;
+        }
+
+        private long GetFeatureCount()
+        {
+            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
+            string filter = txtFilter.Text;
+            string property = "FEATURECOUNT";
+            long count = 0;
+            using (FeatureService service = this.BoundConnection.CreateFeatureService())
+            {
+                if (service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand))
+                {
+                    using (ISQLCommand cmd = service.CreateCommand<ISQLCommand>(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand))
+                    {
+                        cmd.SQLStatement = string.Format("SELECT COUNT(*) AS {0} FROM {1}", property, classDef.Name);
+                        if (!string.IsNullOrEmpty(filter))
+                            cmd.SQLStatement += " WHERE " + filter;
+
+                        using (ISQLDataReader reader = cmd.ExecuteReader())
+                        {
+                            if(reader.ReadNext())
+                            {
+                                count = reader.GetInt64(property);
+                            }
+                        }
+                    }
+                }
+                else if (service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
+                {
+                    using (ISelectAggregates select = service.CreateCommand<ISelectAggregates>(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
+                    {
+                        select.SetFeatureClassName(classDef.Name);
+                        if(!string.IsNullOrEmpty(filter))
+                            select.Filter = Filter.Parse(filter);
+                        select.PropertyNames.Add(new ComputedIdentifier(property, Expression.Parse("COUNT(" + classDef.IdentityProperties[0].Name + ")")));
+
+                        using (OSGeo.FDO.Commands.Feature.IDataReader reader = select.Execute())
+                        {
+                            if (reader.ReadNext() && !reader.IsNull(property))
+                            {
+                                count = reader.GetInt64(property);
+                            }
+                        }
+                    }
+                }
+            }
+            return count;
         }
 
         private void QueryMap()
