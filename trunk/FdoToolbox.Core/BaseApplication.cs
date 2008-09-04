@@ -103,7 +103,7 @@ namespace FdoToolbox.Core
             dict.SetDefaultValue(PreferenceNames.PREF_STR_FDO_HOME, Path.Combine(this.AppPath, "FDO\\"));
             dict.SetDefaultValue(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE, true);
             dict.SetDefaultValue(PreferenceNames.PREF_STR_SESSION_DIRECTORY, Path.Combine(this.AppPath, "Session"));
-            dict.SetDefaultValue(PreferenceNames.PREF_INT_WARN_DATASET, 2500);
+            dict.SetDefaultValue(PreferenceNames.PREF_INT_WARN_DATASET, 1500);
             dict.SetDefaultValue(PreferenceNames.PREF_STR_LOG_PATH, Path.Combine(this.AppPath, "Logs\\"));
         }
 
