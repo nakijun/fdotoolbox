@@ -29,6 +29,7 @@ using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.Commands.Feature;
 using FdoToolbox.Core.SharpMapProvider;
+using OSGeo.FDO.ClientServices;
 
 namespace FdoToolbox.Core.Controls
 {
@@ -38,27 +39,40 @@ namespace FdoToolbox.Core.Controls
         {
             InitializeComponent();
             mapImg.Map = new Map();
+            this.Disposed += delegate 
+            {
+                if (_conn.ConnectionState != ConnectionState.ConnectionState_Closed)
+                    _conn.Close();
+                _conn.Dispose(); 
+            };
         }
-
-        private FeatureService _service;
 
         private FdoInMemoryProvider _provider;
 
+        private IConnection _conn;
+
         public void Initialize(IConnection conn)
         {
-            if(_service == null)
-                _service = new FeatureService(conn);
+            if (_conn == null)
+            {
+                //Clone the connection
+                _conn = FeatureAccessManager.GetConnectionManager().CreateConnection(conn.ConnectionInfo.ProviderName);
+                _conn.ConnectionString = conn.ConnectionString;
+            }
         }
 
         public void LoadQuery(FeatureQueryOptions options)
         {
             Reset();
-            string provider = _service.Connection.ConnectionInfo.ProviderName;
-            string connectionString = _service.Connection.ConnectionString;
-            using (IFeatureReader reader = _service.SelectFeatures(options))
+            _conn.Open();
+            using (FeatureService service = new FeatureService(_conn))
             {
-                _provider = new FdoInMemoryProvider(reader);
+                using (IFeatureReader reader = service.SelectFeatures(options))
+                {
+                    _provider = new FdoInMemoryProvider(reader);
+                }
             }
+            _conn.Close();
             VectorLayer layer = new VectorLayer("Preview", _provider);
             mapImg.Map.Layers.Add(layer);
         }
