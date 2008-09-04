@@ -29,6 +29,7 @@ namespace FdoToolbox.Core.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpatialDataPreviewCtl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitSave = new FdoToolbox.Core.Controls.SplitButton();
             this.ctxSave = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -84,6 +85,7 @@ namespace FdoToolbox.Core.Controls
             this.bgStandard = new System.ComponentModel.BackgroundWorker();
             this.bgSql = new System.ComponentModel.BackgroundWorker();
             this.saveQueryDlg = new System.Windows.Forms.SaveFileDialog();
+            this.imgPreview = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -689,6 +691,7 @@ namespace FdoToolbox.Core.Controls
             // 
             this.tabResults.Controls.Add(this.TAB_RESULTS_GRID);
             this.tabResults.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabResults.ImageList = this.imgPreview;
             this.tabResults.Location = new System.Drawing.Point(0, 0);
             this.tabResults.Name = "tabResults";
             this.tabResults.SelectedIndex = 0;
@@ -698,10 +701,11 @@ namespace FdoToolbox.Core.Controls
             // TAB_RESULTS_GRID
             // 
             this.TAB_RESULTS_GRID.Controls.Add(this.grdPreview);
-            this.TAB_RESULTS_GRID.Location = new System.Drawing.Point(4, 22);
+            this.TAB_RESULTS_GRID.ImageKey = "application_view_columns.png";
+            this.TAB_RESULTS_GRID.Location = new System.Drawing.Point(4, 23);
             this.TAB_RESULTS_GRID.Name = "TAB_RESULTS_GRID";
             this.TAB_RESULTS_GRID.Padding = new System.Windows.Forms.Padding(3);
-            this.TAB_RESULTS_GRID.Size = new System.Drawing.Size(484, 38);
+            this.TAB_RESULTS_GRID.Size = new System.Drawing.Size(484, 37);
             this.TAB_RESULTS_GRID.TabIndex = 0;
             this.TAB_RESULTS_GRID.Text = "Data Query Results";
             this.TAB_RESULTS_GRID.UseVisualStyleBackColor = true;
@@ -715,7 +719,7 @@ namespace FdoToolbox.Core.Controls
             this.grdPreview.Location = new System.Drawing.Point(3, 3);
             this.grdPreview.Name = "grdPreview";
             this.grdPreview.ReadOnly = true;
-            this.grdPreview.Size = new System.Drawing.Size(478, 32);
+            this.grdPreview.Size = new System.Drawing.Size(478, 31);
             this.grdPreview.TabIndex = 1;
             // 
             // bgStandard
@@ -737,6 +741,12 @@ namespace FdoToolbox.Core.Controls
             // saveQueryDlg
             // 
             this.saveQueryDlg.Filter = "SDF Files (*.sdf)|*.sdf|SHP Files(*.shp)|*.shp";
+            // 
+            // imgPreview
+            // 
+            this.imgPreview.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgPreview.ImageStream")));
+            this.imgPreview.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgPreview.Images.SetKeyName(0, "application_view_columns.png");
             // 
             // SpatialDataPreviewCtl
             // 
@@ -829,5 +839,6 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.ContextMenuStrip ctxSave;
         private System.Windows.Forms.ToolStripMenuItem saveToSDFToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveQueryDlg;
+        private System.Windows.Forms.ImageList imgPreview;
     }
 }
