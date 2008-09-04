@@ -86,6 +86,7 @@ namespace FdoToolbox.Core.Controls
 
         private void btnQuery_Click(object sender, EventArgs e)
         {
+            ClearGrid();
             switch (tabQueryMode.SelectedIndex)
             {
                 case TAB_STANDARD:
