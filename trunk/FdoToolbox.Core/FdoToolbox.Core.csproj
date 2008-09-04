@@ -54,6 +54,14 @@
       <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Geometry.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="SharpMap, Version=0.9.3140.37856, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\SharpMap\SharpMap.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpMap.UI, Version=0.9.3140.37860, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\SharpMap\SharpMap.UI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.54.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
@@ -118,6 +126,12 @@
       <DependentUpon>HelpCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\IBaseDocumentCtl.cs" />
+    <Compile Include="Controls\MapPreviewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MapPreviewCtl.Designer.cs">
+      <DependentUpon>MapPreviewCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PreferencesCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -310,6 +324,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SharpMapProvider\FdoInMemoryProvider.cs" />
     <Compile Include="Utility\ExpressUtility.cs" />
     <Compile Include="Forms\AboutDialog.cs">
       <SubType>Form</SubType>
@@ -436,6 +451,10 @@
     <Content Include="OEMenuMap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\icon_fitwindow.gif" />
+    <None Include="Resources\icon_pan.gif" />
+    <None Include="Resources\zoom_out.png" />
+    <None Include="Resources\zoom_in.png" />
     <None Include="Resources\arrow_left.png" />
     <None Include="Resources\house.png" />
     <None Include="Resources\database_edit.png" />
@@ -513,6 +532,10 @@
     <EmbeddedResource Include="Controls\HelpCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>HelpCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\MapPreviewCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MapPreviewCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PreferencesCtl.resx">
       <SubType>Designer</SubType>

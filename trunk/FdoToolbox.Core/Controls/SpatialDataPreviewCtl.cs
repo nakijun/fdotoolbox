@@ -77,6 +77,7 @@ namespace FdoToolbox.Core.Controls
 
         protected override void OnLoad(EventArgs e)
         {
+            chkMap.Checked = false;
             cmbSchema.DataSource = _Service.DescribeSchema();
             cmbAggSchema.DataSource = _Service.DescribeSchema();
             SetSelectedClass();
@@ -89,6 +90,8 @@ namespace FdoToolbox.Core.Controls
             {
                 case TAB_STANDARD:
                     QueryStandard();
+                    if(chkMap.Checked)
+                        QueryMap();
                     break;
                 case TAB_AGGREGATE:
                     QueryAggregate();
@@ -96,6 +99,21 @@ namespace FdoToolbox.Core.Controls
                 case TAB_SQL:
                     QuerySQL();
                     break;
+            }
+        }
+
+        private void QueryMap()
+        {
+            mapCtl.Initialize(this.BoundConnection.InternalConnection);
+            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
+            if (classDef != null)
+            {
+                FeatureQueryOptions qry = new FeatureQueryOptions(classDef.Name);
+                qry.Filter = txtFilter.Text;
+                //qry.AddFeatureProperty(GetCheckedProperties());
+                //qry.AddComputedProperty(GetComputedFields());
+                mapCtl.LoadQuery(qry);
+                //mapCtl.ZoomExtents();
             }
         }
 
@@ -559,6 +577,7 @@ namespace FdoToolbox.Core.Controls
         private void btnClear_Click(object sender, EventArgs e)
         {
             ClearGrid();
+            mapCtl.Reset();
         }
 
         private void ClearGrid()
@@ -1025,6 +1044,19 @@ namespace FdoToolbox.Core.Controls
         private void tabQueryMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             splitSave.Visible = (tabQueryMode.SelectedIndex == TAB_STANDARD);
+        }
+
+        private void chkMap_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkMap.Checked)
+            {
+                if (!tabResults.TabPages.Contains(TAB_RESULTS_MAP))
+                    tabResults.TabPages.Add(TAB_RESULTS_MAP);
+            }
+            else
+            {
+                tabResults.TabPages.Remove(TAB_RESULTS_MAP);
+            }
         }
     }
 }

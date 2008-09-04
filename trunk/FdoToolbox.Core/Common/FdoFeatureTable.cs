@@ -23,12 +23,17 @@ using System.Text;
 using OSGeo.FDO.Schema;
 using System.Data;
 using FdoToolbox.Core.ETL;
+using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core.Common
 {
     public class FdoFeatureTable : FdoDataTable
     {
-        public FdoFeatureTable(string name, string description) : base(name, description) { }
+        public FdoFeatureTable(string name, string description) 
+            : base(name, description) 
+        { 
+            
+        }
 
         public FdoFeatureTable(FeatureClass fc) : base() 
         {
