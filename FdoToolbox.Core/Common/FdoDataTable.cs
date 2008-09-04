@@ -24,6 +24,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands.Feature;
 using System.Data;
 using FdoToolbox.Core.ETL;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.Common
 {
@@ -200,7 +201,11 @@ namespace FdoToolbox.Core.Common
                             break;
                         case PropertyType.PropertyType_GeometricProperty:
                             {
-                                row[dc] = reader.GetGeometry(name);
+                                byte[] fgf = reader.GetGeometry(name);
+                                if (dc.DataType == typeof(byte[]))
+                                    row[dc] = fgf;
+                                else
+                                    row[dc] = FdoGeometryUtil.GetFgfText(fgf);
                             }
                             break;
                     }

@@ -82,8 +82,7 @@ namespace FdoToolbox.Core.Properties {
         ///- famfamfam silk icon set (c) Mark James (http://www.famfamfam.com/lab/icons/silk/)
         ///- ADO.NET 2.0 SQLite Data Provider (c) Robert Simpson (http://sqlite.phxsoftware.com)
         ///- Iesi.Collections (c) Jason Smith
-        ///
-        ///This application and its non-thirdparty components are licensed under the GNU  [rest of string was truncated]&quot;;.
+        ///- MapGuide Maestro API (c) Kenneth Skovhede (http://trac.osgeo.org/mapguide/wiki [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string APP_ABOUT {
             get {
@@ -234,6 +233,20 @@ namespace FdoToolbox.Core.Properties {
         internal static System.Drawing.Bitmap house {
             get {
                 object obj = ResourceManager.GetObject("house", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap icon_fitwindow {
+            get {
+                object obj = ResourceManager.GetObject("icon_fitwindow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap icon_pan {
+            get {
+                object obj = ResourceManager.GetObject("icon_pan", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -440,6 +453,20 @@ namespace FdoToolbox.Core.Properties {
         internal static System.Drawing.Bitmap zoom {
             get {
                 object obj = ResourceManager.GetObject("zoom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap zoom_in {
+            get {
+                object obj = ResourceManager.GetObject("zoom_in", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap zoom_out {
+            get {
+                object obj = ResourceManager.GetObject("zoom_out", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

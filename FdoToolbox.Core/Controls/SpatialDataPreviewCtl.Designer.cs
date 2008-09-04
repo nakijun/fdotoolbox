@@ -31,6 +31,7 @@ namespace FdoToolbox.Core.Controls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpatialDataPreviewCtl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.chkMap = new System.Windows.Forms.CheckBox();
             this.splitSave = new FdoToolbox.Core.Controls.SplitButton();
             this.ctxSave = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.saveToSDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,10 +83,12 @@ namespace FdoToolbox.Core.Controls
             this.tabResults = new System.Windows.Forms.TabControl();
             this.TAB_RESULTS_GRID = new System.Windows.Forms.TabPage();
             this.grdPreview = new System.Windows.Forms.DataGridView();
+            this.TAB_RESULTS_MAP = new System.Windows.Forms.TabPage();
+            this.mapCtl = new FdoToolbox.Core.Controls.MapPreviewCtl();
+            this.imgPreview = new System.Windows.Forms.ImageList(this.components);
             this.bgStandard = new System.ComponentModel.BackgroundWorker();
             this.bgSql = new System.ComponentModel.BackgroundWorker();
             this.saveQueryDlg = new System.Windows.Forms.SaveFileDialog();
-            this.imgPreview = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -104,6 +107,7 @@ namespace FdoToolbox.Core.Controls
             this.tabResults.SuspendLayout();
             this.TAB_RESULTS_GRID.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdPreview)).BeginInit();
+            this.TAB_RESULTS_MAP.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -117,6 +121,7 @@ namespace FdoToolbox.Core.Controls
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.chkMap);
             this.splitContainer1.Panel1.Controls.Add(this.splitSave);
             this.splitContainer1.Panel1.Controls.Add(this.btnCancel);
             this.splitContainer1.Panel1.Controls.Add(this.lblCount);
@@ -127,9 +132,23 @@ namespace FdoToolbox.Core.Controls
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabResults);
-            this.splitContainer1.Size = new System.Drawing.Size(494, 345);
+            this.splitContainer1.Size = new System.Drawing.Size(494, 395);
             this.splitContainer1.SplitterDistance = 275;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // chkMap
+            // 
+            this.chkMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkMap.AutoSize = true;
+            this.chkMap.Checked = true;
+            this.chkMap.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkMap.Location = new System.Drawing.Point(142, 249);
+            this.chkMap.Name = "chkMap";
+            this.chkMap.Size = new System.Drawing.Size(47, 17);
+            this.chkMap.TabIndex = 6;
+            this.chkMap.Text = "Map";
+            this.chkMap.UseVisualStyleBackColor = true;
+            this.chkMap.CheckedChanged += new System.EventHandler(this.chkMap_CheckedChanged);
             // 
             // splitSave
             // 
@@ -690,12 +709,13 @@ namespace FdoToolbox.Core.Controls
             // tabResults
             // 
             this.tabResults.Controls.Add(this.TAB_RESULTS_GRID);
+            this.tabResults.Controls.Add(this.TAB_RESULTS_MAP);
             this.tabResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabResults.ImageList = this.imgPreview;
             this.tabResults.Location = new System.Drawing.Point(0, 0);
             this.tabResults.Name = "tabResults";
             this.tabResults.SelectedIndex = 0;
-            this.tabResults.Size = new System.Drawing.Size(492, 64);
+            this.tabResults.Size = new System.Drawing.Size(492, 114);
             this.tabResults.TabIndex = 0;
             // 
             // TAB_RESULTS_GRID
@@ -705,7 +725,7 @@ namespace FdoToolbox.Core.Controls
             this.TAB_RESULTS_GRID.Location = new System.Drawing.Point(4, 23);
             this.TAB_RESULTS_GRID.Name = "TAB_RESULTS_GRID";
             this.TAB_RESULTS_GRID.Padding = new System.Windows.Forms.Padding(3);
-            this.TAB_RESULTS_GRID.Size = new System.Drawing.Size(484, 37);
+            this.TAB_RESULTS_GRID.Size = new System.Drawing.Size(484, 87);
             this.TAB_RESULTS_GRID.TabIndex = 0;
             this.TAB_RESULTS_GRID.Text = "Data Query Results";
             this.TAB_RESULTS_GRID.UseVisualStyleBackColor = true;
@@ -719,8 +739,35 @@ namespace FdoToolbox.Core.Controls
             this.grdPreview.Location = new System.Drawing.Point(3, 3);
             this.grdPreview.Name = "grdPreview";
             this.grdPreview.ReadOnly = true;
-            this.grdPreview.Size = new System.Drawing.Size(478, 31);
+            this.grdPreview.Size = new System.Drawing.Size(478, 81);
             this.grdPreview.TabIndex = 1;
+            // 
+            // TAB_RESULTS_MAP
+            // 
+            this.TAB_RESULTS_MAP.Controls.Add(this.mapCtl);
+            this.TAB_RESULTS_MAP.ImageKey = "map.png";
+            this.TAB_RESULTS_MAP.Location = new System.Drawing.Point(4, 23);
+            this.TAB_RESULTS_MAP.Name = "TAB_RESULTS_MAP";
+            this.TAB_RESULTS_MAP.Padding = new System.Windows.Forms.Padding(3);
+            this.TAB_RESULTS_MAP.Size = new System.Drawing.Size(484, 87);
+            this.TAB_RESULTS_MAP.TabIndex = 1;
+            this.TAB_RESULTS_MAP.Text = "Map Preview";
+            this.TAB_RESULTS_MAP.UseVisualStyleBackColor = true;
+            // 
+            // mapCtl
+            // 
+            this.mapCtl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapCtl.Location = new System.Drawing.Point(3, 3);
+            this.mapCtl.Name = "mapCtl";
+            this.mapCtl.Size = new System.Drawing.Size(478, 81);
+            this.mapCtl.TabIndex = 0;
+            // 
+            // imgPreview
+            // 
+            this.imgPreview.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgPreview.ImageStream")));
+            this.imgPreview.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgPreview.Images.SetKeyName(0, "application_view_columns.png");
+            this.imgPreview.Images.SetKeyName(1, "map.png");
             // 
             // bgStandard
             // 
@@ -742,19 +789,13 @@ namespace FdoToolbox.Core.Controls
             // 
             this.saveQueryDlg.Filter = "SDF Files (*.sdf)|*.sdf|SHP Files(*.shp)|*.shp";
             // 
-            // imgPreview
-            // 
-            this.imgPreview.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgPreview.ImageStream")));
-            this.imgPreview.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgPreview.Images.SetKeyName(0, "application_view_columns.png");
-            // 
             // SpatialDataPreviewCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Name = "SpatialDataPreviewCtl";
-            this.Size = new System.Drawing.Size(494, 345);
+            this.Size = new System.Drawing.Size(494, 395);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -778,6 +819,7 @@ namespace FdoToolbox.Core.Controls
             this.tabResults.ResumeLayout(false);
             this.TAB_RESULTS_GRID.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdPreview)).EndInit();
+            this.TAB_RESULTS_MAP.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -840,5 +882,8 @@ namespace FdoToolbox.Core.Controls
         private System.Windows.Forms.ToolStripMenuItem saveToSDFToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveQueryDlg;
         private System.Windows.Forms.ImageList imgPreview;
+        private System.Windows.Forms.TabPage TAB_RESULTS_MAP;
+        private MapPreviewCtl mapCtl;
+        private System.Windows.Forms.CheckBox chkMap;
     }
 }

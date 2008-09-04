@@ -23,6 +23,7 @@ using System.Text;
 using OSGeo.FDO.Schema;
 using System.Data;
 using FdoToolbox.Core.ETL;
+using OSGeo.FDO.Commands.Feature;
 
 namespace FdoToolbox.Core.Common
 {
@@ -39,6 +40,13 @@ namespace FdoToolbox.Core.Common
                 default:
                     throw new NotSupportedException();
             }
+        }
+
+        public static FdoDataTable CreateTable(IFeatureReader reader)
+        {
+            FdoDataTable table = CreateTable(reader.GetClassDefinition());
+            table.LoadFromFeatureReader(reader);
+            return table;
         }
 
         /// <summary>
