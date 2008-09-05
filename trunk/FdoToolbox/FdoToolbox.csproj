@@ -183,6 +183,9 @@
     <Content Include="Help\body-home.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\cmd-errorcodes.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Help\cmd-fdoinfo.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
