@@ -1,4 +1,8 @@
 - Enhancements:
+	- Visual Preview of FDO data sources.
+	- MapGuide Extension Module.
+	- Data Preview: You will be warned about potentially large query results sets being returned. If the number
+	  of results exceeds the preference value of PREF_INT_WARN_DATASET, you will get this warning.
 	- When bulk copying, the schema to be applied is checked for compatibility. If it is not compatible with
 	  the target connection, the incompatibilities are displayed with the option to alter it to be compatible.
 	- HTML help documentation. This is just the initial skeleton at the moment. More content will follow.
