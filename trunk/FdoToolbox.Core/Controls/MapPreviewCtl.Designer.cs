@@ -44,7 +44,7 @@ namespace FdoToolbox.Core.Controls
             ((System.ComponentModel.ISupportInitialize)(this.mapImg)).BeginInit();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // mapToolStrip
             // 
             this.mapToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnZoomIn,
@@ -54,7 +54,7 @@ namespace FdoToolbox.Core.Controls
             this.toolStripSeparator1,
             this.btnRefresh});
             this.mapToolStrip.Location = new System.Drawing.Point(0, 0);
-            this.mapToolStrip.Name = "toolStrip1";
+            this.mapToolStrip.Name = "mapToolStrip";
             this.mapToolStrip.Size = new System.Drawing.Size(525, 25);
             this.mapToolStrip.TabIndex = 0;
             this.mapToolStrip.Text = "toolStrip1";
@@ -124,6 +124,7 @@ namespace FdoToolbox.Core.Controls
             // mapImg
             // 
             this.mapImg.ActiveTool = SharpMap.Forms.MapImage.Tools.None;
+            this.mapImg.BackColor = System.Drawing.Color.White;
             this.mapImg.Cursor = System.Windows.Forms.Cursors.Cross;
             this.mapImg.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapImg.Location = new System.Drawing.Point(0, 25);

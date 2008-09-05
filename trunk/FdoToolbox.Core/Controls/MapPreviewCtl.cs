@@ -74,6 +74,8 @@ namespace FdoToolbox.Core.Controls
             }
             _conn.Close();
             VectorLayer layer = new VectorLayer("Preview", _provider);
+            layer.Style.Fill = Brushes.Transparent;
+            layer.Style.EnableOutline = true;
             mapImg.Map.Layers.Add(layer);
         }
 
