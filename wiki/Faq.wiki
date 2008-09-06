@@ -52,3 +52,7 @@ A: Every release will have a Lite version. Only major point releases (0.4, 0.5, 
 === Q: Can I run FDO Toolbox in Linux (via Mono)? ===
 
 A: No, as the FDO managed wrapper libraries are mixed-mode assemblies and Mono will most likely [http://www.jprl.com/Blog/archive/development/mono/2008/Jan-27.html never support the capability]. However certain parts of FDO Toolbox (such as command-line utilities) are on the roadmap to be ported to linux.
+
+=== Q: Are the APIs stable enough to develop extension modules against? ===
+
+A: Until 1.0 is released, there is no guarantee that the current APIs will remain the same. 
