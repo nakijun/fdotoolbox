@@ -1195,7 +1195,7 @@ namespace FdoToolbox.Core.ClientServices
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IFeatureReader SelectFeatures(FeatureQueryOptions options)
+        public FdoFeatureReader SelectFeatures(FeatureQueryOptions options)
         {
             IFeatureReader reader = null;
             ISelect select = CreateCommand<ISelect>(OSGeo.FDO.Commands.CommandType.CommandType_Select);
@@ -1204,7 +1204,7 @@ namespace FdoToolbox.Core.ClientServices
                 SetSelectOptions(options, select);
                 reader = select.Execute();
             }
-            return reader;
+            return new FdoFeatureReader(reader);
         }
 
         /// <summary>
@@ -1213,7 +1213,7 @@ namespace FdoToolbox.Core.ClientServices
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IDataReader SelectAggregates(FeatureAggregateOptions options)
+        public FdoDataReader SelectAggregates(FeatureAggregateOptions options)
         {
             if (!SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
                 throw new FeatureServiceException("This connection does not support Select Aggregate queries");
@@ -1232,7 +1232,7 @@ namespace FdoToolbox.Core.ClientServices
                 }
                 reader = select.Execute();
             }
-            return reader;
+            return new FdoDataReader(reader);
         }
 
         private static void SetSelectOptions(FeatureQueryOptions options, IBaseSelect select)
@@ -1274,7 +1274,7 @@ namespace FdoToolbox.Core.ClientServices
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        public ISQLDataReader ExecuteSQLQuery(string sql)
+        public FdoSqlReader ExecuteSQLQuery(string sql)
         {
             if (!SupportsCommand(CommandType.CommandType_SQLCommand))
                 throw new FeatureServiceException("This connection does not support SQL queries");
@@ -1286,7 +1286,7 @@ namespace FdoToolbox.Core.ClientServices
                 cmd.SQLStatement = sql;
                 reader = cmd.ExecuteReader();
             }
-            return reader;
+            return new FdoSqlReader(reader);
         }
 
         /// <summary>
