@@ -25,9 +25,6 @@ using FdoToolbox.Core.IO;
 
 namespace FdoToolbox.Core.ClientServices
 {
-    public delegate void AlertHandler(string title, string message);
-    public delegate bool ConfirmHandler(string title, string message);
-
     /// <summary>
     /// Application console class. Output is redirected
     /// to the application console window.
@@ -86,7 +83,7 @@ namespace FdoToolbox.Core.ClientServices
         public static void Alert(string title, string message, bool writeToConsole)
         {
             if (DoAlert != null)
-                DoAlert(title, message);
+                DoAlert(new MessageEventArgs(title, message));
             else
                 throw new ApplicationException("DoAlert handler not initialized");
             if (writeToConsole)
@@ -96,7 +93,7 @@ namespace FdoToolbox.Core.ClientServices
         public static bool Confirm(string title, string text)
         {
             if (DoConfirm != null)
-                return DoConfirm(title, text);
+                return DoConfirm(new MessageEventArgs(title, text));
 
             throw new ApplicationException("DoConfirm handler not initialized");
         }

@@ -248,9 +248,9 @@ namespace FdoToolbox.Tests
             IConnection conn2 = new MockSpatialConnection();
             using (mgr)
             {
-                mgr.ConnectionRenamed += delegate(string oldName, string newName)
+                mgr.ConnectionRenamed += delegate(object sender, ConnectionRenameEventArgs e)
                 {
-                    Assert.AreNotEqual(oldName, newName);
+                    Assert.AreNotEqual(e.OldName, e.NewName);
                 };
 
                 mgr.AddConnection("Conn1", conn1);
@@ -273,7 +273,7 @@ namespace FdoToolbox.Tests
             IConnection conn2 = new MockSpatialConnection();
             using (mgr)
             {
-                mgr.ConnectionRenamed += delegate(string oldName, string newName)
+                mgr.ConnectionRenamed += delegate(object sender, ConnectionRenameEventArgs e)
                 {
                     Assert.Fail("Rename should have failed");
                 };

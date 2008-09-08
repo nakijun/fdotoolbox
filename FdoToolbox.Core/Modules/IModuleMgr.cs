@@ -27,8 +27,6 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Modules
 {
-    public delegate void ModuleEventHandler(IModule module);
-
     /// <summary>
     /// Module manager interface
     /// </summary>

@@ -36,7 +36,7 @@ namespace FdoToolbox
 		private void InitializeComponent()
 		{
             this.panel1 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtCmd = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.panel1.SuspendLayout();
@@ -45,7 +45,7 @@ namespace FdoToolbox
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.txtCmd);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 242);
             this.panel1.Name = "panel1";
@@ -54,12 +54,12 @@ namespace FdoToolbox
             // 
             // textBox1
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(563, 20);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox1KeyUp);
+            this.txtCmd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCmd.Location = new System.Drawing.Point(0, 0);
+            this.txtCmd.Name = "textBox1";
+            this.txtCmd.Size = new System.Drawing.Size(563, 20);
+            this.txtCmd.TabIndex = 0;
+            this.txtCmd.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TxtCommandKeyUp);
             // 
             // panel2
             // 
@@ -101,7 +101,7 @@ namespace FdoToolbox
 		}
 		private System.Windows.Forms.RichTextBox richTextBox1;
 		private System.Windows.Forms.Panel panel2;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox txtCmd;
 		private System.Windows.Forms.Panel panel1;
 	}
 }

@@ -26,8 +26,6 @@ using System.IO;
 
 namespace FdoToolbox.Core.IO
 {
-    public delegate object PropertyGetter();
-
     /// <summary>
     /// Textbox-based output stream used by the Application console
     /// </summary>

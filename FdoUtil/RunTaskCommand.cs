@@ -85,20 +85,20 @@ namespace FdoUtil
             return (int)retCode;
         }
 
-        void task_OnLogTaskMessage(string msg)
+        void task_OnLogTaskMessage(object sender, EventArgs<string> e)
         {
             if (logWriter != null)
-                logWriter.WriteLine(msg);
+                logWriter.WriteLine(e.Data);
         }
 
-        void task_OnTaskMessage(string msg)
+        void task_OnTaskMessage(object sender, EventArgs<string> e)
         {
-            WriteLine(msg);
+            WriteLine(e.Data);
         }
 
-        void task_OnItemProcessed(int pc)
+        void task_OnItemProcessed(object sender, EventArgs<int> e)
         {
-            WriteLine("{0}% done", pc);
+            WriteLine("{0}% done", e.Data);
         }
     }
 }

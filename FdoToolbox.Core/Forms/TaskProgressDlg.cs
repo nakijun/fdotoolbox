@@ -66,9 +66,9 @@ namespace FdoToolbox.Core.Forms
             this.Disposed += delegate { bgWorker.Dispose(); };
         }
 
-        void OnLogTaskMessage(string msg)
+        void OnLogTaskMessage(object sender, EventArgs<string> e)
         {
-            AppConsole.WriteLine("[{0}]: {1}", _Task.TaskType, msg);
+            AppConsole.WriteLine("[{0}]: {1}", _Task.TaskType, e.Data);
         }
 
         void ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -76,9 +76,9 @@ namespace FdoToolbox.Core.Forms
             progressBar.Value = e.ProgressPercentage;
         }
 
-        void OnItemProcessed(int pc)
+        void OnItemProcessed(object sender, EventArgs<int> e)
         {
-            bgWorker.ReportProgress(pc);
+            bgWorker.ReportProgress(e.Data);
         }
 
         void WorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -103,16 +103,17 @@ namespace FdoToolbox.Core.Forms
             }
             catch (Exception ex)
             {
-                OnTaskMessage(ex.Message);
+                OnTaskMessage(this, new EventArgs<string>(ex.Message));
                 AppConsole.WriteException(ex);
                 bgWorker.CancelAsync();
             }
         }
 
-        void OnTaskMessage(string msg)
+        void OnTaskMessage(object sender, EventArgs<string> e)
         {
+            string msg = e.Data;
             if (lblMessage.InvokeRequired)
-                lblMessage.Invoke(new EventHandler(delegate(object sender, EventArgs e) { lblMessage.Text = msg; }));
+                lblMessage.Invoke(new EventHandler(delegate { lblMessage.Text = msg; }));
             else
                 lblMessage.Text = msg;
         }

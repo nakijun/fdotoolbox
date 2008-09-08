@@ -44,18 +44,18 @@ namespace FdoToolbox.Core
         {
             AppConsole.Out = new CmdConsoleOutputStream();
             AppConsole.Err = new CmdConsoleErrorStream();
-            AppConsole.DoAlert += delegate(string title, string message)
+            AppConsole.DoAlert += delegate(MessageEventArgs e)
             {
-                AppConsole.WriteLine("{0}: {1}", title, message);
+                AppConsole.WriteLine("{0}: {1}", e.Title, e.Message);
             };
-            AppConsole.DoConfirm += delegate(string title, string message)
+            AppConsole.DoConfirm += delegate(MessageEventArgs e)
             {
-                AppConsole.WriteLine("{0}: {1} [y/n]", title, message);
+                AppConsole.WriteLine("{0}: {1} [y/n]", e.Title, e.Message);
                 ConsoleKeyInfo input = Console.ReadKey();
                 while (input.Key != ConsoleKey.Y && input.Key != ConsoleKey.N)
                 {
                     AppConsole.WriteLine("Unknown response. Try again.");
-                    AppConsole.WriteLine("{0}: {1} [y/n]", title, message);
+                    AppConsole.WriteLine("{0}: {1} [y/n]", e.Title, e.Message);
                 }
                 return input.Key == ConsoleKey.Y;
             };

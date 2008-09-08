@@ -49,7 +49,7 @@ namespace FdoToolbox.Core.ClientServices
             FdoConnectionInfo connInfo = new FdoConnectionInfo(name, conn);
             _ConnectionDict.Add(name, connInfo);
             if (this.ConnectionAdded != null)
-                this.ConnectionAdded(name);
+                this.ConnectionAdded(this, new EventArgs<string>(name));
         }
 
         public void RemoveConnection(string name)
@@ -58,9 +58,9 @@ namespace FdoToolbox.Core.ClientServices
             {
                 if (this.BeforeConnectionRemove != null)
                 {
-                    bool cancel = false;
-                    this.BeforeConnectionRemove(name, ref cancel);
-                    if (cancel)
+                    ConnectionBeforeRenameEventArgs e = new ConnectionBeforeRenameEventArgs(name);
+                    this.BeforeConnectionRemove(this, e);
+                    if (e.Cancel)
                         return;
                 }
 
@@ -69,7 +69,7 @@ namespace FdoToolbox.Core.ClientServices
                 _ConnectionDict.Remove(name);
                 conn.Dispose();
                 if (this.ConnectionRemoved != null)
-                    this.ConnectionRemoved(name);
+                    this.ConnectionRemoved(this, new EventArgs<string>(name));
 
                 //Reset counter if no connections left
                 if (_ConnectionDict.Count == 0)
@@ -129,7 +129,10 @@ namespace FdoToolbox.Core.ClientServices
             _ConnectionDict.Add(newName, conn);
 
             if (this.ConnectionRenamed != null)
-                this.ConnectionRenamed(oldName, newName);
+            {
+                ConnectionRenameEventArgs e = new ConnectionRenameEventArgs(oldName, newName);
+                this.ConnectionRenamed(this, e);
+            }
         }
 
         public event ConnectionRenamedEventHandler ConnectionRenamed;

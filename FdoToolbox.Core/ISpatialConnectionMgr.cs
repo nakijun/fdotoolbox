@@ -23,13 +23,10 @@ using System.Text;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
+using System.ComponentModel;
 
 namespace FdoToolbox.Core
 {
-    public delegate void ConnectionEventHandler(string name);
-    public delegate void ConnectionRenamedEventHandler(string oldName, string newName);
-    public delegate void ConnectionBeforeRemoveHandler(string name, ref bool cancel);
-
     public interface ISpatialConnectionMgr : IDisposable
     {
         string CreateUniqueName();

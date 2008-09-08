@@ -23,8 +23,6 @@ using System.Text;
 
 namespace FdoToolbox.Core
 {
-    public delegate void TaskEventHandler(string name);
-
     public interface ITaskManager
     {
         void AddTask(ITask task);

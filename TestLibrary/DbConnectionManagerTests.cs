@@ -73,9 +73,9 @@ namespace FdoToolbox.Tests
             IDbConnectionManager mgr = new DbConnectionManager();
             using (mgr)
             {
-                mgr.ConnectionRenamed += delegate(string oldName, string newName)
+                mgr.ConnectionRenamed += delegate(object sender, ConnectionRenameEventArgs e)
                 {
-                    Assert.AreNotEqual(oldName, newName);
+                    Assert.AreNotEqual(e.OldName, e.NewName);
                 };
 
                 DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
@@ -100,7 +100,7 @@ namespace FdoToolbox.Tests
             IDbConnectionManager mgr = new DbConnectionManager();
             using (mgr)
             {
-                mgr.ConnectionRenamed += delegate(string oldName, string newName)
+                mgr.ConnectionRenamed += delegate
                 {
                     Assert.Fail("Rename should have failed");
                 };

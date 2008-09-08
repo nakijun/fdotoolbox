@@ -83,7 +83,7 @@ namespace FdoToolbox.Core.Modules
                     _GlobalNamespace.Add(name, extModule.GetCommand(name));
             }
             if (this.ModuleLoaded != null)
-                this.ModuleLoaded(extModule);
+                this.ModuleLoaded(this, new EventArgs<IModule>(extModule));
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace FdoToolbox.Core.Modules
             }
 
             if (this.ModuleUnloaded != null)
-                this.ModuleUnloaded(extModule);
+                this.ModuleUnloaded(this, new EventArgs<IModule>(extModule));
         }
 
         public void Dispose()

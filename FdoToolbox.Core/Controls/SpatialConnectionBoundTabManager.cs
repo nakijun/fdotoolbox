@@ -43,8 +43,10 @@ namespace FdoToolbox.Core.Controls
             _ControlInstances[ctl.GetType()].Remove(ctl);
         }
 
-        void ConnectionManager_ConnectionRenamed(string oldName, string newName)
+        void ConnectionManager_ConnectionRenamed(object sender, ConnectionRenameEventArgs e)
         {
+            string oldName = e.OldName;
+            string newName = e.NewName;
             foreach (Type t in _ControlTypes)
             {
                 List<ISpatialConnectionBoundCtl> controls = _ControlInstances[t].FindAll(
@@ -64,7 +66,7 @@ namespace FdoToolbox.Core.Controls
             }
         }
 
-        void ConnectionManager_BeforeConnectionRemove(string name, ref bool cancel)
+        void ConnectionManager_BeforeConnectionRemove(object sender, ConnectionBeforeRenameEventArgs e)
         {
             List<ISpatialConnectionBoundCtl> controls = new List<ISpatialConnectionBoundCtl>();
             foreach (Type type in _ControlInstances.Keys)
@@ -72,13 +74,13 @@ namespace FdoToolbox.Core.Controls
                 List<ISpatialConnectionBoundCtl> found = _ControlInstances[type].FindAll(
                     delegate(ISpatialConnectionBoundCtl ctl)
                     {
-                        return ctl.BoundConnection.Name == name;
+                        return ctl.BoundConnection.Name == e.ConnectionName;
                     }
                 );
                 controls.AddRange(found);
             }
             if(controls.Count > 0)
-                cancel = !AppConsole.Confirm("Tabs still open", "There are tabs still open which rely on the connection you are about to close.\nIf you close the connection they will be closed too.\n\nClose connection?");
+                e.Cancel = !AppConsole.Confirm("Tabs still open", "There are tabs still open which rely on the connection you are about to close.\nIf you close the connection they will be closed too.\n\nClose connection?");
         }
 
         public ISpatialConnectionBoundCtl CreateTab(Type tabType, FdoConnectionInfo connInfo)
@@ -103,9 +105,9 @@ namespace FdoToolbox.Core.Controls
                 string name = control.BoundConnection.Name;
                 control.SetName(name);
                 control.SetKey(key);
-                ConnectionEventHandler removeHandler = new ConnectionEventHandler(delegate(string connName)
+                ConnectionEventHandler removeHandler = new ConnectionEventHandler(delegate(object sender, EventArgs<string> e)
                 {
-                    if (control.BoundConnection.Name == connName)
+                    if (control.BoundConnection.Name == e.Data)
                         control.Close();
                 });
 

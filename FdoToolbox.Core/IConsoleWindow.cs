@@ -24,8 +24,6 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Core
 {
-    public delegate void ConsoleInputHandler(string input);
-
     /// <summary>
     /// Application Console interface
     /// </summary>

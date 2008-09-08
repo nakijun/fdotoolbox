@@ -88,7 +88,7 @@ namespace FdoToolbox
                 ctl.WrappedControl.Dock = DockStyle.Fill;
                 
                 content.Controls.Add(ctl.WrappedControl);
-                ctl.OnSetTabText += delegate(string title) { content.TabText = title; };
+                ctl.OnSetTabText += delegate(object sender, EventArgs<string> e) { content.TabText = e.Data; };
                 ctl.OnClose += delegate { content.Close(); };
                 ctl.OnAccept += delegate { content.DialogResult = DialogResult.OK; };
                 ctl.OnCancel += delegate { content.DialogResult = DialogResult.Cancel; };
@@ -122,7 +122,7 @@ namespace FdoToolbox
             ctl.WrappedControl.Dock = DockStyle.Fill;
             DockContent content = new DockContent();
             content.Controls.Add(ctl.WrappedControl);
-            ctl.OnSetTabText += delegate(string title) { content.TabText = title; };
+            ctl.OnSetTabText += delegate(object sender, EventArgs<string> e) { content.TabText = e.Data; };
             ctl.OnClose += delegate { content.Close(); };
             ctl.OnAccept += delegate { content.DialogResult = DialogResult.OK; };
             ctl.OnCancel += delegate { content.DialogResult = DialogResult.Cancel; };
