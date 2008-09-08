@@ -29,6 +29,7 @@ using OSGeo.FDO.Connections;
 using FdoToolbox.Core.Controls;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
+using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Core.Forms
 {
@@ -64,6 +65,15 @@ namespace FdoToolbox.Core.Forms
 
             if (this.BoundConnection.InternalConnection.SchemaCapabilities.MaximumDecimalScale > 0)
                 numScale.Maximum = this.BoundConnection.InternalConnection.SchemaCapabilities.MaximumDecimalScale;
+
+            cmbConstraintType.Items.Clear();
+            cmbConstraintType.Items.Add("(None)");
+            if (this.BoundConnection.InternalConnection.SchemaCapabilities.SupportsValueConstraintsList)
+                cmbConstraintType.Items.Add(PropertyValueConstraintType.PropertyValueConstraintType_List);
+            if (this.BoundConnection.InternalConnection.SchemaCapabilities.SupportsExclusiveValueRangeConstraints)
+                cmbConstraintType.Items.Add(PropertyValueConstraintType.PropertyValueConstraintType_Range);
+
+            cmbConstraintType.SelectedIndex = 0;
         }
 
         internal DataPropertyDefinitionDlg(DataPropertyDefinition def, FdoConnectionInfo conn) : this(conn)
@@ -80,6 +90,63 @@ namespace FdoToolbox.Core.Forms
             numLength.Value = Convert.ToDecimal(_Definition.Length);
             numPrecision.Value = Convert.ToDecimal(_Definition.Precision);
             numScale.Value = Convert.ToDecimal(_Definition.Scale);
+            if (def.ValueConstraint != null)
+            {
+                int idx = cmbConstraintType.Items.IndexOf(def.ValueConstraint.ConstraintType);
+                if (idx > 0)
+                {
+                    cmbConstraintType.SelectedIndex = idx;
+                    if (def.ValueConstraint.ConstraintType == PropertyValueConstraintType.PropertyValueConstraintType_List)
+                    {
+                        ValueListConstraintCtl ctl = (ValueListConstraintCtl)pnConstraint.Controls[0];
+                        List<string> values = new List<string>();
+                        DataValueCollection listValues = (def.ValueConstraint as PropertyValueConstraintList).ConstraintList;
+                        foreach (DataValue dv in listValues)
+                        {
+                            switch (dv.DataType)
+                            {
+                                case DataType.DataType_Byte:
+                                    values.Add((dv as ByteValue).Byte.ToString());
+                                    break;
+                                case DataType.DataType_DateTime:
+                                    values.Add((dv as DateTimeValue).DateTime.ToString());
+                                    break;
+                                case DataType.DataType_Decimal:
+                                    values.Add((dv as DecimalValue).Decimal.ToString());
+                                    break;
+                                case DataType.DataType_Double:
+                                    values.Add((dv as DoubleValue).Double.ToString());
+                                    break;
+                                case DataType.DataType_Int16:
+                                    values.Add((dv as Int16Value).Int16.ToString());
+                                    break;
+                                case DataType.DataType_Int32:
+                                    values.Add((dv as Int32Value).Int32.ToString());
+                                    break;
+                                case DataType.DataType_Int64:
+                                    values.Add((dv as Int64Value).Int64.ToString());
+                                    break;
+                                case DataType.DataType_Single:
+                                    values.Add((dv as SingleValue).Single.ToString());
+                                    break;
+                                case DataType.DataType_String:
+                                    values.Add((dv as StringValue).String);
+                                    break;
+                            }
+                        }
+                        ctl.SetItems(values.ToArray());
+                    }
+                    else if (def.ValueConstraint.ConstraintType == PropertyValueConstraintType.PropertyValueConstraintType_Range)
+                    {
+                        PropertyValueConstraintRange range = (def.ValueConstraint as PropertyValueConstraintRange);
+                        ValueRangeConstraintCtl ctl = (ValueRangeConstraintCtl)pnConstraint.Controls[0];
+                        ctl.IsMaxInclusive = range.MaxInclusive;
+                        ctl.IsMinInclusive = range.MinInclusive;
+                        ctl.MaxValue = range.MaxValue;
+                        ctl.MinValue = range.MinValue;
+                    }
+                }
+            }
         }
 
         private DataPropertyDefinition _Definition;
@@ -120,7 +187,17 @@ namespace FdoToolbox.Core.Forms
                     return;
                 }
             }
-            else if (dtype == DataType.DataType_Decimal)
+            if (dtype == DataType.DataType_BLOB ||
+                dtype == DataType.DataType_CLOB ||
+                dtype == DataType.DataType_Boolean)
+            {
+                if (cmbConstraintType.SelectedIndex > 0)
+                {
+                    errorProvider.SetError(cmbConstraintType, "Cannot have constraints on BLOB, CLOB or Boolean");
+                    return;
+                }
+            }
+            if (dtype == DataType.DataType_Decimal)
             {
                 //Check zero length precision/scale
                 if (numPrecision.Value == 0)
@@ -147,6 +224,7 @@ namespace FdoToolbox.Core.Forms
             _Definition.Scale = Convert.ToInt32(numScale.Value);
             _Definition.Precision = Convert.ToInt32(numPrecision.Value);
             _Definition.Length = Convert.ToInt32(numLength.Value);
+            _Definition.ValueConstraint = GetConstraint();
             this.DialogResult = DialogResult.OK;
         }
 
@@ -207,6 +285,100 @@ namespace FdoToolbox.Core.Forms
         public void SetName(string name)
         {
             this.BoundConnection.Name = name;
+        }
+
+        private PropertyValueConstraint GetConstraint()
+        {
+            if (cmbConstraintType.SelectedIndex > 0)
+            {
+                Control c = pnConstraint.Controls[0];
+                ValueListConstraintCtl vlc = c as ValueListConstraintCtl;
+                ValueRangeConstraintCtl vrc = c as ValueRangeConstraintCtl;
+                if (vlc != null)
+                {
+                    PropertyValueConstraintList list = new PropertyValueConstraintList();
+                    string[] items = vlc.GetItems();
+                    foreach (string str in items)
+                    {
+                        DataType dt = (DataType)cmbDataType.SelectedItem;
+                        DataValue value = null;
+                        switch (dt)
+                        {
+                            case DataType.DataType_Byte:
+                                value = new ByteValue(Convert.ToByte(str.Trim()));
+                                break;
+                            case DataType.DataType_DateTime:
+                                value = new DateTimeValue(Convert.ToDateTime(str.Trim()));
+                                break;
+                            case DataType.DataType_Decimal:
+                                value = new DecimalValue(Convert.ToDouble(str.Trim()));
+                                break;
+                            case DataType.DataType_Double:
+                                value = new DoubleValue(Convert.ToDouble(str.Trim()));
+                                break;
+                            case DataType.DataType_Int16:
+                                value = new Int16Value(Convert.ToInt16(str.Trim()));
+                                break;
+                            case DataType.DataType_Int32:
+                                value = new Int32Value(Convert.ToInt32(str.Trim()));
+                                break;
+                            case DataType.DataType_Int64:
+                                value = new Int64Value(Convert.ToInt64(str.Trim()));
+                                break;
+                            case DataType.DataType_Single:
+                                value = new SingleValue(Convert.ToSingle(str.Trim()));
+                                break;
+                            case DataType.DataType_String:
+                                value = new StringValue(Convert.ToString(str.Trim()));
+                                break;
+                        }
+                        list.ConstraintList.Add(value);
+                    }
+                    return list;
+                }
+                else if (vrc != null)
+                {
+                    PropertyValueConstraintRange range = new PropertyValueConstraintRange();
+                    range.MaxInclusive = vrc.IsMaxInclusive;
+                    range.MinInclusive = vrc.IsMinInclusive;
+                    range.MinValue = vrc.MinValue;
+                    range.MaxValue = vrc.MaxValue;
+                    return range;
+                }
+            }
+            return null;
+        }
+
+        private void cmbConstraintType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbConstraintType.SelectedIndex > 0)
+            {
+                Control c = null;
+                PropertyValueConstraintType constraint = (PropertyValueConstraintType)cmbConstraintType.SelectedItem;
+                if (constraint == PropertyValueConstraintType.PropertyValueConstraintType_List)
+                {
+                    c = new ValueListConstraintCtl();
+                }
+                else if (constraint == PropertyValueConstraintType.PropertyValueConstraintType_Range)
+                {
+                    ValueRangeConstraintCtl vrc = new ValueRangeConstraintCtl();
+                    if (this.BoundConnection.InternalConnection.SchemaCapabilities.SupportsInclusiveValueRangeConstraints)
+                        vrc.InclusiveValuesEnabled = true;
+                    else
+                        vrc.InclusiveValuesEnabled = false;
+                    c = vrc;
+                }
+                if (c != null)
+                {
+                    c.Dock = DockStyle.Fill;
+                    pnConstraint.Controls.Clear();
+                    pnConstraint.Controls.Add(c);
+                }
+            }
+            else
+            {
+                pnConstraint.Controls.Clear();
+            }
         }
     }
 }

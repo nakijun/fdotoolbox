@@ -151,6 +151,18 @@
     <Compile Include="Controls\SplitButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ValueListConstraintCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ValueListConstraintCtl.Designer.cs">
+      <DependentUpon>ValueListConstraintCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ValueRangeConstraintCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ValueRangeConstraintCtl.Designer.cs">
+      <DependentUpon>ValueRangeConstraintCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ETL\DataTableConversionOptions.cs" />
     <Compile Include="ETL\DataTableToFlatFileTask.cs" />
     <Compile Include="ETL\DataTypeComparer.cs" />
@@ -601,6 +613,14 @@
     <EmbeddedResource Include="Controls\SpatialJoinCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SpatialJoinCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ValueListConstraintCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ValueListConstraintCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ValueRangeConstraintCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ValueRangeConstraintCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <SubType>Designer</SubType>
