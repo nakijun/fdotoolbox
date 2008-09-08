@@ -19,15 +19,15 @@ A: The Data Preview's UI (and many others) are driven by the connection's capabi
 
 === Q: Does FDO Toolbox support creating Value Constraints for Data Properties? ===
 
-A: Not at this point in time
+A: Yes, this is currently in the trunk build and will be available in the next release.
 
 === Q: Does FDO Toolbox support Association Properties? ===
 
-A: Not at this point in time
+A: [http://code.google.com/p/fdotoolbox/issues/detail?id=126 A ticket] has been created for this issue.
 
 === Q: Does FDO Toolbox support Object Properties? ===
 
-A: Not at this point in time
+A: [http://code.google.com/p/fdotoolbox/issues/detail?id=125 A ticket] has been created for this issue.
 
 === Q: Does FDO Toolbox support Raster Properties? ===
 
