@@ -141,7 +141,7 @@ namespace FdoToolbox.Core.Common
 
         public bool NextResult()
         {
-            throw new Exception("The method or operation is not implemented.");
+            return _internalReader.ReadNext();
         }
 
         public bool Read()
@@ -151,7 +151,7 @@ namespace FdoToolbox.Core.Common
 
         public int RecordsAffected
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { throw new NotImplementedException(); }
         }
 
         public abstract int FieldCount { get; }
@@ -168,27 +168,27 @@ namespace FdoToolbox.Core.Common
 
         public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
         {
-            throw new Exception("The method or operation is not implemented.");
+            throw new NotImplementedException();
         }
 
         public char GetChar(int i)
         {
-            throw new Exception("The method or operation is not implemented.");
+            throw new NotImplementedException();
         }
 
         public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
         {
-            throw new Exception("The method or operation is not implemented.");
+            throw new NotImplementedException();
         }
 
         public System.Data.IDataReader GetData(int i)
         {
-            throw new Exception("The method or operation is not implemented.");
+            throw new NotImplementedException();
         }
 
         public string GetDataTypeName(int i)
         {
-            throw new Exception("The method or operation is not implemented.");
+            throw new NotImplementedException();
         }
 
         public DateTime GetDateTime(int i)
@@ -215,7 +215,7 @@ namespace FdoToolbox.Core.Common
 
         public Guid GetGuid(int i)
         {
-            throw new Exception("The method or operation is not implemented.");
+            throw new NotImplementedException();
         }
 
         public short GetInt16(int i)
@@ -233,10 +233,7 @@ namespace FdoToolbox.Core.Common
             return _internalReader.GetInt64(GetNameAt(i));
         }
 
-        public string GetName(int i)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
+        public abstract string GetName(int i);
 
         public abstract int GetOrdinal(string name);
 
@@ -247,12 +244,34 @@ namespace FdoToolbox.Core.Common
 
         public object GetValue(int i)
         {
-            throw new Exception("The method or operation is not implemented.");
+            Type t = GetFieldType(i);
+            string name = GetName(i);
+            if (t == typeof(bool))
+                return GetBoolean(name);
+            else if (t == typeof(byte))
+                return GetByte(name);
+            else if (t == typeof(DateTime))
+                return GetDateTime(name);
+            else if (t == typeof(decimal))
+                return GetDecimal(i);
+            else if (t == typeof(double))
+                return GetDouble(name);
+            else if (t == typeof(short))
+                return GetInt16(name);
+            else if (t == typeof(int))
+                return GetInt32(name);
+            else if (t == typeof(long))
+                return GetInt64(name);
+            else if (t == typeof(float))
+                return GetSingle(name);
+            else if (t == typeof(string))
+                return GetString(name);
+            return DBNull.Value;
         }
 
         public int GetValues(object[] values)
         {
-            throw new Exception("The method or operation is not implemented.");
+            throw new NotImplementedException();
         }
 
         public bool IsDBNull(int i)
@@ -262,12 +281,18 @@ namespace FdoToolbox.Core.Common
 
         public object this[string name]
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get
+            {
+                return GetValue(GetOrdinal(name));
+            }
         }
 
         public object this[int i]
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get
+            {
+                return GetValue(i);
+            }
         }
     }
 }

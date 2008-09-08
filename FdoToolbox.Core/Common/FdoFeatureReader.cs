@@ -106,5 +106,10 @@ namespace FdoToolbox.Core.Common
         {
             return _internalReader.GetFeatureObject(propertyName);
         }
+
+        public override string GetName(int i)
+        {
+            return _names[i];
+        }
     }
 }
