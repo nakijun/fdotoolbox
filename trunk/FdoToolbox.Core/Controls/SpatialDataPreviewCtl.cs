@@ -590,12 +590,6 @@ namespace FdoToolbox.Core.Controls
                     {
                         byte[] fgf = reader.GetGeometry(name);
                         row[name] = FdoGeometryUtil.GetFgfText(fgf);
-                        /*
-                        using (IGeometry geom = _GeomFactory.CreateGeometryFromFgf(fgf))
-                        {
-                            string text = geom.Text;
-                            row[name] = text;
-                        }*/
                     }
                 }
                 else
