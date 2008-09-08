@@ -3,11 +3,7 @@
 
 === Q: I get errors bulk copying between different providers (when it attempts to apply the schema) ===
 
-A: This is a current shortcoming of the bulk copy feature as various FDO providers do not necessary support the same set of data types. For example: MySQL supports Int64 auto-generated properties, trying to bulk copy MySQL to SDF with this property will fail as SDF does not support Int64 auto-generated properties.
-
-Better warnings about incompatible schemas (with details about incompatible features) will definitely be in a future release. I am still figuring out the best way to resolve this issue in the most practical manner.
-
-Update: Work is being done (Issue 114) to address this issue.
+A: As of version 0.5.8, you will get a detailed explanation of why the source schema can not be applied to the target connection. With this information you can work around this error by re-creating the source schema on the target connection with the incompatible parts changed to parts supported by the target connection.
 
 === Q: I can't see schemas/classes in Oracle (using OSGeo.KingOracle) ===
 
