@@ -828,6 +828,16 @@ namespace FdoToolbox.Core.Controls
             ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
             if (classDef != null)
             {
+                if (classDef.ClassType == ClassType.ClassType_FeatureClass)
+                {
+                    chkMap.Enabled = true;
+                }
+                else
+                {
+                    chkMap.Checked = false;
+                    chkMap.Enabled = false;
+                }
+
                 chkPropertyNames.Items.Clear();
                 foreach (PropertyDefinition propDef in classDef.Properties)
                 {
