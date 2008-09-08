@@ -21,10 +21,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OSGeo.MapGuide.MaestroAPI;
+using FdoToolbox.Core;
 
 namespace MGModule
 {
-    public delegate void MgConnectionHandler(string host);
+    public delegate void MgConnectionHandler(object sender, EventArgs<string> e);
 
     public class MapGuideConnectionMgr : IDisposable
     {
@@ -45,7 +46,7 @@ namespace MGModule
                 conn.AutoRestartSession = true;
                 _MGConnections.Add(key, conn);
                 if (this.ConnectionAdded != null)
-                    this.ConnectionAdded(key);
+                    this.ConnectionAdded(this, new EventArgs<string>(key));
             }
             else
             {
@@ -65,7 +66,7 @@ namespace MGModule
         {
             bool removed = _MGConnections.Remove(key);
             if (removed && this.ConnectionRemoved != null)
-                this.ConnectionRemoved(key);
+                this.ConnectionRemoved(this, new EventArgs<string>(key));
         }
 
         public void Dispose()

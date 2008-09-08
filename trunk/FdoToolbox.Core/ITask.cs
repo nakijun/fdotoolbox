@@ -57,10 +57,6 @@ namespace FdoToolbox.Core
         event TaskProgressMessageEventHandler OnLogTaskMessage;
     }
 
-    public delegate void TaskPercentageEventHandler(int pc);
-
-    public delegate void TaskProgressMessageEventHandler(string msg);
-
     public enum TaskType
     {
         /// <summary>

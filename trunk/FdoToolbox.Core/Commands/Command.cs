@@ -127,6 +127,4 @@ namespace FdoToolbox.Core.Commands
         UI = 2,
         All = 3
     }
-
-    public delegate void CommandExecuteHandler();
 }

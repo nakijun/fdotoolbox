@@ -46,7 +46,7 @@ namespace FdoToolbox.Core.ClientServices
         {
             _Tasks.Add(task.Name, task);
             if (this.TaskAdded != null)
-                this.TaskAdded(task.Name);
+                this.TaskAdded(this, new EventArgs<string>(task.Name));
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace FdoToolbox.Core.ClientServices
         {
             _Tasks.Remove(name);
             if (this.TaskRemoved != null)
-                this.TaskRemoved(name);
+                this.TaskRemoved(this, new EventArgs<string>(name));
         }
 
         /// <summary>

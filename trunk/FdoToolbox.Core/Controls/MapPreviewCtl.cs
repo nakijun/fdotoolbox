@@ -41,9 +41,12 @@ namespace FdoToolbox.Core.Controls
             mapImg.Map = new Map();
             this.Disposed += delegate 
             {
-                if (_conn.ConnectionState != ConnectionState.ConnectionState_Closed)
-                    _conn.Close();
-                _conn.Dispose(); 
+                if (_conn != null)
+                {
+                    if (_conn.ConnectionState != ConnectionState.ConnectionState_Closed)
+                        _conn.Close();
+                    _conn.Dispose();
+                }
             };
         }
 

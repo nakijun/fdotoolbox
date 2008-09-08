@@ -41,14 +41,14 @@ namespace FdoToolbox.Tests
             AppConsole.DoConfirm += new ConfirmHandler(AppConsole_DoConfirm);
         }
 
-        bool AppConsole_DoConfirm(string title, string message)
+        bool AppConsole_DoConfirm(MessageEventArgs e)
         {
             return true;
         }
 
-        void AppConsole_DoAlert(string title, string message)
+        void AppConsole_DoAlert(MessageEventArgs e)
         {
-            Console.WriteLine("[{0}] {1}", title, message);
+            Console.WriteLine("[{0}] {1}", e.Title, e.Message);
         }
     }
 }

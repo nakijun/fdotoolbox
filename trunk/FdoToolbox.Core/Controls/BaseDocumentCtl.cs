@@ -27,8 +27,6 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Core.Controls
 {
-    public delegate void TabTitleEventHandler(string title);
-
     public partial class BaseDocumentCtl : UserControl, IBaseDocumentCtl
     {
         public BaseDocumentCtl()
@@ -48,7 +46,7 @@ namespace FdoToolbox.Core.Controls
                 {
                     this.ParentForm.Text = _Title;
                     if (this.OnSetTabText != null)
-                        this.OnSetTabText(_Title);
+                        this.OnSetTabText(this, new EventArgs<string>(_Title));
                 }
             }
         }

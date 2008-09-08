@@ -88,7 +88,7 @@ namespace FdoToolbox.Core
                 {
                     _shell = shell;
                     _shell.SetTitle(this.Name);
-                    _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(string input) { ExecuteCommand(input, true); });
+                    _shell.ConsoleWindow.ConsoleInput += new ConsoleInputHandler(delegate(object sender, EventArgs<string> e) { ExecuteCommand(e.Data, true); });
 
                     InitConsole();
                     bool timestamp = this.Preferences.GetBooleanPref(PreferenceNames.PREF_BOOL_TIMESTAMP_CONSOLE);
@@ -133,14 +133,14 @@ namespace FdoToolbox.Core
             AppConsole.Err = new TextConsoleOutputStream(_shell.ConsoleWindow.TextWindow);
             AppConsole.Err.TextColor = System.Drawing.Color.Red;
 
-            AppConsole.DoConfirm += delegate(string title, string text)
+            AppConsole.DoConfirm += delegate(MessageEventArgs e)
             {
-                return MessageBox.Show(text, title, MessageBoxButtons.YesNo) == DialogResult.Yes;
+                return MessageBox.Show(e.Message, e.Title, MessageBoxButtons.YesNo) == DialogResult.Yes;
             };
 
-            AppConsole.DoAlert += delegate(string title, string text)
+            AppConsole.DoAlert += delegate(MessageEventArgs e)
             {
-                MessageBox.Show(text, title);
+                MessageBox.Show(e.Message, e.Title);
             };
         }
 
@@ -377,37 +377,37 @@ namespace FdoToolbox.Core
 
         private void InitMessageHandlers()
         {
-            ModuleManager.ModuleLoaded += delegate(IModule module)
+            ModuleManager.ModuleLoaded += delegate(object sender, EventArgs<IModule> e)
             {
-                AppConsole.WriteLine("Module loaded: {0}", module.Name);
+                AppConsole.WriteLine("Module loaded: {0}", e.Data.Name);
             };
-            TaskManager.TaskRemoved += delegate(string name)
+            TaskManager.TaskRemoved += delegate(object sender, EventArgs<string> e)
             {
-                AppConsole.WriteLine("Task Deleted: {0}", name);
+                AppConsole.WriteLine("Task Deleted: {0}", e.Data);
             };
-            SpatialConnectionManager.ConnectionRemoved += delegate(string name)
+            SpatialConnectionManager.ConnectionRemoved += delegate(object sender, EventArgs<string> e)
             {
-                AppConsole.WriteLine("Connection removed: {0}", name);
+                AppConsole.WriteLine("Connection removed: {0}", e.Data);
             };
-            SpatialConnectionManager.ConnectionAdded += delegate(string name)
+            SpatialConnectionManager.ConnectionAdded += delegate(object sender, EventArgs<string> e)
             {
-                AppConsole.WriteLine("New connection added: {0}", name);
+                AppConsole.WriteLine("New connection added: {0}", e.Data);
             };
-            SpatialConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
+            SpatialConnectionManager.ConnectionRenamed += delegate(object sender, ConnectionRenameEventArgs e)
             {
-                AppConsole.WriteLine("Connection {0} renamed to {1}", oldName, newName);
+                AppConsole.WriteLine("Connection {0} renamed to {1}", e.OldName, e.NewName);
             };
-            DatabaseConnectionManager.ConnectionAdded += delegate(string name)
+            DatabaseConnectionManager.ConnectionAdded += delegate(object sender, EventArgs<string> e)
             {
-                AppConsole.WriteLine("Database connection added: {0}", name);
+                AppConsole.WriteLine("Database connection added: {0}", e.Data);
             };
-            DatabaseConnectionManager.ConnectionRemoved += delegate(string name)
+            DatabaseConnectionManager.ConnectionRemoved += delegate(object sender, EventArgs<string> e)
             {
-                AppConsole.WriteLine("Database connection removed: {0}", name);
+                AppConsole.WriteLine("Database connection removed: {0}", e.Data);
             };
-            DatabaseConnectionManager.ConnectionRenamed += delegate(string oldName, string newName)
+            DatabaseConnectionManager.ConnectionRenamed += delegate(object sender, ConnectionRenameEventArgs e)
             {
-                AppConsole.WriteLine("Database connection {0} renamed to {1}", oldName, newName);
+                AppConsole.WriteLine("Database connection {0} renamed to {1}", e.OldName, e.NewName);
             };
         }
 

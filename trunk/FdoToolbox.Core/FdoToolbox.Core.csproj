@@ -83,7 +83,6 @@
     <Compile Include="Common\FdoFeatureReader.cs" />
     <Compile Include="Common\FdoReader.cs" />
     <Compile Include="Common\FdoSqlReader.cs" />
-    <Compile Include="Common\GenericEventArgs.cs" />
     <Compile Include="Common\IncompatibleClassReason.cs" />
     <Compile Include="Common\FdoDataTable.cs">
       <SubType>Component</SubType>
@@ -164,6 +163,7 @@
     <Compile Include="ETL\SpatialJoinOptions.cs" />
     <Compile Include="ETL\SpatialJoinTask.cs" />
     <Compile Include="ETL\TaskBase.cs" />
+    <Compile Include="Events.cs" />
     <Compile Include="Forms\CopyDbToPointsDlg.cs">
       <SubType>Form</SubType>
     </Compile>

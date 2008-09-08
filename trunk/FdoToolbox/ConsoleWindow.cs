@@ -51,7 +51,7 @@ namespace FdoToolbox
 		
 		public TextBoxBase InputTextBox
 		{
-			get { return this.textBox1; }
+			get { return this.txtCmd; }
 		}
 		
 		public event ConsoleInputHandler ConsoleInput;
@@ -63,15 +63,14 @@ namespace FdoToolbox
 			this.Hide();
 		}
 		
-		
-		void TextBox1KeyUp(object sender, KeyEventArgs e)
+		void TxtCommandKeyUp(object sender, KeyEventArgs e)
 		{
-			if(e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(textBox1.Text))
+			if(e.KeyCode == Keys.Enter && !string.IsNullOrEmpty(txtCmd.Text))
 			{
-				string cmdText = textBox1.Text;
-				this.textBox1.Clear();
+				string cmdText = txtCmd.Text;
+				this.txtCmd.Clear();
 				if(this.ConsoleInput != null)
-					this.ConsoleInput(cmdText);
+					this.ConsoleInput(this, new EventArgs<string>(cmdText));
 			}
 		}
 

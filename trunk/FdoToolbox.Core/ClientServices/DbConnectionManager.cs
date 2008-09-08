@@ -26,7 +26,7 @@ namespace FdoToolbox.Core.ClientServices
                 conn.Connection.Open();
             _Connections.Add(name, conn);
             if (this.ConnectionAdded != null)
-                this.ConnectionAdded(name);
+                this.ConnectionAdded(this, new EventArgs<string>(name));
         }
 
         public DbConnectionInfo GetConnection(string name)
@@ -53,9 +53,9 @@ namespace FdoToolbox.Core.ClientServices
             {
                 if (this.BeforeConnectionRemove != null)
                 {
-                    bool cancel = false;
-                    this.BeforeConnectionRemove(name, ref cancel);
-                    if (cancel)
+                    ConnectionBeforeRenameEventArgs e = new ConnectionBeforeRenameEventArgs(name);
+                    this.BeforeConnectionRemove(this, e);
+                    if (e.Cancel)
                         return;
                 }
 
@@ -66,7 +66,7 @@ namespace FdoToolbox.Core.ClientServices
                 conn.Connection.Dispose();
                 _Connections.Remove(name);
                 if (this.ConnectionRemoved != null)
-                    this.ConnectionRemoved(name);
+                    this.ConnectionRemoved(this, new EventArgs<string>(name));
             }
         }
 
@@ -83,7 +83,7 @@ namespace FdoToolbox.Core.ClientServices
             _Connections.Add(newName, conn);
 
             if (this.ConnectionRenamed != null)
-                this.ConnectionRenamed(oldName, newName);
+                this.ConnectionRenamed(this, new ConnectionRenameEventArgs(oldName, newName));
         }
 
         public bool CanRenameConnection(string oldName, string newName, ref string reason)

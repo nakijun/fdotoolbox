@@ -124,14 +124,15 @@ namespace FdoToolbox
             _ContextMenus[ObjectExplorerNodeNames.SELECTED_TASK] = ctxSelectedTask;
         }
 
-        void OnDatabaseConnectionRenamed(string oldName, string newName)
+        void OnDatabaseConnectionRenamed(object sender, ConnectionRenameEventArgs e)
         {
-            TreeNode node = GetDatabaseConnectionsNode().Nodes[oldName];
-            node.Name = node.Text = newName;
+            TreeNode node = GetDatabaseConnectionsNode().Nodes[e.OldName];
+            node.Name = node.Text = e.NewName;
         }
 
-        void OnDatabaseConnectionRemoved(string name)
+        void OnDatabaseConnectionRemoved(object sender, EventArgs<string> e)
         {
+            string name = e.Data;
             TreeNode node = GetDatabaseConnectionsNode().Nodes[name];
             if (node != null)
             {
@@ -139,8 +140,9 @@ namespace FdoToolbox
             }
         }
 
-        void OnDatabaseConnectionAdded(string name)
+        void OnDatabaseConnectionAdded(object sender, EventArgs<string> e)
         {
+            string name = e.Data;
             DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
@@ -195,34 +197,35 @@ namespace FdoToolbox
             }
         }
 
-        void OnSpatialConnectionRenamed(string oldName, string newName)
+        void OnSpatialConnectionRenamed(object sender, ConnectionRenameEventArgs e)
         {
-            TreeNode node = GetSpatialConnectionsNode().Nodes[oldName];
-            node.Name = node.Text = newName;
+            TreeNode node = GetSpatialConnectionsNode().Nodes[e.OldName];
+            node.Name = node.Text = e.NewName;
         }
 
-        void OnTaskRemoved(string name)
+        void OnTaskRemoved(object sender, EventArgs<string> e)
         {
-            GetTasksNode().Nodes.RemoveByKey(NODE_PREFIX_TASK + name);    
+            GetTasksNode().Nodes.RemoveByKey(NODE_PREFIX_TASK + e.Data);    
         }
 
-        void OnTaskAdded(string name)
+        void OnTaskAdded(object sender, EventArgs<string> e)
         {
             TreeNode node = new TreeNode();
-            node.Name = NODE_PREFIX_TASK + name;
-            node.Text = name;
+            node.Name = NODE_PREFIX_TASK + e.Data;
+            node.Text = e.Data;
             node.ImageKey = node.SelectedImageKey = ObjectExplorerImages.IMG_TASK;
             node.ContextMenuStrip = ctxSelectedTask;
             GetTasksNode().Nodes.Add(node);
         }
 
-        void OnSpatialConnectionRemoved(string name)
+        void OnSpatialConnectionRemoved(object sender, EventArgs<string> e)
         {
-            GetSpatialConnectionsNode().Nodes.RemoveByKey(name);
+            GetSpatialConnectionsNode().Nodes.RemoveByKey(e.Data);
         }
 
-        void OnSpatialConnectionAdded(string name)
+        void OnSpatialConnectionAdded(object sender, EventArgs<string> e)
         {
+            string name = e.Data;
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
             node.ImageKey = node.SelectedImageKey = ObjectExplorerImages.IMG_CONNECTION;
@@ -330,8 +333,9 @@ namespace FdoToolbox
         const int NODE_LEVEL_DATABASE = 2;
         const int NODE_LEVEL_TABLE = 3;
 
-        void OnModuleLoaded(IModule module) 
+        void OnModuleLoaded(object sender, EventArgs<IModule> e) 
         {
+            IModule module = e.Data;
             string key = NODE_PREFIX_MODULE + module.Name.GetHashCode();
             TreeNode modNode = new TreeNode();
             modNode.Name = key;
@@ -344,8 +348,9 @@ namespace FdoToolbox
             parent.Nodes.Add(modNode);
         }
         
-        void OnModuleUnloaded(IModule module) 
+        void OnModuleUnloaded(object sender, EventArgs<IModule> e) 
         {
+            IModule module = e.Data;
             string key = NODE_PREFIX_MODULE + module.Name.GetHashCode();
             GetModulesNode().Nodes.RemoveByKey(key);
         }

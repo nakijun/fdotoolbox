@@ -73,15 +73,15 @@ namespace FdoToolbox.Core.ETL
         protected void SendMessage(string msg)
         {
             if (this.OnTaskMessage != null)
-                this.OnTaskMessage(msg);
+                this.OnTaskMessage(this, new EventArgs<string>(msg));
             if (this.OnLogTaskMessage != null)
-                this.OnLogTaskMessage(msg);
+                this.OnLogTaskMessage(this, new EventArgs<string>(msg));
         }
 
         protected void SendCount(int count)
         {
             if (this.OnItemProcessed != null)
-                this.OnItemProcessed(count);
+                this.OnItemProcessed(this, new EventArgs<int>(count));
         }
 
         private Thread _RunningThread;

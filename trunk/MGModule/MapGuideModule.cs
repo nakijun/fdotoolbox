@@ -59,15 +59,17 @@ namespace MGModule
             _App.Shell.ObjectExplorer.RegisterImage(MapGuideImages.MG_SERVERS, Properties.Resources.server);
         }
 
-        void OnConnectionRemoved(string host)
+        void OnConnectionRemoved(object sender, EventArgs<string> e)
         {
+            string host = e.Data;
             System.Windows.Forms.TreeNode mgNode = _App.Shell.ObjectExplorer.GetRootNode(MG_SERVERS);
             mgNode.Nodes.RemoveByKey(host.ToString());
             AppConsole.WriteLine("Disconnected from: {0}", host.ToString());
         }
 
-        void OnConnectionAdded(string host)
+        void OnConnectionAdded(object sender, EventArgs<string> e)
         {
+            string host = e.Data;
             System.Windows.Forms.TreeNode mgNode = _App.Shell.ObjectExplorer.GetRootNode(MG_SERVERS);
             System.Windows.Forms.TreeNode connNode = CreateConnectionNode(host);
             mgNode.Nodes.Add(connNode);
