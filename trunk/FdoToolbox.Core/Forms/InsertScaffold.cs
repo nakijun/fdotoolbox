@@ -200,9 +200,40 @@ namespace FdoToolbox.Core.Forms
                 PropertyValueConstraintList list = (dataDef.ValueConstraint as PropertyValueConstraintList);
                 DataGridViewComboBoxCell cc = new DataGridViewComboBoxCell();
                 List<string> values = new List<string>();
+                if (dataDef.Nullable)
+                    values.Add("");
                 foreach (DataValue value in list.ConstraintList)
                 {
-                    values.Add(value.ToString());
+                    switch (value.DataType)
+                    {
+                        case DataType.DataType_Byte:
+                            values.Add((value as ByteValue).Byte.ToString());
+                            break;
+                        case DataType.DataType_DateTime:
+                            values.Add((value as DateTimeValue).DateTime.ToString());
+                            break;
+                        case DataType.DataType_Decimal:
+                            values.Add((value as DecimalValue).Decimal.ToString());
+                            break;
+                        case DataType.DataType_Double:
+                            values.Add((value as DoubleValue).Double.ToString());
+                            break;
+                        case DataType.DataType_Int16:
+                            values.Add((value as Int16Value).Int16.ToString());
+                            break;
+                        case DataType.DataType_Int32:
+                            values.Add((value as Int32Value).Int32.ToString());
+                            break;
+                        case DataType.DataType_Int64:
+                            values.Add((value as Int64Value).Int64.ToString());
+                            break;
+                        case DataType.DataType_Single:
+                            values.Add((value as SingleValue).Single.ToString());
+                            break;
+                        case DataType.DataType_String:
+                            values.Add((value as StringValue).String);
+                            break;
+                    }
                 }
                 cc.DataSource = values;
                 valueCell = cc;
