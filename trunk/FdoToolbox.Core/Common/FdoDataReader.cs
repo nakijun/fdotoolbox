@@ -29,16 +29,25 @@ namespace FdoToolbox.Core.Common
     {
         private string[] _names;
         private Dictionary<string, int> _ordinals;
+        private Type[] _types;
 
         internal FdoDataReader(IDataReader reader)
             : base(reader)
         {
             _ordinals = new Dictionary<string, int>();
             _names = new string[reader.GetPropertyCount()];
+            _types = new Type[reader.GetPropertyCount()];
             for (int i = 0; i < _names.Length; i++)
             {
-                _names[i] = reader.GetPropertyName(i);
-                _ordinals.Add(_names[i], i);
+                string name = reader.GetPropertyName(i);
+                _names[i] = name;
+                _ordinals.Add(name, i);
+
+                PropertyType ptype = reader.GetPropertyType(name);
+                if (ptype == PropertyType.PropertyType_DataProperty)
+                    _types[i] = FdoDataColumn.GetTypeFromDataType(reader.GetDataType(name));
+                else if (ptype == PropertyType.PropertyType_GeometricProperty)
+                    _types[i] = typeof(byte[]);
             }
         }
 
@@ -64,14 +73,7 @@ namespace FdoToolbox.Core.Common
 
         public override Type GetFieldType(int i)
         {
-            string name = _internalReader.GetPropertyName(i);
-            PropertyType ptype = _internalReader.GetPropertyType(name);
-            if (ptype == PropertyType.PropertyType_DataProperty)
-                return FdoDataColumn.GetTypeFromDataType(_internalReader.GetDataType(name));
-            else if (ptype == PropertyType.PropertyType_GeometricProperty)
-                return typeof(byte[]);
-
-            throw new ArgumentException("Unable to determine type of ordinal: " + i);
+            return _types[i];
         }
 
         public override int GetOrdinal(string name)
