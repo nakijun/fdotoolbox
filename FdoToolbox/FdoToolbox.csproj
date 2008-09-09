@@ -111,12 +111,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FdoToolbox.Core\FdoToolbox.Core.csproj">
-      <Project>{27F2ABA2-C16A-42C8-9EE3-8F2FBD9135DC}</Project>
-      <Name>FdoToolbox.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\plugin.png" />
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +241,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\chart_organisation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FdoToolbox.Core\FdoToolbox.Core.csproj">
+      <Project>{27F2ABA2-C16A-42C8-9EE3-8F2FBD9135DC}</Project>
+      <Name>FdoToolbox.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
