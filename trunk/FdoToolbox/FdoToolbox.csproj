@@ -247,6 +247,10 @@
       <Project>{27F2ABA2-C16A-42C8-9EE3-8F2FBD9135DC}</Project>
       <Name>FdoToolbox.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FdoToolbox.Lib\FdoToolbox.Lib.csproj">
+      <Project>{2B3B10F6-3FF5-418C-BE1E-55C662DD6B82}</Project>
+      <Name>FdoToolbox.Lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using FdoToolbox.Core.Controls;
+using FdoToolbox.Lib.Controls;
 using OSGeo.MapGuide.MaestroAPI;
 
 namespace MGModule.Controls

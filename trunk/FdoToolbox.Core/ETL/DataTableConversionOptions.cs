@@ -82,6 +82,14 @@ namespace FdoToolbox.Core.ETL
             set { _File = value; }
         }
 
+        private string _LogPath;
+
+        public string LogPath
+        {
+            get { return _LogPath; }
+            set { _LogPath = value; }
+        }
+	
         private bool _UseFdoMetaData;
 
         /// <summary>

@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using FdoToolbox.Core.Controls;
 using OSGeo.FDO.Connections;
 using OSGeo.FDO.ClientServices;
 using OSGeo.FDO.Commands.Schema;
@@ -34,6 +33,12 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL
 {
+    public enum ExpressProvider
+    {
+        SDF,
+        SHP
+    }
+
     /// <summary>
     /// Options object for the BulkCopyTask
     /// </summary>
@@ -127,6 +132,14 @@ namespace FdoToolbox.Core.ETL
                 this.Source = new FdoConnectionInfo("SOURCE", src);
                 this.Target = new FdoConnectionInfo("TARGET", dest);
             }
+        }
+
+        private string _LogPath;
+
+        public string LogPath
+        {
+            get { return _LogPath; }
+            set { _LogPath = value; }
         }
 
         private string _GlobalSpatialFilter;

@@ -20,10 +20,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using FdoToolbox.Core;
-using FdoToolbox.Core.Modules;
+using FdoToolbox.Lib;
+using FdoToolbox.Lib.Modules;
+using FdoToolbox.Lib.ClientServices;
+using FdoToolbox.Lib.Commands;
 using FdoToolbox.Core.ClientServices;
-using FdoToolbox.Core.Commands;
 
 namespace TestModule
 {

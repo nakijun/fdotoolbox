@@ -24,10 +24,11 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using FdoToolbox.Core;
 using WeifenLuo.WinFormsUI.Docking;
-using FdoToolbox.Core.Controls;
-using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Lib.Controls;
+using FdoToolbox.Lib.ClientServices;
+using FdoToolbox.Lib;
+using FdoToolbox.Core;
 
 namespace FdoToolbox
 {

@@ -34,8 +34,6 @@ using System.Diagnostics;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Common.Io;
 using OSGeo.FDO.Commands.SpatialContext;
-using FdoToolbox.Core.Forms;
-using FdoToolbox.Core.Controls;
 using System.IO;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.ClientServices;
@@ -426,7 +424,7 @@ namespace FdoToolbox.Core.ETL
                     SendMessage("Bulk Copy: " + total + " features copied in " + watch.ElapsedMilliseconds + "ms");
                 else
                 {
-                    string logPath = AppGateway.RunningApplication.Preferences.GetStringPref(PreferenceNames.PREF_STR_LOG_PATH);
+                    string logPath = _Options.LogPath;
                     string logFile = Path.Combine(logPath, "BCP_" + this.Name + ".log");
                     using (StreamWriter writer = new StreamWriter(logFile, false))
                     {

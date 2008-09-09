@@ -47,6 +47,13 @@ namespace FdoToolbox.Core.IO
     {
         private TaskLoader() { }
 
+        public static event FdoConnectionLoadedEventHandler FdoConnectionLoaded;
+        public static event RemoveFdoConnectionEventHandler RemoveFdoConnection;
+        public static event DbConnectionLoadedEventHandler DbConnectionLoaded;
+        public static event RemoveDbConnectionEventHandler RemoveDbConnection;
+
+        public static event UniqueNameDelegate GetUniqueFdoName;
+
         /// <summary>
         /// Load a task definition
         /// </summary>
@@ -126,9 +133,15 @@ namespace FdoToolbox.Core.IO
                 }
                 else
                 {
-                    AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(priConnInfo.Name, priConnInfo.InternalConnection);
-                    AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(targetConnInfo.Name, targetConnInfo.InternalConnection);
-                    AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(secConnInfo);
+                    if (FdoConnectionLoaded != null)
+                    {
+                        FdoConnectionLoaded(new EventArgs<FdoConnectionInfo>(priConnInfo));
+                        FdoConnectionLoaded(new EventArgs<FdoConnectionInfo>(targetConnInfo));
+                    }
+                    if (DbConnectionLoaded != null)
+                    {
+                        DbConnectionLoaded(new EventArgs<DbConnectionInfo>(secConnInfo));
+                    }
                 }
 
                 SpatialJoinOptions options = new SpatialJoinOptions();
@@ -163,9 +176,15 @@ namespace FdoToolbox.Core.IO
                 AppConsole.WriteException(ex);
                 if (!consoleMode)
                 {
-                    AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(priName);
-                    AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(targetName);
-                    AppGateway.RunningApplication.DatabaseConnectionManager.RemoveConnection(secName);
+                    if (RemoveFdoConnection != null)
+                    {
+                        RemoveFdoConnection(new EventArgs<string>(priName));
+                        RemoveFdoConnection(new EventArgs<string>(targetName));
+                    }
+                    if (RemoveDbConnection != null)
+                    {
+                        RemoveDbConnection(new EventArgs<string>(secName));
+                    }
                 }
                 return null;
             }
@@ -233,8 +252,8 @@ namespace FdoToolbox.Core.IO
         /// <returns>The Bulk Copy task, null if loading failed</returns>
         private static SpatialBulkCopyTask LoadBulkCopy(string configFile, bool consoleMode)
         {
-            string srcName = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
-            string destName = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
+            string srcName = GetUniqueFdoName();
+            string destName = GetUniqueFdoName();
             
             try
             {
@@ -261,9 +280,14 @@ namespace FdoToolbox.Core.IO
                 }
                 else
                 {
-                    ISpatialConnectionMgr mgr = AppGateway.RunningApplication.SpatialConnectionManager;
-                    mgr.AddConnection(srcName, srcConn);
-                    mgr.AddConnection(destName, destConn);
+                    if (FdoConnectionLoaded != null)
+                    {
+                        FdoConnectionInfo src = new FdoConnectionInfo(srcName, srcConn);
+                        FdoConnectionInfo dest = new FdoConnectionInfo(destName, destConn);
+
+                        FdoConnectionLoaded(new EventArgs<FdoConnectionInfo>(src));
+                        FdoConnectionLoaded(new EventArgs<FdoConnectionInfo>(dest));
+                    }
                 }
 
                 string name = bcp.name;
@@ -318,8 +342,11 @@ namespace FdoToolbox.Core.IO
                 AppConsole.WriteException(ex);
                 if (!consoleMode)
                 {
-                    AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(srcName);
-                    AppGateway.RunningApplication.SpatialConnectionManager.RemoveConnection(destName);
+                    if (RemoveFdoConnection != null)
+                    {
+                        RemoveFdoConnection(new EventArgs<string>(srcName));
+                        RemoveFdoConnection(new EventArgs<string>(destName));
+                    }
                 }
                 return null;
             }

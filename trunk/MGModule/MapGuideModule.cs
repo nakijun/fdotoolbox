@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using FdoToolbox.Core.Modules;
-using FdoToolbox.Core.Commands;
+using FdoToolbox.Lib.Modules;
+using FdoToolbox.Lib.Commands;
 using OSGeo.MapGuide.MaestroAPI;
-using FdoToolbox.Core;
 using MGModule.Forms;
-using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Lib.ClientServices;
 using MGModule.Controls;
 using System.IO;
+using FdoToolbox.Core;
+using FdoToolbox.Lib;
+using FdoToolbox.Core.ClientServices;
 
 namespace MGModule
 {
