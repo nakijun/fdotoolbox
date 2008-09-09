@@ -21,22 +21,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
-using FdoToolbox.Core.Modules;
+using OSGeo.FDO.Connections;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core
 {
-    public delegate void ConsoleInputHandler(object sender, EventArgs<string> e);
+    public delegate void FdoConnectionLoadedEventHandler(EventArgs<FdoConnectionInfo> e);
+    public delegate void DbConnectionLoadedEventHandler(EventArgs<DbConnectionInfo> e);
+    public delegate void RemoveFdoConnectionEventHandler(EventArgs<string> e);
+    public delegate void RemoveDbConnectionEventHandler(EventArgs<string> e);
     public delegate void AlertHandler(MessageEventArgs e);
     public delegate bool ConfirmHandler(MessageEventArgs e);
-    public delegate void CommandExecuteHandler();
-    public delegate void ConnectionEventHandler(object sender, EventArgs<string> e);
-    public delegate void ConnectionRenamedEventHandler(object sender, ConnectionRenameEventArgs e);
-    public delegate void ConnectionBeforeRemoveHandler(object sender, ConnectionBeforeRenameEventArgs e);
-    public delegate void TabTitleEventHandler(object sender, EventArgs<string> e);
     public delegate void TaskPercentageEventHandler(object sender, EventArgs<int> e);
     public delegate void TaskProgressMessageEventHandler(object sender, EventArgs<string> e);
     public delegate void TaskEventHandler(object sender, EventArgs<string> e);
-    public delegate void ModuleEventHandler(object sender, EventArgs<IModule> module);
+    public delegate string UniqueNameDelegate();
 
     public class EventArgs<T> : EventArgs
     {
@@ -73,42 +72,5 @@ namespace FdoToolbox.Core
         }
     }
 
-    public class ConnectionRenameEventArgs : EventArgs
-    {
-        private readonly string _OldName;
-
-        public string OldName
-        {
-            get { return _OldName; }
-        }
-
-        private readonly string _NewName;
-
-        public string NewName
-        {
-            get { return _NewName; }
-        }
-
-        public ConnectionRenameEventArgs(string oldName, string newName)
-        {
-            _OldName = oldName;
-            _NewName = NewName;
-        }
-    }
-
-    public class ConnectionBeforeRenameEventArgs : CancelEventArgs
-    {
-        private readonly string _ConnectionName;
-
-        public string ConnectionName
-        {
-            get { return _ConnectionName; }
-        }
-
-        public ConnectionBeforeRenameEventArgs(string name)
-        {
-            _ConnectionName = name;
-            this.Cancel = false;
-        }
-    }
+    
 }

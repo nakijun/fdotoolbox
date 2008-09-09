@@ -31,10 +31,12 @@ using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Schema;
 using System.Diagnostics;
 using System.Xml;
-using FdoToolbox.Core.Modules;
-using FdoToolbox.Core.ClientServices;
-using FdoToolbox.Core.Commands;
+using FdoToolbox.Lib.Modules;
+using FdoToolbox.Lib.ClientServices;
+using FdoToolbox.Lib.Commands;
 using FdoToolbox.Core.Common;
+using FdoToolbox.Lib;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox
 {

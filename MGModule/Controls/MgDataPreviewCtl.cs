@@ -24,7 +24,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using FdoToolbox.Core.Controls;
+using FdoToolbox.Lib.Controls;
 using OSGeo.MapGuide.MaestroAPI;
 using MGModule.Common;
 using Topology.Geometries;

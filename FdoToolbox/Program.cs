@@ -22,6 +22,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using FdoToolbox.Core;
 using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Lib;
+using FdoToolbox.Lib.ClientServices;
 
 namespace FdoToolbox
 {

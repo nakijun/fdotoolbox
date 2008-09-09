@@ -200,7 +200,7 @@ namespace FdoToolbox.Core.ETL
                 //Log any offending rows
                 if (_OffendingRows != null && _OffendingRows.Count > 0)
                 {
-                    string logpath = AppGateway.RunningApplication.Preferences.GetStringPref(PreferenceNames.PREF_STR_LOG_PATH);
+                    string logpath = _options.LogPath;
                     string logFile = Path.Combine(logpath, Path.GetFileName(_options.File) + ".log");
                     if (File.Exists(logFile))
                         File.Delete(logFile);
