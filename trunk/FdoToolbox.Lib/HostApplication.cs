@@ -34,6 +34,7 @@ using FdoToolbox.Core.IO;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core;
 using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Lib.IO;
 
 namespace FdoToolbox.Lib
 {

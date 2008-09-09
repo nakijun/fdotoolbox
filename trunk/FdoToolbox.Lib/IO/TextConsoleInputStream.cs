@@ -22,8 +22,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
+using FdoToolbox.Core.IO;
 
-namespace FdoToolbox.Core.IO
+namespace FdoToolbox.Lib.IO
 {
     /// <summary>
     /// Input stream for GUI applications

@@ -54,14 +54,6 @@
       <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Geometry.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="SharpMap, Version=0.9.3140.37856, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Thirdparty\SharpMap\SharpMap.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpMap.UI, Version=0.9.3140.37860, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Thirdparty\SharpMap\SharpMap.UI.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.54.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
@@ -133,8 +125,6 @@
     <Compile Include="Common\CoordinateSystem.cs" />
     <Compile Include="ClientServices\FeatureService.cs" />
     <Compile Include="IConsoleCommand.cs" />
-    <Compile Include="IO\TextConsoleInputStream.cs" />
-    <Compile Include="IO\TextConsoleOutputStream.cs" />
     <Compile Include="Common\DataStoreInfo.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
