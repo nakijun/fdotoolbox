@@ -23,8 +23,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using FdoToolbox.Core.IO;
 
-namespace FdoToolbox.Core.IO
+namespace FdoToolbox.Lib.IO
 {
     /// <summary>
     /// Textbox-based output stream used by the Application console

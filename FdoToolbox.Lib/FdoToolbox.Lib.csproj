@@ -62,10 +62,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppGateway.cs" />
-    <Compile Include="AppSession.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="CommandAttribute.cs" />
+    <Compile Include="ClientServices\AppGateway.cs" />
+    <Compile Include="ClientServices\AppSession.cs" />
+    <Compile Include="ClientServices\CoordSysCatalog.cs" />
+    <Compile Include="ClientServices\DbConnectionManager.cs" />
+    <Compile Include="ClientServices\MenuStateMgr.cs" />
+    <Compile Include="ClientServices\SpatialConnectionMgr.cs" />
+    <Compile Include="ClientServices\TaskManager.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandAttribute.cs" />
     <Compile Include="Controls\BaseDocumentCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -217,8 +222,6 @@
     <Compile Include="Controls\ValueRangeConstraintCtl.Designer.cs">
       <DependentUpon>ValueRangeConstraintCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoordSysCatalog.cs" />
-    <Compile Include="DbConnectionManager.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Forms\AboutDialog.cs">
@@ -345,10 +348,11 @@
     <Compile Include="IHostApplication.cs" />
     <Compile Include="IMenuStateMgr.cs" />
     <Compile Include="IObjectExplorer.cs" />
+    <Compile Include="IO\TextConsoleInputStream.cs" />
+    <Compile Include="IO\TextConsoleOutputStream.cs" />
     <Compile Include="IShell.cs" />
     <Compile Include="ISpatialConnectionMgr.cs" />
     <Compile Include="ITaskManager.cs" />
-    <Compile Include="MenuStateMgr.cs" />
     <Compile Include="Modules\AdoNetModule.cs" />
     <Compile Include="Modules\CoreModule.cs" />
     <Compile Include="Modules\ExpressModule.cs" />
@@ -364,8 +368,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SharpMapProvider\FdoInMemoryProvider.cs" />
-    <Compile Include="SpatialConnectionMgr.cs" />
-    <Compile Include="TaskManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FdoToolbox.Core\FdoToolbox.Core.csproj">
