@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FdoToolbox.Core
+namespace FdoToolbox.Lib
 {
     /// <summary>
     /// Data transfer object for Coordinate Systems

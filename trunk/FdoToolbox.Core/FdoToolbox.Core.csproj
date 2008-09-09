@@ -123,7 +123,6 @@
     <Compile Include="IO\SpatialConnLoader.cs" />
     <Compile Include="ConsoleApplication.cs" />
     <Compile Include="Commands\ConsoleCommand.cs" />
-    <Compile Include="Common\CoordinateSystem.cs" />
     <Compile Include="ClientServices\FeatureService.cs" />
     <Compile Include="IConsoleCommand.cs" />
     <Compile Include="Common\DataStoreInfo.cs" />
