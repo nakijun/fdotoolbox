@@ -1,22 +1,24 @@
 #summary Planned features for upcoming releases
 
-=== 0.6 ===
+=== 0.7 ===
 
  * MapGuide Enterprise/Open Source integration
  * ~~Visual Preview of FDO Data Sources~~
+ * Additional Property support
+      * Object Properties
+      * Association Properties
+ * Raster Provider support
 
 === Future ===
  * Spatial -> Non-Spatial bulk copy
  * Extra Bulk Copy options
       * Property Value Mappings
  * Additional Property support
-      * Object Properties
-      * Association Properties
       * Raster Properties
  * Schema Mapping support
  * Localization
  * Pipeable console commands
- * Raster Provider support
+ 
  * KML support
  * Chainable tasks
  * Coordinate System Re-Projection
