@@ -84,7 +84,7 @@ namespace FdoToolbox.Core.Common
 
         public override Type GetFieldType(int i)
         {
-            throw new Exception("The method or operation is not implemented.");
+            return _types[i];
         }
 
         public override int GetOrdinal(string name)
