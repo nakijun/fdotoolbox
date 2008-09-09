@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientServices\FeatureQueryOptions.cs" />
+    <Compile Include="ClientServices\IPreferenceDictionary.cs" />
     <Compile Include="Common\FdoConnectionInfo.cs" />
     <Compile Include="Common\FdoDataReader.cs" />
     <Compile Include="Common\FdoFeatureReader.cs" />

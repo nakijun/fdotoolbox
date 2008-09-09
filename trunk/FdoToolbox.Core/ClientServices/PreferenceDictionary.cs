@@ -27,35 +27,7 @@ using System.Xml.Serialization;
 using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ClientServices
-{
-    /// <summary>
-    /// Preference dictionary interface
-    /// </summary>
-    public interface IPreferenceDictionary
-    {
-        void SetDoublePref(string name, double value);
-        void SetIntegerPref(string name, int value);
-        void SetBooleanPref(string name, bool value);
-        void SetStringPref(string name, string value);
-
-        double GetDoublePref(string name);
-        int GetIntegerPref(string name);
-        bool GetBooleanPref(string name);
-        string GetStringPref(string name);
-
-        ICollection<string> DoublePreferences { get; }
-        ICollection<string> IntegerPreferences { get; }
-        ICollection<string> BooleanPreferences { get; }
-        ICollection<string> StringPreferences { get; }
-
-        void SetDefaultValue(string name, string value);
-        void SetDefaultValue(string name, int value);
-        void SetDefaultValue(string name, double value);
-        void SetDefaultValue(string name, bool value);
-
-        void Save();
-    }
-
+{   
     public class PreferenceDictionary : IPreferenceDictionary
     {
         private Dictionary<string, bool> _BooleanPrefs;
