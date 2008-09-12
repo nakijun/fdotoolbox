@@ -20,26 +20,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using OSGeo.FDO.Connections;
-using FdoToolbox.Lib.ClientServices;
 using FdoToolbox.Core.Common;
-using System.ComponentModel;
 
-namespace FdoToolbox.Lib
+namespace FdoToolbox.Lib.Controls
 {
-    public interface ISpatialConnectionMgr : IDisposable
+    public interface IFdoConnectionBoundTabManager
     {
-        string CreateUniqueName();
-        void AddConnection(string name, IConnection conn);
-        void RemoveConnection(string name);
-        FdoConnectionInfo GetConnection(string name);
-        ICollection<string> GetConnectionNames();
-        void RenameConnection(string oldName, string newName);
-        bool CanRenameConnection(string oldName, string newName, ref string reason);
-
-        event ConnectionBeforeRemoveHandler BeforeConnectionRemove;
-        event ConnectionEventHandler ConnectionAdded;
-        event ConnectionEventHandler ConnectionRemoved;
-        event ConnectionRenamedEventHandler ConnectionRenamed;
+        void RemoveTab(IFdoConnectionBoundCtl ctl);
+        void RegisterTabType(Type tabtype);
+        string GenerateKey(Type tabtype, string connName);
+        IFdoConnectionBoundCtl CreateTab(Type tabtype, FdoConnectionInfo connInfo);
     }
 }

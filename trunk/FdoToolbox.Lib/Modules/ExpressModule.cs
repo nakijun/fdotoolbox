@@ -84,7 +84,7 @@ namespace FdoToolbox.Lib.Modules
             if(File.Exists(sdfFile))
             {
                 conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
-                ISpatialConnectionMgr mgr = AppGateway.RunningApplication.SpatialConnectionManager;
+                IFdoConnectionMgr mgr = AppGateway.RunningApplication.FdoConnectionManager;
                 string name = mgr.CreateUniqueName();
                 name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                 CoreModule.AddConnection(conn, name);
@@ -99,7 +99,7 @@ namespace FdoToolbox.Lib.Modules
             if(File.Exists(shpFile))
             {
                 conn = ExpressUtility.CreateSHPConnection(shpFile);
-                ISpatialConnectionMgr mgr = AppGateway.RunningApplication.SpatialConnectionManager;
+                IFdoConnectionMgr mgr = AppGateway.RunningApplication.FdoConnectionManager;
                 string name = mgr.CreateUniqueName();
                 name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                 CoreModule.AddConnection(conn, name);
@@ -116,7 +116,7 @@ namespace FdoToolbox.Lib.Modules
                 {
                     if (AppConsole.Confirm("Create SDF", "SDF File created at " + sdfFile + ". Create a connection to it?"))
                     {
-                        string name = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
+                        string name = AppGateway.RunningApplication.FdoConnectionManager.CreateUniqueName();
                         name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
                         IConnection conn = ExpressUtility.CreateSDFConnection(sdfFile, false);
                         CoreModule.AddConnection(conn, name);
@@ -171,7 +171,7 @@ namespace FdoToolbox.Lib.Modules
                         service.ApplySchema(schema);
                         if (AppConsole.Confirm("Create SHP", "New SHP file created at: " + shpFile + ". Create a connection?"))
                         {
-                            string name = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
+                            string name = AppGateway.RunningApplication.FdoConnectionManager.CreateUniqueName();
                             name = StringInputDlg.GetInput("Connection name", "Enter the name for this connection", name);
                             CoreModule.AddConnection(conn, name);
                             return; //Save this connection, don't dispose
@@ -194,7 +194,7 @@ namespace FdoToolbox.Lib.Modules
             if (diag.ShowDialog() == DialogResult.OK)
             {
                 conn = ExpressUtility.CreateSHPConnection(diag.SelectedPath);
-                ISpatialConnectionMgr mgr = AppGateway.RunningApplication.SpatialConnectionManager;
+                IFdoConnectionMgr mgr = AppGateway.RunningApplication.FdoConnectionManager;
                 string name = mgr.CreateUniqueName();
                 name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                 CoreModule.AddConnection(conn, name);

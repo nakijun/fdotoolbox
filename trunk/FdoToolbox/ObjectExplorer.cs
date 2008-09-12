@@ -52,9 +52,9 @@ namespace FdoToolbox
             _ContextMenus = new Dictionary<string, ContextMenuStrip>();
             AppGateway.RunningApplication.ModuleManager.ModuleLoaded += new ModuleEventHandler(OnModuleLoaded);
             AppGateway.RunningApplication.ModuleManager.ModuleUnloaded += new ModuleEventHandler(OnModuleUnloaded);
-            AppGateway.RunningApplication.SpatialConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnSpatialConnectionAdded);
-            AppGateway.RunningApplication.SpatialConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnSpatialConnectionRemoved);
-            AppGateway.RunningApplication.SpatialConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnSpatialConnectionRenamed);
+            AppGateway.RunningApplication.FdoConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnSpatialConnectionAdded);
+            AppGateway.RunningApplication.FdoConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnSpatialConnectionRemoved);
+            AppGateway.RunningApplication.FdoConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnSpatialConnectionRenamed);
             AppGateway.RunningApplication.DatabaseConnectionManager.ConnectionAdded += new ConnectionEventHandler(OnDatabaseConnectionAdded);
             AppGateway.RunningApplication.DatabaseConnectionManager.ConnectionRemoved += new ConnectionEventHandler(OnDatabaseConnectionRemoved);
             AppGateway.RunningApplication.DatabaseConnectionManager.ConnectionRenamed += new ConnectionRenamedEventHandler(OnDatabaseConnectionRenamed);
@@ -240,7 +240,7 @@ namespace FdoToolbox
 
         private void GetSchemaNodes(TreeNode connNode)
         {
-            FdoConnectionInfo connInfo = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connNode.Name);
+            FdoConnectionInfo connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connNode.Name);
             if (connInfo != null)
             {
                 FeatureService service = connInfo.CreateFeatureService();
@@ -415,7 +415,7 @@ namespace FdoToolbox
             TreeNode node = GetSpatialConnectionsNode().Nodes[name];
             node.Nodes.Clear();
 
-            FdoConnectionInfo conn = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(node.Name);
+            FdoConnectionInfo conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(node.Name);
             if (conn != null)
             {
                 conn.Refresh();
@@ -468,7 +468,7 @@ namespace FdoToolbox
                 if (connNode.Parent == GetSpatialConnectionsNode())
                 {
                     string name = connNode.Name;
-                    return AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connNode.Name);
+                    return AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connNode.Name);
                 }
                 return null;
             }

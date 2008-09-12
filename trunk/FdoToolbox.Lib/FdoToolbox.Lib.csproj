@@ -27,6 +27,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\out\Test\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="OSGeo.FDO, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -66,8 +74,8 @@
     <Compile Include="ClientServices\AppSession.cs" />
     <Compile Include="ClientServices\CoordSysCatalog.cs" />
     <Compile Include="ClientServices\DbConnectionManager.cs" />
+    <Compile Include="ClientServices\FdoConnectionMgr.cs" />
     <Compile Include="ClientServices\MenuStateMgr.cs" />
-    <Compile Include="ClientServices\SpatialConnectionMgr.cs" />
     <Compile Include="ClientServices\TaskManager.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandAttribute.cs" />
@@ -119,6 +127,31 @@
     <Compile Include="Controls\ExpressSpatialBulkCopyCtl.Designer.cs">
       <DependentUpon>ExpressSpatialBulkCopyCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FdoBulkCopyCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoBulkCopyCtl.Designer.cs">
+      <DependentUpon>FdoBulkCopyCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoConnectionBoundControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoConnectionBoundControl.Designer.cs">
+      <DependentUpon>FdoConnectionBoundControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoConnectionBoundTabManager.cs" />
+    <Compile Include="Controls\FdoDataPreviewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoDataPreviewCtl.Designer.cs">
+      <DependentUpon>FdoDataPreviewCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoJoinCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoJoinCtl.Designer.cs">
+      <DependentUpon>FdoJoinCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FeatureClassExtendedInfoCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -144,8 +177,8 @@
       <DependentUpon>HelpCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\IBaseDocumentCtl.cs" />
-    <Compile Include="Controls\ISpatialConnectionBoundCtl.cs" />
-    <Compile Include="Controls\ISpatialConnectionBoundTabManager.cs" />
+    <Compile Include="Controls\IFdoConnectionBoundCtl.cs" />
+    <Compile Include="Controls\IFdoConnectionBoundTabManager.cs" />
     <Compile Include="Controls\MapPreviewCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -176,36 +209,11 @@
     <Compile Include="Controls\SchemaMgrCtl.Designer.cs">
       <DependentUpon>SchemaMgrCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SpatialBulkCopyCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SpatialBulkCopyCtl.Designer.cs">
-      <DependentUpon>SpatialBulkCopyCtl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SpatialConnectionBoundControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SpatialConnectionBoundControl.Designer.cs">
-      <DependentUpon>SpatialConnectionBoundControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SpatialConnectionBoundTabManager.cs" />
     <Compile Include="Controls\SpatialContextCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\SpatialContextCtl.Designer.cs">
       <DependentUpon>SpatialContextCtl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SpatialDataPreviewCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SpatialDataPreviewCtl.Designer.cs">
-      <DependentUpon>SpatialDataPreviewCtl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SpatialJoinCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SpatialJoinCtl.Designer.cs">
-      <DependentUpon>SpatialJoinCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SplitButton.cs">
       <SubType>Component</SubType>
@@ -345,6 +353,7 @@
     <Compile Include="IConsoleWindow.cs" />
     <Compile Include="ICoordinateSystemCatalog.cs" />
     <Compile Include="IDbConnectionManager.cs" />
+    <Compile Include="IFdoConnectionMgr.cs" />
     <Compile Include="IFormWrapper.cs" />
     <Compile Include="IHostApplication.cs" />
     <Compile Include="IMenuStateMgr.cs" />
@@ -352,7 +361,6 @@
     <Compile Include="IO\TextConsoleInputStream.cs" />
     <Compile Include="IO\TextConsoleOutputStream.cs" />
     <Compile Include="IShell.cs" />
-    <Compile Include="ISpatialConnectionMgr.cs" />
     <Compile Include="ITaskManager.cs" />
     <Compile Include="Modules\AdoNetModule.cs" />
     <Compile Include="Modules\CoreModule.cs" />
@@ -401,6 +409,18 @@
       <DependentUpon>ExpressSpatialBulkCopyCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoBulkCopyCtl.resx">
+      <DependentUpon>FdoBulkCopyCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoDataPreviewCtl.resx">
+      <DependentUpon>FdoDataPreviewCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoJoinCtl.resx">
+      <DependentUpon>FdoJoinCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\FeatureClassExtendedInfoCtl.resx">
       <DependentUpon>FeatureClassExtendedInfoCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -437,20 +457,8 @@
       <DependentUpon>SchemaMgrCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SpatialBulkCopyCtl.resx">
-      <DependentUpon>SpatialBulkCopyCtl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SpatialContextCtl.resx">
       <DependentUpon>SpatialContextCtl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SpatialDataPreviewCtl.resx">
-      <DependentUpon>SpatialDataPreviewCtl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SpatialJoinCtl.resx">
-      <DependentUpon>SpatialJoinCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ValueListConstraintCtl.resx">

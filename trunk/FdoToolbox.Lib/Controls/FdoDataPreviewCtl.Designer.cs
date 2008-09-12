@@ -1,6 +1,6 @@
 namespace FdoToolbox.Lib.Controls
 {
-    partial class SpatialDataPreviewCtl
+    partial class FdoDataPreviewCtl
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace FdoToolbox.Lib.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpatialDataPreviewCtl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FdoDataPreviewCtl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.chkMap = new System.Windows.Forms.CheckBox();
             this.splitSave = new FdoToolbox.Lib.Controls.SplitButton();

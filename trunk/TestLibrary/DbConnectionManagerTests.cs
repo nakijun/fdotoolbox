@@ -27,6 +27,8 @@ using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.Common;
 using System.Data.OleDb;
 using System.IO;
+using FdoToolbox.Lib;
+using FdoToolbox.Lib.ClientServices;
 
 namespace FdoToolbox.Tests
 {

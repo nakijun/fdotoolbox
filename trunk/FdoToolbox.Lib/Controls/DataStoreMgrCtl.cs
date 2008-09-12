@@ -35,7 +35,7 @@ using FdoToolbox.Core;
 
 namespace FdoToolbox.Lib.Controls
 {
-    public partial class DataStoreMgrCtl : SpatialConnectionBoundControl
+    public partial class DataStoreMgrCtl : FdoConnectionBoundControl
     {
         private FeatureService _Service;
 

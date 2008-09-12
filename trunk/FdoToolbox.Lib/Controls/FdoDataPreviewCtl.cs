@@ -47,7 +47,7 @@ using FdoToolbox.Core;
 
 namespace FdoToolbox.Lib.Controls
 {
-    public partial class SpatialDataPreviewCtl : SpatialConnectionBoundControl
+    public partial class FdoDataPreviewCtl : FdoConnectionBoundControl
     {
         const int TAB_STANDARD = 0;
         const int TAB_AGGREGATE = 1;
@@ -55,12 +55,12 @@ namespace FdoToolbox.Lib.Controls
 
         private FeatureService _Service;
 
-        internal SpatialDataPreviewCtl()
+        internal FdoDataPreviewCtl()
         {
             InitializeComponent();
         }
 
-        public SpatialDataPreviewCtl(FdoConnectionInfo conn, string key)
+        public FdoDataPreviewCtl(FdoConnectionInfo conn, string key)
             : base(conn, key)
         {
             InitializeComponent();

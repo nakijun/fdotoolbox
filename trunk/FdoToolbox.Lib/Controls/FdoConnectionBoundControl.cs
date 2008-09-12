@@ -28,18 +28,18 @@ using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Lib.Controls
 {
-    public partial class SpatialConnectionBoundControl : BaseDocumentCtl, ISpatialConnectionBoundCtl
+    public partial class FdoConnectionBoundControl : BaseDocumentCtl, IFdoConnectionBoundCtl
     {
         protected FdoConnectionInfo _BoundConnection;
 
         protected string _Key;
 
-        internal SpatialConnectionBoundControl()
+        internal FdoConnectionBoundControl()
         {
             InitializeComponent();
         }
 
-        public SpatialConnectionBoundControl(FdoConnectionInfo connInfo, string key)
+        public FdoConnectionBoundControl(FdoConnectionInfo connInfo, string key)
             : this()
         {
             _BoundConnection = connInfo;

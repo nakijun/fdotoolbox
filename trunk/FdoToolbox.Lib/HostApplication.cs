@@ -47,9 +47,9 @@ namespace FdoToolbox.Lib
         private IShell _shell;
         private IModuleMgr _moduleMgr;
         private ITaskManager _taskMgr;
-        private ISpatialConnectionMgr _connMgr;
+        private IFdoConnectionMgr _connMgr;
         private IDbConnectionManager _dbConnMgr;
-        private ISpatialConnectionBoundTabManager _TabManager;
+        private IFdoConnectionBoundTabManager _TabManager;
         private ICoordinateSystemCatalog _CsCatalog;
         private bool _init;
         
@@ -59,7 +59,7 @@ namespace FdoToolbox.Lib
             Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             _dbConnMgr = new DbConnectionManager();
-            _connMgr = new SpatialConnectionMgr();
+            _connMgr = new FdoConnectionMgr();
             _moduleMgr = new ModuleMgr();
             _taskMgr = new TaskManager();
             _MenuStateMgr = new MenuStateMgr();
@@ -101,7 +101,7 @@ namespace FdoToolbox.Lib
                     AppConsole.WriteLine("Loading modules");
 
                     _CsCatalog = new CoordSysCatalog();
-                    _TabManager = new SpatialConnectionBoundTabManager();
+                    _TabManager = new FdoConnectionBoundTabManager();
 
                     InitMessageHandlers();
                     InitTaskLoader();
@@ -140,7 +140,7 @@ namespace FdoToolbox.Lib
 
         void TaskLoader_RemoveFdoConnection(EventArgs<string> e)
         {
-            this.SpatialConnectionManager.RemoveConnection(e.Data);
+            this.FdoConnectionManager.RemoveConnection(e.Data);
         }
 
         void TaskLoader_RemoveDbConnection(EventArgs<string> e)
@@ -150,12 +150,12 @@ namespace FdoToolbox.Lib
 
         string TaskLoader_GetUniqueFdoName()
         {
-            return this.SpatialConnectionManager.CreateUniqueName();
+            return this.FdoConnectionManager.CreateUniqueName();
         }
 
         void TaskLoader_FdoConnectionLoaded(EventArgs<FdoConnectionInfo> e)
         {
-            this.SpatialConnectionManager.AddConnection(e.Data.Name, e.Data.InternalConnection);
+            this.FdoConnectionManager.AddConnection(e.Data.Name, e.Data.InternalConnection);
         }
 
         void TaskLoader_DbConnectionLoaded(EventArgs<DbConnectionInfo> e)
@@ -423,15 +423,15 @@ namespace FdoToolbox.Lib
             {
                 AppConsole.WriteLine("Task Deleted: {0}", e.Data);
             };
-            SpatialConnectionManager.ConnectionRemoved += delegate(object sender, EventArgs<string> e)
+            FdoConnectionManager.ConnectionRemoved += delegate(object sender, EventArgs<string> e)
             {
                 AppConsole.WriteLine("Connection removed: {0}", e.Data);
             };
-            SpatialConnectionManager.ConnectionAdded += delegate(object sender, EventArgs<string> e)
+            FdoConnectionManager.ConnectionAdded += delegate(object sender, EventArgs<string> e)
             {
                 AppConsole.WriteLine("New connection added: {0}", e.Data);
             };
-            SpatialConnectionManager.ConnectionRenamed += delegate(object sender, ConnectionRenameEventArgs e)
+            FdoConnectionManager.ConnectionRenamed += delegate(object sender, ConnectionRenameEventArgs e)
             {
                 AppConsole.WriteLine("Connection {0} renamed to {1}", e.OldName, e.NewName);
             };
@@ -530,7 +530,7 @@ namespace FdoToolbox.Lib
         /// <summary>
         /// The spatial connection manager
         /// </summary>
-        public ISpatialConnectionMgr SpatialConnectionManager
+        public IFdoConnectionMgr FdoConnectionManager
         {
             get { return _connMgr; }
         }
@@ -546,7 +546,7 @@ namespace FdoToolbox.Lib
         /// <summary>
         /// The connection-bound tab manager
         /// </summary>
-        public ISpatialConnectionBoundTabManager TabManager
+        public IFdoConnectionBoundTabManager TabManager
         {
             get { return _TabManager; }
         }

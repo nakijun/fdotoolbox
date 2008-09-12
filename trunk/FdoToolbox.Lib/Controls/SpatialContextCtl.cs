@@ -40,7 +40,7 @@ namespace FdoToolbox.Lib.Controls
     /// <summary>
     /// A control to manage spatial contexts for a given connection
     /// </summary>
-    public partial class SpatialContextCtl : SpatialConnectionBoundControl
+    public partial class SpatialContextCtl : FdoConnectionBoundControl
     {
         private FgfGeometryFactory _GeomFactory;
         private BindingSource _bsContexts;

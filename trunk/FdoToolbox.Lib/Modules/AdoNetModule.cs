@@ -176,7 +176,7 @@ namespace FdoToolbox.Lib.Modules
         [Command(AdoNetModule.DB_POINT_CONVERT, "Convert to Point Feature Class", Description = "Copies the table to a new Point feature class in an FDO data source", ImageResourceName = "shape_handles")]
         public void ConvertToPoints()
         {
-            if (_App.SpatialConnectionManager.GetConnectionNames().Count == 0)
+            if (_App.FdoConnectionManager.GetConnectionNames().Count == 0)
             {
                 AppConsole.Alert("Error", "Cannot database table to points. There are no FDO data sources open");
                 return;
@@ -211,7 +211,7 @@ namespace FdoToolbox.Lib.Modules
                     IConnection conn = ExpressUtility.ApplySchemaToNewSDF(schema, diag.FilePath);
                     conn.Open();
 
-                    string name = _App.SpatialConnectionManager.CreateUniqueName();
+                    string name = _App.FdoConnectionManager.CreateUniqueName();
                     FdoConnectionInfo connInfo = new FdoConnectionInfo(name, conn);
 
                     DbToPointCopyOptions options = new DbToPointCopyOptions(dbConnInfo, connInfo);

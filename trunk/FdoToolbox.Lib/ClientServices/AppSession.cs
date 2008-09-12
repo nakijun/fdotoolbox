@@ -73,7 +73,7 @@ namespace FdoToolbox.Lib.ClientServices
                     {
                         Connection c = (Connection)connSerializer.Deserialize(reader);
                         //See if it exist already by name
-                        FdoConnectionInfo connInfo = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(c.Name);
+                        FdoConnectionInfo connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(c.Name);
                         if (connInfo != null)
                         {
                             //Connection we are about to load exists
@@ -88,7 +88,7 @@ namespace FdoToolbox.Lib.ClientServices
                         IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(c.Provider);
                         conn.ConnectionString = c.ConnectionString;
                         conn.Open();
-                        AppGateway.RunningApplication.SpatialConnectionManager.AddConnection(c.Name, conn);
+                        AppGateway.RunningApplication.FdoConnectionManager.AddConnection(c.Name, conn);
                     }
                 }
                 //Repeat for database connections
@@ -145,12 +145,12 @@ namespace FdoToolbox.Lib.ClientServices
             {
                 File.Delete(file);
             }
-            ICollection<string> fdoConnNames = AppGateway.RunningApplication.SpatialConnectionManager.GetConnectionNames();
+            ICollection<string> fdoConnNames = AppGateway.RunningApplication.FdoConnectionManager.GetConnectionNames();
             ICollection<string> dbConnNames = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnectionNames();
             ICollection<string> taskNames = AppGateway.RunningApplication.TaskManager.TaskNames;
             foreach (string connName in fdoConnNames)
             {
-                FdoConnectionInfo connInfo = AppGateway.RunningApplication.SpatialConnectionManager.GetConnection(connName);
+                FdoConnectionInfo connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connName);
                 SpatialConnLoader.SaveConnection(connInfo, Path.Combine(path, connName + ".conn"));
             }
             foreach (string connName in dbConnNames)
