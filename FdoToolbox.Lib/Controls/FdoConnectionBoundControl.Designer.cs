@@ -1,6 +1,6 @@
 namespace FdoToolbox.Lib.Controls
 {
-    partial class SpatialConnectionBoundControl
+    partial class FdoConnectionBoundControl
     {
         /// <summary> 
         /// Required designer variable.

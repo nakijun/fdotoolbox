@@ -34,6 +34,7 @@ using FdoToolbox.Core.Utility;
 using OSGeo.FDO.Connections.Capabilities;
 using NMock2;
 using System.Collections.ObjectModel;
+using FdoToolbox.Lib.ClientServices;
 
 namespace FdoToolbox.Tests
 {

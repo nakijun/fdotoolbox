@@ -39,7 +39,7 @@ using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Lib.Controls
 {
-    public partial class SchemaMgrCtl : SpatialConnectionBoundControl
+    public partial class SchemaMgrCtl : FdoConnectionBoundControl
     {
         public SchemaMgrCtl()
         {
@@ -270,7 +270,7 @@ namespace FdoToolbox.Lib.Controls
                         IConnection conn = ExpressUtility.ApplySchemaToNewSDF(selectedSchema, sdfFile);
                         if (AppConsole.Confirm("Save Schema to SDF", "Schema saved to SDF file: " + sdfFile + ". Connect to it?"))
                         {
-                            string name = AppGateway.RunningApplication.SpatialConnectionManager.CreateUniqueName();
+                            string name = AppGateway.RunningApplication.FdoConnectionManager.CreateUniqueName();
                             name = StringInputDlg.GetInput("Connection name", "Enter a name for this connection", name);
                             CoreModule.AddConnection(conn, name);
                         }

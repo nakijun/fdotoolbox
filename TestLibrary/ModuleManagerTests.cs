@@ -22,10 +22,11 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using FdoToolbox.Core;
-using FdoToolbox.Core.Modules;
-using FdoToolbox.Core.Commands;
+using FdoToolbox.Lib.Modules;
+using FdoToolbox.Lib.Commands;
 using System.IO;
-using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Lib.ClientServices;
+using FdoToolbox.Lib;
 
 namespace FdoToolbox.Tests
 {

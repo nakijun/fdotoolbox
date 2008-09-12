@@ -30,13 +30,13 @@ namespace FdoToolbox.Lib.ClientServices
     /// <summary>
     /// FDO Connection Manager
     /// </summary>
-    public class SpatialConnectionMgr : ISpatialConnectionMgr
+    public class FdoConnectionMgr : IFdoConnectionMgr
     {
         private int counter;
 
         private Dictionary<string, FdoConnectionInfo> _ConnectionDict;
 
-        public SpatialConnectionMgr() 
+        public FdoConnectionMgr() 
         {
             _ConnectionDict = new Dictionary<string, FdoConnectionInfo>();
         }

@@ -25,6 +25,8 @@ using FdoToolbox.Core;
 using FdoToolbox.Core.ClientServices;
 using OSGeo.FDO.Connections;
 using System.IO;
+using FdoToolbox.Lib;
+using FdoToolbox.Lib.ClientServices;
 
 namespace FdoToolbox.Tests
 {
@@ -228,7 +230,7 @@ namespace FdoToolbox.Tests
         [ExpectedException(typeof(FdoConnectionException))]
         public void TestAddIdenticalConnectionNames()
         {
-            ISpatialConnectionMgr mgr = new SpatialConnectionMgr();
+            IFdoConnectionMgr mgr = new FdoConnectionMgr();
 
             IConnection conn1 = new MockSpatialConnection();
             IConnection conn2 = new MockSpatialConnection();
@@ -242,7 +244,7 @@ namespace FdoToolbox.Tests
         [Test]
         public void TestRenameToVacantConnectionName()
         {
-            ISpatialConnectionMgr mgr = new SpatialConnectionMgr();
+            IFdoConnectionMgr mgr = new FdoConnectionMgr();
 
             IConnection conn1 = new MockSpatialConnection();
             IConnection conn2 = new MockSpatialConnection();
@@ -267,7 +269,7 @@ namespace FdoToolbox.Tests
         [ExpectedException(typeof(FdoConnectionException))]
         public void TestRenameToExistingConnectionName()
         {
-            ISpatialConnectionMgr mgr = new SpatialConnectionMgr();
+            IFdoConnectionMgr mgr = new FdoConnectionMgr();
 
             IConnection conn1 = new MockSpatialConnection();
             IConnection conn2 = new MockSpatialConnection();

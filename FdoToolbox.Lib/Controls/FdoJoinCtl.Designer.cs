@@ -1,6 +1,6 @@
 namespace FdoToolbox.Lib.Controls
 {
-    partial class SpatialJoinCtl
+    partial class FdoJoinCtl
     {
         /// <summary> 
         /// Required designer variable.

@@ -21,9 +21,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.IO;
 using FdoToolbox.Core;
+using FdoToolbox.Lib.ClientServices;
+using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Tests
 {

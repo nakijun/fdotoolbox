@@ -23,6 +23,8 @@ using System.Text;
 using FdoToolbox.Core;
 using FdoToolbox.Core.ClientServices;
 using System.IO;
+using FdoToolbox.Lib;
+using FdoToolbox.Lib.ClientServices;
 
 namespace FdoToolbox.Tests
 {
@@ -31,7 +33,7 @@ namespace FdoToolbox.Tests
         private IShell _shell;
         //private IModuleMgr _moduleMgr;
         private ITaskManager _taskMgr;
-        private ISpatialConnectionMgr _connMgr;
+        private IFdoConnectionMgr _connMgr;
         private IDbConnectionManager _dbConnMgr;
         //private ISpatialConnectionBoundTabManager _TabManager;
         private ICoordinateSystemCatalog _CsCatalog;
@@ -39,7 +41,7 @@ namespace FdoToolbox.Tests
         public MockApplication()
         {
             _dbConnMgr = new DbConnectionManager();
-            _connMgr = new SpatialConnectionMgr();
+            _connMgr = new FdoConnectionMgr();
         }
 
         public void Initialize(IShell shell)
@@ -69,7 +71,7 @@ namespace FdoToolbox.Tests
             get { throw new Exception("The method or operation is not implemented."); }
         }
 
-        public FdoToolbox.Core.Modules.IModuleMgr ModuleManager
+        public FdoToolbox.Lib.Modules.IModuleMgr ModuleManager
         {
             get { throw new Exception("The method or operation is not implemented."); }
         }
@@ -79,7 +81,7 @@ namespace FdoToolbox.Tests
             get { throw new Exception("The method or operation is not implemented."); }
         }
 
-        public ISpatialConnectionMgr SpatialConnectionManager
+        public IFdoConnectionMgr FdoConnectionManager
         {
             get { return _connMgr; }
         }
@@ -89,7 +91,7 @@ namespace FdoToolbox.Tests
             get { return _dbConnMgr; }
         }
 
-        public FdoToolbox.Core.Controls.ISpatialConnectionBoundTabManager TabManager
+        public FdoToolbox.Lib.Controls.IFdoConnectionBoundTabManager TabManager
         {
             get { throw new Exception("The method or operation is not implemented."); }
         }

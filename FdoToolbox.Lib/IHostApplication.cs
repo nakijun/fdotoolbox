@@ -42,9 +42,9 @@ namespace FdoToolbox.Lib
         IShell Shell { get; }
         IModuleMgr ModuleManager { get; }
         ITaskManager TaskManager { get; }
-        ISpatialConnectionMgr SpatialConnectionManager { get; }
+        IFdoConnectionMgr FdoConnectionManager { get; }
         IDbConnectionManager DatabaseConnectionManager { get; }
-        ISpatialConnectionBoundTabManager TabManager { get; }
+        IFdoConnectionBoundTabManager TabManager { get; }
         ICoordinateSystemCatalog CoordinateSystemCatalog { get; }
         IPreferenceDictionary Preferences { get; }
 
