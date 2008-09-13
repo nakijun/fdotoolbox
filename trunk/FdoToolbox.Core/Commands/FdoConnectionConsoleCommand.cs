@@ -29,7 +29,7 @@ namespace FdoToolbox.Core.Commands
     /// Console command with built-in connection. Derive from this class if
     /// the command requires a single FDO connection.
     /// </summary>
-    public abstract class SpatialConnectionCommand : ConsoleCommand
+    public abstract class FdoConnectionConsoleCommand : ConsoleCommand
     {
         private string _provider;
         private string _connStr;
@@ -44,7 +44,7 @@ namespace FdoToolbox.Core.Commands
             get { return _connStr; }
         }
 
-        protected SpatialConnectionCommand(string provider, string connStr)
+        protected FdoConnectionConsoleCommand(string provider, string connStr)
         {
             _provider = provider;
             _connStr = connStr;
