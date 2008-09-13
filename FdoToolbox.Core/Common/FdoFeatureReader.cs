@@ -31,6 +31,14 @@ namespace FdoToolbox.Core.Common
         private string[] _names;
         private Type[] _types;
         private Dictionary<string, int> _ordinals;
+        private int _limit = -1;
+        private int _read = 0;
+
+        internal FdoFeatureReader(IFeatureReader reader, int limit)
+            : this(reader)
+        {
+            _limit = limit;
+        }
 
         internal FdoFeatureReader(IFeatureReader reader) : base(reader)
         {
@@ -62,19 +70,9 @@ namespace FdoToolbox.Core.Common
             }
         }
 
-        public override string GetNameAt(int i)
-        {
-            return _names[i];
-        }
-
         public override int Depth
         {
             get { return _internalReader.GetDepth(); }
-        }
-
-        public override System.Data.DataTable GetSchemaTable()
-        {
-            throw new Exception("The method or operation is not implemented.");
         }
 
         public override int FieldCount
@@ -110,6 +108,35 @@ namespace FdoToolbox.Core.Common
         public override string GetName(int i)
         {
             return _names[i];
+        }
+
+        public override bool ReadNext()
+        {
+            if (_limit > 0)
+            {
+                bool read = false;
+                if (_limit > _read)
+                {
+                    read = base.ReadNext();
+                    if (read)
+                        _read++;
+                }
+                return read;
+            }
+            else 
+            {
+                return base.ReadNext();
+            }
+        }
+
+        public override bool Read()
+        {
+            return this.ReadNext();
+        }
+
+        public override bool NextResult()
+        {
+            return this.ReadNext();
         }
     }
 }

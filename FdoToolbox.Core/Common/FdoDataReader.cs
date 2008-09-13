@@ -51,19 +51,9 @@ namespace FdoToolbox.Core.Common
             }
         }
 
-        public override string GetNameAt(int i)
-        {
-            return _names[i];
-        }
-
         public override int Depth
         {
             get { return -1; }
-        }
-
-        public override System.Data.DataTable GetSchemaTable()
-        {
-            throw new Exception("The method or operation is not implemented.");
         }
 
         public override int FieldCount

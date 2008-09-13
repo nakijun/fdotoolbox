@@ -62,11 +62,6 @@ namespace FdoToolbox.Core.Common
             }
         }
 
-        public string GetNameAt(int i)
-        {
-            return _internalReader.GetColumnName(i);
-        }
-
         public int Depth
         {
             get { return -1; }
@@ -74,7 +69,66 @@ namespace FdoToolbox.Core.Common
 
         public System.Data.DataTable GetSchemaTable()
         {
-            throw new Exception("The method or operation is not implemented.");
+            System.Data.DataTable schemaTable = new System.Data.DataTable();
+
+            schemaTable.Columns.Add("ColumnName", typeof(String));
+            schemaTable.Columns.Add("ColumnOrdinal", typeof(Int32));
+            schemaTable.Columns.Add("ColumnSize", typeof(Int32));
+            schemaTable.Columns.Add("NumericPrecision", typeof(Int32));
+            schemaTable.Columns.Add("NumericScale", typeof(Int32));
+            schemaTable.Columns.Add("IsUnique", typeof(Boolean));
+            schemaTable.Columns.Add("IsKey", typeof(Boolean));
+            schemaTable.Columns.Add("BaseCatalogName", typeof(String));
+            schemaTable.Columns.Add("BaseColumnName", typeof(String));
+            schemaTable.Columns.Add("BaseSchemaName", typeof(String));
+            schemaTable.Columns.Add("BaseTableName", typeof(String));
+            schemaTable.Columns.Add("DataType", typeof(Type));
+            schemaTable.Columns.Add("AllowDBNull", typeof(Boolean));
+            schemaTable.Columns.Add("ProviderType", typeof(Int32));
+            schemaTable.Columns.Add("IsAliased", typeof(Boolean));
+            schemaTable.Columns.Add("IsExpression", typeof(Boolean));
+            schemaTable.Columns.Add("IsIdentity", typeof(Boolean));
+            schemaTable.Columns.Add("IsAutoIncrement", typeof(Boolean));
+            schemaTable.Columns.Add("IsRowVersion", typeof(Boolean));
+            schemaTable.Columns.Add("IsHidden", typeof(Boolean));
+            schemaTable.Columns.Add("IsLong", typeof(Boolean));
+            schemaTable.Columns.Add("IsReadOnly", typeof(Boolean));
+
+            schemaTable.BeginLoadData();
+            for (int i = 0; i < this.FieldCount; i++)
+            {
+                System.Data.DataRow schemaRow = schemaTable.NewRow();
+
+                schemaRow["ColumnName"] = GetName(i);
+                schemaRow["ColumnOrdinal"] = i;
+                schemaRow["ColumnSize"] = -1;
+                schemaRow["NumericPrecision"] = 0;
+                schemaRow["NumericScale"] = 0;
+                schemaRow["IsUnique"] = false;
+                schemaRow["IsKey"] = false;
+                schemaRow["BaseCatalogName"] = "";
+                schemaRow["BaseColumnName"] = GetName(i);
+                schemaRow["BaseSchemaName"] = "";
+                schemaRow["BaseTableName"] = "";
+                schemaRow["DataType"] = GetFieldType(i);
+                schemaRow["AllowDBNull"] = true;
+                schemaRow["ProviderType"] = 0;
+                schemaRow["IsAliased"] = false;
+                schemaRow["IsExpression"] = false;
+                schemaRow["IsIdentity"] = false;
+                schemaRow["IsAutoIncrement"] = false;
+                schemaRow["IsRowVersion"] = false;
+                schemaRow["IsHidden"] = false;
+                schemaRow["IsLong"] = false;
+                schemaRow["IsReadOnly"] = false;
+
+                schemaTable.Rows.Add(schemaRow);
+                schemaRow.AcceptChanges();
+
+            }
+            schemaTable.EndLoadData();
+
+            return schemaTable;
         }
 
         public int FieldCount
@@ -84,8 +138,7 @@ namespace FdoToolbox.Core.Common
 
         public Type GetFieldType(int i)
         {
-            DataType dt = _internalReader.GetColumnType(_names[i]);
-            return FdoDataColumn.GetTypeFromDataType(dt);
+            return _types[i];
         }
 
         public int GetOrdinal(string name)
@@ -185,7 +238,17 @@ namespace FdoToolbox.Core.Common
 
         public bool ReadNext()
         {
-            return _internalReader.ReadNext();
+            //HACK
+            bool read = false;
+            try
+            {
+                read = _internalReader.ReadNext();
+            }
+            catch
+            {
+                read = false;
+            }
+            return read;
         }
 
         public void Dispose()
@@ -209,12 +272,12 @@ namespace FdoToolbox.Core.Common
 
         public bool NextResult()
         {
-            throw new Exception("The method or operation is not implemented.");
+            return this.ReadNext();
         }
 
         public bool Read()
         {
-            return _internalReader.ReadNext();
+            return this.ReadNext();
         }
 
         public int RecordsAffected
@@ -224,12 +287,12 @@ namespace FdoToolbox.Core.Common
 
         public bool GetBoolean(int i)
         {
-            return _internalReader.GetBoolean(GetNameAt(i));
+            return _internalReader.GetBoolean(GetName(i));
         }
 
         public byte GetByte(int i)
         {
-            return _internalReader.GetByte(GetNameAt(i));
+            return _internalReader.GetByte(GetName(i));
         }
 
         public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
@@ -259,22 +322,22 @@ namespace FdoToolbox.Core.Common
 
         public DateTime GetDateTime(int i)
         {
-            return _internalReader.GetDateTime(GetNameAt(i));
+            return _internalReader.GetDateTime(GetName(i));
         }
 
         public decimal GetDecimal(int i)
         {
-            return Convert.ToDecimal(_internalReader.GetDouble(GetNameAt(i)));
+            return Convert.ToDecimal(_internalReader.GetDouble(GetName(i)));
         }
 
         public double GetDouble(int i)
         {
-            return _internalReader.GetDouble(GetNameAt(i));
+            return _internalReader.GetDouble(GetName(i));
         }
 
         public float GetFloat(int i)
         {
-            return _internalReader.GetSingle(GetNameAt(i));
+            return _internalReader.GetSingle(GetName(i));
         }
 
         public Guid GetGuid(int i)
@@ -284,52 +347,83 @@ namespace FdoToolbox.Core.Common
 
         public short GetInt16(int i)
         {
-            return _internalReader.GetInt16(GetNameAt(i));
+            return _internalReader.GetInt16(GetName(i));
         }
 
         public int GetInt32(int i)
         {
-            return _internalReader.GetInt32(GetNameAt(i));
+            return _internalReader.GetInt32(GetName(i));
         }
 
         public long GetInt64(int i)
         {
-            return _internalReader.GetInt64(GetNameAt(i));
+            return _internalReader.GetInt64(GetName(i));
         }
 
         public string GetName(int i)
         {
-            throw new Exception("The method or operation is not implemented.");
+            return _internalReader.GetColumnName(i);
         }
 
         public string GetString(int i)
         {
-            return _internalReader.GetString(GetNameAt(i));
+            return _internalReader.GetString(GetName(i));
         }
 
         public object GetValue(int i)
         {
-            throw new Exception("The method or operation is not implemented.");
+            Type t = GetFieldType(i);
+            string name = GetName(i);
+            if (t == typeof(bool))
+                return GetBoolean(name);
+            else if (t == typeof(byte))
+                return GetByte(name);
+            else if (t == typeof(DateTime))
+                return GetDateTime(name);
+            else if (t == typeof(decimal))
+                return GetDecimal(i);
+            else if (t == typeof(double))
+                return GetDouble(name);
+            else if (t == typeof(short))
+                return GetInt16(name);
+            else if (t == typeof(int))
+                return GetInt32(name);
+            else if (t == typeof(long))
+                return GetInt64(name);
+            else if (t == typeof(float))
+                return GetSingle(name);
+            else if (t == typeof(string))
+                return GetString(name);
+            return DBNull.Value;
         }
 
         public int GetValues(object[] values)
         {
-            throw new Exception("The method or operation is not implemented.");
+            int numToFill = System.Math.Min(values.Length, this.FieldCount);
+            for (int i = 0; i < numToFill; i++)
+            {
+                string name = GetName(i);
+                if (!IsNull(name))
+                    values[i] = this[i];
+                else
+                    values[i] = DBNull.Value;
+            }
+            return numToFill;
         }
 
         public bool IsDBNull(int i)
         {
-            return _internalReader.IsNull(GetNameAt(i));
+            return _internalReader.IsNull(GetName(i));
         }
 
         public object this[string name]
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return GetValue(GetOrdinal(name)); }
         }
 
         public object this[int i]
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return GetValue(i); }
         }
     }
 }
