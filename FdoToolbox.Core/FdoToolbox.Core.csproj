@@ -74,6 +74,7 @@
     <Compile Include="Common\FdoFeatureReader.cs" />
     <Compile Include="Common\FdoReader.cs" />
     <Compile Include="Common\FdoSqlReader.cs" />
+    <Compile Include="Common\IFdoReader.cs" />
     <Compile Include="Common\IncompatibleClassReason.cs" />
     <Compile Include="Common\FdoDataTable.cs">
       <SubType>Component</SubType>

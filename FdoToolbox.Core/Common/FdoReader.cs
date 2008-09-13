@@ -25,7 +25,7 @@ using OSGeo.FDO.Commands.SQL;
 
 namespace FdoToolbox.Core.Common
 {
-    public abstract class FdoReader<T> : System.Data.IDataReader, IReader where T : IReader
+    public abstract class FdoReader<T> : IReader, FdoToolbox.Core.Common.IFdoReader where T : IReader
     {
         protected T _internalReader;
 
