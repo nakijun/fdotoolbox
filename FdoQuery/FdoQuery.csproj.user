@@ -1,0 +1,5 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartArguments>-provider:OSGeo.MySQL -connection:Service=localhost:3306;Username=root;Password=jn3129;DataStore=fdotest -sql:"SELECT * FROM Parcels LIMIT 250"</StartArguments>
+  </PropertyGroup>
+</Project>
