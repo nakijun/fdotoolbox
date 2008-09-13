@@ -2,7 +2,7 @@
 <Preferences xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <StringPrefs>
         <Pref name="pref_str_working_dir" value="C:\Workspace\FdoToolbox\out\Debug" />
-        <Pref name="pref_str_fdo_home" value="C:\Workspace\FdoToolbox\out\Debug\FDO\" />
+        <Pref name="pref_str_fdo_home" value="C:\Workspace\FdoToolbox\out\Test" />
         <Pref name="pref_str_session_dir" value="C:\Workspace\FdoToolbox\out\Debug\Session" />
     </StringPrefs>
     <DoublePrefs />
