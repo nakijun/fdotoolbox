@@ -1201,6 +1201,11 @@ namespace FdoToolbox.Core.ClientServices
         /// <returns></returns>
         public FdoFeatureReader SelectFeatures(FeatureQueryOptions options)
         {
+            return SelectFeatures(options, -1);
+        }
+
+        public FdoFeatureReader SelectFeatures(FeatureQueryOptions options, int limit)
+        {
             IFeatureReader reader = null;
             ISelect select = CreateCommand<ISelect>(OSGeo.FDO.Commands.CommandType.CommandType_Select);
             using (select)
@@ -1208,7 +1213,10 @@ namespace FdoToolbox.Core.ClientServices
                 SetSelectOptions(options, select);
                 reader = select.Execute();
             }
-            return new FdoFeatureReader(reader);
+            if(limit > 0)
+                return new FdoFeatureReader(reader, limit);
+            else
+                return new FdoFeatureReader(reader);
         }
 
         /// <summary>
