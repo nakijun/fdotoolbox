@@ -158,11 +158,15 @@ namespace FdoToolbox.Core.ClientServices
                     break;
                 case ClassType.ClassType_FeatureClass:
                     {
+                        FeatureClass sfc = (FeatureClass)cd;
                         FeatureClass fc = new FeatureClass(cd.Name, cd.Description);
-                        string geomName = ((FeatureClass)cd).GeometryProperty.Name;
                         CopyProperties(cd.Properties, fc.Properties);
                         CopyIdentityProperties(cd.IdentityProperties, fc.IdentityProperties);
-                        fc.GeometryProperty = fc.Properties[fc.Properties.IndexOf(geomName)] as GeometricPropertyDefinition;
+                        if (sfc.GeometryProperty != null)
+                        {
+                            string geomName = sfc.GeometryProperty.Name;
+                            fc.GeometryProperty = fc.Properties[fc.Properties.IndexOf(geomName)] as GeometricPropertyDefinition;
+                        }
                         classDef = fc;
                     }
                     break;
