@@ -32,9 +32,12 @@ namespace FdoToolbox.Core.Common
      * we have no choice but to duplicate the FdoReader implementation, ugh!
      * 
      * http://trac.osgeo.org/fdo/ticket/359
+     * 
+     * Update 14/9/2008: All adapter classes implement IFdoReader. This does not fix the original
+     * issue, but it does give us an interface that we can work with any reader adapter class.
      */
 
-    public class FdoSqlReader : IDataReader, ISQLDataReader
+    public class FdoSqlReader : ISQLDataReader, IFdoReader
     {
         private Dictionary<string, int> _ordinals;
         private string[] _names;
