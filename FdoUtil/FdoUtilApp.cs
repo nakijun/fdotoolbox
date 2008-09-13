@@ -28,14 +28,6 @@ namespace FdoUtil
 {
     public class FdoUtilApp : ConsoleApplication
     {
-        private IConsoleCommand _Command;
-
-        private static void ThrowIfEmpty(string value, string parameter)
-        {
-            if(string.IsNullOrEmpty(value))
-                throw new ArgumentException("Missing required parameter: " + parameter);
-        }
-
         public override void ParseArguments(string[] args)
         {
             string cmdName = GetArgument("-cmd", args);
@@ -293,43 +285,6 @@ namespace FdoUtil
 For more information about a command type: FdoUtil.exe -cmd:<command name> -help
 For more help. Consult the help file cmd_readme.txt";
             AppConsole.WriteLine(usage);
-        }
-
-        public override void Run(string[] args)
-        {
-            try
-            {
-                ParseArguments(args);
-            }
-            catch (ArgumentException ex)
-            {
-                AppConsole.Err.WriteLine(ex.Message);
-                ShowUsage();
-                return;
-            }
-
-#if DEBUG
-            if(_Command != null)
-                AppConsole.WriteLine("Silent: {0}\nTest: {1}", _Command.IsSilent, _Command.IsTestOnly);
-#endif
-
-            int retCode = (int)CommandStatus.E_OK;
-            if (_Command != null)
-            {
-                try
-                {
-                    retCode = _Command.Execute();
-                }
-                catch (Exception ex)
-                {
-                    AppConsole.WriteException(ex);
-                    retCode = (int)CommandStatus.E_FAIL_UNKNOWN;
-                }
-            }
-#if DEBUG
-            AppConsole.WriteLine("Status: {0}", retCode);
-#endif
-            System.Environment.ExitCode = retCode;
         }
     }
 }

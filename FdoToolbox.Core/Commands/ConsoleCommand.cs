@@ -97,5 +97,15 @@ namespace FdoToolbox.Core.Commands
             if (!IsSilent)
                 AppConsole.Err.WriteLine(str);
         }
+
+        protected static string RepeatString(string str, int iterations)
+        {
+            string result = "";
+            for (int i = 0; i < iterations; i++)
+            {
+                result += str;
+            }
+            return result;
+        }
     }
 }

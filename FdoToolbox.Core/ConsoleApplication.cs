@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using System.IO;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.IO;
+using FdoToolbox.Core.Commands;
 
 namespace FdoToolbox.Core
 {
@@ -37,6 +38,8 @@ namespace FdoToolbox.Core
     /// </summary>
     public abstract class ConsoleApplication : BaseApplication, IDisposable
     {
+        protected IConsoleCommand _Command;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -93,6 +96,12 @@ namespace FdoToolbox.Core
             return MyAssembly;
         }
 
+        protected static void ThrowIfEmpty(string value, string parameter)
+        {
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException("Missing required parameter: " + parameter);
+        }
+
         /// <summary>
         /// Parse application-specific arguments.
         /// </summary>
@@ -108,7 +117,42 @@ namespace FdoToolbox.Core
         /// Run the application
         /// </summary>
         /// <param name="args">The array of commandline arguments</param>
-        public abstract void Run(string[] args);
+        public virtual void Run(string[] args)
+        {
+            try
+            {
+                ParseArguments(args);
+            }
+            catch (ArgumentException ex)
+            {
+                AppConsole.Err.WriteLine(ex.Message);
+                ShowUsage();
+                return;
+            }
+
+#if DEBUG
+            if (_Command != null)
+                AppConsole.WriteLine("Silent: {0}\nTest: {1}", _Command.IsSilent, _Command.IsTestOnly);
+#endif
+
+            int retCode = (int)CommandStatus.E_OK;
+            if (_Command != null)
+            {
+                try
+                {
+                    retCode = _Command.Execute();
+                }
+                catch (Exception ex)
+                {
+                    AppConsole.WriteException(ex);
+                    retCode = (int)CommandStatus.E_FAIL_UNKNOWN;
+                }
+            }
+#if DEBUG
+            AppConsole.WriteLine("Status: {0}", retCode);
+#endif
+            System.Environment.ExitCode = retCode;
+        }
 
         /// <summary>
         /// Verifies the file name exists.
@@ -187,7 +231,7 @@ namespace FdoToolbox.Core
 
             foreach (string arg in args)
             {
-                if (arg == strSwitch)
+                if (arg == strSwitch || arg.StartsWith(strSwitch))
                 {
                     return true;
                 }

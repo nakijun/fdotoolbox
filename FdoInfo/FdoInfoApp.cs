@@ -27,8 +27,6 @@ namespace FdoInfo
 {
     public class FdoInfoApp : ConsoleApplication
     {
-        private IConsoleCommand _Command;
-
         public override void ParseArguments(string[] args)
         {
             string cmdName = GetArgument("-cmd", args);
@@ -221,30 +219,6 @@ Valid command names include:
 For more information about a particular command type:
 FdoInfo.exe -cmd:<command name> -help";
             AppConsole.WriteLine(msg);
-        }
-
-        public override void Run(string[] args)
-        {
-            try
-            {
-                ParseArguments(args);
-            }
-            catch (ArgumentException ex)
-            {
-                AppConsole.Err.WriteLine(ex.Message);
-                ShowUsage();
-                return;
-            }
-
-            int retCode = 0;
-            if (_Command != null)
-            {
-                retCode = _Command.Execute();
-            }
-#if DEBUG
-            AppConsole.WriteLine("Status: {0}", retCode);
-#endif
-            System.Environment.ExitCode = retCode;
         }
     }
 }
