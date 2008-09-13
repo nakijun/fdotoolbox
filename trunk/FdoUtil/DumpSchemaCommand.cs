@@ -27,7 +27,7 @@ using FdoToolbox.Core.ClientServices;
 
 namespace FdoUtil
 {
-    public class DumpSchemaCommand : SpatialConnectionCommand
+    public class DumpSchemaCommand : FdoConnectionConsoleCommand
     {
         private string _schemaFile;
         private string _schemaName;

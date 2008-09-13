@@ -28,7 +28,7 @@ using System.Collections.ObjectModel;
 
 namespace FdoInfo
 {
-    public class ListSpatialContextsCommand : SpatialConnectionCommand
+    public class ListSpatialContextsCommand : FdoConnectionConsoleCommand
     {
         public ListSpatialContextsCommand(string provider, string connStr)
             : base(provider, connStr)

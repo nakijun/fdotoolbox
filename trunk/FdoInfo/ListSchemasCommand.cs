@@ -28,7 +28,7 @@ using FdoToolbox.Core.Commands;
 
 namespace FdoInfo
 {
-    public class ListSchemasCommand : SpatialConnectionCommand
+    public class ListSchemasCommand : FdoConnectionConsoleCommand
     {
         public ListSchemasCommand(string provider, string connStr)
             : base(provider, connStr)

@@ -29,7 +29,7 @@ using System.Collections.ObjectModel;
 
 namespace FdoInfo
 {
-    public class ListDataStoresCommand : SpatialConnectionCommand
+    public class ListDataStoresCommand : FdoConnectionConsoleCommand
     {
         private bool _FdoOnly;
 
