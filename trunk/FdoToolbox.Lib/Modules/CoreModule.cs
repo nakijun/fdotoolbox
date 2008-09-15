@@ -81,6 +81,7 @@ namespace FdoToolbox.Lib.Modules
         public const string CMD_EDITTASK = "edittask";
         public const string CMD_DATAPREVIEW = "datapreview";
         public const string CMD_HELP = "help";
+        public const string CMD_CORE_API_HELP = "coreapihelp";
         public const string CMD_LOADTASK = "loadtask";
         public const string CMD_SAVETASK = "savetask";
         public const string CMD_SAVECONN = "saveconn";
@@ -325,6 +326,13 @@ namespace FdoToolbox.Lib.Modules
         {
             HelpCtl help = new HelpCtl();
             _App.Shell.ShowDocumentWindow(help);
+        }
+
+        [Command(CoreModule.CMD_CORE_API_HELP, "Core API documentation", "Show the Core API documentation", ImageResourceName = "help")]
+        public void ShowCoreApiHelp()
+        {
+            //TODO: un-hardcode the help file reference
+            System.Diagnostics.Process.Start(Path.Combine(_App.AppPath, "FdoToolbox.chm"));
         }
 
         [Command(CoreModule.CMD_MODINFO, "Module Information", "Display information about a loaded module", ImageResourceName = "information", InvocationType = CommandInvocationType.UI)]
