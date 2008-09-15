@@ -37,6 +37,10 @@ namespace FdoToolbox.Core.Common
      * issue, but it does give us an interface that we can work with any reader adapter class.
      */
 
+    /// <summary>
+    /// FDO reader wrapper class. Wraps the FDO ISQLDataReader interface and the 
+    /// ADO.net IDataReader interface
+    /// </summary>
     public class FdoSqlReader : ISQLDataReader, IFdoReader
     {
         private Dictionary<string, int> _ordinals;

@@ -27,6 +27,9 @@ using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// The DataTable equivalent of an FDO feature class.
+    /// </summary>
     public class FdoFeatureTable : FdoDataTable
     {
         public FdoFeatureTable(string name, string description) 

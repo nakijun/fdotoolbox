@@ -36,6 +36,9 @@ using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// DataTable to FDO file data source task.
+    /// </summary>
     public class DataTableToFlatFileTask : TaskBase
     {
         private DataTableConversionOptions _options;
@@ -258,7 +261,7 @@ namespace FdoToolbox.Core.ETL
         {
             get { return TaskType.DataTableToFeatureClass; }
         }
-
+        
         public override bool IsCountable
         {
             get { return true; }

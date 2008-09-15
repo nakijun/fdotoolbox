@@ -44,11 +44,12 @@ namespace FdoToolbox.Core
         /// </summary>
         TaskType TaskType { get; }
         /// <summary>
-        /// Returns true if the progress of this task is countable
+        /// Determines if this task is countable (for measuring progress)
         /// </summary>
         bool IsCountable { get; }
         /// <summary>
-        /// The thread that this task is executing on.
+        /// The thread that this task is executing on. Aborting it will cause
+        /// a ThreadAbortException to be thrown on the thread executing the task.
         /// </summary>
         Thread ExecutingThread { get; }
 

@@ -31,6 +31,9 @@ namespace FdoToolbox.Core
     {
         private string _Name;
 
+        /// <summary>
+        /// The name of the data store
+        /// </summary>
         public string Name
         {
             get { return _Name; }
@@ -39,6 +42,9 @@ namespace FdoToolbox.Core
 
         private string _Description;
 
+        /// <summary>
+        /// The data store description
+        /// </summary>
         public string Description
         {
             get { return _Description; }

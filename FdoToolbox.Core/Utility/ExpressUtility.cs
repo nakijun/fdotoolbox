@@ -42,6 +42,12 @@ namespace FdoToolbox.Core.Utility
 
         private ExpressUtility() { }
 
+        /// <summary>
+        /// Creates a FDO connection to a SDF feature source
+        /// </summary>
+        /// <param name="sdfFile"></param>
+        /// <param name="readOnly"></param>
+        /// <returns></returns>
         public static IConnection CreateSDFConnection(string sdfFile, bool readOnly)
         {
             string connStr = string.Format("File={0};ReadOnly={1}", sdfFile, readOnly.ToString().ToUpper());
@@ -50,6 +56,11 @@ namespace FdoToolbox.Core.Utility
             return conn;
         }
 
+        /// <summary>
+        /// Creates a FDO connection to a SHP feature source
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static IConnection CreateSHPConnection(string path)
         {
             string connStr = string.Format("DefaultFileLocation={0}", path);
@@ -108,6 +119,11 @@ namespace FdoToolbox.Core.Utility
             }
         }
 
+        /// <summary>
+        /// Creates a SDF file
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static bool CreateSDF(string fileName)
         {
             try
@@ -141,6 +157,11 @@ namespace FdoToolbox.Core.Utility
             return result;
         }
 
+        /// <summary>
+        /// Converts a specially formatted string to a NameValueCollection
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static NameValueCollection ConvertFromString(string str)
         {
             NameValueCollection param = new NameValueCollection();
@@ -164,6 +185,13 @@ namespace FdoToolbox.Core.Utility
             return param;
         }
 
+        /// <summary>
+        /// Combines two arrays into one.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array1"></param>
+        /// <param name="array2"></param>
+        /// <returns></returns>
         public static T[] CombineArray<T>(T[] array1, T[] array2)
         {
             List<T> list = new List<T>(array1);

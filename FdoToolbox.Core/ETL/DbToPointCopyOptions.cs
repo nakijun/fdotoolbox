@@ -25,10 +25,17 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// Defines the options for converting a database table to a FDO point
+    /// feature class.
+    /// </summary>
     public class DbToPointCopyOptions
     {
         private DatabaseConnection _Source;
-
+        
+        /// <summary>
+        /// The source database connection
+        /// </summary>
         public DatabaseConnection Source
         {
             get { return _Source; }
@@ -37,6 +44,9 @@ namespace FdoToolbox.Core.ETL
 
         private FdoConnection _Target;
 
+        /// <summary>
+        /// The target FDO connection
+        /// </summary>
         public FdoConnection Target
         {
             get { return _Target; }
@@ -52,6 +62,9 @@ namespace FdoToolbox.Core.ETL
 
         private List<string> _ColumnList;
 
+        /// <summary>
+        /// A list of columns to copy from the database table
+        /// </summary>
         public ReadOnlyCollection<string> ColumnList
         {
             get { return _ColumnList.AsReadOnly(); }
@@ -77,6 +90,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _XColumn;
 
+        /// <summary>
+        /// The "X" point coordinate column of the database table
+        /// </summary>
         public string XColumn
         {
             get { return _XColumn; }
@@ -85,6 +101,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _YColumn;
 
+        /// <summary>
+        /// The "Y" point coordinate column of the database table
+        /// </summary>
         public string YColumn
         {
             get { return _YColumn; }
@@ -93,6 +112,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _ZColumn;
 
+        /// <summary>
+        /// The "Z" point coordinate column of the database table
+        /// </summary>
         public string ZColumn
         {
             get { return _ZColumn; }
@@ -101,6 +123,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _Database;
 
+        /// <summary>
+        /// The database to copy from
+        /// </summary>
         public string Database
         {
             get { return _Database; }
@@ -109,6 +134,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _Table;
 
+        /// <summary>
+        /// The table to copy from
+        /// </summary>
         public string Table
         {
             get { return _Table; }
@@ -117,6 +145,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _SchemaName;
 
+        /// <summary>
+        /// The FDO feature schema to copy to
+        /// </summary>
         public string SchemaName
         {
             get { return _SchemaName; }
@@ -125,6 +156,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _ClassName;
 
+        /// <summary>
+        /// The FDO feature class to copy to
+        /// </summary>
         public string ClassName
         {
             get { return _ClassName; }

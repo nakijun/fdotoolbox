@@ -26,10 +26,19 @@ using FdoToolbox.Core.ClientServices;
 
 namespace FdoToolbox.Core.Utility
 {
+#if DEBUG
+    /// <summary>
+    /// Utility class to aid in debugging feature readers
+    /// </summary>
     public sealed class FeatureReaderHelper
     {
         private FeatureReaderHelper() { }
 
+        /// <summary>
+        /// Dumps the class definition inside the given feature reader to
+        /// the application console.
+        /// </summary>
+        /// <param name="reader"></param>
         public static void DumpReaderClass(IFeatureReader reader)
         {
             AppConsole.WriteLine("Feature Reader class dump:");
@@ -47,4 +56,5 @@ namespace FdoToolbox.Core.Utility
             }
         }
     }
+#endif
 }

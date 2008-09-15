@@ -24,6 +24,10 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// Defines a mapping of a property in a source class to a property
+    /// in a target class.
+    /// </summary>
 #if TEST
     public class DataTypeMapping
 #else
@@ -32,6 +36,9 @@ namespace FdoToolbox.Core.ETL
     {
         private string _SourceProperty;
 
+        /// <summary>
+        /// The name of the source property
+        /// </summary>
         public string SourceProperty
         {
             get { return _SourceProperty; }
@@ -40,6 +47,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _TargetProperty;
 
+        /// <summary>
+        /// The name of the target property
+        /// </summary>
         public string TargetProperty
         {
             get { return _TargetProperty; }
@@ -48,6 +58,9 @@ namespace FdoToolbox.Core.ETL
 
         private DataType _SourceDataType;
 
+        /// <summary>
+        /// The data type of the source property
+        /// </summary>
         public DataType SourceDataType
         {
             get { return _SourceDataType; }
@@ -56,6 +69,9 @@ namespace FdoToolbox.Core.ETL
 
         private DataType _TargetDataType;
 
+        /// <summary>
+        /// The data type of the target property
+        /// </summary>
         public DataType TargetDataType
         {
             get { return _TargetDataType; }

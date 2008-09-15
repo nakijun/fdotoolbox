@@ -25,6 +25,9 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// Error object for an incompatible class property
+    /// </summary>
     public class IncompatibleProperty
     {
         private string _Name;

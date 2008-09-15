@@ -27,7 +27,8 @@ namespace FdoToolbox.Core.ClientServices
 {
     /// <summary>
     /// Application console class. Output is redirected
-    /// to the application console window.
+    /// to the application console window when running the FdoToolbox application.
+    /// Otherwise output is redirected to stdout
     /// </summary>
     public sealed class AppConsole
     {

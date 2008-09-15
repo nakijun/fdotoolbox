@@ -25,6 +25,9 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// Error object for an incompatible feature class
+    /// </summary>
     public class IncompatibleClass
     {
         private string _Name;

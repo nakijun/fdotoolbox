@@ -24,6 +24,9 @@ using System.Threading;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// Base class for executable tasks.
+    /// </summary>
     public abstract class TaskBase : ITask
     {
         private string _Name;

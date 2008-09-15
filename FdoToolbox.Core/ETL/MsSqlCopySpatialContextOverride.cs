@@ -27,13 +27,16 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// Copy spatial context override for SQL Server 2008 target. 
+    /// </summary>
     public class MsSqlCopySpatialContextOverride : ICopySpatialContextOverride
     {
         /// <summary>
-        /// Copy spatial context override for SQL Server 2008 target. 
+        /// Copies the spatial contexts
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
+        /// <param name="srcConn"></param>
+        /// <param name="destConn"></param>
         /// <param name="spatialContextNames"></param>
         public void CopySpatialContexts(IConnection srcConn, IConnection destConn, ReadOnlyCollection<string> spatialContextNames)
         {

@@ -23,6 +23,9 @@ using System.Text;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// Codes for an incompatible class
+    /// </summary>
     public enum IncompatibleClassReason
     {
         /// <summary>
@@ -43,6 +46,9 @@ namespace FdoToolbox.Core.Common
         UnsupportedAutoProperties
     }
 
+    /// <summary>
+    /// Codes for an incompatible class property
+    /// </summary>
     public enum IncompatiblePropertyReason
     {
         /// <summary>

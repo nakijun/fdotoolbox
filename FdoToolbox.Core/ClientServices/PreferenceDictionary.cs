@@ -28,6 +28,9 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ClientServices
 {   
+    /// <summary>
+    /// Stores the application's preferences.
+    /// </summary>
     public class PreferenceDictionary : IPreferenceDictionary
     {
         private Dictionary<string, bool> _BooleanPrefs;
@@ -122,6 +125,11 @@ namespace FdoToolbox.Core.ClientServices
             }
         }
 
+        /// <summary>
+        /// Sets a string preference to the given value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public void SetStringPref(string name, string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -129,21 +137,41 @@ namespace FdoToolbox.Core.ClientServices
             _StringPrefs[name] = value;
         }
 
+        /// <summary>
+        /// Sets a double preference to the given value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public void SetDoublePref(string name, double value)
         {
             _DoublePrefs[name] = value;
         }
 
+        /// <summary>
+        /// Sets an integer preference to the given value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public void SetIntegerPref(string name, int value)
         {
             _IntegerPrefs[name] = value;
         }
 
+        /// <summary>
+        /// Sets a boolean preference to the given value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public void SetBooleanPref(string name, bool value)
         {
             _BooleanPrefs[name] = value;
         }
-
+        
+        /// <summary>
+        /// Gets the value of a boolean preference
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool GetBooleanPref(string name)
         {
             if (_BooleanPrefs.ContainsKey(name))
@@ -152,6 +180,11 @@ namespace FdoToolbox.Core.ClientServices
             throw new PreferenceException(name);
         }
 
+        /// <summary>
+        /// Gets the value of an integer preference
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public int GetIntegerPref(string name)
         {
             if (_IntegerPrefs.ContainsKey(name))
@@ -160,6 +193,11 @@ namespace FdoToolbox.Core.ClientServices
             throw new PreferenceException(name);
         }
 
+        /// <summary>
+        /// Gets the value of a double preference
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public double GetDoublePref(string name)
         {
             if (_DoublePrefs.ContainsKey(name))
@@ -168,6 +206,11 @@ namespace FdoToolbox.Core.ClientServices
             throw new PreferenceException(name);
         }
 
+        /// <summary>
+        /// Gets the value of a string preference
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public string GetStringPref(string name)
         {
             if (_StringPrefs.ContainsKey(name))
@@ -176,6 +219,9 @@ namespace FdoToolbox.Core.ClientServices
             throw new PreferenceException(name);
         }
 
+        /// <summary>
+        /// The names of all the double-value preferences
+        /// </summary>
         public ICollection<string> DoublePreferences
         {
             get
@@ -184,6 +230,9 @@ namespace FdoToolbox.Core.ClientServices
             }
         }
 
+        /// <summary>
+        /// The names of all the integer-value preferences
+        /// </summary>
         public ICollection<string> IntegerPreferences
         {
             get
@@ -192,6 +241,9 @@ namespace FdoToolbox.Core.ClientServices
             }
         }
 
+        /// <summary>
+        /// The names of all the boolean-value preferences
+        /// </summary>
         public ICollection<string> BooleanPreferences
         {
             get
@@ -200,6 +252,9 @@ namespace FdoToolbox.Core.ClientServices
             }
         }
 
+        /// <summary>
+        /// The names of all the string-value preferences
+        /// </summary>
         public ICollection<string> StringPreferences
         {
             get
@@ -208,6 +263,9 @@ namespace FdoToolbox.Core.ClientServices
             }
         }
 
+        /// <summary>
+        /// Saves all the current preferences to Preferences.xml
+        /// </summary>
         public void Save()
         {
             Preferences prefs = new Preferences();
@@ -259,24 +317,48 @@ namespace FdoToolbox.Core.ClientServices
             }
         }
 
+        /// <summary>
+        /// Sets the default value for a given string preference. Only applies 
+        /// if a value has not already been set
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public void SetDefaultValue(string name, string value)
         {
             if (!_StringPrefs.ContainsKey(name))
                 _StringPrefs[name] = value;
         }
 
+        /// <summary>
+        /// Sets the default value for a given integer preference. Only applies
+        /// if a value has not already been set
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public void SetDefaultValue(string name, int value)
         {
             if (!_IntegerPrefs.ContainsKey(name))
                 _IntegerPrefs[name] = value;
         }
 
+        /// <summary>
+        /// Sets the default value for a given double preference. Only applies
+        /// if a value has not already been set
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public void SetDefaultValue(string name, double value)
         {
             if (!_DoublePrefs.ContainsKey(name))
                 _DoublePrefs[name] = value;
         }
 
+        /// <summary>
+        /// Sets the default value for a given boolean preference. Only applies
+        /// if a value has not already been set.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public void SetDefaultValue(string name, bool value)
         {
             if (!_BooleanPrefs.ContainsKey(name))

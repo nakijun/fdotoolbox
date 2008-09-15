@@ -25,6 +25,9 @@ using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// Defines options for converting a ADO.net DataTable to a FDO flat-file data source
+    /// </summary>
     public class DataTableConversionOptions
     {
         private FdoDataTable _Table;

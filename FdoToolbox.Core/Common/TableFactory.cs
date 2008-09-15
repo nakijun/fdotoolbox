@@ -27,8 +27,16 @@ using OSGeo.FDO.Commands.Feature;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// Utility class to convert FDO Class Definitions to FdoDataTable objects
+    /// </summary>
     public sealed class TableFactory
     {
+        /// <summary>
+        /// Creates a FdoDataTable object from a FDO Class Definition
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <returns></returns>
         public static FdoDataTable CreateTable(ClassDefinition classDef)
         {
             switch (classDef.ClassType)
@@ -42,6 +50,11 @@ namespace FdoToolbox.Core.Common
             }
         }
 
+        /// <summary>
+        /// Creates a FdoDataTable object from a FDO Feature Reader
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
         public static FdoDataTable CreateTable(IFeatureReader reader)
         {
             FdoDataTable table = CreateTable(reader.GetClassDefinition());

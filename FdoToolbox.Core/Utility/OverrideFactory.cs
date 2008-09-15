@@ -34,6 +34,11 @@ namespace FdoToolbox.Core.Utility
 
         private static Dictionary<string, Type> _ClassNameOverrides = new Dictionary<string, Type>();
 
+        /// <summary>
+        /// Registers an override class to copy spatial contexts
+        /// </summary>
+        /// <param name="providerName"></param>
+        /// <param name="overrideType"></param>
         public static void RegisterCopySpatialContextOverride(string providerName, Type overrideType)
         {
             if(!Array.Exists<Type>(overrideType.GetInterfaces(), delegate(Type t) { return t == typeof(ICopySpatialContextOverride); }))
@@ -42,6 +47,11 @@ namespace FdoToolbox.Core.Utility
             _CopySpatialContextOverrides[providerName] = overrideType;
         }
 
+        /// <summary>
+        /// Registers an override class to handle class names
+        /// </summary>
+        /// <param name="providerName"></param>
+        /// <param name="overrideType"></param>
         public static void RegisterClassNameOverride(string providerName, Type overrideType)
         {
             if (!Array.Exists<Type>(overrideType.GetInterfaces(), delegate(Type t) { return t == typeof(IClassNameOverride); }))
@@ -50,6 +60,11 @@ namespace FdoToolbox.Core.Utility
             _ClassNameOverrides[providerName] = overrideType;
         }
 
+        /// <summary>
+        /// Gets the registered override object
+        /// </summary>
+        /// <param name="targetConn"></param>
+        /// <returns></returns>
         public static ICopySpatialContextOverride GetCopySpatialContextOverride(IConnection targetConn)
         {
             string providerName = targetConn.ConnectionInfo.ProviderName;
@@ -60,6 +75,11 @@ namespace FdoToolbox.Core.Utility
             return null;
         }
 
+        /// <summary>
+        /// Gets the registered override object
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <returns></returns>
         public static IClassNameOverride GetClassNameOverride(IConnection conn)
         {
             string providerName = conn.ConnectionInfo.ProviderName;
@@ -70,6 +90,9 @@ namespace FdoToolbox.Core.Utility
             return null;
         }
 
+        /// <summary>
+        /// Initialize with the default overrides
+        /// </summary>
         public static void Initialize()
         {
             RegisterClassNameOverride("OSGeo.KingOracle", typeof(OracleClassNameOverride));

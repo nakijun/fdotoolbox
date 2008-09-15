@@ -30,6 +30,10 @@ namespace FdoToolbox.Core.Commands
     /// </summary>
     public abstract class ConsoleCommand : IConsoleCommand
     {
+        /// <summary>
+        /// Executes the command
+        /// </summary>
+        /// <returns>The CommandStatus value</returns>
         public abstract int Execute();
 
         private bool _IsTestOnly;
@@ -56,48 +60,85 @@ namespace FdoToolbox.Core.Commands
             set { _IsSilent = value; }
         }
 
+        /// <summary>
+        /// Writes a newline-terminated line to the application console
+        /// </summary>
+        /// <param name="str"></param>
         protected void WriteLine(string str)
         {
             if (!IsSilent)
                 AppConsole.WriteLine(str);
         }
 
+        /// <summary>
+        /// Writes a line to the application console
+        /// </summary>
+        /// <param name="str"></param>
         protected void Write(string str)
         {
             if (!IsSilent)
                 AppConsole.Write(str);
         }
 
+        /// <summary>
+        /// Writes a newline-terminated line to the application console
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         protected void WriteLine(string format, params object[] args)
         {
             if (!IsSilent)
                 AppConsole.WriteLine(format, args);
         }
 
+        /// <summary>
+        /// Writes a line to the application console
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         protected void Write(string format, params object[] args)
         {
             if (!IsSilent)
                 AppConsole.Write(format, args);
         }
 
+        /// <summary>
+        /// Writes an exception to the application console
+        /// </summary>
+        /// <param name="ex"></param>
         protected void WriteException(Exception ex)
         {
             if (!IsSilent)
                 AppConsole.WriteException(ex);
         }
 
+        /// <summary>
+        /// Writes an error to the application console
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         protected void WriteError(string format, params object[] args)
         {
             if (!IsSilent)
                 AppConsole.Err.WriteLine(format, args);
         }
 
+        /// <summary>
+        /// Writes an error to the application console
+        /// </summary>
+        /// <param name="str"></param>
         protected void WriteError(string str)
         {
             if (!IsSilent)
                 AppConsole.Err.WriteLine(str);
         }
 
+        /// <summary>
+        /// Repeats a string for a given number of iterations
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="iterations"></param>
+        /// <returns></returns>
         protected static string RepeatString(string str, int iterations)
         {
             string result = "";

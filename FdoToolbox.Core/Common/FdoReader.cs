@@ -25,6 +25,11 @@ using OSGeo.FDO.Commands.SQL;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// Base class for FDO reader wrapper classes (except FdoSqlReader) provides base functionality
+    /// of all derived classes.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class FdoReader<T> : IReader, FdoToolbox.Core.Common.IFdoReader where T : IReader
     {
         protected T _internalReader;

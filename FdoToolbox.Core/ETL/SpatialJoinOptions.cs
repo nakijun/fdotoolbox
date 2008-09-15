@@ -24,10 +24,16 @@ using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// Defines options for merging a Database table with a FDO feature class
+    /// </summary>
     public class SpatialJoinOptions
     {
         private FdoConnection _Target;
 
+        /// <summary>
+        /// The target connection (where the join results will be written to)
+        /// </summary>
         public FdoConnection Target
         {
             get { return _Target; }
@@ -35,6 +41,9 @@ namespace FdoToolbox.Core.ETL
 
         private FdoConnection _PrimarySource;
 
+        /// <summary>
+        /// The primary FDO connection
+        /// </summary>
         public FdoConnection PrimarySource
         {
             get { return _PrimarySource; }
@@ -42,6 +51,9 @@ namespace FdoToolbox.Core.ETL
 
         private DatabaseConnection _SecondarySource;
 
+        /// <summary>
+        /// The secondary database connection
+        /// </summary>
         public DatabaseConnection SecondarySource
         {
             get { return _SecondarySource; }
@@ -49,6 +61,9 @@ namespace FdoToolbox.Core.ETL
 
         private SpatialJoinType _JoinType;
 
+        /// <summary>
+        /// The type of join to perform
+        /// </summary>
         public SpatialJoinType JoinType
         {
             get { return _JoinType; }
@@ -57,6 +72,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _TargetSchema;
 
+        /// <summary>
+        /// The feature schema to write the join results to
+        /// </summary>
         public string TargetSchema
         {
             get { return _TargetSchema; }
@@ -64,6 +82,10 @@ namespace FdoToolbox.Core.ETL
 
         private string _TargetClassName;
 
+        /// <summary>
+        /// The feature class to write the join results to. This class must not already
+        /// exist, as it will be created during the join process.
+        /// </summary>
         public string TargetClassName
         {
             get { return _TargetClassName; }
@@ -82,6 +104,10 @@ namespace FdoToolbox.Core.ETL
 
         private string _PrimaryPrefix;
 
+        /// <summary>
+        /// The prefix that will be prepended to each primary property (to avoid 
+        /// name collisions with secondary columns)
+        /// </summary>
         public string PrimaryPrefix
         {
             get { return _PrimaryPrefix; }
@@ -90,12 +116,22 @@ namespace FdoToolbox.Core.ETL
 
         private string _SecondaryPrefix;
 
+        /// <summary>
+        /// The prefix that will be prepended to each secondary property (to avoid
+        /// name collisions with primary properties)
+        /// </summary>
         public string SecondaryPrefix
         {
             get { return _SecondaryPrefix; }
             set { _SecondaryPrefix = value; }
         }
 
+        /// <summary>
+        /// Sets the primary source
+        /// </summary>
+        /// <param name="connInfo"></param>
+        /// <param name="schemaName"></param>
+        /// <param name="className"></param>
         public void SetPrimary(FdoConnection connInfo, string schemaName, string className)
         {
             _PrimarySource = connInfo;
@@ -103,12 +139,23 @@ namespace FdoToolbox.Core.ETL
             _ClassName = className;
         }
 
+        /// <summary>
+        /// Sets the secondary source
+        /// </summary>
+        /// <param name="connInfo"></param>
+        /// <param name="tableName"></param>
         public void SetSecondary(DatabaseConnection connInfo, string tableName)
         {
             _SecondarySource = connInfo;
             _TableName = tableName;
         }
 
+        /// <summary>
+        /// Sets the target where join results will be written to
+        /// </summary>
+        /// <param name="connInfo"></param>
+        /// <param name="schemaName"></param>
+        /// <param name="className"></param>
         public void SetTarget(FdoConnection connInfo, string schemaName, string className)
         {
             _Target = connInfo;
@@ -124,6 +171,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _SchemaName;
 
+        /// <summary>
+        /// The primary feature schema
+        /// </summary>
         public string SchemaName
         {
             get { return _SchemaName; }
@@ -131,6 +181,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _ClassName;
 
+        /// <summary>
+        /// The primary feature class
+        /// </summary>
         public string ClassName
         {
             get { return _ClassName; }
@@ -138,47 +191,87 @@ namespace FdoToolbox.Core.ETL
 
         private string _TableName;
 
+        /// <summary>
+        /// The secondary database table
+        /// </summary>
         public string TableName
         {
             get { return _TableName; }
         }
 
+        /// <summary>
+        /// Gets the column to join on
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public string GetMatchingColumn(string propertyName)
         {
             return _JoinedPairs[propertyName];
         }
 
+        /// <summary>
+        /// Adds a primary/secondary name pair that defines what columns
+        /// and properties will be joined.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <param name="column"></param>
         public void AddJoinPair(string propertyName, string column)
         {
             _JoinedPairs[propertyName] = column;
         }
 
+        /// <summary>
+        /// Adds a secondary column to the join output
+        /// </summary>
+        /// <param name="columnName"></param>
         public void AddColumn(string columnName)
         {
             _ColumnList.Add(columnName);
         }
 
+        /// <summary>
+        /// Adds a primary property to the join output
+        /// </summary>
+        /// <param name="propertyName"></param>
         public void AddProperty(string propertyName)
         {
             _PropertyList.Add(propertyName);
         }
 
+        /// <summary>
+        /// Gets the primary properties that are to be part of the 
+        /// join output
+        /// </summary>
+        /// <returns></returns>
         public string[] GetPropertyNames()
         {
             return _PropertyList.ToArray();
         }
 
+        /// <summary>
+        /// Gets the secondary columns that are to be part of the 
+        /// join output
+        /// </summary>
+        /// <returns></returns>
         public string[] GetColumnNames()
         {
             return _ColumnList.ToArray();
         }
 
+        /// <summary>
+        /// Gets the secondary columns that are to be joined on
+        /// </summary>
+        /// <returns></returns>
         public string[] GetJoinedColumns()
         {
             List<string> cols = new List<string>(_JoinedPairs.Values);
             return cols.ToArray();
         }
 
+        /// <summary>
+        /// Gets the primary properties that are to be joined on
+        /// </summary>
+        /// <returns></returns>
         public string[] GetJoinedProperties()
         {
             List<string> properties = new List<string>(_JoinedPairs.Keys);
@@ -187,6 +280,9 @@ namespace FdoToolbox.Core.ETL
 
         private SpatialJoinCardinality _Cardinaltiy;
 
+        /// <summary>
+        /// The cardinality of the join results
+        /// </summary>
         public SpatialJoinCardinality Cardinality
         {
             get { return _Cardinaltiy; }
