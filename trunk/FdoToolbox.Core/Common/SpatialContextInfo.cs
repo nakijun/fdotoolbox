@@ -33,6 +33,9 @@ namespace FdoToolbox.Core
     {
         private string _name;
 
+        /// <summary>
+        /// The name of the spatial context
+        /// </summary>
         [DisplayName("Name")]
         public string Name
         {
@@ -42,6 +45,9 @@ namespace FdoToolbox.Core
 
         private bool _IsActive;
 
+        /// <summary>
+        /// Determines if this spatial context is the active one
+        /// </summary>
         [DisplayName("Active")]
         public bool IsActive
         {
@@ -51,6 +57,9 @@ namespace FdoToolbox.Core
 
         private double _ZTolerance;
 
+        /// <summary>
+        /// The Z tolerance of this spatial context
+        /// </summary>
         [DisplayName("Z Tolerance")]
         public double ZTolerance
         {
@@ -60,6 +69,9 @@ namespace FdoToolbox.Core
 
         private double _XYTolerance;
 
+        /// <summary>
+        /// The X and Y tolerance of this spatial context
+        /// </summary>
         [DisplayName("X/Y Tolerance")]
         public double XYTolerance
         {
@@ -69,6 +81,9 @@ namespace FdoToolbox.Core
 
         private string _Description;
 
+        /// <summary>
+        /// The description of this spatial context
+        /// </summary>
         [DisplayName("Description")]
         public string Description
         {
@@ -78,6 +93,9 @@ namespace FdoToolbox.Core
 
         private string _CoordinateSystem;
 
+        /// <summary>
+        /// The coordinate system name of this spatial context
+        /// </summary>
         [DisplayName("Coordinate System")]
         public string CoordinateSystem
         {
@@ -87,6 +105,9 @@ namespace FdoToolbox.Core
 
         private SpatialContextExtentType _ExtentType;
 
+        /// <summary>
+        /// The type of extent for this spatial context
+        /// </summary>
         [DisplayName("Extent Type")]
         public SpatialContextExtentType ExtentType
         {
@@ -96,6 +117,9 @@ namespace FdoToolbox.Core
 
         private string _ExtentGeometryText;
 
+        /// <summary>
+        /// The FGF geometry text that defines this spatial context's extent.
+        /// </summary>
         [DisplayName("Extent Geometry")]
         public string ExtentGeometryText
         {
@@ -105,6 +129,9 @@ namespace FdoToolbox.Core
 
         private string _CoordinateSystemWkt;
 
+        /// <summary>
+        /// The WKT of this spatial context's coordinate system
+        /// </summary>
         [DisplayName("Coordinate System WKT")]
         public string CoordinateSystemWkt
         {

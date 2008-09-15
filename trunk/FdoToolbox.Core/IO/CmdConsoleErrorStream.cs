@@ -28,6 +28,9 @@ namespace FdoToolbox.Core.IO
     /// </summary>
     public class CmdConsoleErrorStream : IConsoleOutputStream
     {
+        /// <summary>
+        /// The color that written text will have
+        /// </summary>
         public System.Drawing.Color TextColor
         {
             get
@@ -42,6 +45,10 @@ namespace FdoToolbox.Core.IO
 
         private bool _timestamp;
 
+        /// <summary>
+        /// Determines if each console entry written is prefixed with the
+        /// current date and time.
+        /// </summary>
         public bool TimestampEntries
         {
             get
@@ -54,6 +61,10 @@ namespace FdoToolbox.Core.IO
             }
         }
 
+        /// <summary>
+        /// Writes a line to this stream
+        /// </summary>
+        /// <param name="s"></param>
         public void Write(string s)
         {
             string str = s;
@@ -68,6 +79,11 @@ namespace FdoToolbox.Core.IO
             Console.ForegroundColor = prevColor;
         }
 
+        /// <summary>
+        /// Writes a line to this stream
+        /// </summary>
+        /// <param name="fmt"></param>
+        /// <param name="args"></param>
         public void Write(string fmt, params object[] args)
         {
             string str = fmt;
@@ -82,6 +98,10 @@ namespace FdoToolbox.Core.IO
             Console.ForegroundColor = prevColor;
         }
 
+        /// <summary>
+        /// Writes a line (newline-terminated) to this stream
+        /// </summary>
+        /// <param name="s"></param>
         public void WriteLine(string s)
         {
             string str = s;
@@ -96,6 +116,11 @@ namespace FdoToolbox.Core.IO
             Console.ForegroundColor = prevColor;
         }
 
+        /// <summary>
+        /// Writes a line (newline-terminated) to this stream
+        /// </summary>
+        /// <param name="fmt"></param>
+        /// <param name="args"></param>
         public void WriteLine(string fmt, params object[] args)
         {
             string str = fmt;

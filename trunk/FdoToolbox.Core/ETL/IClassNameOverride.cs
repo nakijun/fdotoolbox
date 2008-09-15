@@ -23,6 +23,9 @@ using System.Text;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// Defines a custom override method to give a the correct class name.
+    /// </summary>
     public interface IClassNameOverride
     {
         string GetClassName(string fullName);

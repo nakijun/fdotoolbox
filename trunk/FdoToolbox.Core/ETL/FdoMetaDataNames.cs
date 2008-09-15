@@ -25,6 +25,9 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// FDO Metadata utility class
+    /// </summary>
     public sealed class FdoMetaDataNames
     {
         private FdoMetaDataNames() { }

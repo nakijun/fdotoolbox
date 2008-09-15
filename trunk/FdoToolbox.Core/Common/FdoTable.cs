@@ -25,6 +25,9 @@ using System.Data;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// The DataTable equivalent of a FDO non-feature class.
+    /// </summary>
     public class FdoTable : FdoDataTable
     {
         public FdoTable(string name, string description) : base(name, description) { }

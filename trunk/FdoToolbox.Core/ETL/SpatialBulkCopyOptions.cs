@@ -136,6 +136,9 @@ namespace FdoToolbox.Core.ETL
 
         private string _LogPath;
 
+        /// <summary>
+        /// The path where error logs will be written to
+        /// </summary>
         public string LogPath
         {
             get { return _LogPath; }

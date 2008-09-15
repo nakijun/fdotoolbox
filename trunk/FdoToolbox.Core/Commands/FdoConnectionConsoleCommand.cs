@@ -34,11 +34,17 @@ namespace FdoToolbox.Core.Commands
         private string _provider;
         private string _connStr;
 
+        /// <summary>
+        /// The FDO provider for this command
+        /// </summary>
         public string Provider
         {
             get { return _provider; }
         }
 
+        /// <summary>
+        /// The connection string for this command
+        /// </summary>
         public string ConnectionString
         {
             get { return _connStr; }
@@ -50,6 +56,10 @@ namespace FdoToolbox.Core.Commands
             _connStr = connStr;
         }
 
+        /// <summary>
+        /// Creates a new FDO connection
+        /// </summary>
+        /// <returns></returns>
         protected IConnection CreateConnection()
         {
             IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(_provider);

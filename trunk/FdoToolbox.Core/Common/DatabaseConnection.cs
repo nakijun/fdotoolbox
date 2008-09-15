@@ -8,6 +8,9 @@ using System.Data.OleDb;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// OLEDB database connection wrapper class
+    /// </summary>
     public class DatabaseConnection
     {
         private string _Name;

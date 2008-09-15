@@ -23,6 +23,9 @@ using System.Text;
 
 namespace FdoToolbox.Core.Commands
 {
+    /// <summary>
+    /// Status codes that can be returned by any console application
+    /// </summary>
     public enum CommandStatus : int
     {
         E_OK = 0,

@@ -26,7 +26,8 @@ using OSGeo.FDO.Schema;
 namespace FdoToolbox.Core.ETL
 {
     /// <summary>
-    /// Source Class Copy options
+    /// Defines options for copying a source class to a target class in a
+    /// bulk copy operation.
     /// </summary>
     public class ClassCopyOptions
     {

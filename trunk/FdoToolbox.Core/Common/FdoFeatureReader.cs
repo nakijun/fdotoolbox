@@ -25,6 +25,10 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// FDO reader wrapper class. Wraps the FDO IFeatureReader interface and
+    /// the ADO.net IDataReader interface
+    /// </summary>
     public class FdoFeatureReader : FdoReader<IFeatureReader>, IFeatureReader
     {
         private ClassDefinition _classDefinition;

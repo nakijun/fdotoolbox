@@ -24,6 +24,9 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// FDO Data Type comparer class
+    /// </summary>
     public class DataTypeComparer : Comparer<DataType>
     {
         public override int Compare(DataType x, DataType y)

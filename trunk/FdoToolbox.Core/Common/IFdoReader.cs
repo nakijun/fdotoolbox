@@ -21,7 +21,7 @@ using System;
 namespace FdoToolbox.Core.Common
 {
     /// <summary>
-    /// A "bridge" interface that all fdo reader adapter classes implement
+    /// A "bridge" interface that all fdo reader wrapper classes implement
     /// </summary>
     public interface IFdoReader : System.Data.IDataReader
     {

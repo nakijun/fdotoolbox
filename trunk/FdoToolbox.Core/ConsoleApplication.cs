@@ -96,6 +96,11 @@ namespace FdoToolbox.Core
             return MyAssembly;
         }
 
+        /// <summary>
+        /// Throws an ArgumentException if the given parameter value is empty
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="parameter"></param>
         protected static void ThrowIfEmpty(string value, string parameter)
         {
             if (string.IsNullOrEmpty(value))
@@ -239,6 +244,10 @@ namespace FdoToolbox.Core
             return false;
         }
 
+        /// <summary>
+        /// Checks if the default FDO path is valid. If not the user will be asked to 
+        /// enter a new FDO path. If this is valid, it will be set as the default FDO path
+        /// </summary>
         protected override void CheckFdoPath()
         {
             string fdoPath = this.Preferences.GetStringPref(PreferenceNames.PREF_STR_FDO_HOME);

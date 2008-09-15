@@ -30,10 +30,16 @@ using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// A task that copies data from a database table to a FDO point feature class
+    /// </summary>
     public class DbToPointCopyTask : TaskBase
     {
         private DbToPointCopyOptions _Options;
 
+        /// <summary>
+        /// The copy options
+        /// </summary>
         public DbToPointCopyOptions Options
         {
             get { return _Options; }

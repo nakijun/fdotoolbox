@@ -24,6 +24,9 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// Error object for an incompatible feature schema
+    /// </summary>
     public class IncompatibleSchema
     {
         private string _Name;

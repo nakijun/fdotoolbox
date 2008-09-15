@@ -25,6 +25,10 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// Defines a method to override the copying of spatial contexts during
+    /// a bulk copy operation.
+    /// </summary>
     public interface ICopySpatialContextOverride
     {
         void CopySpatialContexts(IConnection source, IConnection target, ReadOnlyCollection<string> spatialContextNames);
