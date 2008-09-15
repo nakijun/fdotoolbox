@@ -61,7 +61,7 @@ namespace FdoToolbox.Lib.Controls
 
         private FeatureService _Service;
 
-        public SpatialContextCtl(FdoConnectionInfo conn, string key)
+        public SpatialContextCtl(FdoConnection conn, string key)
             : base(conn, key)
         {
             InitializeComponent();

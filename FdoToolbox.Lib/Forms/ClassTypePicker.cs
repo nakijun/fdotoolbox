@@ -86,7 +86,7 @@ namespace FdoToolbox.Lib.Forms
             }
         }
 
-        public static ClassType? GetClassType(FdoConnectionInfo connInfo)
+        public static ClassType? GetClassType(FdoConnection connInfo)
         {
             ClassTypePicker diag = new ClassTypePicker(connInfo.InternalConnection.SchemaCapabilities.ClassTypes);
             if (diag.ShowDialog() == DialogResult.OK)

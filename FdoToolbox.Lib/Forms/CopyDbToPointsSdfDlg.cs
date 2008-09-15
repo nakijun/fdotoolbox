@@ -34,7 +34,7 @@ namespace FdoToolbox.Lib.Forms
 {
     public partial class CopyDbToPointsSdfDlg : Form
     {
-        private DbConnectionInfo _source;
+        private DatabaseConnection _source;
 
         internal CopyDbToPointsSdfDlg()
         {
@@ -42,7 +42,7 @@ namespace FdoToolbox.Lib.Forms
         }
 
         public CopyDbToPointsSdfDlg(
-            DbConnectionInfo source, 
+            DatabaseConnection source, 
             string db,
             string table)
             : this()

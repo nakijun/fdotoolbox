@@ -27,9 +27,9 @@ namespace FdoToolbox.Lib
     public interface IDbConnectionManager : IDisposable
     {
         string CreateUniqueName();
-        void AddConnection(DbConnectionInfo conn);
+        void AddConnection(DatabaseConnection conn);
         void RemoveConnection(string name);
-        DbConnectionInfo GetConnection(string name);
+        DatabaseConnection GetConnection(string name);
         ICollection<string> GetConnectionNames();
         void RenameConnection(string oldName, string newName);
         bool CanRenameConnection(string oldName, string newName, ref string reason);

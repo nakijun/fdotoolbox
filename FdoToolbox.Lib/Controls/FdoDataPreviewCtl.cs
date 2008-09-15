@@ -60,7 +60,7 @@ namespace FdoToolbox.Lib.Controls
             InitializeComponent();
         }
 
-        public FdoDataPreviewCtl(FdoConnectionInfo conn, string key)
+        public FdoDataPreviewCtl(FdoConnection conn, string key)
             : base(conn, key)
         {
             InitializeComponent();

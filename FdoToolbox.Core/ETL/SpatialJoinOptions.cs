@@ -26,23 +26,23 @@ namespace FdoToolbox.Core.ETL
 {
     public class SpatialJoinOptions
     {
-        private FdoConnectionInfo _Target;
+        private FdoConnection _Target;
 
-        public FdoConnectionInfo Target
+        public FdoConnection Target
         {
             get { return _Target; }
         }
 
-        private FdoConnectionInfo _PrimarySource;
+        private FdoConnection _PrimarySource;
 
-        public FdoConnectionInfo PrimarySource
+        public FdoConnection PrimarySource
         {
             get { return _PrimarySource; }
         }
 
-        private DbConnectionInfo _SecondarySource;
+        private DatabaseConnection _SecondarySource;
 
-        public DbConnectionInfo SecondarySource
+        public DatabaseConnection SecondarySource
         {
             get { return _SecondarySource; }
         }
@@ -96,20 +96,20 @@ namespace FdoToolbox.Core.ETL
             set { _SecondaryPrefix = value; }
         }
 
-        public void SetPrimary(FdoConnectionInfo connInfo, string schemaName, string className)
+        public void SetPrimary(FdoConnection connInfo, string schemaName, string className)
         {
             _PrimarySource = connInfo;
             _SchemaName = schemaName;
             _ClassName = className;
         }
 
-        public void SetSecondary(DbConnectionInfo connInfo, string tableName)
+        public void SetSecondary(DatabaseConnection connInfo, string tableName)
         {
             _SecondarySource = connInfo;
             _TableName = tableName;
         }
 
-        public void SetTarget(FdoConnectionInfo connInfo, string schemaName, string className)
+        public void SetTarget(FdoConnection connInfo, string schemaName, string className)
         {
             _Target = connInfo;
             _TargetSchema = schemaName;

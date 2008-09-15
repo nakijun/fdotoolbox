@@ -30,7 +30,7 @@ namespace FdoToolbox.Lib.Controls
 {
     public partial class FdoConnectionBoundControl : BaseDocumentCtl, IFdoConnectionBoundCtl
     {
-        protected FdoConnectionInfo _BoundConnection;
+        protected FdoConnection _BoundConnection;
 
         protected string _Key;
 
@@ -39,14 +39,14 @@ namespace FdoToolbox.Lib.Controls
             InitializeComponent();
         }
 
-        public FdoConnectionBoundControl(FdoConnectionInfo connInfo, string key)
+        public FdoConnectionBoundControl(FdoConnection connInfo, string key)
             : this()
         {
             _BoundConnection = connInfo;
             _Key = key;
         }
 
-        public FdoConnectionInfo BoundConnection
+        public FdoConnection BoundConnection
         {
             get { return _BoundConnection; }
         }

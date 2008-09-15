@@ -32,7 +32,7 @@ namespace FdoToolbox.Lib
         string CreateUniqueName();
         void AddConnection(string name, IConnection conn);
         void RemoveConnection(string name);
-        FdoConnectionInfo GetConnection(string name);
+        FdoConnection GetConnection(string name);
         ICollection<string> GetConnectionNames();
         void RenameConnection(string oldName, string newName);
         bool CanRenameConnection(string oldName, string newName, ref string reason);

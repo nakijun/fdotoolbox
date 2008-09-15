@@ -40,7 +40,7 @@ namespace FdoToolbox.Lib.Forms
             InitializeComponent();
         }
 
-        public MultiClassPicker(FdoConnectionInfo connInfo)
+        public MultiClassPicker(FdoConnection connInfo)
             : this()
         {
             FeatureService service = connInfo.CreateFeatureService();
@@ -80,7 +80,7 @@ namespace FdoToolbox.Lib.Forms
             return list.AsReadOnly();
         }
 
-        public static ReadOnlyCollection<ClassDefinition> GetClasses(string title, string prompt, FdoConnectionInfo connInfo)
+        public static ReadOnlyCollection<ClassDefinition> GetClasses(string title, string prompt, FdoConnection connInfo)
         {
             MultiClassPicker diag = new MultiClassPicker(connInfo);
             diag.Text = title;

@@ -11,7 +11,7 @@ namespace FdoToolbox.Lib.Controls
 {
     public partial class DbConnectionBoundCtl : BaseDocumentCtl
     {
-        protected DbConnectionInfo _BoundConnection;
+        protected DatabaseConnection _BoundConnection;
 
         protected string _Key;
 
@@ -20,14 +20,14 @@ namespace FdoToolbox.Lib.Controls
             InitializeComponent();
         }
 
-        public DbConnectionBoundCtl(DbConnectionInfo connInfo, string key)
+        public DbConnectionBoundCtl(DatabaseConnection connInfo, string key)
             : this()
         {
             _BoundConnection = connInfo;
             _Key = key;
         }
 
-        public DbConnectionInfo BoundConnection
+        public DatabaseConnection BoundConnection
         {
             get { return _BoundConnection; }
         }

@@ -160,7 +160,7 @@ namespace FdoToolbox.Lib.Modules
                     classDef.Name = className;
                     schema.Classes.Add(classDef);
                     //Use a dummy name for the connection
-                    FdoConnectionInfo connInfo = new FdoConnectionInfo(conn.GetHashCode().ToString(), conn);
+                    FdoConnection connInfo = new FdoConnection(conn.GetHashCode().ToString(), conn);
                     ClassDefCtl ctl = new ClassDefCtl(classDef, connInfo);
                     Form frm = FormFactory.CreateFormForControl(ctl);
                     if (frm.ShowDialog() == DialogResult.OK)

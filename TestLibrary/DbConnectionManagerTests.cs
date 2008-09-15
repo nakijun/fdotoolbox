@@ -32,7 +32,7 @@ using FdoToolbox.Lib.ClientServices;
 
 namespace FdoToolbox.Tests
 {
-    public class MockDbConnectionInfo : DbConnectionInfo
+    public class MockDbConnectionInfo : DatabaseConnection
     {
         public MockDbConnectionInfo(string name, OleDbConnection conn)
             : base()
@@ -61,8 +61,8 @@ namespace FdoToolbox.Tests
             IDbConnectionManager mgr = new DbConnectionManager();
             using (mgr)
             {
-                DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
-                DbConnectionInfo conn2 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
+                DatabaseConnection conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
+                DatabaseConnection conn2 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
 
                 mgr.AddConnection(conn1);
                 mgr.AddConnection(conn2);
@@ -80,8 +80,8 @@ namespace FdoToolbox.Tests
                     Assert.AreNotEqual(e.OldName, e.NewName);
                 };
 
-                DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
-                DbConnectionInfo conn2 = new MockDbConnectionInfo("Conn2", CreateOleDbConnection());
+                DatabaseConnection conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
+                DatabaseConnection conn2 = new MockDbConnectionInfo("Conn2", CreateOleDbConnection());
 
                 mgr.AddConnection(conn1);
                 mgr.AddConnection(conn2);
@@ -107,8 +107,8 @@ namespace FdoToolbox.Tests
                     Assert.Fail("Rename should have failed");
                 };
 
-                DbConnectionInfo conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
-                DbConnectionInfo conn2 = new MockDbConnectionInfo("Conn2", CreateOleDbConnection());
+                DatabaseConnection conn1 = new MockDbConnectionInfo("Conn1", CreateOleDbConnection());
+                DatabaseConnection conn2 = new MockDbConnectionInfo("Conn2", CreateOleDbConnection());
 
                 mgr.AddConnection(conn1);
                 mgr.AddConnection(conn2);

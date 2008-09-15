@@ -43,7 +43,7 @@ namespace FdoToolbox.Core.IO
         /// </summary>
         /// <param name="file">The connection settings file</param>
         /// <returns>The spatial connection</returns>
-        public static DbConnectionInfo LoadConnection(string file)
+        public static DatabaseConnection LoadConnection(string file)
         {
             DbConnection c = null;
             XmlSerializer serializer = new XmlSerializer(typeof(DbConnection));
@@ -51,7 +51,7 @@ namespace FdoToolbox.Core.IO
             {
                 c = (DbConnection)serializer.Deserialize(reader);
             }
-            return new DbConnectionInfo(c.Name, new OleDbConnection(c.ConnectionString));
+            return new DatabaseConnection(c.Name, new OleDbConnection(c.ConnectionString));
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace FdoToolbox.Core.IO
         /// </summary>
         /// <param name="cinfo">The spatial connection</param>
         /// <param name="file">The file to save it to</param>
-        public static void SaveConnection(DbConnectionInfo cinfo, string file)
+        public static void SaveConnection(DatabaseConnection cinfo, string file)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(DbConnection));
             using (XmlTextWriter writer = new XmlTextWriter(file, Encoding.UTF8))

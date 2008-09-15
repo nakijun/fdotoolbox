@@ -56,7 +56,7 @@ namespace FdoToolbox.Lib.Controls
         private FeatureSchemaCollection _Schemas;
         private FeatureService _Service;
 
-        public SchemaMgrCtl(FdoConnectionInfo conn, string key)
+        public SchemaMgrCtl(FdoConnection conn, string key)
             : base(conn, key)
         {
             InitializeComponent();

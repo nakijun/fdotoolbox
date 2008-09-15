@@ -35,9 +35,9 @@ namespace FdoToolbox.Lib.Forms
     {
         private GeometricPropertyDefinition _Definition;
 
-        private FdoConnectionInfo _BoundConnection;
+        private FdoConnection _BoundConnection;
 
-        internal GeometryPropertyDefinitionDlg(FdoConnectionInfo conn)
+        internal GeometryPropertyDefinitionDlg(FdoConnection conn)
         {
             InitializeComponent();
             _BoundConnection = conn;
@@ -52,7 +52,7 @@ namespace FdoToolbox.Lib.Forms
             }
         }
 
-        internal GeometryPropertyDefinitionDlg(GeometricPropertyDefinition def, FdoConnectionInfo conn)
+        internal GeometryPropertyDefinitionDlg(GeometricPropertyDefinition def, FdoConnection conn)
             : this(conn)
         {
             _Definition = def;
@@ -92,7 +92,7 @@ namespace FdoToolbox.Lib.Forms
             }
         }
 
-        public static GeometricPropertyDefinition NewGeometryProperty(FdoConnectionInfo conn)
+        public static GeometricPropertyDefinition NewGeometryProperty(FdoConnection conn)
         {
             GeometryPropertyDefinitionDlg dlg = new GeometryPropertyDefinitionDlg(conn);
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -102,7 +102,7 @@ namespace FdoToolbox.Lib.Forms
             return null;
         }
 
-        public static void EditGeometryProperty(GeometricPropertyDefinition def, FdoConnectionInfo conn)
+        public static void EditGeometryProperty(GeometricPropertyDefinition def, FdoConnection conn)
         {
             GeometryPropertyDefinitionDlg dlg = new GeometryPropertyDefinitionDlg(def, conn);
             dlg.ShowDialog();

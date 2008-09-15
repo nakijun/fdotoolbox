@@ -45,7 +45,7 @@ namespace FdoToolbox.Lib
         /// underlying connection object
         /// </summary>
         /// <returns></returns>
-        FdoConnectionInfo GetSelectedSpatialConnection();
+        FdoConnection GetSelectedSpatialConnection();
 
         /// <summary>
         /// If a schema node is selected, returns the name of the
@@ -100,7 +100,7 @@ namespace FdoToolbox.Lib
         /// underlying connection object
         /// </summary>
         /// <returns></returns>
-        DbConnectionInfo GetSelectedDatabaseConnection();
+        DatabaseConnection GetSelectedDatabaseConnection();
 
         /// <summary>
         /// If the database node is selected, gets the name of the selected database

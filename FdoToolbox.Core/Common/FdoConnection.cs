@@ -28,14 +28,14 @@ namespace FdoToolbox.Core.Common
     /// <summary>
     /// FDO Connection wrapper class
     /// </summary>
-    public class FdoConnectionInfo : IDisposable
+    public class FdoConnection : IDisposable
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
         /// <param name="conn"></param>
-        public FdoConnectionInfo(string name, IConnection conn)
+        public FdoConnection(string name, IConnection conn)
         {
             this.Name = name;
             this.InternalConnection = conn;

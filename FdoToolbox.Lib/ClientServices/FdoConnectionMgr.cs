@@ -34,11 +34,11 @@ namespace FdoToolbox.Lib.ClientServices
     {
         private int counter;
 
-        private Dictionary<string, FdoConnectionInfo> _ConnectionDict;
+        private Dictionary<string, FdoConnection> _ConnectionDict;
 
         public FdoConnectionMgr() 
         {
-            _ConnectionDict = new Dictionary<string, FdoConnectionInfo>();
+            _ConnectionDict = new Dictionary<string, FdoConnection>();
         }
 
         public void AddConnection(string name, OSGeo.FDO.Connections.IConnection conn)
@@ -47,7 +47,7 @@ namespace FdoToolbox.Lib.ClientServices
                 throw new FdoConnectionException("Unable to add connection named " + name + " to the connection manager");
             if (conn.ConnectionState != ConnectionState.ConnectionState_Open)
                 conn.Open();
-            FdoConnectionInfo connInfo = new FdoConnectionInfo(name, conn);
+            FdoConnection connInfo = new FdoConnection(name, conn);
             _ConnectionDict.Add(name, connInfo);
             if (this.ConnectionAdded != null)
                 this.ConnectionAdded(this, new EventArgs<string>(name));
@@ -65,7 +65,7 @@ namespace FdoToolbox.Lib.ClientServices
                         return;
                 }
 
-                FdoConnectionInfo conn = _ConnectionDict[name];
+                FdoConnection conn = _ConnectionDict[name];
                 conn.Close();
                 _ConnectionDict.Remove(name);
                 conn.Dispose();
@@ -78,7 +78,7 @@ namespace FdoToolbox.Lib.ClientServices
             }
         }
 
-        public FdoConnectionInfo GetConnection(string name)
+        public FdoConnection GetConnection(string name)
         {
             if (_ConnectionDict.ContainsKey(name))
                 return _ConnectionDict[name];
@@ -125,7 +125,7 @@ namespace FdoToolbox.Lib.ClientServices
             if (_ConnectionDict.ContainsKey(newName))
                 throw new FdoConnectionException("Cannot rename connection " + oldName + " to " + newName + " as a connection of that name already exists");
 
-            FdoConnectionInfo conn = _ConnectionDict[oldName];
+            FdoConnection conn = _ConnectionDict[oldName];
             _ConnectionDict.Remove(oldName);
             _ConnectionDict.Add(newName, conn);
 

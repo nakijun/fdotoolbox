@@ -27,23 +27,23 @@ namespace FdoToolbox.Core.ETL
 {
     public class DbToPointCopyOptions
     {
-        private DbConnectionInfo _Source;
+        private DatabaseConnection _Source;
 
-        public DbConnectionInfo Source
+        public DatabaseConnection Source
         {
             get { return _Source; }
             set { _Source = value; }
         }
 
-        private FdoConnectionInfo _Target;
+        private FdoConnection _Target;
 
-        public FdoConnectionInfo Target
+        public FdoConnection Target
         {
             get { return _Target; }
             set { _Target = value; }
         }
 	
-        public DbToPointCopyOptions(DbConnectionInfo source, FdoConnectionInfo target)
+        public DbToPointCopyOptions(DatabaseConnection source, FdoConnection target)
         {
             this.Source = source;
             this.Target = target;

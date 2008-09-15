@@ -35,7 +35,7 @@ namespace FdoToolbox.Lib.Forms
 {
     public partial class CopyDbToPointsDlg : Form
     {
-        private DbConnectionInfo _source;
+        private DatabaseConnection _source;
 
         internal CopyDbToPointsDlg()
         {
@@ -43,7 +43,7 @@ namespace FdoToolbox.Lib.Forms
         }
 
         internal CopyDbToPointsDlg(
-            DbConnectionInfo source, 
+            DatabaseConnection source, 
             string db,
             string table)
             : this()
@@ -82,7 +82,7 @@ namespace FdoToolbox.Lib.Forms
 
         public DbToPointCopyOptions GetCopyOptions()
         {
-            FdoConnectionInfo spConnInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
+            FdoConnection spConnInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
             DbToPointCopyOptions options = new DbToPointCopyOptions(_source, spConnInfo);
             options.ClassName = txtClass.Text;
             options.Database = txtDatabase.Text;
@@ -101,7 +101,7 @@ namespace FdoToolbox.Lib.Forms
             return options;
         }
 
-        public static DbToPointCopyOptions GetCopyOptions(DbConnectionInfo source, string db, string table)
+        public static DbToPointCopyOptions GetCopyOptions(DatabaseConnection source, string db, string table)
         {
             CopyDbToPointsDlg diag = new CopyDbToPointsDlg(source, db, table);
             if (diag.ShowDialog() == DialogResult.OK)
@@ -136,7 +136,7 @@ namespace FdoToolbox.Lib.Forms
 
         private void cmbTargetConnection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FdoConnectionInfo conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
+            FdoConnection conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
             if (conn != null)
             {
                 using (FeatureService service = conn.CreateFeatureService())

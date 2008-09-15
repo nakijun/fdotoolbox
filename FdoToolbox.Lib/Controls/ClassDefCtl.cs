@@ -47,14 +47,14 @@ namespace FdoToolbox.Lib.Controls
 
         private FeatureSchema _ParentSchema;
 
-        private FdoConnectionInfo _BoundConnection;
+        private FdoConnection _BoundConnection;
 
-        public FdoConnectionInfo BoundConnection
+        public FdoConnection BoundConnection
         {
             get { return _BoundConnection; }
         }
 
-        public ClassDefCtl(ClassDefinition classDef, FdoConnectionInfo conn)
+        public ClassDefCtl(ClassDefinition classDef, FdoConnection conn)
         {
             InitializeComponent();
             _BoundConnection = conn;
@@ -64,7 +64,7 @@ namespace FdoToolbox.Lib.Controls
             ToggleUI();
         }
 
-        public ClassDefCtl(FeatureSchema schema, ClassType ctype, FdoConnectionInfo conn)
+        public ClassDefCtl(FeatureSchema schema, ClassType ctype, FdoConnection conn)
         {
             InitializeComponent();
             switch (ctype)
