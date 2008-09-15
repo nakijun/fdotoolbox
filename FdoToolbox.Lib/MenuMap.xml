@@ -48,6 +48,7 @@ DO NOT DELETE THIS FILE!!!
 	</Menu>
 	<Menu name="Help">
 		<Command name="help" />
+        <Command name="coreapihelp" />
 		<Command name="about" />
 	</Menu>
 </MenuMap>

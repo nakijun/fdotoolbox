@@ -1,4 +1,7 @@
 @echo off
+echo "Cleaning Temp doc directories"
+rd /S /Q Doc\doc
+rd /S /Q Doc\msdn-chm
 echo "Cleaning Output Directory"
 rd /S /Q out
 echo "Cleaning FdoInfo"
