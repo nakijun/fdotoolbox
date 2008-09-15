@@ -27,7 +27,7 @@ namespace FdoToolbox.Core.Common
         }
 
 #if TEST
-        public DbConnectionInfo() { }
+        public DatabaseConnection() { }
 #endif
         public DatabaseConnection(string name, OleDbConnection conn)
         {
