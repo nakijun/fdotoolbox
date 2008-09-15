@@ -530,7 +530,7 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
-        private void CopySpatialContexts(FdoConnectionInfo source, FdoConnectionInfo target)
+        private void CopySpatialContexts(FdoConnection source, FdoConnection target)
         {
             if (_Options.SourceSpatialContexts.Count == 0)
             {

@@ -26,8 +26,8 @@ using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Core
 {
-    public delegate void FdoConnectionLoadedEventHandler(EventArgs<FdoConnectionInfo> e);
-    public delegate void DbConnectionLoadedEventHandler(EventArgs<DbConnectionInfo> e);
+    public delegate void FdoConnectionLoadedEventHandler(EventArgs<FdoConnection> e);
+    public delegate void DbConnectionLoadedEventHandler(EventArgs<DatabaseConnection> e);
     public delegate void RemoveFdoConnectionEventHandler(EventArgs<string> e);
     public delegate void RemoveDbConnectionEventHandler(EventArgs<string> e);
     public delegate void AlertHandler(MessageEventArgs e);

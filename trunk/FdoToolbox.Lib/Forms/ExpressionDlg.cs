@@ -38,7 +38,7 @@ namespace FdoToolbox.Lib.Forms
 {
     public partial class ExpressionDlg : Form
     {
-        private FdoConnectionInfo _BoundConnection;
+        private FdoConnection _BoundConnection;
 
         private ClassDefinition _ClassDef;
 
@@ -51,7 +51,7 @@ namespace FdoToolbox.Lib.Forms
             _ExprMode = ExpressionMode.Filter;
         }
 
-        public ExpressionDlg(FdoConnectionInfo conn, ClassDefinition classDef, ExpressionMode mode)
+        public ExpressionDlg(FdoConnection conn, ClassDefinition classDef, ExpressionMode mode)
             : this()
         {
             _BoundConnection = conn;
@@ -59,7 +59,7 @@ namespace FdoToolbox.Lib.Forms
             _ExprMode = mode;
         }
 
-        public FdoConnectionInfo BoundConnection
+        public FdoConnection BoundConnection
         {
             get { return _BoundConnection; }
         }
@@ -450,7 +450,7 @@ namespace FdoToolbox.Lib.Forms
             }
         }
 
-        public static string EditExpression(FdoConnectionInfo conn, ClassDefinition classDef, string expr, ExpressionMode mode)
+        public static string EditExpression(FdoConnection conn, ClassDefinition classDef, string expr, ExpressionMode mode)
         {
             ExpressionDlg dlg = new ExpressionDlg(conn, classDef, mode);
             dlg.txtExpression.Text = expr;
@@ -461,7 +461,7 @@ namespace FdoToolbox.Lib.Forms
             return null;
         }
 
-        public static string NewExpression(FdoConnectionInfo conn, ClassDefinition classDef, ExpressionMode mode)
+        public static string NewExpression(FdoConnection conn, ClassDefinition classDef, ExpressionMode mode)
         {
             ExpressionDlg dlg = new ExpressionDlg(conn, classDef, mode);
             if (dlg.ShowDialog() == DialogResult.OK)

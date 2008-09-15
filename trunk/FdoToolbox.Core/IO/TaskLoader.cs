@@ -121,9 +121,9 @@ namespace FdoToolbox.Core.IO
                 IConnection targetConn = FeatureAccessManager.GetConnectionManager().CreateConnection(djt.Target.Provider);
                 targetConn.ConnectionString = djt.Target.ConnectionString;
 
-                FdoConnectionInfo priConnInfo = new FdoConnectionInfo(priName, priConn);
-                FdoConnectionInfo targetConnInfo = new FdoConnectionInfo(targetName, targetConn);
-                DbConnectionInfo secConnInfo = new DbConnectionInfo(secName, new OleDbConnection(djt.SecondarySource.ConnectionString));
+                FdoConnection priConnInfo = new FdoConnection(priName, priConn);
+                FdoConnection targetConnInfo = new FdoConnection(targetName, targetConn);
+                DatabaseConnection secConnInfo = new DatabaseConnection(secName, new OleDbConnection(djt.SecondarySource.ConnectionString));
 
                 if (consoleMode)
                 {
@@ -135,12 +135,12 @@ namespace FdoToolbox.Core.IO
                 {
                     if (FdoConnectionLoaded != null)
                     {
-                        FdoConnectionLoaded(new EventArgs<FdoConnectionInfo>(priConnInfo));
-                        FdoConnectionLoaded(new EventArgs<FdoConnectionInfo>(targetConnInfo));
+                        FdoConnectionLoaded(new EventArgs<FdoConnection>(priConnInfo));
+                        FdoConnectionLoaded(new EventArgs<FdoConnection>(targetConnInfo));
                     }
                     if (DbConnectionLoaded != null)
                     {
-                        DbConnectionLoaded(new EventArgs<DbConnectionInfo>(secConnInfo));
+                        DbConnectionLoaded(new EventArgs<DatabaseConnection>(secConnInfo));
                     }
                 }
 
@@ -282,18 +282,18 @@ namespace FdoToolbox.Core.IO
                 {
                     if (FdoConnectionLoaded != null)
                     {
-                        FdoConnectionInfo src = new FdoConnectionInfo(srcName, srcConn);
-                        FdoConnectionInfo dest = new FdoConnectionInfo(destName, destConn);
+                        FdoConnection src = new FdoConnection(srcName, srcConn);
+                        FdoConnection dest = new FdoConnection(destName, destConn);
 
-                        FdoConnectionLoaded(new EventArgs<FdoConnectionInfo>(src));
-                        FdoConnectionLoaded(new EventArgs<FdoConnectionInfo>(dest));
+                        FdoConnectionLoaded(new EventArgs<FdoConnection>(src));
+                        FdoConnectionLoaded(new EventArgs<FdoConnection>(dest));
                     }
                 }
 
                 string name = bcp.name;
 
-                FdoConnectionInfo srcConnInfo = new FdoConnectionInfo(srcName, srcConn);
-                FdoConnectionInfo destConnInfo = new FdoConnectionInfo(destName, destConn);
+                FdoConnection srcConnInfo = new FdoConnection(srcName, srcConn);
+                FdoConnection destConnInfo = new FdoConnection(destName, destConn);
 
                 SpatialBulkCopyOptions options = new SpatialBulkCopyOptions(srcConnInfo, destConnInfo);
                 options.SourceSchemaName = bcp.Source.Schema;

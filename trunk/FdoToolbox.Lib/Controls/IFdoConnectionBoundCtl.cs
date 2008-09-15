@@ -27,7 +27,7 @@ namespace FdoToolbox.Lib.Controls
 {
     public interface IFdoConnectionBoundCtl : IBaseDocumentCtl
     {
-        FdoConnectionInfo BoundConnection { get; }
+        FdoConnection BoundConnection { get; }
         void SetName(string name);
         string GetKey();
         void SetKey(string key);

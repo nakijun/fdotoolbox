@@ -164,7 +164,7 @@ namespace FdoToolbox.Lib.Controls
         private void cmbSrcConn_SelectedIndexChanged(object sender, EventArgs e)
         {
             string connName = cmbSrcConn.SelectedItem.ToString();
-            FdoConnectionInfo conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connName);
+            FdoConnection conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connName);
             FeatureService service = conn.CreateFeatureService();
             FeatureSchemaCollection schemas = service.DescribeSchema();
             if(schemas.Count == 0)
@@ -188,7 +188,7 @@ namespace FdoToolbox.Lib.Controls
         private void cmbDestConn_SelectedIndexChanged(object sender, EventArgs e)
         {
             string connName = cmbDestConn.SelectedItem.ToString();
-            FdoConnectionInfo conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connName);
+            FdoConnection conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connName);
             using (FeatureService service = conn.CreateFeatureService())
             {
                 FeatureSchemaCollection schemas = service.DescribeSchema();
@@ -282,7 +282,7 @@ namespace FdoToolbox.Lib.Controls
             string name = cmbSrcConn.SelectedItem.ToString();
             string schemaName = (cmbSrcSchema.SelectedItem as FeatureSchema).Name;
             string className = filterNode.Parent.Parent.Name;
-            FdoConnectionInfo connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(name);
+            FdoConnection connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(name);
             FeatureService service = connInfo.CreateFeatureService();
             ClassDefinition classDef = service.GetClassByName(schemaName, className);
             if (classDef != null)
@@ -615,8 +615,8 @@ namespace FdoToolbox.Lib.Controls
 
             string srcConnName = cmbSrcConn.SelectedItem.ToString();
             string destConnName = cmbDestConn.SelectedItem.ToString();
-            FdoConnectionInfo srcConn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(srcConnName);
-            FdoConnectionInfo destConn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(destConnName);
+            FdoConnection srcConn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(srcConnName);
+            FdoConnection destConn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(destConnName);
             if (!destConn.InternalConnection.ConnectionCapabilities.SupportsMultipleSpatialContexts())
             {
                 if (chkSourceContextList.CheckedItems.Count > 1)
@@ -756,7 +756,7 @@ namespace FdoToolbox.Lib.Controls
             if (chkCopySpatialContexts.Checked)
             {
                 string connName = cmbDestConn.SelectedItem.ToString();
-                FdoConnectionInfo conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connName);
+                FdoConnection conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connName);
                 if (!conn.InternalConnection.ConnectionCapabilities.SupportsMultipleSpatialContexts())
                 {
                     AppConsole.Alert("Warning", "The target connection does not support multiple spatial contexts\nSelect at most ONE spatial context from the list\nThe target spatial context and any data stored in that context will also be destroyed!");
@@ -767,7 +767,7 @@ namespace FdoToolbox.Lib.Controls
         private void DeleteBeforeCopyEnable_Click(object sender, EventArgs e)
         {
             string name = cmbDestConn.SelectedItem.ToString();
-            FdoConnectionInfo conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(name);
+            FdoConnection conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(name);
             using (FeatureService service = conn.CreateFeatureService())
             {
                 TreeNode delNode = mTreeView.SelectedNode;

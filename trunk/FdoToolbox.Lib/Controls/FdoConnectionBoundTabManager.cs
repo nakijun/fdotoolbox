@@ -85,7 +85,7 @@ namespace FdoToolbox.Lib.Controls
                 e.Cancel = !AppConsole.Confirm("Tabs still open", "There are tabs still open which rely on the connection you are about to close.\nIf you close the connection they will be closed too.\n\nClose connection?");
         }
 
-        public IFdoConnectionBoundCtl CreateTab(Type tabType, FdoConnectionInfo connInfo)
+        public IFdoConnectionBoundCtl CreateTab(Type tabType, FdoConnection connInfo)
         {
             IFdoConnectionBoundCtl control = null;
             if (!_ControlTypes.Contains(tabType))

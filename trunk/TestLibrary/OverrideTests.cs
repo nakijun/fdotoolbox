@@ -41,8 +41,8 @@ namespace FdoToolbox.Tests
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskMySql()
         {
-            FdoConnectionInfo source = new MockSdfConnection();
-            FdoConnectionInfo target = new MockMySqlConnection();
+            FdoConnection source = new MockSdfConnection();
+            FdoConnection target = new MockMySqlConnection();
 
             source.InternalConnection.Open();
             target.InternalConnection.Open();
@@ -57,8 +57,8 @@ namespace FdoToolbox.Tests
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskOracle()
         {
-            FdoConnectionInfo source = new MockOracleConnection();
-            FdoConnectionInfo target = new MockSdfConnection();
+            FdoConnection source = new MockOracleConnection();
+            FdoConnection target = new MockSdfConnection();
 
             source.InternalConnection.Open();
             target.InternalConnection.Open();
@@ -73,8 +73,8 @@ namespace FdoToolbox.Tests
         [Test(Description = "Test that the correct override is loaded")]
         public void TestLoadBcpTaskShp()
         {
-            FdoConnectionInfo source = new MockSdfConnection();
-            FdoConnectionInfo target = new MockShpConnection();
+            FdoConnection source = new MockSdfConnection();
+            FdoConnection target = new MockShpConnection();
 
             source.InternalConnection.Open();
             target.InternalConnection.Open();
@@ -87,7 +87,7 @@ namespace FdoToolbox.Tests
         }
     }
 
-    class MockSdfConnection : FdoConnectionInfo 
+    class MockSdfConnection : FdoConnection 
     {
         public MockSdfConnection()
             : base("Foo", null)
@@ -96,7 +96,7 @@ namespace FdoToolbox.Tests
         }
     }
 
-    class MockMySqlConnection : FdoConnectionInfo
+    class MockMySqlConnection : FdoConnection
     {
         public MockMySqlConnection()
             : base("Foo", null)
@@ -105,7 +105,7 @@ namespace FdoToolbox.Tests
         }
     }
 
-    class MockShpConnection : FdoConnectionInfo
+    class MockShpConnection : FdoConnection
     {
         public MockShpConnection()
             : base("Foo", null)
@@ -114,7 +114,7 @@ namespace FdoToolbox.Tests
         }
     }
 
-    class MockOracleConnection : FdoConnectionInfo
+    class MockOracleConnection : FdoConnection
     {
         public MockOracleConnection()
             : base("Foo", null)

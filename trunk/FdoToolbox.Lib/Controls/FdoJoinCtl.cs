@@ -107,14 +107,14 @@ namespace FdoToolbox.Lib.Controls
 
             SpatialJoinOptions options = new SpatialJoinOptions();
 
-            FdoConnectionInfo priConnInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(cmbPrimaryConnection.SelectedItem.ToString());
+            FdoConnection priConnInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(cmbPrimaryConnection.SelectedItem.ToString());
             string priSchema = (cmbPrimarySchema.SelectedItem as FeatureSchema).Name;
             string priClass = (cmbPrimaryClass.SelectedItem as ClassDefinition).Name;
 
-            DbConnectionInfo secConn = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(cmbSecondaryConnection.SelectedItem.ToString());
+            DatabaseConnection secConn = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(cmbSecondaryConnection.SelectedItem.ToString());
             string secTable = (cmbSecondaryTable.SelectedItem as TableInfo).Name;
 
-            FdoConnectionInfo tConnInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
+            FdoConnection tConnInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(cmbTargetConnection.SelectedItem.ToString());
             string tSchema = (cmbTargetSchema.SelectedItem as FeatureSchema).Name;
             string tClass = txtTargetClassName.Text;
 
@@ -210,7 +210,7 @@ namespace FdoToolbox.Lib.Controls
         private void cmbPrimaryConnection_SelectedIndexChanged(object sender, EventArgs e)
         {
             string name = cmbPrimaryConnection.SelectedItem.ToString();
-            FdoConnectionInfo conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(name);
+            FdoConnection conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(name);
             if (conn != null)
             {
                 using (FeatureService service = conn.CreateFeatureService())
@@ -223,7 +223,7 @@ namespace FdoToolbox.Lib.Controls
         private void cmbTargetConnection_SelectedIndexChanged(object sender, EventArgs e)
         {
             string name = cmbTargetConnection.SelectedItem.ToString();
-            FdoConnectionInfo conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(name);
+            FdoConnection conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(name);
             if (conn != null)
             {
                 using (FeatureService service = conn.CreateFeatureService())
@@ -236,7 +236,7 @@ namespace FdoToolbox.Lib.Controls
         private void cmbSecondaryConnection_SelectedIndexChanged(object sender, EventArgs e)
         {
             string name = cmbSecondaryConnection.SelectedItem.ToString();
-            DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
+            DatabaseConnection connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
             if (connInfo != null)
             {
                 cmbSecondaryTable.DataSource = connInfo.Database.Tables;

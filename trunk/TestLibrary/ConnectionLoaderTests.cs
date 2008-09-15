@@ -36,7 +36,7 @@ namespace FdoToolbox.Tests
         public void TestBadDbConnectionString()
         {
             string file = "DbConnBadConnectionString.dbconn";
-            DbConnectionInfo connInfo = DbConnLoader.LoadConnection(file);
+            DatabaseConnection connInfo = DbConnLoader.LoadConnection(file);
             using (connInfo.Connection) { }
         }
 
@@ -45,7 +45,7 @@ namespace FdoToolbox.Tests
         public void TestBadSpatialConnectionString()
         {
             string file = "SpatialConnBadConnectionString.conn";
-            FdoConnectionInfo connInfo = SpatialConnLoader.LoadConnection(file);
+            FdoConnection connInfo = SpatialConnLoader.LoadConnection(file);
             using (connInfo.InternalConnection) { }
         }
 
@@ -54,7 +54,7 @@ namespace FdoToolbox.Tests
         public void TestBadFdoProvider()
         {
             string file = "SpatialConnBadProvider.conn";
-            FdoConnectionInfo connInfo = SpatialConnLoader.LoadConnection(file);
+            FdoConnection connInfo = SpatialConnLoader.LoadConnection(file);
             using (connInfo.InternalConnection) { }
         }
     }

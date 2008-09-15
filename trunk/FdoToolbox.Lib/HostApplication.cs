@@ -153,12 +153,12 @@ namespace FdoToolbox.Lib
             return this.FdoConnectionManager.CreateUniqueName();
         }
 
-        void TaskLoader_FdoConnectionLoaded(EventArgs<FdoConnectionInfo> e)
+        void TaskLoader_FdoConnectionLoaded(EventArgs<FdoConnection> e)
         {
             this.FdoConnectionManager.AddConnection(e.Data.Name, e.Data.InternalConnection);
         }
 
-        void TaskLoader_DbConnectionLoaded(EventArgs<DbConnectionInfo> e)
+        void TaskLoader_DbConnectionLoaded(EventArgs<DatabaseConnection> e)
         {
             this.DatabaseConnectionManager.AddConnection(e.Data);
         }

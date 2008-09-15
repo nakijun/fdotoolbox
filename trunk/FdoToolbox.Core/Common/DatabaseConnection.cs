@@ -8,7 +8,7 @@ using System.Data.OleDb;
 
 namespace FdoToolbox.Core.Common
 {
-    public class DbConnectionInfo
+    public class DatabaseConnection
     {
         private string _Name;
 
@@ -29,7 +29,7 @@ namespace FdoToolbox.Core.Common
 #if TEST
         public DbConnectionInfo() { }
 #endif
-        public DbConnectionInfo(string name, OleDbConnection conn)
+        public DatabaseConnection(string name, OleDbConnection conn)
         {
             this.Name = name;
             this.Connection = conn;

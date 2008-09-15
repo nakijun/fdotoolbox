@@ -73,7 +73,7 @@ namespace FdoToolbox.Lib.ClientServices
                     {
                         Connection c = (Connection)connSerializer.Deserialize(reader);
                         //See if it exist already by name
-                        FdoConnectionInfo connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(c.Name);
+                        FdoConnection connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(c.Name);
                         if (connInfo != null)
                         {
                             //Connection we are about to load exists
@@ -99,7 +99,7 @@ namespace FdoToolbox.Lib.ClientServices
                     {
                         DbConnection c = (DbConnection)dbConnSerializer.Deserialize(reader);
                         //See if it exist already by name
-                        DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(c.Name);
+                        DatabaseConnection connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(c.Name);
                         if (connInfo != null)
                         {
                             //Connection we are about to load exists
@@ -110,7 +110,7 @@ namespace FdoToolbox.Lib.ClientServices
                             }
                         }
                         //Connection doesn't exist, so add it
-                        connInfo = new DbConnectionInfo(c.Name, new OleDbConnection(c.ConnectionString));
+                        connInfo = new DatabaseConnection(c.Name, new OleDbConnection(c.ConnectionString));
                         AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(connInfo);
                     }
                 }
@@ -150,12 +150,12 @@ namespace FdoToolbox.Lib.ClientServices
             ICollection<string> taskNames = AppGateway.RunningApplication.TaskManager.TaskNames;
             foreach (string connName in fdoConnNames)
             {
-                FdoConnectionInfo connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connName);
+                FdoConnection connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connName);
                 SpatialConnLoader.SaveConnection(connInfo, Path.Combine(path, connName + ".conn"));
             }
             foreach (string connName in dbConnNames)
             {
-                DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(connName);
+                DatabaseConnection connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(connName);
                 DbConnLoader.SaveConnection(connInfo, Path.Combine(path, connName + ".dbconn"));
             }
             foreach (string taskName in taskNames)

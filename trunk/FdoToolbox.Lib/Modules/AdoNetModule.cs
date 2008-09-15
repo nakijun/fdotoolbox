@@ -81,7 +81,7 @@ namespace FdoToolbox.Lib.Modules
         [Command(AdoNetModule.DB_REFRESH_CONNECTION, "Refresh connection", ImageResourceName = "page_refresh")]
         public void RefreshConnection()
         {
-            DbConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DatabaseConnection connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
                 _App.Shell.ObjectExplorer.RefreshDatabaseConnection(connInfo.Name);
         }
@@ -89,7 +89,7 @@ namespace FdoToolbox.Lib.Modules
         [Command(AdoNetModule.DB_RENAME_CONNECTION, "Rename connection")]
         public void RenameConnection()
         {
-            DbConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DatabaseConnection connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
             {
                 string oldName = connInfo.Name;
@@ -108,7 +108,7 @@ namespace FdoToolbox.Lib.Modules
         [Command(AdoNetModule.DB_REMOVE_CONNECTION, "Remove connection", ImageResourceName = "cross")]
         public void RemoveConnection()
         { 
-            DbConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DatabaseConnection connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
                 _App.DatabaseConnectionManager.RemoveConnection(connInfo.Name);
         }
@@ -128,7 +128,7 @@ namespace FdoToolbox.Lib.Modules
         public void DataPreview()
         {
             //TODO: Don't create directly
-            DbConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DatabaseConnection connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
             {
                 string key = "PREVIEW";
@@ -140,7 +140,7 @@ namespace FdoToolbox.Lib.Modules
         [Command(AdoNetModule.DB_SAVE_CONNECTION, "Save Connection", ImageResourceName = "disk")]
         public void SaveConnection()
         {
-            DbConnectionInfo connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DatabaseConnection connInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (connInfo != null)
             {
                 string connDef = _App.SaveFile("Save connection information", "Connection information (*.dbconn)|*.dbconn");
@@ -160,8 +160,8 @@ namespace FdoToolbox.Lib.Modules
             string connDef = _App.OpenFile("Load connection information", "Connection information (*.dbconn)|*.dbconn");
             if (File.Exists(connDef))
             {
-                DbConnectionInfo connInfo = DbConnLoader.LoadConnection(connDef);
-                DbConnectionInfo conn = _App.DatabaseConnectionManager.GetConnection(connInfo.Name);
+                DatabaseConnection connInfo = DbConnLoader.LoadConnection(connDef);
+                DatabaseConnection conn = _App.DatabaseConnectionManager.GetConnection(connInfo.Name);
                 if (conn != null)
                 {
                     AppConsole.Write("A connection named {0} already exists. ", connInfo.Name);
@@ -181,7 +181,7 @@ namespace FdoToolbox.Lib.Modules
                 AppConsole.Alert("Error", "Cannot database table to points. There are no FDO data sources open");
                 return;
             }
-            DbConnectionInfo dbConnInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DatabaseConnection dbConnInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (dbConnInfo != null)
             {
                 string database = _App.Shell.ObjectExplorer.GetSelectedDatabase();
@@ -198,7 +198,7 @@ namespace FdoToolbox.Lib.Modules
         [Command(AdoNetModule.DB_POINT_CONVERT_SDF, "Convert to Point Feature SDF", Description = "Copies the table to a new Point feature class in a new SDF file", ImageResourceName = "shape_handles")]
         public void ConvertToPointsSdf()
         {
-            DbConnectionInfo dbConnInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
+            DatabaseConnection dbConnInfo = _App.Shell.ObjectExplorer.GetSelectedDatabaseConnection();
             if (dbConnInfo != null)
             {
                 string database = _App.Shell.ObjectExplorer.GetSelectedDatabase();
@@ -212,7 +212,7 @@ namespace FdoToolbox.Lib.Modules
                     conn.Open();
 
                     string name = _App.FdoConnectionManager.CreateUniqueName();
-                    FdoConnectionInfo connInfo = new FdoConnectionInfo(name, conn);
+                    FdoConnection connInfo = new FdoConnection(name, conn);
 
                     DbToPointCopyOptions options = new DbToPointCopyOptions(dbConnInfo, connInfo);
                     options.ClassName = diag.ClassName;

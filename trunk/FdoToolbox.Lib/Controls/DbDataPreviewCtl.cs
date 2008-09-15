@@ -18,7 +18,7 @@ namespace FdoToolbox.Lib.Controls
             InitializeComponent();
         }
 
-        public DbDataPreviewCtl(DbConnectionInfo connInfo, string key)
+        public DbDataPreviewCtl(DatabaseConnection connInfo, string key)
             : base(connInfo, key)
         {
             InitializeComponent();

@@ -43,7 +43,7 @@ namespace FdoToolbox.Lib.Controls
                 btnConnect.Enabled = false;
                 try
                 {
-                    DbConnectionInfo connInfo = new DbConnectionInfo(name, conn);
+                    DatabaseConnection connInfo = new DatabaseConnection(name, conn);
                     AppGateway.RunningApplication.DatabaseConnectionManager.AddConnection(connInfo);
                 }
                 catch (Exception ex)

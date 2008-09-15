@@ -36,9 +36,9 @@ namespace FdoToolbox.Lib.Forms
 {
     public partial class DataPropertyDefinitionDlg : Form
     {
-        private FdoConnectionInfo _BoundConnection;
+        private FdoConnection _BoundConnection;
 
-        internal DataPropertyDefinitionDlg(FdoConnectionInfo conn)
+        internal DataPropertyDefinitionDlg(FdoConnection conn)
         {
             InitializeComponent();
             _BoundConnection = conn;
@@ -77,7 +77,7 @@ namespace FdoToolbox.Lib.Forms
             cmbConstraintType.SelectedIndex = 0;
         }
 
-        internal DataPropertyDefinitionDlg(DataPropertyDefinition def, FdoConnectionInfo conn) : this(conn)
+        internal DataPropertyDefinitionDlg(DataPropertyDefinition def, FdoConnection conn) : this(conn)
         {
             _Definition = def;
             txtName.Text = _Definition.Name;
@@ -152,7 +152,7 @@ namespace FdoToolbox.Lib.Forms
 
         private DataPropertyDefinition _Definition;
 
-        public static DataPropertyDefinition NewDataProperty(FdoConnectionInfo conn)
+        public static DataPropertyDefinition NewDataProperty(FdoConnection conn)
         {
             DataPropertyDefinitionDlg dlg = new DataPropertyDefinitionDlg(conn);
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -162,7 +162,7 @@ namespace FdoToolbox.Lib.Forms
             return null;
         }
 
-        public static void EditDataProperty(DataPropertyDefinition def, FdoConnectionInfo conn)
+        public static void EditDataProperty(DataPropertyDefinition def, FdoConnection conn)
         {
             DataPropertyDefinitionDlg dlg = new DataPropertyDefinitionDlg(def, conn);
             dlg.ShowDialog();
@@ -277,7 +277,7 @@ namespace FdoToolbox.Lib.Forms
             numLength.Maximum = (max < 0) ? long.MaxValue : max;
         }
 
-        public FdoConnectionInfo BoundConnection
+        public FdoConnection BoundConnection
         {
             get { return _BoundConnection; }
         }

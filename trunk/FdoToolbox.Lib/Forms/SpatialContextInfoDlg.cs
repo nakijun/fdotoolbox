@@ -43,21 +43,21 @@ namespace FdoToolbox.Lib.Forms
     /// </summary>
     public partial class SpatialContextInfoDlg : Form
     {
-        private FdoConnectionInfo _BoundConnection;
+        private FdoConnection _BoundConnection;
 
         internal SpatialContextInfoDlg()
         {
             InitializeComponent();
         }
 
-        public SpatialContextInfoDlg(FdoConnectionInfo conn)
+        public SpatialContextInfoDlg(FdoConnection conn)
             : this()
         {
             _BoundConnection = conn;
             cmbExtentType.DataSource = _BoundConnection.InternalConnection.ConnectionCapabilities.SpatialContextTypes;
         }
 
-        public SpatialContextInfoDlg(FdoConnectionInfo conn, SpatialContextInfo ctx)
+        public SpatialContextInfoDlg(FdoConnection conn, SpatialContextInfo ctx)
             : this(conn)
         {
             txtName.Enabled = false;
@@ -190,7 +190,7 @@ namespace FdoToolbox.Lib.Forms
             }
         }
 
-        public static SpatialContextInfo Edit(FdoConnectionInfo conn, SpatialContextInfo ctx)
+        public static SpatialContextInfo Edit(FdoConnection conn, SpatialContextInfo ctx)
         {
             SpatialContextInfoDlg dlg = new SpatialContextInfoDlg(conn, ctx);
             if (dlg.ShowDialog() == DialogResult.OK)
@@ -227,7 +227,7 @@ namespace FdoToolbox.Lib.Forms
             return null;
         }
 
-        public static SpatialContextInfo CreateNew(FdoConnectionInfo conn)
+        public static SpatialContextInfo CreateNew(FdoConnection conn)
         {
             SpatialContextInfoDlg dlg = new SpatialContextInfoDlg(conn);
             if (dlg.ShowDialog() == DialogResult.OK)

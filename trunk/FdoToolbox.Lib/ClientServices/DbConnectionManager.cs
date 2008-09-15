@@ -30,14 +30,14 @@ namespace FdoToolbox.Lib.ClientServices
     {
         private int counter;
 
-        private Dictionary<string, DbConnectionInfo> _Connections;
+        private Dictionary<string, DatabaseConnection> _Connections;
 
         public DbConnectionManager() 
         {
-            _Connections = new Dictionary<string, DbConnectionInfo>();
+            _Connections = new Dictionary<string, DatabaseConnection>();
         }
 
-        public void AddConnection(DbConnectionInfo conn)
+        public void AddConnection(DatabaseConnection conn)
         {
             string name = conn.Name;
             if (_Connections.ContainsKey(name))
@@ -49,7 +49,7 @@ namespace FdoToolbox.Lib.ClientServices
                 this.ConnectionAdded(this, new EventArgs<string>(name));
         }
 
-        public DbConnectionInfo GetConnection(string name)
+        public DatabaseConnection GetConnection(string name)
         {
             if (!_Connections.ContainsKey(name))
                 return null;
@@ -79,7 +79,7 @@ namespace FdoToolbox.Lib.ClientServices
                         return;
                 }
 
-                DbConnectionInfo conn = _Connections[name];
+                DatabaseConnection conn = _Connections[name];
                 if (conn.Connection.State != ConnectionState.Closed)
                     conn.Connection.Close();
 
@@ -97,7 +97,7 @@ namespace FdoToolbox.Lib.ClientServices
             if (_Connections.ContainsKey(newName))
                 throw new DbConnectionException("Cannot rename connection " + oldName + " to " + newName + " as a connection of that name already exists");
 
-            DbConnectionInfo conn = _Connections[oldName];
+            DatabaseConnection conn = _Connections[oldName];
             _Connections.Remove(oldName);
             conn.Name = newName;
             _Connections.Add(newName, conn);

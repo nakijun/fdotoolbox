@@ -44,7 +44,7 @@ namespace FdoToolbox.Lib.Controls
             InitializeComponent();
         }
 
-        public DataStoreMgrCtl(FdoConnectionInfo connInfo, string key)
+        public DataStoreMgrCtl(FdoConnection connInfo, string key)
             : base(connInfo, key)
         {
             InitializeComponent();

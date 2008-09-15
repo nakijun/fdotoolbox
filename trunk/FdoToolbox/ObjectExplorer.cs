@@ -145,7 +145,7 @@ namespace FdoToolbox
         void OnDatabaseConnectionAdded(object sender, EventArgs<string> e)
         {
             string name = e.Data;
-            DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
+            DatabaseConnection connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
             node.ImageKey = node.SelectedImageKey = ObjectExplorerImages.IMG_CONNECTION;
@@ -240,7 +240,7 @@ namespace FdoToolbox
 
         private void GetSchemaNodes(TreeNode connNode)
         {
-            FdoConnectionInfo connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connNode.Name);
+            FdoConnection connInfo = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(connNode.Name);
             if (connInfo != null)
             {
                 FeatureService service = connInfo.CreateFeatureService();
@@ -404,7 +404,7 @@ namespace FdoToolbox
             if (node != null)
             {
                 node.Nodes.Clear();
-                DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
+                DatabaseConnection connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(name);
                 connInfo.Refresh();
                 GetDatabaseNodes(node, connInfo.Database);
             }
@@ -415,7 +415,7 @@ namespace FdoToolbox
             TreeNode node = GetSpatialConnectionsNode().Nodes[name];
             node.Nodes.Clear();
 
-            FdoConnectionInfo conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(node.Name);
+            FdoConnection conn = AppGateway.RunningApplication.FdoConnectionManager.GetConnection(node.Name);
             if (conn != null)
             {
                 conn.Refresh();
@@ -424,7 +424,7 @@ namespace FdoToolbox
             GetSchemaNodes(node);
         }
 
-        public DbConnectionInfo GetSelectedDatabaseConnection()
+        public DatabaseConnection GetSelectedDatabaseConnection()
         {
             TreeNode connNode = mTreeView.SelectedNode;
             if (connNode == null || connNode.Level == 0)
@@ -441,7 +441,7 @@ namespace FdoToolbox
                 if (connNode.Parent == GetDatabaseConnectionsNode())
                 {
                     string name = connNode.Name;
-                    DbConnectionInfo connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(connNode.Name);
+                    DatabaseConnection connInfo = AppGateway.RunningApplication.DatabaseConnectionManager.GetConnection(connNode.Name);
                     if (connInfo != null)
                         return connInfo;
                     else
@@ -451,7 +451,7 @@ namespace FdoToolbox
             }
         }
 
-        public FdoConnectionInfo GetSelectedSpatialConnection()
+        public FdoConnection GetSelectedSpatialConnection()
         {
             TreeNode connNode = mTreeView.SelectedNode;
             if (connNode == null || connNode.Level == 0)
@@ -597,7 +597,7 @@ namespace FdoToolbox
 
         private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            FdoConnectionInfo connInfo = GetSelectedSpatialConnection();
+            FdoConnection connInfo = GetSelectedSpatialConnection();
             if (connInfo != null)
             {
                 IModuleMgr modMgr = AppGateway.RunningApplication.ModuleManager;
