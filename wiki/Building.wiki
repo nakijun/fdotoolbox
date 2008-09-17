@@ -4,11 +4,15 @@
 
 Follow the instructions in the "Source" tab of this project site.
 
+== Requirements ==
+
+In order to build the API documentation, you will need to download and install the [http://www.microsoft.com/downloads/details.aspx?familyid=00535334-c8a6-452f-9aa0-d597d16580cc&displaylang=en HTML Help Workshop]
+
 == Building ==
 
-To build in debug mode. Run the build_debug.bat file, this will also run copy_thirdparty_debug.bat which will copy the prerequisite libraries. The output directory will be "out\Debug"
+To build in debug mode. Run the build_debug.bat file, this will also run copy_thirdparty_debug.bat which will copy the prerequisite libraries and will also run build_doc_debug.bat to build the API documentation. The output directory will be "out\Debug"
 
-To build in release mode. Run the build_release.bat file, this will also run copy_thirdparty_release.bat which will copy the prerequisite libraries. The output directory will be "out\Release"
+To build in release mode. Run the build_release.bat file, this will also run copy_thirdparty_release.bat which will copy the prerequisite libraries and will also run build_doc_release.bat to build the API documentation. The output directory will be "out\Release"
 
 To build the unit tests. Run the build_test.bat file, this will also run copy_thirdparty_test.bat which will copy the prerequisite libraries. The output directory will be "out\Test". To run the unit tests, type:
 
