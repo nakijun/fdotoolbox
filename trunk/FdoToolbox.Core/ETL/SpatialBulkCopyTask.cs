@@ -1221,11 +1221,7 @@ namespace FdoToolbox.Core.ETL
             _ErrorMsgs.Add(msg.ToString());
         }
 
-#if TEST
-        public static LiteralValue GetConvertedValue(DataTypeMapping mapping, object obj)
-#else
-        private static LiteralValue GetConvertedValue(DataTypeMapping mapping, object obj)
-#endif
+        internal static LiteralValue GetConvertedValue(DataTypeMapping mapping, object obj)
         {
             try
             {

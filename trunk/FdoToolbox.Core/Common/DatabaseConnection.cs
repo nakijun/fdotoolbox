@@ -29,9 +29,8 @@ namespace FdoToolbox.Core.Common
             set { _Connection = value; }
         }
 
-#if TEST
-        public DatabaseConnection() { }
-#endif
+        internal DatabaseConnection() { } 
+
         public DatabaseConnection(string name, OleDbConnection conn)
         {
             this.Name = name;

@@ -28,11 +28,7 @@ namespace FdoToolbox.Core.ETL
     /// Defines a mapping of a property in a source class to a property
     /// in a target class.
     /// </summary>
-#if TEST
-    public class DataTypeMapping
-#else
     internal class DataTypeMapping
-#endif
     {
         private string _SourceProperty;
 
@@ -78,11 +74,7 @@ namespace FdoToolbox.Core.ETL
             set { _TargetDataType = value; }
         }
 
-#if TEST
-        public DataTypeMapping(string srcName, string targetName, DataType srcType, DataType targetType)
-#else
         internal DataTypeMapping(string srcName, string targetName, DataType srcType, DataType targetType)
-#endif
         {
             this.SourceProperty = srcName;
             this.TargetProperty = targetName;
