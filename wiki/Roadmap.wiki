@@ -28,3 +28,4 @@
  * Star schema support
  * LINQ support
  * WPF user interface
+ * Integration with other OSGeo tools/libraries
