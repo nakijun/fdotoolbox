@@ -18,7 +18,6 @@
  * Schema Mapping support
  * Localization
  * Pipeable console commands
- 
  * KML support
  * Chainable tasks
  * Coordinate System Re-Projection
@@ -29,3 +28,4 @@
  * LINQ support
  * WPF user interface
  * Integration with other OSGeo tools/libraries
+ * Java GIS library integration via IKVM
