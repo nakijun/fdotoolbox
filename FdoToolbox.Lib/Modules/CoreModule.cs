@@ -324,8 +324,8 @@ namespace FdoToolbox.Lib.Modules
         [Command(CoreModule.CMD_HELP, "Help", "Show the help documentation", ImageResourceName = "help")]
         public void ShowHelp()
         {
-            HelpCtl help = new HelpCtl();
-            _App.Shell.ShowDocumentWindow(help);
+            //TODO: un-hardcode the help file reference
+            System.Diagnostics.Process.Start(Path.Combine(_App.AppPath, "userdoc.chm"));
         }
 
         [Command(CoreModule.CMD_CORE_API_HELP, "Core API documentation", "Show the Core API documentation", ImageResourceName = "help")]
