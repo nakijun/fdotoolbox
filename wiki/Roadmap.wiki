@@ -10,16 +10,13 @@
  * Raster Provider support
 
 === Future ===
- * Spatial -> Non-Spatial bulk copy
- * Extra Bulk Copy options
-      * Property Value Mappings
+ * Spatial ETL pipelining API
  * Additional Property support
       * Raster Properties
  * Schema Mapping support
  * Localization
  * Pipeable console commands
  * KML support
- * Chainable tasks
  * Coordinate System Re-Projection
  * Provider-specific extension modules
  * Product-specific extension modules
