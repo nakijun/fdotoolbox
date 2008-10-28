@@ -95,21 +95,27 @@ namespace FdoToolbox.Lib.Controls
                     {
                         if (ProceedWithQuery())
                         {
+                            queryMap = ((cmbClass.SelectedItem as ClassDefinition).ClassType == ClassType.ClassType_FeatureClass);
+                            CheckMapState();
                             QueryStandard();
-                            if (chkMap.Checked)
-                                QueryMap();
                         }
                     }
                     break;
                 case TAB_AGGREGATE:
                     {
+                        queryMap = false;
+                        CheckMapState();
                         QueryAggregate();
                     }
                     break;
                 case TAB_SQL:
                     {
                         if (ProceedWithQuery())
+                        {
+                            queryMap = false;
+                            CheckMapState();
                             QuerySQL();
+                        }
                     }
                     break;
             }
@@ -118,8 +124,9 @@ namespace FdoToolbox.Lib.Controls
         private bool ProceedWithQuery()
         {
             long count = GetFeatureCount();
-            int limit = AppGateway.RunningApplication.Preferences.GetIntegerPref(PreferenceNames.PREF_INT_WARN_DATASET);
-            if (count > limit)
+            int applimit = AppGateway.RunningApplication.Preferences.GetIntegerPref(PreferenceNames.PREF_INT_WARN_DATASET);
+            int limit = Convert.ToInt32(numLimit.Value);
+            if (limit <= 0 && count > applimit)
                 return AppConsole.Confirm("Warning", "The query you have defined will return a potentially large result set. Do you want to continue?");
             return true;
         }
@@ -171,21 +178,6 @@ namespace FdoToolbox.Lib.Controls
             return count;
         }
 
-        private void QueryMap()
-        {
-            mapCtl.Initialize(this.BoundConnection.InternalConnection);
-            ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
-            if (classDef != null)
-            {
-                FeatureQueryOptions qry = new FeatureQueryOptions(classDef.Name);
-                qry.Filter = txtFilter.Text;
-                //qry.AddFeatureProperty(GetCheckedProperties());
-                //qry.AddComputedProperty(GetComputedFields());
-                mapCtl.LoadQuery(qry);
-                //mapCtl.ZoomExtents();
-            }
-        }
-
         private void QuerySQL()
         {
             string sql = txtSQL.Text;
@@ -204,6 +196,7 @@ namespace FdoToolbox.Lib.Controls
             ClearGrid();
             btnQuery.Enabled = false;
             btnClear.Enabled = false;
+            btnCancel.Enabled = true;
             bgSql.RunWorkerAsync(qry);
         }
 
@@ -379,6 +372,7 @@ namespace FdoToolbox.Lib.Controls
                             break;
                         case PropertyType.PropertyType_GeometricProperty:
                             {
+                                //row[identifier] = reader.GetGeometry(identifier);
                                 byte[] bGeom = reader.GetGeometry(identifier);
                                 row[identifier] = FdoGeometryUtil.GetFgfText(bGeom);
                             }
@@ -502,6 +496,7 @@ namespace FdoToolbox.Lib.Controls
                 grpQuery.Enabled = false;
                 btnQuery.Enabled = false;
                 btnClear.Enabled = false;
+                btnCancel.Enabled = true;
                 ClearGrid();
                 bgStandard.RunWorkerAsync(qry);
             }
@@ -590,6 +585,7 @@ namespace FdoToolbox.Lib.Controls
                     }
                     else if (geomDef != null)
                     {
+                        //row[name] = reader.GetGeometry(name);
                         byte[] fgf = reader.GetGeometry(name);
                         row[name] = FdoGeometryUtil.GetFgfText(fgf);
                     }
@@ -640,13 +636,13 @@ namespace FdoToolbox.Lib.Controls
         private void btnClear_Click(object sender, EventArgs e)
         {
             ClearGrid();
-            mapCtl.Reset();
         }
 
         private void ClearGrid()
         {
             grdPreview.DataSource = null;
             lblCount.Text = "";
+            mapCtl.Reset();
         }
 
         private void cmbAggSchema_SelectedIndexChanged(object sender, EventArgs e)
@@ -825,6 +821,8 @@ namespace FdoToolbox.Lib.Controls
             grdExpressions.Rows.Clear();
         }
 
+        private bool queryMap = true;
+
         private void cmbClass_SelectedIndexChanged(object sender, EventArgs e)
         {
             ClassDefinition classDef = cmbClass.SelectedItem as ClassDefinition;
@@ -832,12 +830,11 @@ namespace FdoToolbox.Lib.Controls
             {
                 if (classDef.ClassType == ClassType.ClassType_FeatureClass)
                 {
-                    chkMap.Enabled = true;
+                    queryMap = true;
                 }
                 else
                 {
-                    chkMap.Checked = false;
-                    chkMap.Enabled = false;
+                    queryMap = false;
                 }
 
                 chkPropertyNames.Items.Clear();
@@ -889,6 +886,7 @@ namespace FdoToolbox.Lib.Controls
             {
                 ClassDefinition cd = reader.GetClassDefinition();
                 FdoDataTable table = TableFactory.CreateTable(cd);
+                mapCtl.DataSource = table;
                 int count = 0;
                 Dictionary<int, string> cachedPropertyNames = new Dictionary<int, string>();
                 for (int i = 0; i < cd.Properties.Count; i++)
@@ -954,9 +952,11 @@ namespace FdoToolbox.Lib.Controls
                 DataTable table = row.Table;
                 BindingSource bs = new BindingSource();
                 bs.DataSource = table;
-                grdPreview.DataSource = bs;
+                mapCtl.DataSource = table as FdoFeatureTable;
 
+                grdPreview.DataSource = bs;
                 table.Rows.Add(row.ItemArray);
+                //mapCtl.DataSource.Rows.Add(row.ItemArray);
             }
             else
             {
@@ -971,6 +971,7 @@ namespace FdoToolbox.Lib.Controls
             grpQuery.Enabled = true;
             btnQuery.Enabled = true;
             btnClear.Enabled = true;
+            btnCancel.Enabled = false;
 
             if (e.Error != null)
             {
@@ -1046,6 +1047,7 @@ namespace FdoToolbox.Lib.Controls
             grpQuery.Enabled = true;
             btnQuery.Enabled = true;
             btnClear.Enabled = true;
+            btnCancel.Enabled = false;
 
             if (e.Error != null)
             {
@@ -1119,9 +1121,9 @@ namespace FdoToolbox.Lib.Controls
             splitSave.Visible = (tabQueryMode.SelectedIndex == TAB_STANDARD);
         }
 
-        private void chkMap_CheckedChanged(object sender, EventArgs e)
+        private void CheckMapState()
         {
-            if (chkMap.Checked)
+            if (queryMap)
             {
                 if (!tabResults.TabPages.Contains(TAB_RESULTS_MAP))
                     tabResults.TabPages.Add(TAB_RESULTS_MAP);
