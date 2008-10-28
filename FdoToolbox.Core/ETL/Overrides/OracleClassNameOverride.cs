@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Overrides
 {
     /// <summary>
     /// Class name override for Oracle. Class names in oracle are in the 

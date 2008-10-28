@@ -34,7 +34,7 @@ using System.Threading;
 using System.Data;
 using FdoToolbox.Core.Common;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Specialized
 {
     /// <summary>
     /// DataTable to FDO file data source task.

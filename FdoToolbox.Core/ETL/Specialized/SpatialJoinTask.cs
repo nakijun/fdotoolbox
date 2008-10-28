@@ -60,7 +60,7 @@ using FdoToolbox.Core.Utility;
  * result with the given join rules.
  */
 #endregion
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Specialized
 {
     /// <summary>
     /// Task that joins/merges a spatial data source with a non-spatial data source

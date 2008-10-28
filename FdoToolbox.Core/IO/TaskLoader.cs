@@ -37,6 +37,7 @@ using FdoToolbox.Core.Configuration;
 using System.Xml.Serialization;
 using System.IO;
 using System.Collections.ObjectModel;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Core.IO
 {

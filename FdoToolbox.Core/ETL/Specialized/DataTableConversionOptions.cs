@@ -23,7 +23,7 @@ using System.Text;
 using System.Data;
 using FdoToolbox.Core.Common;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Specialized
 {
     /// <summary>
     /// Defines options for converting a ADO.net DataTable to a FDO flat-file data source

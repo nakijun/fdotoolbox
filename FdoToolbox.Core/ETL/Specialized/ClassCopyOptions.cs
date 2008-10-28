@@ -23,7 +23,7 @@ using System.Text;
 using System.Collections.Specialized;
 using OSGeo.FDO.Schema;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Specialized
 {
     /// <summary>
     /// Defines options for copying a source class to a target class in a

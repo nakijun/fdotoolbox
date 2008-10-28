@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Core.Common;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Specialized
 {
     /// <summary>
     /// Defines options for merging a Database table with a FDO feature class

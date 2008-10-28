@@ -34,6 +34,7 @@ using FdoToolbox.Core.ETL;
 using FdoToolbox.Lib.ClientServices;
 using FdoToolbox.Core;
 using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Lib.Controls
 {

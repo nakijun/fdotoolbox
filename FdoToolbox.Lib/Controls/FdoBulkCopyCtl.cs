@@ -36,6 +36,7 @@ using OSGeo.FDO.Commands.Feature;
 using System.Collections.ObjectModel;
 using FdoToolbox.Core;
 using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.ETL.Specialized;
 #region overview
 /*
  * The bulk copy control is the front-end to the BulkCopyTask class.

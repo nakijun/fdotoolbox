@@ -21,26 +21,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-using OSGeo.FDO.Commands.SpatialContext;
-using OSGeo.FDO.Commands;
-using OSGeo.FDO.Connections;
 using FdoToolbox.Core.ClientServices;
+using OSGeo.FDO.Connections;
 using System.Collections.ObjectModel;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Overrides
 {
     /// <summary>
-    /// Copy spatial context override for MySQL target. 
-    /// 
-    /// MySQL requires that if an existing spatial context already exists 
-    /// (by name) that it be destoryed, as ICreateSpatialContext::updateExisting 
-    /// does not work
-    /// 
-    /// Also, an existing spatial context cannot be destroyed if there are
-    /// Geometric Properties using that spatial context. In this case, we don't
-    /// copy that context across
+    /// Copy spatial context override for SQL Server 2008 target. 
     /// </summary>
-    public class MySqlCopySpatialContextOverride : ICopySpatialContextOverride
+    public class MsSqlCopySpatialContextOverride : ICopySpatialContextOverride
     {
         /// <summary>
         /// Copies the spatial contexts
@@ -53,12 +43,12 @@ namespace FdoToolbox.Core.ETL
             if (spatialContextNames.Count == 0)
                 return;
 
-            Debug.Assert(destConn.ConnectionInfo.ProviderName.Contains("OSGeo.MySQL"));
+            Debug.Assert(destConn.ConnectionInfo.ProviderName.Contains("OSGeo.SQLServerSpatial"));
             FeatureService srcService = new FeatureService(srcConn);
             FeatureService destService = new FeatureService(destConn);
             ReadOnlyCollection<SpatialContextInfo> srcContexts = srcService.GetSpatialContexts();
             ReadOnlyCollection<SpatialContextInfo> destContexts = destService.GetSpatialContexts();
-            foreach(SpatialContextInfo ctx in srcContexts)
+            foreach (SpatialContextInfo ctx in srcContexts)
             {
                 if (spatialContextNames.Contains(ctx.Name))
                 {

@@ -23,7 +23,7 @@ using System.Text;
 using FdoToolbox.Core.Common;
 using System.Collections.ObjectModel;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Specialized
 {
     /// <summary>
     /// Defines the options for converting a database table to a FDO point
