@@ -35,6 +35,7 @@ using FdoToolbox.Core.Common;
 using FdoToolbox.Core.Utility;
 using FdoToolbox.Core.ClientServices;
 using FdoToolbox.Core.ETL;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Lib.Modules
 {

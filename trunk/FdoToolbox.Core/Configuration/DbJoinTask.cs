@@ -14,6 +14,7 @@
 namespace FdoToolbox.Core.Configuration {
     using System.Xml.Serialization;
     using FdoToolbox.Core.ETL;
+    using FdoToolbox.Core.ETL.Specialized;
     
     
     /// <remarks/>

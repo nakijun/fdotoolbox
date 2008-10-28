@@ -31,7 +31,7 @@ using FdoToolbox.Core.Common;
 using FdoToolbox.Core.Utility;
 using System.Collections.ObjectModel;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Specialized
 {
     public enum ExpressProvider
     {

@@ -28,7 +28,7 @@ using OSGeo.FDO.Commands;
 using OSGeo.FDO.Expression;
 using OSGeo.FDO.Geometry;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Specialized
 {
     /// <summary>
     /// A task that copies data from a database table to a FDO point feature class

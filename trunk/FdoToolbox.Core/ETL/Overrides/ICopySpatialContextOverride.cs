@@ -23,7 +23,7 @@ using System.Text;
 using OSGeo.FDO.Connections;
 using System.Collections.ObjectModel;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Overrides
 {
     /// <summary>
     /// Defines a method to override the copying of spatial contexts during

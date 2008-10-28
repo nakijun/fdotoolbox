@@ -30,6 +30,7 @@ using FdoToolbox.Lib.ClientServices;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Lib.Controls
 {

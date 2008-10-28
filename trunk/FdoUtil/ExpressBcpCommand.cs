@@ -29,6 +29,7 @@ using FdoToolbox.Core.Commands;
 using FdoToolbox.Core.Common;
 using FdoToolbox.Core.Utility;
 using System.Collections.ObjectModel;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoUtil
 {

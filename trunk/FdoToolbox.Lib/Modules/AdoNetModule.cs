@@ -32,6 +32,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.Utility;
 using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Lib.Modules
 {

@@ -41,6 +41,7 @@ using FdoToolbox.Core.Utility;
 using OSGeo.FDO.Commands.SQL;
 using System.Threading;
 using System.Collections.ObjectModel;
+using FdoToolbox.Core.ETL.Overrides;
 #region overview
 /*
  * Bulk Copy overview
@@ -79,7 +80,7 @@ using System.Collections.ObjectModel;
  * Creation of non-existent properties and classes will come in the future
  */
 #endregion
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Specialized
 {
     public class SpatialBulkCopyTask : TaskBase
     {

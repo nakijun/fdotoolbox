@@ -28,7 +28,7 @@ using FdoToolbox.Core.ClientServices;
 using System.Collections.ObjectModel;
 using FdoToolbox.Core.Utility;
 
-namespace FdoToolbox.Core.ETL
+namespace FdoToolbox.Core.ETL.Overrides
 {
     /// <summary>
     /// Copy spatial context override for SHP target. SHP requires
