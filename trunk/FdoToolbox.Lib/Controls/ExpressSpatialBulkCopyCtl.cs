@@ -146,6 +146,7 @@ namespace FdoToolbox.Lib.Controls
             {
                 options = new SpatialBulkCopyOptions(this.SourceProvider, this.TargetProvider, source, target);
                 options.CopySpatialContexts = chkCopySpatialContexts.Checked;
+                options.LogPath = AppGateway.RunningApplication.AppPath;
 
                 SpatialBulkCopyTask task = new SpatialBulkCopyTask("EXPR_BCP", options);
                 TaskProgressDlg diag = new TaskProgressDlg(task);
