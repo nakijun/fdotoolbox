@@ -31,6 +31,7 @@ using OSGeo.FDO.Commands.Feature;
 using FdoToolbox.Lib.SharpMapProvider;
 using OSGeo.FDO.ClientServices;
 using FdoToolbox.Core.ClientServices;
+using FdoToolbox.Core.Common;
 
 namespace FdoToolbox.Lib.Controls
 {
@@ -40,47 +41,24 @@ namespace FdoToolbox.Lib.Controls
         {
             InitializeComponent();
             mapImg.Map = new Map();
-            this.Disposed += delegate 
-            {
-                if (_conn != null)
-                {
-                    if (_conn.ConnectionState != ConnectionState.ConnectionState_Closed)
-                        _conn.Close();
-                    _conn.Dispose();
-                }
-            };
         }
 
-        private FdoInMemoryProvider _provider;
+        private FdoInMemoryProvider _provider = new FdoInMemoryProvider();
 
-        private IConnection _conn;
-
-        public void Initialize(IConnection conn)
+        public FdoDataTable DataSource
         {
-            if (_conn == null)
-            {
-                //Clone the connection
-                _conn = FeatureAccessManager.GetConnectionManager().CreateConnection(conn.ConnectionInfo.ProviderName);
-                _conn.ConnectionString = conn.ConnectionString;
-            }
-        }
-
-        public void LoadQuery(FeatureQueryOptions options)
-        {
-            Reset();
-            _conn.Open();
-            using (FeatureService service = new FeatureService(_conn))
-            {
-                using (IFeatureReader reader = service.SelectFeatures(options))
+            get { return _provider.DataSource; }
+            set 
+            { 
+                _provider.DataSource = value;
+                if (value != null && mapImg.Map.Layers.Count == 0)
                 {
-                    _provider = new FdoInMemoryProvider(reader);
+                    VectorLayer layer = new VectorLayer("Preview", _provider);
+                    layer.Style.Fill = Brushes.Transparent;
+                    layer.Style.EnableOutline = true;
+                    mapImg.Map.Layers.Add(layer);
                 }
             }
-            _conn.Close();
-            VectorLayer layer = new VectorLayer("Preview", _provider);
-            layer.Style.Fill = Brushes.Transparent;
-            layer.Style.EnableOutline = true;
-            mapImg.Map.Layers.Add(layer);
         }
 
         private void btnZoomIn_Click(object sender, EventArgs e)

@@ -31,7 +31,6 @@ namespace FdoToolbox.Lib.Controls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FdoDataPreviewCtl));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.chkMap = new System.Windows.Forms.CheckBox();
             this.splitSave = new FdoToolbox.Lib.Controls.SplitButton();
             this.ctxSave = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.saveToSDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -121,7 +120,6 @@ namespace FdoToolbox.Lib.Controls
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.chkMap);
             this.splitContainer1.Panel1.Controls.Add(this.splitSave);
             this.splitContainer1.Panel1.Controls.Add(this.btnCancel);
             this.splitContainer1.Panel1.Controls.Add(this.lblCount);
@@ -135,20 +133,6 @@ namespace FdoToolbox.Lib.Controls
             this.splitContainer1.Size = new System.Drawing.Size(494, 395);
             this.splitContainer1.SplitterDistance = 275;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // chkMap
-            // 
-            this.chkMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkMap.AutoSize = true;
-            this.chkMap.Checked = true;
-            this.chkMap.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkMap.Location = new System.Drawing.Point(142, 249);
-            this.chkMap.Name = "chkMap";
-            this.chkMap.Size = new System.Drawing.Size(47, 17);
-            this.chkMap.TabIndex = 6;
-            this.chkMap.Text = "Map";
-            this.chkMap.UseVisualStyleBackColor = true;
-            this.chkMap.CheckedChanged += new System.EventHandler(this.chkMap_CheckedChanged);
             // 
             // splitSave
             // 
@@ -167,13 +151,13 @@ namespace FdoToolbox.Lib.Controls
             this.ctxSave.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveToSDFToolStripMenuItem});
             this.ctxSave.Name = "ctxSave";
-            this.ctxSave.Size = new System.Drawing.Size(134, 26);
+            this.ctxSave.Size = new System.Drawing.Size(145, 26);
             // 
             // saveToSDFToolStripMenuItem
             // 
             this.saveToSDFToolStripMenuItem.Image = global::FdoToolbox.Lib.Properties.Resources.disk;
             this.saveToSDFToolStripMenuItem.Name = "saveToSDFToolStripMenuItem";
-            this.saveToSDFToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.saveToSDFToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.saveToSDFToolStripMenuItem.Text = "Save to SDF";
             this.saveToSDFToolStripMenuItem.Click += new System.EventHandler(this.saveToSDFToolStripMenuItem_Click);
             // 
@@ -789,12 +773,12 @@ namespace FdoToolbox.Lib.Controls
             // 
             this.saveQueryDlg.Filter = "SDF Files (*.sdf)|*.sdf|SHP Files(*.shp)|*.shp";
             // 
-            // SpatialDataPreviewCtl
+            // FdoDataPreviewCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
-            this.Name = "SpatialDataPreviewCtl";
+            this.Name = "FdoDataPreviewCtl";
             this.Size = new System.Drawing.Size(494, 395);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
@@ -884,6 +868,5 @@ namespace FdoToolbox.Lib.Controls
         private System.Windows.Forms.ImageList imgPreview;
         private System.Windows.Forms.TabPage TAB_RESULTS_MAP;
         private MapPreviewCtl mapCtl;
-        private System.Windows.Forms.CheckBox chkMap;
     }
 }

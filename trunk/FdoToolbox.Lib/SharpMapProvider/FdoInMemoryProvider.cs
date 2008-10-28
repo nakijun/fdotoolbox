@@ -36,9 +36,12 @@ namespace FdoToolbox.Lib.SharpMapProvider
     {
         private FdoDataTable _data;
 
-        public FdoInMemoryProvider(IFeatureReader reader)
+        public FdoInMemoryProvider() { }
+
+        public FdoDataTable DataSource
         {
-            _data = TableFactory.CreateTable(reader);
+            get { return _data; }
+            set { _data = value; }
         }
 
         public void Close()
