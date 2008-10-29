@@ -1,3 +1,6 @@
+v0.6.0
+------
+
 - Enhancements:
 	- Visual Preview of FDO data sources using the SharpMap library.
 	- MapGuide Extension Module. This is experimental and work in progress.
