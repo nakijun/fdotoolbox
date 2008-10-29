@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FdoToolbox.Lib</RootNamespace>
-    <AssemblyName>FdoToolbox.Lib</AssemblyName>
+    <AssemblyName>FdoToolbox.Base</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
