@@ -34,7 +34,8 @@ namespace FdoToolbox.Core.ETL.Filters
     public class FdoStringSubstitutionFilter : FdoConditionalFilter
     {
         /// <summary>
-        /// Adds a substitution rule for a given property
+        /// Adds a substitution rule for a given property. The property must be
+        /// a string property, otherwise substitution will not occur.
         /// </summary>
         /// <param name="name">The name of the property</param>
         /// <param name="value">The value to look for</param>
@@ -42,7 +43,7 @@ namespace FdoToolbox.Core.ETL.Filters
         public void AddSubstitution(string name, string value, string replacement)
         {
             //Test predicate. Return true if expression is string and == value
-            Predicate<ValueExpression> test = delegate(ValueExpression expr)
+            Predicate<LiteralValue> test = delegate(LiteralValue expr)
             {
                 StringValue sval = expr as StringValue;
                 if (sval != null)
@@ -51,7 +52,7 @@ namespace FdoToolbox.Core.ETL.Filters
             };
 
             //Action delegate. Replace string expression with replacement value
-            Action<ValueExpression> sub = delegate(ValueExpression expr)
+            Action<LiteralValue> sub = delegate(LiteralValue expr)
             {
                 StringValue sval = expr as StringValue;
                 if (sval != null)

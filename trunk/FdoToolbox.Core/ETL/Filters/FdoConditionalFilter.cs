@@ -33,8 +33,8 @@ namespace FdoToolbox.Core.ETL.Filters
 
         class ConditionAction
         {
-            public Predicate<ValueExpression> comparision;
-            public Action<ValueExpression> action;
+            public Predicate<LiteralValue> comparision;
+            public Action<LiteralValue> action;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace FdoToolbox.Core.ETL.Filters
         /// <param name="name">The property to apply a conditional action</param>
         /// <param name="comparison">A delegate that tests a condition</param>
         /// <param name="action">An action to perform if the condition passes</param>
-        public void AddCondition(string name, Predicate<ValueExpression> comparison, Action<ValueExpression> action)
+        public void AddCondition(string name, Predicate<LiteralValue> comparison, Action<LiteralValue> action)
         {
             if (!_conditions.ContainsKey(name))
                 _conditions[name] = new List<ConditionAction>();
@@ -75,7 +75,7 @@ namespace FdoToolbox.Core.ETL.Filters
         {
             foreach (string name in _conditions.Keys)
             {
-                ValueExpression expr = feat[name];
+                LiteralValue expr = feat[name];
                 if (expr != null)
                 {
                     //Test all conditions for this feature
