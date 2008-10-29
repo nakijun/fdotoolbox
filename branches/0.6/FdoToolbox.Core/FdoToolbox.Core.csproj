@@ -1,0 +1,261 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{27F2ABA2-C16A-42C8-9EE3-8F2FBD9135DC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FdoToolbox.Core</RootNamespace>
+    <AssemblyName>FdoToolbox.Core</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\out\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\out\Debug\FdoToolbox.Core.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\out\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <DocumentationFile>..\out\Release\FdoToolbox.Core.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
+    <OutputPath>..\out\Test\</OutputPath>
+    <DefineConstants>TEST</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Iesi.Collections\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="OSGeo.FDO, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OSGeo.FDO.Common, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OSGeo.FDO.Geometry, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Geometry.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.54.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\SQLite\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientServices\FeatureQueryOptions.cs" />
+    <Compile Include="ClientServices\IPreferenceDictionary.cs" />
+    <Compile Include="Commands\FdoConnectionConsoleCommand.cs" />
+    <Compile Include="Common\DatabaseConnection.cs" />
+    <Compile Include="Common\FdoConnection.cs" />
+    <Compile Include="Common\FdoDataReader.cs" />
+    <Compile Include="Common\FdoFeatureReader.cs" />
+    <Compile Include="Common\FdoReader.cs" />
+    <Compile Include="Common\FdoSqlReader.cs" />
+    <Compile Include="Common\IFdoReader.cs" />
+    <Compile Include="Common\IncompatibleClassReason.cs" />
+    <Compile Include="Common\FdoDataTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\FdoColumns.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\FdoFeatureTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\FdoTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\IncompatibleSchema.cs" />
+    <Compile Include="Common\IncompatibleClass.cs" />
+    <Compile Include="Common\IncompatibleProperty.cs" />
+    <Compile Include="Common\TableFactory.cs" />
+    <Compile Include="Configuration\BulkCopyTask.cs" />
+    <Compile Include="Configuration\DbConnection.cs" />
+    <Compile Include="Configuration\DbJoinTask.cs" />
+    <Compile Include="Configuration\Preferences.cs" />
+    <Compile Include="Configuration\SpatialConnection.cs" />
+    <Compile Include="ETL\DataTypeComparer.cs" />
+    <Compile Include="ETL\DataTypeMapping.cs" />
+    <Compile Include="ETL\Filters\FdoConditionalFilter.cs" />
+    <Compile Include="ETL\FdoFeature.cs" />
+    <Compile Include="ETL\FdoFeatureInput.cs" />
+    <Compile Include="ETL\FdoFeatureOutput.cs" />
+    <Compile Include="ETL\FdoFeatureOutputBatched.cs" />
+    <Compile Include="ETL\FdoFilteredStreamingOperation.cs" />
+    <Compile Include="ETL\Filters\FdoNullFilter.cs" />
+    <Compile Include="ETL\FdoReaderAdapter.cs" />
+    <Compile Include="ETL\Filters\FdoRenameFilter.cs" />
+    <Compile Include="ETL\FdoStreamingOperation.cs" />
+    <Compile Include="ETL\Filters\FdoStringSubstitutionFilter.cs" />
+    <Compile Include="ETL\FdoTransformationPipeline.cs" />
+    <Compile Include="ETL\IClassNameOverride.cs" />
+    <Compile Include="ETL\IFdoBatchedOutput.cs" />
+    <Compile Include="ETL\IFdoDatabaseJoinFilter.cs" />
+    <Compile Include="ETL\IFdoIO.cs" />
+    <Compile Include="ETL\IFdoOperation.cs" />
+    <Compile Include="ETL\Operations\PrintOperation.cs" />
+    <Compile Include="ETL\Overrides\ICopySpatialContextOverride.cs" />
+    <Compile Include="ETL\Overrides\MsSqlCopySpatialContextOverride.cs" />
+    <Compile Include="ETL\Overrides\MySqlCopySpatialContextOverride.cs" />
+    <Compile Include="ETL\Overrides\OracleClassNameOverride.cs" />
+    <Compile Include="ETL\Overrides\ShpCopySpatialContextOverride.cs" />
+    <Compile Include="ETL\Specialized\ClassCopyOptions.cs" />
+    <Compile Include="ETL\Specialized\DataTableConversionOptions.cs" />
+    <Compile Include="ETL\Specialized\DataTableToFlatFileTask.cs" />
+    <Compile Include="ETL\Specialized\DbToPointCopyOptions.cs" />
+    <Compile Include="ETL\Specialized\DbToPointCopyTask.cs" />
+    <Compile Include="ETL\Specialized\SpatialBulkCopyOptions.cs" />
+    <Compile Include="ETL\Specialized\SpatialBulkCopyTask.cs" />
+    <Compile Include="ETL\Specialized\SpatialJoinOptions.cs" />
+    <Compile Include="ETL\Specialized\SpatialJoinTask.cs" />
+    <Compile Include="ETL\TaskBase.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="IO\DbConnLoader.cs" />
+    <Compile Include="ClientServices\AppConsole.cs" />
+    <Compile Include="BaseApplication.cs" />
+    <Compile Include="IO\CmdConsoleErrorStream.cs" />
+    <Compile Include="IO\CmdConsoleOutputStream.cs" />
+    <Compile Include="Commands\CommandStatus.cs" />
+    <Compile Include="IO\SpatialConnLoader.cs" />
+    <Compile Include="ConsoleApplication.cs" />
+    <Compile Include="Commands\ConsoleCommand.cs" />
+    <Compile Include="ClientServices\FeatureService.cs" />
+    <Compile Include="IConsoleCommand.cs" />
+    <Compile Include="Common\DataStoreInfo.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="IO\IConsoleInputStream.cs" />
+    <Compile Include="IO\IConsoleOutputStream.cs" />
+    <Compile Include="ITask.cs" />
+    <Compile Include="Utility\ExpressUtility.cs" />
+    <Compile Include="Utility\FdoGeometryUtil.cs" />
+    <Compile Include="ETL\FdoMetaDataNames.cs" />
+    <Compile Include="Utility\FeatureReaderHelper.cs" />
+    <Compile Include="Utility\OverrideFactory.cs" />
+    <Compile Include="ClientServices\PreferenceDictionary.cs" />
+    <Compile Include="ClientServices\PreferenceNames.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\SpatialContextInfo.cs" />
+    <Compile Include="IO\TaskLoader.cs" />
+    <Compile Include="Utility\WKTParser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_form_edit.png" />
+    <Content Include="Resources\APP_ABOUT.txt" />
+    <None Include="Resources\icon_fitwindow.gif" />
+    <None Include="Resources\icon_pan.gif" />
+    <None Include="Resources\zoom_out.png" />
+    <None Include="Resources\zoom_in.png" />
+    <None Include="Resources\arrow_left.png" />
+    <None Include="Resources\house.png" />
+    <None Include="Resources\database_edit.png" />
+    <None Include="Resources\application_side_boxes.png" />
+    <None Include="Resources\application_xp_terminal.png" />
+    <None Include="Resources\world.png" />
+    <None Include="cscatalog.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\page_white_code.png" />
+    <None Include="Resources\arrow_right.png" />
+    <None Include="Resources\map.png" />
+    <None Include="Resources\add.png" />
+    <None Include="Resources\bricks.png" />
+    <None Include="Resources\page_refresh.png" />
+    <None Include="Resources\database_add.png" />
+    <None Include="Resources\chart_organisation.png" />
+    <None Include="Resources\help.png" />
+    <None Include="Resources\information.png" />
+    <None Include="Resources\table_delete.png" />
+    <None Include="Resources\table_add.png" />
+    <None Include="Resources\table_edit.png" />
+    <None Include="Resources\chart_organisation_delete.png" />
+    <None Include="Resources\chart_organisation_add.png" />
+    <None Include="Resources\zoom.png" />
+    <None Include="Resources\table_relationship.png" />
+    <None Include="Resources\table_go.png" />
+    <None Include="Resources\table.png" />
+    <None Include="Resources\shape_handles.png" />
+    <None Include="Resources\plugin_delete.png" />
+    <None Include="Resources\plugin.png" />
+    <None Include="Resources\page_white.png" />
+    <None Include="Resources\package.png" />
+    <None Include="Resources\key.png" />
+    <None Include="Resources\image.png" />
+    <None Include="Resources\folder.png" />
+    <None Include="Resources\disk.png" />
+    <None Include="Resources\database_table.png" />
+    <None Include="Resources\database_connect.png" />
+    <None Include="Resources\database.png" />
+    <None Include="Resources\cross.png" />
+    <None Include="Resources\application_go.png" />
+    <None Include="Resources\application_edit.png" />
+    <None Include="Resources\accept.png" />
+    <None Include="Schemas\BulkCopyTask.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\DbConnection.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\DbJoinTask.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\Preferences.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\SpatialConnection.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
