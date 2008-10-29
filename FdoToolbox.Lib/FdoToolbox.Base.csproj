@@ -543,7 +543,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MenuMap.xml" />
-    <Content Include="Modules.xml" />
+    <Content Include="Modules.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="OEMenuMap.xml" />
     <None Include="Resources\zoom_out.png" />
     <None Include="Resources\zoom_in.png" />
