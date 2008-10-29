@@ -1,18 +1,22 @@
 #summary Planned features for upcoming releases
 
-=== 0.7 ===
+=== 0.6 ===
 
  * MapGuide Enterprise/Open Source integration
  * ~~Visual Preview of FDO Data Sources~~
+
+=== 0.7 ===
+
  * Additional Property support
       * Object Properties
       * Association Properties
- * Raster Provider support
-
-=== Future ===
  * Spatial ETL pipelining API
+ * Raster Provider support
  * Additional Property support
       * Raster Properties
+
+=== Future ===
+ 
  * Schema Mapping support
  * Localization
  * Pipeable console commands
