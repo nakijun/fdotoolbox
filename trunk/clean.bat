@@ -10,9 +10,6 @@ rd /S /Q FdoInfo\obj
 echo "Cleaning FdoUtil"
 rd /S /Q FdoUtil\bin
 rd /S /Q FdoUtil\obj
-echo "Cleaning FdoQuery"
-rd /S /Q FdoQuery\bin
-rd /S /Q FdoQuery\obj
 echo "Cleaning TestApp"
 rd /S /Q TestLibrary\bin
 rd /S /Q TestLibrary\obj
