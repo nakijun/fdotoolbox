@@ -7,5 +7,6 @@ This application uses the following thirdparty libraries and resources:
 - Iesi.Collections (c) Jason Smith
 - MapGuide Maestro API (c) Kenneth Skovhede (http://trac.osgeo.org/mapguide/wiki/maestro)
 - Topology Framework .NET (c) Maksim Sestic (http://code.google.com/p/tf-net)
+- SharpMap 0.9 (c) Morten Nielsen (http://www.codeplex.com/SharpMap)
 
-This application and its non-thirdparty components are licensed under the GNU Lesser General Public Licence (see http://www.gnu.org/licenses/lgpl.html)
+This application is licensed under the GNU Lesser General Public Licence (see http://www.gnu.org/licenses/lgpl.html) 
