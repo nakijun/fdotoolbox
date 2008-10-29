@@ -1,12 +1,8 @@
 #summary Planned features for upcoming releases
 
-=== 0.6 ===
-
- * MapGuide Enterprise/Open Source integration
- * ~~Visual Preview of FDO Data Sources~~
-
 === 0.7 ===
 
+ * MapGuide Enterprise/Open Source integration
  * Additional Property support
       * Object Properties
       * Association Properties
