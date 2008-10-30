@@ -2,9 +2,11 @@
 
 SET TYPEACTION=build
 SET TYPEBUILD=Release
+
 SET OUTDIR=%CD%\out\%TYPEBUILD%
 SET DOCPATH=%CD%\Doc
 SET THIRDPARTY=%CD%\Thirdparty
+SET INSTALL=%CD%\Install
 SET FDOINFO=%CD%\FdoInfo
 SET FDOUTIL=%CD%\FdoUtil
 SET TESTAPP=%CD%\TestApp
@@ -16,7 +18,8 @@ SET FDOTOOLBOXCORE=%CD%\FdoToolbox.Core
 SET FDOTOOLBOXBASE=%CD%\FdoToolbox.Lib
 SET TESTMODULE=%CD%\TestModule
 SET MGMODULE=%CD%\MGModule
-SET PATH=%PATH%;%systemroot%\Microsoft.NET\Framework\v2.0.50727;%THIRDPARTY%\NDoc
+
+SET PATH=%PATH%;%systemroot%\Microsoft.NET\Framework\v2.0.50727;%THIRDPARTY%\NDoc;%THIRDPARTY%\NSIS
 SET VERBOSITY=/v:q
 
 :study_params
@@ -86,6 +89,11 @@ copy userdoc.chm %OUTDIR%
 popd
 
 IF NOT EXIST %OUTDIR%\FDO xcopy /S /Y /I %THIRDPARTY%\Fdo\*.* %OUTDIR%\FDO
+
+echo Creating installer
+pushd %INSTALL%
+makensis /DSLN_CONFIG=%TYPEBUILD% FdoToolbox.nsi
+popd
 goto quit
 
 :clean
