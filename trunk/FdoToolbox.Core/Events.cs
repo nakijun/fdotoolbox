@@ -23,6 +23,7 @@ using System.Text;
 using System.ComponentModel;
 using OSGeo.FDO.Connections;
 using FdoToolbox.Core.Common;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Core
 {
@@ -36,23 +37,77 @@ namespace FdoToolbox.Core
     public delegate void TaskProgressMessageEventHandler(object sender, EventArgs<string> e);
     public delegate void TaskEventHandler(object sender, EventArgs<string> e);
     public delegate string UniqueNameDelegate();
+    public delegate void FeatureErrorEventHandler(object sender, FeatureErrorEventArgs e);
 
+    /// <summary>
+    /// Feature error event object
+    /// </summary>
+    public class FeatureErrorEventArgs : EventArgs
+    {
+        private readonly FdoFeature _feat;
+        private readonly Exception _ex;
+
+        /// <summary>
+        /// The feature that caused the error
+        /// </summary>
+        public FdoFeature Feature
+        {
+            get { return _feat; }
+        }
+
+        /// <summary>
+        /// The error object
+        /// </summary>
+        public Exception Exception
+        {
+            get { return _ex; }
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="feat"></param>
+        /// <param name="ex"></param>
+        public FeatureErrorEventArgs(FdoFeature feat, Exception ex)
+        {
+            _feat = feat;
+            _ex = ex;
+        }
+    }
+
+    /// <summary>
+    /// Generic event object
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class EventArgs<T> : EventArgs
     {
         private readonly T _Data;
 
+        /// <summary>
+        /// The event data
+        /// </summary>
         public T Data
         {
             get { return _Data; }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="data"></param>
         public EventArgs(T data) { _Data = data; }
     }
 
+    /// <summary>
+    /// Message event object
+    /// </summary>
     public class MessageEventArgs : EventArgs
     {
         private readonly string _Title;
 
+        /// <summary>
+        /// The title of the message
+        /// </summary>
         public string Title
         {
             get { return _Title; }
@@ -60,11 +115,19 @@ namespace FdoToolbox.Core
 
         private readonly string _Message;
 
+        /// <summary>
+        /// The message content
+        /// </summary>
         public string Message
         {
             get { return _Message; }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
         public MessageEventArgs(string title, string message)
         {
             _Title = title;
