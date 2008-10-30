@@ -12,3 +12,7 @@
 === OSGeo.OGR ===
 
  * Can get VC++ "pure virtual function calls" at random
+
+=== OSGeo.KingOracle ===
+
+ * SelectAggregate commands do not work because either the provider does not support them or the provide is falsely advertising that it does support it. ([http://trac.osgeo.org/fdo/ticket/376 Trac ticket 376])
