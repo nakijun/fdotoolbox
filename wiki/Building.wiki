@@ -30,8 +30,9 @@ When running build.bat with the -t switch, the unit tests will be built and run 
 
 To run the unit tests, do any of the following:
 
-type: build.bat -t
-or type: nunit-console.exe TestLibrary.dll
-or load and run TestLibrary.dll in the NUnit GUI application.
+ * type: build.bat -t
+ * type: nunit-console.exe TestLibrary.dll
+ * load and run TestLibrary.dll in the NUnit GUI application.
+ * run the TestRunner.exe application which will execute the unit tests. 
 
-or run the TestRunner.exe application which will execute the unit tests. Additionally you can set the TestRunner project as the startup project to allow for debugging of unit tests.
+Additionally you can set the TestRunner project as the startup project to allow for debugging of unit tests.
