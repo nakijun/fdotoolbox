@@ -24,6 +24,9 @@ using System.Threading;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Running task interface
+    /// </summary>
     public interface ITask
     {
         /// <summary>
@@ -53,11 +56,25 @@ namespace FdoToolbox.Core
         /// </summary>
         Thread ExecutingThread { get; }
 
+        /// <summary>
+        /// Fired when a item is processed in the task
+        /// </summary>
         event TaskPercentageEventHandler OnItemProcessed;
+
+        /// <summary>
+        /// Fired when a message is sent from the task
+        /// </summary>
         event TaskProgressMessageEventHandler OnTaskMessage;
+
+        /// <summary>
+        /// Fired when a message to be logged is sent from the task
+        /// </summary>
         event TaskProgressMessageEventHandler OnLogTaskMessage;
     }
 
+    /// <summary>
+    /// Defines the types of running tasks
+    /// </summary>
     public enum TaskType
     {
         /// <summary>

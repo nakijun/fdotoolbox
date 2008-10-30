@@ -32,11 +32,20 @@ namespace FdoToolbox.Core.ETL
     {
         private IFeatureReader _featureReader;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="reader"></param>
         public FdoFeatureInput(IFeatureReader reader)
         {
             _featureReader = reader;
         }
 
+        /// <summary>
+        /// Processes the set of features
+        /// </summary>
+        /// <param name="features"></param>
+        /// <returns></returns>
         public IEnumerable<FdoFeature> Process(IEnumerable<FdoFeature> features)
         {
             return new FdoReaderAdapter(_featureReader);

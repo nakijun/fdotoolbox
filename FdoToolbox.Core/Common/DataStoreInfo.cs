@@ -51,12 +51,21 @@ namespace FdoToolbox.Core
             set { _Description = value; }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
         public DataStoreInfo(string name, string description)
         {
             this.Name = name;
             this.Description = description;
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="reader"></param>
         public DataStoreInfo(IDataStoreReader reader)
         {
             this.Name = reader.GetName();

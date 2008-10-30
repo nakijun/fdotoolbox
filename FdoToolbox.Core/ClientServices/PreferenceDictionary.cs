@@ -38,6 +38,9 @@ namespace FdoToolbox.Core.ClientServices
         private Dictionary<string, int> _IntegerPrefs;
         private Dictionary<string, double> _DoublePrefs;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PreferenceDictionary()
         {
             _BooleanPrefs = new Dictionary<string, bool>();
@@ -46,6 +49,10 @@ namespace FdoToolbox.Core.ClientServices
             _DoublePrefs = new Dictionary<string, double>();
         }
 
+        /// <summary>
+        /// Loads the preferences from disk
+        /// </summary>
+        /// <param name="prefsFile"></param>
         public void LoadPreferences(string prefsFile)
         {
             XmlDocument doc = new XmlDocument();

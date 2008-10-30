@@ -29,6 +29,12 @@ namespace FdoToolbox.Core.ETL
     /// </summary>
     public class DataTypeComparer : Comparer<DataType>
     {
+        /// <summary>
+        /// Compares two data types
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public override int Compare(DataType x, DataType y)
         {
             return ((int)x).CompareTo((int)y);

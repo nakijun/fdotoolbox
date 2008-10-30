@@ -31,6 +31,9 @@ namespace FdoToolbox.Core
     /// </summary>
     public abstract class BaseApplication
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected BaseApplication()
         {
 #if DEBUG || TEST
@@ -107,8 +110,14 @@ namespace FdoToolbox.Core
             dict.SetDefaultValue(PreferenceNames.PREF_STR_LOG_PATH, Path.Combine(this.AppPath, "Logs\\"));
         }
 
+        /// <summary>
+        /// The preference dictionary
+        /// </summary>
         protected IPreferenceDictionary _PrefDict;
 
+        /// <summary>
+        /// The preference dictionary
+        /// </summary>
         public IPreferenceDictionary Preferences
         {
             get { return _PrefDict; }
@@ -127,8 +136,14 @@ namespace FdoToolbox.Core
             } 
         }
 
+        /// <summary>
+        /// Performs a check to ensure the FDO libraries can be loaded
+        /// </summary>
         protected abstract void CheckFdoPath();
 
+        /// <summary>
+        /// Perform pre-shutdown cleanup
+        /// </summary>
         protected virtual void Cleanup()
         {
             this.Preferences.Save();

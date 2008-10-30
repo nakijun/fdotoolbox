@@ -36,6 +36,9 @@ namespace FdoToolbox.Core.ClientServices
 
         private static IConsoleInputStream _In;
 
+        /// <summary>
+        /// The console input stream
+        /// </summary>
         public static IConsoleInputStream In
         {
             get { return _In; }
@@ -43,6 +46,9 @@ namespace FdoToolbox.Core.ClientServices
         }
         private static IConsoleOutputStream _Out;
 
+        /// <summary>
+        /// The console output stream
+        /// </summary>
         public static IConsoleOutputStream Out
         {
             get { return _Out; }
@@ -50,37 +56,69 @@ namespace FdoToolbox.Core.ClientServices
         }
         private static IConsoleOutputStream _Err;
 
+        /// <summary>
+        /// The console error stream
+        /// </summary>
         public static IConsoleOutputStream Err
         {
             get { return _Err; }
             set { _Err = value; }
         }
 
+        /// <summary>
+        /// Writes a formatted string to the console
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         public static void WriteLine(string format, params object[] args)
         {
             Out.WriteLine(format, args);
         }
 
+        /// <summary>
+        /// Writes an object to the console
+        /// </summary>
+        /// <param name="obj"></param>
         public static void WriteLine(object obj)
         {
             Out.WriteLine(obj.ToString());
         }
 
+        /// <summary>
+        /// Displays an alert message
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="msg"></param>
         public static void Alert(string title, string msg)
         {
             Alert(title, msg, true);
         }
 
+        /// <summary>
+        /// Writes an exception to the console
+        /// </summary>
+        /// <param name="ex"></param>
         public static void WriteException(Exception ex)
         {
             Err.WriteLine(ex.ToString());
         }
 
+        /// <summary>
+        /// Writes a formatted string to the console
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         public static void Write(string format, params object [] args)
         {
             Out.Write(format, args);
         }
 
+        /// <summary>
+        /// Displays an alert message
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        /// <param name="writeToConsole"></param>
         public static void Alert(string title, string message, bool writeToConsole)
         {
             if (DoAlert != null)
@@ -91,6 +129,12 @@ namespace FdoToolbox.Core.ClientServices
                 Out.WriteLine(message);
         }
 
+        /// <summary>
+        /// Displays a confirmation message
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static bool Confirm(string title, string text)
         {
             if (DoConfirm != null)
@@ -99,7 +143,14 @@ namespace FdoToolbox.Core.ClientServices
             throw new ApplicationException("DoConfirm handler not initialized");
         }
 
+        /// <summary>
+        /// Fires when an alert is displayed
+        /// </summary>
         public static event AlertHandler DoAlert;
+
+        /// <summary>
+        /// Fires when confirmation is requested
+        /// </summary>
         public static event ConfirmHandler DoConfirm;
     }
 }

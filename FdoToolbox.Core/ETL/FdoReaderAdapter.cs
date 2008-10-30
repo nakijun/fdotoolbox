@@ -34,6 +34,10 @@ namespace FdoToolbox.Core.ETL
     {
         Enumerator enumerator;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="reader"></param>
         public FdoReaderAdapter(IFeatureReader reader)
         {
             this.enumerator = new Enumerator(reader);

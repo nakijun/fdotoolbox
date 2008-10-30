@@ -27,10 +27,20 @@ using System.Data;
 
 namespace FdoToolbox.Core.Common
 {
+    /// <summary>
+    /// Extension of DataColumn with FDO-friendly attributes
+    /// </summary>
     public abstract class FdoColumn : System.Data.DataColumn
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected FdoColumn() { }
 
+        /// <summary>
+        /// Initialize this column with the underlying property definition
+        /// </summary>
+        /// <param name="def"></param>
         protected void LoadBaseAttributes(PropertyDefinition def)
         {
             this.ColumnName = def.Name;
@@ -39,67 +49,117 @@ namespace FdoToolbox.Core.Common
             this.IsSystem = def.IsSystem;
         }
 
+        /// <summary>
+        /// Sets the underlying property definition's base attributes from this column
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="def"></param>
         protected void GetBaseAttributes<T>(ref T def) where T : PropertyDefinition
         {
             def.IsSystem = this.IsSystem;
         }
 
+        /// <summary>
+        /// The column type
+        /// </summary>
         public PropertyType ColumnType
         {
             get { return (PropertyType)this.ExtendedProperties[FdoMetaDataNames.FDO_PROPERTY_TYPE]; }
             set { this.ExtendedProperties[FdoMetaDataNames.FDO_PROPERTY_TYPE] = value; } 
         }
 
+        /// <summary>
+        /// Returns true if this column is system generated
+        /// </summary>
         public bool IsSystem
         {
             get { return (bool)this.ExtendedProperties[FdoMetaDataNames.FDO_SYSTEM_PROPERTY]; }
             set { this.ExtendedProperties[FdoMetaDataNames.FDO_SYSTEM_PROPERTY] = value; }
         }
 
+        /// <summary>
+        /// Sets the underlying property definition's attributes from this column
+        /// </summary>
+        /// <param name="def"></param>
         protected abstract void LoadAttributes(PropertyDefinition def);
 
+        /// <summary>
+        /// Gets the underlying property definition
+        /// </summary>
+        /// <returns></returns>
         public abstract PropertyDefinition GetPropertyDefinition();
     }
 
+    /// <summary>
+    /// FDO Geometry data column
+    /// </summary>
     public class FdoGeometryColumn : FdoColumn
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FdoGeometryColumn() { }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
         public FdoGeometryColumn(string name, string description) 
         {
             GeometricPropertyDefinition def = new GeometricPropertyDefinition(name, description);
             this.LoadAttributes(def);
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="def"></param>
         public FdoGeometryColumn(GeometricPropertyDefinition def) 
         {
             this.LoadAttributes(def);
         }
 
+        /// <summary>
+        /// Returns true if this geometry has elevation (Z-component)
+        /// </summary>
         public bool HasElevation
         {
             get { return (bool)this.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_HAS_ELEVATION]; }
             set { this.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_HAS_ELEVATION] = value; }
         }
 
+        /// <summary>
+        /// Returns true if this geometry has measure
+        /// </summary>
         public bool HasMeasure
         {
             get { return (bool)this.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_HAS_MEASURE]; }
             set { this.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_HAS_MEASURE] = value; }
         }
 
+        /// <summary>
+        /// Gets the geometry types of this geometry
+        /// </summary>
         public int GeometryTypes
         {
             get { return (int)this.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_TYPE]; }
             set { this.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_TYPE] = value; }
         }
 
+        /// <summary>
+        /// Gets the spatial context association
+        /// </summary>
         public string SpatialContextAssociation
         {
             get { return this.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_SPATIAL_CONTEXT].ToString(); }
             set { this.ExtendedProperties[FdoMetaDataNames.FDO_GEOMETRY_SPATIAL_CONTEXT] = value; }
         }
 
+        /// <summary>
+        /// Sets the underlying property definition's attributes from this column
+        /// </summary>
+        /// <param name="def"></param>
         protected override void LoadAttributes(PropertyDefinition pd)
         {
             this.LoadBaseAttributes(pd);
@@ -113,6 +173,10 @@ namespace FdoToolbox.Core.Common
             this.SpatialContextAssociation = def.SpatialContextAssociation;
         }
 
+        /// <summary>
+        /// Gets the underlying property definition
+        /// </summary>
+        /// <returns></returns>
         public override PropertyDefinition GetPropertyDefinition()
         {
             GeometricPropertyDefinition def = new GeometricPropertyDefinition(this.ColumnName, this.Caption);
@@ -126,10 +190,21 @@ namespace FdoToolbox.Core.Common
         }
     }
 
+    /// <summary>
+    /// FDO data column
+    /// </summary>
     public class FdoDataColumn : FdoColumn
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FdoDataColumn() { }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
         public FdoDataColumn(string name, string description) 
         {
             DataPropertyDefinition def = new DataPropertyDefinition(name, description);
@@ -137,6 +212,10 @@ namespace FdoToolbox.Core.Common
             this.DefaultValue = null;
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="def"></param>
         public FdoDataColumn(DataPropertyDefinition def)
         {
             this.LoadAttributes(def);
@@ -147,6 +226,11 @@ namespace FdoToolbox.Core.Common
             return GetDataTypeFromType(this.DataType);
         }
 
+        /// <summary>
+        /// Gets the FDO data type
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static DataType GetDataTypeFromType(Type t)
         {
             //No CLOB
@@ -176,6 +260,11 @@ namespace FdoToolbox.Core.Common
                 throw new ArgumentException("Could not find corresponding DataType for Type: " + t);
         }
 
+        /// <summary>
+        /// Gets the CLR type from a FDO data type
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
         public static Type GetTypeFromDataType(DataType dt)
         {
             Type t = null;
@@ -221,18 +310,28 @@ namespace FdoToolbox.Core.Common
             return t;
         }
 
+        /// <summary>
+        /// Gets the scale of this data column
+        /// </summary>
         public int Scale
         {
             get { return (int)this.ExtendedProperties[FdoMetaDataNames.FDO_DATA_SCALE]; }
             set { this.ExtendedProperties[FdoMetaDataNames.FDO_DATA_SCALE] = value; }
         }
 
+        /// <summary>
+        /// Gets the precision of this data column
+        /// </summary>
         public int Precision
         {
             get { return (int)this.ExtendedProperties[FdoMetaDataNames.FDO_DATA_PRECISION]; }
             set { this.ExtendedProperties[FdoMetaDataNames.FDO_DATA_PRECISION] = value; }
         }
 
+        /// <summary>
+        /// Sets the underlying property definition's attributes from this column
+        /// </summary>
+        /// <param name="def"></param>
         protected override void LoadAttributes(PropertyDefinition pd)
         {
             this.LoadBaseAttributes(pd);
@@ -261,6 +360,10 @@ namespace FdoToolbox.Core.Common
                 this.DefaultValue = def.DefaultValue;
         }
 
+        /// <summary>
+        /// Gets the underlying property definition
+        /// </summary>
+        /// <returns></returns>
         public override PropertyDefinition GetPropertyDefinition()
         {
             DataPropertyDefinition def = new DataPropertyDefinition(this.ColumnName, this.Caption);
