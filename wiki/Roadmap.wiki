@@ -27,3 +27,4 @@
  * Integration with other OSGeo tools/libraries
  * Java GIS library integration via IKVM
  * Overhaul extensibility framework
+ * Segmented bulk copy (for extremely large datasets)
