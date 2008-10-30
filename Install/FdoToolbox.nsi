@@ -188,7 +188,6 @@ Section "uninstall"
 	RMDir /r "$INSTDIR"
 	
 	# remove shortcuts
-	Delete "$SMPROGRAMS\${INST_PRODUCT}\${LNK_FDOTOOLBOX}.lnk"
-	RMDir "$SMPROGRAMS\${INST_PRODUCT}"
+	RMDir /r "$SMPROGRAMS\${INST_PRODUCT}"
 SectionEnd
 
