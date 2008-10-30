@@ -10,18 +10,26 @@ In order to build the API documentation, you will need to download and install t
 
 == Building ==
 
-To build in debug mode. Run the build_debug.bat file, this will also run copy_thirdparty_debug.bat which will copy the prerequisite libraries and will also run build_doc_debug.bat to build the API documentation. The output directory will be "out\Debug"
+To build FDO Toolbox run build.bat, the following options are available
 
-To build in release mode. Run the build_release.bat file, this will also run copy_thirdparty_release.bat which will copy the prerequisite libraries and will also run build_doc_release.bat to build the API documentation. The output directory will be "out\Release"
+build.bat [-h]
+          [-t]
+          [-v]
+          [-c=BuildType]
+          [-a=Action]
 
-To build the unit tests. Run the build_test.bat file, this will also run copy_thirdparty_test.bat which will copy the prerequisite libraries. The output directory will be "out\Test". To run the unit tests, type:
+Help:          -h[elp]
+Test:          -t[est]
+Verbose:       -v
+BuildType:     -c[onfig]=Release(default), Debug
+Action:        -a[ction]=build(default), clean
 
-nunit-console.exe TestLibrary.dll
+When running build.bat with the -t switch, the unit tests will be built and run instead of the main source code.
 
+To run the unit tests, do any of the following:
+
+type: build.bat -t
+or type: nunit-console.exe TestLibrary.dll
 or load and run TestLibrary.dll in the NUnit GUI application.
 
 or run the TestRunner.exe application which will execute the unit tests. Additionally you can set the TestRunner project as the startup project to allow for debugging of unit tests.
-
-Run the clean.bat to delete the output directory and any intermediate files created during the build process.
-
-Run the clean_test.bat to only delete the test-related output files.
