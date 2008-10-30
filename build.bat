@@ -140,7 +140,6 @@ echo           [-t]
 echo           [-v]
 echo           [-c=BuildType]
 echo           [-a=Action]
-echo 
 echo Help:                  -h[elp]
 echo Test:                  -t[est]
 echo Verbose:               -v
