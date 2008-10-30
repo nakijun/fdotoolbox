@@ -36,8 +36,21 @@ namespace FdoToolbox.Core.ETL
         private IConnection _conn;
         private IInsert _insertCmd;
 
+        /// <summary>
+        /// Fired when a inserting a feature throws an exception
+        /// </summary>
+        public event FeatureErrorEventHandler FeatureError = delegate { };
+
+        /// <summary>
+        /// Fired when a feature has been inserted
+        /// </summary>
         public event EventHandler FeatureInserted = delegate { };
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="className"></param>
         public FdoFeatureOutput(IConnection conn, string className)
         {
             _conn = conn;
@@ -45,6 +58,12 @@ namespace FdoToolbox.Core.ETL
             _insertCmd.SetFeatureClassName(className);
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="schema"></param>
+        /// <param name="className"></param>
         public FdoFeatureOutput(IConnection conn, FeatureSchema schema, string className)
         {
             using (IApplySchema apply = conn.CreateCommand(CommandType.CommandType_ApplySchema) as IApplySchema)
@@ -57,25 +76,40 @@ namespace FdoToolbox.Core.ETL
             _insertCmd.SetFeatureClassName(className);
         }
 
+        /// <summary>
+        /// Processes the set of features
+        /// </summary>
+        /// <param name="features"></param>
+        /// <returns></returns>
         public IEnumerable<FdoFeature> Process(IEnumerable<FdoFeature> features)
         {
             foreach (FdoFeature feat in features)
             {
                 _insertCmd.PropertyValues.Clear();
-                PropertyValueCollection propVals = feat.ToValueCollection();
-                foreach (PropertyValue p in propVals)
+                try
                 {
-                    _insertCmd.PropertyValues.Add(p);
+                    PropertyValueCollection propVals = feat.ToValueCollection();
+                    foreach (PropertyValue p in propVals)
+                    {
+                        _insertCmd.PropertyValues.Add(p);
+                    }
+                    using (IFeatureReader reader = _insertCmd.Execute())
+                    {
+                        while (reader.ReadNext()) { }
+                        reader.Close();
+                    }
                 }
-                using (IFeatureReader reader = _insertCmd.Execute())
+                catch (OSGeo.FDO.Common.Exception ex)
                 {
-                    while (reader.ReadNext()) { }
-                    reader.Close();
+                    FeatureError(this, new FeatureErrorEventArgs(feat, ex));
                 }
             }
             yield break;
         }
 
+        /// <summary>
+        /// Dispose this object
+        /// </summary>
         public void Dispose()
         {
             _insertCmd.Dispose();
