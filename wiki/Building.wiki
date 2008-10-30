@@ -12,6 +12,7 @@ In order to build the API documentation, you will need to download and install t
 
 To build FDO Toolbox run build.bat, the following options are available
 
+{{{
 build.bat [-h]
           [-t]
           [-v]
@@ -23,6 +24,7 @@ Test:          -t[est]
 Verbose:       -v
 BuildType:     -c[onfig]=Release(default), Debug
 Action:        -a[ction]=build(default), clean
+}}}
 
 When running build.bat with the -t switch, the unit tests will be built and run instead of the main source code.
 
