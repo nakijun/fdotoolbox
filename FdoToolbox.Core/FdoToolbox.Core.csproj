@@ -126,6 +126,7 @@
     <Compile Include="ETL\Overrides\MsSqlCopySpatialContextOverride.cs" />
     <Compile Include="ETL\Overrides\MySqlCopySpatialContextOverride.cs" />
     <Compile Include="ETL\Overrides\OracleClassNameOverride.cs" />
+    <Compile Include="ETL\Overrides\PostGisClassNameOverride.cs" />
     <Compile Include="ETL\Overrides\ShpCopySpatialContextOverride.cs" />
     <Compile Include="ETL\Specialized\ClassCopyOptions.cs" />
     <Compile Include="ETL\Specialized\DataTableConversionOptions.cs" />
