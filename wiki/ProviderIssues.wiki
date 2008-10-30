@@ -1,0 +1,14 @@
+#summary Quirks and Notes on various FDO providers
+
+
+=== OSGeo.PostGIS ===
+
+ * The provider is very unstable, any operations with a PostGIS connection may throw anything from win32 exceptions to System.AccessViolationException
+
+ * Opening a bulk copy tab that involves a PostGIS connection may/will throw a System.AccessViolationException at OSGeo.FDO.Commands.BatchParameterValueCollection.ReleaseUnmanagedObject()
+
+ * Changes made after applying a schema to a PostGIS connection are not visible until you remove and re-open the connection
+
+=== OSGeo.OGR ===
+
+ * Can get VC++ "pure virtual function calls" at random
