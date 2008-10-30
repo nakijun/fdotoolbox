@@ -89,36 +89,30 @@ namespace FdoToolbox.Lib.Controls
         private void btnQuery_Click(object sender, EventArgs e)
         {
             ClearGrid();
-            
-            switch (tabQueryMode.SelectedIndex)
+
+            if (tabQueryMode.SelectedTab == pageStandard)
             {
-                case TAB_STANDARD:
-                    {
-                        if (ProceedWithQuery())
-                        {
-                            queryMap = ((cmbClass.SelectedItem as ClassDefinition).ClassType == ClassType.ClassType_FeatureClass);
-                            CheckMapState();
-                            QueryStandard();
-                        }
-                    }
-                    break;
-                case TAB_AGGREGATE:
-                    {
-                        queryMap = false;
-                        CheckMapState();
-                        QueryAggregate();
-                    }
-                    break;
-                case TAB_SQL:
-                    {
-                        if (ProceedWithQuery())
-                        {
-                            queryMap = false;
-                            CheckMapState();
-                            QuerySQL();
-                        }
-                    }
-                    break;
+                if (ProceedWithQuery())
+                {
+                    queryMap = ((cmbClass.SelectedItem as ClassDefinition).ClassType == ClassType.ClassType_FeatureClass);
+                    CheckMapState();
+                    QueryStandard();
+                }
+            }
+            else if (tabQueryMode.SelectedTab == pageAggregates)
+            {
+                queryMap = false;
+                CheckMapState();
+                QueryAggregate();
+            }
+            else if (tabQueryMode.SelectedTab == pageSQL)
+            {
+                if (ProceedWithQuery())
+                {
+                    queryMap = false;
+                    CheckMapState();
+                    QuerySQL();
+                }
             }
         }
 
@@ -144,9 +138,16 @@ namespace FdoToolbox.Lib.Controls
                 {
                     using (ISQLCommand cmd = service.CreateCommand<ISQLCommand>(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand))
                     {
-                        cmd.SQLStatement = string.Format("SELECT COUNT(*) AS {0} FROM {1}", property, classDef.Name);
+                        IClassNameOverride ov = OverrideFactory.GetClassNameOverride(service.Connection);
+                        string sql = string.Empty;
+                        if (ov != null)
+                            sql = string.Format("SELECT COUNT(*) AS {0} FROM {1}", property, ov.GetClassName(classDef.Name));
+                        else 
+                            sql = string.Format("SELECT COUNT(*) AS {0} FROM {1}", property, classDef.Name);
                         if (!string.IsNullOrEmpty(filter))
-                            cmd.SQLStatement += " WHERE " + filter;
+                            sql += " WHERE " + filter;
+
+                        cmd.SQLStatement = sql;
 
                         using (ISQLDataReader reader = cmd.ExecuteReader())
                         {

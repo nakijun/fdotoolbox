@@ -96,6 +96,9 @@ namespace FdoToolbox.Core.Utility
         /// </summary>
         public static void Initialize()
         {
+            RegisterClassNameOverride("OSGeo.PostGIS", typeof(PostGisClassNameOverride));
+            RegisterClassNameOverride("OSGeo.PostGIS.3.3", typeof(PostGisClassNameOverride));
+
             RegisterClassNameOverride("OSGeo.KingOracle", typeof(OracleClassNameOverride));
             RegisterCopySpatialContextOverride("OSGeo.MySQL", typeof(MySqlCopySpatialContextOverride));
             RegisterCopySpatialContextOverride("OSGeo.SHP", typeof(ShpCopySpatialContextOverride));
