@@ -28,26 +28,113 @@ namespace FdoToolbox.Core.ClientServices
     /// </summary>
     public interface IPreferenceDictionary
     {
+        /// <summary>
+        /// Sets a double preference value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void SetDoublePref(string name, double value);
+
+        /// <summary>
+        /// Sets an integer preference value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void SetIntegerPref(string name, int value);
+
+        /// <summary>
+        /// Sets a boolean preference value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void SetBooleanPref(string name, bool value);
+
+        /// <summary>
+        /// Sets a string preference value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void SetStringPref(string name, string value);
 
+        /// <summary>
+        /// Gets a double preference value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         double GetDoublePref(string name);
+
+        /// <summary>
+        /// Gets an integer preference value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         int GetIntegerPref(string name);
+
+        /// <summary>
+        /// Gets a boolean preference value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         bool GetBooleanPref(string name);
+
+        /// <summary>
+        /// Gets a string preference value
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         string GetStringPref(string name);
 
+        /// <summary>
+        /// The names of all double preference values
+        /// </summary>
         ICollection<string> DoublePreferences { get; }
+
+        /// <summary>
+        /// The names of all integer preference values
+        /// </summary>
         ICollection<string> IntegerPreferences { get; }
+
+        /// <summary>
+        /// The names of all boolean preference values
+        /// </summary>
         ICollection<string> BooleanPreferences { get; }
+
+        /// <summary>
+        /// The names of all string preference values
+        /// </summary>
         ICollection<string> StringPreferences { get; }
 
+        /// <summary>
+        /// Sets the default value of a string preference
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void SetDefaultValue(string name, string value);
+        
+        /// <summary>
+        /// Sets the default value of an integer preference
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void SetDefaultValue(string name, int value);
+
+        /// <summary>
+        /// Sets the default value of a double preference
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void SetDefaultValue(string name, double value);
+
+        /// <summary>
+        /// Sets the default value of a boolean preference
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void SetDefaultValue(string name, bool value);
 
+        /// <summary>
+        /// Persists the preferences
+        /// </summary>
         void Save();
     }
 

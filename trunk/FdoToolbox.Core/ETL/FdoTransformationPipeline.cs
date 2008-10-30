@@ -32,6 +32,9 @@ namespace FdoToolbox.Core.ETL
 
         private IFdoInput _input;
 
+        /// <summary>
+        /// The input source
+        /// </summary>
         public IFdoInput Input
         {
             get { return _input; }
@@ -40,17 +43,28 @@ namespace FdoToolbox.Core.ETL
 
         private IFdoOutput _output;
 
+        /// <summary>
+        /// The output source
+        /// </summary>
         public IFdoOutput Output
         {
             get { return _output; }
             set { _output = value; }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FdoTransformationPipeline() 
         {
             _Operations = new List<IFdoOperation>(); 
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
         public FdoTransformationPipeline(IFdoInput input, IFdoOutput output)
             : this()
         {

@@ -31,12 +31,18 @@ namespace FdoToolbox.Core.ETL
     {
         private string _Name;
 
+        /// <summary>
+        /// The name of the task
+        /// </summary>
         public string Name
         {
             get { return _Name; }
             set { _Name = value; }
         }
 
+        /// <summary>
+        /// Validates the parameters of the task before execution
+        /// </summary>
         public abstract void ValidateTaskParameters();
 
         /// <summary>
@@ -57,22 +63,41 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         public abstract void DoExecute();
 
+        /// <summary>
+        /// Gets the type of this task
+        /// </summary>
         public abstract TaskType TaskType
         {
             get;
         }
 
+        /// <summary>
+        /// Returns true if this task can be counted
+        /// </summary>
         public abstract bool IsCountable
         {
             get;
         }
 
+        /// <summary>
+        /// Fired when a item is processed in the task
+        /// </summary>
         public event TaskPercentageEventHandler OnItemProcessed;
 
+        /// <summary>
+        /// Fired when a message is sent from the task
+        /// </summary>
         public event TaskProgressMessageEventHandler OnTaskMessage;
 
+        /// <summary>
+        /// Fired when a message to be logged is sent from the task
+        /// </summary>
         public event TaskProgressMessageEventHandler OnLogTaskMessage;
 
+        /// <summary>
+        /// Sends a task message
+        /// </summary>
+        /// <param name="msg"></param>
         protected void SendMessage(string msg)
         {
             if (this.OnTaskMessage != null)
@@ -81,6 +106,10 @@ namespace FdoToolbox.Core.ETL
                 this.OnLogTaskMessage(this, new EventArgs<string>(msg));
         }
 
+        /// <summary>
+        /// Send the current progress
+        /// </summary>
+        /// <param name="count"></param>
         protected void SendCount(int count)
         {
             if (this.OnItemProcessed != null)
@@ -89,6 +118,9 @@ namespace FdoToolbox.Core.ETL
 
         private Thread _RunningThread;
 
+        /// <summary>
+        /// The thread that is executing this task
+        /// </summary>
         public Thread ExecutingThread
         {
             get { return _RunningThread; }

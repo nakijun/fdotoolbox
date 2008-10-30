@@ -46,11 +46,18 @@ namespace FdoToolbox.Core.ETL.Specialized
             set { _Options = value; }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="options"></param>
         public DbToPointCopyTask(DbToPointCopyOptions options)
         {
             this.Options = options;
         }
 	
+        /// <summary>
+        /// Validates the parameters of the task before execution
+        /// </summary>
         public override void ValidateTaskParameters()
         {
             using (FeatureService service = new FeatureService(this.Options.Target.InternalConnection))
@@ -141,6 +148,9 @@ namespace FdoToolbox.Core.ETL.Specialized
 
         const string GEOM_PROP = "Geometry";
 
+        /// <summary>
+        /// Executes the task
+        /// </summary>
         public override void DoExecute()
         {
             FeatureService service = new FeatureService(this.Options.Target.InternalConnection);
@@ -329,11 +339,17 @@ namespace FdoToolbox.Core.ETL.Specialized
             return columns;
         }
         
+        /// <summary>
+        /// Gets the type of this task
+        /// </summary>
         public override TaskType TaskType
         {
             get { return TaskType.NonSpatialToSpatialBulkCopy; }
         }
 
+        /// <summary>
+        /// Returns true if this task is countable
+        /// </summary>
         public override bool IsCountable
         {
             get { return true; }

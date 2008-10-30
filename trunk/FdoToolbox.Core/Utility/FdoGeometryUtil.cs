@@ -24,11 +24,11 @@ using System.IO;
 using OSGeo.FDO.Common;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Geometry;
-/**
- * FGF to WKT conversion code copied from:
- * 
- * http://trac.osgeo.org/fdo/browser/trunk/Providers/OGR/OgrFdoUtil.cpp
- */
+//
+// FGF to WKT conversion code copied from:
+// 
+// http://trac.osgeo.org/fdo/browser/trunk/Providers/OGR/OgrFdoUtil.cpp
+//
 namespace FdoToolbox.Core.Utility
 {
     /// <summary>

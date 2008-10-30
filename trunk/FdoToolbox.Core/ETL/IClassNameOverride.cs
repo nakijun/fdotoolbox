@@ -28,6 +28,11 @@ namespace FdoToolbox.Core.ETL
     /// </summary>
     public interface IClassNameOverride
     {
+        /// <summary>
+        /// Returns the class name
+        /// </summary>
+        /// <param name="fullName"></param>
+        /// <returns></returns>
         string GetClassName(string fullName);
     }
 }

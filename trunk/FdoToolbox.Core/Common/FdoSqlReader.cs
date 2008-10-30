@@ -26,16 +26,16 @@ using System.Data;
 
 namespace FdoToolbox.Core.Common
 {
-    /**
-     * This should really derive from FdoReader<T>, but since ISQLDataReader does
-     * not derive from IReader, that is not possible. Until that is fixed in FDO itself
-     * we have no choice but to duplicate the FdoReader implementation, ugh!
-     * 
-     * http://trac.osgeo.org/fdo/ticket/359
-     * 
-     * Update 14/9/2008: All adapter classes implement IFdoReader. This does not fix the original
-     * issue, but it does give us an interface that we can work with any reader adapter class.
-     */
+    //
+    // This should really derive from FdoReader<T>, but since ISQLDataReader does
+    // not derive from IReader, that is not possible. Until that is fixed in FDO itself
+    // we have no choice but to duplicate the FdoReader implementation, ugh!
+    // 
+    // http://trac.osgeo.org/fdo/ticket/359
+    // 
+    // Update 14/9/2008: All adapter classes implement IFdoReader. This does not fix the original
+    // issue, but it does give us an interface that we can work with any reader adapter class.
+    //
 
     /// <summary>
     /// FDO reader wrapper class. Wraps the FDO ISQLDataReader interface and the 
