@@ -1,0 +1,69 @@
+[OPTIONS]
+Language=0x409 English (United States)
+Default Font=Arial,8,0
+TITLE=FDO Toolbox Help Documentation
+Full-text search=Yes
+Display compile notes=YES
+Display compile progress=YES
+Compatibility=1.1
+Auto Index=Yes
+Default Window=Main
+Compiled file=userdoc.chm
+Error Log file=userdoc.log
+Contents file=userdoc.hhc
+Index File=userdoc.hhk
+Default Topic=user_introduction.html
+
+[FILES]
+user_introduction.html
+connecting_via_the_generic_dialog.html
+connecting_via_express_dialogs.html
+savingloading_connections.html
+connection_notes.html
+object_explorer_introduction.html
+customising_context_menus.html
+extending_the_object_explorer.html
+schema_introduction.html
+creating_new_classes.html
+updating_existing_classes.html
+notes.html
+using_the_generic_dialog.html
+creating_flat_files.html
+preview_introduction.html
+standard_query.html
+aggregate_query.html
+sql_query.html
+saving_query_results.html
+adding_new_features.html
+creating_bulk_copy_tasks.html
+express_bulk_copy_tasks.html
+savingloading_bulk_copy_tasks.html
+join_introduction.html
+creating_database_joins.html
+savingloading_join_tasks.html
+cmd_introduction.html
+UsingFdoUtil.exe.html
+UsingFdoInfo.exe.html
+UsingFdoQuery.exe.html
+ErrorCodes.html
+Architecture.html
+CreatingExtensionModules.html
+APIDocumentation.html
+
+
+
+
+[WINDOWS]
+Main="FDO Toolbox Help Documentation","userdoc.hhc","userdoc.hhk","user_introduction.html","user_introduction.html",,,,,0x61520,200,0x304e,[50,50,450,450],0x307e,,,,,,0
+Popup="Popup","userdoc.hhc","userdoc.hhk","user_introduction.html","user_introduction.html", ,,,,0x00061520,200, 0x0000304E,[50,50,450,450],0x307e,,,,,,0
+
+
+[MAP]
+#include userdoc.h
+
+
+
+[TEXT POPUPS]
+CSHelp.txt
+
+

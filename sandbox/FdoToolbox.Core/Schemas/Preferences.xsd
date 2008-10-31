@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Preferences" type="Preferences" />
+	<xs:complexType name="Preferences">
+		<xs:sequence>
+			<xs:element name="StringPrefs" type="StringPrefs" />
+			<xs:element name="DoublePrefs" type="DoublePrefs" />
+			<xs:element name="IntegerPrefs" type="IntegerPrefs" />
+			<xs:element name="BooleanPrefs" type="BooleanPrefs" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StringPrefs">
+		<xs:sequence>
+			<xs:element name="Pref" type="StringPref" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>	   
+	</xs:complexType>
+	<xs:complexType name="DoublePrefs">
+		<xs:sequence>
+			<xs:element name="Pref" type="DoublePref" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IntegerPrefs">
+		<xs:sequence>
+			<xs:element name="Pref" type="IntegerPref" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BooleanPrefs">
+		<xs:sequence>
+			<xs:element name="Pref" type="BooleanPref" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StringPref">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="DoublePref">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:double" use="required" />
+	</xs:complexType>
+	<xs:complexType name="IntegerPref">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:integer" use="required" />
+	</xs:complexType>
+	<xs:complexType name="BooleanPref">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:boolean" use="required" />
+	</xs:complexType>
+</xs:schema>

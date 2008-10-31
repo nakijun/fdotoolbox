@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="BulkCopyTask" type="BulkCopyTask" />
+	<xs:complexType name="BulkCopyTask">
+		<xs:sequence>
+			<xs:element name="Source" type="CopySource" />
+			<xs:element name="Target" type="CopyTarget" />
+			<xs:element name="ClassMappings" type="ClassMappings" />
+			<xs:element name="BulkCopyOptions" type="BulkCopyOptions" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="CopySource">
+		<xs:sequence>
+			<xs:element name="Provider" type="xs:string" nillable="false" />
+			<xs:element name="ConnectionString" type="xs:string" nillable="false"/>
+			<xs:element name="Schema" type="xs:string" nillable="false" />
+			<xs:element name="SpatialContextList" type="SpatialContextList" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="CopyTarget">
+		<xs:sequence>
+			<xs:element name="Provider" type="xs:string" nillable="false" />
+			<xs:element name="ConnectionString" type="xs:string" nillable="false"/>
+			<xs:element name="Schema" type="xs:string" nillable="false" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="ClassMappings">
+		<xs:sequence>
+			<xs:element name="Mapping" type="Mapping" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Mapping">
+		<xs:sequence>
+			<xs:element name="DeleteTarget" type="xs:boolean" nillable="false" />
+			<xs:element name="SourceClass" type="xs:string" nillable="false" />
+			<xs:element name="TargetClass" type="xs:string" nillable="false" />
+			<xs:element name="Properties" type="Properties" />
+			<xs:element name="SourceFilter" type="xs:string" nillable="false" />		  
+		</xs:sequence>	   
+	</xs:complexType>
+	<xs:complexType name="BulkCopyOptions">
+		<xs:sequence>
+			<xs:element name="CopySpatialContexts" type="xs:boolean" nillable="false" />
+			<xs:element name="CoerceDataTypes" type="xs:boolean" nillable="false" default="false" />
+			<xs:element name="GlobalSpatialFilter" type="xs:string" nillable="true" />
+			<xs:element name="BatchInsertSize" type="xs:integer" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SpatialContextList">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" nillable="false" minOccurs="0" maxOccurs="unbounded" />		  
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Properties">
+		<xs:sequence>
+			<xs:element name="PropertyMapping" type="PropertyMapping" minOccurs="0" maxOccurs="unbounded" />		  
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PropertyMapping">
+		<xs:sequence>
+			<xs:element name="SourceProperty" type="xs:string" nillable="false" />
+			<xs:element name="TargetProperty" type="xs:string" nillable="false" />
+		</xs:sequence>	   
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DatabaseJoinTask xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DBJOIN">
+    <PrimarySource name="SDF_Countries">
+        <Provider>OSGeo.SDF.3.3</Provider>
+        <ConnectionString>File=World_Countries.sdf;ReadOnly=FALSE</ConnectionString>
+        <FeatureSchema>SHP_Schema</FeatureSchema>
+        <Class>World_Countries</Class>
+        <PropertyList>
+            <Property>SHPGEOM</Property>
+            <Property>MAPKEY</Property>
+            <Property>NAME</Property>
+            <Property>KEY</Property>
+        </PropertyList>
+        <Prefix />
+    </PrimarySource>
+    <SecondarySource name="Cities">
+        <Driver>Access</Driver>
+        <ConnectionString>Provider=Microsoft.Jet.OLEDB.4.0;Data Source=Cities.mdb</ConnectionString>
+        <Table>Cities</Table>
+        <ColumnList>
+            <Column>CITY_ID</Column>
+            <Column>NAME</Column>
+            <Column>COUNTRY</Column>
+            <Column>POPULATION</Column>
+            <Column>CAPITAL</Column>
+            <Column>LATITUDE</Column>
+            <Column>LONGITUDE</Column>
+            <Column>URL</Column>
+        </ColumnList>
+        <Prefix>CNT_</Prefix>
+    </SecondarySource>
+    <Target name="JoinTarget">
+        <Provider>OSGeo.SDF.3.3</Provider>
+        <ConnectionString>File=Target.sdf;ReadOnly=FALSE</ConnectionString>
+        <FeatureSchema>SHP_Schema</FeatureSchema>
+        <Class>Countries_Joined</Class>
+    </Target>
+    <Joins>
+        <Join primary="NAME" secondary="NAME" />
+    </Joins>
+    <JoinOptions>
+        <JoinType>LeftOuter</JoinType>
+        <JoinCardinality>OneToOne</JoinCardinality>
+    </JoinOptions>
+</DatabaseJoinTask>
