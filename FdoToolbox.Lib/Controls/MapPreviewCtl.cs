@@ -149,5 +149,10 @@ namespace FdoToolbox.Lib.Controls
             mapImg.Map.Layers.Clear();
             RefreshMap();
         }
+
+        private void mapImg_MouseMove(SharpMap.Geometries.Point WorldPos, MouseEventArgs ImagePos)
+        {
+            positionLabel.Text = string.Format("X: {0} Y: {0}", WorldPos.X, WorldPos.Y);
+        }
     }
 }
