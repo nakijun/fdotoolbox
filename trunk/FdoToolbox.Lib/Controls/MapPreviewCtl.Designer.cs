@@ -40,7 +40,9 @@ namespace FdoToolbox.Lib.Controls
             this.btnRefresh = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.mapImg = new SharpMap.Forms.MapImage();
+            this.positionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mapToolStrip.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mapImg)).BeginInit();
             this.SuspendLayout();
             // 
@@ -115,6 +117,8 @@ namespace FdoToolbox.Lib.Controls
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.positionLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 404);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(525, 22);
@@ -144,6 +148,12 @@ namespace FdoToolbox.Lib.Controls
             this.mapImg.TabIndex = 2;
             this.mapImg.TabStop = false;
             this.mapImg.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mapImg_MouseClick);
+            this.mapImg.MouseMove += new SharpMap.Forms.MapImage.MouseEventHandler(this.mapImg_MouseMove);
+            // 
+            // positionLabel
+            // 
+            this.positionLabel.Name = "positionLabel";
+            this.positionLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // MapPreviewCtl
             // 
@@ -156,6 +166,8 @@ namespace FdoToolbox.Lib.Controls
             this.Size = new System.Drawing.Size(525, 426);
             this.mapToolStrip.ResumeLayout(false);
             this.mapToolStrip.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mapImg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -173,5 +185,6 @@ namespace FdoToolbox.Lib.Controls
         private System.Windows.Forms.ToolStripButton btnPan;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private SharpMap.Forms.MapImage mapImg;
+        private System.Windows.Forms.ToolStripStatusLabel positionLabel;
     }
 }
