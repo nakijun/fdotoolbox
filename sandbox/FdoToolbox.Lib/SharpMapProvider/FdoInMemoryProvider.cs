@@ -76,46 +76,54 @@ namespace FdoToolbox.Lib.SharpMapProvider
                     {
                         if (geomCol.DataType == typeof(byte[]))
                         {
-                            byte[] fgf = (byte[])row[geomCol];
-                            byte[] wkb = FdoGeometryUtil.Fgf2Wkb(fgf);
-                            SharpMap.Geometries.Geometry g = GeometryFromWKB.Parse(wkb);
-                            SharpMap.Geometries.BoundingBox b = g.GetBoundingBox();
-                            if (bbox != null)
+                            try
                             {
-                                if (b.Max.X > bbox.Max.X)
-                                    bbox.Max.X = b.Max.X;
-                                if (b.Max.Y > bbox.Max.Y)
-                                    bbox.Max.Y = b.Max.Y;
-                                if (b.Min.X < bbox.Min.X)
-                                    bbox.Min.X = b.Min.X;
-                                if (b.Min.Y < bbox.Min.Y)
-                                    bbox.Min.Y = b.Min.Y;
+                                byte[] fgf = (byte[])row[geomCol];
+                                byte[] wkb = FdoGeometryUtil.Fgf2Wkb(fgf);
+                                SharpMap.Geometries.Geometry g = GeometryFromWKB.Parse(wkb);
+                                SharpMap.Geometries.BoundingBox b = g.GetBoundingBox();
+                                if (bbox != null)
+                                {
+                                    if (b.Max.X > bbox.Max.X)
+                                        bbox.Max.X = b.Max.X;
+                                    if (b.Max.Y > bbox.Max.Y)
+                                        bbox.Max.Y = b.Max.Y;
+                                    if (b.Min.X < bbox.Min.X)
+                                        bbox.Min.X = b.Min.X;
+                                    if (b.Min.Y < bbox.Min.Y)
+                                        bbox.Min.Y = b.Min.Y;
+                                }
+                                else
+                                {
+                                    bbox = b;
+                                }
                             }
-                            else
-                            {
-                                bbox = b;
-                            }
+                            catch { }
                         }
                         else
                         {
-                            string text = row[geomCol].ToString();
-                            SharpMap.Geometries.Geometry g = GeometryFromWKT.Parse(text);
-                            SharpMap.Geometries.BoundingBox b = g.GetBoundingBox();
-                            if (bbox != null)
+                            try
                             {
-                                if (b.Max.X > bbox.Max.X)
-                                    bbox.Max.X = b.Max.X;
-                                if (b.Max.Y > bbox.Max.Y)
-                                    bbox.Max.Y = b.Max.Y;
-                                if (b.Min.X < bbox.Min.X)
-                                    bbox.Min.X = b.Min.X;
-                                if (b.Min.Y < bbox.Min.Y)
-                                    bbox.Min.Y = b.Min.Y;
+                                string text = row[geomCol].ToString();
+                                SharpMap.Geometries.Geometry g = GeometryFromWKT.Parse(text);
+                                SharpMap.Geometries.BoundingBox b = g.GetBoundingBox();
+                                if (bbox != null)
+                                {
+                                    if (b.Max.X > bbox.Max.X)
+                                        bbox.Max.X = b.Max.X;
+                                    if (b.Max.Y > bbox.Max.Y)
+                                        bbox.Max.Y = b.Max.Y;
+                                    if (b.Min.X < bbox.Min.X)
+                                        bbox.Min.X = b.Min.X;
+                                    if (b.Min.Y < bbox.Min.Y)
+                                        bbox.Min.Y = b.Min.Y;
+                                }
+                                else
+                                {
+                                    bbox = b;
+                                }
                             }
-                            else
-                            {
-                                bbox = b;
-                            }
+                            catch { }
                         }
                     }
                 }
@@ -147,16 +155,24 @@ namespace FdoToolbox.Lib.SharpMapProvider
                     {
                         if (geomCol.DataType == typeof(byte[]))
                         {
-                            byte[] fgf = (byte[])row[geomCol];
-                            byte[] wkb = FdoGeometryUtil.Fgf2Wkb(fgf);
-                            SharpMap.Geometries.Geometry g = GeometryFromWKB.Parse(wkb);
-                            geoms.Add(g);
+                            try
+                            {
+                                byte[] fgf = (byte[])row[geomCol];
+                                byte[] wkb = FdoGeometryUtil.Fgf2Wkb(fgf);
+                                SharpMap.Geometries.Geometry g = GeometryFromWKB.Parse(wkb);
+                                geoms.Add(g);
+                            }
+                            catch { }
                         }
                         else
                         {
-                            string text = row[geomCol].ToString();
-                            SharpMap.Geometries.Geometry g = GeometryFromWKT.Parse(text);
-                            geoms.Add(g);
+                            try
+                            {
+                                string text = row[geomCol].ToString();
+                                SharpMap.Geometries.Geometry g = GeometryFromWKT.Parse(text);
+                                geoms.Add(g);
+                            }
+                            catch { }
                         }
                     }
                 }
