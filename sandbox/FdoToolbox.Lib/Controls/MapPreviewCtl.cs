@@ -61,29 +61,39 @@ namespace FdoToolbox.Lib.Controls
             }
         }
 
+        public bool HasLayers
+        {
+            get { return mapImg.Map.Layers.Count > 0; }
+        }
+
         private void btnZoomIn_Click(object sender, EventArgs e)
         {
-            ZoomIn();
+            if(this.HasLayers)
+                ZoomIn();
         }
 
         private void btnZoomOut_Click(object sender, EventArgs e)
         {
-            ZoomOut();
+            if (this.HasLayers)
+                ZoomOut();
         }
 
         private void btnZoomExtents_Click(object sender, EventArgs e)
         {
-            ZoomExtents();
+            if (this.HasLayers)
+                ZoomExtents();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            RefreshMap();
+            if (this.HasLayers)
+                RefreshMap();
         }
 
         private void btnPan_Click(object sender, EventArgs e)
         {
-            Pan();
+            if (this.HasLayers)
+                Pan();
         }
 
         private void ZoomIn()
@@ -125,13 +135,19 @@ namespace FdoToolbox.Lib.Controls
 
         public void ZoomExtents()
         {
-            mapImg.Map.ZoomToExtents();
-            RefreshMap();
+            if (this.HasLayers)
+            {
+                mapImg.Map.ZoomToExtents();
+                RefreshMap();
+            }
         }
 
         public void RefreshMap()
         {
-            mapImg.Refresh();
+            if (this.HasLayers)
+            {
+                mapImg.Refresh();
+            }
         }
 
         private void Pan()
