@@ -884,7 +884,7 @@ namespace FdoToolbox.Lib.Controls
             StandardFeatureQuery qry = e.Argument as StandardFeatureQuery;
             int limit = qry.Limit;
             
-            using (IFeatureReader reader = _Service.SelectFeatures(qry))
+            using (IFeatureReader reader = _Service.SelectFeatures(qry, limit))
             {
                 ClassDefinition cd = reader.GetClassDefinition();
                 FdoDataTable table = TableFactory.CreateTable(cd);
@@ -897,37 +897,18 @@ namespace FdoToolbox.Lib.Controls
                 }
                 try
                 {
-                    if (limit > 0)
+                    while (reader.ReadNext())
                     {
-                        while (reader.ReadNext() && count < limit)
+                        if (bgStandard.CancellationPending)
                         {
-                            if (bgStandard.CancellationPending)
-                            {
-                                e.Cancel = true;
-                                return;
-                            }
-
-                            ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
-                            count++;
-                            if (count % 50 == 0)
-                                Thread.Sleep(90);
+                            e.Cancel = true;
+                            return;
                         }
-                    }
-                    else
-                    {
-                        while (reader.ReadNext())
-                        {
-                            if (bgStandard.CancellationPending)
-                            {
-                                e.Cancel = true;
-                                return;
-                            }
 
-                            ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
-                            count++;
-                            if (count % 50 == 0)
-                                Thread.Sleep(75);
-                        }
+                        ProcessFeatureReader(table, cd.Properties, cachedPropertyNames, reader);
+                        count++;
+                        if (count % 50 == 0)
+                            Thread.Sleep(75);
                     }
                 }
                 catch (OSGeo.FDO.Common.Exception)
@@ -946,11 +927,6 @@ namespace FdoToolbox.Lib.Controls
             DataRow row = e.UserState as DataRow;
             if (grdPreview.Rows.Count == 0)
             {
-                /*
-                DataTable table = new DataTable();
-                table.TableName = row.Table.TableName;
-                table.Merge(row.Table);
-                */
                 DataTable table = row.Table;
                 BindingSource bs = new BindingSource();
                 bs.DataSource = table;
@@ -958,7 +934,6 @@ namespace FdoToolbox.Lib.Controls
 
                 grdPreview.DataSource = bs;
                 table.Rows.Add(row.ItemArray);
-                //mapCtl.DataSource.Rows.Add(row.ItemArray);
             }
             else
             {
