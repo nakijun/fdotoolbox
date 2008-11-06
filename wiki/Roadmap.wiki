@@ -13,6 +13,7 @@
 
 === Future ===
  
+ * Standalone Feature Schema Definition (xml) Editor
  * Schema Mapping support
  * Localization
  * Pipeable console commands
