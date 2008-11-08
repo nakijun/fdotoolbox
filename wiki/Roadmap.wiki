@@ -2,21 +2,25 @@
 
 === 0.7 ===
 
- * Overhaul extensibility framework
- * MapGuide Enterprise/Open Source integration
- * Additional Property support
-      * Object Properties
-      * Association Properties
+ * ~~Overhaul extensibility framework~~
  * Spatial ETL pipelining API
+ * Standalone Feature Schema Editor
+ * ~~NSIS installer packages~~
+
+=== 0.8 ===
+ 
+ * Localization
  * Raster Provider support
  * Additional Property support
       * Raster Properties
+ * Additional Property support
+      * Object Properties
+      * Association Properties
 
 === Future ===
  
- * Standalone Feature Schema Definition (xml) Editor
+ * MapGuide Enterprise/Open Source integration
  * Schema Mapping support
- * Localization
  * Pipeable console commands
  * KML support
  * Coordinate System Re-Projection
