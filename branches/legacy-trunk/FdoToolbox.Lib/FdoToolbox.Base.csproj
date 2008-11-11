@@ -1,0 +1,606 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2B3B10F6-3FF5-418C-BE1E-55C662DD6B82}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FdoToolbox.Lib</RootNamespace>
+    <AssemblyName>FdoToolbox.Base</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\out\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\out\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\out\Test\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OSGeo.FDO, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OSGeo.FDO.Common, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OSGeo.FDO.Geometry, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Geometry.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SharpMap, Version=0.9.3140.37856, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\SharpMap\SharpMap.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpMap.UI, Version=0.9.3140.37860, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\SharpMap\SharpMap.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.54.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\SQLite\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientServices\AppGateway.cs" />
+    <Compile Include="ClientServices\AppSession.cs" />
+    <Compile Include="ClientServices\CoordSysCatalog.cs" />
+    <Compile Include="ClientServices\DbConnectionManager.cs" />
+    <Compile Include="ClientServices\FdoConnectionMgr.cs" />
+    <Compile Include="ClientServices\MenuStateMgr.cs" />
+    <Compile Include="ClientServices\TaskManager.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandAttribute.cs" />
+    <Compile Include="Controls\BaseDocumentCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BaseDocumentCtl.Designer.cs">
+      <DependentUpon>BaseDocumentCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ClassDefCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ClassDefCtl.Designer.cs">
+      <DependentUpon>ClassDefCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CoordSysManagerCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CoordSysManagerCtl.Designer.cs">
+      <DependentUpon>CoordSysManagerCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DatabaseConnectCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DatabaseConnectCtl.Designer.cs">
+      <DependentUpon>DatabaseConnectCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DataStoreMgrCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DataStoreMgrCtl.Designer.cs">
+      <DependentUpon>DataStoreMgrCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DbConnectionBoundCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DbConnectionBoundCtl.Designer.cs">
+      <DependentUpon>DbConnectionBoundCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DbDataPreviewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DbDataPreviewCtl.Designer.cs">
+      <DependentUpon>DbDataPreviewCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExpressSpatialBulkCopyCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ExpressSpatialBulkCopyCtl.Designer.cs">
+      <DependentUpon>ExpressSpatialBulkCopyCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoBulkCopyCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoBulkCopyCtl.Designer.cs">
+      <DependentUpon>FdoBulkCopyCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoConnectionBoundControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoConnectionBoundControl.Designer.cs">
+      <DependentUpon>FdoConnectionBoundControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoConnectionBoundTabManager.cs" />
+    <Compile Include="Controls\FdoDataPreviewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoDataPreviewCtl.Designer.cs">
+      <DependentUpon>FdoDataPreviewCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoJoinCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoJoinCtl.Designer.cs">
+      <DependentUpon>FdoJoinCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FeatureClassExtendedInfoCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FeatureClassExtendedInfoCtl.Designer.cs">
+      <DependentUpon>FeatureClassExtendedInfoCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GenericCreateDataStoreCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GenericCreateDataStoreCtl.Designer.cs">
+      <DependentUpon>GenericCreateDataStoreCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GenericSpatialConnectCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GenericSpatialConnectCtl.Designer.cs">
+      <DependentUpon>GenericSpatialConnectCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\IBaseDocumentCtl.cs" />
+    <Compile Include="Controls\IFdoConnectionBoundCtl.cs" />
+    <Compile Include="Controls\IFdoConnectionBoundTabManager.cs" />
+    <Compile Include="Controls\MapPreviewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MapPreviewCtl.Designer.cs">
+      <DependentUpon>MapPreviewCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ModuleInfoCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ModuleInfoCtl.Designer.cs">
+      <DependentUpon>ModuleInfoCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PreferencesCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PreferencesCtl.Designer.cs">
+      <DependentUpon>PreferencesCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RegProviderCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RegProviderCtl.Designer.cs">
+      <DependentUpon>RegProviderCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchemaMgrCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaMgrCtl.Designer.cs">
+      <DependentUpon>SchemaMgrCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SpatialContextCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SpatialContextCtl.Designer.cs">
+      <DependentUpon>SpatialContextCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ValueListConstraintCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ValueListConstraintCtl.Designer.cs">
+      <DependentUpon>ValueListConstraintCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ValueRangeConstraintCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ValueRangeConstraintCtl.Designer.cs">
+      <DependentUpon>ValueRangeConstraintCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CoordinateSystem.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="Forms\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutDialog.Designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ClassTypePicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ClassTypePicker.Designer.cs">
+      <DependentUpon>ClassTypePicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CoordinateSystemPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CoordinateSystemPicker.Designer.cs">
+      <DependentUpon>CoordinateSystemPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CopyDbToPointsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CopyDbToPointsDlg.Designer.cs">
+      <DependentUpon>CopyDbToPointsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CopyDbToPointsSdfDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CopyDbToPointsSdfDlg.Designer.cs">
+      <DependentUpon>CopyDbToPointsSdfDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CSInfoDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CSInfoDlg.Designer.cs">
+      <DependentUpon>CSInfoDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DataPropertyDefinitionDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DataPropertyDefinitionDlg.Designer.cs">
+      <DependentUpon>DataPropertyDefinitionDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DictionaryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DictionaryDialog.Designer.cs">
+      <DependentUpon>DictionaryDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ExpressionDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExpressionDlg.Designer.cs">
+      <DependentUpon>ExpressionDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormFactory.cs" />
+    <Compile Include="Forms\GeometryPropertyDefinitionDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GeometryPropertyDefinitionDlg.Designer.cs">
+      <DependentUpon>GeometryPropertyDefinitionDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\InsertScaffold.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InsertScaffold.Designer.cs">
+      <DependentUpon>InsertScaffold.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MultiClassPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MultiClassPicker.Designer.cs">
+      <DependentUpon>MultiClassPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PendingParameterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PendingParameterDialog.Designer.cs">
+      <DependentUpon>PendingParameterDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SchemaInfoDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SchemaInfoDlg.Designer.cs">
+      <DependentUpon>SchemaInfoDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpatialContextInfoDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpatialContextInfoDlg.Designer.cs">
+      <DependentUpon>SpatialContextInfoDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpatialContextPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpatialContextPicker.Designer.cs">
+      <DependentUpon>SpatialContextPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StringInputDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StringInputDlg.Designer.cs">
+      <DependentUpon>StringInputDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TaskProgressDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TaskProgressDlg.Designer.cs">
+      <DependentUpon>TaskProgressDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UnregProviderDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UnregProviderDlg.Designer.cs">
+      <DependentUpon>UnregProviderDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HostApplication.cs" />
+    <Compile Include="ICommandVerifier.cs" />
+    <Compile Include="IConsoleWindow.cs" />
+    <Compile Include="ICoordinateSystemCatalog.cs" />
+    <Compile Include="IDbConnectionManager.cs" />
+    <Compile Include="IFdoConnectionMgr.cs" />
+    <Compile Include="IFormWrapper.cs" />
+    <Compile Include="IHostApplication.cs" />
+    <Compile Include="IMenuStateMgr.cs" />
+    <Compile Include="IObjectExplorer.cs" />
+    <Compile Include="IO\TextConsoleInputStream.cs" />
+    <Compile Include="IO\TextConsoleOutputStream.cs" />
+    <Compile Include="IShell.cs" />
+    <Compile Include="ITaskManager.cs" />
+    <Compile Include="Modules\AdoNetModule.cs" />
+    <Compile Include="Modules\CoreModule.cs" />
+    <Compile Include="Modules\ExpressModule.cs" />
+    <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\IModuleMgr.cs" />
+    <Compile Include="Modules\ModuleBase.cs" />
+    <Compile Include="Modules\ModuleMgr.cs" />
+    <Compile Include="Modules\TestModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SharpMapProvider\FdoInMemoryProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FdoToolbox.Core\FdoToolbox.Core.csproj">
+      <Project>{27F2ABA2-C16A-42C8-9EE3-8F2FBD9135DC}</Project>
+      <Name>FdoToolbox.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ClassDefCtl.resx">
+      <DependentUpon>ClassDefCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CoordSysManagerCtl.resx">
+      <DependentUpon>CoordSysManagerCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DatabaseConnectCtl.resx">
+      <DependentUpon>DatabaseConnectCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DataStoreMgrCtl.resx">
+      <DependentUpon>DataStoreMgrCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DbDataPreviewCtl.resx">
+      <DependentUpon>DbDataPreviewCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ExpressSpatialBulkCopyCtl.resx">
+      <DependentUpon>ExpressSpatialBulkCopyCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoBulkCopyCtl.resx">
+      <DependentUpon>FdoBulkCopyCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoDataPreviewCtl.resx">
+      <DependentUpon>FdoDataPreviewCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoJoinCtl.resx">
+      <DependentUpon>FdoJoinCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FeatureClassExtendedInfoCtl.resx">
+      <DependentUpon>FeatureClassExtendedInfoCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GenericCreateDataStoreCtl.resx">
+      <DependentUpon>GenericCreateDataStoreCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GenericSpatialConnectCtl.resx">
+      <DependentUpon>GenericSpatialConnectCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\MapPreviewCtl.resx">
+      <DependentUpon>MapPreviewCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ModuleInfoCtl.resx">
+      <DependentUpon>ModuleInfoCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PreferencesCtl.resx">
+      <DependentUpon>PreferencesCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RegProviderCtl.resx">
+      <DependentUpon>RegProviderCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaMgrCtl.resx">
+      <DependentUpon>SchemaMgrCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SpatialContextCtl.resx">
+      <DependentUpon>SpatialContextCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ValueListConstraintCtl.resx">
+      <DependentUpon>ValueListConstraintCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ValueRangeConstraintCtl.resx">
+      <DependentUpon>ValueRangeConstraintCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ClassTypePicker.resx">
+      <DependentUpon>ClassTypePicker.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CoordinateSystemPicker.resx">
+      <DependentUpon>CoordinateSystemPicker.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CopyDbToPointsDlg.resx">
+      <DependentUpon>CopyDbToPointsDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CopyDbToPointsSdfDlg.resx">
+      <DependentUpon>CopyDbToPointsSdfDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CSInfoDlg.resx">
+      <DependentUpon>CSInfoDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DataPropertyDefinitionDlg.resx">
+      <DependentUpon>DataPropertyDefinitionDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DictionaryDialog.resx">
+      <DependentUpon>DictionaryDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExpressionDlg.resx">
+      <DependentUpon>ExpressionDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GeometryPropertyDefinitionDlg.resx">
+      <DependentUpon>GeometryPropertyDefinitionDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InsertScaffold.resx">
+      <DependentUpon>InsertScaffold.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MultiClassPicker.resx">
+      <DependentUpon>MultiClassPicker.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PendingParameterDialog.resx">
+      <DependentUpon>PendingParameterDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SchemaInfoDlg.resx">
+      <DependentUpon>SchemaInfoDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpatialContextInfoDlg.resx">
+      <DependentUpon>SpatialContextInfoDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpatialContextPicker.resx">
+      <DependentUpon>SpatialContextPicker.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StringInputDlg.resx">
+      <DependentUpon>StringInputDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TaskProgressDlg.resx">
+      <DependentUpon>TaskProgressDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UnregProviderDlg.resx">
+      <DependentUpon>UnregProviderDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MenuMap.xml" />
+    <Content Include="Modules.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="OEMenuMap.xml" />
+    <None Include="Resources\zoom_out.png" />
+    <None Include="Resources\zoom_in.png" />
+    <None Include="Resources\zoom.png" />
+    <None Include="Resources\world.png" />
+    <None Include="Resources\table_relationship.png" />
+    <None Include="Resources\table_go.png" />
+    <None Include="Resources\table_edit.png" />
+    <None Include="Resources\table_delete.png" />
+    <None Include="Resources\table_add.png" />
+    <None Include="Resources\table.png" />
+    <None Include="Resources\shape_handles.png" />
+    <None Include="Resources\plugin_delete.png" />
+    <None Include="Resources\plugin.png" />
+    <None Include="Resources\page_white_code.png" />
+    <None Include="Resources\page_white.png" />
+    <None Include="Resources\page_refresh.png" />
+    <None Include="Resources\package.png" />
+    <None Include="Resources\map.png" />
+    <None Include="Resources\key.png" />
+    <None Include="Resources\information.png" />
+    <None Include="Resources\image.png" />
+    <None Include="Resources\icon_pan.gif" />
+    <None Include="Resources\icon_fitwindow.gif" />
+    <None Include="Resources\house.png" />
+    <None Include="Resources\help.png" />
+    <None Include="Resources\folder.png" />
+    <None Include="Resources\disk.png" />
+    <None Include="Resources\database_table.png" />
+    <None Include="Resources\database_edit.png" />
+    <None Include="Resources\database_connect.png" />
+    <None Include="Resources\database_add.png" />
+    <None Include="Resources\database.png" />
+    <None Include="Resources\cross.png" />
+    <None Include="Resources\chart_organisation_delete.png" />
+    <None Include="Resources\chart_organisation_add.png" />
+    <None Include="Resources\chart_organisation.png" />
+    <None Include="Resources\bricks.png" />
+    <None Include="Resources\arrow_right.png" />
+    <None Include="Resources\arrow_left.png" />
+    <None Include="Resources\application_xp_terminal.png" />
+    <None Include="Resources\application_side_boxes.png" />
+    <None Include="Resources\application_go.png" />
+    <None Include="Resources\application_form_edit.png" />
+    <None Include="Resources\application_edit.png" />
+    <None Include="Resources\add.png" />
+    <None Include="Resources\accept.png" />
+    <None Include="Resources\APP_ABOUT.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

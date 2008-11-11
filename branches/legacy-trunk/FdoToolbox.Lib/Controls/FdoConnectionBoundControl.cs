@@ -1,0 +1,68 @@
+#region LGPL Header
+// Copyright (C) 2008, Jackie Ng
+// http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
+// 
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+#endregion
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using FdoToolbox.Core.Common;
+
+namespace FdoToolbox.Lib.Controls
+{
+    public partial class FdoConnectionBoundControl : BaseDocumentCtl, IFdoConnectionBoundCtl
+    {
+        protected FdoConnection _BoundConnection;
+
+        protected string _Key;
+
+        internal FdoConnectionBoundControl()
+        {
+            InitializeComponent();
+        }
+
+        public FdoConnectionBoundControl(FdoConnection connInfo, string key)
+            : this()
+        {
+            _BoundConnection = connInfo;
+            _Key = key;
+        }
+
+        public FdoConnection BoundConnection
+        {
+            get { return _BoundConnection; }
+        }
+
+        public virtual void SetName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetKey() { return _Key; }
+
+        public void SetKey(string key) { _Key = key; }
+
+        public virtual string GetTabType()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+    }
+}

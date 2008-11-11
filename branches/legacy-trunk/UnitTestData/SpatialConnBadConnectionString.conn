@@ -1,0 +1,5 @@
+<Connection>
+	<Name>foobar</Name>
+	<Provider>OSGeo.SDF</Provider>
+	<ConnectionString>Foo=Bar</ConnectionString>
+</Connection>
