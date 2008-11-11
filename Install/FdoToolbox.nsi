@@ -89,10 +89,16 @@ LicenseData "${INST_SRC}\${INST_LICENSE}"
 ;-------------------
 
 !insertmacro MUI_PAGE_WELCOME
-#!insertmacro MUI_PAGE_LICENSE "${INST_LICENSE}"
+!insertmacro MUI_PAGE_LICENSE "${INST_LICENSE}"
 #!insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
+    # These indented statements modify settings for MUI_PAGE_FINISH
+    !define MUI_FINISHPAGE_NOAUTOCLOSE
+    !define MUI_FINISHPAGE_RUN
+    !define MUI_FINISHPAGE_RUN_CHECKED
+    !define MUI_FINISHPAGE_RUN_TEXT "Run FDO Toolbox"
+    !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
 !insertmacro MUI_PAGE_FINISH
 
 !insertmacro MUI_UNPAGE_CONFIRM
@@ -116,35 +122,32 @@ Section
 	
 	# directories
 	File /r "${INST_OUTPUT_FDOTOOLBOX}\FDO"
-	File /r "${INST_OUTPUT_FDOTOOLBOX}\Schemas"
+	File /r "${INST_OUTPUT_FDOTOOLBOX}\AddIns"
 	
-	# files
-	File "${INST_OUTPUT_FDOTOOLBOX}\Modules.xml"
-	File "${INST_OUTPUT_FDOTOOLBOX}\TestModule.UIExtension"
-	File "${INST_OUTPUT_FDOTOOLBOX}\MGModule.UIExtension"
-	File "${INST_OUTPUT_FDOTOOLBOX}\cscatalog.sqlite"
-	File "${INST_OUTPUT_FDOTOOLBOX}\TestModule.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\cmd_readme.txt"
+	# docs
+	File "${INST_OUTPUT_FDOTOOLBOX}\userdoc.chm"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FDO Toolbox Core API.chm"
 	File "${INST_OUTPUT_FDOTOOLBOX}\changelog.txt"
 	File "${INST_OUTPUT_FDOTOOLBOX}\license.txt"
-	File "${INST_OUTPUT_FDOTOOLBOX}\Topology.IO.MapGuide.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\Iesi.Collections.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.UI.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\MGModule.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.XML"
-	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\OSGeo.MapGuide.MaestroAPI.dll"
+	
+	# files
+	File "${INST_OUTPUT_FDOTOOLBOX}\cscatalog.sqlite"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Base.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\WeifenLuo.WinFormsUI.Docking.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.XML"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.exe.config"
+	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.Core.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.TextEditor.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\Iesi.Collections.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\log4net.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.UI.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\System.Data.SQLite.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\Topology.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.chm"
-	File "${INST_OUTPUT_FDOTOOLBOX}\userdoc.chm"
+	File "${INST_OUTPUT_FDOTOOLBOX}\WeifenLuo.WinFormsUI.Docking.dll"
 	
 	# main executables
-	File "${INST_OUTPUT_FDOTOOLBOX}\FdoUtil.exe"
-	File "${INST_OUTPUT_FDOTOOLBOX}\FdoInfo.exe"
+	#File "${INST_OUTPUT_FDOTOOLBOX}\FdoUtil.exe"
+	#File "${INST_OUTPUT_FDOTOOLBOX}\FdoInfo.exe"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.exe"
 	
 	# create uninstaller
@@ -171,8 +174,10 @@ Section
 	
 	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\${LNK_FDOTOOLBOX}.lnk" "$INSTDIR\${EXE_FDOTOOLBOX}"
 	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\User Documentation.lnk" "$INSTDIR\userdoc.chm"
-	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\Core API Documentation.lnk" "$INSTDIR\FdoToolbox.chm"
+	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\Core API Documentation.lnk" "$INSTDIR\FDO Toolbox Core API.chm"
 	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+	
+	CreateShortCut "$DESKTOP\${LNK_FDOTOOLBOX}.lnk" "$INSTDIR\${EXE_FDOTOOLBOX}"
 	
 SectionEnd
 
@@ -180,6 +185,9 @@ SectionEnd
 Section "uninstall"
     # remove uninstaller
 	Delete "$INSTDIR\uninstall.exe"
+	
+	# remove desktop shortcut
+	Delete "$DESKTOP\${LNK_FDOTOOLBOX}.lnk"
 	
 	# remove Add/Remove programs registry entry
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${INST_PRODUCT}"
@@ -191,3 +199,6 @@ Section "uninstall"
 	RMDir /r "$SMPROGRAMS\${INST_PRODUCT}"
 SectionEnd
 
+Function LaunchLink
+	ExecShell "" "$INSTDIR\${EXE_FDOTOOLBOX}"
+FunctionEnd

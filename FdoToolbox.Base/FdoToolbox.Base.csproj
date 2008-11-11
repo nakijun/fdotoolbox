@@ -1,0 +1,417 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9A3DA959-2B7E-4407-9DF8-DA56178D211A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FdoToolbox.Base</RootNamespace>
+    <AssemblyName>FdoToolbox.Base</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\out\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\out\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="OSGeo.FDO, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OSGeo.FDO.Common, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OSGeo.FDO.Geometry, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Geometry.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.54.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\SQLite\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.2.2864.18696, Culture=neutral, PublicKeyToken=d481317c817cec47, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\DockPanel\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\ConsoleCommands.cs" />
+    <Compile Include="Commands\FdoCommands.cs" />
+    <Compile Include="Commands\ObjectExplorerCommands.cs" />
+    <Compile Include="Commands\TextEditorCommands.cs" />
+    <Compile Include="Commands\ToolCommands.cs" />
+    <Compile Include="Controls\CoordSysCatalog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CoordSysCatalog.Designer.cs">
+      <DependentUpon>CoordSysCatalog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CoordSysCatalogPresenter.cs" />
+    <Compile Include="Controls\FdoAggregateQueryCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoAggregateQueryCtl.Designer.cs">
+      <DependentUpon>FdoAggregateQueryCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoAggregateQueryCtlPresentation.cs" />
+    <Compile Include="Controls\FdoCreateDataStoreCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoCreateDataStoreCtl.Designer.cs">
+      <DependentUpon>FdoCreateDataStoreCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoCreateDataStoreCtlPresentation.cs" />
+    <Compile Include="Controls\FdoConnectCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoConnectCtl.Designer.cs">
+      <DependentUpon>FdoConnectCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoConnectCtlPresentation.cs">
+    </Compile>
+    <Compile Include="Controls\FdoDataPreviewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoDataPreviewCtl.Designer.cs">
+      <DependentUpon>FdoDataPreviewCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoDataPreviewCtlPresentation.cs" />
+    <Compile Include="Controls\FdoMapPreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoMapPreview.Designer.cs">
+      <DependentUpon>FdoMapPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoMapPreviewPresenter.cs" />
+    <Compile Include="Controls\FdoObjectExplorerDecorator.cs" />
+    <Compile Include="Controls\FdoRegProviderCtlPresentation.cs" />
+    <Compile Include="Controls\FdoSchemaMgrCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoSchemaMgrCtl.Designer.cs">
+      <DependentUpon>FdoSchemaMgrCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoSchemaMgrCtlPresentation.cs" />
+    <Compile Include="Controls\FdoSqlQueryCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoSqlQueryCtl.Designer.cs">
+      <DependentUpon>FdoSqlQueryCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoSqlQueryCtlPresentation.cs" />
+    <Compile Include="Controls\FdoStandaloneSchemaEditorPresenter.cs" />
+    <Compile Include="Controls\FdoStandardQueryPresentation.cs" />
+    <Compile Include="Controls\FdoStandardQueryCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoStandardQueryCtl.Designer.cs">
+      <DependentUpon>FdoStandardQueryCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\IConsole.cs" />
+    <Compile Include="Controls\IObjectExplorer.cs" />
+    <Compile Include="Controls\IObjectExplorerDecorator.cs" />
+    <Compile Include="Controls\PreferencesCtlPresentation.cs" />
+    <Compile Include="Controls\PreferencesCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PreferencesCtl.Designer.cs">
+      <DependentUpon>PreferencesCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoRegProviderCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoRegProviderCtl.Designer.cs">
+      <DependentUpon>FdoRegProviderCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoUnregProviderCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoUnregProviderCtl.Designer.cs">
+      <DependentUpon>FdoUnregProviderCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoUnregProviderCtlPresentation.cs">
+    </Compile>
+    <Compile Include="Controls\TextEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EventWatcher.cs" />
+    <Compile Include="Forms\CoordinateSystemDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CoordinateSystemDialog.designer.cs">
+      <DependentUpon>CoordinateSystemDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DictionaryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DictionaryDialog.designer.cs">
+      <DependentUpon>DictionaryDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ExpressionEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExpressionEditor.Designer.cs">
+      <DependentUpon>ExpressionEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PendingParameterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PendingParameterDialog.Designer.cs">
+      <DependentUpon>PendingParameterDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SchemaInfoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SchemaInfoDialog.Designer.cs">
+      <DependentUpon>SchemaInfoDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ISubView.cs" />
+    <Compile Include="Services\Preferences.cs" />
+    <Compile Include="Services\CoordSysCatalog.cs" />
+    <Compile Include="Services\FdoConnectionManager.cs" />
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\IService.cs" />
+    <Compile Include="Services\ServiceManager.cs" />
+    <Compile Include="Commands\AboutCommand.cs" />
+    <Compile Include="Commands\FileCommands.cs" />
+    <Compile Include="Commands\HelpCommands.cs" />
+    <Compile Include="Commands\StartupCommand.cs" />
+    <Compile Include="Controls\ConsolePane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="Forms\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutDialog.Designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ICoordinateSystemCatalog.cs" />
+    <Compile Include="IDisplayBinding.cs" />
+    <Compile Include="IFdoConnectionManager.cs" />
+    <Compile Include="Images.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Images.resx</DependentUpon>
+    </Compile>
+    <Compile Include="IViewContent.cs" />
+    <Compile Include="Controls\ObjectExplorer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SharpMapProvider\FdoInMemoryProvider.cs" />
+    <Compile Include="Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TabManager.cs" />
+    <Compile Include="Workbench.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FdoToolbox.Base.addin" />
+    <None Include="cscatalog.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\wrench.ico" />
+    <None Include="Resources\wrench_orange.png" />
+    <None Include="Resources\wrench.png" />
+    <None Include="Resources\page_edit.png" />
+    <None Include="Resources\APP_ABOUT.txt" />
+    <None Include="Resources\zoom_out.png" />
+    <None Include="Resources\zoom_in.png" />
+    <None Include="Resources\zoom.png" />
+    <None Include="Resources\world.png" />
+    <None Include="Resources\table_relationship.png" />
+    <None Include="Resources\table_go.png" />
+    <None Include="Resources\table_edit.png" />
+    <None Include="Resources\table_delete.png" />
+    <None Include="Resources\table_add.png" />
+    <None Include="Resources\table.png" />
+    <None Include="Resources\shape_handles.png" />
+    <None Include="Resources\plugin_delete.png" />
+    <None Include="Resources\plugin.png" />
+    <None Include="Resources\page_white_code.png" />
+    <None Include="Resources\page_white.png" />
+    <None Include="Resources\page_refresh.png" />
+    <None Include="Resources\package.png" />
+    <None Include="Resources\map.png" />
+    <None Include="Resources\key.png" />
+    <None Include="Resources\information.png" />
+    <None Include="Resources\image.png" />
+    <None Include="Resources\icon_select.gif" />
+    <None Include="Resources\icon_pan.gif" />
+    <None Include="Resources\icon_fitwindow.gif" />
+    <None Include="Resources\house.png" />
+    <None Include="Resources\help.png" />
+    <None Include="Resources\folder.png" />
+    <None Include="Resources\disk.png" />
+    <None Include="Resources\database_table.png" />
+    <None Include="Resources\database_edit.png" />
+    <None Include="Resources\database_connect.png" />
+    <None Include="Resources\database_add.png" />
+    <None Include="Resources\database.png" />
+    <None Include="Resources\cross.png" />
+    <None Include="Resources\chart_organisation_delete.png" />
+    <None Include="Resources\chart_organisation_add.png" />
+    <None Include="Resources\chart_organisation.png" />
+    <None Include="Resources\bricks.png" />
+    <None Include="Resources\arrow_right.png" />
+    <None Include="Resources\arrow_left.png" />
+    <None Include="Resources\application_xp_terminal.png" />
+    <None Include="Resources\application_side_boxes.png" />
+    <None Include="Resources\application_go.png" />
+    <None Include="Resources\application_form_edit.png" />
+    <None Include="Resources\application_edit.png" />
+    <None Include="Resources\add.png" />
+    <None Include="Resources\accept.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ConsolePane.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ConsolePane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CoordSysCatalog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CoordSysCatalog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoAggregateQueryCtl.resx">
+      <DependentUpon>FdoAggregateQueryCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoConnectCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoConnectCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoCreateDataStoreCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoCreateDataStoreCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoDataPreviewCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoDataPreviewCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoMapPreview.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoMapPreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoRegProviderCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoRegProviderCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoSchemaMgrCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoSchemaMgrCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoStandardQueryCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoStandardQueryCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PreferencesCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PreferencesCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoUnregProviderCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoUnregProviderCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CoordinateSystemDialog.resx">
+      <DependentUpon>CoordinateSystemDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DictionaryDialog.resx">
+      <DependentUpon>DictionaryDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExpressionEditor.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ExpressionEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PendingParameterDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PendingParameterDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SchemaInfoDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SchemaInfoDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Images.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Images.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Strings.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Workbench.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Workbench.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FdoToolbox.Core\FdoToolbox.Core.csproj">
+      <Project>{6AAE821C-D27F-47D2-8F1B-D748AF145B0A}</Project>
+      <Name>FdoToolbox.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Thirdparty\SharpDevelop\ICSharpCode.Core\ICSharpCode.Core.csproj">
+      <Project>{35CEF10F-2D4C-45F2-9DD1-161E0FEC583C}</Project>
+      <Name>ICSharpCode.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Thirdparty\SharpDevelop\ICSharpCode.TextEditor\Project\ICSharpCode.TextEditor.csproj">
+      <Project>{2D18BE89-D210-49EB-A9DD-2246FBB3DF6D}</Project>
+      <Name>ICSharpCode.TextEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Thirdparty\SharpMap\SharpMap.UI\SharpMap.UI.csproj">
+      <Project>{DD1CC1DB-4BF9-4C88-A100-733D84795F3A}</Project>
+      <Name>SharpMap.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Thirdparty\SharpMap\SharpMap\SharpMap.csproj">
+      <Project>{C83777FC-AABB-47D9-911F-D76255D4D541}</Project>
+      <Name>SharpMap</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
