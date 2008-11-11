@@ -24,3 +24,4 @@
    * SDF to SHP
    * SHP to SDF
    * SHP to SHP
+ * Capability-aware user interface
