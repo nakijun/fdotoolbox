@@ -55,7 +55,7 @@ A: No, as the FDO managed wrapper libraries are mixed-mode assemblies and Mono w
 
 ~~A: Ad-hoc testing (ie. Overwriting the FDO binaries with v3.4 ones) suggests that it does work. However it is recommended to only use the supported version of FDO (as of the most recent release, is v3.3.1)~~
 
-A: Yes
+A: Yes, as of 0.7, FDO Toolbox will be built against FDO 3.4 binaries. It will no longer be compatible with FDO 3.3.x as it will be using newer APIs introduced in 3.4
 
 === Q: Are the APIs stable enough to develop extension modules against? ===
 
