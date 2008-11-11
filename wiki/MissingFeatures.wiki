@@ -1,0 +1,26 @@
+#summary Features yet to be ported to the new version of FDO Toolbox
+
+ * Schema Management
+   * Class Editor
+ * Spatial Context Management
+ * Spatial Context browser (for assigning spatial contexts)
+ * Data Store Management
+ * Delete Schema Command
+ * Insert Data Scaffold
+ * Task Management
+   * Create Task
+     * Bulk Copy
+     * Database Join
+   * Delete Task
+   * Execute Task
+   * Load Task
+   * Save Task
+ * Database Support
+   * Connect to Database
+   * Data Preview
+   * Convert database table to point feature class
+ * File to File Bulk Copy
+   * SDF to SDF
+   * SDF to SHP
+   * SHP to SDF
+   * SHP to SHP
