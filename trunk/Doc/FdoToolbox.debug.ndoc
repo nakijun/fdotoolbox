@@ -16,7 +16,7 @@
         <documenter name="MSDN-CHM">
             <property name="SdkLinksOnWeb" value="True" />
             <property name="OutputDirectory" value=".\msdn-chm\" />
-            <property name="HtmlHelpName" value="FdoToolbox" />
+            <property name="HtmlHelpName" value="FDO Toolbox Core API" />
             <property name="Title" value="FDO Toolbox Core API" />
             <property name="Version" value="1.0.0" />
             <property name="DocumentProtected" value="False" />

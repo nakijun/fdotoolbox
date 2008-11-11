@@ -1,0 +1,256 @@
+#region LGPL Header
+// Copyright (C) 2008, Jackie Ng
+// http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
+// 
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+#endregion
+using System;
+using System.Collections.Generic;
+using System.Text;
+using OSGeo.FDO.Connections;
+using FdoToolbox.Core.Feature;
+using OSGeo.FDO.ClientServices;
+using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
+
+using Res = FdoToolbox.Core.ResourceUtil;
+using FdoToolbox.Core.Connections;
+
+namespace FdoToolbox.Core.Feature
+{
+    /// <summary>
+    /// FDO Connection wrapper class
+    /// </summary>
+    public class FdoConnection : IDisposable
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="conn"></param>
+        internal FdoConnection(IConnection conn)
+        {
+            this.InternalConnection = conn;
+        }
+
+        private ICapability _caps;
+        
+        /// <summary>
+        /// Gets the capability object for this connection
+        /// </summary>
+        public ICapability Capability
+        {
+            get
+            {
+                if (_caps == null)
+                    _caps = new Capability(this);
+                return _caps;
+            }
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="provider">The provider name</param>
+        /// <param name="connectionString">The connection string</param>
+        public FdoConnection(string provider, string connectionString)
+        {
+            this.InternalConnection = FeatureAccessManager.GetConnectionManager().CreateConnection(provider);
+            this.InternalConnection.ConnectionString = connectionString;
+        }
+
+        /// <summary>
+        /// Saves this connection to a file
+        /// </summary>
+        /// <param name="file"></param>
+        public void Save(string file)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(FdoToolbox.Core.Configuration.Connection));
+            using (XmlTextWriter writer = new XmlTextWriter(file, Encoding.UTF8))
+            {
+                writer.Indentation = 4;
+                writer.Formatting = Formatting.Indented;
+
+                FdoToolbox.Core.Configuration.Connection conn = new FdoToolbox.Core.Configuration.Connection();
+                conn.Provider = this.Provider;
+                conn.ConnectionString = this.ConnectionString;
+
+                serializer.Serialize(writer, conn);
+            }
+        }
+
+        /// <summary>
+        /// Creates an FDO connection from file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static FdoConnection LoadFromFile(string file)
+        {
+            FdoToolbox.Core.Configuration.Connection c = null;
+            XmlSerializer serializer = new XmlSerializer(typeof(FdoToolbox.Core.Configuration.Connection));
+            using (StreamReader reader = new StreamReader(file))
+            {
+                c = (FdoToolbox.Core.Configuration.Connection)serializer.Deserialize(reader);
+            }
+            return new FdoConnection(c.Provider, c.ConnectionString);
+        }
+
+        /// <summary>
+        /// The connection string of the underlying connection
+        /// </summary>
+        public string ConnectionString
+        {
+            get { return this.InternalConnection.ConnectionString; }
+            set { this.InternalConnection.ConnectionString = value; }
+        }
+
+        /// <summary>
+        /// The name of the connection's underlying provider
+        /// </summary>
+        public string Provider
+        {
+            get { return this.InternalConnection.ConnectionInfo.ProviderName; }
+        }
+
+        /// <summary>
+        /// Refreshes this connection
+        /// </summary>
+        public void Refresh()
+        {
+            Close();
+            this.InternalConnection.Open();
+        }
+
+        private IConnection _Connection;
+
+        /// <summary>
+        /// The underlying FDO connection
+        /// </summary>
+        internal IConnection InternalConnection
+        {
+            get { return _Connection; }
+            set { _Connection = value; }
+        }
+
+        /// <summary>
+        /// Creates a new feature service
+        /// </summary>
+        /// <returns></returns>
+        public FdoFeatureService CreateFeatureService()
+        {
+            return new FdoFeatureService(this.InternalConnection);
+        }
+
+        /// <summary>
+        /// Opens the underlying connection
+        /// </summary>
+        public FdoConnectionState Open()
+        {
+            try
+            {
+                if (this.InternalConnection.ConnectionState != ConnectionState.ConnectionState_Open)
+                    this.InternalConnection.Open();
+            }
+            catch (OSGeo.FDO.Common.Exception ex) { throw new FdoException(ex); }
+            return this.State;
+        }
+
+        /// <summary>
+        /// Closes the underlying connection
+        /// </summary>
+        public void Close()
+        {
+            if (this.InternalConnection.ConnectionState != ConnectionState.ConnectionState_Closed)
+                this.InternalConnection.Close();
+        }
+
+        /// <summary>
+        /// Disposes this connection
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Gets the current connection state
+        /// </summary>
+        public FdoConnectionState State
+        {
+            get
+            {
+                switch (this.InternalConnection.ConnectionState)
+                {
+                    case ConnectionState.ConnectionState_Busy:
+                        return FdoConnectionState.Busy;
+                    case ConnectionState.ConnectionState_Closed:
+                        return FdoConnectionState.Closed;
+                    case ConnectionState.ConnectionState_Open:
+                        return FdoConnectionState.Open;
+                    case ConnectionState.ConnectionState_Pending:
+                        return FdoConnectionState.Pending;
+                }
+                throw new InvalidOperationException(Res.GetString("ERR_CONNECTION_UNKNOWN_STATE"));
+            }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.Close();
+                this.InternalConnection.Dispose();
+            }
+        }
+
+        public DictionaryProperty GetConnectTimeProperty(string name)
+        {
+            if (this.State != FdoConnectionState.Open)
+                throw new InvalidOperationException(Res.GetString("ERR_CONNECTION_NOT_OPEN"));
+
+            IConnectionPropertyDictionary dict = this.InternalConnection.ConnectionInfo.ConnectionProperties;
+            bool enumerable = dict.IsPropertyEnumerable(name);
+            DictionaryProperty dp = null;
+            if (enumerable)
+            {
+                EnumerableDictionaryProperty ep = new EnumerableDictionaryProperty();
+                ep.Values = dict.EnumeratePropertyValues(name);
+                dp = ep;
+            }
+            else
+            {
+                dp = new DictionaryProperty();
+            }
+
+            dp.Name = name;
+            dp.LocalizedName = dict.GetLocalizedName(name);
+            dp.DefaultValue = dict.GetPropertyDefault(name);
+            dp.Protected = dict.IsPropertyProtected(name);
+            dp.Required = dict.IsPropertyRequired(name);
+
+            return dp;
+        }
+    }
+
+    public enum FdoConnectionState
+    {
+        Busy,
+        Open,
+        Closed,
+        Pending
+    }
+}
