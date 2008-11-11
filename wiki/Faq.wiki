@@ -43,7 +43,9 @@ A: Lite releases do not include the FDO binaries, you will need the [http://fdo.
 
 === Q: What is the release cycle for Lite and Full releases? === 
 
-A: Every release will have a Lite version. Only major point releases (0.4, 0.5, ...) will have Full releases or when a newer version of FDO is released.
+~~A: Every release will have a Lite version. Only major point releases (0.4, 0.5, ...) will have Full releases or when a newer version of FDO is released.~~
+
+A: As of 0.7 all new releases will be full releases.
 
 === Q: Can I run FDO Toolbox in Linux (via Mono)? ===
 
@@ -51,8 +53,10 @@ A: No, as the FDO managed wrapper libraries are mixed-mode assemblies and Mono w
 
 === Q: Does FDO Toolbox work with FDO 3.4.0 weekly builds? ===
 
-A: Ad-hoc testing (ie. Overwriting the FDO binaries with v3.4 ones) suggests that it does work. However it is recommended to only use the supported version of FDO (as of the most recent release, is v3.3.1)
+~~A: Ad-hoc testing (ie. Overwriting the FDO binaries with v3.4 ones) suggests that it does work. However it is recommended to only use the supported version of FDO (as of the most recent release, is v3.3.1)~~
+
+A: Yes
 
 === Q: Are the APIs stable enough to develop extension modules against? ===
 
-A: Until 1.0 is released, there is no guarantee that the current APIs will remain the same. 
+A: Until 1.0 is released, there is no guarantee that the current APIs will remain the same.
