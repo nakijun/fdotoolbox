@@ -7,6 +7,7 @@
  * Data Store Management
  * Delete Schema Command
  * Insert Data Scaffold
+ * Command-line utilities
  * Task Management
    * Create Task
      * Bulk Copy
