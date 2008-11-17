@@ -135,17 +135,18 @@ namespace FdoToolbox.Core.Feature
             return _connectProperties[provider];
         }
 
-        private static Dictionary<string, IList<DictionaryProperty>> _dataStoreProperties = new Dictionary<string, IList<DictionaryProperty>>();
+        private static Dictionary<string, IList<DictionaryProperty>> _createDataStoreProperties = new Dictionary<string, IList<DictionaryProperty>>();
+        private static Dictionary<string, IList<DictionaryProperty>> _destroyDataStoreProperties = new Dictionary<string, IList<DictionaryProperty>>();
 
-        public static IList<DictionaryProperty> GetDataStoreProperties(string provider)
+        public static IList<DictionaryProperty> GetCreateDataStoreProperties(string provider)
         {
-            if (_dataStoreProperties.ContainsKey(provider))
-                return _dataStoreProperties[provider];
+            if (_createDataStoreProperties.ContainsKey(provider))
+                return _createDataStoreProperties[provider];
 
             IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(provider);
             if (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_CreateDataStore) >= 0)
             {
-                _dataStoreProperties[provider] = new List<DictionaryProperty>();
+                _createDataStoreProperties[provider] = new List<DictionaryProperty>();
                 using (ICreateDataStore create = conn.CreateCommand(CommandType.CommandType_CreateDataStore) as ICreateDataStore)
                 {
                     IDataStorePropertyDictionary dict = create.DataStoreProperties;
@@ -170,12 +171,55 @@ namespace FdoToolbox.Core.Feature
                         p.Name = n;
                         p.Required = dict.IsPropertyRequired(n);
                         p.Protected = dict.IsPropertyProtected(n);
-                        _dataStoreProperties[provider].Add(p);
+                        _createDataStoreProperties[provider].Add(p);
                     }
                     dict.Dispose();
                 }
                 conn.Dispose();
-                return _dataStoreProperties[provider];
+                return _createDataStoreProperties[provider];
+            }
+            return null;
+        }
+
+        public static IList<DictionaryProperty> GetDestroyDataStoreProperties(string provider)
+        {
+            if (_destroyDataStoreProperties.ContainsKey(provider))
+                return _destroyDataStoreProperties[provider];
+
+            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(provider);
+            if (Array.IndexOf<int>(conn.CommandCapabilities.Commands, (int)CommandType.CommandType_CreateDataStore) >= 0)
+            {
+                _destroyDataStoreProperties[provider] = new List<DictionaryProperty>();
+                using (IDestroyDataStore destroy = conn.CreateCommand(CommandType.CommandType_DestroyDataStore) as IDestroyDataStore)
+                {
+                    IDataStorePropertyDictionary dict = destroy.DataStoreProperties;
+                    string[] names = dict.PropertyNames;
+                    foreach (string n in names)
+                    {
+                        DictionaryProperty p = null;
+                        if (dict.IsPropertyEnumerable(n))
+                        {
+                            EnumerableDictionaryProperty ep = new EnumerableDictionaryProperty();
+                            ep.Values = dict.EnumeratePropertyValues(n);
+                            p = ep;
+                        }
+                        else
+                        {
+                            p = new DictionaryProperty();
+                        }
+                        p.IsFile = dict.IsPropertyFileName(n);
+                        p.IsPath = dict.IsPropertyFilePath(n);
+                        p.DefaultValue = dict.GetPropertyDefault(n);
+                        p.LocalizedName = dict.GetLocalizedName(n);
+                        p.Name = n;
+                        p.Required = dict.IsPropertyRequired(n);
+                        p.Protected = dict.IsPropertyProtected(n);
+                        _createDataStoreProperties[provider].Add(p);
+                    }
+                    dict.Dispose();
+                }
+                conn.Dispose();
+                return _destroyDataStoreProperties[provider];
             }
             return null;
         }

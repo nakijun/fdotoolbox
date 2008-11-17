@@ -55,7 +55,7 @@ namespace FdoToolbox.Base.Controls
             {
                 _view.ResetDataStoreGrid();
 
-                IList<DictionaryProperty> dprops = FdoFeatureService.GetDataStoreProperties(prov.Name);
+                IList<DictionaryProperty> dprops = FdoFeatureService.GetCreateDataStoreProperties(prov.Name);
                 if (dprops != null)
                 {
                     foreach (DictionaryProperty p in dprops)

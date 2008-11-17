@@ -324,4 +324,24 @@ namespace FdoToolbox.Base.Commands
             }
         }
     }
+
+    public class ManageDataStoresCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            if (wb != null)
+            {
+                TreeNode node = wb.ObjectExplorer.GetSelectedNode();
+                if (node.Level == 1)
+                {
+                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                    FdoConnection conn = mgr.GetConnection(node.Name);
+
+                    FdoDataStoreMgrCtl ctl = new FdoDataStoreMgrCtl(conn);
+                    wb.ShowContent(ctl, ViewRegion.Document);
+                }
+            }
+        }
+    }
 }

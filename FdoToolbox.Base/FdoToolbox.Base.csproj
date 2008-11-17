@@ -103,6 +103,13 @@
       <DependentUpon>FdoDataPreviewCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FdoDataPreviewCtlPresentation.cs" />
+    <Compile Include="Controls\FdoDataStoreMgrCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoDataStoreMgrCtl.Designer.cs">
+      <DependentUpon>FdoDataStoreMgrCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoDataStoreMgrCtlPresentation.cs" />
     <Compile Include="Controls\FdoMapPreview.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -349,6 +356,10 @@
     <EmbeddedResource Include="Controls\FdoDataPreviewCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoDataPreviewCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoDataStoreMgrCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoDataStoreMgrCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoMapPreview.resx">
       <SubType>Designer</SubType>
