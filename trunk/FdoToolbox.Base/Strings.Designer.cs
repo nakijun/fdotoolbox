@@ -779,6 +779,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Showing all Data Stores.
+        /// </summary>
+        internal static string MSG_LISTING_DATA_STORES {
+            get {
+                return ResourceManager.GetString("MSG_LISTING_DATA_STORES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Showing all Spatial Contexts in Data Source.
         /// </summary>
         internal static string MSG_LISTING_SPATIAL_CONTEXTS {
@@ -923,6 +932,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Data Store.
+        /// </summary>
+        internal static string TITLE_CREATE_DATASTORE {
+            get {
+                return ResourceManager.GetString("TITLE_CREATE_DATASTORE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Spatial Context.
         /// </summary>
         internal static string TITLE_CREATE_SPATIAL_CONTEXT {
@@ -937,6 +955,24 @@ namespace FdoToolbox.Base {
         internal static string TITLE_DATA_PREVIEW {
             get {
                 return ResourceManager.GetString("TITLE_DATA_PREVIEW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Store Management.
+        /// </summary>
+        internal static string TITLE_DATA_STORE_MGMT {
+            get {
+                return ResourceManager.GetString("TITLE_DATA_STORE_MGMT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Destroy Data Store.
+        /// </summary>
+        internal static string TITLE_DESTROY_DATASTORE {
+            get {
+                return ResourceManager.GetString("TITLE_DESTROY_DATASTORE", resourceCulture);
             }
         }
         

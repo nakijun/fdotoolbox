@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Collections.Specialized;
 using OSGeo.FDO.Commands.DataStore;
 using OSGeo.FDO.Schema;
+using FdoToolbox.Core.Connections;
 
 namespace FdoToolbox.Base.Forms
 {
@@ -36,6 +37,41 @@ namespace FdoToolbox.Base.Forms
             colValue.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             grdProperties.Columns.Add(colName);
             grdProperties.Columns.Add(colValue);
+        }
+
+        public DictionaryDialog(IEnumerable<DictionaryProperty> dict)
+            : this()
+        {
+            foreach (DictionaryProperty prop in dict)
+            {
+                string localized = prop.LocalizedName;
+                bool required = prop.Required;
+                bool enumerable = prop.Enumerable;
+                string defaultValue = prop.DefaultValue;
+
+                if (required)
+                {
+                    if (enumerable)
+                    {
+                        string [] values = (prop as EnumerableDictionaryProperty).Values;
+                        DataGridViewRow row = AddRequiredEnumerableProperty(localized, defaultValue, values);
+                        if (values.Length > 0)
+                            row.Cells[1].Value = values[0];
+                    }
+                    else
+                        AddRequiredProperty(localized, defaultValue);
+                }
+                else
+                {
+                    if (enumerable)
+                    {
+                        string[] values = (prop as EnumerableDictionaryProperty).Values;
+                        AddOptionalEnumerableProperty(localized, defaultValue, values);
+                    }
+                    else
+                        AddProperty(localized, defaultValue);
+                }
+            }
         }
 
         public DictionaryDialog(SchemaAttributeDictionary dict)
@@ -131,6 +167,17 @@ namespace FdoToolbox.Base.Forms
                 nvc.Add(name, value);
             }
             return nvc;
+        }
+
+        public static NameValueCollection GetParameters(string title, IEnumerable<DictionaryProperty> dict)
+        {
+            DictionaryDialog diag = new DictionaryDialog(dict);
+            diag.Text = title;
+            if (diag.ShowDialog() == DialogResult.OK)
+            {
+                return diag.GetProperties();
+            }
+            return null;
         }
 
         public static NameValueCollection GetParameters(string title, SchemaAttributeDictionary dict)

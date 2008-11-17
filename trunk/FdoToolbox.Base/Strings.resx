@@ -388,6 +388,9 @@
   <data name="MSG_DATA_STORE_CREATED" xml:space="preserve">
     <value>Data store created.</value>
   </data>
+  <data name="MSG_LISTING_DATA_STORES" xml:space="preserve">
+    <value>Showing all Data Stores</value>
+  </data>
   <data name="MSG_LISTING_SPATIAL_CONTEXTS" xml:space="preserve">
     <value>Showing all Spatial Contexts in Data Source</value>
   </data>
@@ -436,11 +439,20 @@
   <data name="TITLE_CREATE_DATA_STORE" xml:space="preserve">
     <value>Create Data Store</value>
   </data>
+  <data name="TITLE_CREATE_DATASTORE" xml:space="preserve">
+    <value>Create Data Store</value>
+  </data>
   <data name="TITLE_CREATE_SPATIAL_CONTEXT" xml:space="preserve">
     <value>Create Spatial Context</value>
   </data>
   <data name="TITLE_DATA_PREVIEW" xml:space="preserve">
     <value>Data Preview</value>
+  </data>
+  <data name="TITLE_DATA_STORE_MGMT" xml:space="preserve">
+    <value>Data Store Management</value>
+  </data>
+  <data name="TITLE_DESTROY_DATASTORE" xml:space="preserve">
+    <value>Destroy Data Store</value>
   </data>
   <data name="TITLE_EDIT_CLASS_ATTRIBUTES" xml:space="preserve">
     <value>Edit Class Attributes</value>
