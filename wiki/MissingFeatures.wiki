@@ -2,8 +2,8 @@
 
  * Schema Management
    * Class Editor
- * Spatial Context Management
- * Spatial Context browser (for assigning spatial contexts)
+ * ~~Spatial Context Management~~
+ * ~~Coordinate System Definition browser (for assigning spatial contexts)~~
  * Data Store Management
  * Delete Schema Command
  * Insert Data Scaffold
