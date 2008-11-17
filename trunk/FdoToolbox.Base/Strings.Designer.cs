@@ -752,6 +752,33 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Schema {0} deleted from connection: {1}.
+        /// </summary>
+        internal static string LOG_SCHEMA_DELETED {
+            get {
+                return ResourceManager.GetString("LOG_SCHEMA_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schemas saved to {0}.
+        /// </summary>
+        internal static string LOG_SCHEMA_SAVED {
+            get {
+                return ResourceManager.GetString("LOG_SCHEMA_SAVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schema {0} saved to {1}.
+        /// </summary>
+        internal static string LOG_SCHEMA_SAVED_2 {
+            get {
+                return ResourceManager.GetString("LOG_SCHEMA_SAVED_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changes have been applied.
         /// </summary>
         internal static string MSG_CHANGES_APPLIED {
@@ -811,6 +838,15 @@ namespace FdoToolbox.Base {
         internal static string MSG_PROVIDER_UNREGISTERED {
             get {
                 return ResourceManager.GetString("MSG_PROVIDER_UNREGISTERED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schema Deleted.
+        /// </summary>
+        internal static string MSG_SCHEMA_DELETED {
+            get {
+                return ResourceManager.GetString("MSG_SCHEMA_DELETED", resourceCulture);
             }
         }
         
@@ -964,6 +1000,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_DATA_STORE_MGMT {
             get {
                 return ResourceManager.GetString("TITLE_DATA_STORE_MGMT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Schema.
+        /// </summary>
+        internal static string TITLE_DELETE_SCHEMA {
+            get {
+                return ResourceManager.GetString("TITLE_DELETE_SCHEMA", resourceCulture);
             }
         }
         
