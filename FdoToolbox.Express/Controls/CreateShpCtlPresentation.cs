@@ -26,7 +26,7 @@ namespace FdoToolbox.Express.Controls
         public CreateShpPresenter(ICreateShpView view)
         {
             _view = view;
-            _connMgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+            _connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
             CheckConnect();
         }
 

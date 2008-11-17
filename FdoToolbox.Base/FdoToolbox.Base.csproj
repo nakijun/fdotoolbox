@@ -119,6 +119,14 @@
       <DependentUpon>FdoSchemaMgrCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FdoSchemaMgrCtlPresentation.cs" />
+    <Compile Include="Controls\FdoSpatialContextMgrCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoSpatialContextMgrCtl.Designer.cs">
+      <DependentUpon>FdoSpatialContextMgrCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoSpatialContextMgrCtlPresentation.cs">
+    </Compile>
     <Compile Include="Controls\FdoSqlQueryCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -180,6 +188,27 @@
     <Compile Include="Forms\ExpressionEditor.Designer.cs">
       <DependentUpon>ExpressionEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FdoMultiClassPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FdoMultiClassPicker.Designer.cs">
+      <DependentUpon>FdoMultiClassPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FdoMultiClassPickerPresenter.cs" />
+    <Compile Include="Forms\CoordinateSystemBrowserDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CoordinateSystemBrowserDialog.Designer.cs">
+      <DependentUpon>CoordinateSystemBrowserDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CoordinateSystemBrowserDialogPresenter.cs" />
+    <Compile Include="Forms\FdoSpatialContextDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FdoSpatialContextDialog.Designer.cs">
+      <DependentUpon>FdoSpatialContextDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FdoSpatialContextDialogPresenter.cs" />
     <Compile Include="Forms\PendingParameterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -333,6 +362,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>FdoSchemaMgrCtl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoSpatialContextMgrCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoSpatialContextMgrCtl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoStandardQueryCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoStandardQueryCtl.cs</DependentUpon>
@@ -360,6 +393,18 @@
     <EmbeddedResource Include="Forms\ExpressionEditor.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ExpressionEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FdoMultiClassPicker.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoMultiClassPicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CoordinateSystemBrowserDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CoordinateSystemBrowserDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FdoSpatialContextDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoSpatialContextDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PendingParameterDialog.resx">
       <SubType>Designer</SubType>

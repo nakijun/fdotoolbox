@@ -71,7 +71,7 @@
     <Compile Include="Configuration\SpatialConnection.cs" />
     <Compile Include="Connections\EnumerableDictionaryProperty.cs" />
     <Compile Include="Connections\DictionaryProperty.cs" />
-    <Compile Include="CoordinateSystems\CoordinateSystem.cs" />
+    <Compile Include="CoordinateSystems\CoordinateSystemDefinition.cs" />
     <Compile Include="ETL\Enumerables\CachingEnumerable.cs" />
     <Compile Include="ETL\Enumerables\EventRaisingEnumerator.cs" />
     <Compile Include="ETL\Enumerables\ThreadSafeEnumerator.cs" />

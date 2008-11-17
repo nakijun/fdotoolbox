@@ -16,20 +16,20 @@ namespace FdoToolbox.Base
         /// Add a new coordinate system
         /// </summary>
         /// <param name="cs">The coordinate system to add</param>
-        void AddProjection(CoordinateSystem cs);
+        void AddProjection(CoordinateSystemDefinition cs);
         /// <summary>
         /// Updates an existing coordinate system (by name)
         /// </summary>
         /// <param name="cs">The updated coordinate system object</param>
         /// <param name="oldName">The name of the coordinate system to update</param>
         /// <returns>true if updated, false otherwise</returns>
-        bool UpdateProjection(CoordinateSystem cs, string oldName);
+        bool UpdateProjection(CoordinateSystemDefinition cs, string oldName);
         /// <summary>
         /// Deletes a coordinate system
         /// </summary>
         /// <param name="cs">The coordinate system to delete</param>
         /// <returns>true if deleted, false otherwise</returns>
-        bool DeleteProjection(CoordinateSystem cs);
+        bool DeleteProjection(CoordinateSystemDefinition cs);
         /// <summary>
         /// Checks if a given coordinate system (by name) exists.
         /// </summary>
@@ -40,6 +40,6 @@ namespace FdoToolbox.Base
         /// Gets all the coordinate systems stored in the catalog
         /// </summary>
         /// <returns>A list of coordinate systems</returns>
-        BindingList<CoordinateSystem> GetAllProjections();
+        BindingList<CoordinateSystemDefinition> GetAllProjections();
     }
 }

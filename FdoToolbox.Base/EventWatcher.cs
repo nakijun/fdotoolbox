@@ -14,7 +14,7 @@ namespace FdoToolbox.Base
     {
         public static void Initialize()
         {
-            FdoConnectionManager manager = ServiceManager.Services.GetService<FdoConnectionManager>();
+            FdoConnectionManager manager = ServiceManager.Instance.GetService<FdoConnectionManager>();
             manager.ConnectionAdded += delegate(object sender, EventArgs<string> e)
             {
                 LoggingService.InfoFormatted("Connection added: {0}", e.Data);

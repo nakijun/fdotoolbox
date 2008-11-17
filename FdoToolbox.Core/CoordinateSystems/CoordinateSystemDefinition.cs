@@ -7,7 +7,7 @@ namespace FdoToolbox.Core.CoordinateSystems
     /// <summary>
     /// Data transfer object for Coordinate Systems
     /// </summary>
-    public class CoordinateSystem
+    public class CoordinateSystemDefinition
     {
         private string _Name;
 
@@ -48,7 +48,7 @@ namespace FdoToolbox.Core.CoordinateSystems
         /// <param name="name"></param>
         /// <param name="description"></param>
         /// <param name="wkt"></param>
-        public CoordinateSystem(string name, string description, string wkt)
+        public CoordinateSystemDefinition(string name, string description, string wkt)
         {
             this.Name = name;
             this.Description = description;

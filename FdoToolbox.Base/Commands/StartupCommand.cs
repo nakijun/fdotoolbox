@@ -16,7 +16,7 @@ namespace FdoToolbox.Base.Commands
     {
         public override void Run()
         {
-            ServiceManager svcMgr = ServiceManager.Services;
+            ServiceManager svcMgr = ServiceManager.Instance;
             EventWatcher.Initialize();
             Res.RegisterNeutralStrings(FdoToolbox.Base.Strings.ResourceManager);
             Res.RegisterNeutralImages(FdoToolbox.Base.Images.ResourceManager);

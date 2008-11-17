@@ -12,7 +12,7 @@ namespace FdoToolbox.Base.Services
         private List<IService> _services = new List<IService>();
         private Dictionary<Type, IService> _serviceDict = new Dictionary<Type, IService>();
 
-        public static ServiceManager Services
+        public static ServiceManager Instance
         {
             get
             {

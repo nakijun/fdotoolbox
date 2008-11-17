@@ -21,7 +21,7 @@ namespace FdoToolbox.Express.Commands
             if (!string.IsNullOrEmpty(path))
             {
                 TreeNode schemaNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-                FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(schemaNode.Parent.Name);
                 using (FdoFeatureService service = conn.CreateFeatureService())
                 {

@@ -21,7 +21,7 @@ namespace FdoToolbox.Base.Controls
             InitializeComponent();
             InitializeGrid();
             this.Title = ResourceService.GetString("TITLE_NEW_DATA_CONNECTION");
-            _presenter = new FdoConnectCtlPresenter(this, ServiceManager.Services.GetService<FdoConnectionManager>());
+            _presenter = new FdoConnectCtlPresenter(this, ServiceManager.Instance.GetService<FdoConnectionManager>());
         }
 
         protected override void OnLoad(EventArgs e)

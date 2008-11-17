@@ -382,14 +382,35 @@
   <data name="MSG_CHANGES_APPLIED" xml:space="preserve">
     <value>Changes have been applied</value>
   </data>
+  <data name="MSG_CONFIRM_DELETE_SPATIAL_CONTEXT" xml:space="preserve">
+    <value>Deleting this spatial context will delete *all* data stored in this context. Are you sure you want to do this?</value>
+  </data>
   <data name="MSG_DATA_STORE_CREATED" xml:space="preserve">
     <value>Data store created.</value>
+  </data>
+  <data name="MSG_LISTING_SPATIAL_CONTEXTS" xml:space="preserve">
+    <value>Showing all Spatial Contexts in Data Source</value>
   </data>
   <data name="MSG_PROVIDER_REGISTERED" xml:space="preserve">
     <value>Provider registered</value>
   </data>
   <data name="MSG_PROVIDER_UNREGISTERED" xml:space="preserve">
     <value>Provider un-registered</value>
+  </data>
+  <data name="MSG_SCHEMA_LOADED" xml:space="preserve">
+    <value>Schemas loaded into connection {0} from {1}</value>
+  </data>
+  <data name="MSG_SELECT_EXTENT_CLASSES" xml:space="preserve">
+    <value>Select the classes to compute the extents from</value>
+  </data>
+  <data name="MSG_SELECT_SPATIAL_CONTEXT" xml:space="preserve">
+    <value>Select a spatial context from the list below</value>
+  </data>
+  <data name="MSG_SPATIAL_CONTEXT_CREATED" xml:space="preserve">
+    <value>Spatial Context Created</value>
+  </data>
+  <data name="MSG_SPATIAL_CONTEXT_UPDATED" xml:space="preserve">
+    <value>Spatial Context Updated</value>
   </data>
   <data name="MSG_VALID_EXPRESSION" xml:space="preserve">
     <value>Expression is valid</value>
@@ -400,6 +421,12 @@
   <data name="QUESTION_UNSAVED_CHANGES" xml:space="preserve">
     <value>You have unsaved changes. Save now?</value>
   </data>
+  <data name="TITLE_COMPUTE_EXTENTS" xml:space="preserve">
+    <value>Compute Extents</value>
+  </data>
+  <data name="TITLE_CONFIRM_DELETE_SPATIAL_CONTEXT" xml:space="preserve">
+    <value>Delete Spatial Context</value>
+  </data>
   <data name="TITLE_COORDINATE_SYSTEM" xml:space="preserve">
     <value>Coordinate System</value>
   </data>
@@ -408,6 +435,9 @@
   </data>
   <data name="TITLE_CREATE_DATA_STORE" xml:space="preserve">
     <value>Create Data Store</value>
+  </data>
+  <data name="TITLE_CREATE_SPATIAL_CONTEXT" xml:space="preserve">
+    <value>Create Spatial Context</value>
   </data>
   <data name="TITLE_DATA_PREVIEW" xml:space="preserve">
     <value>Data Preview</value>
@@ -469,11 +499,17 @@
   <data name="TITLE_SELECT_DIRECTORY" xml:space="preserve">
     <value>Select Directory</value>
   </data>
+  <data name="TITLE_SPATIAL_CONTEXT_MGMT" xml:space="preserve">
+    <value>Spatial Context Management</value>
+  </data>
   <data name="TITLE_TEXT_EDITOR" xml:space="preserve">
     <value>Text Editor</value>
   </data>
   <data name="TITLE_UNREGISTER_PROVIDER" xml:space="preserve">
     <value>Un-Register Provider</value>
+  </data>
+  <data name="TITLE_UPDATE_SPATIAL_CONTEXT" xml:space="preserve">
+    <value>Update Spatial Context</value>
   </data>
   <data name="TITLE_VALIDATE_EXPRESSION" xml:space="preserve">
     <value>Validate Expression</value>
