@@ -18,7 +18,7 @@ namespace FdoToolbox.Base.Controls
         public FdoCreateDataStoreCtl()
         {
             InitializeComponent();
-            _presenter = new FdoCreateDataStorePresenter(this, ServiceManager.Services.GetService<FdoConnectionManager>());
+            _presenter = new FdoCreateDataStorePresenter(this, ServiceManager.Instance.GetService<FdoConnectionManager>());
         }
 
         protected override void OnLoad(EventArgs e)

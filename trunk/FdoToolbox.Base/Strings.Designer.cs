@@ -761,11 +761,29 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deleting this spatial context will delete *all* data stored in this context. Are you sure you want to do this?.
+        /// </summary>
+        internal static string MSG_CONFIRM_DELETE_SPATIAL_CONTEXT {
+            get {
+                return ResourceManager.GetString("MSG_CONFIRM_DELETE_SPATIAL_CONTEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data store created..
         /// </summary>
         internal static string MSG_DATA_STORE_CREATED {
             get {
                 return ResourceManager.GetString("MSG_DATA_STORE_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Showing all Spatial Contexts in Data Source.
+        /// </summary>
+        internal static string MSG_LISTING_SPATIAL_CONTEXTS {
+            get {
+                return ResourceManager.GetString("MSG_LISTING_SPATIAL_CONTEXTS", resourceCulture);
             }
         }
         
@@ -784,6 +802,51 @@ namespace FdoToolbox.Base {
         internal static string MSG_PROVIDER_UNREGISTERED {
             get {
                 return ResourceManager.GetString("MSG_PROVIDER_UNREGISTERED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schemas loaded into connection {0} from {1}.
+        /// </summary>
+        internal static string MSG_SCHEMA_LOADED {
+            get {
+                return ResourceManager.GetString("MSG_SCHEMA_LOADED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the classes to compute the extents from.
+        /// </summary>
+        internal static string MSG_SELECT_EXTENT_CLASSES {
+            get {
+                return ResourceManager.GetString("MSG_SELECT_EXTENT_CLASSES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a spatial context from the list below.
+        /// </summary>
+        internal static string MSG_SELECT_SPATIAL_CONTEXT {
+            get {
+                return ResourceManager.GetString("MSG_SELECT_SPATIAL_CONTEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spatial Context Created.
+        /// </summary>
+        internal static string MSG_SPATIAL_CONTEXT_CREATED {
+            get {
+                return ResourceManager.GetString("MSG_SPATIAL_CONTEXT_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spatial Context Updated.
+        /// </summary>
+        internal static string MSG_SPATIAL_CONTEXT_UPDATED {
+            get {
+                return ResourceManager.GetString("MSG_SPATIAL_CONTEXT_UPDATED", resourceCulture);
             }
         }
         
@@ -815,6 +878,24 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compute Extents.
+        /// </summary>
+        internal static string TITLE_COMPUTE_EXTENTS {
+            get {
+                return ResourceManager.GetString("TITLE_COMPUTE_EXTENTS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Spatial Context.
+        /// </summary>
+        internal static string TITLE_CONFIRM_DELETE_SPATIAL_CONTEXT {
+            get {
+                return ResourceManager.GetString("TITLE_CONFIRM_DELETE_SPATIAL_CONTEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Coordinate System.
         /// </summary>
         internal static string TITLE_COORDINATE_SYSTEM {
@@ -838,6 +919,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_CREATE_DATA_STORE {
             get {
                 return ResourceManager.GetString("TITLE_CREATE_DATA_STORE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Spatial Context.
+        /// </summary>
+        internal static string TITLE_CREATE_SPATIAL_CONTEXT {
+            get {
+                return ResourceManager.GetString("TITLE_CREATE_SPATIAL_CONTEXT", resourceCulture);
             }
         }
         
@@ -1022,6 +1112,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spatial Context Management.
+        /// </summary>
+        internal static string TITLE_SPATIAL_CONTEXT_MGMT {
+            get {
+                return ResourceManager.GetString("TITLE_SPATIAL_CONTEXT_MGMT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text Editor.
         /// </summary>
         internal static string TITLE_TEXT_EDITOR {
@@ -1036,6 +1135,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_UNREGISTER_PROVIDER {
             get {
                 return ResourceManager.GetString("TITLE_UNREGISTER_PROVIDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Spatial Context.
+        /// </summary>
+        internal static string TITLE_UPDATE_SPATIAL_CONTEXT {
+            get {
+                return ResourceManager.GetString("TITLE_UPDATE_SPATIAL_CONTEXT", resourceCulture);
             }
         }
         

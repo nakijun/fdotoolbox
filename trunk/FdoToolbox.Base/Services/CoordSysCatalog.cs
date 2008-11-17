@@ -26,13 +26,13 @@ namespace FdoToolbox.Base.Services
             _ConnectionString = string.Format("Data Source={0};Version=3;Compress=True;FailIfMissing=true", dbpath);
         }
 
-        private BindingList<CoordinateSystem> _Projections;
+        private BindingList<CoordinateSystemDefinition> _Projections;
 
         /// <summary>
         /// Adds a new coordinate system to the database
         /// </summary>
         /// <param name="cs"></param>
-        public void AddProjection(CoordinateSystem cs)
+        public void AddProjection(CoordinateSystemDefinition cs)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_ConnectionString))
             {
@@ -58,7 +58,7 @@ namespace FdoToolbox.Base.Services
         /// <param name="cs"></param>
         /// <param name="oldName"></param>
         /// <returns></returns>
-        public bool UpdateProjection(CoordinateSystem cs, string oldName)
+        public bool UpdateProjection(CoordinateSystemDefinition cs, string oldName)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_ConnectionString))
             {
@@ -85,7 +85,7 @@ namespace FdoToolbox.Base.Services
         /// </summary>
         /// <param name="cs"></param>
         /// <returns></returns>
-        public bool DeleteProjection(CoordinateSystem cs)
+        public bool DeleteProjection(CoordinateSystemDefinition cs)
         {
             using (SQLiteConnection conn = new SQLiteConnection(_ConnectionString))
             {
@@ -109,12 +109,12 @@ namespace FdoToolbox.Base.Services
         /// Gets all the coordinate systems in the database
         /// </summary>
         /// <returns></returns>
-        public BindingList<CoordinateSystem> GetAllProjections()
+        public BindingList<CoordinateSystemDefinition> GetAllProjections()
         {
             if (_Projections != null)
                 return _Projections;
 
-            _Projections = new BindingList<CoordinateSystem>();
+            _Projections = new BindingList<CoordinateSystemDefinition>();
             SQLiteConnection conn = new SQLiteConnection(_ConnectionString);
             using (conn)
             {
@@ -132,7 +132,7 @@ namespace FdoToolbox.Base.Services
                         name = reader.GetString(reader.GetOrdinal("Name"));
                         desc = reader.GetString(reader.GetOrdinal("Description"));
                         wkt = reader.GetString(reader.GetOrdinal("WKT"));
-                        _Projections.Add(new CoordinateSystem(name, desc, wkt));
+                        _Projections.Add(new CoordinateSystemDefinition(name, desc, wkt));
                     }
                 }
                 conn.Close();
@@ -151,7 +151,7 @@ namespace FdoToolbox.Base.Services
             if (_Projections == null)
                 GetAllProjections();
 
-            foreach (CoordinateSystem cs in _Projections)
+            foreach (CoordinateSystemDefinition cs in _Projections)
             {
                 if (cs.Name == name)
                     return true;

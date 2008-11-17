@@ -17,7 +17,7 @@ namespace FdoToolbox.Base.Forms
         internal CoordinateSystemDialog()
         {
             InitializeComponent();
-            catalog = ServiceManager.Services.GetService<CoordSysCatalog>();
+            catalog = ServiceManager.Instance.GetService<CoordSysCatalog>();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -47,17 +47,17 @@ namespace FdoToolbox.Base.Forms
             this.DialogResult = DialogResult.OK;
         }
 
-        public static CoordinateSystem NewCoordinateSystem()
+        public static CoordinateSystemDefinition NewCoordinateSystem()
         {
             CoordinateSystemDialog diag = new CoordinateSystemDialog();
             if (diag.ShowDialog() == DialogResult.OK)
             {
-                return new CoordinateSystem(diag.txtName.Text, diag.txtDescription.Text, diag.txtWKT.Text);
+                return new CoordinateSystemDefinition(diag.txtName.Text, diag.txtDescription.Text, diag.txtWKT.Text);
             }
             return null;
         }
 
-        public static bool EditCooridinateSystem(CoordinateSystem cs)
+        public static bool EditCooridinateSystem(CoordinateSystemDefinition cs)
         {
             CoordinateSystemDialog diag = new CoordinateSystemDialog();
             diag.txtName.Text = cs.Name;

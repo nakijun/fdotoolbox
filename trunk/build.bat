@@ -166,4 +166,5 @@ echo Verbose:               -v
 echo BuildType:             -c[onfig]=Release(default), Debug
 echo Action:                -a[ction]=build(default),
 echo                                  clean
+echo ************************************************************************
 :quit

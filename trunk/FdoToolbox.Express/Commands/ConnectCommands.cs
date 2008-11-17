@@ -20,7 +20,7 @@ namespace FdoToolbox.Express.Commands
             if (FileService.FileExists(file))
             {
                 FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SDF", file);
-                FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
 
                 string name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), "");
                 if (name == null)
@@ -47,7 +47,7 @@ namespace FdoToolbox.Express.Commands
             if (FileService.FileExists(file))
             {
                 FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SHP", file);
-                FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
 
                 string name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), "");
                 if (name == null)

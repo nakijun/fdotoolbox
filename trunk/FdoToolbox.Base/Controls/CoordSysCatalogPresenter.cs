@@ -8,9 +8,9 @@ namespace FdoToolbox.Base.Controls
 {
     public interface ICoordSysCatalogView
     {
-        BindingList<CoordinateSystem> CoordSysDefinitions { set; }
+        BindingList<CoordinateSystemDefinition> CoordSysDefinitions { set; }
 
-        CoordinateSystem SelectedCS { get; }
+        CoordinateSystemDefinition SelectedCS { get; }
 
         bool EditEnabled { set; }
         bool DeleteEnabled { set; }
@@ -20,7 +20,7 @@ namespace FdoToolbox.Base.Controls
     {
         private readonly ICoordSysCatalogView _view;
         private FdoToolbox.Base.Services.CoordSysCatalog _catalog;
-        private BindingList<CoordinateSystem> _list;
+        private BindingList<CoordinateSystemDefinition> _list;
 
         public CoordSysCatalogPresenter(ICoordSysCatalogView view, FdoToolbox.Base.Services.CoordSysCatalog catalog)
         {
@@ -35,17 +35,17 @@ namespace FdoToolbox.Base.Controls
             _view.CoordSysDefinitions = _list = _catalog.GetAllProjections(); 
         }
 
-        public void AddNew(CoordinateSystem cs)
+        public void AddNew(CoordinateSystemDefinition cs)
         {
             _catalog.AddProjection(cs);
         }
 
-        public void Update(string oldName, CoordinateSystem cs)
+        public void Update(string oldName, CoordinateSystemDefinition cs)
         {
             _catalog.UpdateProjection(cs, oldName);
         }
 
-        public void Delete(CoordinateSystem cs)
+        public void Delete(CoordinateSystemDefinition cs)
         {
             _catalog.DeleteProjection(cs);
         }

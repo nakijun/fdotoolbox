@@ -41,7 +41,7 @@ namespace FdoToolbox.Base.Controls
         public void Decorate(IObjectExplorer explorer)
         {
             _explorer = explorer;
-            _connMgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+            _connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
             _connMgr.ConnectionAdded += new ConnectionEventHandler(OnConnectionAdded);
             _connMgr.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
             _connMgr.ConnectionRemoved += new ConnectionEventHandler(OnConnectionRemoved);

@@ -16,6 +16,7 @@ namespace FdoToolbox.Base.Controls
     public enum QueryMode
     {
         Standard,
+        ExtendedSelect,
         Aggregate,
         SQL
     }

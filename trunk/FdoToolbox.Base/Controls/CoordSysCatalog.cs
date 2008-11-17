@@ -19,7 +19,7 @@ namespace FdoToolbox.Base.Controls
         public CoordSysCatalog()
         {
             InitializeComponent();
-            _presenter = new CoordSysCatalogPresenter(this, ServiceManager.Services.GetService<FdoToolbox.Base.Services.CoordSysCatalog>());
+            _presenter = new CoordSysCatalogPresenter(this, ServiceManager.Instance.GetService<FdoToolbox.Base.Services.CoordSysCatalog>());
         }
 
         protected override void OnLoad(EventArgs e)
@@ -60,14 +60,14 @@ namespace FdoToolbox.Base.Controls
             return true;
         }
 
-        public CoordinateSystem SelectedCS
+        public CoordinateSystemDefinition SelectedCS
         {
             get
             {
                 if (grdCs.SelectedRows.Count == 1)
-                    return grdCs.SelectedRows[0].DataBoundItem as CoordinateSystem;
+                    return grdCs.SelectedRows[0].DataBoundItem as CoordinateSystemDefinition;
                 else if (grdCs.SelectedCells.Count == 1)
-                    return grdCs.Rows[grdCs.SelectedCells[0].RowIndex].DataBoundItem as CoordinateSystem;
+                    return grdCs.Rows[grdCs.SelectedCells[0].RowIndex].DataBoundItem as CoordinateSystemDefinition;
                 else
                     return null;
             }
@@ -87,7 +87,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            CoordinateSystem cs = CoordinateSystemDialog.NewCoordinateSystem();
+            CoordinateSystemDefinition cs = CoordinateSystemDialog.NewCoordinateSystem();
             if (cs != null)
             {
                 _presenter.AddNew(cs);
@@ -96,7 +96,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            CoordinateSystem cs = this.SelectedCS;
+            CoordinateSystemDefinition cs = this.SelectedCS;
             if (cs != null)
             {
                 string oldName = cs.Name;
@@ -109,7 +109,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            CoordinateSystem cs = this.SelectedCS;
+            CoordinateSystemDefinition cs = this.SelectedCS;
             if (cs != null)
             {
                 _presenter.Delete(cs);
@@ -121,7 +121,7 @@ namespace FdoToolbox.Base.Controls
             //_presenter.Filter(txtFilter.Text);
         }
 
-        public BindingList<CoordinateSystem> CoordSysDefinitions
+        public BindingList<CoordinateSystemDefinition> CoordSysDefinitions
         {
             set 
             {

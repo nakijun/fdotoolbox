@@ -20,7 +20,7 @@ namespace FdoToolbox.Base.Commands
     {
         public override void Run()
         {
-            FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+            FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
             mgr.Clear();
         }
     }
@@ -30,7 +30,7 @@ namespace FdoToolbox.Base.Commands
         public override void Run()
         {
             TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-            FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+            FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
             mgr.RefreshConnection(connNode.Name);
         }
     }
@@ -40,7 +40,7 @@ namespace FdoToolbox.Base.Commands
         public override void Run()
         {
             TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-            FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+            FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
             mgr.RemoveConnection(connNode.Name);
         }
     }
@@ -50,7 +50,7 @@ namespace FdoToolbox.Base.Commands
         public override void Run()
         {
             TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-            FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+            FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
 
             string name = Msg.ShowInputBox(Res.GetString("TITLE_RENAME_CONNECTION"), Res.GetString("PROMPT_ENTER_NEW_CONNECTION_NAME"), connNode.Name);
             if (name == null)
@@ -75,7 +75,7 @@ namespace FdoToolbox.Base.Commands
             if (!string.IsNullOrEmpty(path))
             {
                 TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-                FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(connNode.Name);
                 conn.Save(path);
                 Log.InfoFormatted("Connection saved to: {0}", path);
@@ -91,7 +91,7 @@ namespace FdoToolbox.Base.Commands
             if (FileService.FileExists(path))
             {
                 FdoConnection conn = FdoConnection.LoadFromFile(path);
-                FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
 
                 string name = string.Empty;
                 name = Msg.ShowInputBox(Res.GetString("TITLE_NEW_CONNECTION"), Res.GetString("PROMPT_ENTER_NEW_CONNECTION_NAME"), name);
@@ -118,12 +118,13 @@ namespace FdoToolbox.Base.Commands
             if (FileService.FileExists(path))
             {
                 TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-                FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(connNode.Name);
                 using (FdoFeatureService service = conn.CreateFeatureService())
                 {
                     service.LoadSchemasFromXml(path);
-                    Log.InfoFormatted("Schemas loaded into connection {0} from {1}", connNode.Name, path);
+                    MessageService.ShowMessageFormatted(Res.GetString("MSG_SCHEMA_LOADED"), connNode.Name, path);
+                    Log.InfoFormatted(Res.GetString("MSG_SCHEMA_LOADED"), connNode.Name, path);
                 }
             }
         }
@@ -140,7 +141,7 @@ namespace FdoToolbox.Base.Commands
                 if (node.Level == 1) //Connection
                 {
                     TreeNode connNode = node;
-                    FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                     FdoConnection conn = mgr.GetConnection(connNode.Name);
                     using (FdoFeatureService service = conn.CreateFeatureService())
                     {
@@ -152,7 +153,7 @@ namespace FdoToolbox.Base.Commands
                 {
                     TreeNode schemaNode = node;
                     TreeNode connNode = node.Parent;
-                    FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                     FdoConnection conn = mgr.GetConnection(connNode.Name);
                     using (FdoFeatureService service = conn.CreateFeatureService())
                     {
@@ -169,7 +170,7 @@ namespace FdoToolbox.Base.Commands
         public override void Run()
         {
             TreeNode schemaNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-            FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+            FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
             FdoConnection conn = mgr.GetConnection(schemaNode.Parent.Name);
             using (FdoFeatureService service = conn.CreateFeatureService())
             {
@@ -191,7 +192,7 @@ namespace FdoToolbox.Base.Commands
                 while (connNode.Level > 1)
                     connNode = connNode.Parent;
                 
-                FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(connNode.Name);
 
                 FdoDataPreviewCtl ctl = new FdoDataPreviewCtl(conn);
@@ -221,7 +222,7 @@ namespace FdoToolbox.Base.Commands
             }
             if (connNode != null)
             {
-                FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(connNode.Name);
 
                 if (conn != null)
@@ -243,7 +244,7 @@ namespace FdoToolbox.Base.Commands
                 TreeNode node = wb.ObjectExplorer.GetSelectedNode();
                 if (node.Level == 3)
                 {
-                    FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                     FdoConnection conn = mgr.GetConnection(node.Parent.Parent.Name);
                     using (FdoFeatureService service = conn.CreateFeatureService())
                     {
@@ -279,7 +280,7 @@ namespace FdoToolbox.Base.Commands
                 TreeNode node = wb.ObjectExplorer.GetSelectedNode();
                 if (node.Level == 2)
                 {
-                    FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
+                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                     FdoConnection conn = mgr.GetConnection(node.Parent.Name);
                     using (FdoFeatureService service = conn.CreateFeatureService())
                     {
@@ -299,6 +300,26 @@ namespace FdoToolbox.Base.Commands
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    public class ManageSpatialContextsCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            if (wb != null)
+            {
+                TreeNode node = wb.ObjectExplorer.GetSelectedNode();
+                if (node.Level == 1)
+                {
+                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                    FdoConnection conn = mgr.GetConnection(node.Name);
+
+                    FdoSpatialContextMgrCtl ctl = new FdoSpatialContextMgrCtl(conn);
+                    wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }
         }
