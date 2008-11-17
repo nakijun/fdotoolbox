@@ -146,7 +146,7 @@ namespace FdoToolbox.Base.Commands
                     using (FdoFeatureService service = conn.CreateFeatureService())
                     {
                         service.WriteSchemaToXml(path);
-                        Log.InfoFormatted("Schemas saved to {0}", path);
+                        Log.InfoFormatted(Res.GetString("LOG_SCHEMA_SAVED"), path);
                     }
                 }
                 else if (node.Level == 2) //Schema
@@ -158,7 +158,7 @@ namespace FdoToolbox.Base.Commands
                     using (FdoFeatureService service = conn.CreateFeatureService())
                     {
                         service.WriteSchemaToXml(schemaNode.Name, path);
-                        Log.InfoFormatted("Schema {0} saved to {1}", connNode.Name, path);
+                        Log.InfoFormatted(Res.GetString("LOG_SCHEMA_SAVED_2"), connNode.Name, path);
                     }
                 }
             }
@@ -174,9 +174,17 @@ namespace FdoToolbox.Base.Commands
             FdoConnection conn = mgr.GetConnection(schemaNode.Parent.Name);
             using (FdoFeatureService service = conn.CreateFeatureService())
             {
-                service.DestroySchema(schemaNode.Name);
-                Msg.ShowMessage("Schema Deleted", "Delete Schema");
-                Log.InfoFormatted("Schema {0} delete from connection: {1}", schemaNode.Name, schemaNode.Parent.Name);
+                //TODO: This command should be preemptively disabled, as it was in 0.6 and before.
+                try
+                {
+                    service.DestroySchema(schemaNode.Name);
+                    Msg.ShowMessage(Res.GetString("MSG_SCHEMA_DELETED"), Res.GetString("TITLE_DELETE_SCHEMA"));
+                    Log.InfoFormatted(Res.GetString("LOG_SCHEMA_DELETED"), schemaNode.Name, schemaNode.Parent.Name);
+                }
+                catch (OSGeo.FDO.Common.Exception ex)
+                {
+                    Msg.ShowError(ex);
+                }
             }
         }
     }

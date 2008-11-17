@@ -379,6 +379,15 @@
     <value>Show Exception</value>
     <comment>Required by SharpDevelop Core</comment>
   </data>
+  <data name="LOG_SCHEMA_DELETED" xml:space="preserve">
+    <value>Schema {0} deleted from connection: {1}</value>
+  </data>
+  <data name="LOG_SCHEMA_SAVED" xml:space="preserve">
+    <value>Schemas saved to {0}</value>
+  </data>
+  <data name="LOG_SCHEMA_SAVED_2" xml:space="preserve">
+    <value>Schema {0} saved to {1}</value>
+  </data>
   <data name="MSG_CHANGES_APPLIED" xml:space="preserve">
     <value>Changes have been applied</value>
   </data>
@@ -399,6 +408,9 @@
   </data>
   <data name="MSG_PROVIDER_UNREGISTERED" xml:space="preserve">
     <value>Provider un-registered</value>
+  </data>
+  <data name="MSG_SCHEMA_DELETED" xml:space="preserve">
+    <value>Schema Deleted</value>
   </data>
   <data name="MSG_SCHEMA_LOADED" xml:space="preserve">
     <value>Schemas loaded into connection {0} from {1}</value>
@@ -450,6 +462,9 @@
   </data>
   <data name="TITLE_DATA_STORE_MGMT" xml:space="preserve">
     <value>Data Store Management</value>
+  </data>
+  <data name="TITLE_DELETE_SCHEMA" xml:space="preserve">
+    <value>Delete Schema</value>
   </data>
   <data name="TITLE_DESTROY_DATASTORE" xml:space="preserve">
     <value>Destroy Data Store</value>
