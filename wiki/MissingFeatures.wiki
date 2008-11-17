@@ -5,7 +5,7 @@
  * ~~Spatial Context Management~~
  * ~~Coordinate System Definition browser (for assigning spatial contexts)~~
  * ~~Data Store Management~~
- * Delete Schema Command
+ * ~~Delete Schema Command~~
  * Insert Data Scaffold
  * Command-line utilities
  * Task Management
