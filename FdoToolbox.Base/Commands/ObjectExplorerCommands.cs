@@ -216,26 +216,15 @@ namespace FdoToolbox.Base.Commands
             Workbench wb = Workbench.Instance;
             TreeNode connNode = null;
             TreeNode node = wb.ObjectExplorer.GetSelectedNode();
-            if (node.Level == 1) //Connection
+            if(node.Level == 2)
             {
-                connNode = node;
-            }
-            else if (node.Level >= 2) //Schema or lower
-            {
-                while (node.Level > 2)
-                {
-                    node = node.Parent;
-                }
                 connNode = node.Parent;
-            }
-            if (connNode != null)
-            {
                 FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(connNode.Name);
 
                 if (conn != null)
                 {
-                    FdoSchemaMgrCtl ctl = new FdoSchemaMgrCtl(conn);
+                    FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl(conn, node.Name);
                     wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }

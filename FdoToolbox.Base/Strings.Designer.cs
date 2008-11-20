@@ -752,6 +752,51 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Class.
+        /// </summary>
+        internal static string LBL_CLASS {
+            get {
+                return ResourceManager.GetString("LBL_CLASS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Property.
+        /// </summary>
+        internal static string LBL_DATA_PROPERTY {
+            get {
+                return ResourceManager.GetString("LBL_DATA_PROPERTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feature Class.
+        /// </summary>
+        internal static string LBL_FEATURE_CLASS {
+            get {
+                return ResourceManager.GetString("LBL_FEATURE_CLASS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feature Schema.
+        /// </summary>
+        internal static string LBL_FEATURE_SCHEMA {
+            get {
+                return ResourceManager.GetString("LBL_FEATURE_SCHEMA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geometric Property.
+        /// </summary>
+        internal static string LBL_GEOMETRIC_PROPERTY {
+            get {
+                return ResourceManager.GetString("LBL_GEOMETRIC_PROPERTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schema {0} deleted from connection: {1}.
         /// </summary>
         internal static string LOG_SCHEMA_DELETED {
@@ -1166,6 +1211,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Schema Designer.
+        /// </summary>
+        internal static string TITLE_SCHEMA_DESIGNER {
+            get {
+                return ResourceManager.GetString("TITLE_SCHEMA_DESIGNER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schema Information.
         /// </summary>
         internal static string TITLE_SCHEMA_INFORMATION {
@@ -1189,6 +1243,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_SELECT_DIRECTORY {
             get {
                 return ResourceManager.GetString("TITLE_SELECT_DIRECTORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spatial Context Browser.
+        /// </summary>
+        internal static string TITLE_SPATIAL_CONTEXT_BROWSER {
+            get {
+                return ResourceManager.GetString("TITLE_SPATIAL_CONTEXT_BROWSER", resourceCulture);
             }
         }
         

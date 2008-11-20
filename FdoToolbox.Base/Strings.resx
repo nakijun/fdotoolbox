@@ -379,6 +379,21 @@
     <value>Show Exception</value>
     <comment>Required by SharpDevelop Core</comment>
   </data>
+  <data name="LBL_CLASS" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="LBL_DATA_PROPERTY" xml:space="preserve">
+    <value>Data Property</value>
+  </data>
+  <data name="LBL_FEATURE_CLASS" xml:space="preserve">
+    <value>Feature Class</value>
+  </data>
+  <data name="LBL_FEATURE_SCHEMA" xml:space="preserve">
+    <value>Feature Schema</value>
+  </data>
+  <data name="LBL_GEOMETRIC_PROPERTY" xml:space="preserve">
+    <value>Geometric Property</value>
+  </data>
   <data name="LOG_SCHEMA_DELETED" xml:space="preserve">
     <value>Schema {0} deleted from connection: {1}</value>
   </data>
@@ -517,6 +532,9 @@
   <data name="TITLE_SAVE_SCHEMA" xml:space="preserve">
     <value>Save Feature Schema</value>
   </data>
+  <data name="TITLE_SCHEMA_DESIGNER" xml:space="preserve">
+    <value>Schema Designer</value>
+  </data>
   <data name="TITLE_SCHEMA_INFORMATION" xml:space="preserve">
     <value>Schema Information</value>
   </data>
@@ -525,6 +543,9 @@
   </data>
   <data name="TITLE_SELECT_DIRECTORY" xml:space="preserve">
     <value>Select Directory</value>
+  </data>
+  <data name="TITLE_SPATIAL_CONTEXT_BROWSER" xml:space="preserve">
+    <value>Spatial Context Browser</value>
   </data>
   <data name="TITLE_SPATIAL_CONTEXT_MGMT" xml:space="preserve">
     <value>Spatial Context Management</value>
