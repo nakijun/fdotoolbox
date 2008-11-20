@@ -26,8 +26,7 @@ namespace FdoToolbox.Base.Commands
             Workbench wb = Workbench.Instance;
             if (wb != null)
             {
-                FdoSchemaMgrCtl ctl = new FdoSchemaMgrCtl();
-                ctl.Standalone = true;
+                FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl();
                 wb.ShowContent(ctl, ViewRegion.Document);
             }
         }
