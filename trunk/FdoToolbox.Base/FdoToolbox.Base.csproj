@@ -67,6 +67,12 @@
     <Compile Include="Commands\ObjectExplorerCommands.cs" />
     <Compile Include="Commands\TextEditorCommands.cs" />
     <Compile Include="Commands\ToolCommands.cs" />
+    <Compile Include="Controls\BasePreferencesCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BasePreferencesCtl.Designer.cs">
+      <DependentUpon>BasePreferencesCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CoordSysCatalog.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -151,6 +157,7 @@
     <Compile Include="Controls\IConsole.cs" />
     <Compile Include="Controls\IObjectExplorer.cs" />
     <Compile Include="Controls\IObjectExplorerDecorator.cs" />
+    <Compile Include="Controls\IPreferenceSheet.cs" />
     <Compile Include="Controls\PreferencesCtlPresentation.cs" />
     <Compile Include="Controls\PreferencesCtl.cs">
       <SubType>UserControl</SubType>
@@ -377,6 +384,10 @@
     <None Include="Resources\accept.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\BasePreferencesCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BasePreferencesCtl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConsolePane.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ConsolePane.cs</DependentUpon>
