@@ -151,6 +151,9 @@
   <data name="CMD_CreateDataStore" xml:space="preserve">
     <value>Create Data Store</value>
   </data>
+  <data name="CMD_CreateSchema" xml:space="preserve">
+    <value>Create New Schema</value>
+  </data>
   <data name="CMD_DataPreview" xml:space="preserve">
     <value>Data Preview</value>
   </data>
@@ -159,6 +162,9 @@
   </data>
   <data name="CMD_EditClassAttributes" xml:space="preserve">
     <value>Edit Class Attributes</value>
+  </data>
+  <data name="CMD_EditSchema" xml:space="preserve">
+    <value>Edit Schema</value>
   </data>
   <data name="CMD_EditSchemaAttributes" xml:space="preserve">
     <value>Edit Schema Attributes</value>
@@ -180,9 +186,6 @@
   </data>
   <data name="CMD_ManageDataStores" xml:space="preserve">
     <value>Manage Data Stores</value>
-  </data>
-  <data name="CMD_ManageSchema" xml:space="preserve">
-    <value>Manage Schema</value>
   </data>
   <data name="CMD_ManageSpatialContexts" xml:space="preserve">
     <value>Manage Spatial Contexts</value>

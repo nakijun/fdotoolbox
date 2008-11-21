@@ -167,6 +167,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create New Schema.
+        /// </summary>
+        internal static string CMD_CreateSchema {
+            get {
+                return ResourceManager.GetString("CMD_CreateSchema", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data Preview.
         /// </summary>
         internal static string CMD_DataPreview {
@@ -190,6 +199,15 @@ namespace FdoToolbox.Base {
         internal static string CMD_EditClassAttributes {
             get {
                 return ResourceManager.GetString("CMD_EditClassAttributes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Schema.
+        /// </summary>
+        internal static string CMD_EditSchema {
+            get {
+                return ResourceManager.GetString("CMD_EditSchema", resourceCulture);
             }
         }
         
@@ -253,15 +271,6 @@ namespace FdoToolbox.Base {
         internal static string CMD_ManageDataStores {
             get {
                 return ResourceManager.GetString("CMD_ManageDataStores", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Manage Schema.
-        /// </summary>
-        internal static string CMD_ManageSchema {
-            get {
-                return ResourceManager.GetString("CMD_ManageSchema", resourceCulture);
             }
         }
         

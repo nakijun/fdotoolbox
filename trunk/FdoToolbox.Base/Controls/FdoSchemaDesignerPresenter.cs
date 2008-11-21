@@ -308,7 +308,7 @@ namespace FdoToolbox.Base.Controls
 
         private void CheckDirtyState()
         {
-            _view.ApplyEnabled = (_schema.ElementState == SchemaElementState.SchemaElementState_Modified && _conn != null);
+            _view.ApplyEnabled = ((_schema.ElementState == SchemaElementState.SchemaElementState_Modified || _schema.ElementState == SchemaElementState.SchemaElementState_Added) && _conn != null);
         }
 
         private void ValidateSchema()
