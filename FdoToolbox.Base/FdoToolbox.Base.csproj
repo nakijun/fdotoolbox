@@ -62,7 +62,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppSession.cs" />
     <Compile Include="Commands\ConsoleCommands.cs" />
     <Compile Include="Commands\FdoCommands.cs" />
     <Compile Include="Commands\ObjectExplorerCommands.cs" />
