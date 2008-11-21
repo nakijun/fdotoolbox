@@ -7,8 +7,8 @@
  * ~~Data Store Management~~
  * ~~Delete Schema Command~~
  * Insert Data Scaffold
- * Command-line utilities
- * Session persistence
+ * ~~Command-line utilities~~
+ * ~~Session persistence (connections~~ / tasks)
  * Task Management
    * Create Task
      * Bulk Copy
