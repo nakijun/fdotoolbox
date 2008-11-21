@@ -10,6 +10,9 @@ namespace FdoToolbox.Base.Services
         void InitializeService();
         void UnloadService();
 
+        void Load();
+        void Save();
+
         event EventHandler Initialize;
         event EventHandler Unload;
     }

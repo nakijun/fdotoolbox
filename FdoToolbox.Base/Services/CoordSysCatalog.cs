@@ -181,5 +181,16 @@ namespace FdoToolbox.Base.Services
         public event EventHandler Initialize = delegate { };
 
         public event EventHandler Unload = delegate { };
+
+
+        public void Load()
+        {
+            
+        }
+
+        public void Save()
+        {
+            
+        }
     }
 }

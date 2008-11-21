@@ -170,5 +170,50 @@ namespace FdoToolbox.Base.Services
                 ConnectionRefreshed(this, new EventArgs<string>(name));
             }
         }
+
+
+        public void Load()
+        {
+            string path = Preferences.SessionDirectory;
+            if (System.IO.Directory.Exists(path))
+            {
+                string [] files = System.IO.Directory.GetFiles(path, "*.conn");
+                foreach (string f in files)
+                {
+                    try
+                    {
+                        string name = System.IO.Path.GetFileNameWithoutExtension(f);
+                        FdoConnection conn = FdoConnection.LoadFromFile(f);
+                        this.AddConnection(name, conn);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+        }
+
+        public void Save()
+        {
+            string path = Preferences.SessionDirectory;
+            if (!System.IO.Directory.Exists(path))
+                System.IO.Directory.CreateDirectory(path);
+            else
+            {
+                string [] files = System.IO.Directory.GetFiles(path, "*.conn");
+                foreach (string f in files)
+                {
+                    System.IO.File.Delete(f);
+                }
+            }
+
+            foreach (string key in _ConnectionDict.Keys)
+            {
+                string file = System.IO.Path.Combine(path, key + ".conn");
+                FdoConnection conn = _ConnectionDict[key];
+                conn.Save(file);
+            }
+        }
     }
 }

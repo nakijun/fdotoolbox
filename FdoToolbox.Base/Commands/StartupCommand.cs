@@ -16,16 +16,23 @@ namespace FdoToolbox.Base.Commands
     {
         public override void Run()
         {
-            ServiceManager svcMgr = ServiceManager.Instance;
             EventWatcher.Initialize();
+            ServiceManager svcMgr = ServiceManager.Instance;
+            
             Res.RegisterNeutralStrings(FdoToolbox.Base.Strings.ResourceManager);
             Res.RegisterNeutralImages(FdoToolbox.Base.Images.ResourceManager);
 
             Workbench.WorkbenchInitialized += delegate
             {
+                svcMgr.RestoreSession();
                 Workbench wb = Workbench.Instance;
                 Msg.MainForm = wb;
                 wb.SetTitle(Res.GetString("UI_TITLE"));
+
+                wb.FormClosing += delegate
+                {
+                    svcMgr.UnloadAllServices();
+                };
             };
         }
     }

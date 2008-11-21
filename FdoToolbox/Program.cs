@@ -64,6 +64,18 @@ namespace FdoToolbox
             coreStartup.ConfigureUserAddIns(Path.Combine(PropertyService.ConfigDirectory, "AddInInstallTemp"),
                                             Path.Combine(PropertyService.ConfigDirectory, "AddIns"));
 
+            LoggingService.Info("Checking FDO");
+            // Set FDO path
+            string fdoPath = Preferences.FdoPath;
+            if (!FdoAssemblyResolver.IsValidFdoPath(fdoPath))
+            {
+                fdoPath = Path.Combine(FileUtility.ApplicationRootPath, "FDO");
+                Preferences.FdoPath = fdoPath;
+            }
+            //FdoAssemblyResolver.SetFdoPath(fdoPath);
+            FdoAssemblyResolver.InitializeFdo(fdoPath);
+            LoggingService.Info("FDO path set to: " + fdoPath);
+
             LoggingService.Info("Loading AddInTree...");
             // Now finally initialize the application. This parses the ".addin" files and
             // creates the AddIn tree. It also automatically runs the commands in
@@ -76,18 +88,6 @@ namespace FdoToolbox
             Workbench.InitializeWorkbench();
 
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
-
-            LoggingService.Info("Checking FDO");
-            // Set FDO path
-            string fdoPath = Preferences.FdoPath;
-            if (!FdoAssemblyResolver.IsValidFdoPath(fdoPath))
-            {
-                fdoPath = Path.Combine(FileUtility.ApplicationRootPath, "FDO");
-                Preferences.FdoPath = fdoPath;
-            }
-            //FdoAssemblyResolver.SetFdoPath(fdoPath);
-            FdoAssemblyResolver.InitializeFdo(fdoPath);
-            LoggingService.Info("FDO path set to: " + fdoPath);
             
             try
             {

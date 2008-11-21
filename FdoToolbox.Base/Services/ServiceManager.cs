@@ -34,8 +34,18 @@ namespace FdoToolbox.Base.Services
 
             foreach (IService service in _services)
             {
-                if(!service.IsInitialized)
+                if (!service.IsInitialized)
+                {
                     service.InitializeService();
+                }
+            }
+        }
+
+        internal void RestoreSession()
+        {
+            foreach (IService service in _services)
+            {
+                service.Load();
             }
         }
 
@@ -43,6 +53,7 @@ namespace FdoToolbox.Base.Services
         {
             foreach (IService service in _services)
             {
+                service.Save();
                 service.UnloadService();
             }
         }
