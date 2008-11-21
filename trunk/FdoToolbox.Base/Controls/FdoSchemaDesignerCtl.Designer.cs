@@ -31,10 +31,7 @@ namespace FdoToolbox.Base.Controls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FdoSchemaDesignerCtl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.btnApply = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnAdd = new System.Windows.Forms.ToolStripDropDownButton();
-            this.btnSave = new System.Windows.Forms.ToolStripDropDownButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.schemaTree = new System.Windows.Forms.TreeView();
             this.imgTree = new System.Windows.Forms.ImageList(this.components);
@@ -45,6 +42,13 @@ namespace FdoToolbox.Base.Controls
             this.mnuAddNewProperty = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToNewSDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnApply = new System.Windows.Forms.ToolStripButton();
+            this.btnAdd = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnSave = new System.Windows.Forms.ToolStripDropDownButton();
+            this.saveAsXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsNewSDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -57,7 +61,6 @@ namespace FdoToolbox.Base.Controls
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnApply,
-            this.toolStripSeparator1,
             this.btnAdd,
             this.btnSave});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -66,34 +69,10 @@ namespace FdoToolbox.Base.Controls
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // btnApply
-            // 
-            this.btnApply.Image = ((System.Drawing.Image)(resources.GetObject("btnApply.Image")));
-            this.btnApply.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(94, 22);
-            this.btnApply.Text = "Apply Schema";
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
-            this.btnAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(55, 22);
-            this.btnAdd.Text = "Add";
-            // 
-            // btnSave
-            // 
-            this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
-            this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(60, 22);
-            this.btnSave.Text = "Save";
             // 
             // splitContainer1
             // 
@@ -178,6 +157,62 @@ namespace FdoToolbox.Base.Controls
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
+            // saveToXMLToolStripMenuItem
+            // 
+            this.saveToXMLToolStripMenuItem.Name = "saveToXMLToolStripMenuItem";
+            this.saveToXMLToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.saveToXMLToolStripMenuItem.Text = "Save to XML";
+            this.saveToXMLToolStripMenuItem.Click += new System.EventHandler(this.saveToXMLToolStripMenuItem_Click);
+            // 
+            // saveToNewSDFToolStripMenuItem
+            // 
+            this.saveToNewSDFToolStripMenuItem.Name = "saveToNewSDFToolStripMenuItem";
+            this.saveToNewSDFToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.saveToNewSDFToolStripMenuItem.Text = "Save to new SDF";
+            this.saveToNewSDFToolStripMenuItem.Click += new System.EventHandler(this.saveToNewSDFToolStripMenuItem_Click);
+            // 
+            // btnApply
+            // 
+            this.btnApply.Image = ((System.Drawing.Image)(resources.GetObject("btnApply.Image")));
+            this.btnApply.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(94, 22);
+            this.btnApply.Text = "Apply Schema";
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
+            this.btnAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(79, 22);
+            this.btnAdd.Text = "Add New";
+            // 
+            // btnSave
+            // 
+            this.btnSave.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveAsXMLToolStripMenuItem,
+            this.saveAsNewSDFToolStripMenuItem});
+            this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
+            this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(60, 22);
+            this.btnSave.Text = "Save";
+            // 
+            // saveAsXMLToolStripMenuItem
+            // 
+            this.saveAsXMLToolStripMenuItem.Name = "saveAsXMLToolStripMenuItem";
+            this.saveAsXMLToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.saveAsXMLToolStripMenuItem.Text = "Save as XML";
+            this.saveAsXMLToolStripMenuItem.Click += new System.EventHandler(this.saveToXMLToolStripMenuItem_Click);
+            // 
+            // saveAsNewSDFToolStripMenuItem
+            // 
+            this.saveAsNewSDFToolStripMenuItem.Name = "saveAsNewSDFToolStripMenuItem";
+            this.saveAsNewSDFToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.saveAsNewSDFToolStripMenuItem.Text = "Save as new SDF";
+            this.saveAsNewSDFToolStripMenuItem.Click += new System.EventHandler(this.saveToNewSDFToolStripMenuItem_Click);
+            // 
             // FdoSchemaDesignerCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -205,9 +240,6 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.TreeView schemaTree;
         private System.Windows.Forms.PropertyGrid propGrid;
         private System.Windows.Forms.ImageList imgTree;
-        private System.Windows.Forms.ToolStripDropDownButton btnAdd;
-        private System.Windows.Forms.ToolStripDropDownButton btnSave;
-        private System.Windows.Forms.ToolStripButton btnApply;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ContextMenuStrip ctxProperty;
         private System.Windows.Forms.ContextMenuStrip ctxClass;
@@ -215,6 +247,13 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.ToolStripMenuItem mnuAddNewProperty;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToXMLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToNewSDFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton btnApply;
+        private System.Windows.Forms.ToolStripDropDownButton btnAdd;
+        private System.Windows.Forms.ToolStripDropDownButton btnSave;
+        private System.Windows.Forms.ToolStripMenuItem saveAsXMLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsNewSDFToolStripMenuItem;
 
     }
 }

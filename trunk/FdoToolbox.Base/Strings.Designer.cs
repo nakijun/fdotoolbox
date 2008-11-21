@@ -482,6 +482,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SDF Files (*.sdf)|*.sdf.
+        /// </summary>
+        internal static string FILTER_SDF_FILE {
+            get {
+                return ResourceManager.GetString("FILTER_SDF_FILE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Add.
         /// </summary>
         internal static string Global_AddButtonText {

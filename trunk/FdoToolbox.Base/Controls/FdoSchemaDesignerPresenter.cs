@@ -8,6 +8,7 @@ using ICSharpCode.Core;
 
 using Comp = System.ComponentModel;
 using System.Drawing;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -29,6 +30,7 @@ namespace FdoToolbox.Base.Controls
         PropertyType[] SupportedPropertyTypes { set; }
 
         string Title { set; }
+        bool ApplyEnabled { set; }
     }
 
     public class FdoSchemaDesignerPresenter
@@ -110,6 +112,7 @@ namespace FdoToolbox.Base.Controls
 
         private void SetCapabilities()
         {
+            CheckDirtyState();
             _view.SupportedClassTypes = (ClassType[])Enum.GetValues(typeof(ClassType));
             _view.SupportedPropertyTypes = (PropertyType[])Enum.GetValues(typeof(PropertyType));
         }
@@ -243,6 +246,7 @@ namespace FdoToolbox.Base.Controls
             Class cls = new Class(name, "");
             _schema.Classes.Add(cls);
             _view.AddClassNode(cls.Name, RES_CLASS);
+            CheckDirtyState();
         }
 
         public void AddFeatureClass()
@@ -251,6 +255,7 @@ namespace FdoToolbox.Base.Controls
             FeatureClass cls = new FeatureClass(name, "");
             _schema.Classes.Add(cls);
             _view.AddClassNode(cls.Name, RES_CLASS);
+            CheckDirtyState();
         }
 
         public void AddDataProperty()
@@ -262,6 +267,7 @@ namespace FdoToolbox.Base.Controls
                 DataPropertyDefinition dp = new DataPropertyDefinition(name, "");
                 cls.Properties.Add(dp);
                 _view.AddPropertyNode(cls.Name, dp.Name, RES_DATA_PROPERTY);
+                CheckDirtyState();
             }
         }
 
@@ -274,6 +280,62 @@ namespace FdoToolbox.Base.Controls
                 GeometricPropertyDefinition dp = new GeometricPropertyDefinition(name, "");
                 cls.Properties.Add(dp);
                 _view.AddPropertyNode(cls.Name, dp.Name, RES_GEOM);
+                CheckDirtyState();
+            }
+        }
+
+        private void CheckDirtyState()
+        {
+            _view.ApplyEnabled = (_schema.ElementState == SchemaElementState.SchemaElementState_Modified && _conn != null);
+        }
+
+        private void ValidateSchema()
+        {
+            if (_conn != null)
+            {
+                using (FdoFeatureService service = _conn.CreateFeatureService())
+                {
+                    IncompatibleSchema incSchema;
+                    if (!service.CanApplySchema(_schema, out incSchema))
+                        throw new NotSupportedException("Schema cannot be applied: " + incSchema.ToString());
+                }
+            }
+            else 
+            { 
+                //
+            }
+        }
+
+        public void SaveSchemaToSdf(string sdfFile)
+        {
+            ValidateSchema();
+            bool result = ExpressUtility.CreateFlatFileDataSource(sdfFile);
+            if (result)
+            {
+                FdoConnection conn = ExpressUtility.CreateFlatFileConnection(sdfFile);
+                conn.Open();
+                using (FdoFeatureService service = conn.CreateFeatureService())
+                {
+                    service.ApplySchema(_schema);
+                }
+            }
+        }
+
+        public void SaveSchemaToXml(string xmlFile)
+        {
+            ValidateSchema();
+            _schema.WriteXml(xmlFile);
+        }
+
+        public void ApplySchema()
+        {
+            if (_conn != null)
+            {
+                ValidateSchema();
+                using (FdoFeatureService service = _conn.CreateFeatureService())
+                {
+                    service.ApplySchema(_schema);
+                }
             }
         }
     }
