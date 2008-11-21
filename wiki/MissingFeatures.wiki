@@ -1,7 +1,7 @@
 #summary Features yet to be ported to the new version of FDO Toolbox
 
- * Schema Management
-   * Class Editor
+ * ~~Schema Management~~
+   * ~~Class Editor~~
  * ~~Spatial Context Management~~
  * ~~Coordinate System Definition browser (for assigning spatial contexts)~~
  * ~~Data Store Management~~
