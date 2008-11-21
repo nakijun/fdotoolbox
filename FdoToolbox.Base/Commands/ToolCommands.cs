@@ -31,4 +31,17 @@ namespace FdoToolbox.Base.Commands
             }
         }
     }
+
+    public class PreferencesCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            if (wb != null)
+            {
+                PreferencesCtl ctl = new PreferencesCtl();
+                wb.ShowContent(ctl, ViewRegion.Dialog);
+            }
+        }
+    }
 }

@@ -9,7 +9,7 @@ namespace FdoToolbox.Base.Controls
 {
     public interface IPreferencesView : IViewContent
     {
-
+        IList<IPreferenceSheet> Sheets { get; set; }
     }
 
     public class PreferencesCtlPresenter
@@ -23,8 +23,18 @@ namespace FdoToolbox.Base.Controls
 
         public void LoadPreferences()
         {
-            Properties prop = Prop.Get("Base.AddIn.Options", new Properties());
+            List<IPreferenceSheet> sheets = AddInTree.BuildItems<IPreferenceSheet>("/FdoToolbox/Preferences", this);
+            _view.Sheets = sheets;
+            //Properties prop = Prop.Get("Base.AddIn.Options", new Properties());
+        }
 
+        public void SaveChanges()
+        {
+            foreach (IPreferenceSheet sh in _view.Sheets)
+            {
+                sh.ApplyChanges();
+            }
+            PropertyService.Save();
         }
     }
 }

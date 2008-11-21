@@ -39,29 +39,58 @@ namespace FdoToolbox.Base.Controls
 
         public bool CanClose
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return true; }
         }
 
         public bool Close()
         {
-            throw new Exception("The method or operation is not implemented.");
+            return true;
         }
 
         public bool Save()
         {
-            throw new Exception("The method or operation is not implemented.");
+            return true;
         }
 
         public bool SaveAs()
         {
-            throw new Exception("The method or operation is not implemented.");
+            return true;
         }
 
-        public event EventHandler ViewContentClosing;
+        public event EventHandler ViewContentClosing = delegate { };
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            _presenter.SaveChanges();
+            MessageService.ShowMessage(ResourceService.GetString("MSG_PREFS_SAVED"));
+            ViewContentClosing(this, EventArgs.Empty);
+        }
 
+        private IList<IPreferenceSheet> _sheets;
+
+        public IList<IPreferenceSheet> Sheets
+        {
+            get
+            {
+                return _sheets;
+            }
+            set
+            {
+                _sheets = value;
+                tabOptions.TabPages.Clear();
+                foreach (IPreferenceSheet sh in _sheets)
+                {
+                    TabPage page = new TabPage(sh.Title);
+                    sh.ContentControl.Dock = DockStyle.Fill;
+                    page.Controls.Add(sh.ContentControl);
+                    tabOptions.TabPages.Add(page);
+                }
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            ViewContentClosing(this, EventArgs.Empty);
         }
     }
 }

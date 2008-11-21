@@ -887,6 +887,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preferences saved.
+        /// </summary>
+        internal static string MSG_PREFS_SAVED {
+            get {
+                return ResourceManager.GetString("MSG_PREFS_SAVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Provider registered.
         /// </summary>
         internal static string MSG_PROVIDER_REGISTERED {
@@ -1189,6 +1198,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_PREFERENCES {
             get {
                 return ResourceManager.GetString("TITLE_PREFERENCES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        internal static string TITLE_PREFS_GENERAL {
+            get {
+                return ResourceManager.GetString("TITLE_PREFS_GENERAL", resourceCulture);
             }
         }
         

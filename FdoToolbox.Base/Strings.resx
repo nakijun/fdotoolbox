@@ -424,6 +424,9 @@
   <data name="MSG_LISTING_SPATIAL_CONTEXTS" xml:space="preserve">
     <value>Showing all Spatial Contexts in Data Source</value>
   </data>
+  <data name="MSG_PREFS_SAVED" xml:space="preserve">
+    <value>Preferences saved</value>
+  </data>
   <data name="MSG_PROVIDER_REGISTERED" xml:space="preserve">
     <value>Provider registered</value>
   </data>
@@ -525,6 +528,9 @@
   </data>
   <data name="TITLE_PREFERENCES" xml:space="preserve">
     <value>Preferences</value>
+  </data>
+  <data name="TITLE_PREFS_GENERAL" xml:space="preserve">
+    <value>General</value>
   </data>
   <data name="TITLE_REGISTER_PROVIDER" xml:space="preserve">
     <value>Register Provider</value>
