@@ -129,6 +129,7 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\FDO Toolbox Core API.chm"
 	File "${INST_OUTPUT_FDOTOOLBOX}\changelog.txt"
 	File "${INST_OUTPUT_FDOTOOLBOX}\license.txt"
+	File "${INST_OUTPUT_FDOTOOLBOX}\cmd_readme.txt"
 	
 	# files
 	File "${INST_OUTPUT_FDOTOOLBOX}\cscatalog.sqlite"
@@ -146,8 +147,8 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\WeifenLuo.WinFormsUI.Docking.dll"
 	
 	# main executables
-	#File "${INST_OUTPUT_FDOTOOLBOX}\FdoUtil.exe"
-	#File "${INST_OUTPUT_FDOTOOLBOX}\FdoInfo.exe"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoUtil.exe"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoInfo.exe"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.exe"
 	
 	# create uninstaller
