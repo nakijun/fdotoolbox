@@ -283,6 +283,9 @@ namespace FdoToolbox.Base.Controls
                     name = "DataProperty" + counter++;
                 }
                 DataPropertyDefinition dp = new DataPropertyDefinition(name, "");
+                //Make some sensible string default length
+                if (dp.DataType == DataType.DataType_String && dp.Length == 0)
+                    dp.Length = 25;
                 cls.Properties.Add(dp);
                 _view.AddPropertyNode(cls.Name, dp.Name, RES_DATA_PROPERTY);
                 CheckDirtyState();
@@ -389,6 +392,11 @@ namespace FdoToolbox.Base.Controls
                 _view.RemoveClassNode(className);
                 CheckDirtyState();
             }
+        }
+
+        public void ValidateProperty(object obj, string name, object value)
+        {
+            
         }
     }
 }
