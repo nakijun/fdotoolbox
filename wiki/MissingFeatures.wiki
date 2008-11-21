@@ -8,6 +8,7 @@
  * ~~Delete Schema Command~~
  * Insert Data Scaffold
  * Command-line utilities
+ * Session persistence
  * Task Management
    * Create Task
      * Bulk Copy
