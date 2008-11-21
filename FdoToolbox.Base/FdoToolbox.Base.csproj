@@ -270,6 +270,7 @@
       <DependentUpon>SchemaInfoDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="ISubView.cs" />
+    <Compile Include="Services\NamingService.cs" />
     <Compile Include="Services\Preferences.cs" />
     <Compile Include="Services\CoordSysCatalog.cs" />
     <Compile Include="Services\FdoConnectionManager.cs" />

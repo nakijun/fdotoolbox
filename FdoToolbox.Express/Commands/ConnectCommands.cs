@@ -21,8 +21,9 @@ namespace FdoToolbox.Express.Commands
             {
                 FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SDF", file);
                 FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                NamingService namer = ServiceManager.Instance.GetService<NamingService>();
 
-                string name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), "");
+                string name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), namer.GetDefaultConnectionName("OSGeo.SDF"));
                 if (name == null)
                     return;
                 
@@ -48,8 +49,9 @@ namespace FdoToolbox.Express.Commands
             {
                 FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SHP", file);
                 FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                NamingService namer = ServiceManager.Instance.GetService<NamingService>();
 
-                string name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), "");
+                string name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), namer.GetDefaultConnectionName("OSGeo.SHP"));
                 if (name == null)
                     return;
 
