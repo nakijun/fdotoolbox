@@ -18,6 +18,10 @@ namespace FdoToolbox.Base.Controls
         void SetSchemaNode(string name);
         void AddClassNode(string name, string imageKey);
         void AddPropertyNode(string className, string propName, string imageKey);
+
+        void RemoveClassNode(string className);
+        void RemovePropertyNode(string className, string propName);
+
         string SelectedSchema { get; }
         string SelectedClass { get; }
         string SelectedProperty { get; }
@@ -31,6 +35,8 @@ namespace FdoToolbox.Base.Controls
 
         string Title { set; }
         bool ApplyEnabled { set; }
+
+        event EventHandler SchemaApplied;
     }
 
     public class FdoSchemaDesignerPresenter
@@ -243,6 +249,10 @@ namespace FdoToolbox.Base.Controls
         public void AddClass()
         {
             string name = "Class" + counter++;
+            while (_schema.Classes.IndexOf(name) >= 0)
+            {
+                name = "Class" + counter++;
+            }
             Class cls = new Class(name, "");
             _schema.Classes.Add(cls);
             _view.AddClassNode(cls.Name, RES_CLASS);
@@ -252,6 +262,10 @@ namespace FdoToolbox.Base.Controls
         public void AddFeatureClass()
         {
             string name = "Class" + counter++;
+            while (_schema.Classes.IndexOf(name) >= 0)
+            {
+                name = "Class" + counter++;
+            }
             FeatureClass cls = new FeatureClass(name, "");
             _schema.Classes.Add(cls);
             _view.AddClassNode(cls.Name, RES_CLASS);
@@ -264,6 +278,10 @@ namespace FdoToolbox.Base.Controls
             if (cls != null)
             {
                 string name = "DataProperty" + counter++;
+                while (cls.Properties.IndexOf(name) >= 0)
+                {
+                    name = "DataProperty" + counter++;
+                }
                 DataPropertyDefinition dp = new DataPropertyDefinition(name, "");
                 cls.Properties.Add(dp);
                 _view.AddPropertyNode(cls.Name, dp.Name, RES_DATA_PROPERTY);
@@ -277,6 +295,10 @@ namespace FdoToolbox.Base.Controls
             if (cls != null)
             {
                 string name = "GeomProperty" + counter++;
+                while (cls.Properties.IndexOf(name) >= 0)
+                {
+                    name = "GeomProperty" + counter++;
+                }
                 GeometricPropertyDefinition dp = new GeometricPropertyDefinition(name, "");
                 cls.Properties.Add(dp);
                 _view.AddPropertyNode(cls.Name, dp.Name, RES_GEOM);
@@ -336,6 +358,36 @@ namespace FdoToolbox.Base.Controls
                 {
                     service.ApplySchema(_schema);
                 }
+                CheckDirtyState();
+            }
+        }
+
+        public void RemoveProperty()
+        {
+            string className = _view.SelectedClass;
+            string propName = _view.SelectedProperty;
+            ClassDefinition cls = GetClass(className);
+            if (cls != null)
+            {
+                PropertyDefinition pd = GetProperty(className, propName);
+                if (pd != null)
+                {
+                    cls.Properties.Remove(pd);
+                    _view.RemovePropertyNode(className, propName);
+                    CheckDirtyState();
+                }
+            }
+        }
+
+        public void RemoveClass()
+        {
+            string className = _view.SelectedClass;
+            ClassDefinition cls = GetClass(className);
+            if (cls != null)
+            {
+                _schema.Classes.Remove(cls);
+                _view.RemoveClassNode(className);
+                CheckDirtyState();
             }
         }
     }

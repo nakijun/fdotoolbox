@@ -427,11 +427,17 @@
   <data name="MSG_PROVIDER_UNREGISTERED" xml:space="preserve">
     <value>Provider un-registered</value>
   </data>
+  <data name="MSG_SCHEMA_APPLIED" xml:space="preserve">
+    <value>Schema Applied</value>
+  </data>
   <data name="MSG_SCHEMA_DELETED" xml:space="preserve">
     <value>Schema Deleted</value>
   </data>
   <data name="MSG_SCHEMA_LOADED" xml:space="preserve">
     <value>Schemas loaded into connection {0} from {1}</value>
+  </data>
+  <data name="MSG_SCHEMA_SAVED" xml:space="preserve">
+    <value>Schema Saved</value>
   </data>
   <data name="MSG_SELECT_EXTENT_CLASSES" xml:space="preserve">
     <value>Select the classes to compute the extents from</value>

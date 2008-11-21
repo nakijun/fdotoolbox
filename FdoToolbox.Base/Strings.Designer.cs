@@ -896,6 +896,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Schema Applied.
+        /// </summary>
+        internal static string MSG_SCHEMA_APPLIED {
+            get {
+                return ResourceManager.GetString("MSG_SCHEMA_APPLIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schema Deleted.
         /// </summary>
         internal static string MSG_SCHEMA_DELETED {
@@ -910,6 +919,15 @@ namespace FdoToolbox.Base {
         internal static string MSG_SCHEMA_LOADED {
             get {
                 return ResourceManager.GetString("MSG_SCHEMA_LOADED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schema Saved.
+        /// </summary>
+        internal static string MSG_SCHEMA_SAVED {
+            get {
+                return ResourceManager.GetString("MSG_SCHEMA_SAVED", resourceCulture);
             }
         }
         
