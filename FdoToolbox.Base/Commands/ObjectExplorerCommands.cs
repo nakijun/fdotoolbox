@@ -209,7 +209,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class ManageSchemaCommand : AbstractMenuCommand
+    public class EditSchemaCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -341,6 +341,31 @@ namespace FdoToolbox.Base.Commands
                     FdoConnection conn = mgr.GetConnection(node.Name);
 
                     FdoDataStoreMgrCtl ctl = new FdoDataStoreMgrCtl(conn);
+                    wb.ShowContent(ctl, ViewRegion.Document);
+                }
+            }
+        }
+    }
+
+    public class CreateSchemaCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            TreeNode node = wb.ObjectExplorer.GetSelectedNode();
+            if (node.Level == 1)
+            {
+                string name = node.Name;
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                FdoConnection conn = mgr.GetConnection(name);
+
+                if (conn != null)
+                {
+                    FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl(conn);
+                    ctl.SchemaApplied += delegate
+                    {
+                        mgr.RefreshConnection(name);
+                    };
                     wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }
