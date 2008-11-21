@@ -219,12 +219,17 @@ namespace FdoToolbox.Base.Commands
             if(node.Level == 2)
             {
                 connNode = node.Parent;
+                string name = connNode.Name;
                 FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-                FdoConnection conn = mgr.GetConnection(connNode.Name);
+                FdoConnection conn = mgr.GetConnection(name);
 
                 if (conn != null)
                 {
                     FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl(conn, node.Name);
+                    ctl.SchemaApplied += delegate
+                    {
+                        mgr.RefreshConnection(name);
+                    };
                     wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }

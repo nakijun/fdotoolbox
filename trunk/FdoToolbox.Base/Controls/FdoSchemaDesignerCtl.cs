@@ -259,6 +259,7 @@ namespace FdoToolbox.Base.Controls
                 try
                 {
                     _presenter.SaveSchemaToXml(xmlFile);
+                    MessageService.ShowMessage(ResourceService.GetString("MSG_SCHEMA_SAVED"));
                 }
                 catch (Exception ex)
                 {
@@ -275,6 +276,7 @@ namespace FdoToolbox.Base.Controls
                 try
                 {
                     _presenter.SaveSchemaToSdf(sdfFile);
+                    MessageService.ShowMessage(ResourceService.GetString("MSG_SCHEMA_SAVED"));
                 }
                 catch (Exception ex)
                 {
@@ -288,10 +290,48 @@ namespace FdoToolbox.Base.Controls
             try
             {
                 _presenter.ApplySchema();
+                MessageService.ShowMessage(ResourceService.GetString("MSG_SCHEMA_APPLIED"));
+                this.SchemaApplied(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
                 MessageService.ShowError(ex);
+            }
+        }
+
+
+        public event EventHandler SchemaApplied = delegate { };
+
+        private void deletePropertyItem_Click(object sender, EventArgs e)
+        {
+            _presenter.RemoveProperty();
+        }
+
+        private void deleteClassItem_Click(object sender, EventArgs e)
+        {
+            _presenter.RemoveClass();
+        }
+
+
+        public void RemoveClassNode(string className)
+        {
+            TreeNode schemaNode = schemaTree.Nodes[0];
+            if (schemaNode == null)
+                throw new InvalidOperationException("No schema node defined");
+
+            schemaNode.Nodes.RemoveByKey(className);
+        }
+
+        public void RemovePropertyNode(string className, string propName)
+        {
+            TreeNode schemaNode = schemaTree.Nodes[0];
+            if (schemaNode == null)
+                throw new InvalidOperationException("No schema node defined");
+
+            TreeNode classNode = schemaNode.Nodes[className];
+            if (classNode != null)
+            {
+                classNode.Nodes.RemoveByKey(propName);
             }
         }
     }

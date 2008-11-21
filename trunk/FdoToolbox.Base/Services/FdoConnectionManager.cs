@@ -150,7 +150,23 @@ namespace FdoToolbox.Base.Services
         {
             if (NameExists(name))
             {
-                //TODO: Actually destroy and rebuild the connection?
+                FdoConnection conn = this.GetConnection(name);
+                conn.Close();
+                conn.Open();
+
+                /*
+                //TODO: I got a bad feeling that this may break something
+                //which may rely on the old connection. Verify this.
+                FdoConnection oldConn = this.GetConnection(name);
+                string provider = oldConn.Provider;
+                string connStr = oldConn.ConnectionString;
+                oldConn.Close();
+                oldConn.Dispose();
+
+                FdoConnection newConn = new FdoConnection(provider, connStr);
+                newConn.Open();
+                _ConnectionDict[name] = newConn;
+                */
                 ConnectionRefreshed(this, new EventArgs<string>(name));
             }
         }
