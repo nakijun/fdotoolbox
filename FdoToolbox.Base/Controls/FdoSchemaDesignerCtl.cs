@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using ICSharpCode.Core;
 using FdoToolbox.Core.Feature;
+using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -241,6 +242,56 @@ namespace FdoToolbox.Base.Controls
             if (e.Button == MouseButtons.Right)
             {
                 schemaTree.SelectedNode = schemaTree.GetNodeAt(e.X, e.Y);
+            }
+        }
+
+        public bool ApplyEnabled
+        {
+            get { return btnApply.Enabled; }
+            set { btnApply.Enabled = value; }
+        }
+
+        private void saveToXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string xmlFile = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_SCHEMA"), ResourceService.GetString("FILTER_SCHEMA_FILE"));
+            if (xmlFile != null)
+            {
+                try
+                {
+                    _presenter.SaveSchemaToXml(xmlFile);
+                }
+                catch (Exception ex)
+                {
+                    MessageService.ShowError(ex);
+                }
+            }
+        }
+
+        private void saveToNewSDFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string sdfFile = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_SCHEMA"), ResourceService.GetString("FILTER_SDF_FILE"));
+            if (sdfFile != null)
+            {
+                try
+                {
+                    _presenter.SaveSchemaToSdf(sdfFile);
+                }
+                catch (Exception ex)
+                {
+                    MessageService.ShowError(ex);
+                }
+            }
+        }
+
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _presenter.ApplySchema();
+            }
+            catch (Exception ex)
+            {
+                MessageService.ShowError(ex);
             }
         }
     }

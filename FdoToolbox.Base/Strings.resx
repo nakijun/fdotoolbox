@@ -259,6 +259,9 @@
   <data name="FILTER_SCHEMA_FILE" xml:space="preserve">
     <value>FDO Feature Schema (*.schema)|*.schema</value>
   </data>
+  <data name="FILTER_SDF_FILE" xml:space="preserve">
+    <value>SDF Files (*.sdf)|*.sdf</value>
+  </data>
   <data name="Global.AddButtonText" xml:space="preserve">
     <value>&amp;Add</value>
     <comment>Required by SharpDevelop Core</comment>
