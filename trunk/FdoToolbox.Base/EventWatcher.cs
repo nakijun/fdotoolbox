@@ -15,6 +15,7 @@ namespace FdoToolbox.Base
         public static void Initialize()
         {
             FdoConnectionManager manager = ServiceManager.Instance.GetService<FdoConnectionManager>();
+            NamingService namer = ServiceManager.Instance.GetService<NamingService>();
             manager.ConnectionAdded += delegate(object sender, EventArgs<string> e)
             {
                 LoggingService.InfoFormatted("Connection added: {0}", e.Data);
@@ -22,6 +23,8 @@ namespace FdoToolbox.Base
             manager.ConnectionRemoved += delegate(object sender, EventArgs<string> e)
             {
                 LoggingService.InfoFormatted("Connection removed: {0}", e.Data);
+                if (manager.GetConnectionNames().Count == 0)
+                    namer.ResetCounter();
             };
             manager.ConnectionRenamed += delegate(object sender, ConnectionRenameEventArgs e)
             {

@@ -37,6 +37,15 @@ namespace FdoToolbox.Base.Services
             _namePrefixes[provider] = prefix;
         }
 
+        public void ResetCounter()
+        {
+            List<string> keys = new List<string>(_counter.Keys);
+            foreach (string k in keys)
+            {
+                _counter[k] = 0;
+            }
+        }
+
         private FdoConnectionManager _manager;
 
         public string GetDefaultConnectionName(string provider)
