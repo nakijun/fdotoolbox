@@ -1,7 +1,13 @@
 - Enhancements:
-	- Refined Create SDF express command
+	- Based on SharpDevelop Core, allowing for cleaner and simpler extensibility.
+	- Helper macros for Generic Connect/Create datastore controls.
+	- Refined Express Module
 	- Refined Data Preview control. Select Aggregates is now fully featured unlike before.
-	- 
+	- Refined Schema Editor. This one is more simpler and can also function as a standalone editor.
+	- Application Console can now be saved/cleared.
+	- Added a text editor component (used by SharpDevelop). It currently serves no real purpose
+	- Added a Preference UI extension API. To register and expose your preference UIs, implement IPreferenceSheet 
+	  and specify the concrete type under the path "/FdoToolbox/Preferences" in your addin definition.
 	
 - Other:
 	- Nearly everything has been re-written from the ground up. 
