@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Boo.Lang;
+//using Boo.Lang;
 using System.Collections;
 using System.Diagnostics;
 
@@ -11,7 +11,7 @@ namespace FdoToolbox.Core.ETL
     /// A dictionary that can be access with a natural syntax from Boo
     /// </summary>
     [Serializable]
-    public class QuackingDictionary : IQuackFu, IDictionary
+    public class QuackingDictionary : IDictionary//, IQuackFu
     {
         /// <summary>
         /// The inner items collection
