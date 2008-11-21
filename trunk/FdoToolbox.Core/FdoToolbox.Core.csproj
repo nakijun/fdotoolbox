@@ -67,6 +67,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppFramework\CommandStatus.cs" />
+    <Compile Include="AppFramework\ConsoleApplication.cs" />
+    <Compile Include="AppFramework\ConsoleCommand.cs" />
+    <Compile Include="AppFramework\IConsoleCommand.cs" />
     <Compile Include="Configuration\DbConnection.cs" />
     <Compile Include="Configuration\SpatialConnection.cs" />
     <Compile Include="Connections\EnumerableDictionaryProperty.cs" />
