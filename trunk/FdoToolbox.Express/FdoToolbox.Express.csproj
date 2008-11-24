@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Commands\BulkCopyCommands.cs" />
     <Compile Include="Commands\ConnectCommands.cs" />
     <Compile Include="Commands\CreateCommands.cs" />

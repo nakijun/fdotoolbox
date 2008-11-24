@@ -62,6 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Commands\ConsoleCommands.cs" />
     <Compile Include="Commands\FdoCommands.cs" />
     <Compile Include="Commands\ObjectExplorerCommands.cs" />
