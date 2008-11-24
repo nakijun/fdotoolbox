@@ -63,6 +63,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AppFramework\CommandStatus.cs" />
     <Compile Include="AppFramework\ConsoleApplication.cs" />
     <Compile Include="AppFramework\ConsoleCommand.cs" />
@@ -94,6 +97,10 @@
     <Compile Include="ETL\Pipelines\SingleThreadedPipelineExecuter.cs" />
     <Compile Include="ETL\Pipelines\ThreadPoolPipelineExecuter.cs" />
     <Compile Include="ETL\QuackingDictionary.cs" />
+    <Compile Include="ETL\Specialized\FdoBulkCopy.cs" />
+    <Compile Include="ETL\Specialized\FdoBulkCopyOptions.cs" />
+    <Compile Include="ETL\Specialized\FdoDbJoin.cs" />
+    <Compile Include="ETL\Specialized\FdoDbJoinOptions.cs" />
     <Compile Include="ETL\WithLoggingMixin.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Exceptions.cs" />
@@ -156,9 +163,6 @@
     <None Include="Schemas\SpatialConnection.xsx">
       <DependentUpon>SpatialConnection.xsd</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ETL\Specialized\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
