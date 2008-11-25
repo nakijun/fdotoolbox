@@ -10,7 +10,7 @@ namespace FdoToolbox.Core.Feature
     {
         internal FdoFeature(DataRowBuilder rb) : base(rb) { }
 
-        private List<IGeometry> _geometries;
+        private List<IGeometry> _geometries = new List<IGeometry>();
 
         public void AddGeometry(IGeometry geom)
         {

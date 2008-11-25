@@ -75,8 +75,6 @@ namespace FdoToolbox.Base
             ConsolePane console = new ConsolePane();
             appConsole = console;
 
-            new FdoObjectExplorerDecorator().Decorate(exp);
-
             ShowContent(console, ViewRegion.Bottom);
             ShowContent(exp, ViewRegion.Left);
             

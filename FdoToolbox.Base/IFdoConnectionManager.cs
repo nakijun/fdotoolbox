@@ -13,7 +13,6 @@ namespace FdoToolbox.Base
     /// </summary>
     public interface IFdoConnectionManager : IService
     {
-        string CreateUniqueName();
         void AddConnection(string name, FdoConnection conn);
         void RemoveConnection(string name);
         void Clear();

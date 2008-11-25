@@ -13,6 +13,16 @@
         <Import assembly="FdoToolbox.Tasks.dll" />
     </Runtime>
 
+    <!-- Service definitions -->
+    <Path name="/FdoToolbox/Services">
+        <Class id="TaskManager" class="FdoToolbox.Tasks.Services.TaskManager" />
+    </Path>
+
+    <!-- Object Explorer Decorators -->
+    <Path name="/ObjectExplorer/Decorators">
+        <Class id="Tasks" class="FdoToolbox.Tasks.Controls.TaskDecorator" />
+    </Path>
+    
     <!-- Main Menu definition -->
     <Path name = "/Workbench/MainMenu">
 
@@ -20,7 +30,7 @@
 
     <!-- Auto-start commands -->
     <Path name="/Workspace/Autostart">
-
+        <Class id="Startup" class="FdoToolbox.Tasks.Commands.StartupCommand" />
     </Path>
 
     <!-- Toolbar definition -->
@@ -36,6 +46,43 @@
     <!-- Application Console toolbar definition -->
     <Path name="/AppConsole/Toolbar">
 
+    </Path>
+
+    
+    <Path name="/ObjectExplorer/ContextMenus/Tasks">
+        <MenuItem id="Task"
+                  label="${res:MENU_NEW_TASK}"
+                  icon="application_go"
+                  type="Menu">
+            <MenuItem id="CreateBulkCopy"
+                  label="${res:CMD_CreateBulkCopy}"
+                  icon="table_go"
+                  class="FdoToolbox.Tasks.Commands.CreateBulkCopyCommand" />
+            <MenuItem id="CreateJoin"
+                  label="${res:CMD_CreateJoin}"
+                  icon="table_relationship"
+                  class="FdoToolbox.Tasks.Commands.CreateJoinCommand" />
+        </MenuItem>
+        <MenuItem type="Separator" />
+        <MenuItem id="LoadTask"
+                  label="${res:CMD_LoadTask}"
+                  icon="folder"
+                  class="FdoToolbox.Tasks.Commands.LoadTaskCommand" />
+        <MenuItem id="RemoveAllTasks"
+                  label="${res:CMD_RemoveAllTasks}"
+                  icon="cross"
+                  class="FdoToolbox.Tasks.Commands.RemoveAllTasksCommand" />
+    </Path>
+
+    <Path name="/ObjectExplorer/ContextMenus/SelectedTask">
+        <MenuItem id="EditTask"
+                  label="${res:CMD_EditTask}"
+                  icon="application_edit"
+                  class="FdoToolbox.Tasks.Commands.EditTaskCommand" />
+        <MenuItem id="ExecTask"
+                  label="${res:CMD_ExecuteTask}"
+                  icon="application_go"
+                  class="FdoToolbox.Tasks.Commands.ExecuteTaskCommand" />
     </Path>
 
 </AddIn>

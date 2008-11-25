@@ -204,11 +204,15 @@ namespace FdoToolbox.Core.ETL
             PropertyValueCollection values = new PropertyValueCollection();
             foreach (string col in this.Columns)
             {
-                ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
-                if (dv != null)
+                //Omit null values
+                if (this[col] != null && this[col] != DBNull.Value)
                 {
-                    PropertyValue pv = new PropertyValue(col, dv);
-                    values.Add(pv);
+                    ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
+                    if (dv != null)
+                    {
+                        PropertyValue pv = new PropertyValue(col, dv);
+                        values.Add(pv);
+                    }
                 }
             }
             return values;
