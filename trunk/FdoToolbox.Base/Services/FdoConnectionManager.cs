@@ -31,11 +31,6 @@ namespace FdoToolbox.Base.Services
             return _ConnectionDict.ContainsKey(name);
         }
 
-        public string CreateUniqueName()
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
         public void AddConnection(string name, FdoToolbox.Core.Feature.FdoConnection conn)
         {
             if (_ConnectionDict.ContainsKey(name))

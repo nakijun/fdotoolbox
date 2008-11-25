@@ -9,6 +9,7 @@ using FdoToolbox.Base.Services;
 using Res = ICSharpCode.Core.ResourceService;
 using Msg = ICSharpCode.Core.MessageService;
 using FdoToolbox.Core;
+using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Base.Commands
 {
@@ -24,8 +25,17 @@ namespace FdoToolbox.Base.Commands
 
             Workbench.WorkbenchInitialized += delegate
             {
-                svcMgr.RestoreSession();
                 Workbench wb = Workbench.Instance;
+                List<IObjectExplorerDecorator> decorators = AddInTree.BuildItems<IObjectExplorerDecorator>("/ObjectExplorer/Decorators", this);
+                if (decorators != null)
+                {
+                    foreach (IObjectExplorerDecorator dec in decorators)
+                    {
+                        dec.Decorate(wb.ObjectExplorer);
+                    }
+                }
+
+                svcMgr.RestoreSession();
                 Msg.MainForm = wb;
                 wb.SetTitle(Res.GetString("UI_TITLE"));
 

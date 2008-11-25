@@ -34,6 +34,9 @@ namespace FdoToolbox.Core.Feature
     {
         private string _ClassName;
 
+        /// <summary>
+        /// Gets or sets the name of the feature class to query
+        /// </summary>
         public string ClassName
         {
             get { return _ClassName; }
@@ -42,6 +45,9 @@ namespace FdoToolbox.Core.Feature
 
         private List<string> _PropertyList;
 
+        /// <summary>
+        /// Gets the list of feature class properties to include in the query result
+        /// </summary>
         public ReadOnlyCollection<string> PropertyList
         {
             get { return _PropertyList.AsReadOnly(); }
@@ -49,6 +55,9 @@ namespace FdoToolbox.Core.Feature
 
         private Dictionary<string, Expression> _ComputedProperties;
 
+        /// <summary>
+        /// Gets a list of computed expressions to include in the query result
+        /// </summary>
         public Dictionary<string, Expression> ComputedProperties
         {
             get { return _ComputedProperties; }
@@ -56,12 +65,19 @@ namespace FdoToolbox.Core.Feature
 
         private string _Filter;
 
+        /// <summary>
+        /// Gets or sets the filter to apply to the query
+        /// </summary>
         public string Filter
         {
             get { return _Filter; }
             set { _Filter = value; }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="className"></param>
         public FeatureQueryOptions(string className)
         {
             _ClassName = className;
@@ -70,16 +86,28 @@ namespace FdoToolbox.Core.Feature
             _OrderBy = new List<string>();
         }
 
+        /// <summary>
+        /// Returns true if a filter has been defined for this query
+        /// </summary>
         public bool IsFilterSet
         {
             get { return !string.IsNullOrEmpty(_Filter); }
         }
 
+        /// <summary>
+        /// Adds a computed expression to be part of the query result
+        /// </summary>
+        /// <param name="alias"></param>
+        /// <param name="expression"></param>
         public void AddComputedProperty(string alias, string expression)
         {
             _ComputedProperties.Add(alias, Expression.Parse(expression));
         }
 
+        /// <summary>
+        /// Adds a series of computed expressions to be part of the query result
+        /// </summary>
+        /// <param name="computedProperties"></param>
         public void AddComputedProperty(NameValueCollection computedProperties)
         {
             if (computedProperties != null && computedProperties.Count > 0)
@@ -91,22 +119,38 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Removes a computed expression that is to be part of the query result
+        /// </summary>
+        /// <param name="alias"></param>
         public void RemoveComputedProperty(string alias)
         {
             if (_ComputedProperties.ContainsKey(alias))
                 _ComputedProperties.Remove(alias);
         }
 
+        /// <summary>
+        /// Removes a property that is to be part of the query result
+        /// </summary>
+        /// <param name="propertyName"></param>
         public void RemoveFeatureProperty(string propertyName)
         {
             _PropertyList.Remove(propertyName);
         }
 
+        /// <summary>
+        /// Adds a property that is to be part of the query result
+        /// </summary>
+        /// <param name="propertyName"></param>
         public void AddFeatureProperty(string propertyName)
         {
             _PropertyList.Add(propertyName);
         }
 
+        /// <summary>
+        /// Adds a series of properties that are to be part of the query result
+        /// </summary>
+        /// <param name="propertyNames"></param>
         public void AddFeatureProperty(IEnumerable<string> propertyNames)
         {
             _PropertyList.AddRange(propertyNames);
@@ -114,6 +158,9 @@ namespace FdoToolbox.Core.Feature
 
         private List<string> _OrderBy;
 
+        /// <summary>
+        /// Gets the properties to order by
+        /// </summary>
         public ReadOnlyCollection<string> OrderBy
         {
             get { return _OrderBy.AsReadOnly(); }
@@ -121,11 +168,19 @@ namespace FdoToolbox.Core.Feature
 
         private OrderingOption _OrderingOption;
 
+        /// <summary>
+        /// Gets the ordering option
+        /// </summary>
         public OrderingOption OrderOption
         {
             get { return _OrderingOption; }
         }
 
+        /// <summary>
+        /// Sets the ordering options for this query. Note that most providers do not support ordering.
+        /// </summary>
+        /// <param name="propertyNames"></param>
+        /// <param name="option"></param>
         public void SetOrderingOption(IEnumerable<string> propertyNames, OrderingOption option)
         {
             _OrderBy.Clear();
@@ -141,6 +196,9 @@ namespace FdoToolbox.Core.Feature
     {
         private bool _Distinct;
 
+        /// <summary>
+        /// Gets or sets whether the query results are to be distinct
+        /// </summary>
         public bool Distinct
         {
             get { return _Distinct; }
@@ -148,7 +206,10 @@ namespace FdoToolbox.Core.Feature
         }
 
         private string _GroupFilter;
-
+        
+        /// <summary>
+        /// Gets the group filter
+        /// </summary>
         public string GroupFilter
         {
             get { return _GroupFilter; }
@@ -156,17 +217,29 @@ namespace FdoToolbox.Core.Feature
 
         private List<string> _GroupByProperties;
 
+        /// <summary>
+        /// Gets the feature class properties to group by in the query result
+        /// </summary>
         public IEnumerable<string> GroupByProperties
         {
             get { return _GroupByProperties; }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="className"></param>
         public FeatureAggregateOptions(string className)
             : base(className)
         {
             _GroupByProperties = new List<string>();
         }
 
+        /// <summary>
+        /// Sets the grouping parameters
+        /// </summary>
+        /// <param name="groupByProperties"></param>
+        /// <param name="groupFilter"></param>
         public void SetGroupingFilter(IEnumerable<string> groupByProperties, string groupFilter)
         {
             _GroupFilter = groupFilter;

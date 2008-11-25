@@ -33,19 +33,6 @@ namespace FdoToolbox.Core
         }
 
         /// <summary>
-        /// Pre-loads the FDO libraries from a given path. Call this method only if your FDO libraries are not in
-        /// the same path as the assembly containing the consumer of this method.
-        /// </summary>
-        /// <param name="path"></param>
-        //public static void InitializeFdo(string path)
-        //{
-        //    foreach (string asm in assemblies)
-        //    {
-        //        Assembly.LoadFrom(Path.Combine(path, asm));
-        //    }
-        //}
-
-        /// <summary>
         /// Sets the path where FDO assemblies will be loaded.
         /// </summary>
         /// <param name="path"></param>

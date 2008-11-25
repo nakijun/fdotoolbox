@@ -99,6 +99,8 @@
     <Compile Include="ETL\QuackingDictionary.cs" />
     <Compile Include="ETL\Specialized\FdoBulkCopy.cs" />
     <Compile Include="ETL\Specialized\FdoBulkCopyOptions.cs" />
+    <Compile Include="ETL\Specialized\FdoClassCopyOptions.cs" />
+    <Compile Include="ETL\Specialized\FdoClassCopyProcess.cs" />
     <Compile Include="ETL\Specialized\FdoDbJoin.cs" />
     <Compile Include="ETL\Specialized\FdoDbJoinOptions.cs" />
     <Compile Include="ETL\WithLoggingMixin.cs" />
