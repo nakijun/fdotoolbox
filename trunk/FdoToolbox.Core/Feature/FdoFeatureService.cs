@@ -52,6 +52,10 @@ namespace FdoToolbox.Core.Feature
     {
         private static IList<FdoProviderInfo> _providerInfo;
 
+        /// <summary>
+        /// Gets the list of providers from the provider registry
+        /// </summary>
+        /// <returns></returns>
         public static IList<FdoProviderInfo> GetProviders()
         {
             if (_providerInfo == null)
@@ -90,7 +94,12 @@ namespace FdoToolbox.Core.Feature
         }
 
         private static Dictionary<string, IList<DictionaryProperty>> _connectProperties = new Dictionary<string, IList<DictionaryProperty>>();
-
+        
+        /// <summary>
+        /// Gets the parameters required to create a connection
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public static IList<DictionaryProperty> GetConnectProperties(string provider)
         {
             if (_connectProperties.ContainsKey(provider))
@@ -138,6 +147,11 @@ namespace FdoToolbox.Core.Feature
         private static Dictionary<string, IList<DictionaryProperty>> _createDataStoreProperties = new Dictionary<string, IList<DictionaryProperty>>();
         private static Dictionary<string, IList<DictionaryProperty>> _destroyDataStoreProperties = new Dictionary<string, IList<DictionaryProperty>>();
 
+        /// <summary>
+        /// Gets the parameters required to create a datastore
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public static IList<DictionaryProperty> GetCreateDataStoreProperties(string provider)
         {
             if (_createDataStoreProperties.ContainsKey(provider))
@@ -181,6 +195,11 @@ namespace FdoToolbox.Core.Feature
             return null;
         }
 
+        /// <summary>
+        /// Gets the parameters required to destory a data store
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public static IList<DictionaryProperty> GetDestroyDataStoreProperties(string provider)
         {
             if (_destroyDataStoreProperties.ContainsKey(provider))
@@ -228,6 +247,9 @@ namespace FdoToolbox.Core.Feature
 
         private FgfGeometryFactory _GeomFactory;
 
+        /// <summary>
+        /// Gets the FDO Geometry factory instance
+        /// </summary>
         public FgfGeometryFactory GeometryFactory
         {
             get { return _GeomFactory; }
@@ -245,6 +267,9 @@ namespace FdoToolbox.Core.Feature
             _GeomFactory = new FgfGeometryFactory();
         }
 
+        /// <summary>
+        /// Finalizer
+        /// </summary>
         ~FdoFeatureService()
         {
             Dispose(false);
@@ -258,6 +283,9 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Dispose this object
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
@@ -377,6 +405,74 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets the names of all schemas in this connection
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetSchemaNames()
+        {
+            List<string> schemas = new List<string>();
+            if (SupportsPartialSchemaDiscovery())
+            {
+                using (IGetSchemaNames getnames = Connection.CreateCommand(CommandType.CommandType_GetSchemaNames) as IGetSchemaNames)
+                {
+                    OSGeo.FDO.Common.StringCollection names = getnames.Execute();
+                    foreach (OSGeo.FDO.Common.StringElement sn in names)
+                    {
+                        schemas.Add(sn.String);
+                    }
+                }
+            }
+            else
+            {
+                FeatureSchemaCollection schemas = DescribeSchema();
+                foreach (FeatureSchema fs in schemas)
+                {
+                    schemas.Add(fs.Name);
+                }
+            }
+            return schemas;
+        }
+
+        /// <summary>
+        /// Gets the names of all classes for a given schema
+        /// </summary>
+        /// <param name="schema"></param>
+        /// <returns></returns>
+        public List<string> GetClassNames(string schema)
+        {
+            List<string> classNames = new List<string>();
+            if (SupportsPartialSchemaDiscovery())
+            {
+                using (IGetClassNames getnames = Connection.CreateCommand(CommandType.CommandType_GetClassNames) as IGetClassNames)
+                {
+                    getnames.SchemaName = schema;
+                    OSGeo.FDO.Common.StringCollection names = getnames.Execute();
+                    foreach (OSGeo.FDO.Common.StringElement sn in names)
+                    {
+                        classNames.Add(sn);
+                    }
+                }
+            }
+            else
+            {
+                FeatureSchema schema = GetSchemaByName(schema);
+                if (schema != null)
+                {
+                    foreach (ClassDefinition cd in schema.Classes)
+                    {
+                        classNames.Add(cd.Name);
+                    }
+                }
+            }
+            return classNames;
+        }
+
+        /// <summary>
+        /// Clones a given property definition
+        /// </summary>
+        /// <param name="pd"></param>
+        /// <returns></returns>
         public static PropertyDefinition CloneProperty(PropertyDefinition pd)
         {
             PropertyDefinition propDef = null;
@@ -479,6 +575,12 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets the number of features in a given class definition
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         public long GetFeatureCount(ClassDefinition classDef, string filter)
         {
             long count = 0;
@@ -586,14 +688,27 @@ namespace FdoToolbox.Core.Feature
             if (string.IsNullOrEmpty(schemaName))
                 return null;
 
-            FeatureSchemaCollection schemas = DescribeSchema();
-
-            foreach (FeatureSchema schema in schemas)
+            if (SupportsPartialSchemaDiscovery())
             {
-                if (schema.Name == schemaName)
-                    return schema;
+                FeatureSchemaCollection schemas = null;
+                using (IDescribeSchema describe = Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                {
+                    describe.SchemaName = schemaName;
+                    schemas = describe.Execute();
+                }
+                if (schemas != null && schemas.Count == 1)
+                    return schemas[0];
             }
+            else
+            {
+                FeatureSchemaCollection schemas = DescribeSchema();
 
+                foreach (FeatureSchema schema in schemas)
+                {
+                    if (schema.Name == schemaName)
+                        return schema;
+                }
+            }
             return null;
         }
 
@@ -622,13 +737,28 @@ namespace FdoToolbox.Core.Feature
             if (string.IsNullOrEmpty(className))
                 return null;
 
-            FeatureSchema schema = GetSchemaByName(schemaName);
-            if (schema != null)
+            if (SupportsPartialSchemaDiscovery())
             {
-                foreach (ClassDefinition classDef in schema.Classes)
+                ClassDefinition classDef = null;
+                using (IDescribeSchema describe = Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
                 {
-                    if (classDef.Name == className)
-                        return classDef;
+                    describe.SchemaName = schemaName;
+                    describe.ClassNames.Add(new OSGeo.FDO.Common.StringElement(className));
+                    FeatureSchemaCollection schemas = describe.Execute();
+                    if (schemas != null)
+                        classDef = schemas[0].Classes[0];
+                }
+            }
+            else
+            {
+                FeatureSchema schema = GetSchemaByName(schemaName);
+                if (schema != null)
+                {
+                    foreach (ClassDefinition classDef in schema.Classes)
+                    {
+                        if (classDef.Name == className)
+                            return classDef;
+                    }
                 }
             }
             return null;
@@ -1429,6 +1559,12 @@ namespace FdoToolbox.Core.Feature
             return SelectFeatures(options, -1);
         }
 
+        /// <summary>
+        /// Selects features from this connection according to the criteria set in the FeatureQueryOptions argument
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
         public FdoFeatureReader SelectFeatures(FeatureQueryOptions options, int limit)
         {
             IFeatureReader reader = null;
@@ -1772,18 +1908,48 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Returns true if this connection supports partial schema discovery.
+        /// ie. It supports IGetClassNames and IGetSchemaNames and enhanced IDescribeSchema
+        /// </summary>
+        /// <returns></returns>
+        public bool SupportsPartialSchemaDiscovery()
+        {
+            int[] cmds = this.Connection.CommandCapabilities.Commands;
+            return (Array.IndexOf<int>(cmds, (int)CommandType.CommandType_GetClassNames) >= 0
+                 && Array.IndexOf<int>(cmds, (int)CommandType.CommandType_GetSchemaNames) >= 0);
+        }
+
+        /// <summary>
+        /// Removes an FDO provider from the provider registry
+        /// </summary>
+        /// <param name="prov"></param>
         public static void UnregisterProvider(string prov)
         {
             FeatureAccessManager.GetProviderRegistry().UnregisterProvider(prov);
             _providerInfo = null; //Invalidate
         }
 
+        /// <summary>
+        /// Adds a new FDO provider to the provider registry
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="displayName"></param>
+        /// <param name="description"></param>
+        /// <param name="version"></param>
+        /// <param name="fdoVersion"></param>
+        /// <param name="libraryPath"></param>
+        /// <param name="managed"></param>
         public static void RegisterProvider(string name, string displayName, string description, string version, string fdoVersion, string libraryPath, bool managed)
         {
             FeatureAccessManager.GetProviderRegistry().RegisterProvider(name, displayName, description, version, fdoVersion, libraryPath, managed);
             _providerInfo = null; //Invalidate
         }
 
+        /// <summary>
+        /// Applies the given feature schemas to the current connection
+        /// </summary>
+        /// <param name="schemas"></param>
         public void ApplySchemas(FeatureSchemaCollection schemas)
         {
             foreach (FeatureSchema s in schemas)
