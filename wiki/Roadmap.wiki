@@ -7,10 +7,10 @@
  * Spatial ETL pipelining API
  * ~~NSIS installer packages~~
  * ~~Standalone Feature Schema Editor~~
- * Express support for SQLite provider
 
 === 0.8 ===
- 
+
+ * Express support for SQLite provider 
  * Localization
  * Raster Provider support
  * Additional Property support
