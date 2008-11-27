@@ -21,10 +21,9 @@
 === Future ===
 
  * SharpDevelop for Applications (SDA) support
- * Boo scriptability
+ * Boo scriptability / DSL
  * MapGuide Enterprise/Open Source integration
  * Schema Mapping support
- * Pipeable console commands
  * KML support
  * Coordinate System Re-Projection
  * Provider-specific extension modules
