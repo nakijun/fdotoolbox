@@ -15,4 +15,4 @@
 
 === OSGeo.KingOracle ===
 
- * SelectAggregate commands do not work because either the provider does not support them or the provide is falsely advertising that it does support it. ([http://trac.osgeo.org/fdo/ticket/376 Trac ticket 376])
+ * SelectAggregate commands do not work because either the provider does not support them or the provide is falsely advertising that it does support it. ([http://trac.osgeo.org/fdo/ticket/376 Trac ticket 376]) (Edit: A newer version of the KingOracle provider exists that supports SelectAggregate and has many performance improvements. However there is no release that targets FDO 3.4 meaning this provider can only be used with FDO Toolbox v0.6.0 and older) 
