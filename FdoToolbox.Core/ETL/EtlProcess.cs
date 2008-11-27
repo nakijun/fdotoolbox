@@ -147,5 +147,10 @@ namespace FdoToolbox.Core.ETL
                 }
             }
         }
+
+        /// <summary>
+        /// Persists this process to a file.
+        /// </summary>
+        public abstract void Save(string file);
     }
 }

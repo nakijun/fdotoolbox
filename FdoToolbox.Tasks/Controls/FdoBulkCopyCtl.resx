@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,43 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CMD_CreateBulkCopy" xml:space="preserve">
-    <value>Create Bulk Copy</value>
-  </data>
-  <data name="CMD_CreateJoin" xml:space="preserve">
-    <value>Create Join</value>
-  </data>
-  <data name="CMD_EditTask" xml:space="preserve">
-    <value>Edit Task</value>
-  </data>
-  <data name="CMD_ExecuteTask" xml:space="preserve">
-    <value>Execute Task</value>
-  </data>
-  <data name="CMD_LoadTask" xml:space="preserve">
-    <value>Load Task</value>
-  </data>
-  <data name="CMD_RemoveAllTasks" xml:space="preserve">
-    <value>Remove all Tasks</value>
-  </data>
-  <data name="LBL_DELETE_TARGET" xml:space="preserve">
-    <value>Delete target</value>
-  </data>
-  <data name="LBL_SOURCE_FILTER" xml:space="preserve">
-    <value>Source class filter</value>
-  </data>
-  <data name="MENU_NEW_TASK" xml:space="preserve">
-    <value>New Task</value>
-  </data>
-  <data name="NODE_EXPRESSION" xml:space="preserve">
-    <value>Class Computed Properties</value>
-  </data>
-  <data name="NODE_OPTIONS" xml:space="preserve">
-    <value>Class Copy Options</value>
-  </data>
-  <data name="NODE_PROPERTIES" xml:space="preserve">
-    <value>Class Properties</value>
-  </data>
-  <data name="TITLE_ETL_PROCESS" xml:space="preserve">
-    <value>Running ETL Process</value>
-  </data>
+  <metadata name="ctxSelectedClass.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="ctxFilter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>150, 17</value>
+  </metadata>
+  <metadata name="ctxDelete.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>241, 17</value>
+  </metadata>
+  <metadata name="ctxExpressions.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>339, 17</value>
+  </metadata>
+  <metadata name="ctxSelectedExpression.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>463, 17</value>
+  </metadata>
 </root>

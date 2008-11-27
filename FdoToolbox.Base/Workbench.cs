@@ -136,12 +136,13 @@ namespace FdoToolbox.Base
             };
 
             content.ClientSize = vc.ContentControl.Size;
+            content.CloseButton = vc.CanClose;
 
             vc.ContentControl.Dock = DockStyle.Fill;
             content.Controls.Add(vc.ContentControl);
 
             if (region == ViewRegion.Dialog)
-            {
+            {   
                 content.StartPosition = FormStartPosition.CenterParent;
                 content.ShowDialog();
             }

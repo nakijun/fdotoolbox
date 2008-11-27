@@ -58,6 +58,18 @@ namespace FdoToolbox.Core.ETL.Specialized
             get { return _SourceFilter; }
             set { _SourceFilter = value; }
         }
+
+        private bool _DeleteTarget;
+
+        /// <summary>
+        /// Determines if the data in the target feature class should be 
+        /// deleted before commencing copying.
+        /// </summary>
+        public bool DeleteTarget
+        {
+            get { return _DeleteTarget; }
+            set { _DeleteTarget = value; }
+        }
 	
         private NameValueCollection _propertyMappings;
 
