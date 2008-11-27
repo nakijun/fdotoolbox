@@ -207,7 +207,7 @@ namespace FdoToolbox.Base.Controls
             if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand))
             {
                 modes.Add(QueryMode.SQL);
-                _queryViews.Add(QueryMode.Aggregate, new FdoSqlQueryCtl());
+                _queryViews.Add(QueryMode.SQL, new FdoSqlQueryCtl());
             }
             _view.QueryModes = modes;
         }
