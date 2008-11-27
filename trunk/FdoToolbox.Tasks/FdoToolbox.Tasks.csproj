@@ -28,6 +28,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OSGeo.FDO, Version=3.3.8304.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OSGeo.FDO.Common, Version=3.3.8304.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OSGeo.FDO.Geometry, Version=3.3.8304.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\Fdo\OSGeo.FDO.Geometry.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -40,21 +55,28 @@
     </Compile>
     <Compile Include="Commands\CreateBulkCopyCommand.cs" />
     <Compile Include="Commands\StartupCommand.cs" />
+    <Compile Include="Commands\TaskCommands.cs" />
+    <Compile Include="Controls\EtlProcessCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\EtlProcessCtl.Designer.cs">
+      <DependentUpon>EtlProcessCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FdoBulkCopyCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\FdoBulkCopyCtl.Designer.cs">
       <DependentUpon>FdoBulkCopyCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FdoBulkCopyPresenter.cs" />
     <Compile Include="Controls\TaskDecorator.cs" />
-    <Compile Include="ITask.cs" />
+    <Compile Include="EtlBackgroundRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="TaskBase.cs" />
     <Compile Include="Services\TaskManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,12 +89,24 @@
       <Project>{9A3DA959-2B7E-4407-9DF8-DA56178D211A}</Project>
       <Name>FdoToolbox.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FdoToolbox.Core\FdoToolbox.Core.csproj">
+      <Project>{6AAE821C-D27F-47D2-8F1B-D748AF145B0A}</Project>
+      <Name>FdoToolbox.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Thirdparty\SharpDevelop\ICSharpCode.Core\ICSharpCode.Core.csproj">
       <Project>{35CEF10F-2D4C-45F2-9DD1-161E0FEC583C}</Project>
       <Name>ICSharpCode.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\EtlProcessCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>EtlProcessCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoBulkCopyCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoBulkCopyCtl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Strings.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>

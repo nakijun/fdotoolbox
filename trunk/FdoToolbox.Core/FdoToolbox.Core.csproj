@@ -100,7 +100,6 @@
     <Compile Include="ETL\Specialized\FdoBulkCopy.cs" />
     <Compile Include="ETL\Specialized\FdoBulkCopyOptions.cs" />
     <Compile Include="ETL\Specialized\FdoClassCopyOptions.cs" />
-    <Compile Include="ETL\Specialized\FdoClassCopyProcess.cs" />
     <Compile Include="ETL\Specialized\FdoDbJoin.cs" />
     <Compile Include="ETL\Specialized\FdoDbJoinOptions.cs" />
     <Compile Include="ETL\WithLoggingMixin.cs" />
@@ -161,9 +160,6 @@
     </None>
     <None Include="Schemas\SpatialConnection.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Schemas\SpatialConnection.xsx">
-      <DependentUpon>SpatialConnection.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -411,7 +411,7 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public List<string> GetSchemaNames()
         {
-            List<string> schemas = new List<string>();
+            List<string> schemaNames = new List<string>();
             if (SupportsPartialSchemaDiscovery())
             {
                 using (IGetSchemaNames getnames = Connection.CreateCommand(CommandType.CommandType_GetSchemaNames) as IGetSchemaNames)
@@ -419,7 +419,7 @@ namespace FdoToolbox.Core.Feature
                     OSGeo.FDO.Common.StringCollection names = getnames.Execute();
                     foreach (OSGeo.FDO.Common.StringElement sn in names)
                     {
-                        schemas.Add(sn.String);
+                        schemaNames.Add(sn.String);
                     }
                 }
             }
@@ -428,35 +428,35 @@ namespace FdoToolbox.Core.Feature
                 FeatureSchemaCollection schemas = DescribeSchema();
                 foreach (FeatureSchema fs in schemas)
                 {
-                    schemas.Add(fs.Name);
+                    schemaNames.Add(fs.Name);
                 }
             }
-            return schemas;
+            return schemaNames;
         }
 
         /// <summary>
         /// Gets the names of all classes for a given schema
         /// </summary>
-        /// <param name="schema"></param>
+        /// <param name="schemaName"></param>
         /// <returns></returns>
-        public List<string> GetClassNames(string schema)
+        public List<string> GetClassNames(string schemaName)
         {
             List<string> classNames = new List<string>();
             if (SupportsPartialSchemaDiscovery())
             {
                 using (IGetClassNames getnames = Connection.CreateCommand(CommandType.CommandType_GetClassNames) as IGetClassNames)
                 {
-                    getnames.SchemaName = schema;
+                    getnames.SchemaName = schemaName;
                     OSGeo.FDO.Common.StringCollection names = getnames.Execute();
                     foreach (OSGeo.FDO.Common.StringElement sn in names)
                     {
-                        classNames.Add(sn);
+                        classNames.Add(sn.String);
                     }
                 }
             }
             else
             {
-                FeatureSchema schema = GetSchemaByName(schema);
+                FeatureSchema schema = GetSchemaByName(schemaName);
                 if (schema != null)
                 {
                     foreach (ClassDefinition cd in schema.Classes)

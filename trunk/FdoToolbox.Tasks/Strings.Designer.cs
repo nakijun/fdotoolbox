@@ -115,11 +115,65 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete target.
+        /// </summary>
+        internal static string LBL_DELETE_TARGET {
+            get {
+                return ResourceManager.GetString("LBL_DELETE_TARGET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source class filter.
+        /// </summary>
+        internal static string LBL_SOURCE_FILTER {
+            get {
+                return ResourceManager.GetString("LBL_SOURCE_FILTER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Task.
         /// </summary>
         internal static string MENU_NEW_TASK {
             get {
                 return ResourceManager.GetString("MENU_NEW_TASK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class Computed Properties.
+        /// </summary>
+        internal static string NODE_EXPRESSION {
+            get {
+                return ResourceManager.GetString("NODE_EXPRESSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class Copy Options.
+        /// </summary>
+        internal static string NODE_OPTIONS {
+            get {
+                return ResourceManager.GetString("NODE_OPTIONS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class Properties.
+        /// </summary>
+        internal static string NODE_PROPERTIES {
+            get {
+                return ResourceManager.GetString("NODE_PROPERTIES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running ETL Process.
+        /// </summary>
+        internal static string TITLE_ETL_PROCESS {
+            get {
+                return ResourceManager.GetString("TITLE_ETL_PROCESS", resourceCulture);
             }
         }
     }

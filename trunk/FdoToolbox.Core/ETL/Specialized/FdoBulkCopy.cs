@@ -4,10 +4,17 @@ using System.Text;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
-    public class FdoBulkCopy : IDisposable
+    using Operations;
+    using FdoToolbox.Core.Feature;
+    using OSGeo.FDO.Commands.Feature;
+
+    /// <summary>
+    /// A specialized form of <see cref="EtlProcess"/> that copies
+    /// a series of feature classes from one source to another
+    /// </summary>
+    public class FdoBulkCopy : EtlProcess
     {
         private FdoBulkCopyOptions _options;
-        private List<FdoClassCopyProcess> _classCopyProcesses;
 
         /// <summary>
         /// Constructor
@@ -16,60 +23,61 @@ namespace FdoToolbox.Core.ETL.Specialized
         public FdoBulkCopy(FdoBulkCopyOptions options)
         {
             _options = options;
-            _classCopyProcesses = new List<FdoClassCopyProcess>();
+        }
+
+        /// <summary>
+        /// Initializes the process
+        /// </summary>
+        protected override void Initialize()
+        {
             foreach (FdoClassCopyOptions copt in _options.ClassCopyOptions)
             {
-                FdoClassCopyProcess proc = new FdoClassCopyProcess(copt);
-                _classCopyProcesses.Add(proc);
-            }
-        }
-
-        /// <summary>
-        /// Finalizer
-        /// </summary>
-        ~FdoBulkCopy()
-        {
-            Dispose(false);
-        }
-
-        private List<Exception> _errors = new List<Exception>();
-
-        /// <summary>
-        /// Executes the bulk copy
-        /// </summary>
-        public void Execute()
-        {
-            //Validate options
-
-            foreach (FdoClassCopyProcess fcp in _classCopyProcesses)
-            {
-                fcp.Execute();
-                if (fcp.Errors != null)
-                    _errors.AddRange(fcp.Errors);
-            }
-        }
-
-        public Exception[] Errors
-        {
-            get { return _errors.ToArray(); }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                foreach (FdoClassCopyProcess fcp in _classCopyProcesses)
+                if (copt.DeleteTarget)
                 {
-                    fcp.Dispose();
+                    Info("Deleting data in target class {0} before copying", copt.TargetClassName);
+                    using (FdoFeatureService service = copt.TargetConnection.CreateFeatureService())
+                    {
+                        using (IDelete del = service.CreateCommand<IDelete>(OSGeo.FDO.Commands.CommandType.CommandType_Delete) as IDelete)
+                        {
+                            try
+                            {
+                                del.SetFeatureClassName(copt.TargetClassName);
+                                del.Execute();
+                                Info("Data in target class {0} deleted");
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                    }
                 }
-                _classCopyProcesses.Clear();
+
+                Register(new FdoInputOperation(copt.SourceConnection, CreateSourceQuery(copt)));
+                if (copt.PropertyMappings.Count > 0)
+                    Register(new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings));
+                else
+                    Register(new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName));
             }
+        }
+
+        private static FeatureQueryOptions CreateSourceQuery(FdoClassCopyOptions copt)
+        {
+            FeatureQueryOptions query = new FeatureQueryOptions(copt.SourceClassName);
+            query.AddFeatureProperty(copt.SourcePropertyNames);
+            if (!string.IsNullOrEmpty(copt.SourceFilter))
+                query.Filter = copt.SourceFilter;
+
+            return query;
+        }
+
+        /// <summary>
+        /// Saves the bulk copy configuration
+        /// </summary>
+        /// <param name="file"></param>
+        public override void Save(string file)
+        {
+            
         }
     }
 }

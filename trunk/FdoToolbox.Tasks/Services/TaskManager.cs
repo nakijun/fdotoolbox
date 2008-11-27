@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Base.Services;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Tasks.Services
 {
@@ -38,14 +39,14 @@ namespace FdoToolbox.Tasks.Services
 
         public event EventHandler Unload = delegate { };
 
-        private Dictionary<string, ITask> _taskDict = new Dictionary<string, ITask>();
+        private Dictionary<string, EtlProcess> _taskDict = new Dictionary<string, EtlProcess>();
 
-        public void AddTask(ITask task)
+        public void AddTask(string name, EtlProcess task)
         {
-            if (_taskDict.ContainsKey(task.Name))
-                throw new ArgumentException("A task named " + task.Name + " already exists");
+            if (_taskDict.ContainsKey(name))
+                throw new ArgumentException("A task named " + name + " already exists");
 
-            _taskDict.Add(task.Name, task);
+            _taskDict.Add(name, task);
         }
 
         public void RemoveTask(string name)
@@ -56,7 +57,7 @@ namespace FdoToolbox.Tasks.Services
             }
         }
 
-        public ITask GetTask(string name)
+        public EtlProcess GetTask(string name)
         {
             if (_taskDict.ContainsKey(name))
                 return _taskDict[name];
