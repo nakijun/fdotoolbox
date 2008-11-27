@@ -30,9 +30,7 @@
  * Provider-specific extension modules
  * Product-specific extension modules
  * Linux port of command-line utilities
- * Star schema support
  * LINQ support
- * WPF user interface
  * Integration with other OSGeo tools/libraries
  * Java GIS library integration via IKVM
  * Segmented bulk copy (for extremely large datasets)
