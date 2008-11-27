@@ -5,7 +5,7 @@
 
  * The provider is very unstable, any operations with a PostGIS connection may throw anything from win32 exceptions to System.AccessViolationException
 
- * Opening a bulk copy tab that involves a PostGIS connection may/will throw a System.AccessViolationException at OSGeo.FDO.Commands.BatchParameterValueCollection.ReleaseUnmanagedObject()
+ * Opening a bulk copy tab that involves a PostGIS connection may/will throw a System.AccessViolationException at OSGeo.FDO.Commands.BatchParameterValueCollection.ReleaseUnmanagedObject() (Edit: There may be some problems with reference counting that is causing these exceptions)
 
  * Changes made after applying a schema to a PostGIS connection are not visible until you remove and re-open the connection
 
