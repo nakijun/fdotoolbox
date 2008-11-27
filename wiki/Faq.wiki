@@ -11,7 +11,9 @@ A: When connecting to Oracle, leave the OracleSchema and KingFdoClass properties
 
 === Q: Select Aggregates do not work in the Data Preview (using OSGeo.KingOracle) ===
 
-A: The Data Preview's UI (and many others) are driven by the connection's capabilities, thus preventing you from doing illegal/unsupported actions. Basically [http://trac.osgeo.org/fdo/ticket/376 the provider is falsely reporting that Select Aggregates is supported, when it actually isn't]
+~~A: The Data Preview's UI (and many others) are driven by the connection's capabilities, thus preventing you from doing illegal/unsupported actions. Basically [http://trac.osgeo.org/fdo/ticket/376 the provider is falsely reporting that Select Aggregates is supported, when it actually isn't]~~
+
+A: A newer release of KingOracle is available [http://www.sl-king.com/fdooracle here] that supports SelectAggregates. Note that because there is no provider targeting FDO 3.4, this provider will not work in the trunk builds of FDO Toolbox and can only be used in v0.6.0 and older releases.
 
 === Q: Does FDO Toolbox support creating Value Constraints for Data Properties? ===
 
@@ -39,13 +41,13 @@ A: Not at this point in time
 
 === Q: What is the difference between Lite and Full releases? ===
 
-A: Lite releases do not include the FDO binaries, you will need the [http://fdo.osgeo.org FDO binaries]. You may be prompted for the directory containing the FDO binaries, this is a one-off thing.
+A: Lite releases do not include the FDO binaries, you will need the [http://fdo.osgeo.org FDO binaries]. You may be prompted for the directory containing the FDO binaries, this is a one-off thing. 
 
 === Q: What is the release cycle for Lite and Full releases? === 
 
 ~~A: Every release will have a Lite version. Only major point releases (0.4, 0.5, ...) will have Full releases or when a newer version of FDO is released.~~
 
-A: As of 0.7 all new releases will be full releases.
+A: As of 0.7 all new releases will be full releases bundled with the most recent weekly build of FDO 3.4.0.
 
 === Q: Can I run FDO Toolbox in Linux (via Mono)? ===
 
