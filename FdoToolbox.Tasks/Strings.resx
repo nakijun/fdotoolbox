@@ -135,6 +135,9 @@
   <data name="CMD_RemoveAllTasks" xml:space="preserve">
     <value>Remove all Tasks</value>
   </data>
+  <data name="CMD_RenameTask" xml:space="preserve">
+    <value>Rename Task</value>
+  </data>
   <data name="LBL_DELETE_TARGET" xml:space="preserve">
     <value>Delete target</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="MENU_NEW_TASK" xml:space="preserve">
     <value>New Task</value>
+  </data>
+  <data name="MSG_DELETE_UNSUPPORTED" xml:space="preserve">
+    <value>Delete is not supported</value>
   </data>
   <data name="NODE_EXPRESSION" xml:space="preserve">
     <value>Class Computed Properties</value>
@@ -153,7 +159,13 @@
   <data name="NODE_PROPERTIES" xml:space="preserve">
     <value>Class Properties</value>
   </data>
+  <data name="PROMPT_ENTER_NEW_TASK_NAME" xml:space="preserve">
+    <value>Enter the new name for the task</value>
+  </data>
   <data name="TITLE_ETL_PROCESS" xml:space="preserve">
     <value>Running ETL Process</value>
+  </data>
+  <data name="TITLE_RENAME_TASK" xml:space="preserve">
+    <value>Rename Task</value>
   </data>
 </root>

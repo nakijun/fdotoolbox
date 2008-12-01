@@ -12,7 +12,7 @@ using System.Collections;
 
 namespace FdoToolbox.Base.Controls
 {
-    public class FdoObjectExplorerDecorator : IObjectExplorerDecorator
+    public class FdoObjectExplorerExtender : IObjectExplorerExtender
     {
         private string RootNodeName = "NODE_FDO";
 

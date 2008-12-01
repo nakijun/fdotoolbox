@@ -19,6 +19,8 @@
 #endregion
 using System;
 using System.Runtime.Serialization;
+using System.Collections.Generic;
+using System.Text;
 
 namespace FdoToolbox.Core
 {
@@ -70,10 +72,33 @@ namespace FdoToolbox.Core
     [Serializable]
     public class TaskValidationException : Exception
     {
+        private string[] _errors = new string[0];
+
+        public string[] Errors { get { return _errors; } }
+
         protected TaskValidationException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
         public TaskValidationException() : base() { }
         public TaskValidationException(string msg) : base(msg) { }
         public TaskValidationException(string msg, Exception inner) : base(msg, inner) { }
+
+        public TaskValidationException(List<string> errors) : base() { }
+
+        public override string ToString()
+        {
+            if (this.Errors.Length > 0)
+            {
+                StringBuilder sb = new StringBuilder("The following validation errors were encountered: ");
+                foreach (string str in this.Errors)
+                {
+                    sb.AppendFormat(" - {0}\n", str);
+                }
+                return sb.ToString();
+            }
+            else
+            {
+                return base.ToString();
+            }
+        }
     }
 
     [Serializable]

@@ -41,22 +41,22 @@ namespace FdoToolbox.Tasks.Controls
 
         public bool CanClose
         {
-            get { return false; }
+            get { return true; }
         }
 
         public bool Close()
         {
-            return false;
+            return true;
         }
 
         public bool Save()
         {
-            return false;
+            return true;
         }
 
         public bool SaveAs()
         {
-            return false;
+            return true;
         }
 
         public event EventHandler ViewContentClosing = delegate { };

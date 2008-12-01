@@ -11,6 +11,7 @@ using FdoToolbox.Base.Services;
 using FdoToolbox.Base.Forms;
 using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Schema;
+using FdoToolbox.Core;
 
 namespace FdoToolbox.Tasks.Controls
 {
@@ -252,7 +253,7 @@ namespace FdoToolbox.Tasks.Controls
             if (classNode != null)
             {
                 TreeNode filterNode = new TreeNode();
-                filterNode.Text = ResourceService.GetString("LBL_SOURCE_FILTER");
+                filterNode.Name = filterNode.Text = ResourceService.GetString("LBL_SOURCE_FILTER");
                 filterNode.ContextMenuStrip = ctxFilter;
                 classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes.Add(filterNode);
             }
@@ -264,7 +265,7 @@ namespace FdoToolbox.Tasks.Controls
             if (classNode != null)
             {
                 TreeNode deleteNode = new TreeNode();
-                deleteNode.Text = ResourceService.GetString("LBL_DELETE_TARGET");
+                deleteNode.Name = deleteNode.Text = ResourceService.GetString("LBL_DELETE_TARGET");
                 deleteNode.ContextMenuStrip = ctxDelete;
                 classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes.Add(deleteNode);
             }
@@ -565,11 +566,114 @@ namespace FdoToolbox.Tasks.Controls
             try
             {
                 _presenter.SaveTask();
+                ViewContentClosing(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
                 MessageService.ShowError(ex);
             }
+        }
+
+
+        public bool GetClassDeleteOption(string className)
+        {
+            TreeNode classNode = ClassesNode.Nodes[className];
+            if (classNode != null)
+            {
+                TreeNode deleteNode = classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes[1];
+                if (deleteNode.Tag != null)
+                {
+                    return (bool)deleteNode.Tag;
+                }
+            }
+            return false;
+        }
+
+        public string GetClassFilterOption(string className)
+        {
+            TreeNode classNode = ClassesNode.Nodes[className];
+            if (classNode != null)
+            {
+                TreeNode filterNode = classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes[0];
+                if (filterNode.Tag != null)
+                {
+                    return filterNode.Tag.ToString();
+                }
+            }
+            return null;
+        }
+
+        private void clearFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode filterNode = treeMappings.SelectedNode;
+            filterNode.Tag = null;
+            filterNode.ToolTipText = null;
+            filterNode.Text = ResourceService.GetString("LBL_SOURCE_FILTER");
+        }
+
+        private void setFilterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode filterNode = treeMappings.SelectedNode;
+            TreeNode classNode = filterNode.Parent.Parent;
+            FdoConnection conn = _presenter.GetSourceConnection();
+            using (FdoFeatureService service = conn.CreateFeatureService())
+            {
+                ClassDefinition cd = service.GetClassByName(this.SelectedSourceSchema, classNode.Name);
+                if (cd != null)
+                {
+                    string expr = ExpressionEditor.NewExpression(conn, cd, ExpressionMode.Filter);
+                    if (!string.IsNullOrEmpty(expr))
+                    {
+                        filterNode.Tag = filterNode.ToolTipText = expr;
+                        filterNode.Text = ResourceService.GetString("LBL_SOURCE_FILTER") + " (set)";
+                    }
+                }
+            }
+        }
+
+        private void deleteTrueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode delNode = treeMappings.SelectedNode;
+            FdoConnection conn = _presenter.GetTargetConnection();
+            using (FdoFeatureService service = conn.CreateFeatureService())
+            {
+                if (service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Delete))
+                {
+                    delNode.Tag = true;
+                }
+                else
+                {
+                    MessageService.ShowMessage(ResourceService.GetString("MSG_DELETE_UNSUPPORTED"));
+                    delNode.Tag = false;
+                }
+                delNode.Text = delNode.Name + " (" + delNode.Tag + ")";
+            }
+        }
+
+        private void deleteFalseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode delNode = treeMappings.SelectedNode;
+            delNode.Tag = false;
+            delNode.Text = delNode.Name + " (" + delNode.Tag + ")";
+        }
+
+
+        public System.Collections.Specialized.NameValueCollection GetExpressions(string className)
+        {
+            System.Collections.Specialized.NameValueCollection exprs = new System.Collections.Specialized.NameValueCollection();
+            TreeNode classNode = ClassesNode.Nodes[className];
+            if (classNode != null)
+            {
+                foreach (TreeNode exprNode in classNode.Nodes[PREFIX_CLASS_EXPRESSION].Nodes)
+                {
+                    if (exprNode.Tag != null)
+                    {
+                        ExpressionMappingInfo map = (ExpressionMappingInfo)exprNode.Tag;
+                        exprs.Add(exprNode.Name, map.Expression);
+                    }
+                }
+            }
+            return exprs;
         }
     }
 }

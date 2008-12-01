@@ -5,10 +5,10 @@ using System.Text;
 namespace FdoToolbox.Base.Controls
 {
     /// <summary>
-    /// A decorator interface that extends the Object Explorer with custom
+    /// An extender interface that extends the Object Explorer with custom
     /// root nodes and context menus.
     /// </summary>
-    public interface IObjectExplorerDecorator
+    public interface IObjectExplorerExtender
     {
         void Decorate(IObjectExplorer explorer);
     }

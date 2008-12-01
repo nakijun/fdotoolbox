@@ -93,12 +93,27 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <param name="sourceClass"></param>
         /// <param name="targetClass"></param>
         /// <param name="mappings"></param>
-        public void AddClassCopyOption(string sourceClass, string targetClass, NameValueCollection mappings)
+        /// <param name="sourceExpressions"></param>
+        /// <param name="deleteTarget"></param>
+        /// <param name="sourceFilter"></param>
+        public void AddClassCopyOption(string sourceClass, string targetClass, NameValueCollection mappings, NameValueCollection sourceExpressions, bool deleteTarget, string sourceFilter)
         {
+            //All source expressions passsed in must be mapped.
+            foreach (string key in sourceExpressions.AllKeys)
+            {
+                if (mappings[key] == null)
+                    throw new InvalidOperationException("Could not find mapped property for source expression: " + key);
+            }
             FdoClassCopyOptions copt = new FdoClassCopyOptions(_sourceConn, _targetConn, sourceClass, targetClass);
+            copt.DeleteTarget = deleteTarget;
+            copt.SourceFilter = sourceFilter;
             foreach (string key in mappings.AllKeys)
             {
                 copt.AddPropertyMapping(key, mappings[key]);
+            }
+            foreach (string key in sourceExpressions.AllKeys)
+            {
+                copt.AddSourceExpression(key, sourceExpressions[key]);
             }
             copt.BatchSize = this.BatchSize;
             _classOptions.Add(copt);

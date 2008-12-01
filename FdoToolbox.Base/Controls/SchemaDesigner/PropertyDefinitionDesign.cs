@@ -22,6 +22,11 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             _conn = conn;
         }
 
+        protected void FirePropertyChanged(string property)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+
         [Browsable(false)]
         public FdoConnection Connection
         {
@@ -35,7 +40,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             set 
             { 
                 _propDef.Name = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("Name"));
+                FirePropertyChanged("Name");
             }
         }
 
@@ -43,7 +48,11 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         public string Description
         {
             get { return _propDef.Description; }
-            set { _propDef.Description = value; }
+            set 
+            { 
+                _propDef.Description = value;
+                FirePropertyChanged("Description");
+            }
         }
 
         [Description("Gets whether this is a system property")]

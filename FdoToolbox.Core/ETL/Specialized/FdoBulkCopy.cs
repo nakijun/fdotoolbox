@@ -65,6 +65,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         {
             FeatureQueryOptions query = new FeatureQueryOptions(copt.SourceClassName);
             query.AddFeatureProperty(copt.SourcePropertyNames);
+            query.AddComputedProperty(copt.SourceExpressions);
             if (!string.IsNullOrEmpty(copt.SourceFilter))
                 query.Filter = copt.SourceFilter;
 

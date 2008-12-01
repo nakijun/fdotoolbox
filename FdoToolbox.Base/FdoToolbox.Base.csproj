@@ -126,7 +126,7 @@
       <DependentUpon>FdoMapPreview.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FdoMapPreviewPresenter.cs" />
-    <Compile Include="Controls\FdoObjectExplorerDecorator.cs" />
+    <Compile Include="Controls\FdoObjectExplorerExtender.cs" />
     <Compile Include="Controls\FdoRegProviderCtlPresentation.cs" />
     <Compile Include="Controls\FdoSchemaDesignerCtl.cs">
       <SubType>UserControl</SubType>
@@ -159,7 +159,7 @@
     </Compile>
     <Compile Include="Controls\IConsole.cs" />
     <Compile Include="Controls\IObjectExplorer.cs" />
-    <Compile Include="Controls\IObjectExplorerDecorator.cs" />
+    <Compile Include="Controls\IObjectExplorerExtender.cs" />
     <Compile Include="Controls\IPreferenceSheet.cs" />
     <Compile Include="Controls\PreferencesCtlPresentation.cs" />
     <Compile Include="Controls\PreferencesCtl.cs">

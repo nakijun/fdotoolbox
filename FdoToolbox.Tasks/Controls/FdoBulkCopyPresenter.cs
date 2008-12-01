@@ -7,6 +7,9 @@ using OSGeo.FDO.Schema;
 using System.Collections.ObjectModel;
 using FdoToolbox.Core.ETL.Specialized;
 using System.Collections.Specialized;
+using FdoToolbox.Core;
+using FdoToolbox.Tasks.Services;
+using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Tasks.Controls
 {
@@ -41,6 +44,9 @@ namespace FdoToolbox.Tasks.Controls
         void MapClassProperty(string className, string propName, string targetProp);
         void MapClass(string className, string targetClass);
 
+        bool GetClassDeleteOption(string className);
+        string GetClassFilterOption(string className);
+
         List<string> MappableClasses { set; }
 
         void SetMappableProperties(string className, List<string> properties);
@@ -51,6 +57,7 @@ namespace FdoToolbox.Tasks.Controls
         void EditExpression(string className, string alias, string expr);
         void RemoveExpression(string className, string alias);
         void MapExpression(string className, string alias, string targetProp);
+        NameValueCollection GetExpressions(string className);
     }
 
     public class FdoBulkCopyPresenter
@@ -115,7 +122,7 @@ namespace FdoToolbox.Tasks.Controls
 
         public void SourceSchemaChanged()
         {
-            string connName = _view.SelectedTargetConnection;
+            string connName = _view.SelectedSourceConnection;
             string schemaName = _view.SelectedSourceSchema;
             if (schemaName != null && connName != null)
             {
@@ -259,17 +266,59 @@ namespace FdoToolbox.Tasks.Controls
 
         public void SaveTask()
         {
-            FdoBulkCopyOptions options = new FdoBulkCopyOptions(GetSourceConnection(), GetTargetConnection());
-            if ( _view.BatchInsertSize > 0)
-                options.BatchSize = _view.BatchInsertSize;
+            //Validate
+            List<string> errors = new List<string>();
+            if (string.IsNullOrEmpty(_view.TaskName))
+                errors.Add("Task Name is required");
 
-            foreach (string srcClass in _classMappings.Keys)
+            FdoConnection source = GetSourceConnection();
+            FdoConnection target = GetTargetConnection();
+
+            FdoFeatureService srcService = source.CreateFeatureService();
+            FdoFeatureService destService = target.CreateFeatureService();
+
+            if (!destService.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert))
+                errors.Add("Target connection is not valid as it does not support insert commands");
+
+            FdoBulkCopyOptions options = new FdoBulkCopyOptions(source, target);
+
+            using (srcService)
+            using (destService)
             {
-                if (_propertyMappings.ContainsKey(srcClass))
+                if (_view.BatchInsertSize > 0)
+                    options.BatchSize = _view.BatchInsertSize;
+
+                foreach (string srcClass in _classMappings.Keys)
                 {
-                    options.AddClassCopyOption(srcClass, _classMappings[srcClass], _propertyMappings[srcClass]);
+                    if (_propertyMappings.ContainsKey(srcClass))
+                    {
+                        ClassDefinition cd = destService.GetClassByName(_view.SelectedTargetSchema, _classMappings[srcClass]);
+                        if (cd != null)
+                        {
+                            bool delete = _view.GetClassDeleteOption(srcClass);
+                            string filter = _view.GetClassFilterOption(srcClass);
+                            NameValueCollection sourceExpr = GetSourceExpressions(srcClass);
+                            options.AddClassCopyOption(srcClass, _classMappings[srcClass], _propertyMappings[srcClass], sourceExpr, delete, filter);
+                        }
+                        else
+                        {
+                            errors.Add("Target class " + _classMappings[srcClass] + " not found in schema " + _view.SelectedTargetSchema);
+                        }
+                    }
                 }
             }
+
+            if (errors.Count > 0)
+                throw new TaskValidationException(errors);
+
+            TaskManager tm = ServiceManager.Instance.GetService<TaskManager>();
+            FdoBulkCopy proc = new FdoBulkCopy(options);
+            tm.AddTask(_view.TaskName, proc);
+        }
+
+        private NameValueCollection GetSourceExpressions(string className)
+        {
+            return _view.GetExpressions(className);
         }
     }
 
