@@ -28,28 +28,44 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         public int GeometryTypes
         {
             get { return _geomDef.GeometryTypes; }
-            set { _geomDef.GeometryTypes = value; }
+            set 
+            { 
+                _geomDef.GeometryTypes = value;
+                FirePropertyChanged("GeometryTypes");
+            }
         }
 
         [Description("Indicates if the geometry of this property includes elevation values")]
         public bool HasElevation
         {
             get { return _geomDef.HasElevation; }
-            set { _geomDef.HasElevation = value; }
+            set 
+            { 
+                _geomDef.HasElevation = value;
+                FirePropertyChanged("HasElevation");
+            }
         }
 
         [Description("Indicates if the geometry of this property includes measurement values")]
         public bool HasMeasure
         {
             get { return _geomDef.HasMeasure; }
-            set { _geomDef.HasMeasure = value; }
+            set 
+            { 
+                _geomDef.HasMeasure = value;
+                FirePropertyChanged("HasMeasure");
+            }
         }
 
         [Description("Indicates if this property is read-only")]
         public bool ReadOnly
         {
             get { return _geomDef.ReadOnly; }
-            set { _geomDef.ReadOnly = value; }
+            set 
+            { 
+                _geomDef.ReadOnly = value;
+                FirePropertyChanged("ReadOnly");
+            }
         }
 
         [Description("The spatial context association to this property")]
@@ -57,7 +73,11 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         public string SpatialContextAssociation
         {
             get { return _geomDef.SpatialContextAssociation; }
-            set { _geomDef.SpatialContextAssociation = value; }
+            set 
+            { 
+                _geomDef.SpatialContextAssociation = value;
+                FirePropertyChanged("SpatialContextAssociation");
+            }
         }
     }
 }

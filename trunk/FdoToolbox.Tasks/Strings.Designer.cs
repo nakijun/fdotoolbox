@@ -115,6 +115,15 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename Task.
+        /// </summary>
+        internal static string CMD_RenameTask {
+            get {
+                return ResourceManager.GetString("CMD_RenameTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete target.
         /// </summary>
         internal static string LBL_DELETE_TARGET {
@@ -138,6 +147,15 @@ namespace FdoToolbox.Tasks {
         internal static string MENU_NEW_TASK {
             get {
                 return ResourceManager.GetString("MENU_NEW_TASK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete is not supported.
+        /// </summary>
+        internal static string MSG_DELETE_UNSUPPORTED {
+            get {
+                return ResourceManager.GetString("MSG_DELETE_UNSUPPORTED", resourceCulture);
             }
         }
         
@@ -169,11 +187,29 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the new name for the task.
+        /// </summary>
+        internal static string PROMPT_ENTER_NEW_TASK_NAME {
+            get {
+                return ResourceManager.GetString("PROMPT_ENTER_NEW_TASK_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Running ETL Process.
         /// </summary>
         internal static string TITLE_ETL_PROCESS {
             get {
                 return ResourceManager.GetString("TITLE_ETL_PROCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename Task.
+        /// </summary>
+        internal static string TITLE_RENAME_TASK {
+            get {
+                return ResourceManager.GetString("TITLE_RENAME_TASK", resourceCulture);
             }
         }
     }

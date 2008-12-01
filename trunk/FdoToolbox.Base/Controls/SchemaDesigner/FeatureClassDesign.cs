@@ -21,7 +21,11 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         public OSGeo.FDO.Schema.GeometricPropertyDefinition GeometryProperty
         {
             get { return _featClass.GeometryProperty; }
-            set { _featClass.GeometryProperty = value; }
+            set 
+            { 
+                _featClass.GeometryProperty = value;
+                FirePropertyChanged("GeometryProperty");
+            }
         }
     }
 }

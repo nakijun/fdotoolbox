@@ -26,10 +26,10 @@ namespace FdoToolbox.Base.Commands
             Workbench.WorkbenchInitialized += delegate
             {
                 Workbench wb = Workbench.Instance;
-                List<IObjectExplorerDecorator> decorators = AddInTree.BuildItems<IObjectExplorerDecorator>("/ObjectExplorer/Decorators", this);
-                if (decorators != null)
+                List<IObjectExplorerExtender> extenders = AddInTree.BuildItems<IObjectExplorerExtender>("/ObjectExplorer/Extenders", this);
+                if (extenders != null)
                 {
-                    foreach (IObjectExplorerDecorator dec in decorators)
+                    foreach (IObjectExplorerExtender dec in extenders)
                     {
                         dec.Decorate(wb.ObjectExplorer);
                     }

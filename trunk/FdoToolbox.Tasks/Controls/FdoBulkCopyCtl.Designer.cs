@@ -29,7 +29,7 @@ namespace FdoToolbox.Tasks.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Classes");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Classes");
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
@@ -46,17 +46,6 @@ namespace FdoToolbox.Tasks.Controls
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.ctxSelectedClass = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ctxFilter = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ctxDelete = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ctxExpressions = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addComputedExpressionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctxSelectedExpression = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.removeExpressionItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.editExpressionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mapExpressionItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.txtSpatialFilter = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -64,16 +53,36 @@ namespace FdoToolbox.Tasks.Controls
             this.label6 = new System.Windows.Forms.Label();
             this.chkListSpatialContexts = new System.Windows.Forms.CheckedListBox();
             this.chkCopySpatialContexts = new System.Windows.Forms.CheckBox();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.ctxSelectedClass = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxFilter = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearFilterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxDelete = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteTrueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteFalseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxExpressions = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addComputedExpressionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxSelectedExpression = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeExpressionItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeMappingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.editExpressionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapExpressionItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            this.ctxExpressions.SuspendLayout();
-            this.ctxSelectedExpression.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).BeginInit();
+            this.ctxFilter.SuspendLayout();
+            this.ctxDelete.SuspendLayout();
+            this.ctxExpressions.SuspendLayout();
+            this.ctxSelectedExpression.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -125,10 +134,11 @@ namespace FdoToolbox.Tasks.Controls
             this.treeMappings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeMappings.Location = new System.Drawing.Point(3, 16);
             this.treeMappings.Name = "treeMappings";
-            treeNode6.Name = "NODE_CLASSES";
-            treeNode6.Text = "Classes";
+            treeNode2.Name = "NODE_CLASSES";
+            treeNode2.Text = "Classes";
             this.treeMappings.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode6});
+            treeNode2});
+            this.treeMappings.ShowNodeToolTips = true;
             this.treeMappings.Size = new System.Drawing.Size(282, 337);
             this.treeMappings.TabIndex = 0;
             this.treeMappings.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeMappings_MouseDown);
@@ -257,82 +267,6 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Bulk Copy Options";
             // 
-            // btnSave
-            // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(443, 422);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 5;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // ctxSelectedClass
-            // 
-            this.ctxSelectedClass.Name = "ctxSelectedClass";
-            this.ctxSelectedClass.Size = new System.Drawing.Size(61, 4);
-            // 
-            // ctxFilter
-            // 
-            this.ctxFilter.Name = "ctxFilter";
-            this.ctxFilter.Size = new System.Drawing.Size(61, 4);
-            // 
-            // ctxDelete
-            // 
-            this.ctxDelete.Name = "ctxDelete";
-            this.ctxDelete.Size = new System.Drawing.Size(61, 4);
-            // 
-            // ctxExpressions
-            // 
-            this.ctxExpressions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addComputedExpressionToolStripMenuItem});
-            this.ctxExpressions.Name = "ctxExpressions";
-            this.ctxExpressions.Size = new System.Drawing.Size(212, 26);
-            // 
-            // addComputedExpressionToolStripMenuItem
-            // 
-            this.addComputedExpressionToolStripMenuItem.Name = "addComputedExpressionToolStripMenuItem";
-            this.addComputedExpressionToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.addComputedExpressionToolStripMenuItem.Text = "Add Computed Expression";
-            this.addComputedExpressionToolStripMenuItem.Click += new System.EventHandler(this.addComputedExpressionToolStripMenuItem_Click);
-            // 
-            // ctxSelectedExpression
-            // 
-            this.ctxSelectedExpression.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.removeExpressionItem,
-            this.removeMappingToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.editExpressionToolStripMenuItem,
-            this.mapExpressionItem});
-            this.ctxSelectedExpression.Name = "ctxSelectedExpression";
-            this.ctxSelectedExpression.Size = new System.Drawing.Size(168, 98);
-            // 
-            // removeExpressionItem
-            // 
-            this.removeExpressionItem.Name = "removeExpressionItem";
-            this.removeExpressionItem.Size = new System.Drawing.Size(158, 22);
-            this.removeExpressionItem.Text = "Remove";
-            this.removeExpressionItem.Click += new System.EventHandler(this.removeExpressionItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(155, 6);
-            // 
-            // editExpressionToolStripMenuItem
-            // 
-            this.editExpressionToolStripMenuItem.Name = "editExpressionToolStripMenuItem";
-            this.editExpressionToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.editExpressionToolStripMenuItem.Text = "Edit Expression";
-            this.editExpressionToolStripMenuItem.Click += new System.EventHandler(this.editExpressionToolStripMenuItem_Click);
-            // 
-            // mapExpressionItem
-            // 
-            this.mapExpressionItem.Name = "mapExpressionItem";
-            this.mapExpressionItem.Size = new System.Drawing.Size(158, 22);
-            this.mapExpressionItem.Text = "Map To";
-            // 
             // panel1
             // 
             this.panel1.AutoScroll = true;
@@ -407,12 +341,132 @@ namespace FdoToolbox.Tasks.Controls
             this.chkCopySpatialContexts.UseVisualStyleBackColor = true;
             this.chkCopySpatialContexts.CheckedChanged += new System.EventHandler(this.chkCopySpatialContexts_CheckedChanged);
             // 
+            // btnSave
+            // 
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSave.Location = new System.Drawing.Point(443, 422);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 5;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // ctxSelectedClass
+            // 
+            this.ctxSelectedClass.Name = "ctxSelectedClass";
+            this.ctxSelectedClass.Size = new System.Drawing.Size(61, 4);
+            // 
+            // ctxFilter
+            // 
+            this.ctxFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setFilterToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.clearFilterToolStripMenuItem});
+            this.ctxFilter.Name = "ctxFilter";
+            this.ctxFilter.Size = new System.Drawing.Size(129, 54);
+            // 
+            // setFilterToolStripMenuItem
+            // 
+            this.setFilterToolStripMenuItem.Name = "setFilterToolStripMenuItem";
+            this.setFilterToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.setFilterToolStripMenuItem.Text = "Set Filter";
+            this.setFilterToolStripMenuItem.Click += new System.EventHandler(this.setFilterToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(125, 6);
+            // 
+            // clearFilterToolStripMenuItem
+            // 
+            this.clearFilterToolStripMenuItem.Name = "clearFilterToolStripMenuItem";
+            this.clearFilterToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.clearFilterToolStripMenuItem.Text = "Clear";
+            this.clearFilterToolStripMenuItem.Click += new System.EventHandler(this.clearFilterToolStripMenuItem_Click);
+            // 
+            // ctxDelete
+            // 
+            this.ctxDelete.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteTrueToolStripMenuItem,
+            this.deleteFalseToolStripMenuItem});
+            this.ctxDelete.Name = "ctxDelete";
+            this.ctxDelete.Size = new System.Drawing.Size(111, 48);
+            // 
+            // deleteTrueToolStripMenuItem
+            // 
+            this.deleteTrueToolStripMenuItem.Name = "deleteTrueToolStripMenuItem";
+            this.deleteTrueToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.deleteTrueToolStripMenuItem.Text = "True";
+            this.deleteTrueToolStripMenuItem.Click += new System.EventHandler(this.deleteTrueToolStripMenuItem_Click);
+            // 
+            // deleteFalseToolStripMenuItem
+            // 
+            this.deleteFalseToolStripMenuItem.Name = "deleteFalseToolStripMenuItem";
+            this.deleteFalseToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.deleteFalseToolStripMenuItem.Text = "False";
+            this.deleteFalseToolStripMenuItem.Click += new System.EventHandler(this.deleteFalseToolStripMenuItem_Click);
+            // 
+            // ctxExpressions
+            // 
+            this.ctxExpressions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addComputedExpressionToolStripMenuItem});
+            this.ctxExpressions.Name = "ctxExpressions";
+            this.ctxExpressions.Size = new System.Drawing.Size(212, 26);
+            // 
+            // addComputedExpressionToolStripMenuItem
+            // 
+            this.addComputedExpressionToolStripMenuItem.Name = "addComputedExpressionToolStripMenuItem";
+            this.addComputedExpressionToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
+            this.addComputedExpressionToolStripMenuItem.Text = "Add Computed Expression";
+            this.addComputedExpressionToolStripMenuItem.Click += new System.EventHandler(this.addComputedExpressionToolStripMenuItem_Click);
+            // 
+            // ctxSelectedExpression
+            // 
+            this.ctxSelectedExpression.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeExpressionItem,
+            this.removeMappingToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.editExpressionToolStripMenuItem,
+            this.mapExpressionItem});
+            this.ctxSelectedExpression.Name = "ctxSelectedExpression";
+            this.ctxSelectedExpression.Size = new System.Drawing.Size(168, 98);
+            // 
+            // removeExpressionItem
+            // 
+            this.removeExpressionItem.Name = "removeExpressionItem";
+            this.removeExpressionItem.Size = new System.Drawing.Size(167, 22);
+            this.removeExpressionItem.Text = "Remove";
+            this.removeExpressionItem.Click += new System.EventHandler(this.removeExpressionItem_Click);
+            // 
             // removeMappingToolStripMenuItem
             // 
             this.removeMappingToolStripMenuItem.Name = "removeMappingToolStripMenuItem";
             this.removeMappingToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.removeMappingToolStripMenuItem.Text = "Remove Mapping";
             this.removeMappingToolStripMenuItem.Click += new System.EventHandler(this.removeMappingToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(164, 6);
+            // 
+            // editExpressionToolStripMenuItem
+            // 
+            this.editExpressionToolStripMenuItem.Name = "editExpressionToolStripMenuItem";
+            this.editExpressionToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.editExpressionToolStripMenuItem.Text = "Edit Expression";
+            this.editExpressionToolStripMenuItem.Click += new System.EventHandler(this.editExpressionToolStripMenuItem_Click);
+            // 
+            // mapExpressionItem
+            // 
+            this.mapExpressionItem.Name = "mapExpressionItem";
+            this.mapExpressionItem.Size = new System.Drawing.Size(167, 22);
+            this.mapExpressionItem.Text = "Map To";
+            // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
             // 
             // FdoBulkCopyCtl
             // 
@@ -434,11 +488,14 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
-            this.ctxExpressions.ResumeLayout(false);
-            this.ctxSelectedExpression.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).EndInit();
+            this.ctxFilter.ResumeLayout(false);
+            this.ctxDelete.ResumeLayout(false);
+            this.ctxExpressions.ResumeLayout(false);
+            this.ctxSelectedExpression.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -480,5 +537,11 @@ namespace FdoToolbox.Tasks.Controls
         private System.Windows.Forms.CheckedListBox chkListSpatialContexts;
         private System.Windows.Forms.CheckBox chkCopySpatialContexts;
         private System.Windows.Forms.ToolStripMenuItem removeMappingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setFilterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem clearFilterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteTrueToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteFalseToolStripMenuItem;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }

@@ -18,9 +18,9 @@
         <Class id="TaskManager" class="FdoToolbox.Tasks.Services.TaskManager" />
     </Path>
 
-    <!-- Object Explorer Decorators -->
-    <Path name="/ObjectExplorer/Decorators">
-        <Class id="Tasks" class="FdoToolbox.Tasks.Controls.TaskDecorator" />
+    <!-- Object Explorer Extenders -->
+    <Path name="/ObjectExplorer/Extenders">
+        <Class id="Tasks" class="FdoToolbox.Tasks.Controls.TaskObjectExplorerExtender" />
     </Path>
     
     <!-- Main Menu definition -->
@@ -75,14 +75,18 @@
     </Path>
 
     <Path name="/ObjectExplorer/ContextMenus/SelectedTask">
-        <MenuItem id="EditTask"
-                  label="${res:CMD_EditTask}"
-                  icon="application_edit"
-                  class="FdoToolbox.Tasks.Commands.EditTaskCommand" />
         <MenuItem id="ExecTask"
                   label="${res:CMD_ExecuteTask}"
                   icon="application_go"
                   class="FdoToolbox.Tasks.Commands.ExecuteTaskCommand" />
+        <MenuItem type="Separator" />
+        <MenuItem id="EditTask"
+                  label="${res:CMD_EditTask}"
+                  icon="application_edit"
+                  class="FdoToolbox.Tasks.Commands.EditTaskCommand" />
+        <MenuItem id="RenameTask"
+                  label="${res:CMD_RenameTask}"
+                  class="FdoToolbox.Tasks.Commands.RenameTaskCommand" />
     </Path>
 
 </AddIn>

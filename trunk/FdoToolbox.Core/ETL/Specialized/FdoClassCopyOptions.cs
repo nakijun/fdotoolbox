@@ -82,6 +82,16 @@ namespace FdoToolbox.Core.ETL.Specialized
             get { return _propertyMappings; }
         }
 
+        private NameValueCollection _sourceExpressions;
+
+        /// <summary>
+        /// Gets the source expressions. 
+        /// </summary>
+        public NameValueCollection SourceExpressions
+        {
+            get { return _sourceExpressions; }
+        }
+
         /// <summary>
         /// Gets the list of source property names. Use this to get the mapped (target)
         /// property name. If this is empty, then all source properties will be used
@@ -134,10 +144,16 @@ namespace FdoToolbox.Core.ETL.Specialized
                 throw new ArgumentException("parameter destClass is null or empty");
 
             _propertyMappings = new NameValueCollection();
+            _sourceExpressions = new NameValueCollection();
             _source = srcConn;
             _target = destConn;
             _sourceClass = srcClass;
             _targetClass = destClass;
+        }
+
+        public void AddSourceExpression(string key, string value)
+        {
+            _sourceExpressions[key] = value;
         }
     }
 }

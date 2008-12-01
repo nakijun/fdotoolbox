@@ -28,14 +28,6 @@ using System.Diagnostics;
 
 namespace FdoToolbox.Core
 {
-    public delegate void FdoConnectionLoadedEventHandler(EventArgs<FdoConnection> e);
-    public delegate void DbConnectionLoadedEventHandler(EventArgs<DatabaseConnection> e);
-    public delegate void RemoveFdoConnectionEventHandler(EventArgs<string> e);
-    public delegate void RemoveDbConnectionEventHandler(EventArgs<string> e);
-    public delegate void TaskPercentageEventHandler(object sender, EventArgs<int> e);
-    public delegate void TaskProgressMessageEventHandler(object sender, EventArgs<string> e);
-    public delegate void TaskEventHandler(object sender, EventArgs<string> e);
-
     /// <summary>
     /// Represents the method that will handle the RowChanging, RowChanged, RowDeleting and RowDeleted events of a 
     /// FdoFeatureTable

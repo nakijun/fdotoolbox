@@ -12,6 +12,7 @@ namespace FdoToolbox.Tasks.Commands
         public override void Run()
         {
             ResourceService.RegisterNeutralStrings(Strings.ResourceManager);
+            EventWatcher.Initialize();
         }
     }
 }

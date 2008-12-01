@@ -170,7 +170,9 @@ namespace FdoToolbox.Base.Controls
                 ClassDefinitionDesign c = GetClassDesigner(cls);
                 c.PropertyChanged += delegate(object sender, Comp.PropertyChangedEventArgs e)
                 {
-                    _view.SelectedName = c.Name;
+                    if(e.PropertyName == "Name")
+                        _view.SelectedName = c.Name;
+                    CheckDirtyState();
                 };
                 _view.SelectedObject = c;
             }
@@ -197,7 +199,9 @@ namespace FdoToolbox.Base.Controls
                 PropertyDefinitionDesign p = GetPropertyDesigner(prop);
                 p.PropertyChanged += delegate(object sender, Comp.PropertyChangedEventArgs e)
                 {
-                    _view.SelectedName = p.Name;
+                    if(e.PropertyName == "Name")
+                        _view.SelectedName = p.Name;
+                    CheckDirtyState();
                 };
                 _view.SelectedObject = p;
             }

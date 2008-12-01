@@ -27,7 +27,11 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         public OSGeo.FDO.Schema.ClassDefinition BaseClass
         {
             get { return _classDef.BaseClass; }
-            set { _classDef.BaseClass = value; }
+            set 
+            { 
+                _classDef.BaseClass = value;
+                FirePropertyChanged("BaseClass");
+            }
         }
 
         [Description("The type of class")]
@@ -48,7 +52,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                 {
                     _classDef.IdentityProperties.Add(dp);
                 }
-                PropertyChanged(this, new PropertyChangedEventArgs("IdentityProperties"));
+                FirePropertyChanged("IdentityProperties");
             }
         }
 
@@ -56,14 +60,22 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         public bool IsAbstract
         {
             get { return _classDef.IsAbstract; }
-            set { _classDef.IsAbstract = value; }
+            set 
+            { 
+                _classDef.IsAbstract = value;
+                FirePropertyChanged("IsAbstract");
+            }
         }
 
         [Description("Indicates whether this class is computed")]
         public bool IsComputed
         {
             get { return _classDef.IsComputed; }
-            set { _classDef.IsComputed = value; }
+            set 
+            { 
+                _classDef.IsComputed = value;
+                FirePropertyChanged("IsComputed");
+            }
         }
 
         [Description("The name of this class")]
@@ -73,7 +85,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             set
             {
                 _classDef.Name = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("Name"));
+                FirePropertyChanged("Name");
             }
         }
 
@@ -81,6 +93,11 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         public UniqueConstraintCollection UniqueConstraints
         {
             get { return _classDef.UniqueConstraints; }
+        }
+
+        protected void FirePropertyChanged(string property)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
