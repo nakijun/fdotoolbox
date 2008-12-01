@@ -22,8 +22,4 @@
    * Data Preview
    * Convert database table to point feature class
  * File to File Bulk Copy
-   * SDF to SDF
-   * SDF to SHP
-   * SHP to SDF
-   * SHP to SHP
  * Capability-aware user interface
