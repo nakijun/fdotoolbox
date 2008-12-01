@@ -11,10 +11,10 @@
  * ~~Session persistence (connections~~ / tasks)
  * Task Management
    * Create Task
-     * Bulk Copy
+     * ~~Bulk Copy~~
      * Database Join
    * Delete Task
-   * Execute Task
+   * ~~Execute Task~~
    * Load Task
    * Save Task
  * Database Support
