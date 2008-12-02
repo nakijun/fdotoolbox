@@ -1839,7 +1839,7 @@ namespace FdoToolbox.Core.Feature
                         case DataType.DataType_String:
                             {
                                 int length = (int)caps.get_MaximumDataValueLength(DataType.DataType_String);
-                                if (dp.Length > length)
+                                if (dp.Length > length && length > 0)
                                     dp.Length = length;
                             }
                             break;
@@ -1957,6 +1957,70 @@ namespace FdoToolbox.Core.Feature
             {
                 this.ApplySchema(s);
             }
+        }
+
+        /// <summary>
+        /// Gets the active spatial context in this connection
+        /// </summary>
+        /// <returns></returns>
+        public SpatialContextInfo GetActiveSpatialContext()
+        {
+            using (IGetSpatialContexts get = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_GetSpatialContexts) as IGetSpatialContexts)
+            {
+                get.ActiveOnly = true;
+                using (ISpatialContextReader reader = get.Execute())
+                {
+                    if (reader.ReadNext())
+                    {
+                        SpatialContextInfo info = new SpatialContextInfo(reader);
+                        return info;
+                    }
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Returns a feature schema containing the given sub-set of classes
+        /// </summary>
+        /// <param name="schemaName"></param>
+        /// <param name="classes"></param>
+        /// <returns></returns>
+        public FeatureSchema PartialDescribeSchema(string schemaName, List<string> classes)
+        {
+            if (SupportsPartialSchemaDiscovery())
+            {
+                //Use new API
+                using (IDescribeSchema describe = Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                {
+                    describe.SchemaName = schemaName;
+                    foreach (string cls in classes)
+                    {
+                        describe.ClassNames.Add(new OSGeo.FDO.Common.StringElement(cls));
+                    }
+                    FeatureSchemaCollection schemas = describe.Execute();
+                    if (schemas != null)
+                        return schemas[0];
+                }
+            }
+            else
+            {
+                //Use old approach, full schema and rip out classes not in
+                //the list
+                FeatureSchema schema = GetSchemaByName(schemaName);
+                List<string> clsRemove = new List<string>();
+                foreach (ClassDefinition cd in schema.Classes)
+                {
+                    if (!classes.Contains(cd.Name))
+                        clsRemove.Add(cd.Name);
+                }
+                foreach (string cls in clsRemove)
+                {
+                    schema.Classes.RemoveAt(schema.Classes.IndexOf(cls));
+                }
+                return schema;
+            }
+            return null;
         }
     }
 }

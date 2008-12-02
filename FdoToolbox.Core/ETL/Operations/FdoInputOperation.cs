@@ -27,7 +27,7 @@ namespace FdoToolbox.Core.ETL.Operations
         {
             using (FdoFeatureService service = _conn.CreateFeatureService())
             {
-                using (IFdoReader reader = service.SelectFeatures(this.Query))
+                using (FdoFeatureReader reader = service.SelectFeatures(this.Query))
                 {
                     while (reader.ReadNext())
                     {
@@ -37,9 +37,9 @@ namespace FdoToolbox.Core.ETL.Operations
             }
         }
 
-        private FdoRow CreateRowFromReader(IFdoReader reader)
+        private FdoRow CreateRowFromReader(FdoFeatureReader reader)
         {
-            return FdoRow.FromReader(reader);
+            return FdoRow.FromFeatureReader(reader);
         }
     }
 }

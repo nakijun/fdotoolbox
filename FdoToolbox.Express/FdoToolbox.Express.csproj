@@ -72,6 +72,12 @@
       <DependentUpon>CreateSdfCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\CreateSdfCtlPresentation.cs" />
+    <Compile Include="Controls\FileToFileCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FileToFileCtl.Designer.cs">
+      <DependentUpon>FileToFileCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Images.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -98,6 +104,10 @@
     <EmbeddedResource Include="Controls\CreateSdfCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CreateSdfCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FileToFileCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FileToFileCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Images.resx">
       <SubType>Designer</SubType>

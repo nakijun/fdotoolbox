@@ -177,6 +177,51 @@ namespace FdoUtil
                         _Command = new UnregisterProviderCommand(name);
                     }
                     break;
+                case "BulkCopy":
+                    {
+                        if (IsSwitchDefined("-help", args))
+                        {
+                            Console.WriteLine("Description: {0}\nUsage: {1}\nNotes: {2}{3}{4}",
+                                "Copies data from a FDO data source to any flat-file FDO data source",
+                                "FdoUtil.exe -cmd:BulkCopy -src_provider:<provider name> -src_conn:<connection string> -dest_path:<path to file or directory> -src_schema:<source schema name> [-src_classes:<comma-separated list of class names>] [-copy_srs:<source spatial context name>] [-quiet]",
+                                "When -dest_path is a directory, it is assumed SHP is the output format\n",
+                                "Please note that the output format is determined by file extension\n",
+                                "Valid file extensions include: sdf, sqlite, db");
+
+                            return;
+                        }
+
+                        string srcProvider = GetArgument("-src_provider", args);
+                        string srcConnStr = GetArgument("-src_conn", args);
+                        string destFile = GetArgument("-dest_path", args);
+                        string srcSchema = GetArgument("-src_schema", args);
+                        string classes = GetArgument("-src_classes", args);
+                        string srcSpatialContext = GetArgument("-copy_srs", args);
+
+                        ThrowIfEmpty(srcProvider, "-src_provider");
+                        ThrowIfEmpty(srcConnStr, "-src_conn");
+                        ThrowIfEmpty(destFile, "-dest_path");
+                        ThrowIfEmpty(srcSchema, "-src_schema");
+
+                        List<string> srcClasses = new List<string>();
+                        if (!string.IsNullOrEmpty(classes))
+                        {
+                            string[] tokens = classes.Split(',');
+                            if (tokens.Length > 0)
+                            {
+                                foreach (string className in tokens)
+                                {
+                                    srcClasses.Add(className);
+                                }
+                            }
+                            else
+                            {
+                                srcClasses.Add(classes);
+                            }
+                        }
+                        _Command = new CopyToFileCommand(srcProvider, srcConnStr, srcSchema, srcClasses, destFile, srcSpatialContext);
+                    }
+                    break;
                 default:
                     throw new ArgumentException("Unknown command name: " + cmdName);
             }
@@ -199,6 +244,7 @@ namespace FdoUtil
  - CreateFile
  - RegisterProvider
  - UnregisterProvider
+ - BulkCopy
 For more information about a command type: FdoUtil.exe -cmd:<command name> -help
 For more help. Consult the help file cmd_readme.txt";
             Console.WriteLine(usage);

@@ -102,11 +102,14 @@
     <Compile Include="ETL\Specialized\FdoClassCopyOptions.cs" />
     <Compile Include="ETL\Specialized\FdoDbJoin.cs" />
     <Compile Include="ETL\Specialized\FdoDbJoinOptions.cs" />
+    <Compile Include="ETL\Specialized\FdoSpecializedEtlProcess.cs" />
+    <Compile Include="ETL\Specialized\IFdoSpecializedEtlProcess.cs" />
     <Compile Include="ETL\WithLoggingMixin.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FdoAssemblyResolver.cs" />
     <Compile Include="FdoException.cs" />
+    <Compile Include="FdoGeometryFactory.cs" />
     <Compile Include="Feature\Capability.cs" />
     <Compile Include="Feature\CapabilityType.cs" />
     <Compile Include="Feature\ComputedProperty.cs" />

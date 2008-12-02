@@ -52,6 +52,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ApplySchemaCommand.cs" />
+    <Compile Include="CopyToFileCommand.cs" />
     <Compile Include="CreateDataStoreCommand.cs" />
     <Compile Include="CreateFileCommand.cs" />
     <Compile Include="DestroyCommand.cs" />

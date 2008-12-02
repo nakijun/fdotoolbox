@@ -307,6 +307,14 @@ namespace FdoToolbox.Core.Feature
             return _internalReader.GetString(GetName(i));
         }
 
+        /// <summary>
+        /// Gets the value at the specified index. if the indexed property is a 
+        /// geometry property, it is ignored when retrieved via this call. 
+        /// Instead, use the <see cref="GeometryProperties"/> and <see cref="DefaultGeometryProperty"/> 
+        /// properties to determine if a call to <see cref="GetGeometry"/> is required.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
         public object GetValue(int i)
         {
             Type t = GetFieldType(i);

@@ -138,6 +138,10 @@
   <data name="CMD_RenameTask" xml:space="preserve">
     <value>Rename Task</value>
   </data>
+  <data name="ERR_CANNOT_EXECUTE_UNSPECIALIZED_ETL_PROCESS" xml:space="preserve">
+    <value>Cannot execute generic ETL process</value>
+    <comment>Thrown when the task being executed is not a specialized ETL task.</comment>
+  </data>
   <data name="LBL_DELETE_TARGET" xml:space="preserve">
     <value>Delete target</value>
   </data>
@@ -161,6 +165,9 @@
   </data>
   <data name="PROMPT_ENTER_NEW_TASK_NAME" xml:space="preserve">
     <value>Enter the new name for the task</value>
+  </data>
+  <data name="TITLE_CHOOSE_DIRECTORY" xml:space="preserve">
+    <value>Choose Directory</value>
   </data>
   <data name="TITLE_ETL_PROCESS" xml:space="preserve">
     <value>Running ETL Process</value>

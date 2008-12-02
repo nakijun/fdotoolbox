@@ -9,6 +9,7 @@ using OSGeo.FDO.Connections;
 using OSGeo.FDO.ClientServices;
 using OSGeo.FDO.Commands.DataStore;
 using System.IO;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Core.Utility
 {
@@ -153,7 +154,7 @@ namespace FdoToolbox.Core.Utility
         public static FdoConnection CreateFlatFileConnection(string provider, string file)
         {
             FdoConnection conn = null;
-            if (provider.StartsWith("OSGeo.SDF"))
+            if (provider.StartsWith("OSGeo.SDF") || provider.StartsWith("OSGeo.SQLite"))
             {
                 conn = new FdoConnection(provider, string.Format("File={0}", file));
             }
@@ -211,6 +212,8 @@ namespace FdoToolbox.Core.Utility
         {
             if (provider.StartsWith("OSGeo.SDF"))
                 return "File";
+            else if (provider.StartsWith("OSGeo.SQLite"))
+                return "File";
 
             return null;
         }
@@ -240,6 +243,8 @@ namespace FdoToolbox.Core.Utility
                 return "OSGeo.SDF";
             else if (ext == ".shp")
                 return "OSGeo.SHP";
+            else if (ext == ".db" || ext == ".sqlite")
+                return "OSGeo.SQLite";
             return null;
         }
 
@@ -254,6 +259,97 @@ namespace FdoToolbox.Core.Utility
             if (provider != null)
                 return CreateFlatFileDataSource(provider, file);
             return false;
+        }
+
+        /// <summary>
+        /// Creates a FDO bulk copy task. The target file will be created as part of 
+        /// this method call. If the target path is a directory, it is assumed that
+        /// SHP files are to be created and copied to.
+        /// </summary>
+        /// <param name="sourceFile">The path to the source file.</param>
+        /// <param name="targetPath">
+        /// The path to the target file/directory. If it is a directory, it is assumed
+        /// that SHP files are to be created and copied to.
+        /// </param>
+        /// <param name="copySpatialContexts">If true, will also copy spatial contexts</param>
+        /// <param name="fixIncompatibleSchema">If true, will try to fix the source schema to make it compatible with the target connection. If false, an exception will be thrown</param>
+        /// <returns></returns>
+        public static FdoBulkCopy CreateBulkCopy(string sourceFile, string targetPath, bool copySpatialContexts, bool fixIncompatibleSchema)
+        {
+            FdoBulkCopyOptions options = null;
+            FdoConnection source = null;
+            FdoConnection target = null;
+            //Is a directory. Implies a SHP connection
+            if (Directory.Exists(targetPath))
+            {
+                //SHP doesn't actually support CreateDataStore. We use the following technique:
+                // - Connect to base directory
+                // - Clone source schema and apply to SHP connection.
+                // - A SHP file and related files are created for each feature class.
+                string shpdir = Path.GetDirectoryName(targetPath);
+                source = CreateFlatFileConnection(sourceFile);
+                target = new FdoConnection("OSGeo.SHP", "DefaultFileLocation=" + shpdir);
+            }
+            else
+            {
+                if (!CreateFlatFileDataSource(targetPath))
+                    throw new FdoException("Unable to create data source on: " + targetPath);
+                source = CreateFlatFileConnection(sourceFile);
+                target = CreateFlatFileConnection(targetPath);
+            }
+
+            source.Open();
+            target.Open();
+
+            options = new FdoBulkCopyOptions(source, target, true);
+
+            using (FdoFeatureService srcService = source.CreateFeatureService())
+            using (FdoFeatureService destService = target.CreateFeatureService())
+            {
+                FeatureSchemaCollection schemas = srcService.DescribeSchema();
+                //Assume single-schema
+                FeatureSchema fs = schemas[0];
+                //Clone and apply to target
+                FeatureSchema targetSchema = FdoFeatureService.CloneSchema(fs);
+                IncompatibleSchema incSchema;
+                bool canApply = destService.CanApplySchema(targetSchema, out incSchema);
+                if (canApply)
+                {
+                    destService.ApplySchema(targetSchema);
+                }
+                else
+                {
+                    if (fixIncompatibleSchema)
+                    {
+                        FeatureSchema fixedSchema = destService.AlterSchema(targetSchema, incSchema);
+                        destService.ApplySchema(fixedSchema);
+                    }
+                    else
+                    {
+                        throw new Exception(incSchema.ToString());
+                    }
+                }
+
+                //Copy all classes
+                foreach (ClassDefinition cd in fs.Classes)
+                {
+                    options.AddClassCopyOption(cd.Name, cd.Name);
+                }
+
+                if (copySpatialContexts)
+                {
+                    //Assume single spatial context. So use the active one
+                    SpatialContextInfo srcCtx = srcService.GetActiveSpatialContext();
+                    if(srcCtx != null)
+                        options.AddSourceSpatialContext(srcCtx);
+                }
+                //Flick on batch support if we can
+                if (destService.SupportsBatchInsertion())
+                    options.BatchSize = 300; //Madness? THIS IS SPARTA!
+            }
+            
+
+            return new FdoBulkCopy(options);
         }
     }
 }

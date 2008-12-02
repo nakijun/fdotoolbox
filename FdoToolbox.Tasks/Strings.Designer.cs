@@ -124,6 +124,15 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot execute generic ETL process.
+        /// </summary>
+        internal static string ERR_CANNOT_EXECUTE_UNSPECIALIZED_ETL_PROCESS {
+            get {
+                return ResourceManager.GetString("ERR_CANNOT_EXECUTE_UNSPECIALIZED_ETL_PROCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete target.
         /// </summary>
         internal static string LBL_DELETE_TARGET {
@@ -192,6 +201,15 @@ namespace FdoToolbox.Tasks {
         internal static string PROMPT_ENTER_NEW_TASK_NAME {
             get {
                 return ResourceManager.GetString("PROMPT_ENTER_NEW_TASK_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose Directory.
+        /// </summary>
+        internal static string TITLE_CHOOSE_DIRECTORY {
+            get {
+                return ResourceManager.GetString("TITLE_CHOOSE_DIRECTORY", resourceCulture);
             }
         }
         

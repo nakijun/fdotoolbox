@@ -155,6 +155,15 @@ namespace FdoToolbox.Tasks.Controls
                     chkListSpatialContexts.Items.Add(str, false);
                 }
             }
+            get
+            {
+                List<string> ctxNames = new List<string>();
+                foreach (object obj in chkListSpatialContexts.CheckedItems)
+                {
+                    ctxNames.Add(obj.ToString());
+                }
+                return ctxNames;
+            }
         }
 
         public string SpatialFilter
