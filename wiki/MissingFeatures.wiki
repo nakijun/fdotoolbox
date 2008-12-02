@@ -9,7 +9,9 @@
  * Insert Data Scaffold
  * ~~Command-line utilities~~
  * ~~Session persistence (connections~~ / tasks)
- * Batch insert support
+ * Bulk Copy features
+   * Batch insert support
+   * Data value conversion support
  * Task Management
    * Create Task
      * ~~Bulk Copy~~
