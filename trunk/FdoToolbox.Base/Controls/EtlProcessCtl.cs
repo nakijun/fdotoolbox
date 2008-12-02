@@ -8,8 +8,9 @@ using System.Windows.Forms;
 using FdoToolbox.Base;
 using ICSharpCode.Core;
 using FdoToolbox.Core.ETL;
+using FdoToolbox.Core.ETL.Specialized;
 
-namespace FdoToolbox.Tasks.Controls
+namespace FdoToolbox.Base.Controls
 {
     public partial class EtlProcessCtl : UserControl, IViewContent
     {
@@ -20,10 +21,30 @@ namespace FdoToolbox.Tasks.Controls
 
         private EtlBackgroundRunner _runner;
 
-        public EtlProcessCtl(EtlProcess proc)
+        public EtlProcessCtl(IFdoSpecializedEtlProcess proc)
             : this()
         {
             _runner = new EtlBackgroundRunner(proc);
+            _runner.ProcessMessage += new MessageEventHandler(OnMessageSent);
+        }
+
+        void OnMessageSent(object sender, FdoToolbox.Core.MessageEventArgs e)
+        {
+            if (txtOutput.InvokeRequired)
+            {
+                txtOutput.Invoke(new AppendTextHandler(this.AppendText), e.Message);
+            }
+            else
+            {
+                this.AppendText(e.Message);
+            }
+        }
+
+        private delegate void AppendTextHandler(string msg);
+
+        private void AppendText(string msg)
+        {
+            txtOutput.AppendText(msg + "\n");
         }
 
         protected override void OnLoad(EventArgs e)
@@ -74,6 +95,11 @@ namespace FdoToolbox.Tasks.Controls
         private void bgEtlProc_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             btnOK.Enabled = true;
+            btnCancel.Enabled = false;
+            if (e.Cancelled)
+            {
+                AppendText("ETL Process Cancelled!");
+            }
         }
 
         private void btnOK_Click(object sender, EventArgs e)

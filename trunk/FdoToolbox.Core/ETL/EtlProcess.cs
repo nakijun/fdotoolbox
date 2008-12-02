@@ -42,9 +42,18 @@ namespace FdoToolbox.Core.ETL
         ///<filterpriority>2</filterpriority>
         public void Dispose()
         {
-            foreach (IFdoOperation operation in operations)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                operation.Dispose();
+                foreach (IFdoOperation operation in operations)
+                {
+                    operation.Dispose();
+                }
             }
         }
 
@@ -67,6 +76,14 @@ namespace FdoToolbox.Core.ETL
             PipelineExecuter.Execute(Name, operations);
 
             PostProcessing();
+            OnProcessCompleted();
+        }
+
+        /// <summary>
+        /// Called when the process has completed
+        /// </summary>
+        protected virtual void OnProcessCompleted()
+        {
         }
 
         private void RegisterToOperationsEvents()
@@ -147,10 +164,5 @@ namespace FdoToolbox.Core.ETL
                 }
             }
         }
-
-        /// <summary>
-        /// Persists this process to a file.
-        /// </summary>
-        public abstract void Save(string file);
     }
 }

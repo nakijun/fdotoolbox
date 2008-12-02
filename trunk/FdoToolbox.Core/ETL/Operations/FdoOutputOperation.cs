@@ -61,7 +61,11 @@ namespace FdoToolbox.Core.ETL.Operations
             {
                 foreach (FdoRow row in rows)
                 {
-                    _service.InsertFeature(this.ClassName, row.ToPropertyValueCollection(), false);
+                    using (PropertyValueCollection propVals = row.ToPropertyValueCollection())
+                    {
+                        _service.InsertFeature(this.ClassName, propVals, false);
+                        RaiseFeatureProcessed(row);
+                    }
                 }
             }
             else
@@ -71,25 +75,30 @@ namespace FdoToolbox.Core.ETL.Operations
                     //This is basically the inlined version of FdoRow::ToPropertyValueCollection
                     //except that we use the mapped (target) property name instead of the source property
                     //name. Also we exclude any un-mapped properties from the final insert
-                    PropertyValueCollection values = new PropertyValueCollection();
-                    foreach (string col in row.Columns)
+                    using (PropertyValueCollection values = new PropertyValueCollection())
                     {
-                        //Is mapped and not null?
-                        if (_mappings[col] != null && row[col] != null && row[col] != DBNull.Value)
+                        foreach (string col in row.Columns)
                         {
-                            ValueExpression dv = ValueConverter.GetConvertedValue(row[col]);
-                            if (dv != null)
+                            //Is mapped and not null?
+                            if (_mappings[col] != null && row[col] != null && row[col] != DBNull.Value)
                             {
-                                string mappedProperty = _mappings[col];
-                                PropertyValue pv = new PropertyValue(mappedProperty, dv);
-                                values.Add(pv);
+                                ValueExpression dv = ValueConverter.GetConvertedValue(row[col]);
+                                if (dv != null)
+                                {
+                                    string mappedProperty = _mappings[col];
+                                    PropertyValue pv = new PropertyValue(mappedProperty, dv);
+                                    values.Add(pv);
+                                }
                             }
                         }
-                    }
 
-                    //No mappings -> No insert
-                    if(values.Count > 0)
-                        _service.InsertFeature(this.ClassName, values, false);
+                        //No mappings -> No insert
+                        if (values.Count > 0)
+                        {
+                            _service.InsertFeature(this.ClassName, values, false);
+                            RaiseFeatureProcessed(row);
+                        }
+                    }
                 }
             }
             yield break;

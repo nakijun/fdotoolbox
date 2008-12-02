@@ -97,6 +97,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bulk Copy.
+        /// </summary>
+        internal static string CMD_ExpressBcp {
+            get {
+                return ResourceManager.GetString("CMD_ExpressBcp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Schema to new SDF.
         /// </summary>
         internal static string CMD_SaveSchemaSdf {
@@ -106,47 +115,20 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDF to SDF.
-        /// </summary>
-        internal static string CMD_Sdf2Sdf {
-            get {
-                return ResourceManager.GetString("CMD_Sdf2Sdf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SDF to SHP.
-        /// </summary>
-        internal static string CMD_Sdf2Shp {
-            get {
-                return ResourceManager.GetString("CMD_Sdf2Shp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SHP to SDF.
-        /// </summary>
-        internal static string CMD_Shp2Sdf {
-            get {
-                return ResourceManager.GetString("CMD_Shp2Sdf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SHP to SDF.
-        /// </summary>
-        internal static string CMD_Shp2Shp {
-            get {
-                return ResourceManager.GetString("CMD_Shp2Shp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Name was empty or already exists. Please pick another.
         /// </summary>
         internal static string ERR_CONNECTION_NAME_EMPTY_OR_EXISTS {
             get {
                 return ResourceManager.GetString("ERR_CONNECTION_NAME_EMPTY_OR_EXISTS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SDF files (*.sdf)|*.sdf|SHP Files (*.shp)|*.shp|SQLite (*.db)|*.db|SQLite (*.sqlite)|*.sqlite.
+        /// </summary>
+        internal static string FILTER_EXPRESS_BCP {
+            get {
+                return ResourceManager.GetString("FILTER_EXPRESS_BCP", resourceCulture);
             }
         }
         
@@ -255,6 +237,33 @@ namespace FdoToolbox.Express {
         internal static string TITLE_CREATE_SHP {
             get {
                 return ResourceManager.GetString("TITLE_CREATE_SHP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Express Bulk Copy.
+        /// </summary>
+        internal static string TITLE_EXPRESS_BULK_COPY {
+            get {
+                return ResourceManager.GetString("TITLE_EXPRESS_BULK_COPY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open File.
+        /// </summary>
+        internal static string TITLE_OPEN_FILE {
+            get {
+                return ResourceManager.GetString("TITLE_OPEN_FILE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save File.
+        /// </summary>
+        internal static string TITLE_SAVE_FILE {
+            get {
+                return ResourceManager.GetString("TITLE_SAVE_FILE", resourceCulture);
             }
         }
         

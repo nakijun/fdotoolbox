@@ -77,10 +77,10 @@ namespace FdoToolbox.Base.SharpMapProvider
 
         public SharpMap.Geometries.BoundingBox GetExtents()
         {
+            SharpMap.Geometries.BoundingBox bbox = null;
             if (_data == null || _data.Rows.Count == 0 || string.IsNullOrEmpty(_data.GeometryColumn))
                 return new SharpMap.Geometries.BoundingBox(0.0, 0.0, 0.0, 0.0);
-
-            SharpMap.Geometries.BoundingBox bbox = null;
+            
             foreach (FdoFeature feat in _data.Rows)
             {
                 if (feat[_data.GeometryColumn] != null && feat[_data.GeometryColumn] != DBNull.Value)
@@ -107,7 +107,10 @@ namespace FdoToolbox.Base.SharpMapProvider
                     catch { }
                 }
             }
-            return bbox;
+            if (bbox != null)
+                return bbox;
+            else
+                return new SharpMap.Geometries.BoundingBox(0.0, 0.0, 0.0, 0.0);
         }
 
         public string ConnectionID

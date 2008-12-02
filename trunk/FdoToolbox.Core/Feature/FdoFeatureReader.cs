@@ -23,6 +23,7 @@ using System.Text;
 using OSGeo.FDO.Commands.Feature;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core.Utility;
+using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core.Feature
 {
@@ -41,6 +42,7 @@ namespace FdoToolbox.Core.Feature
         private string[] _geometryNames;
         private string _defaultGeometryName;
         private Dictionary<string, FdoPropertyType> _ptypes;
+        private FgfGeometryFactory _internalFactory;
 
         internal FdoFeatureReader(IFeatureReader reader, int limit)
             : this(reader)
@@ -50,6 +52,7 @@ namespace FdoToolbox.Core.Feature
 
         internal FdoFeatureReader(IFeatureReader reader) : base(reader)
         {
+            _internalFactory = new FgfGeometryFactory();
             _classDefinition = reader.GetClassDefinition();
             _ptypes = new Dictionary<string, FdoPropertyType>();
             _ordinals = new Dictionary<string, int>();
@@ -102,6 +105,7 @@ namespace FdoToolbox.Core.Feature
             if (disposing)
             {
                 _classDefinition.Dispose();
+                _internalFactory.Dispose();
             }
         }
 
@@ -187,6 +191,12 @@ namespace FdoToolbox.Core.Feature
         public override FdoPropertyType GetFdoPropertyType(string name)
         {
             return _ptypes[name];
+        }
+
+        public IGeometry GetGeometryObject(string name)
+        {
+            byte[] fgf = GetGeometry(name);
+            return _internalFactory.CreateGeometryFromFgf(fgf);
         }
     }
 }

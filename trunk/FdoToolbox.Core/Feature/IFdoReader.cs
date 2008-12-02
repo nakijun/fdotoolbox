@@ -42,5 +42,6 @@ namespace FdoToolbox.Core.Feature
         bool ReadNext();
         string[] GeometryProperties { get; }
         string DefaultGeometryProperty { get; }
+
     }
 }

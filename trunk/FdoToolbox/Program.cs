@@ -85,6 +85,7 @@ namespace FdoToolbox
             LoggingService.Info("Initializing Workbench...");
             // Workbench is our class from the base project, this method creates an instance
             // of the main form.
+            log4net.Config.XmlConfigurator.Configure();
             Workbench.InitializeWorkbench();
 
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);

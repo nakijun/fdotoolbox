@@ -47,22 +47,9 @@
                           class="FdoToolbox.Express.Commands.CreateShpCommand" />
             </MenuItem>
             <MenuItem id="ExpressBulkCopy"
-                      label="Bulk Copy"
-                      icon="table_go" 
-                      type="Menu">
-                <MenuItem id="Sdf2Sdf"
-                          label="${res:CMD_Sdf2Sdf}"
-                          class="FdoToolbox.Express.Commands.SdfToSdfCommand" />
-                <MenuItem id="Sdf2Shp"
-                          label="${res:CMD_Sdf2Shp}"
-                          class="FdoToolbox.Express.Commands.SdfToShpCommand" />
-                <MenuItem id="Sdf2Sdf"
-                          label="${res:CMD_Shp2Shp}"
-                          class="FdoToolbox.Express.Commands.ShpToShpCommand" />
-                <MenuItem id="Sdf2Sdf"
-                          label="${res:CMD_Shp2Sdf}"
-                          class="FdoToolbox.Express.Commands.ShpToSdfCommand" />
-            </MenuItem>
+                      label="${res:CMD_ExpressBcp}"
+                      icon="table_go"
+                      class="FdoToolbox.Express.Commands.ExpressBulkCopyCommand" />
         </MenuItem>
     </Path>
 

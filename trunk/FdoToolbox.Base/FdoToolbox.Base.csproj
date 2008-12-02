@@ -83,6 +83,13 @@
       <DependentUpon>CoordSysCatalog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\CoordSysCatalogPresenter.cs" />
+    <Compile Include="Controls\EtlBackgroundRunner.cs" />
+    <Compile Include="Controls\EtlProcessCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\EtlProcessCtl.Designer.cs">
+      <DependentUpon>EtlProcessCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FdoAggregateQueryCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -218,6 +225,7 @@
       <DependentUpon>ValueConstraintDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SchemaDesigner\ValueConstraintEditor.cs" />
+    <Compile Include="Controls\TextBoxAppender.cs" />
     <Compile Include="Controls\TextEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -328,8 +336,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FdoToolbox.Base.addin" />
-    <None Include="Resources\Expand9.png" />
-    <None Include="Resources\Collapse9.png" />
     <None Include="cscatalog.sqlite">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -398,6 +404,10 @@
     <EmbeddedResource Include="Controls\CoordSysCatalog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CoordSysCatalog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\EtlProcessCtl.resx">
+      <DependentUpon>EtlProcessCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoAggregateQueryCtl.resx">
       <DependentUpon>FdoAggregateQueryCtl.cs</DependentUpon>

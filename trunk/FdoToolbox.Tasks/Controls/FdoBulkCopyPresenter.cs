@@ -29,7 +29,7 @@ namespace FdoToolbox.Tasks.Controls
         string SelectedSourceSchema { get; set; }
         string SelectedTargetSchema { get; set; }
 
-        List<string> SourceSpatialContexts { set; }
+        List<string> SourceSpatialContexts { get; set; }
         string SpatialFilter { get; }
         int BatchInsertSize { get; set; }
 
@@ -285,6 +285,18 @@ namespace FdoToolbox.Tasks.Controls
             using (srcService)
             using (destService)
             {
+                if (_view.CopySpatialContexts)
+                {
+                    List<string> ctxNames = _view.SourceSpatialContexts;
+                    if (ctxNames.Count > 1)
+                    {
+                        if (!target.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value)
+                        {
+                            errors.Add("Cannot copy more than one spatial context. Target connection doesn't support multiple spatial contexts");
+                        }
+                    }
+                }
+
                 if (_view.BatchInsertSize > 0)
                     options.BatchSize = _view.BatchInsertSize;
 

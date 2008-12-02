@@ -8,7 +8,7 @@ namespace FdoToolbox.Core.ETL.Specialized
 {
     using Feature;
 
-    public class FdoBulkCopyOptions 
+    public class FdoBulkCopyOptions : IDisposable
     {
         private FdoConnection _sourceConn;
 
@@ -40,6 +40,13 @@ namespace FdoToolbox.Core.ETL.Specialized
             get { return _classOptions.AsReadOnly(); }
         }
 
+        private List<SpatialContextInfo> _spatialContextList;
+
+        public ReadOnlyCollection<SpatialContextInfo> SourceSpatialContexts
+        {
+            get { return _spatialContextList.AsReadOnly(); }
+        }
+
         private int _BatchSize;
 
         /// <summary>
@@ -59,20 +66,36 @@ namespace FdoToolbox.Core.ETL.Specialized
                 });
             }
         }
-	
+
+        /// <summary>
+        /// Determines if this object owns the connections.
+        /// </summary>
+        private bool _owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        /// <param name="classOptions"></param>
+        /// <param name="source">The source connection</param>
+        /// <param name="target">The target connection</param>
         public FdoBulkCopyOptions(FdoConnection source, FdoConnection target)
         {
             _sourceConn = source;
             _targetConn = target;
             _classOptions = new List<FdoClassCopyOptions>();
+            _spatialContextList = new List<SpatialContextInfo>();
             this.BatchSize = 0;
+            _owner = false;
+        }
+
+        /// <summary>
+        /// Internal constructor used by the ExpressUtility.
+        /// </summary>
+        /// <param name="source">The source connection</param>
+        /// <param name="target">The target connection</param>
+        /// <param name="owner">If true, this object owns the connections and will dispose of them when it is disposed</param>
+        internal FdoBulkCopyOptions(FdoConnection source, FdoConnection target, bool owner) : this(source, target)
+        {
+            _owner = owner;
         }
 
         /// <summary>
@@ -117,6 +140,27 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
             copt.BatchSize = this.BatchSize;
             _classOptions.Add(copt);
+        }
+
+        /// <summary>
+        /// Adds a source spatial contex to be copied
+        /// </summary>
+        /// <param name="ctx"></param>
+        public void AddSourceSpatialContext(SpatialContextInfo ctx)
+        {
+            _spatialContextList.Add(ctx);
+        }
+
+        /// <summary>
+        /// Dispose this objects
+        /// </summary>
+        public void Dispose()
+        {
+            if (_owner)
+            {
+                _sourceConn.Dispose();
+                _targetConn.Dispose();
+            }
         }
     }
 }

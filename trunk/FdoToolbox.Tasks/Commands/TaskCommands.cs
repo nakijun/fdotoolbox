@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using Res = ICSharpCode.Core.ResourceService;
 using Msg = ICSharpCode.Core.MessageService;
 using FdoToolbox.Tasks.Controls;
+using FdoToolbox.Base.Controls;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Tasks.Commands
 {
@@ -24,8 +26,16 @@ namespace FdoToolbox.Tasks.Commands
 
             if (proc != null)
             {
-                EtlProcessCtl ctl = new EtlProcessCtl(proc);
-                Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
+                IFdoSpecializedEtlProcess spec = proc as IFdoSpecializedEtlProcess;
+                if (spec != null)
+                {
+                    EtlProcessCtl ctl = new EtlProcessCtl(spec);
+                    Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
+                }
+                else
+                {
+                    MessageService.ShowError(ResourceService.GetString("ERR_CANNOT_EXECUTE_UNSPECIALIZED_ETL_PROCESS"));
+                }
             }
         }
     }

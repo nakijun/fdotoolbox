@@ -10,13 +10,11 @@ namespace FdoToolbox.Core.Feature
     {
         internal FdoFeature(DataRowBuilder rb) : base(rb) { }
 
-        private List<IGeometry> _geometries = new List<IGeometry>();
-
-        public void AddGeometry(IGeometry geom)
-        {
-            _geometries.Add(geom);
-        }
-
+        /// <summary>
+        /// Returns the item array for this feature. Geometry values are
+        /// converted to FGF text form.
+        /// </summary>
+        /// <returns></returns>
         public object[] GeometriesAsText()
         {
             object[] items = this.ItemArray;

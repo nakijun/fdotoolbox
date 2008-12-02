@@ -12,9 +12,12 @@ namespace FdoToolbox.Core.ETL.Specialized
     /// A specialized form of <see cref="EtlProcess"/> that copies
     /// a series of feature classes from one source to another
     /// </summary>
-    public class FdoBulkCopy : EtlProcess
+    public class FdoBulkCopy : FdoSpecializedEtlProcess
     {
         private FdoBulkCopyOptions _options;
+
+        private TimeSpan _totalSpan;
+        private int _featuresCopied;
 
         /// <summary>
         /// Constructor
@@ -23,6 +26,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         public FdoBulkCopy(FdoBulkCopyOptions options)
         {
             _options = options;
+            _totalSpan = new TimeSpan();
         }
 
         /// <summary>
@@ -30,8 +34,41 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// </summary>
         protected override void Initialize()
         {
-            foreach (FdoClassCopyOptions copt in _options.ClassCopyOptions)
+            //Copy Spatial Contexts
+            IList<SpatialContextInfo> contexts = _options.SourceSpatialContexts;
+            if (contexts.Count > 0)
             {
+                SendMessage("Copying Spatial Contexts");
+                using (FdoFeatureService targetService = _options.TargetConnection.CreateFeatureService())
+                {
+                    if (_options.TargetConnection.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value)
+                    {
+                        foreach (SpatialContextInfo ctx in contexts)
+                        {
+                            targetService.CreateSpatialContext(ctx, true);
+                            SendMessage("Spatial Context Copied: " + ctx.Name);
+                        }
+                    }
+                    else
+                    {
+                        SpatialContextInfo srcCtx = contexts[0];
+                        SpatialContextInfo destCtx = targetService.GetSpatialContext(srcCtx.Name);
+                        bool canDestroy = targetService.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySchema);
+                        if (canDestroy)
+                        {
+                            SendMessage("Destroying target spatial context: " + destCtx.Name);
+                            targetService.DestroySpatialContext(destCtx);
+                        }
+                        SendMessage("Copying spatial context to target: " + srcCtx.Name);
+                        targetService.CreateSpatialContext(srcCtx, !canDestroy);
+                    }
+                }
+            }
+
+            //Set class copy tasks
+            for(int i = 0; i < _options.ClassCopyOptions.Count; i++)
+            {
+                FdoClassCopyOptions copt = _options.ClassCopyOptions[i];
                 if (copt.DeleteTarget)
                 {
                     Info("Deleting data in target class {0} before copying", copt.TargetClassName);
@@ -53,11 +90,39 @@ namespace FdoToolbox.Core.ETL.Specialized
                     }
                 }
 
-                Register(new FdoInputOperation(copt.SourceConnection, CreateSourceQuery(copt)));
+                IFdoOperation input = new FdoInputOperation(copt.SourceConnection, CreateSourceQuery(copt)); 
+                IFdoOperation output = null;
                 if (copt.PropertyMappings.Count > 0)
-                    Register(new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings));
+                    output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings);
                 else
-                    Register(new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName));
+                    output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName);
+
+                string sourceClass = copt.SourceClassName;
+                string targetClass = copt.TargetClassName;
+
+                Register(input);
+                Register(output);
+            }
+        }
+
+        protected override void OnFeatureProcessed(FdoOperationBase op, FdoRow dictionary)
+        {
+            if (op.Statistics.OutputtedRows % 50 == 0)
+            {
+                if (op is FdoOutputOperation)
+                {
+                    string className = (op as FdoOutputOperation).ClassName;
+                    SendMessageFormatted("[Bulk Copy => {0}]: {1} features written", className, op.Statistics.OutputtedRows);
+                }
+            }
+        }
+
+        protected override void OnFinishedProcessing(FdoOperationBase op)
+        {
+            if (op is FdoOutputOperation)
+            {
+                string className = (op as FdoOutputOperation).ClassName;
+                SendMessageFormatted("[Bulk Copy => {0}]: {1} features written in {2}", className, op.Statistics.OutputtedRows, op.Statistics.Duration.ToString());
             }
         }
 
@@ -72,13 +137,13 @@ namespace FdoToolbox.Core.ETL.Specialized
             return query;
         }
 
-        /// <summary>
-        /// Saves the bulk copy configuration
-        /// </summary>
-        /// <param name="file"></param>
-        public override void Save(string file)
+        protected override void Dispose(bool disposing)
         {
-            
+            if (disposing)
+            {
+                _options.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

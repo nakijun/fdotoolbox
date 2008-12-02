@@ -101,35 +101,15 @@ namespace FdoToolbox.Core
     /// </summary>
     public class MessageEventArgs : EventArgs
     {
-        private readonly string _Title;
-
-        /// <summary>
-        /// The title of the message
-        /// </summary>
-        public string Title
-        {
-            get { return _Title; }
-        }
-
-        private readonly string _Message;
-
-        /// <summary>
-        /// The message content
-        /// </summary>
-        public string Message
-        {
-            get { return _Message; }
-        }
+        public readonly string Message;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="title"></param>
-        /// <param name="message"></param>
-        public MessageEventArgs(string title, string message)
+        public MessageEventArgs(string message)
         {
-            _Title = title;
-            _Message = message;
+            this.Message = message;
         }
     }
 
