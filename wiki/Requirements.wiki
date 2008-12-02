@@ -3,3 +3,5 @@
 FDO Toolbox requires the following components be already installed:
   * Microsoft .net Framework 2.0 (http://www.microsoft.com/downloads/details.aspx?FamilyID=0856EACB-4362-4B0D-8EDD-AAB15C5E04F5&displaylang=en)
   * Microsoft Visual C++ 2005 SP1 Runtime Library (http://www.microsoft.com/downloads/details.aspx?FamilyID=200b2fd9-ae1a-4a14-984d-389c36f85647&displaylang=en)
+
+For FDO Toolbox v0.7 and onwards, you will require the Microsoft Visual C++ 2008 runtime library: (http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF&displaylang=en)
