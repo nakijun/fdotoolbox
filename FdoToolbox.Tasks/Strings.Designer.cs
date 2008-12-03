@@ -79,6 +79,15 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Task.
+        /// </summary>
+        internal static string CMD_DeleteTask {
+            get {
+                return ResourceManager.GetString("CMD_DeleteTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Task.
         /// </summary>
         internal static string CMD_EditTask {
