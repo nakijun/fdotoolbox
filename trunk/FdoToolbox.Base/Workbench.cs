@@ -29,6 +29,7 @@ namespace FdoToolbox.Base
         }
  
         MenuStrip menu;
+        ToolStripContainer toolStripContainer;
         ToolStrip toolbar;
         DockPanel contentPanel;
         StatusStrip status;
@@ -36,6 +37,8 @@ namespace FdoToolbox.Base
 
         IObjectExplorer objExplorer;
         IConsole appConsole;
+
+        ContextMenuStrip ctxToolbar;
 
         public IConsole Console { get { return appConsole; } }
 
@@ -45,29 +48,43 @@ namespace FdoToolbox.Base
         {
             InitializeComponent();
 
+            _toolstrips = new Dictionary<string, ToolStrip>();
+            _toolstripRegions = new Dictionary<string, WorkbenchRegion>();
+
             this.Icon = ResourceService.GetIcon("FdoToolbox");
 
             contentPanel = new DockPanel();
+            contentPanel.DocumentStyle = DocumentStyle.DockingWindow;
             contentPanel.Dock = DockStyle.Fill;
             contentPanel.DockLeftPortion = 200;
             contentPanel.DockBottomPortion = 150;
             
-            this.Controls.Add(contentPanel);
-
             menu = new MenuStrip();
             MenuService.AddItemsToMenu(menu.Items, this, "/Workbench/MainMenu");
 
+            toolStripContainer = new ToolStripContainer();
+            toolStripContainer.ContentPanel.Controls.Add(contentPanel);
+            toolStripContainer.Dock = DockStyle.Fill;
+
+            this.Controls.Add(toolStripContainer);
+
+            ctxToolbar = new ContextMenuStrip();
+            toolStripContainer.TopToolStripPanel.ContextMenuStrip = ctxToolbar;
+            toolStripContainer.BottomToolStripPanel.ContextMenuStrip = ctxToolbar;
+            toolStripContainer.LeftToolStripPanel.ContextMenuStrip = ctxToolbar;
+            toolStripContainer.RightToolStripPanel.ContextMenuStrip = ctxToolbar;
+
             toolbar = ToolbarService.CreateToolStrip(this, "/Workbench/Toolbar");
+            AddToolbar("Base", toolbar, WorkbenchRegion.Top, false);
 
             status = new StatusStrip();
             statusLabel = new ToolStripStatusLabel();
             status.Items.Add(statusLabel);
 
-            this.Controls.Add(toolbar);
             this.Controls.Add(menu);
             this.Controls.Add(status);
 
-            this.IsMdiContainer = true;
+            //this.IsMdiContainer = true;
 
             ObjectExplorer exp = new ObjectExplorer();
             objExplorer = exp;
@@ -80,6 +97,102 @@ namespace FdoToolbox.Base
             
             // Use the Idle event to update the status of menu and toolbar items.
             Application.Idle += OnApplicationIdle;
+        }
+
+        private Dictionary<string, ToolStrip> _toolstrips;
+        private Dictionary<string, WorkbenchRegion> _toolstripRegions;
+
+        public void AddToolbar(string name, ToolStrip toolbar, WorkbenchRegion region, bool canToggleVisibility)
+        {
+            _toolstrips.Add(name, toolbar);
+            _toolstripRegions.Add(name, region);
+
+            if (canToggleVisibility)
+            {
+                ToolStripMenuItem item = new ToolStripMenuItem();
+                item.Text = name;
+                item.Tag = name;
+                item.Checked = true;
+                item.CheckOnClick = true;
+                item.Click += delegate
+                {
+                    SetToolbarVisibility(name, item.Checked);
+                };
+                ctxToolbar.Items.Add(item);
+            }
+
+            switch (region)
+            {
+                case WorkbenchRegion.Top:
+                    toolStripContainer.TopToolStripPanel.Controls.Add(toolbar);
+                    break;
+                case WorkbenchRegion.Bottom:
+                    toolStripContainer.BottomToolStripPanel.Controls.Add(toolbar);
+                    break;
+                case WorkbenchRegion.Left:
+                    toolStripContainer.LeftToolStripPanel.Controls.Add(toolbar);
+                    break;
+                case WorkbenchRegion.Right:
+                    toolStripContainer.RightToolStripPanel.Controls.Add(toolbar);
+                    break;
+            }
+        }
+
+        public void SetToolbarVisibility(string toolbarName, bool visible)
+        {
+            ToolStrip strip = GetToolbar(toolbarName);
+            if (strip != null)
+            {
+                WorkbenchRegion region = _toolstripRegions[toolbarName];
+                if (visible)
+                {
+                    switch (region)
+                    {
+                        case WorkbenchRegion.Bottom:
+                            toolStripContainer.BottomToolStripPanel.Controls.Add(strip);
+                            break;
+                        case WorkbenchRegion.Left:
+                            toolStripContainer.LeftToolStripPanel.Controls.Add(strip);
+                            break;
+                        case WorkbenchRegion.Right:
+                            toolStripContainer.RightToolStripPanel.Controls.Add(strip);
+                            break;
+                        case WorkbenchRegion.Top:
+                            toolStripContainer.TopToolStripPanel.Controls.Add(strip);
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (region)
+                    {
+                        case WorkbenchRegion.Bottom:
+                            toolStripContainer.BottomToolStripPanel.Controls.Remove(strip);
+                            break;
+                        case WorkbenchRegion.Left:
+                            toolStripContainer.LeftToolStripPanel.Controls.Remove(strip);
+                            break;
+                        case WorkbenchRegion.Right:
+                            toolStripContainer.RightToolStripPanel.Controls.Remove(strip);
+                            break;
+                        case WorkbenchRegion.Top:
+                            toolStripContainer.TopToolStripPanel.Controls.Remove(strip);
+                            break;
+                    }
+                }
+            }
+        }
+
+        public ToolStrip GetToolbar(string name)
+        {
+            if(_toolstrips.ContainsKey(name))
+                return _toolstrips[name];
+            return null;
+        }
+
+        public ICollection<string> ToolbarNames
+        {
+            get { return _toolstrips.Keys; }
         }
 
         public void SetStatusLabel(string text)
@@ -181,5 +294,13 @@ namespace FdoToolbox.Base
             this.ResumeLayout(false);
 
         }
+    }
+
+    public enum WorkbenchRegion
+    {
+        Top,
+        Left,
+        Right,
+        Bottom
     }
 }
