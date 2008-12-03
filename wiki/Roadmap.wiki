@@ -21,7 +21,6 @@
 
 === Future ===
 
- * SharpDevelop for Applications (SDA) support
  * Boo scriptability / DSL
  * MapGuide Enterprise/Open Source integration
  * Schema Mapping support
