@@ -61,7 +61,9 @@ namespace FdoToolbox.Tasks.Services
         {
             if (_taskDict.ContainsKey(name))
             {
+                EtlProcess proc = _taskDict[name];
                 _taskDict.Remove(name);
+                proc.Dispose();
                 TaskRemoved(this, new EventArgs<string>(name));
             }
         }

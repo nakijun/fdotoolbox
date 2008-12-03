@@ -123,6 +123,9 @@
   <data name="CMD_CreateJoin" xml:space="preserve">
     <value>Create Join</value>
   </data>
+  <data name="CMD_DeleteTask" xml:space="preserve">
+    <value>Delete Task</value>
+  </data>
   <data name="CMD_EditTask" xml:space="preserve">
     <value>Edit Task</value>
   </data>

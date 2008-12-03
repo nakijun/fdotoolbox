@@ -87,6 +87,11 @@
         <MenuItem id="RenameTask"
                   label="${res:CMD_RenameTask}"
                   class="FdoToolbox.Tasks.Commands.RenameTaskCommand" />
+        <MenuItem type="Separator" />
+        <MenuItem id="DeleteTask"
+                  label="${res:CMD_DeleteTask}"
+                  icon="cross"
+                  class="FdoToolbox.Tasks.Commands.DeleteTaskCommand" />
     </Path>
 
 </AddIn>
