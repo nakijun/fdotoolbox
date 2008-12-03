@@ -16,7 +16,7 @@
    * Create Task
      * ~~Bulk Copy~~
      * Database Join
-   * Delete Task
+   * ~~Delete Task~~
    * ~~Execute Task~~
    * Load Task
    * Save Task
