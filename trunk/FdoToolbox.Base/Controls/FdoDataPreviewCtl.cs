@@ -72,7 +72,18 @@ namespace FdoToolbox.Base.Controls
 
         public List<QueryMode> QueryModes
         {
-            set { cmbQueryMode.ComboBox.DataSource = value; }
+            set 
+            { 
+                cmbQueryMode.ComboBox.Items.Clear();
+                foreach (QueryMode mode in value)
+                {
+                    cmbQueryMode.ComboBox.Items.Add(mode);
+                }
+                if (value.Count > 0)
+                {
+                    cmbQueryMode.SelectedIndex = 0;
+                }
+            }
         }
 
         public QueryMode SelectedQueryMode
