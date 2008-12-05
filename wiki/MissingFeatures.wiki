@@ -20,10 +20,6 @@
    * ~~Execute Task~~
    * Load Task
    * Save Task
- * Database Support
-   * Connect to Database
-   * Data Preview
-   * Convert database table to point feature class
  * File to File Bulk Copy
    * ~~SDF to SDF~~
    * ~~SHP to SDF~~
