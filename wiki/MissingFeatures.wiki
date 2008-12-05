@@ -26,3 +26,5 @@
    * SDF to SHP
    * SHP to SHP
  * Capability-aware user interface
+
+Database support will not be ported over to 0.7. See [http://themapguyde.blogspot.com/2008/12/heres-another-little-fdo-toolbox-update.html this blog post] for an explanation.
