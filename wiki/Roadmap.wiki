@@ -22,6 +22,9 @@
 
 === Future ===
 
+ * Spatial Join support
+ * Class to Feature Class conversion
+ * FDO Connection configuration support
  * Boo scriptability / DSL
  * MapGuide Enterprise/Open Source integration
  * Schema Mapping support
