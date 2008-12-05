@@ -67,7 +67,7 @@ namespace FdoToolbox.Base.Controls
                 {
                     object n = row.Cells[0].Value;
                     object v = row.Cells[1].Value;
-                    if (n != null && v != null)
+                    if (n != null && v != null && v.ToString().Trim().Length > 0)
                     {
                         props.Add(n.ToString(), v.ToString());
                     }
