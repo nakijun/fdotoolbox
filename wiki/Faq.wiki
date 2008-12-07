@@ -1,6 +1,10 @@
 #summary Frequently Asked Questions
 #labels Featured
 
+=== Q: How do I supply the ConnectionString parameter for the ODBC Provider? ===
+
+A: You must surround the value in double quotes.
+
 === Q: I get errors bulk copying between different providers (when it attempts to apply the schema) ===
 
 A: As of version 0.5.8, you will get a detailed explanation of why the source schema can not be applied to the target connection. With this information you can work around this error by re-creating the source schema on the target connection with the incompatible parts changed to parts supported by the target connection.
