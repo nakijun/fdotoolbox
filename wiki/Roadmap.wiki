@@ -10,6 +10,7 @@
 
 === 0.8 ===
 
+ * Connection configuration support
  * Express support for ODBC provider
  * Express support for SQLite provider 
  * Localization
