@@ -63,6 +63,10 @@ A: No, as the FDO managed wrapper libraries are mixed-mode assemblies and Mono w
 
 A: Yes, as of 0.7, FDO Toolbox will be built against FDO 3.4 binaries. It will no longer be compatible with FDO 3.3.x as it will be using newer APIs introduced in 3.4
 
+=== Q: I get crashes on the Map Data Preview for some data sources ===
+
+A: FDO stores geometries as FGF (FDO Geometry Format) which is a superset of WKB, the SharpMap rendering library used currently only supports rendering WKB geometries. Thus it will break down on incompatible/unsupported geometries.
+
 === Q: Are the APIs stable enough to develop extension modules against? ===
 
 A: Until 1.0 is released, there is no guarantee that the current APIs will remain the same.
