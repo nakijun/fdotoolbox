@@ -10,7 +10,7 @@ using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoStandardQueryCtl : UserControl, IFdoStandardQueryView, ISubView
+    public partial class FdoStandardQueryCtl : UserControl, IFdoStandardQueryView
     {
         private FdoStandardQueryPresenter _presenter;
 
@@ -313,5 +313,12 @@ namespace FdoToolbox.Base.Controls
                 }
             }
         }
+
+        public void FireMapPreviewStateChanged(bool enabled)
+        {
+            MapPreviewStateChanged(this, enabled);
+        }
+
+        public event MapPreviewStateEventHandler MapPreviewStateChanged = delegate { };
     }
 }

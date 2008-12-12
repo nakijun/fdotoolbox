@@ -91,12 +91,12 @@ namespace FdoToolbox.Base.Controls
             get { return (QueryMode)cmbQueryMode.ComboBox.SelectedItem; }
         }
 
-        public ISubView QueryView
+        public IQuerySubView QueryView
         {
             get
             {
                 if (queryPanel.Controls.Count > 0)
-                    return (ISubView)queryPanel.Controls[0];
+                    return (IQuerySubView)queryPanel.Controls[0];
                 return null;
             }
             set 

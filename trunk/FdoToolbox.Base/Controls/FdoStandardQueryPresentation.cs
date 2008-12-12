@@ -6,7 +6,7 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoStandardQueryView
+    public interface IFdoStandardQueryView : IQuerySubView
     {
         FeatureSchemaCollection SchemaList { set; }
         ClassCollection ClassList { set; }
@@ -71,6 +71,7 @@ namespace FdoToolbox.Base.Controls
                     p.Add(pd.Name);
                 }
                 _view.PropertyList = p;
+                _view.FireMapPreviewStateChanged(_view.SelectedClass.ClassType == ClassType.ClassType_FeatureClass);
             }
         }
 

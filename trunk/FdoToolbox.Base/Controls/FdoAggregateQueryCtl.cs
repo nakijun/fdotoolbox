@@ -10,7 +10,7 @@ using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoAggregateQueryCtl : UserControl, IFdoAggregateQueryView, ISubView
+    public partial class FdoAggregateQueryCtl : UserControl, IFdoAggregateQueryView
     {
         private FdoAggregateQueryPresenter _presenter;
 
@@ -408,5 +408,12 @@ namespace FdoToolbox.Base.Controls
                 }
             }
         }
+
+        public void FireMapPreviewStateChanged(bool enabled)
+        {
+            MapPreviewStateChanged(this, enabled);
+        }
+
+        public event MapPreviewStateEventHandler MapPreviewStateChanged = delegate { };
     }
 }

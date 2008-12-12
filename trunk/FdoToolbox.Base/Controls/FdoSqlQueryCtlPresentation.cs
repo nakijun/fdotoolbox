@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoSqlQueryView
+    public interface IFdoSqlQueryView : IQuerySubView
     {
         string SQLString { get; }
     }
