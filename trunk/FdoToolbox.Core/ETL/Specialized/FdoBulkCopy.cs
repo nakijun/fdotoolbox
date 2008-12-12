@@ -37,10 +37,16 @@ namespace FdoToolbox.Core.ETL.Specialized
             //Copy Spatial Contexts
             IList<SpatialContextInfo> contexts = _options.SourceSpatialContexts;
             if (contexts.Count > 0)
-            {
-                SendMessage("Copying Spatial Contexts");
+            {   
                 using (FdoFeatureService targetService = _options.TargetConnection.CreateFeatureService())
                 {
+                    if (_options.BatchSize > 0 && !targetService.SupportsBatchInsertion())
+                    {
+                        SendMessage("Batch insert not supported. Using regular inserts");
+                        _options.BatchSize = 0;
+                    }
+
+                    SendMessage("Copying Spatial Contexts");
                     if (_options.TargetConnection.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value)
                     {
                         foreach (SpatialContextInfo ctx in contexts)
@@ -93,9 +99,19 @@ namespace FdoToolbox.Core.ETL.Specialized
                 IFdoOperation input = new FdoInputOperation(copt.SourceConnection, CreateSourceQuery(copt)); 
                 IFdoOperation output = null;
                 if (copt.PropertyMappings.Count > 0)
-                    output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings);
+                {
+                    if (_options.BatchSize > 0)
+                        output = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings, _options.BatchSize);
+                    else
+                        output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings);
+                }
                 else
-                    output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName);
+                {
+                    if(_options.BatchSize > 0)
+                        output = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, _options.BatchSize);
+                    else
+                        output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName);
+                }
 
                 string sourceClass = copt.SourceClassName;
                 string targetClass = copt.TargetClassName;

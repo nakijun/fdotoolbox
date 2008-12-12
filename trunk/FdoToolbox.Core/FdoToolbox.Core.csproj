@@ -81,10 +81,12 @@
     <Compile Include="ETL\EtlProcess.cs" />
     <Compile Include="ETL\EtlProcessBase.cs" />
     <Compile Include="ETL\ObjectArrayKeys.cs" />
+    <Compile Include="ETL\Operations\FdoBatchedOutputOperation.cs" />
     <Compile Include="ETL\Operations\FdoBranchingOperation.cs" />
     <Compile Include="ETL\Operations\FdoFilteredOperation.cs" />
     <Compile Include="ETL\Operations\FdoInputOperation.cs" />
     <Compile Include="ETL\Operations\FdoJoinOperation.cs" />
+    <Compile Include="ETL\Operations\FdoNestedLoopsJoinOperation.cs" />
     <Compile Include="ETL\Operations\FdoOperationBase.cs" />
     <Compile Include="ETL\FdoRow.cs" />
     <Compile Include="ETL\Operations\FdoOutputOperation.cs" />
@@ -100,8 +102,8 @@
     <Compile Include="ETL\Specialized\FdoBulkCopy.cs" />
     <Compile Include="ETL\Specialized\FdoBulkCopyOptions.cs" />
     <Compile Include="ETL\Specialized\FdoClassCopyOptions.cs" />
-    <Compile Include="ETL\Specialized\FdoDbJoin.cs" />
-    <Compile Include="ETL\Specialized\FdoDbJoinOptions.cs" />
+    <Compile Include="ETL\Specialized\FdoJoin.cs" />
+    <Compile Include="ETL\Specialized\FdoJoinOptions.cs" />
     <Compile Include="ETL\Specialized\FdoSpecializedEtlProcess.cs" />
     <Compile Include="ETL\Specialized\IFdoSpecializedEtlProcess.cs" />
     <Compile Include="ETL\WithLoggingMixin.cs" />

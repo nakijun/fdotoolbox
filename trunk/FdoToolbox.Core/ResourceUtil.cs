@@ -11,7 +11,7 @@ namespace FdoToolbox.Core
 
         static ResourceUtil()
         {
-            _resMan = new ResourceManager("Strings", typeof(ResourceUtil).Assembly);
+            _resMan = Strings.ResourceManager;
         }
 
         public static string GetString(string key)
