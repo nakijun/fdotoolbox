@@ -214,6 +214,15 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bulk Copy Settings.
+        /// </summary>
+        internal static string TITLE_BULK_COPY_SETTINGS {
+            get {
+                return ResourceManager.GetString("TITLE_BULK_COPY_SETTINGS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose Directory.
         /// </summary>
         internal static string TITLE_CHOOSE_DIRECTORY {
@@ -228,6 +237,15 @@ namespace FdoToolbox.Tasks {
         internal static string TITLE_ETL_PROCESS {
             get {
                 return ResourceManager.GetString("TITLE_ETL_PROCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Join Settings.
+        /// </summary>
+        internal static string TITLE_JOIN_SETTINGS {
+            get {
+                return ResourceManager.GetString("TITLE_JOIN_SETTINGS", resourceCulture);
             }
         }
         

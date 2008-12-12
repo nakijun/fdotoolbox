@@ -33,7 +33,7 @@ namespace FdoToolbox.Tasks.Controls
 
         public string Title
         {
-            get { return "Bulk Copy Settings"; }
+            get { return ResourceService.GetString("TITLE_BULK_COPY_SETTINGS"); }
         }
 
         public event EventHandler TitleChanged = delegate { };

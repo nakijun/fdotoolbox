@@ -54,6 +54,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Commands\CreateBulkCopyCommand.cs" />
+    <Compile Include="Commands\CreateJoinCommand.cs" />
     <Compile Include="Commands\StartupCommand.cs" />
     <Compile Include="Commands\TaskCommands.cs" />
     <Compile Include="Controls\FdoBulkCopyCtl.cs">
@@ -63,6 +64,12 @@
       <DependentUpon>FdoBulkCopyCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FdoBulkCopyPresenter.cs" />
+    <Compile Include="Controls\FdoJoinCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoJoinCtl.Designer.cs">
+      <DependentUpon>FdoJoinCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TaskObjectExplorerExtender.cs" />
     <Compile Include="EventWatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -96,6 +103,10 @@
     <EmbeddedResource Include="Controls\FdoBulkCopyCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoBulkCopyCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoJoinCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoJoinCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Strings.resx">
       <SubType>Designer</SubType>
