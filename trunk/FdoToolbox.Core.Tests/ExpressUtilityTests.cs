@@ -17,6 +17,13 @@ namespace FdoToolbox.Core.Tests
         [Test]
         public void TestCreateFlatFile()
         {
+            Assert.IsTrue(ExpressUtility.CreateFlatFileDataSource("Test.sdf"));
+            Assert.IsTrue(ExpressUtility.CreateFlatFileDataSource("Test.sqlite"));
+            Assert.IsTrue(ExpressUtility.CreateFlatFileDataSource("Test.db"));
+
+            File.Delete("Test.sdf");
+            File.Delete("Test.sqlite");
+            File.Delete("Test.db");
         }
 
         [Test]
@@ -32,20 +39,13 @@ namespace FdoToolbox.Core.Tests
 
         [Test]
         public void TestNvcToString()
-        { 
-            
-        }
-
-        [Test]
-        public void TestClrTypeToDataType()
         {
-
-        }
-
-        [Test]
-        public void TestDataTypeToClrType()
-        {
-
+            NameValueCollection nvc = new NameValueCollection();
+            nvc["Username"] = "Foo";
+            nvc["Password"] = "Bar";
+            nvc["Service"] = "localhost";
+            string str = ExpressUtility.ConvertFromNameValueCollection(nvc);
+            Assert.AreEqual(str, "Username=Foo;Password=Bar;Service=localhost");
         }
     }
 }
