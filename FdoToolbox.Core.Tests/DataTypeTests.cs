@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using OSGeo.FDO.Schema;
+using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Core.Tests
 {
@@ -46,12 +47,12 @@ namespace FdoToolbox.Core.Tests
             Assert.IsTrue(IsConvertable(DataType.DataType_Byte, DataType.DataType_Byte));
             Assert.IsFalse(IsConvertable(DataType.DataType_Byte, DataType.DataType_CLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Byte, DataType.DataType_DateTime));
-            Assert.IsFalse(IsConvertable(DataType.DataType_Byte, DataType.DataType_Decimal));
-            Assert.IsFalse(IsConvertable(DataType.DataType_Byte, DataType.DataType_Double));
+            Assert.IsTrue(IsConvertable(DataType.DataType_Byte, DataType.DataType_Decimal));
+            Assert.IsTrue(IsConvertable(DataType.DataType_Byte, DataType.DataType_Double));
             Assert.IsTrue(IsConvertable(DataType.DataType_Byte, DataType.DataType_Int16));
             Assert.IsTrue(IsConvertable(DataType.DataType_Byte, DataType.DataType_Int32));
             Assert.IsTrue(IsConvertable(DataType.DataType_Byte, DataType.DataType_Int64));
-            Assert.IsFalse(IsConvertable(DataType.DataType_Byte, DataType.DataType_Single));
+            Assert.IsTrue(IsConvertable(DataType.DataType_Byte, DataType.DataType_Single));
             Assert.IsTrue(IsConvertable(DataType.DataType_Byte, DataType.DataType_String));
 
             //CLOB
@@ -85,7 +86,7 @@ namespace FdoToolbox.Core.Tests
             //Decimal
             Assert.IsFalse(IsConvertable(DataType.DataType_Decimal, DataType.DataType_BLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Decimal, DataType.DataType_Boolean));
-            Assert.IsFalse(IsConvertable(DataType.DataType_Decimal, DataType.DataType_Byte));
+            Assert.IsTrue(IsConvertable(DataType.DataType_Decimal, DataType.DataType_Byte));
             Assert.IsFalse(IsConvertable(DataType.DataType_Decimal, DataType.DataType_CLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Decimal, DataType.DataType_DateTime));
             Assert.IsTrue(IsConvertable(DataType.DataType_Decimal, DataType.DataType_Decimal));
@@ -99,7 +100,7 @@ namespace FdoToolbox.Core.Tests
             //Double
             Assert.IsFalse(IsConvertable(DataType.DataType_Double, DataType.DataType_BLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Double, DataType.DataType_Boolean));
-            Assert.IsFalse(IsConvertable(DataType.DataType_Double, DataType.DataType_Byte));
+            Assert.IsTrue(IsConvertable(DataType.DataType_Double, DataType.DataType_Byte));
             Assert.IsFalse(IsConvertable(DataType.DataType_Double, DataType.DataType_CLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Double, DataType.DataType_DateTime));
             Assert.IsTrue(IsConvertable(DataType.DataType_Double, DataType.DataType_Decimal));
@@ -113,7 +114,7 @@ namespace FdoToolbox.Core.Tests
             //Int16
             Assert.IsFalse(IsConvertable(DataType.DataType_Int16, DataType.DataType_BLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Int16, DataType.DataType_Boolean));
-            Assert.IsFalse(IsConvertable(DataType.DataType_Int16, DataType.DataType_Byte));
+            Assert.IsTrue(IsConvertable(DataType.DataType_Int16, DataType.DataType_Byte));
             Assert.IsFalse(IsConvertable(DataType.DataType_Int16, DataType.DataType_CLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Int16, DataType.DataType_DateTime));
             Assert.IsTrue(IsConvertable(DataType.DataType_Int16, DataType.DataType_Decimal));
@@ -127,7 +128,7 @@ namespace FdoToolbox.Core.Tests
             //Int32
             Assert.IsFalse(IsConvertable(DataType.DataType_Int32, DataType.DataType_BLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Int32, DataType.DataType_Boolean));
-            Assert.IsFalse(IsConvertable(DataType.DataType_Int32, DataType.DataType_Byte));
+            Assert.IsTrue(IsConvertable(DataType.DataType_Int32, DataType.DataType_Byte));
             Assert.IsFalse(IsConvertable(DataType.DataType_Int32, DataType.DataType_CLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Int32, DataType.DataType_DateTime));
             Assert.IsTrue(IsConvertable(DataType.DataType_Int32, DataType.DataType_Decimal));
@@ -141,7 +142,7 @@ namespace FdoToolbox.Core.Tests
             //Int64
             Assert.IsFalse(IsConvertable(DataType.DataType_Int64, DataType.DataType_BLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Int64, DataType.DataType_Boolean));
-            Assert.IsFalse(IsConvertable(DataType.DataType_Int64, DataType.DataType_Byte));
+            Assert.IsTrue(IsConvertable(DataType.DataType_Int64, DataType.DataType_Byte));
             Assert.IsFalse(IsConvertable(DataType.DataType_Int64, DataType.DataType_CLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Int64, DataType.DataType_DateTime));
             Assert.IsTrue(IsConvertable(DataType.DataType_Int64, DataType.DataType_Decimal));
@@ -155,7 +156,7 @@ namespace FdoToolbox.Core.Tests
             //Single
             Assert.IsFalse(IsConvertable(DataType.DataType_Single, DataType.DataType_BLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Single, DataType.DataType_Boolean));
-            Assert.IsFalse(IsConvertable(DataType.DataType_Single, DataType.DataType_Byte));
+            Assert.IsTrue(IsConvertable(DataType.DataType_Single, DataType.DataType_Byte));
             Assert.IsFalse(IsConvertable(DataType.DataType_Single, DataType.DataType_CLOB));
             Assert.IsFalse(IsConvertable(DataType.DataType_Single, DataType.DataType_DateTime));
             Assert.IsTrue(IsConvertable(DataType.DataType_Single, DataType.DataType_Decimal));
@@ -167,10 +168,10 @@ namespace FdoToolbox.Core.Tests
             Assert.IsTrue(IsConvertable(DataType.DataType_Single, DataType.DataType_String));
 
             //String
-            Assert.IsTrue(IsConvertable(DataType.DataType_String, DataType.DataType_BLOB));
+            Assert.IsFalse(IsConvertable(DataType.DataType_String, DataType.DataType_BLOB));
             Assert.IsTrue(IsConvertable(DataType.DataType_String, DataType.DataType_Boolean));
             Assert.IsTrue(IsConvertable(DataType.DataType_String, DataType.DataType_Byte));
-            Assert.IsTrue(IsConvertable(DataType.DataType_String, DataType.DataType_CLOB));
+            Assert.IsFalse(IsConvertable(DataType.DataType_String, DataType.DataType_CLOB));
             Assert.IsTrue(IsConvertable(DataType.DataType_String, DataType.DataType_DateTime));
             Assert.IsTrue(IsConvertable(DataType.DataType_String, DataType.DataType_Decimal));
             Assert.IsTrue(IsConvertable(DataType.DataType_String, DataType.DataType_Double));
@@ -183,8 +184,7 @@ namespace FdoToolbox.Core.Tests
 
         private bool IsConvertable(DataType d1, DataType d2)
         {
-            return false;
-            //return SpatialBulkCopyTask.IsConvertable(d1, d2);
+            return ValueConverter.IsConvertible(d1, d2);
         }
     }
 }
