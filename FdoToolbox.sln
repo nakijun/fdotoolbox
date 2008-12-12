@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Core", "FdoToolb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox", "FdoToolbox\FdoToolbox.csproj", "{D2A74ED5-440A-4276-99D0-8837CB924311}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.AdoDb", "FdoToolbox.AdoDb\FdoToolbox.AdoDb.csproj", "{8C455218-6D14-4CB4-A817-D35B6F35461C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Express", "FdoToolbox.Express\FdoToolbox.Express.csproj", "{282A4797-CC1B-40F7-A9D8-12249F10FD48}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.AddInManager", "FdoToolbox.AddInManager\FdoToolbox.AddInManager.csproj", "{5329A30E-63A8-4D4F-932C-986BF7407877}"
@@ -51,10 +49,6 @@ Global
 		{D2A74ED5-440A-4276-99D0-8837CB924311}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2A74ED5-440A-4276-99D0-8837CB924311}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2A74ED5-440A-4276-99D0-8837CB924311}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C455218-6D14-4CB4-A817-D35B6F35461C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C455218-6D14-4CB4-A817-D35B6F35461C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C455218-6D14-4CB4-A817-D35B6F35461C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C455218-6D14-4CB4-A817-D35B6F35461C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{282A4797-CC1B-40F7-A9D8-12249F10FD48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{282A4797-CC1B-40F7-A9D8-12249F10FD48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{282A4797-CC1B-40F7-A9D8-12249F10FD48}.Release|Any CPU.ActiveCfg = Release|Any CPU
