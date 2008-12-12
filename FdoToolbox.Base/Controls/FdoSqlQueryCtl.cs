@@ -9,7 +9,7 @@ using ICSharpCode.TextEditor;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoSqlQueryCtl : UserControl, ISubView, IFdoSqlQueryView
+    public partial class FdoSqlQueryCtl : UserControl, IFdoSqlQueryView
     {
         private TextEditorControl _editor;
 
@@ -30,5 +30,12 @@ namespace FdoToolbox.Base.Controls
         {
             get { return _editor.Text; }
         }
+
+        public void FireMapPreviewStateChanged(bool enabled)
+        {
+            MapPreviewStateChanged(this, enabled);
+        }
+
+        public event MapPreviewStateEventHandler MapPreviewStateChanged = delegate { };
     }
 }

@@ -26,7 +26,7 @@ namespace FdoToolbox.Base.Controls
         List<QueryMode> QueryModes { set; }
         QueryMode SelectedQueryMode { get; }
 
-        ISubView QueryView { get; set; }
+        IQuerySubView QueryView { get; set; }
 
         bool CancelEnabled { get; set; }
         bool ClearEnabled { get; set; }
@@ -47,14 +47,14 @@ namespace FdoToolbox.Base.Controls
         private FdoFeatureService _service;
         private BackgroundWorker _queryWorker;
 
-        private Dictionary<QueryMode, ISubView> _queryViews;
+        private Dictionary<QueryMode, IQuerySubView> _queryViews;
 
         public FdoDataPreviewPresenter(IFdoDataPreviewView view, FdoConnection conn)
         {
             _view = view;
             _connection = conn;
             _service = conn.CreateFeatureService();
-            _queryViews = new Dictionary<QueryMode, ISubView>();
+            _queryViews = new Dictionary<QueryMode, IQuerySubView>();
             _queryWorker = new BackgroundWorker();
             _queryWorker.WorkerReportsProgress = true;
             _queryWorker.WorkerSupportsCancellation = true;
@@ -209,13 +209,22 @@ namespace FdoToolbox.Base.Controls
                 modes.Add(QueryMode.SQL);
                 _queryViews.Add(QueryMode.SQL, new FdoSqlQueryCtl());
             }
+            foreach (IQuerySubView qv in _queryViews.Values)
+            {
+                qv.MapPreviewStateChanged += new MapPreviewStateEventHandler(OnMapPreviewStateChanged);
+            }
             _view.QueryModes = modes;
+        }
+
+        void OnMapPreviewStateChanged(object sender, bool enabled)
+        {
+            _view.MapEnabled = enabled;
         }
 
         public void QueryModeChanged()
         {
             _view.QueryView = _queryViews[_view.SelectedQueryMode];
-            _view.MapEnabled = (_view.SelectedQueryMode == QueryMode.Standard);
+            //_view.MapEnabled = (_view.SelectedQueryMode == QueryMode.Standard);
         }
 
         class StandardQuery

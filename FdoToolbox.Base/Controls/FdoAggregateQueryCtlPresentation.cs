@@ -6,7 +6,7 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoAggregateQueryView
+    public interface IFdoAggregateQueryView : IQuerySubView
     {
         FeatureSchemaCollection SchemaList { set; }
         ClassCollection ClassList { set; }
