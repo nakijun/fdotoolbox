@@ -11,9 +11,9 @@ namespace FdoToolbox.Core.ETL.Operations
 {
     public class FdoOutputOperation : FdoOperationBase
     {
-        private FdoConnection _conn;
-        private FdoFeatureService _service;
-        private NameValueCollection _mappings;
+        protected FdoConnection _conn;
+        protected FdoFeatureService _service;
+        protected NameValueCollection _mappings;
 
         /// <summary>
         /// Constructor
@@ -57,48 +57,12 @@ namespace FdoToolbox.Core.ETL.Operations
         /// <returns></returns>
         public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
         {
-            if (_mappings == null)
+            foreach (FdoRow row in rows)
             {
-                foreach (FdoRow row in rows)
+                using (PropertyValueCollection propVals = row.ToPropertyValueCollection(_mappings))
                 {
-                    using (PropertyValueCollection propVals = row.ToPropertyValueCollection())
-                    {
-                        _service.InsertFeature(this.ClassName, propVals, false);
-                        RaiseFeatureProcessed(row);
-                    }
-                }
-            }
-            else
-            {
-                foreach (FdoRow row in rows)
-                {
-                    //This is basically the inlined version of FdoRow::ToPropertyValueCollection
-                    //except that we use the mapped (target) property name instead of the source property
-                    //name. Also we exclude any un-mapped properties from the final insert
-                    using (PropertyValueCollection values = new PropertyValueCollection())
-                    {
-                        foreach (string col in row.Columns)
-                        {
-                            //Is mapped and not null?
-                            if (_mappings[col] != null && row[col] != null && row[col] != DBNull.Value)
-                            {
-                                ValueExpression dv = ValueConverter.GetConvertedValue(row[col]);
-                                if (dv != null)
-                                {
-                                    string mappedProperty = _mappings[col];
-                                    PropertyValue pv = new PropertyValue(mappedProperty, dv);
-                                    values.Add(pv);
-                                }
-                            }
-                        }
-
-                        //No mappings -> No insert
-                        if (values.Count > 0)
-                        {
-                            _service.InsertFeature(this.ClassName, values, false);
-                            RaiseFeatureProcessed(row);
-                        }
-                    }
+                    _service.InsertFeature(this.ClassName, propVals, false);
+                    RaiseFeatureProcessed(row);
                 }
             }
             yield break;

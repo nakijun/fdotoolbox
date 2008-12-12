@@ -9,6 +9,7 @@ using OSGeo.FDO.Expression;
 using OSGeo.FDO.Commands;
 using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Geometry;
+using System.Collections.Specialized;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -235,28 +236,131 @@ namespace FdoToolbox.Core.ETL
 
         public PropertyValueCollection ToPropertyValueCollection()
         {
+            return ToPropertyValueCollection(null);
+        }
+
+        public PropertyValueCollection ToPropertyValueCollection(NameValueCollection mappings)
+        {
             PropertyValueCollection values = new PropertyValueCollection();
-            foreach (string col in this.Columns)
+            if (mappings == null)
             {
-                //Omit null values
-                if (this[col] != null && this[col] != DBNull.Value)
+                foreach (string col in this.Columns)
                 {
-                    if (!IsGeometryProperty(col))
+                    //Omit null values
+                    if (this[col] != null && this[col] != DBNull.Value)
                     {
-                        ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
-                        if (dv != null)
+                        if (!IsGeometryProperty(col))
                         {
-                            PropertyValue pv = new PropertyValue(col, dv);
-                            values.Add(pv);
+                            ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
+                            if (dv != null)
+                            {
+                                PropertyValue pv = new PropertyValue(col, dv);
+                                values.Add(pv);
+                            }
+                        }
+                        else
+                        {
+                            IGeometry geom = this[col] as IGeometry;
+                            if (geom != null)
+                            {
+                                PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                                values.Add(pv);
+                            }
                         }
                     }
-                    else
+                }
+            }
+            else
+            {
+                foreach (string col in this.Columns)
+                {
+                    //Omit null and un-mapped values
+                    if (mappings[col] != null && this[col] != null && this[col] != DBNull.Value)
                     {
-                        IGeometry geom = this[col] as IGeometry;
-                        if (geom != null)
+                        if (!IsGeometryProperty(col))
                         {
-                            PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
-                            values.Add(pv);
+                            ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
+                            if (dv != null)
+                            {
+                                PropertyValue pv = new PropertyValue(col, dv);
+                                values.Add(pv);
+                            }
+                        }
+                        else
+                        {
+                            IGeometry geom = this[col] as IGeometry;
+                            if (geom != null)
+                            {
+                                PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                                values.Add(pv);
+                            }
+                        }
+                    }
+                }
+            }
+            return values;
+        }
+
+        public ParameterValueCollection ToParameterValueCollection(string prefix)
+        {
+            return ToParameterValueCollection(prefix, null);
+        }
+
+        public ParameterValueCollection ToParameterValueCollection(string prefix, NameValueCollection mappings)
+        {
+            ParameterValueCollection values = new ParameterValueCollection();
+            if (mappings == null)
+            {
+                foreach (string col in this.Columns)
+                {
+                    //Omit null values
+                    if (this[col] != null && this[col] != DBNull.Value)
+                    {
+                        if (!IsGeometryProperty(col))
+                        {
+                            LiteralValue dv = ValueConverter.GetConvertedValue(this[col]);
+                            if (dv != null)
+                            {
+                                ParameterValue pv = new ParameterValue(prefix + col, dv);
+                                values.Add(pv);
+                            }
+                        }
+                        else
+                        {
+                            IGeometry geom = this[col] as IGeometry;
+                            if (geom != null)
+                            {
+                                ParameterValue pv = new ParameterValue(prefix + col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                                values.Add(pv);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (string col in this.Columns)
+                {
+                    //Omit null and un-mapped values
+                    if (mappings[col] != null && this[col] != null && this[col] != DBNull.Value)
+                    {
+                        if (!IsGeometryProperty(col))
+                        {
+                            LiteralValue dv = ValueConverter.GetConvertedValue(this[col]);
+                            if (dv != null)
+                            {
+                                ParameterValue pv = new ParameterValue(prefix + col, dv);
+                                values.Add(pv);
+                            }
+                        }
+                        else
+                        {
+                            IGeometry geom = this[col] as IGeometry;
+                            if (geom != null)
+                            {
+                                ParameterValue pv = new ParameterValue(prefix + col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                                values.Add(pv);
+                            }
                         }
                     }
                 }
@@ -291,6 +395,19 @@ namespace FdoToolbox.Core.ETL
         {
             get { return _DefaultGeometryProperty; }
             internal set { _DefaultGeometryProperty = value; }
+        }
+
+        /// <summary>
+        /// The geometry object for this feature row
+        /// </summary>
+        public IGeometry Geometry
+        {
+            get
+            {
+                if (_DefaultGeometryProperty != null)
+                    return this[_DefaultGeometryProperty] as IGeometry;
+                return null;
+            }
         }
     }
 }
