@@ -1,4 +1,5 @@
 - Enhancements:
+    - FdoFeatureService has been updated to take advantage of new APIs in FDO v3.4.x
 	- Based on SharpDevelop Core, allowing for cleaner and simpler extensibility.
 	- Helper macros for Generic Connect/Create datastore controls.
 	- Refined Express Module
