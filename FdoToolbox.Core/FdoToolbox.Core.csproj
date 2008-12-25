@@ -159,8 +159,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Schemas\BulkCopyTask.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Schemas\DbConnection.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\JoinTask.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Schemas\JoinTask.xsx">
+      <DependentUpon>JoinTask.xsd</DependentUpon>
     </None>
     <None Include="Schemas\SpatialConnection.xsd">
       <SubType>Designer</SubType>
