@@ -7,11 +7,12 @@
  * Spatial ETL pipelining API
  * ~~NSIS installer packages~~
  * ~~Standalone Feature Schema Editor~~
+ * ~~Express support for ODBC provider~~
+ * Spatial Join support
 
 === 0.8 ===
 
  * Connection configuration support
- * Express support for ODBC provider
  * Express support for SQLite provider 
  * Localization
  * Raster Provider support
@@ -23,7 +24,6 @@
 
 === Future ===
 
- * Spatial Join support
  * Class to Feature Class conversion
  * FDO Connection configuration support
  * Boo scriptability / DSL
