@@ -9,6 +9,8 @@ using FdoToolbox.Core.Utility;
 //Type aliases to save typing
 using Res = ICSharpCode.Core.ResourceService;
 using Msg = ICSharpCode.Core.MessageService;
+using FdoToolbox.Express.Controls;
+using FdoToolbox.Base;
 
 namespace FdoToolbox.Express.Commands
 {
@@ -65,6 +67,16 @@ namespace FdoToolbox.Express.Commands
                 }
                 mgr.AddConnection(name, conn);
             }
+        }
+    }
+
+    public class ConnectOdbcCommand : AbstractMenuCommand 
+    {
+        public override void Run()
+        {
+            ConnectOdbcCtl ctl = new ConnectOdbcCtl();
+            Workbench wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
         }
     }
 }

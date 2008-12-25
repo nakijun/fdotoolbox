@@ -61,6 +61,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect via ODBC.
+        /// </summary>
+        internal static string CMD_ConnectOdbc {
+            get {
+                return ResourceManager.GetString("CMD_ConnectOdbc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect to SDF.
         /// </summary>
         internal static string CMD_ConnectSdf {
@@ -192,6 +201,15 @@ namespace FdoToolbox.Express {
         internal static string PROMPT_ENTER_CONNECTION {
             get {
                 return ResourceManager.GetString("PROMPT_ENTER_CONNECTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create ODBC Connection.
+        /// </summary>
+        internal static string TITLE_CONNECT_ODBC {
+            get {
+                return ResourceManager.GetString("TITLE_CONNECT_ODBC", resourceCulture);
             }
         }
         
