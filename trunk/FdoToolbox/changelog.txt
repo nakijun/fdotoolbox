@@ -9,6 +9,7 @@
 	- Added a text editor component (used by SharpDevelop). It currently serves no real purpose
 	- Added a Preference UI extension API. To register and expose your preference UIs, implement IPreferenceSheet 
 	  and specify the concrete type under the path "/FdoToolbox/Preferences" in your addin definition.
+	- Express module now supports connecting to common ODBC formats (MS Access, Excel, SQL Server, Text files)
 	
 - Other:
 	- Nearly everything has been re-written from the ground up. 
