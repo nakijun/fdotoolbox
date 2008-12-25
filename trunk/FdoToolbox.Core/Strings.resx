@@ -153,6 +153,45 @@
   <data name="ERR_INSERT" xml:space="preserve">
     <value>Error inserting new feature</value>
   </data>
+  <data name="ERR_JOIN_KEYS_UNDEFINED" xml:space="preserve">
+    <value>No properties defined to join both left and right sides on.</value>
+  </data>
+  <data name="ERR_JOIN_LEFT_CLASS_NOT_FOUND" xml:space="preserve">
+    <value>The left-side join class was not found: {0}</value>
+  </data>
+  <data name="ERR_JOIN_LEFT_PROPERTY_NOT_FOUND" xml:space="preserve">
+    <value>Could not find left-side property: {0}</value>
+  </data>
+  <data name="ERR_JOIN_LEFT_UNDEFINED" xml:space="preserve">
+    <value>Left side of the join has not been defined</value>
+  </data>
+  <data name="ERR_JOIN_NOT_TARGET_GEOMETRY_PROPERTY" xml:space="preserve">
+    <value>Property {0} in joined class is not a geometry property</value>
+  </data>
+  <data name="ERR_JOIN_PROPERTY_NAME_COLLISION" xml:space="preserve">
+    <value>There is at least one or more properties of the same name of both sides of the join. If this is intended, please qualify one side of the join with a prefix.</value>
+  </data>
+  <data name="ERR_JOIN_RIGHT_CLASS_NOT_FOUND" xml:space="preserve">
+    <value>The right-side join class was not found: {0}</value>
+  </data>
+  <data name="ERR_JOIN_RIGHT_PROPERTY_NOT_FOUND" xml:space="preserve">
+    <value>Could not find right-side property: {0}</value>
+  </data>
+  <data name="ERR_JOIN_RIGHT_UNDEFINED" xml:space="preserve">
+    <value>Right side of the join has not been defined</value>
+  </data>
+  <data name="ERR_JOIN_SCHEMA_NOT_FOUND" xml:space="preserve">
+    <value>n the join target could not be found</value>
+  </data>
+  <data name="ERR_JOIN_TARGET_EXISTS" xml:space="preserve">
+    <value>The join target must be a feature class that doesn't already exist</value>
+  </data>
+  <data name="ERR_JOIN_TARGET_GEOMETRY_PROPERTY_NOT_FOUND" xml:space="preserve">
+    <value>Unable to find geometry property {0} in joined class</value>
+  </data>
+  <data name="ERR_JOIN_TARGET_UNDEFINED" xml:space="preserve">
+    <value>Join target has not been defined</value>
+  </data>
   <data name="ERR_NO_CORRESPONDING_DATA_TYPE" xml:space="preserve">
     <value>Could not find corresponding Data Type for Type: {0}</value>
   </data>
@@ -182,6 +221,9 @@
   </data>
   <data name="ERR_UNSUPPORTED_CLONE_OBJECT" xml:space="preserve">
     <value>Cloning object properties is currently not supported</value>
+  </data>
+  <data name="ERR_UNSUPPORTED_CMD" xml:space="preserve">
+    <value>Unsupported command: {0}</value>
   </data>
   <data name="ERR_UNSUPPORTED_FLAT_FILE_PROVIDER" xml:space="preserve">
     <value>Unsupported or Unrecognised FDO Provider</value>

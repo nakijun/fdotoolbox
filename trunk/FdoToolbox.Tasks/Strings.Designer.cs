@@ -257,5 +257,41 @@ namespace FdoToolbox.Tasks {
                 return ResourceManager.GetString("TITLE_RENAME_TASK", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type of join to perform.
+        /// </summary>
+        internal static string TOOLTIP_JOIN_TYPE {
+            get {
+                return ResourceManager.GetString("TOOLTIP_JOIN_TYPE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The prefix to attach to property names in merged features that come from the left side of the join.
+        /// </summary>
+        internal static string TOOLTIP_LEFT_PREFIX {
+            get {
+                return ResourceManager.GetString("TOOLTIP_LEFT_PREFIX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The prefix to attach to property names in merged features that come from the right side of the join.
+        /// </summary>
+        internal static string TOOLTIP_RIGHT_PREFIX {
+            get {
+                return ResourceManager.GetString("TOOLTIP_RIGHT_PREFIX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The spatial condition to join left and right sides on.
+        /// </summary>
+        internal static string TOOLTIP_SPATIAL_PREDICATE {
+            get {
+                return ResourceManager.GetString("TOOLTIP_SPATIAL_PREDICATE", resourceCulture);
+            }
+        }
     }
 }

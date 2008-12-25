@@ -169,6 +169,123 @@ namespace FdoToolbox.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No properties defined to join both left and right sides on..
+        /// </summary>
+        internal static string ERR_JOIN_KEYS_UNDEFINED {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_KEYS_UNDEFINED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The left-side join class was not found: {0}.
+        /// </summary>
+        internal static string ERR_JOIN_LEFT_CLASS_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_LEFT_CLASS_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find left-side property: {0}.
+        /// </summary>
+        internal static string ERR_JOIN_LEFT_PROPERTY_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_LEFT_PROPERTY_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left side of the join has not been defined.
+        /// </summary>
+        internal static string ERR_JOIN_LEFT_UNDEFINED {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_LEFT_UNDEFINED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property {0} in joined class is not a geometry property.
+        /// </summary>
+        internal static string ERR_JOIN_NOT_TARGET_GEOMETRY_PROPERTY {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_NOT_TARGET_GEOMETRY_PROPERTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is at least one or more properties of the same name of both sides of the join. If this is intended, please qualify one side of the join with a prefix..
+        /// </summary>
+        internal static string ERR_JOIN_PROPERTY_NAME_COLLISION {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_PROPERTY_NAME_COLLISION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The right-side join class was not found: {0}.
+        /// </summary>
+        internal static string ERR_JOIN_RIGHT_CLASS_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_RIGHT_CLASS_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find right-side property: {0}.
+        /// </summary>
+        internal static string ERR_JOIN_RIGHT_PROPERTY_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_RIGHT_PROPERTY_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right side of the join has not been defined.
+        /// </summary>
+        internal static string ERR_JOIN_RIGHT_UNDEFINED {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_RIGHT_UNDEFINED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to n the join target could not be found.
+        /// </summary>
+        internal static string ERR_JOIN_SCHEMA_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_SCHEMA_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The join target must be a feature class that doesn&apos;t already exist.
+        /// </summary>
+        internal static string ERR_JOIN_TARGET_EXISTS {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_TARGET_EXISTS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to find geometry property {0} in joined class.
+        /// </summary>
+        internal static string ERR_JOIN_TARGET_GEOMETRY_PROPERTY_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_TARGET_GEOMETRY_PROPERTY_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Join target has not been defined.
+        /// </summary>
+        internal static string ERR_JOIN_TARGET_UNDEFINED {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_TARGET_UNDEFINED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not find corresponding Data Type for Type: {0}.
         /// </summary>
         internal static string ERR_NO_CORRESPONDING_DATA_TYPE {
@@ -255,6 +372,15 @@ namespace FdoToolbox.Core {
         internal static string ERR_UNSUPPORTED_CLONE_OBJECT {
             get {
                 return ResourceManager.GetString("ERR_UNSUPPORTED_CLONE_OBJECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported command: {0}.
+        /// </summary>
+        internal static string ERR_UNSUPPORTED_CMD {
+            get {
+                return ResourceManager.GetString("ERR_UNSUPPORTED_CMD", resourceCulture);
             }
         }
         
