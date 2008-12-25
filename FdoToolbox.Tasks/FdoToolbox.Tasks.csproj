@@ -70,6 +70,7 @@
     <Compile Include="Controls\FdoJoinCtl.Designer.cs">
       <DependentUpon>FdoJoinCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FdoJoinPresenter.cs" />
     <Compile Include="Controls\TaskObjectExplorerExtender.cs" />
     <Compile Include="EventWatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

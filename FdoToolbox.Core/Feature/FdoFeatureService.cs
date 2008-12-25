@@ -450,7 +450,13 @@ namespace FdoToolbox.Core.Feature
                     OSGeo.FDO.Common.StringCollection names = getnames.Execute();
                     foreach (OSGeo.FDO.Common.StringElement sn in names)
                     {
-                        classNames.Add(sn.String);
+                        //If the class name is qualified, un-qualify it
+                        string className = sn.String;
+                        string[] tokens = className.Split(':');
+                        if (tokens.Length == 2)
+                            classNames.Add(tokens[1]);
+                        else
+                            classNames.Add(sn.String);
                     }
                 }
             }
@@ -737,6 +743,16 @@ namespace FdoToolbox.Core.Feature
             if (string.IsNullOrEmpty(className))
                 return null;
 
+            FeatureSchema schema = GetSchemaByName(schemaName);
+            if (schema != null)
+            {
+                foreach (ClassDefinition classDef in schema.Classes)
+                {
+                    if (classDef.Name == className)
+                        return classDef;
+                }
+            }
+            /*
             if (SupportsPartialSchemaDiscovery())
             {
                 ClassDefinition classDef = null;
@@ -760,7 +776,7 @@ namespace FdoToolbox.Core.Feature
                             return classDef;
                     }
                 }
-            }
+            }*/
             return null;
         }
 

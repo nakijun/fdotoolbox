@@ -371,4 +371,24 @@ namespace FdoToolbox.Base.Commands
             }
         }
     }
+
+    public class ConfigureConnectionCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            TreeNode node = wb.ObjectExplorer.GetSelectedNode();
+            if (node.Level == 1)
+            {
+                string name = node.Name;
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                FdoConnection conn = mgr.GetConnection(name);
+
+                if (conn != null)
+                {
+
+                }
+            }
+        }
+    }
 }

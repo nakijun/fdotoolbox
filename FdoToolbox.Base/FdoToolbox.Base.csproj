@@ -97,6 +97,12 @@
       <DependentUpon>FdoAggregateQueryCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FdoAggregateQueryCtlPresentation.cs" />
+    <Compile Include="Controls\FdoConnectionConfigCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoConnectionConfigCtl.Designer.cs">
+      <DependentUpon>FdoConnectionConfigCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FdoCreateDataStoreCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -287,7 +293,9 @@
     <Compile Include="Forms\SchemaInfoDialog.Designer.cs">
       <DependentUpon>SchemaInfoDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\IQuerySubView.cs" />
     <Compile Include="ISubView.cs" />
+    <Compile Include="NameValuePair.cs" />
     <Compile Include="Services\ManagerBase.cs" />
     <Compile Include="Services\NamingService.cs" />
     <Compile Include="Services\Preferences.cs" />
@@ -417,6 +425,10 @@
     <EmbeddedResource Include="Controls\FdoConnectCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoConnectCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoConnectionConfigCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoConnectionConfigCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoCreateDataStoreCtl.resx">
       <SubType>Designer</SubType>
