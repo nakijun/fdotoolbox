@@ -8,14 +8,24 @@ using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core.Feature
 {
+    /// <summary>
+    /// A FDO-friendly DataTable
+    /// </summary>
     public class FdoFeatureTable : DataTable, IEnumerable
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoFeatureTable"/> class.
+        /// </summary>
         public FdoFeatureTable()
             : base()
         {
             this.InitClass();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoFeatureTable"/> class.
+        /// </summary>
+        /// <param name="table">The table.</param>
         public FdoFeatureTable(DataTable table)
             : base(table.TableName)
         {
@@ -102,6 +112,10 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         public event FdoFeatureChangeEventHandler FeatureDeleted = delegate { };
 
+        /// <summary>
+        /// Creates a new instance
+        /// </summary>
+        /// <returns></returns>
         protected override DataTable CreateInstance()
         {
             return new FdoFeatureTable();
@@ -204,6 +218,10 @@ namespace FdoToolbox.Core.Feature
             get { return _geometryColumn; }
         }
 
+        /// <summary>
+        /// Initializes the table from a reader
+        /// </summary>
+        /// <param name="reader">The reader.</param>
         public void InitTable(IFdoReader reader)
         {
             this.Columns.Clear();

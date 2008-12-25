@@ -16,8 +16,8 @@ namespace FdoToolbox.Core.ETL.Specialized
     {
         private FdoBulkCopyOptions _options;
 
-        private TimeSpan _totalSpan;
-        private int _featuresCopied;
+        //private TimeSpan _totalSpan;
+        //private int _featuresCopied;
 
         /// <summary>
         /// Constructor
@@ -26,7 +26,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         public FdoBulkCopy(FdoBulkCopyOptions options)
         {
             _options = options;
-            _totalSpan = new TimeSpan();
+            //_totalSpan = new TimeSpan();
         }
 
         /// <summary>
@@ -121,6 +121,11 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
         }
 
+        /// <summary>
+        /// Called when a row is processed.
+        /// </summary>
+        /// <param name="op">The operation.</param>
+        /// <param name="dictionary">The dictionary.</param>
         protected override void OnFeatureProcessed(FdoOperationBase op, FdoRow dictionary)
         {
             if (op.Statistics.OutputtedRows % 50 == 0)
@@ -133,6 +138,10 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
         }
 
+        /// <summary>
+        /// Called when this process has finished processing.
+        /// </summary>
+        /// <param name="op">The op.</param>
         protected override void OnFinishedProcessing(FdoOperationBase op)
         {
             if (op is FdoOutputOperation)
@@ -153,6 +162,10 @@ namespace FdoToolbox.Core.ETL.Specialized
             return query;
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

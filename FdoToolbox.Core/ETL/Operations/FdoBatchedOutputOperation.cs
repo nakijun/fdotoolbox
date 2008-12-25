@@ -11,6 +11,9 @@ using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
+    /// <summary>
+    /// Output pipeline operation with support for batch insertion
+    /// </summary>
     public class FdoBatchedOutputOperation : FdoOutputOperation
     {
         private int _BatchSize;
@@ -49,6 +52,11 @@ namespace FdoToolbox.Core.ETL.Operations
             _BatchSize = batchSize;
         }
 
+        /// <summary>
+        /// Executes the operation
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <returns></returns>
         public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
         {
             int count = 0;

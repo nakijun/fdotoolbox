@@ -99,6 +99,10 @@ namespace FdoToolbox.Core.Feature
                 _defaultGeometryName = geoms[0];
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -109,46 +113,94 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating the depth of nesting for the current row.
+        /// </summary>
+        /// <value></value>
+        /// <returns>The level of nesting.</returns>
         public override int Depth
         {
             get { return _internalReader.GetDepth(); }
         }
 
+        /// <summary>
+        /// Gets the number of columns in the current row.
+        /// </summary>
+        /// <value></value>
+        /// <returns>When not positioned in a valid recordset, 0; otherwise, the number of columns in the current record. The default is -1.</returns>
         public override int FieldCount
         {
             get { return _names.Length; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="T:System.Type"/> information corresponding to the type of <see cref="T:System.Object"/> that would be returned from <see cref="M:System.Data.IDataRecord.GetValue(System.Int32)"/>.
+        /// </summary>
+        /// <param name="i">The index of the field to find.</param>
+        /// <returns>
+        /// The <see cref="T:System.Type"/> information corresponding to the type of <see cref="T:System.Object"/> that would be returned from <see cref="M:System.Data.IDataRecord.GetValue(System.Int32)"/>.
+        /// </returns>
+        /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public override Type GetFieldType(int i)
         {
             return _types[i];
         }
 
+        /// <summary>
+        /// Return the index of the named field.
+        /// </summary>
+        /// <param name="name">The name of the field to find.</param>
+        /// <returns>The index of the named field.</returns>
         public override int GetOrdinal(string name)
         {
             return _ordinals[name];
         }
 
+        /// <summary>
+        /// Gets the class definition.
+        /// </summary>
+        /// <returns></returns>
         public ClassDefinition GetClassDefinition()
         {
             return _classDefinition;
         }
 
+        /// <summary>
+        /// Gets the depth.
+        /// </summary>
+        /// <returns></returns>
         public int GetDepth()
         {
             return _internalReader.GetDepth();
         }
 
+        /// <summary>
+        /// Gets the feature object.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns></returns>
         public IFeatureReader GetFeatureObject(string propertyName)
         {
             return _internalReader.GetFeatureObject(propertyName);
         }
 
+        /// <summary>
+        /// Gets the name for the field to find.
+        /// </summary>
+        /// <param name="i">The index of the field to find.</param>
+        /// <returns>
+        /// The name of the field or the empty string (""), if there is no value to return.
+        /// </returns>
+        /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public override string GetName(int i)
         {
             return _names[i];
         }
 
+        /// <summary>
+        /// Reads the next.
+        /// </summary>
+        /// <returns></returns>
         public override bool ReadNext()
         {
             if (_limit > 0)
@@ -168,31 +220,61 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Advances the <see cref="T:System.Data.IDataReader"/> to the next record.
+        /// </summary>
+        /// <returns>
+        /// true if there are more rows; otherwise, false.
+        /// </returns>
         public override bool Read()
         {
             return this.ReadNext();
         }
 
+        /// <summary>
+        /// Advances the data reader to the next result, when reading the results of batch SQL statements.
+        /// </summary>
+        /// <returns>
+        /// true if there are more rows; otherwise, false.
+        /// </returns>
         public override bool NextResult()
         {
             return this.ReadNext();
         }
 
+        /// <summary>
+        /// Gets the geometry properties.
+        /// </summary>
+        /// <value>The geometry properties.</value>
         public override string[] GeometryProperties
         {
             get { return _geometryNames; }
         }
 
+        /// <summary>
+        /// Gets the default geometry property.
+        /// </summary>
+        /// <value>The default geometry property.</value>
         public override string DefaultGeometryProperty
         {
             get { return _defaultGeometryName; }
         }
 
+        /// <summary>
+        /// Gets the type of the fdo property.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public override FdoPropertyType GetFdoPropertyType(string name)
         {
             return _ptypes[name];
         }
 
+        /// <summary>
+        /// Gets the geometry object.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public IGeometry GetGeometryObject(string name)
         {
             byte[] fgf = GetGeometry(name);

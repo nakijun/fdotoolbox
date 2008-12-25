@@ -32,6 +32,10 @@ namespace FdoToolbox.Core.Feature
     {
         private string _Name;
 
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get { return _Name; }
@@ -40,6 +44,10 @@ namespace FdoToolbox.Core.Feature
 
         private List<IncompatibleProperty> _Properties;
 
+        /// <summary>
+        /// Gets the properties.
+        /// </summary>
+        /// <value>The properties.</value>
         public ReadOnlyCollection<IncompatibleProperty> Properties
         {
             get { return _Properties.AsReadOnly(); }
@@ -47,6 +55,10 @@ namespace FdoToolbox.Core.Feature
 
         private List<string> _Reasons;
 
+        /// <summary>
+        /// Gets the reasons.
+        /// </summary>
+        /// <value>The reasons.</value>
         public ReadOnlyCollection<string> Reasons
         {
             get { return _Reasons.AsReadOnly(); }
@@ -54,11 +66,20 @@ namespace FdoToolbox.Core.Feature
 
         private ISet<IncompatibleClassReason> _ReasonCodes;
 
+        /// <summary>
+        /// Gets the reason codes.
+        /// </summary>
+        /// <value>The reason codes.</value>
         public ISet<IncompatibleClassReason> ReasonCodes
         {
             get { return _ReasonCodes; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IncompatibleClass"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="reason">The reason.</param>
         public IncompatibleClass(string name, string reason)
         {
             this.Name = name;
@@ -68,6 +89,12 @@ namespace FdoToolbox.Core.Feature
             _ReasonCodes = new HashedSet<IncompatibleClassReason>();
         }
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder("Incompatible Class: " + this.Name + "\n");
@@ -90,16 +117,29 @@ namespace FdoToolbox.Core.Feature
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Adds the reason.
+        /// </summary>
+        /// <param name="reason">The reason.</param>
         public void AddReason(string reason)
         {
             _Reasons.Add(reason);
         }
 
+        /// <summary>
+        /// Adds the property.
+        /// </summary>
+        /// <param name="prop">The prop.</param>
         public void AddProperty(IncompatibleProperty prop)
         {
             _Properties.Add(prop);
         }
 
+        /// <summary>
+        /// Finds the property.
+        /// </summary>
+        /// <param name="propName">Name of the prop.</param>
+        /// <returns></returns>
         public IncompatibleProperty FindProperty(string propName)
         {
             foreach (IncompatibleProperty prop in _Properties)

@@ -48,18 +48,36 @@ namespace FdoToolbox.Core.ETL.Operations
             Statistics.MarkStarted();
         }
 
+        /// <summary>
+        /// Raised when a feature has been processed
+        /// </summary>
         public event FeatureProcessedEventHandler OnFeatureProcessed = delegate { };
 
+        /// <summary>
+        /// Raised when processing has completed
+        /// </summary>
         public event FdoOperationEventHandler OnFinishedProcessing = delegate { };
 
+        /// <summary>
+        /// Executes the operation
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <returns></returns>
         public abstract IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows);
 
+        /// <summary>
+        /// Raises the OnFeatureProcessed event
+        /// </summary>
+        /// <param name="row"></param>
         public void RaiseFeatureProcessed(FdoRow row)
         {
             Statistics.MarkFeatureProcessed();
             OnFeatureProcessed(this, row);
         }
 
+        /// <summary>
+        /// Raises the OnFinishedProcessing event
+        /// </summary>
         public void RaiseFinishedProcessing()
         {
             Statistics.MarkFinished();
@@ -75,12 +93,19 @@ namespace FdoToolbox.Core.ETL.Operations
             return this.Errors;
         }
 
+        /// <summary>
+        /// Dispose this object
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Dispose this object
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             

@@ -31,6 +31,10 @@ namespace FdoToolbox.Core.Feature
     {
         private string _Name;
 
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get { return _Name; }
@@ -39,17 +43,31 @@ namespace FdoToolbox.Core.Feature
 
         private List<IncompatibleClass> _Classes;
 
+        /// <summary>
+        /// Gets the classes.
+        /// </summary>
+        /// <value>The classes.</value>
         public ReadOnlyCollection<IncompatibleClass> Classes
         {
             get { return _Classes.AsReadOnly(); }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IncompatibleSchema"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
         public IncompatibleSchema(string name)
         {
             this.Name = name;
             _Classes = new List<IncompatibleClass>();
         }
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder("Incompatible schema: " + this.Name + "\n");
@@ -60,6 +78,10 @@ namespace FdoToolbox.Core.Feature
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Adds the class.
+        /// </summary>
+        /// <param name="cls">The CLS.</param>
         public void AddClass(IncompatibleClass cls)
         {
             _Classes.Add(cls);

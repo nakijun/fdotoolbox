@@ -7,6 +7,9 @@ namespace FdoToolbox.Core.ETL
 {
     using Pipelines;
 
+    /// <summary>
+    /// An ETL process
+    /// </summary>
     public abstract class EtlProcess : EtlProcessBase<EtlProcess>, IDisposable
     {
         private IPipelineExecuter pipelineExecuter = new ThreadPoolPipelineExecuter();
@@ -46,6 +49,10 @@ namespace FdoToolbox.Core.ETL
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -124,23 +131,6 @@ namespace FdoToolbox.Core.ETL
             else
                 Debug("Processed {0} rows in {1}", op.Statistics.OutputtedRows, op.Name);
         }
-
-        /// <summary>
-        /// Executes the command and return a scalar
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="connectionName">Name of the connection.</param>
-        /// <param name="commandText">The command text.</param>
-        /// <returns></returns>
-        //protected static T ExecuteScalar<T>(string connectionName, string commandText)
-        //{
-        //    return Use.Transaction<T>(connectionName, delegate(IDbCommand cmd)
-        //    {
-        //        cmd.CommandText = commandText;
-        //        object scalar = cmd.ExecuteScalar();
-        //        return (T)(scalar ?? default(T));
-        //    });
-        //}
 
         /// <summary>
         /// Gets all errors that occured during the execution of this process

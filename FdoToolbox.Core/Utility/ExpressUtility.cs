@@ -13,6 +13,9 @@ using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Core.Utility
 {
+    /// <summary>
+    /// Utility class for common FDO tasks and functionality
+    /// </summary>
     public sealed class ExpressUtility
     {
         /// <summary>
@@ -80,7 +83,7 @@ namespace FdoToolbox.Core.Utility
         /// <summary>
         /// Gets the CLR type from a FDO data type
         /// </summary>
-        /// <param name="dataType"></param>
+        /// <param name="dt"></param>
         /// <returns></returns>
         public static Type GetClrTypeFromFdoDataType(DataType dt)
         {
@@ -251,7 +254,7 @@ namespace FdoToolbox.Core.Utility
         /// <summary>
         /// Creates a FDO data source. The provider must be a flat-file provider
         /// </summary>
-        /// <param name="_destFile"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
         public static bool CreateFlatFileDataSource(string file)
         {
