@@ -6,6 +6,9 @@ using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core.Feature
 {
+    /// <summary>
+    /// FDO-friendly <see cref="DataRow"/>
+    /// </summary>
     public class FdoFeature : DataRow
     {
         internal FdoFeature(DataRowBuilder rb) : base(rb) { }

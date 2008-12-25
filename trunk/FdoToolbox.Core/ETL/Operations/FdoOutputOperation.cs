@@ -9,10 +9,22 @@ using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
+    /// <summary>
+    /// Output pipeline operation
+    /// </summary>
     public class FdoOutputOperation : FdoOperationBase
     {
+        /// <summary>
+        /// The output connection
+        /// </summary>
         protected FdoConnection _conn;
+        /// <summary>
+        /// The service bound to the output connection
+        /// </summary>
         protected FdoFeatureService _service;
+        /// <summary>
+        /// The property value mappings
+        /// </summary>
         protected NameValueCollection _mappings;
 
         /// <summary>

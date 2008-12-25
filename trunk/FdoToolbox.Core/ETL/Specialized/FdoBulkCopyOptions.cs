@@ -8,6 +8,9 @@ namespace FdoToolbox.Core.ETL.Specialized
 {
     using Feature;
 
+    /// <summary>
+    /// Options for <see cref="FdoBulkCopy"/>
+    /// </summary>
     public class FdoBulkCopyOptions : IDisposable
     {
         private FdoConnection _sourceConn;
@@ -42,6 +45,10 @@ namespace FdoToolbox.Core.ETL.Specialized
 
         private List<SpatialContextInfo> _spatialContextList;
 
+        /// <summary>
+        /// Gets the source spatial contexts.
+        /// </summary>
+        /// <value>The source spatial contexts.</value>
         public ReadOnlyCollection<SpatialContextInfo> SourceSpatialContexts
         {
             get { return _spatialContextList.AsReadOnly(); }
@@ -152,7 +159,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         }
 
         /// <summary>
-        /// Dispose this objects
+        /// Dispose this object
         /// </summary>
         public void Dispose()
         {

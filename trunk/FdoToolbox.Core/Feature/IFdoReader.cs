@@ -25,22 +25,106 @@ namespace FdoToolbox.Core.Feature
     /// </summary>
     public interface IFdoReader : System.Data.IDataReader
     {
+        /// <summary>
+        /// Gets the boolean.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         bool GetBoolean(string name);
+        /// <summary>
+        /// Gets the byte.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         byte GetByte(string name);
+        /// <summary>
+        /// Gets the date time.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         DateTime GetDateTime(string name);
+        /// <summary>
+        /// Gets the type of the fdo property.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         FdoPropertyType GetFdoPropertyType(string name);
+        /// <summary>
+        /// Gets the double.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         double GetDouble(string name);
+        /// <summary>
+        /// Gets the geometry.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         byte[] GetGeometry(string name);
+        /// <summary>
+        /// Gets the int16.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         short GetInt16(string name);
+        /// <summary>
+        /// Gets the int32.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         int GetInt32(string name);
+        /// <summary>
+        /// Gets the int64.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         long GetInt64(string name);
+        /// <summary>
+        /// Gets the LOB.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         OSGeo.FDO.Expression.LOBValue GetLOB(string name);
+        /// <summary>
+        /// Gets the LOB stream reader.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         OSGeo.FDO.Common.IStreamReader GetLOBStreamReader(string name);
+        /// <summary>
+        /// Gets the single.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         float GetSingle(string name);
+        /// <summary>
+        /// Gets the string.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         string GetString(string name);
+        /// <summary>
+        /// Determines whether the specified property name is null.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified name is null; otherwise, <c>false</c>.
+        /// </returns>
         bool IsNull(string name);
+        /// <summary>
+        /// Reads the next feature/row
+        /// </summary>
+        /// <returns></returns>
         bool ReadNext();
+        /// <summary>
+        /// Gets the geometry properties.
+        /// </summary>
+        /// <value>The geometry properties.</value>
         string[] GeometryProperties { get; }
+        /// <summary>
+        /// Gets the default geometry property.
+        /// </summary>
+        /// <value>The default geometry property.</value>
         string DefaultGeometryProperty { get; }
 
     }

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
+    /// <summary>
+    /// Pipeline operation interface
+    /// </summary>
     public interface IFdoOperation : IDisposable
     {
         /// <summary>
@@ -52,7 +55,13 @@ namespace FdoToolbox.Core.ETL.Operations
         IEnumerable<Exception> GetAllErrors();
     }
 
+    /// <summary>
+    /// Event handler for tracking operation status
+    /// </summary>
     public delegate void FdoOperationEventHandler(FdoOperationBase op);
 
+    /// <summary>
+    /// Event handler for processed features
+    /// </summary>
     public delegate void FeatureProcessedEventHandler(FdoOperationBase op, FdoRow row);
 }

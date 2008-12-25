@@ -5,6 +5,9 @@ using System.Resources;
 
 namespace FdoToolbox.Core
 {
+    /// <summary>
+    /// Utility class to access string resources
+    /// </summary>
     public sealed class ResourceUtil
     {
         private static ResourceManager _resMan;
@@ -14,11 +17,22 @@ namespace FdoToolbox.Core
             _resMan = Strings.ResourceManager;
         }
 
+        /// <summary>
+        /// Gets the string.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
         public static string GetString(string key)
         {
             return _resMan.GetString(key);
         }
 
+        /// <summary>
+        /// Gets the string formatted.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
         public static string GetStringFormatted(string key, params object[] args)
         {
             string str = _resMan.GetString(key);

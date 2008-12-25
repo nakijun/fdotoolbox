@@ -28,6 +28,9 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <param name="options"></param>
         public FdoJoin(FdoJoinOptions options) { _options = options; }
 
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
         protected override void Initialize()
         {
             _options.Validate();
@@ -169,6 +172,11 @@ namespace FdoToolbox.Core.ETL.Specialized
             return fc;
         }
 
+        /// <summary>
+        /// Called when [feature processed].
+        /// </summary>
+        /// <param name="op">The op.</param>
+        /// <param name="dictionary">The dictionary.</param>
         protected override void OnFeatureProcessed(FdoOperationBase op, FdoRow dictionary)
         {
             if (op.Statistics.OutputtedRows % 50 == 0)
@@ -181,6 +189,10 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
         }
 
+        /// <summary>
+        /// Called when [finished processing].
+        /// </summary>
+        /// <param name="op">The op.</param>
         protected override void OnFinishedProcessing(FdoOperationBase op)
         {
             if (op is FdoOutputOperation)
@@ -199,17 +211,30 @@ namespace FdoToolbox.Core.ETL.Specialized
             NameValueCollection attributePairs;
             SpatialOperations? spatialJoinPredicate;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ConcreteJoin"/> class.
+            /// </summary>
+            /// <param name="joinType">Type of the join.</param>
             public ConcreteJoin(FdoJoinType joinType)
             {
                 this.attributePairs = new NameValueCollection();
                 this.joinType = joinType;
             }
 
+            /// <summary>
+            /// Sets the spatial predicate.
+            /// </summary>
+            /// <value>The spatial predicate.</value>
             public SpatialOperations SpatialPredicate
             {
                 set { spatialJoinPredicate = value; }
             }
 
+            /// <summary>
+            /// Adds the attribute join condition.
+            /// </summary>
+            /// <param name="leftProperty">The left property.</param>
+            /// <param name="rightProperty">The right property.</param>
             public void AddAttributeJoinCondition(string leftProperty, string rightProperty)
             {
                 this.attributePairs.Add(leftProperty, rightProperty);
@@ -224,7 +249,6 @@ namespace FdoToolbox.Core.ETL.Specialized
                         {
                             throw new NotImplementedException();   
                         }
-                        break;
                     case FdoJoinType.Left:
                         {
                             row.Copy(leftRow);

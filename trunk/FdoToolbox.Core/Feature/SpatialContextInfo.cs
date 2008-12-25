@@ -139,6 +139,9 @@ namespace FdoToolbox.Core.Feature
             set { _CoordinateSystemWkt = value; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpatialContextInfo"/> class.
+        /// </summary>
         public SpatialContextInfo() { }
 
         internal SpatialContextInfo(ISpatialContextReader reader)

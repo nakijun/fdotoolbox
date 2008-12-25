@@ -83,61 +83,124 @@ namespace FdoToolbox.Core.Feature
                 _defaultGeometryName = geoms[0];
         }
 
+        /// <summary>
+        /// Gets a value indicating the depth of nesting for the current row.
+        /// </summary>
+        /// <value></value>
+        /// <returns>The level of nesting.</returns>
         public override int Depth
         {
             get { return -1; }
         }
 
+        /// <summary>
+        /// Gets the number of columns in the current row.
+        /// </summary>
+        /// <value></value>
+        /// <returns>When not positioned in a valid recordset, 0; otherwise, the number of columns in the current record. The default is -1.</returns>
         public override int FieldCount
         {
             get { return _internalReader.GetPropertyCount(); }
         }
 
+        /// <summary>
+        /// Gets the <see cref="T:System.Type"/> information corresponding to the type of <see cref="T:System.Object"/> that would be returned from <see cref="M:System.Data.IDataRecord.GetValue(System.Int32)"/>.
+        /// </summary>
+        /// <param name="i">The index of the field to find.</param>
+        /// <returns>
+        /// The <see cref="T:System.Type"/> information corresponding to the type of <see cref="T:System.Object"/> that would be returned from <see cref="M:System.Data.IDataRecord.GetValue(System.Int32)"/>.
+        /// </returns>
+        /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public override Type GetFieldType(int i)
         {
             return _types[i];
         }
 
+        /// <summary>
+        /// Return the index of the named field.
+        /// </summary>
+        /// <param name="name">The name of the field to find.</param>
+        /// <returns>The index of the named field.</returns>
         public override int GetOrdinal(string name)
         {
             return _ordinals[name];
         }
 
+        /// <summary>
+        /// Gets the type of the data.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public OSGeo.FDO.Schema.DataType GetDataType(string name)
         {
             return _internalReader.GetDataType(name);
         }
 
+        /// <summary>
+        /// Gets the property count.
+        /// </summary>
+        /// <returns></returns>
         public int GetPropertyCount()
         {
             return _internalReader.GetPropertyCount();
         }
 
+        /// <summary>
+        /// Gets the name of the property.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
         public string GetPropertyName(int index)
         {
             return _internalReader.GetPropertyName(index);
         }
 
+        /// <summary>
+        /// Gets the type of the property.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public OSGeo.FDO.Schema.PropertyType GetPropertyType(string name)
         {
             return _internalReader.GetPropertyType(name);
         }
 
+        /// <summary>
+        /// Gets the name for the field to find.
+        /// </summary>
+        /// <param name="i">The index of the field to find.</param>
+        /// <returns>
+        /// The name of the field or the empty string (""), if there is no value to return.
+        /// </returns>
+        /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public override string GetName(int i)
         {
             return _names[i];
         }
 
+        /// <summary>
+        /// Gets the geometry properties.
+        /// </summary>
+        /// <value>The geometry properties.</value>
         public override string[] GeometryProperties
         {
             get { return _geometryNames; }
         }
 
+        /// <summary>
+        /// Gets the default geometry property.
+        /// </summary>
+        /// <value>The default geometry property.</value>
         public override string DefaultGeometryProperty
         {
             get { return _defaultGeometryName; }
         }
 
+        /// <summary>
+        /// Gets the type of the fdo property.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public override FdoPropertyType GetFdoPropertyType(string name)
         {
             return _ptypes[name];

@@ -101,12 +101,15 @@ namespace FdoToolbox.Core
     /// </summary>
     public class MessageEventArgs : EventArgs
     {
+        /// <summary>
+        /// The message
+        /// </summary>
         public readonly string Message;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="title"></param>
+        /// <param name="message"></param>
         public MessageEventArgs(string message)
         {
             this.Message = message;

@@ -6,10 +6,21 @@ using System.IO;
 
 namespace FdoToolbox.Core.AppFramework
 {
+    /// <summary>
+    /// Base application object for console applications
+    /// </summary>
     public abstract class ConsoleApplication : IDisposable
     {
+        /// <summary>
+        /// The command to be executed
+        /// </summary>
         protected IConsoleCommand _Command;
 
+        /// <summary>
+        /// Asks the specified question.
+        /// </summary>
+        /// <param name="question">The question.</param>
+        /// <returns></returns>
         public bool Ask(string question)
         {
             Console.WriteLine("{0} [y/n]?", question);
@@ -165,6 +176,7 @@ namespace FdoToolbox.Core.AppFramework
         /// Checks if a given parameter switch was defined
         /// </summary>
         /// <param name="strSwitch"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
         protected static bool IsSwitchDefined(string strSwitch, string[] args)
         {
@@ -181,12 +193,19 @@ namespace FdoToolbox.Core.AppFramework
             return false;
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             

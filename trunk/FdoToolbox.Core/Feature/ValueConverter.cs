@@ -908,7 +908,6 @@ namespace FdoToolbox.Core.Feature
                                 return false;
                         }
                     }
-                    break;
                 case DataType.DataType_Int16:
                     {
                         switch (dest)
@@ -926,7 +925,6 @@ namespace FdoToolbox.Core.Feature
                                 return false;
                         }
                     }
-                    break;
                 case DataType.DataType_Int32:
                     {
                         switch (dest)
@@ -944,7 +942,6 @@ namespace FdoToolbox.Core.Feature
                                 return false;
                         }
                     }
-                    break;
                 case DataType.DataType_Int64:
                     {
                         switch (dest)
@@ -962,7 +959,6 @@ namespace FdoToolbox.Core.Feature
                                 return false;
                         }
                     }
-                    break;
                 case DataType.DataType_Single:
                     {
                         switch (dest)
@@ -980,7 +976,6 @@ namespace FdoToolbox.Core.Feature
                                 return false;
                         }
                     }
-                    break;
                 case DataType.DataType_String:
                     {
                         switch (dest)
@@ -993,7 +988,6 @@ namespace FdoToolbox.Core.Feature
                         }
                         
                     }
-                    break;
             }
 
             return false;

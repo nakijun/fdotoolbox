@@ -208,6 +208,10 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -217,6 +221,11 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets the connect time property.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public DictionaryProperty GetConnectTimeProperty(string name)
         {
             if (this.State != FdoConnectionState.Open)
@@ -246,11 +255,26 @@ namespace FdoToolbox.Core.Feature
         }
     }
 
+    /// <summary>
+    /// Indicates the current connection state
+    /// </summary>
     public enum FdoConnectionState
     {
+        /// <summary>
+        /// Connection is busy
+        /// </summary>
         Busy,
+        /// <summary>
+        /// Connection is open
+        /// </summary>
         Open,
+        /// <summary>
+        /// Connection is closed
+        /// </summary>
         Closed,
+        /// <summary>
+        /// Connection is pending. Additional parameters are required in order for it to be open
+        /// </summary>
         Pending
     }
 }

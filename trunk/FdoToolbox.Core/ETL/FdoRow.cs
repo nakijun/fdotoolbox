@@ -234,11 +234,20 @@ namespace FdoToolbox.Core.ETL
             return instance;
         }
 
+        /// <summary>
+        /// Converts this feature to a property value collection.
+        /// </summary>
+        /// <returns></returns>
         public PropertyValueCollection ToPropertyValueCollection()
         {
             return ToPropertyValueCollection(null);
         }
 
+        /// <summary>
+        /// Converts this feature to a property value collection.
+        /// </summary>
+        /// <param name="mappings">The mappings.</param>
+        /// <returns></returns>
         public PropertyValueCollection ToPropertyValueCollection(NameValueCollection mappings)
         {
             PropertyValueCollection values = new PropertyValueCollection();
@@ -301,11 +310,22 @@ namespace FdoToolbox.Core.ETL
             return values;
         }
 
+        /// <summary>
+        /// Converts this feature to a parameter value collection.
+        /// </summary>
+        /// <param name="prefix">The prefix.</param>
+        /// <returns></returns>
         public ParameterValueCollection ToParameterValueCollection(string prefix)
         {
             return ToParameterValueCollection(prefix, null);
         }
 
+        /// <summary>
+        /// Converts this feature to a parameter value collection.
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <param name="mappings"></param>
+        /// <returns></returns>
         public ParameterValueCollection ToParameterValueCollection(string prefix, NameValueCollection mappings)
         {
             ParameterValueCollection values = new ParameterValueCollection();

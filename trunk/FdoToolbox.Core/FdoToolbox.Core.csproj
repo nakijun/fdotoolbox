@@ -115,7 +115,6 @@
     <Compile Include="Feature\Capability.cs" />
     <Compile Include="Feature\CapabilityType.cs" />
     <Compile Include="Feature\ComputedProperty.cs" />
-    <Compile Include="Feature\DatabaseConnection.cs" />
     <Compile Include="Feature\DataStoreInfo.cs" />
     <Compile Include="Feature\DataTypeComparer.cs" />
     <Compile Include="Feature\DataTypeMapping.cs" />

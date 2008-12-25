@@ -11,16 +11,52 @@ using OSGeo.FDO.Commands.SpatialContext;
 
 namespace FdoToolbox.Core.Feature
 {
+    /// <summary>
+    /// Generic provider capability interface
+    /// </summary>
     public interface ICapability
     {
+        /// <summary>
+        /// Gets the boolean capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         bool? GetBooleanCapability(CapabilityType cap);
+        /// <summary>
+        /// Gets the int32 capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         int? GetInt32Capability(CapabilityType cap);
+        /// <summary>
+        /// Gets the int64 capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         long? GetInt64Capability(CapabilityType cap);
+        /// <summary>
+        /// Gets the string capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         string GetStringCapability(CapabilityType cap);
+        /// <summary>
+        /// Gets the array capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         int[] GetArrayCapability(CapabilityType cap);
+        /// <summary>
+        /// Gets the object capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         object GetObjectCapability(CapabilityType cap);
     }
 
+    /// <summary>
+    /// Allows querying of FDO provider capabilities in a generic fashion.
+    /// </summary>
     public class Capability : ICapability
     {
         private IConnection _conn;
@@ -30,6 +66,11 @@ namespace FdoToolbox.Core.Feature
             _conn = conn.InternalConnection;
         }
 
+        /// <summary>
+        /// Gets the boolean capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         public bool? GetBooleanCapability(CapabilityType cap)
         {
             switch (cap)
@@ -119,6 +160,11 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets the int32 capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         public int? GetInt32Capability(CapabilityType cap)
         {
             switch (cap)
@@ -144,6 +190,11 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets the int64 capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         public long? GetInt64Capability(CapabilityType cap)
         {
             switch (cap)
@@ -196,6 +247,11 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets the string capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         public string GetStringCapability(CapabilityType cap)
         {
             switch (cap)
@@ -207,6 +263,11 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets the array capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         public int[] GetArrayCapability(CapabilityType cap)
         {
             switch (cap)
@@ -238,6 +299,11 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets the object capability.
+        /// </summary>
+        /// <param name="cap">The cap.</param>
+        /// <returns></returns>
         public object GetObjectCapability(CapabilityType cap)
         {
             switch (cap)

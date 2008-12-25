@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
+    /// <summary>
+    /// A pipeline operation that conditionally discards features sent to it
+    /// </summary>
     public class FdoFilteredOperation : FdoOperationBase
     {
         private Predicate<FdoRow> _condition;
@@ -17,6 +20,11 @@ namespace FdoToolbox.Core.ETL.Operations
             _condition = condition;
         }
 
+        /// <summary>
+        /// Executes the operation
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <returns></returns>
         public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
         {
             foreach (FdoRow row in rows)

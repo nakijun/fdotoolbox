@@ -32,6 +32,10 @@ namespace FdoToolbox.Core.Feature
     {
         private string _Name;
 
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get { return _Name; }
@@ -40,6 +44,10 @@ namespace FdoToolbox.Core.Feature
 
         private List<string> _Reasons;
 
+        /// <summary>
+        /// Gets the reasons.
+        /// </summary>
+        /// <value>The reasons.</value>
         public ReadOnlyCollection<string> Reasons
         {
             get { return _Reasons.AsReadOnly(); }
@@ -47,11 +55,20 @@ namespace FdoToolbox.Core.Feature
 
         private ISet<IncompatiblePropertyReason> _ReasonCodes;
 
+        /// <summary>
+        /// Gets the reason codes.
+        /// </summary>
+        /// <value>The reason codes.</value>
         public ISet<IncompatiblePropertyReason> ReasonCodes
         {
             get { return _ReasonCodes; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IncompatibleProperty"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="reason">The reason.</param>
         public IncompatibleProperty(string name, string reason)
         {
             this.Name = name;
@@ -60,8 +77,17 @@ namespace FdoToolbox.Core.Feature
             _Reasons.Add(reason);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IncompatibleProperty"/> class.
+        /// </summary>
         public IncompatibleProperty() { }
 
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder("Incompatible Property: " + this.Name + "\n");
@@ -76,6 +102,10 @@ namespace FdoToolbox.Core.Feature
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Adds the reason.
+        /// </summary>
+        /// <param name="propReason">The prop reason.</param>
         public void AddReason(string propReason)
         {
             _Reasons.Add(propReason);

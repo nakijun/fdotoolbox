@@ -5,10 +5,17 @@ using OSGeo.FDO.ClientServices;
 
 namespace FdoToolbox.Core.Feature
 {
+    /// <summary>
+    /// FDO provider information class
+    /// </summary>
     public class FdoProviderInfo
     {
         private string _DisplayName;
 
+        /// <summary>
+        /// Gets or sets the display name.
+        /// </summary>
+        /// <value>The display name.</value>
         public string DisplayName
         {
             get { return _DisplayName; }
@@ -16,6 +23,10 @@ namespace FdoToolbox.Core.Feature
         }
         private string _Description;
 
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
         public string Description
         {
             get { return _Description; }
@@ -23,6 +34,10 @@ namespace FdoToolbox.Core.Feature
         }
         private string _FeatureDataObjectsVersion;
 
+        /// <summary>
+        /// Gets or sets the feature data objects version.
+        /// </summary>
+        /// <value>The feature data objects version.</value>
         public string FeatureDataObjectsVersion
         {
             get { return _FeatureDataObjectsVersion; }
@@ -30,6 +45,12 @@ namespace FdoToolbox.Core.Feature
         }
         private bool _IsManaged;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is managed.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is managed; otherwise, <c>false</c>.
+        /// </value>
         public bool IsManaged
         {
             get { return _IsManaged; }
@@ -37,6 +58,10 @@ namespace FdoToolbox.Core.Feature
         }
         private string _LibraryPath;
 
+        /// <summary>
+        /// Gets or sets the library path.
+        /// </summary>
+        /// <value>The library path.</value>
         public string LibraryPath
         {
             get { return _LibraryPath; }
@@ -44,6 +69,10 @@ namespace FdoToolbox.Core.Feature
         }
         private string _Name;
 
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get { return _Name; }
@@ -51,6 +80,10 @@ namespace FdoToolbox.Core.Feature
         }
         private string _Version;
 
+        /// <summary>
+        /// Gets or sets the version.
+        /// </summary>
+        /// <value>The version.</value>
         public string Version
         {
             get { return _Version; }
@@ -59,6 +92,12 @@ namespace FdoToolbox.Core.Feature
 
         private bool _IsFlatFile;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this provider is a flat file provider.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is flat file; otherwise, <c>false</c>.
+        /// </value>
         public bool IsFlatFile
         {
             get { return _IsFlatFile; }

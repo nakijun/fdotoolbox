@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class FdoBranchingOperation : FdoOperationBase
     {
         private readonly List<IFdoOperation> operations = new List<IFdoOperation>();
@@ -19,6 +22,10 @@ namespace FdoToolbox.Core.ETL.Operations
             return this;
         }
 
+        /// <summary>
+        /// Initializes this instance
+        /// </summary>
+        /// <param name="pipelineExecuter"></param>
         public override void PrepareForExecution(IPipelineExecuter pipelineExecuter)
         {
             base.PrepareForExecution(pipelineExecuter);

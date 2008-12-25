@@ -347,6 +347,11 @@ namespace FdoToolbox.Core.Feature
             return newSchemas[0];
         }
 
+        /// <summary>
+        /// Utility method to clone a class definition
+        /// </summary>
+        /// <param name="cd"></param>
+        /// <returns></returns>
         public static ClassDefinition CloneClass(ClassDefinition cd)
         {
             ClassDefinition classDef = null;
@@ -381,6 +386,11 @@ namespace FdoToolbox.Core.Feature
             return classDef;
         }
 
+        /// <summary>
+        /// Utility method to copy a schema attribute dictionary
+        /// </summary>
+        /// <param name="srcAttributes"></param>
+        /// <param name="targetAttributes"></param>
         private static void CopyClassAttributes(SchemaAttributeDictionary srcAttributes, SchemaAttributeDictionary targetAttributes)
         {
             foreach (string attr in srcAttributes.AttributeNames)
@@ -389,6 +399,11 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Utility method to copy a class's identity properties
+        /// </summary>
+        /// <param name="srcProperties"></param>
+        /// <param name="targetProperties"></param>
         private static void CopyIdentityProperties(DataPropertyDefinitionCollection srcProperties, DataPropertyDefinitionCollection targetProperties)
         {
             foreach (PropertyDefinition propDef in srcProperties)
@@ -397,6 +412,11 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Utility method to copy a property definition collection
+        /// </summary>
+        /// <param name="srcProperties"></param>
+        /// <param name="targetProperties"></param>
         private static void CopyProperties(PropertyDefinitionCollection srcProperties, PropertyDefinitionCollection targetProperties)
         {
             foreach (PropertyDefinition propDef in srcProperties)
@@ -1047,6 +1067,12 @@ namespace FdoToolbox.Core.Feature
             return _conn.CreateCommand(commandType) as T;
         }
 
+        /// <summary>
+        /// Alters the schema.
+        /// </summary>
+        /// <param name="schema">The schema.</param>
+        /// <param name="incompatibleSchema">The incompatible schema.</param>
+        /// <returns></returns>
         public FeatureSchema AlterSchema(FeatureSchema schema, IncompatibleSchema incompatibleSchema)
         {
             //Clone the incoming schema so we can work with the cloned copy
@@ -1266,6 +1292,12 @@ namespace FdoToolbox.Core.Feature
             }
         }
 
+        /// <summary>
+        /// Gets the type of the promoted data.
+        /// </summary>
+        /// <param name="dataType">Type of the data.</param>
+        /// <param name="dataTypes">The data types.</param>
+        /// <returns></returns>
         public static DataType GetPromotedDataType(DataType dataType, DataType [] dataTypes)
         {
             DataType? dt = null;
@@ -1364,6 +1396,7 @@ namespace FdoToolbox.Core.Feature
         /// Returns false if otherwise.
         /// </summary>
         /// <param name="schema"></param>
+        /// <param name="incSchema"></param>
         /// <returns></returns>
         public bool CanApplySchema(FeatureSchema schema, out IncompatibleSchema incSchema)
         {

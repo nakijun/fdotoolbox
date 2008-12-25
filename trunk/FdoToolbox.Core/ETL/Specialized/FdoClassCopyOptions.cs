@@ -6,6 +6,9 @@ using System.Collections.Specialized;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
+    /// <summary>
+    /// Class options for <see cref="FdoBulkCopy"/>
+    /// </summary>
     public class FdoClassCopyOptions
     {
         private FdoConnection _source;
@@ -151,6 +154,11 @@ namespace FdoToolbox.Core.ETL.Specialized
             _targetClass = destClass;
         }
 
+        /// <summary>
+        /// Adds the source expression.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
         public void AddSourceExpression(string key, string value)
         {
             _sourceExpressions[key] = value;

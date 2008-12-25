@@ -62,5 +62,8 @@ namespace FdoToolbox.Core.Feature
         }
     }
 
+    /// <summary>
+    /// A <see cref="FdoFeatureTable"/> collection
+    /// </summary>
     public class FdoFeatureTableCollection : List<FdoFeatureTable> { }
 }
