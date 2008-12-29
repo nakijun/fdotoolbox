@@ -22,7 +22,7 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public static string GetString(string key)
+        internal static string GetString(string key)
         {
             return _resMan.GetString(key);
         }
@@ -33,10 +33,18 @@ namespace FdoToolbox.Core
         /// <param name="key">The key.</param>
         /// <param name="args">The args.</param>
         /// <returns></returns>
-        public static string GetStringFormatted(string key, params object[] args)
+        internal static string GetStringFormatted(string key, params object[] args)
         {
             string str = _resMan.GetString(key);
             return string.Format(str, args);
+        }
+
+        /// <summary>
+        /// Gets the resource manager for this string bundle
+        /// </summary>
+        public static ResourceManager StringResourceManager
+        {
+            get { return Strings.ResourceManager; }
         }
     }
 }
