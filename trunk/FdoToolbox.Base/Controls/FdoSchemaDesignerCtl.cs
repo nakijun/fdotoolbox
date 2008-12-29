@@ -214,7 +214,7 @@ namespace FdoToolbox.Base.Controls
             return true;
         }
 
-        public event EventHandler ViewContentClosing;
+        public event EventHandler ViewContentClosing = delegate { };
 
         public Control ContentControl
         {

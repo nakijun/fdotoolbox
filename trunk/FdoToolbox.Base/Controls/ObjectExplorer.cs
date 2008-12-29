@@ -56,7 +56,7 @@ namespace FdoToolbox.Base.Controls
             get { return ResourceService.GetString("UI_OBJECT_EXPLORER"); }
         }
 
-        public event EventHandler TitleChanged;
+        public event EventHandler TitleChanged = delegate { };
 
         public bool CanClose
         {

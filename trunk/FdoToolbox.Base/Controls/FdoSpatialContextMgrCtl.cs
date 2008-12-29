@@ -112,7 +112,7 @@ namespace FdoToolbox.Base.Controls
             get { return ResourceService.GetString("TITLE_SPATIAL_CONTEXT_MGMT"); }
         }
 
-        public event EventHandler TitleChanged;
+        public event EventHandler TitleChanged = delegate { };
 
         public bool CanClose
         {
@@ -134,7 +134,7 @@ namespace FdoToolbox.Base.Controls
             return true;
         }
 
-        public event EventHandler ViewContentClosing;
+        public event EventHandler ViewContentClosing = delegate { };
 
         public Control ContentControl
         {

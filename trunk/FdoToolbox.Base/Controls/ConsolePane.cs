@@ -54,7 +54,7 @@ namespace FdoToolbox.Base.Controls
             get { return ResourceService.GetString("UI_CONSOLE"); }
         }
 
-        public event EventHandler TitleChanged;
+        public event EventHandler TitleChanged = delegate { };
 
         public bool CanClose
         {
