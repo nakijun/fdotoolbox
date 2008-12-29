@@ -41,7 +41,7 @@ namespace FdoToolbox.Base.Controls
             get { return ResourceService.GetString("TITLE_UNREGISTER_PROVIDER"); }
         }
 
-        public event EventHandler TitleChanged;
+        public event EventHandler TitleChanged = delegate { };
 
         public bool CanClose
         {

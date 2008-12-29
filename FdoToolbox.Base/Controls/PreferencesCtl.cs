@@ -35,7 +35,7 @@ namespace FdoToolbox.Base.Controls
             get { return ResourceService.GetString("TITLE_PREFERENCES"); }
         }
 
-        public event EventHandler TitleChanged;
+        public event EventHandler TitleChanged = delegate { };
 
         public bool CanClose
         {
