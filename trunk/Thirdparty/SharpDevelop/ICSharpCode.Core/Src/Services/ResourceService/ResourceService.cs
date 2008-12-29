@@ -339,6 +339,23 @@ namespace ICSharpCode.Core
 		{
 			return Load(resourceDirectory + Path.DirectorySeparatorChar + name + "." + language + ".resources");
 		}
+
+        /// <summary>
+        /// Returns a format string from the resource database, the string in the localized
+        /// resource database must be a format string.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the requested resource.
+        /// </param>
+        /// <param name="args"></param>
+        /// <returns>
+        /// The formatted string in the (localized) resource database.
+        /// </returns>
+        public static string GetStringFormatted(string name, params object[] args)
+        {
+            string fmt = GetString(name);
+            return string.Format(fmt, args);
+        }
 		
 		/// <summary>
 		/// Returns a string from the resource database, it handles localization
