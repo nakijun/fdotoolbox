@@ -29,7 +29,7 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// Initializes a new instance of the <see cref="FdoRow"/> class.
         /// </summary>
-        public FdoRow()
+        internal FdoRow()
             : base(new Hashtable(StringComparer.InvariantCultureIgnoreCase))
         {
         }
