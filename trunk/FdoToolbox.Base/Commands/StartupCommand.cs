@@ -22,6 +22,7 @@ namespace FdoToolbox.Base.Commands
             
             Res.RegisterNeutralStrings(FdoToolbox.Base.Strings.ResourceManager);
             Res.RegisterNeutralImages(FdoToolbox.Base.Images.ResourceManager);
+            Res.RegisterNeutralStrings(ResourceUtil.StringResourceManager);
 
             Workbench.WorkbenchInitialized += delegate
             {
