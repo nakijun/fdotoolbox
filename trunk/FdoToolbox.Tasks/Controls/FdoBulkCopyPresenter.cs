@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using FdoToolbox.Core;
 using FdoToolbox.Tasks.Services;
 using FdoToolbox.Base.Services;
+using ICSharpCode.Core;
 
 namespace FdoToolbox.Tasks.Controls
 {
@@ -63,17 +64,19 @@ namespace FdoToolbox.Tasks.Controls
     public class FdoBulkCopyPresenter
     {
         private readonly IFdoBulkCopyView _view;
-        private IFdoConnectionManager _connMgr;
+        private readonly IFdoConnectionManager _connMgr;
+        private readonly TaskManager _taskMgr;
 
         private Dictionary<string, string> _classMappings;
         private Dictionary<string, NameValueCollection> _propertyMappings;
 
-        public FdoBulkCopyPresenter(IFdoBulkCopyView view, IFdoConnectionManager connMgr)
+        public FdoBulkCopyPresenter(IFdoBulkCopyView view, IFdoConnectionManager connMgr, TaskManager taskMgr)
         {
             _view = view;
             _connMgr = connMgr;
             _classMappings = new Dictionary<string, string>();
             _propertyMappings = new Dictionary<string, NameValueCollection>();
+            _taskMgr = taskMgr;
         }
 
         public void Init()
@@ -269,7 +272,7 @@ namespace FdoToolbox.Tasks.Controls
             //Validate
             List<string> errors = new List<string>();
             if (string.IsNullOrEmpty(_view.TaskName))
-                errors.Add("Task Name is required");
+                errors.Add(ResourceService.GetString("ERR_TASK_NAME_REQUIRED"));
 
             FdoConnection source = GetSourceConnection();
             FdoConnection target = GetTargetConnection();
@@ -278,7 +281,7 @@ namespace FdoToolbox.Tasks.Controls
             FdoFeatureService destService = target.CreateFeatureService();
 
             if (!destService.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert))
-                errors.Add("Target connection is not valid as it does not support insert commands");
+                errors.Add(ResourceService.GetStringFormatted("ERR_UNSUPPORTED_CMD", OSGeo.FDO.Commands.CommandType.CommandType_Insert));
 
             FdoBulkCopyOptions options = new FdoBulkCopyOptions(source, target);
 
@@ -292,7 +295,7 @@ namespace FdoToolbox.Tasks.Controls
                     {
                         if (!target.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value)
                         {
-                            errors.Add("Cannot copy more than one spatial context. Target connection doesn't support multiple spatial contexts");
+                            errors.Add(ResourceService.GetString("ERR_UNSUPPORTED_COPY_MULTIPLE_SPATIAL_CONTEXTS"));
                         }
                     }
                 }
@@ -314,7 +317,7 @@ namespace FdoToolbox.Tasks.Controls
                         }
                         else
                         {
-                            errors.Add("Target class " + _classMappings[srcClass] + " not found in schema " + _view.SelectedTargetSchema);
+                            errors.Add(ResourceService.GetStringFormatted("ERR_CLASS_NOT_FOUND", _classMappings[srcClass], _view.SelectedTargetSchema));
                         }
                     }
                 }
@@ -323,9 +326,8 @@ namespace FdoToolbox.Tasks.Controls
             if (errors.Count > 0)
                 throw new TaskValidationException(errors);
 
-            TaskManager tm = ServiceManager.Instance.GetService<TaskManager>();
             FdoBulkCopy proc = new FdoBulkCopy(options);
-            tm.AddTask(_view.TaskName, proc);
+            _taskMgr.AddTask(_view.TaskName, proc);
         }
 
         private NameValueCollection GetSourceExpressions(string className)

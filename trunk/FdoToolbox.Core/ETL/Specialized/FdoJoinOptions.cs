@@ -6,14 +6,37 @@ using OSGeo.FDO.Filter;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using Iesi.Collections.Generic;
+using OSGeo.FDO.Schema;
+using FdoToolbox.Core.Configuration;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
     /// <summary>
     /// Controls the <see cref="FdoJoin"/> operation
     /// </summary>
-    public class FdoJoinOptions
+    public class FdoJoinOptions : IDisposable
     {
+        private bool _owner;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoJoinOptions"/> class.
+        /// </summary>
+        /// <param name="owner">if set to <c>true</c> this will own the underlying connections and dispose of them when it itself is disposed</param>
+        public FdoJoinOptions(bool owner)
+        {
+            _owner = owner;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoJoinOptions"/> class.
+        /// </summary>
+        public FdoJoinOptions()
+            : this(false)
+        {
+        }
+
         private int _BatchSize;
 
         /// <summary>
@@ -130,6 +153,15 @@ namespace FdoToolbox.Core.ETL.Specialized
         }
 
         /// <summary>
+        /// Sets the join pair collection
+        /// </summary>
+        /// <param name="pairs"></param>
+        public void SetJoinPairs(NameValueCollection pairs)
+        {
+            _joinPairs.Add(pairs);
+        }
+
+        /// <summary>
         /// Sets the left source of the join
         /// </summary>
         /// <param name="conn"></param>
@@ -207,32 +239,81 @@ namespace FdoToolbox.Core.ETL.Specialized
             set { _GeometryProperty = value; }
         }
 
+        private bool _ForceOneToOne;
+
+        /// <summary>
+        /// If true, will only merge the left side with the first matching result
+        /// on the right side. Otherwise, all matching results on the right side
+        /// are merged.
+        /// </summary>
+        public bool ForceOneToOne
+        {
+            get { return _ForceOneToOne; }
+            set { _ForceOneToOne = value; }
+        }
+
         /// <summary>
         /// Validates these options
         /// </summary>
-        internal void Validate()
+        public void Validate()
         {
             if (_Left == null)
-                throw new FdoETLException(ResourceUtil.GetString("ERR_JOIN_LEFT_UNDEFINED"));
+                throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_LEFT_UNDEFINED"));
 
             if (_Right == null)
-                throw new FdoETLException(ResourceUtil.GetString("ERR_JOIN_RIGHT_UNDEFINED"));
+                throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_RIGHT_UNDEFINED"));
 
             if (_Target == null)
-                throw new FdoETLException(ResourceUtil.GetString("ERR_JOIN_TARGET_UNDEFINED"));
+                throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_TARGET_UNDEFINED"));
+
+            if (string.IsNullOrEmpty(_Target.ClassName))
+                throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_TARGET_CLASS_UNDEFINED"));
 
             if (this.JoinPairs.Count == 0 && !this.SpatialJoinPredicate.HasValue)
-                throw new FdoETLException(ResourceUtil.GetString("ERR_JOIN_KEYS_UNDEFINED"));
+                throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_KEYS_UNDEFINED"));
 
             int count = this.LeftProperties.Count + this.RightProperties.Count;
 
-            ISet<string> set = new HashedSet<string>();
-            set.AddAll(this.LeftProperties);
-            set.AddAll(this.RightProperties);
+            if (string.IsNullOrEmpty(_LeftPrefix) && string.IsNullOrEmpty(_RightPrefix))
+            {
+                ISet<string> set = new HashedSet<string>();
+                set.AddAll(this.LeftProperties);
+                set.AddAll(this.RightProperties);
 
-            //If all properties are unique then the counts should be the same
-            if (set.Count < count)
-                throw new FdoETLException(ResourceUtil.GetString("ERR_JOIN_PROPERTY_NAME_COLLISION"));
+                //If all properties are unique then the counts should be the same
+                if (set.Count < count)
+                    throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_PROPERTY_NAME_COLLISION"));
+            }
+
+            //Create target class. The schema must already exist, but the class must *not* already exist.
+            using (FdoFeatureService service = this.Target.Connection.CreateFeatureService())
+            {
+                if (!service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema))
+                    throw new TaskValidationException(ResourceUtil.GetStringFormatted("ERR_UNSUPPORTED_CMD", OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema));
+
+                //Get target schema
+                FeatureSchema schema = service.GetSchemaByName(this.Target.SchemaName);
+                if (schema == null)
+                    throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_SCHEMA_NOT_FOUND"));
+
+                //Check target class does not exist
+                int cidx = schema.Classes.IndexOf(this.Target.ClassName);
+                if (cidx >= 0)
+                    throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_TARGET_EXISTS"));
+            }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (_owner)
+            {
+                _Left.Connection.Dispose();
+                _Right.Connection.Dispose();
+                _Target.Connection.Dispose();
+            }
         }
     }
 

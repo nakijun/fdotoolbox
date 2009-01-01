@@ -12,6 +12,7 @@ using FdoToolbox.Base.Forms;
 using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core;
+using FdoToolbox.Tasks.Services;
 
 namespace FdoToolbox.Tasks.Controls
 {
@@ -22,7 +23,10 @@ namespace FdoToolbox.Tasks.Controls
         public FdoBulkCopyCtl()
         {
             InitializeComponent();
-            _presenter = new FdoBulkCopyPresenter(this, ServiceManager.Instance.GetService<IFdoConnectionManager>());
+            ServiceManager sm = ServiceManager.Instance;
+            _presenter = new FdoBulkCopyPresenter(this, 
+                sm.GetService<IFdoConnectionManager>(),
+                sm.GetService<TaskManager>());
         }
 
         protected override void OnLoad(EventArgs e)

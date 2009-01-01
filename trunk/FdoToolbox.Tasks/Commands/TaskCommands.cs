@@ -13,6 +13,7 @@ using Msg = ICSharpCode.Core.MessageService;
 using FdoToolbox.Tasks.Controls;
 using FdoToolbox.Base.Controls;
 using FdoToolbox.Core.ETL.Specialized;
+using System.IO;
 
 namespace FdoToolbox.Tasks.Commands
 {
@@ -70,6 +71,59 @@ namespace FdoToolbox.Tasks.Commands
             TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
 
             mgr.RemoveTask(taskNode.Name);
+        }
+    }
+
+    public class LoadTaskCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
+            TaskLoader ldr = new TaskLoader();
+            string file = FileService.OpenFile(ResourceService.GetString("TITLE_LOAD_TASK"), ResourceService.GetString("FILTER_TASK_DEFINITION"));
+            if (FileService.FileExists(file))
+            {
+                if (TaskDefinitionHelper.IsBulkCopy(file))
+                {
+                    string name = string.Empty;
+                    FdoBulkCopyOptions opt = ldr.BulkCopyFromXml(file, ref name, false);
+                    FdoBulkCopy cpy = new FdoBulkCopy(opt);
+                    mgr.AddTask(name, cpy);
+                }
+                else if (TaskDefinitionHelper.IsJoin(file))
+                {
+                    string name = string.Empty;
+                    FdoJoinOptions opt = ldr.JoinFromXml(file, ref name, false);
+                    FdoJoin join = new FdoJoin(opt);
+                    mgr.AddTask(name, join);
+                }
+            }
+        }
+    }
+
+    public class SaveTaskCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            TreeNode taskNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
+            TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
+            EtlProcess proc = mgr.GetTask(taskNode.Name);
+            if (proc != null)
+            {
+                //try
+                //{
+                //    string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_TASK"), proc.GetFileExtension());
+                //    if (FileService.FileExists(file))
+                //    {
+                //        proc.Save(file);
+                //        MessageService.ShowMessage(ResourceService.GetStringFormatted("MSG_TASK_SAVED", file));
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageService.ShowError(ex.Message);
+                //}
+            }
         }
     }
 }

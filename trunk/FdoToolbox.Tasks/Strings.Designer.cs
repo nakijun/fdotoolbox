@@ -142,6 +142,33 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Class {0} not found in schema {1}.
+        /// </summary>
+        internal static string ERR_CLASS_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ERR_CLASS_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task name required.
+        /// </summary>
+        internal static string ERR_TASK_NAME_REQUIRED {
+            get {
+                return ResourceManager.GetString("ERR_TASK_NAME_REQUIRED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bulk Copy Definition (*.BulkCopyDefinition)|*.BulkCopyDefinition|Join Task Definition (*.JoinDefinition)|*.JoinDefinition.
+        /// </summary>
+        internal static string FILTER_TASK_DEFINITION {
+            get {
+                return ResourceManager.GetString("FILTER_TASK_DEFINITION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete target.
         /// </summary>
         internal static string LBL_DELETE_TARGET {
@@ -246,6 +273,15 @@ namespace FdoToolbox.Tasks {
         internal static string TITLE_JOIN_SETTINGS {
             get {
                 return ResourceManager.GetString("TITLE_JOIN_SETTINGS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Task.
+        /// </summary>
+        internal static string TITLE_LOAD_TASK {
+            get {
+                return ResourceManager.GetString("TITLE_LOAD_TASK", resourceCulture);
             }
         }
         

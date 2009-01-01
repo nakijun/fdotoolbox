@@ -8,6 +8,7 @@ using ICSharpCode.Core;
 using FdoToolbox.Core.Connections;
 using FdoToolbox.Core;
 using FdoToolbox.Base.Forms;
+using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {

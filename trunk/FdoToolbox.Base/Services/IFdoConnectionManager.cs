@@ -6,7 +6,7 @@ using FdoToolbox.Core;
 using System.ComponentModel;
 using FdoToolbox.Base.Services;
 
-namespace FdoToolbox.Base
+namespace FdoToolbox.Base.Services
 {
     /// <summary>
     /// Connection manager interface
@@ -19,6 +19,7 @@ namespace FdoToolbox.Base
         bool NameExists(string name);
         void RefreshConnection(string name);
         FdoConnection GetConnection(string name);
+        FdoConnection GetConnection(string provider, string connStr);
         ICollection<string> GetConnectionNames();
         void RenameConnection(string oldName, string newName);
         ConnectionRenameResult CanRenameConnection(string oldName, string newName);

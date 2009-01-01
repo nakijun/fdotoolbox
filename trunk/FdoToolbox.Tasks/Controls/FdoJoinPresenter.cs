@@ -7,12 +7,17 @@ using FdoToolbox.Core.ETL.Specialized;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Base;
 using OSGeo.FDO.Schema;
+using FdoToolbox.Core;
+using ICSharpCode.Core;
+using FdoToolbox.Tasks.Services;
+using FdoToolbox.Base.Services;
+using FdoToolbox.Core.ETL.Operations;
 
 namespace FdoToolbox.Tasks.Controls
 {
     public interface IFdoJoinView
     {
-        string Name { get; set; }
+        string TaskName { get; set; }
 
         List<string> LeftConnections { set; }
         List<string> RightConnections { set; }
@@ -38,9 +43,16 @@ namespace FdoToolbox.Tasks.Controls
 
         string SelectedLeftClass { get; set; }
         string SelectedRightClass { get; set; }
+        string SelectedTargetClass { get; set; }
 
-        NameValueCollection TargetGeometryProperties { set; }
-        string SelectedTargetGeometryProperty { get; }
+        string LeftPrefix { get; set; }
+        string RightPrefix { get; set; }
+
+        FdoJoinType SelectedJoinType { get; }
+
+        bool TargetGeometryPropertyEnabled { get; set; }
+
+        bool ForceOneToOne { get; set; }
 
         /// <summary>
         /// Sets the properties or gets the checked properties
@@ -55,6 +67,7 @@ namespace FdoToolbox.Tasks.Controls
         int BatchSize { get; set; }
         bool BatchEnabled { get; set; }
 
+        bool SpatialPredicateListEnabled { set; }
         bool SpatialPredicateEnabled { get; set; }
         SpatialOperations SelectedSpatialPredicate { get; set; }
 
@@ -63,6 +76,13 @@ namespace FdoToolbox.Tasks.Controls
         void RemoveJoin(string left);
 
         NameValueCollection GetJoinedProperties();
+
+        bool LeftGeometryEnabled { get; set; }
+        string LeftGeometryName { get; set; }
+        bool LeftGeometryChecked { get; set; }
+        bool RightGeometryEnabled { get; set; }
+        string RightGeometryName { get; set; }
+        bool RightGeometryChecked { get; set; }
     }
 
     internal enum JoinSourceType
@@ -76,14 +96,18 @@ namespace FdoToolbox.Tasks.Controls
     {
         private readonly IFdoJoinView _view;
         private readonly IFdoConnectionManager _connMgr;
+        private readonly TaskManager _taskMgr;
 
-        public FdoJoinPresenter(IFdoJoinView view, IFdoConnectionManager connMgr)
+        public FdoJoinPresenter(IFdoJoinView view, IFdoConnectionManager connMgr, TaskManager taskMgr)
         {
             _view = view;
             _view.JoinTypes = Enum.GetValues(typeof(FdoJoinType));
             _view.SpatialPredicates = Enum.GetValues(typeof(SpatialOperations));
             _connMgr = connMgr;
+            _taskMgr = taskMgr;
         }
+
+        private bool _init = false;
 
         public void Init()
         {
@@ -94,6 +118,14 @@ namespace FdoToolbox.Tasks.Controls
             ConnectionChanged(JoinSourceType.Left);
             ConnectionChanged(JoinSourceType.Right);
             ConnectionChanged(JoinSourceType.Target);
+
+            _view.ForceOneToOne = true;
+
+            _init = true;
+            SetTargetGeometries();
+
+            JoinPredicateCheckChanged();
+            GeometryPropertyCheckChanged();
         }
 
         internal FdoConnection GetConnection(JoinSourceType type)
@@ -217,11 +249,116 @@ namespace FdoToolbox.Tasks.Controls
                     }
                 }
             }
+
+            SetTargetGeometries();
         }
 
-        internal void SpatialPredicateStateChanged()
+        private void SetTargetGeometries()
         {
-            _view.SpatialPredicateEnabled = _view.SpatialPredicateEnabled;
+            if (!_init)
+                return;
+
+            _view.LeftGeometryName = string.Empty;
+            _view.RightGeometryName = string.Empty;
+            _view.LeftGeometryEnabled = false;
+            _view.RightGeometryEnabled = false;
+            _view.LeftGeometryChecked = false;
+            _view.RightGeometryChecked = false;
+
+            using (FdoFeatureService leftService = GetConnection(JoinSourceType.Left).CreateFeatureService())
+            using (FdoFeatureService rightService = GetConnection(JoinSourceType.Right).CreateFeatureService())
+            {
+                ClassDefinition leftClass = leftService.GetClassByName(_view.SelectedLeftSchema, _view.SelectedLeftClass);
+                ClassDefinition rightClass = rightService.GetClassByName(_view.SelectedRightSchema, _view.SelectedRightClass);
+
+                if (leftClass.ClassType == ClassType.ClassType_FeatureClass)
+                {
+                    string geomName = ((FeatureClass)leftClass).GeometryProperty.Name;
+                    //targetGeoms.Add(geomName + " (Left)", geomName);
+                    //_view.LeftGeometryEnabled = true;
+                    _view.LeftGeometryName = geomName;
+                    _view.LeftGeometryChecked = true;
+                    
+                }
+
+                if (rightClass.ClassType == ClassType.ClassType_FeatureClass)
+                {
+                    string geomName = ((FeatureClass)rightClass).GeometryProperty.Name;
+                    //targetGeoms.Add(geomName + " (Right)", geomName);
+                    //_view.RightGeometryEnabled = true;
+                    _view.RightGeometryName = geomName;
+
+                    if (!_view.LeftGeometryChecked)
+                        _view.RightGeometryChecked = true;
+                }
+            }
+        }
+
+        internal void SaveTask()
+        {
+            if (string.IsNullOrEmpty(_view.TaskName))
+                throw new TaskValidationException(ResourceService.GetString("ERR_TASK_NAME_REQUIRED"));
+
+            FdoJoinOptions options = new FdoJoinOptions();
+            options.SetLeft(
+                _connMgr.GetConnection(_view.SelectedLeftConnection),
+                _view.SelectedLeftSchema,
+                _view.SelectedLeftClass);
+            options.SetRight(
+                _connMgr.GetConnection(_view.SelectedRightConnection),
+                _view.SelectedRightSchema,
+                _view.SelectedRightClass);
+            options.SetTarget(
+                _connMgr.GetConnection(_view.SelectedTargetConnection),
+                _view.SelectedTargetSchema,
+                _view.SelectedTargetClass);
+
+            if (_view.BatchEnabled)
+                options.BatchSize = _view.BatchSize;
+
+            if (_view.TargetGeometryPropertyEnabled)
+            {
+                if (!string.IsNullOrEmpty(_view.LeftGeometryName) && _view.LeftGeometryChecked)
+                    options.GeometryProperty = _view.LeftGeometryName;
+                else if (!string.IsNullOrEmpty(_view.RightGeometryName) && _view.RightGeometryChecked)
+                    options.GeometryProperty = _view.RightGeometryName;
+            }
+
+            options.SetJoinPairs(_view.GetJoinedProperties());
+            if (_view.SpatialPredicateEnabled)
+                options.SpatialJoinPredicate = _view.SelectedSpatialPredicate;
+
+            options.JoinType = _view.SelectedJoinType;
+            options.ForceOneToOne = _view.ForceOneToOne;
+
+            foreach (string leftProp in _view.LeftProperties)
+            {
+                options.AddLeftProperty(leftProp);
+            }
+
+            foreach (string rightProp in _view.RightProperties)
+            {
+                options.AddRightProperty(rightProp);
+            }
+
+            options.LeftPrefix = _view.LeftPrefix;
+            options.RightPrefix = _view.RightPrefix;
+
+            options.Validate();
+
+            FdoJoin join = new FdoJoin(options);
+            _taskMgr.AddTask(_view.TaskName, join);
+        }
+
+        internal void JoinPredicateCheckChanged()
+        {
+            _view.SpatialPredicateListEnabled = _view.SpatialPredicateEnabled;
+        }
+
+        internal void GeometryPropertyCheckChanged()
+        {
+            _view.LeftGeometryEnabled = _view.TargetGeometryPropertyEnabled && !string.IsNullOrEmpty(_view.LeftGeometryName);
+            _view.RightGeometryEnabled = _view.TargetGeometryPropertyEnabled && !string.IsNullOrEmpty(_view.RightGeometryName);
         }
     }
 }

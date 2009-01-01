@@ -9,6 +9,10 @@ using FdoToolbox.Base;
 using ICSharpCode.Core;
 using FdoToolbox.Base.Services;
 using System.Collections.Specialized;
+using FdoToolbox.Core;
+using FdoToolbox.Core.ETL.Specialized;
+using FdoToolbox.Tasks.Services;
+using FdoToolbox.Core.ETL.Operations;
 
 namespace FdoToolbox.Tasks.Controls
 {
@@ -19,7 +23,10 @@ namespace FdoToolbox.Tasks.Controls
         public FdoJoinCtl()
         {
             InitializeComponent();
-            _presenter = new FdoJoinPresenter(this, ServiceManager.Instance.GetService<IFdoConnectionManager>());
+            ServiceManager sm = ServiceManager.Instance;
+            _presenter = new FdoJoinPresenter(this, 
+                sm.GetService<IFdoConnectionManager>(),
+                sm.GetService<TaskManager>());
         }
 
         protected override void OnLoad(EventArgs e)
@@ -33,7 +40,7 @@ namespace FdoToolbox.Tasks.Controls
             get { return ResourceService.GetString("TITLE_JOIN_SETTINGS"); }
         }
 
-        public event EventHandler TitleChanged;
+        public event EventHandler TitleChanged = delegate { };
 
         public bool CanClose
         {
@@ -111,6 +118,11 @@ namespace FdoToolbox.Tasks.Controls
         public Array SpatialPredicates
         {
             set { cmbSpatialPredicate.DataSource = value; }
+        }
+
+        public FdoJoinType SelectedJoinType
+        {
+            get { return (FdoJoinType)cmbJoinTypes.SelectedItem; }
         }
 
         public string SelectedLeftConnection
@@ -209,26 +221,6 @@ namespace FdoToolbox.Tasks.Controls
             }
         }
 
-        public NameValueCollection TargetGeometryProperties
-        {
-            set
-            {
-                cmbGeometryProperty.Items.Clear();
-                cmbGeometryProperty.DisplayMember = "Name";
-                cmbGeometryProperty.ValueMember = "Value";
-                foreach (string name in value.Keys)
-                {
-                    NameValuePair pair = new NameValuePair(name, value[name]);
-                    cmbGeometryProperty.Items.Add(pair);
-                }
-            }
-        }
-
-        public string SelectedTargetGeometryProperty
-        {
-            get { return cmbGeometryProperty.SelectedValue.ToString(); }
-        }
-
         public List<string> LeftProperties
         {
             get
@@ -247,6 +239,7 @@ namespace FdoToolbox.Tasks.Controls
                 {
                     chkLeftProperties.Items.Add(prop, false);
                 }
+                COL_LEFT.DataSource = new List<string>(value);
             }
         }
 
@@ -268,6 +261,7 @@ namespace FdoToolbox.Tasks.Controls
                 {
                     chkRightProperties.Items.Add(prop, false);
                 }
+                COL_RIGHT.DataSource = new List<string>(value);
             }
         }
 
@@ -299,11 +293,13 @@ namespace FdoToolbox.Tasks.Controls
         {
             get
             {
-                return cmbSpatialPredicate.Enabled;
+                //return cmbSpatialPredicate.Enabled;
+                return chkJoinPredicate.Checked;
             }
             set
             {
-                cmbSpatialPredicate.Enabled = value;
+                //cmbSpatialPredicate.Enabled = value;
+                chkJoinPredicate.Checked = value;
             }
         }
 
@@ -392,6 +388,130 @@ namespace FdoToolbox.Tasks.Controls
         private void cmbRightClass_SelectionChangeCommitted(object sender, EventArgs e)
         {
             _presenter.ClassChanged(JoinSourceType.Right);
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _presenter.SaveTask();
+                ViewContentClosing(this, EventArgs.Empty);
+            }
+            catch (TaskValidationException ex)
+            {
+                MessageService.ShowError(ex.Message);
+            }
+        }
+
+        public string TaskName
+        {
+            get { return txtName.Text; }
+            set { txtName.Text = value; }
+        }
+
+        public string SelectedTargetClass
+        {
+            get { return txtTargetClass.Text; }
+            set { txtTargetClass.Text = value; }
+        }
+
+        private void chkJoinPredicate_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.JoinPredicateCheckChanged();
+        }
+
+        private void chkGeometryProperty_CheckedChanged(object sender, EventArgs e)
+        {
+            _presenter.GeometryPropertyCheckChanged();
+        }
+
+        public string LeftPrefix
+        {
+            get { return txtLeftPrefix.Text; }
+            set { txtRightPrefix.Text = value; }
+        }
+
+        public string RightPrefix
+        {
+            get { return txtRightPrefix.Text; }
+            set { txtRightPrefix.Text = value; }
+        }
+
+        public bool TargetGeometryPropertyEnabled
+        {
+            get { return chkGeometryProperty.Checked; }
+            set { chkGeometryProperty.Checked = value; }
+        }
+
+        public bool SpatialPredicateListEnabled
+        {
+            set { cmbSpatialPredicate.Enabled = value; }
+        }
+
+
+        public bool LeftGeometryEnabled
+        {
+            get { return rdLeftGeom.Enabled; }
+            set { rdLeftGeom.Enabled = value; }
+        }
+
+        public string LeftGeometryName
+        {
+            get { return rdLeftGeom.Text; }
+            set { rdLeftGeom.Text = value; }
+        }
+
+        public bool LeftGeometryChecked
+        {
+            get { return rdLeftGeom.Checked; }
+            set { rdLeftGeom.Checked = value; }
+        }
+
+        public bool RightGeometryEnabled
+        {
+            get { return rdRightGeom.Enabled; }
+            set { rdRightGeom.Enabled = value; }
+        }
+
+        public string RightGeometryName
+        {
+            get { return rdRightGeom.Text; }
+            set { rdRightGeom.Text = value; }
+        }
+
+        public bool RightGeometryChecked
+        {
+            get { return rdRightGeom.Checked; }
+            set { rdRightGeom.Checked = value; }
+        }
+
+        private void btnAddJoin_Click(object sender, EventArgs e)
+        {
+            grdJoin.Rows.Add();
+        }
+
+        private void grdJoin_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            btnDeleteJoin.Enabled = true;
+        }
+
+        private void btnDeleteJoin_Click(object sender, EventArgs e)
+        {
+            int rowIndex = -1;
+            if (grdJoin.SelectedRows.Count == 1)
+                rowIndex = grdJoin.SelectedRows[0].Index;
+            else if (grdJoin.SelectedCells.Count == 1)
+                rowIndex = grdJoin.SelectedCells[0].RowIndex;
+            
+            if (rowIndex >= 0)
+                grdJoin.Rows.RemoveAt(rowIndex);
+        }
+
+
+        public bool ForceOneToOne
+        {
+            get { return chkOneToOne.Checked; }
+            set { chkOneToOne.Checked = value; }
         }
     }
 }

@@ -210,5 +210,16 @@ namespace FdoToolbox.Base.Services
                 conn.Save(file);
             }
         }
+
+
+        public FdoConnection GetConnection(string provider, string connStr)
+        {
+            foreach (FdoConnection conn in _ConnectionDict.Values)
+            {
+                if (conn.Provider.StartsWith(provider) && conn.ConnectionString.ToLower() == connStr)
+                    return conn;
+            }
+            return null;
+        }
     }
 }
