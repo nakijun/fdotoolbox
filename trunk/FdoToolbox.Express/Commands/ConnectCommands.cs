@@ -91,6 +91,34 @@ namespace FdoToolbox.Express.Commands
         }
     }
 
+    public class ConnectShpDirCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            string dir = FileService.GetDirectory(Res.GetString("TITLE_CONNECT_SHP_DIR"));
+            if (FileService.DirectoryExists(dir))
+            {
+                FdoConnection conn = new FdoConnection("OSGeo.SHP", "DefaultFileLocation=" + dir);
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                NamingService namer = ServiceManager.Instance.GetService<NamingService>();
+
+                string name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), namer.GetDefaultConnectionName("OSGeo.SHP"));
+                if (name == null)
+                    return;
+
+                while (string.IsNullOrEmpty(name) || mgr.NameExists(name))
+                {
+                    Msg.ShowError(Res.GetString("ERR_CONNECTION_NAME_EMPTY_OR_EXISTS"));
+                    name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), name);
+
+                    if (name == null)
+                        return;
+                }
+                mgr.AddConnection(name, conn);
+            }
+        }
+    }
+
     public class ConnectOdbcCommand : AbstractMenuCommand 
     {
         public override void Run()

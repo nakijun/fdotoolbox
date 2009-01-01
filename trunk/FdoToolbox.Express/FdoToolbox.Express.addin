@@ -34,6 +34,9 @@
                 <MenuItem id="ConnectShp"
                           label="${res:CMD_ConnectShp}"
                           class="FdoToolbox.Express.Commands.ConnectShpCommand" />
+                <MenuItem id="ConnectShpDir"
+                          label="${res:CMD_ConnectShpDir}"
+                          class="FdoToolbox.Express.Commands.ConnectShpDirCommand" />
                 <MenuItem id="ConnectOdbc"
                           label="${res:CMD_ConnectOdbc}"
                           class="FdoToolbox.Express.Commands.ConnectOdbcCommand" />
