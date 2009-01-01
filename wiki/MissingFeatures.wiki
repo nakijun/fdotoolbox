@@ -13,9 +13,9 @@
    * Batch insert support
    * Data value conversion support
  * Task Management
-   * Create Task
+   * ~~Create Task~~
      * ~~Bulk Copy~~
-     * Database Join
+     * ~~Database Join~~
    * ~~Delete Task~~
    * ~~Execute Task~~
    * Load Task
