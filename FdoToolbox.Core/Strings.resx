@@ -183,6 +183,9 @@
   <data name="ERR_JOIN_SCHEMA_NOT_FOUND" xml:space="preserve">
     <value>n the join target could not be found</value>
   </data>
+  <data name="ERR_JOIN_TARGET_CLASS_UNDEFINED" xml:space="preserve">
+    <value>No join target class has been defined</value>
+  </data>
   <data name="ERR_JOIN_TARGET_EXISTS" xml:space="preserve">
     <value>The join target must be a feature class that doesn't already exist</value>
   </data>
@@ -224,6 +227,9 @@
   </data>
   <data name="ERR_UNSUPPORTED_CMD" xml:space="preserve">
     <value>Unsupported command: {0}</value>
+  </data>
+  <data name="ERR_UNSUPPORTED_COPY_MULTIPLE_SPATIAL_CONTEXTS" xml:space="preserve">
+    <value>Cannot copy more than one spatial context. Target connection doesn't support multiple spatial contexts</value>
   </data>
   <data name="ERR_UNSUPPORTED_FLAT_FILE_PROVIDER" xml:space="preserve">
     <value>Unsupported or Unrecognised FDO Provider</value>

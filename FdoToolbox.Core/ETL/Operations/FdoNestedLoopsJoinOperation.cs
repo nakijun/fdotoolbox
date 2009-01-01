@@ -3,6 +3,7 @@ namespace FdoToolbox.Core.ETL.Operations
     using System;
     using System.Collections.Generic;
     using Enumerables;
+    using FdoToolbox.Core.ETL.Specialized;
 
     /// <summary>
     /// Perform a join between two sources
@@ -13,6 +14,8 @@ namespace FdoToolbox.Core.ETL.Operations
         private readonly PartialProcessOperation right = new PartialProcessOperation();
         private static readonly string IsEmptyRowMarker = Guid.NewGuid().ToString();
 
+        protected FdoJoinType joinType = FdoJoinType.Inner;
+        protected bool forceOneToOne = true;
         private FdoRow currentRightRow, currentLeftRow;
         /// <summary>
         /// Sets the right part of the join
@@ -63,6 +66,8 @@ namespace FdoToolbox.Core.ETL.Operations
                         leftNeedOuterJoin = false;
                         matchedRightRows[rightRow] = null;
                         yield return MergeRows(leftRow, rightRow);
+                        if (this.forceOneToOne)
+                            break;
                     }
                 }
                 if (leftNeedOuterJoin)

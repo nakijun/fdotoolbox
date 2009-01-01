@@ -27,6 +27,8 @@ namespace FdoToolbox
             // to System.Diagnostics.Trace.
             LoggingService.Info("Application start");
 
+            AppDomain.CurrentDomain.AssemblyLoad += new AssemblyLoadEventHandler(CurrentDomain_AssemblyLoad);
+
             // Get a reference to the entry assembly (Startup.exe)
             Assembly exe = typeof(Program).Assembly;
 
@@ -110,6 +112,11 @@ namespace FdoToolbox
             }
 
             LoggingService.Info("Application shutdown");
+        }
+
+        static void CurrentDomain_AssemblyLoad(object sender, AssemblyLoadEventArgs args)
+        {
+            LoggingService.InfoFormatted("Loaded assembly: {0}", args.LoadedAssembly.GetName().Name);
         }
 
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)

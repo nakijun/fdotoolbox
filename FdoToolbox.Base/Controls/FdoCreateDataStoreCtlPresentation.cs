@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Core.Connections;
 using ICSharpCode.Core;
+using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {

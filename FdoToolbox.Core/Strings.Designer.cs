@@ -259,6 +259,15 @@ namespace FdoToolbox.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No join target class has been defined.
+        /// </summary>
+        internal static string ERR_JOIN_TARGET_CLASS_UNDEFINED {
+            get {
+                return ResourceManager.GetString("ERR_JOIN_TARGET_CLASS_UNDEFINED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The join target must be a feature class that doesn&apos;t already exist.
         /// </summary>
         internal static string ERR_JOIN_TARGET_EXISTS {
@@ -381,6 +390,15 @@ namespace FdoToolbox.Core {
         internal static string ERR_UNSUPPORTED_CMD {
             get {
                 return ResourceManager.GetString("ERR_UNSUPPORTED_CMD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot copy more than one spatial context. Target connection doesn&apos;t support multiple spatial contexts.
+        /// </summary>
+        internal static string ERR_UNSUPPORTED_COPY_MULTIPLE_SPATIAL_CONTEXTS {
+            get {
+                return ResourceManager.GetString("ERR_UNSUPPORTED_COPY_MULTIPLE_SPATIAL_CONTEXTS", resourceCulture);
             }
         }
         

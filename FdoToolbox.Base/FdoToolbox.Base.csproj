@@ -320,7 +320,7 @@
     </Compile>
     <Compile Include="ICoordinateSystemCatalog.cs" />
     <Compile Include="IDisplayBinding.cs" />
-    <Compile Include="IFdoConnectionManager.cs" />
+    <Compile Include="Services\IFdoConnectionManager.cs" />
     <Compile Include="Images.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

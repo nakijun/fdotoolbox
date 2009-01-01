@@ -12,6 +12,7 @@ namespace FdoToolbox.Core.ETL.Specialized
     using FdoToolbox.Core.ETL.Pipelines;
     using FdoToolbox.Core.Feature;
     using OSGeo.FDO.Schema;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// A specialized form of <see cref="EtlProcess"/> that merges
@@ -44,6 +45,12 @@ namespace FdoToolbox.Core.ETL.Specialized
             FdoInputOperation right = new FdoInputOperation(_options.Right.Connection, _options.CreateRightQuery());
             join.Left(left);
             join.Right(right);
+            join.LeftProperties = _options.LeftProperties;
+            join.RightProperties = _options.RightProperties;
+            join.LeftPrefix = _options.LeftPrefix;
+            join.RightPrefix = _options.RightPrefix;
+            join.GeometryProperty = _options.GeometryProperty;
+            join.ForceOneToOne = _options.ForceOneToOne;
             foreach (string leftProp in _options.JoinPairs.Keys)
             {
                 join.AddAttributeJoinCondition(leftProp, _options.JoinPairs[leftProp]);
@@ -53,23 +60,12 @@ namespace FdoToolbox.Core.ETL.Specialized
             join.PrepareForExecution(new SingleThreadedPipelineExecuter());
 
             IFdoOperation output = null;
-            
+
             //Create target class. The schema must already exist, but the class must *not* already exist.
             using (FdoFeatureService service = _options.Target.Connection.CreateFeatureService())
             {
-                if (!service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema))
-                    throw new FdoETLException(ResourceUtil.GetStringFormatted("ERR_UNSUPPORTED_CMD", OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema));
-
                 //Get target schema
                 FeatureSchema schema = service.GetSchemaByName(_options.Target.SchemaName);
-                if (schema == null)
-                    throw new FdoETLException(ResourceUtil.GetString("ERR_JOIN_SCHEMA_NOT_FOUND"));
-
-                //Check target class does not exist
-                int cidx = schema.Classes.IndexOf(_options.Target.ClassName);
-                if (cidx >= 0)
-                    throw new FdoETLException(ResourceUtil.GetString("ERR_JOIN_TARGET_EXISTS"));
-
 
                 SendMessageFormatted("Creating joined class: {0}", _options.Target.ClassName);
                 //Create target class
@@ -207,9 +203,10 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// </summary>
         class ConcreteJoin : FdoNestedLoopsJoinOperation
         {
-            FdoJoinType joinType;
             NameValueCollection attributePairs;
             SpatialOperations? spatialJoinPredicate;
+            ICollection<string> leftProperties;
+            ICollection<string> rightProperties;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ConcreteJoin"/> class.
@@ -218,7 +215,70 @@ namespace FdoToolbox.Core.ETL.Specialized
             public ConcreteJoin(FdoJoinType joinType)
             {
                 this.attributePairs = new NameValueCollection();
-                this.joinType = joinType;
+                base.joinType = joinType;
+            }
+
+            /// <summary>
+            /// If true, will only merge the left side with the first matching result
+            /// on the right side. Otherwise, all matching results on the right side
+            /// are merged.
+            /// </summary>
+            public bool ForceOneToOne
+            {
+                set { base.forceOneToOne = value; }
+            }
+
+            private string _LeftPrefix;
+
+            /// <summary>
+            /// The left side property qualifier
+            /// </summary>
+            public string LeftPrefix
+            {
+                get { return _LeftPrefix; }
+                set { _LeftPrefix = value; }
+            }
+
+            private string _RightPrefix;
+
+            /// <summary>
+            /// The right side property qualifier
+            /// </summary>
+            public string RightPrefix
+            {
+                get { return _RightPrefix; }
+                set { _RightPrefix = value; }
+            }
+
+            private string _GeometryProperty;
+
+            /// <summary>
+            /// The designated geometry property. If a prefix is specified, then this
+            /// property must also be prefixed
+            /// </summary>
+            public string GeometryProperty
+            {
+                get { return _GeometryProperty; }
+                set { _GeometryProperty = value; }
+            }
+
+
+            /// <summary>
+            /// The left side properties
+            /// </summary>
+            public ICollection<string> LeftProperties
+            {
+                get { return leftProperties; }
+                set { leftProperties = value; }
+            }
+
+            /// <summary>
+            /// The right side properties
+            /// </summary>
+            public ICollection<string> RightProperties
+            {
+                get { return rightProperties; }
+                set { rightProperties = value; }
             }
 
             /// <summary>
@@ -243,24 +303,124 @@ namespace FdoToolbox.Core.ETL.Specialized
             protected override FdoRow MergeRows(FdoRow leftRow, FdoRow rightRow)
             {
                 FdoRow row = new FdoRow();
-                switch (joinType)
+
+                if (base.joinType == FdoJoinType.Inner)
                 {
-                    case FdoJoinType.Inner:
-                        {
-                            throw new NotImplementedException();   
-                        }
-                    case FdoJoinType.Left:
-                        {
-                            row.Copy(leftRow);
-                        }
-                        break;
-                    case FdoJoinType.Right:
-                        {
-                            row.Copy(rightRow);
-                        }
-                        break;
+                    MergeLeft(leftRow, row);
+                    MergeRight(rightRow, row);
                 }
+                else //left, right or full (both)
+                {
+                    //LEFT JOIN defined -or- left row is not empty
+                    if (((base.joinType & FdoJoinType.Left) != 0) || leftRow.Count > 0)
+                    {
+                        MergeLeft(leftRow, row);
+                    }
+                    //RIGHT JOIN defined -or- right row is not empty
+                    if (((base.joinType & FdoJoinType.Right) != 0) || rightRow.Count > 0)
+                    {
+                        MergeRight(rightRow, row);
+                    }
+                }
+                if (!string.IsNullOrEmpty(_GeometryProperty))
+                    row.DefaultGeometryProperty = _GeometryProperty;
+
+                //switch (joinType)
+                //{
+                //    case FdoJoinType.Inner:
+                //        {
+                //            if (leftProperties.Count > 0)
+                //            {
+                //                if (string.IsNullOrEmpty(_LeftPrefix))
+                //                {
+                //                    foreach (string prop in leftProperties)
+                //                    {
+                //                        row[prop] = leftRow[prop];
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    foreach (string prop in leftProperties)
+                //                    {
+                //                        row[_LeftPrefix + prop] = leftRow[prop];
+                //                    }
+                //                }
+                //            }
+                //            if (rightProperties.Count > 0)
+                //            {
+                //                if (string.IsNullOrEmpty(_RightPrefix))
+                //                {
+                //                    foreach (string prop in rightProperties)
+                //                    {
+                //                        row[prop] = rightRow[prop];
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    foreach (string prop in rightProperties)
+                //                    {
+                //                        row[_RightPrefix + prop] = rightRow[prop];
+                //                    }
+                //                }
+                //            }
+                //            if (!string.IsNullOrEmpty(_GeometryProperty))
+                //                row.DefaultGeometryProperty = _GeometryProperty;
+                //        }
+                //        break;
+                //    case FdoJoinType.Left:
+                //        {
+                //            row.Copy(leftRow);
+                //        }
+                //        break;
+                //    case FdoJoinType.Right:
+                //        {
+                //            row.Copy(rightRow);
+                //        }
+                //        break;
+                //}
                 return row;
+            }
+
+            private void MergeRight(FdoRow rightRow, FdoRow currentRow)
+            {
+                if (rightProperties.Count > 0)
+                {
+                    if (string.IsNullOrEmpty(_RightPrefix))
+                    {
+                        foreach (string prop in rightProperties)
+                        {
+                            currentRow[prop] = rightRow[prop];
+                        }
+                    }
+                    else
+                    {
+                        foreach (string prop in rightProperties)
+                        {
+                            currentRow[_RightPrefix + prop] = rightRow[prop];
+                        }
+                    }
+                }
+            }
+
+            private void MergeLeft(FdoRow leftRow, FdoRow currentRow)
+            {
+                if (leftProperties.Count > 0)
+                {
+                    if (string.IsNullOrEmpty(_LeftPrefix))
+                    {
+                        foreach (string prop in leftProperties)
+                        {
+                            currentRow[prop] = leftRow[prop];
+                        }
+                    }
+                    else
+                    {
+                        foreach (string prop in leftProperties)
+                        {
+                            currentRow[_LeftPrefix + prop] = leftRow[prop];
+                        }
+                    }
+                }
             }
 
             protected override bool MatchJoinCondition(FdoRow leftRow, FdoRow rightRow)
@@ -279,6 +439,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                             break;
                         case FdoJoinType.Right:
                             equals = Equals(leftRow[leftKey], rightRow[rightKey]) || leftRow[leftKey] == null;
+                            break;
+                        case FdoJoinType.Full:
+                            equals = Equals(leftRow[leftKey], rightRow[rightKey]) || leftRow[leftKey] == null || rightRow[rightKey] == null;
                             break;
                     }
                 }

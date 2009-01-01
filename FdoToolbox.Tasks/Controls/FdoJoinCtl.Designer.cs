@@ -33,14 +33,17 @@ namespace FdoToolbox.Tasks.Controls
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.cmbGeometryProperty = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.rdRightGeom = new System.Windows.Forms.RadioButton();
+            this.rdLeftGeom = new System.Windows.Forms.RadioButton();
+            this.chkGeometryProperty = new System.Windows.Forms.CheckBox();
             this.numBatchSize = new System.Windows.Forms.NumericUpDown();
             this.label18 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.grdJoin = new System.Windows.Forms.DataGridView();
-            this.COL_LEFT = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.COL_RIGHT = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.COL_LEFT = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.COL_RIGHT = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.chkJoinPredicate = new System.Windows.Forms.CheckBox();
             this.cmbSpatialPredicate = new System.Windows.Forms.ComboBox();
             this.cmbJoinTypes = new System.Windows.Forms.ComboBox();
@@ -79,6 +82,7 @@ namespace FdoToolbox.Tasks.Controls
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.chkOneToOne = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).BeginInit();
@@ -125,8 +129,12 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.checkBox1);
-            this.groupBox5.Controls.Add(this.cmbGeometryProperty);
+            this.groupBox5.Controls.Add(this.chkOneToOne);
+            this.groupBox5.Controls.Add(this.label19);
+            this.groupBox5.Controls.Add(this.label3);
+            this.groupBox5.Controls.Add(this.rdRightGeom);
+            this.groupBox5.Controls.Add(this.rdLeftGeom);
+            this.groupBox5.Controls.Add(this.chkGeometryProperty);
             this.groupBox5.Controls.Add(this.numBatchSize);
             this.groupBox5.Controls.Add(this.label18);
             this.groupBox5.Controls.Add(this.label4);
@@ -142,26 +150,56 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Join Options";
             // 
-            // checkBox1
+            // label19
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(243, 48);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(170, 17);
-            this.checkBox1.TabIndex = 11;
-            this.checkBox1.Text = "Designated Geometry Property";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(419, 73);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(32, 13);
+            this.label19.TabIndex = 15;
+            this.label19.Text = "Right";
             // 
-            // cmbGeometryProperty
+            // label3
             // 
-            this.cmbGeometryProperty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbGeometryProperty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbGeometryProperty.FormattingEnabled = true;
-            this.cmbGeometryProperty.Location = new System.Drawing.Point(430, 46);
-            this.cmbGeometryProperty.Name = "cmbGeometryProperty";
-            this.cmbGeometryProperty.Size = new System.Drawing.Size(198, 21);
-            this.cmbGeometryProperty.TabIndex = 10;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(419, 50);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(25, 13);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Left";
+            // 
+            // rdRightGeom
+            // 
+            this.rdRightGeom.AutoSize = true;
+            this.rdRightGeom.Location = new System.Drawing.Point(460, 71);
+            this.rdRightGeom.Name = "rdRightGeom";
+            this.rdRightGeom.Size = new System.Drawing.Size(85, 17);
+            this.rdRightGeom.TabIndex = 13;
+            this.rdRightGeom.TabStop = true;
+            this.rdRightGeom.Text = "radioButton2";
+            this.rdRightGeom.UseVisualStyleBackColor = true;
+            // 
+            // rdLeftGeom
+            // 
+            this.rdLeftGeom.AutoSize = true;
+            this.rdLeftGeom.Location = new System.Drawing.Point(460, 48);
+            this.rdLeftGeom.Name = "rdLeftGeom";
+            this.rdLeftGeom.Size = new System.Drawing.Size(85, 17);
+            this.rdLeftGeom.TabIndex = 12;
+            this.rdLeftGeom.TabStop = true;
+            this.rdLeftGeom.Text = "radioButton1";
+            this.rdLeftGeom.UseVisualStyleBackColor = true;
+            // 
+            // chkGeometryProperty
+            // 
+            this.chkGeometryProperty.AutoSize = true;
+            this.chkGeometryProperty.Location = new System.Drawing.Point(243, 48);
+            this.chkGeometryProperty.Name = "chkGeometryProperty";
+            this.chkGeometryProperty.Size = new System.Drawing.Size(170, 17);
+            this.chkGeometryProperty.TabIndex = 11;
+            this.chkGeometryProperty.Text = "Designated Geometry Property";
+            this.chkGeometryProperty.UseVisualStyleBackColor = true;
+            this.chkGeometryProperty.CheckedChanged += new System.EventHandler(this.chkGeometryProperty_CheckedChanged);
             // 
             // numBatchSize
             // 
@@ -204,17 +242,23 @@ namespace FdoToolbox.Tasks.Controls
             this.grdJoin.RowHeadersVisible = false;
             this.grdJoin.Size = new System.Drawing.Size(621, 59);
             this.grdJoin.TabIndex = 5;
+            this.grdJoin.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdJoin_CellClick);
+            this.grdJoin.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdJoin_CellClick);
             // 
             // COL_LEFT
             // 
             this.COL_LEFT.HeaderText = "Left Property";
             this.COL_LEFT.Name = "COL_LEFT";
+            this.COL_LEFT.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.COL_LEFT.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // COL_RIGHT
             // 
             this.COL_RIGHT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.COL_RIGHT.HeaderText = "Right Property";
             this.COL_RIGHT.Name = "COL_RIGHT";
+            this.COL_RIGHT.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.COL_RIGHT.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // chkJoinPredicate
             // 
@@ -225,6 +269,7 @@ namespace FdoToolbox.Tasks.Controls
             this.chkJoinPredicate.TabIndex = 4;
             this.chkJoinPredicate.Text = "Spatial Join Predicate";
             this.chkJoinPredicate.UseVisualStyleBackColor = true;
+            this.chkJoinPredicate.CheckedChanged += new System.EventHandler(this.chkJoinPredicate_CheckedChanged);
             // 
             // cmbSpatialPredicate
             // 
@@ -232,9 +277,9 @@ namespace FdoToolbox.Tasks.Controls
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbSpatialPredicate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSpatialPredicate.FormattingEnabled = true;
-            this.cmbSpatialPredicate.Location = new System.Drawing.Point(430, 17);
+            this.cmbSpatialPredicate.Location = new System.Drawing.Point(422, 17);
             this.cmbSpatialPredicate.Name = "cmbSpatialPredicate";
-            this.cmbSpatialPredicate.Size = new System.Drawing.Size(198, 21);
+            this.cmbSpatialPredicate.Size = new System.Drawing.Size(206, 21);
             this.cmbSpatialPredicate.TabIndex = 3;
             // 
             // cmbJoinTypes
@@ -264,6 +309,7 @@ namespace FdoToolbox.Tasks.Controls
             this.btnDeleteJoin.TabIndex = 8;
             this.btnDeleteJoin.Text = "Delete Join";
             this.btnDeleteJoin.UseVisualStyleBackColor = true;
+            this.btnDeleteJoin.Click += new System.EventHandler(this.btnDeleteJoin_Click);
             // 
             // btnAddJoin
             // 
@@ -274,6 +320,7 @@ namespace FdoToolbox.Tasks.Controls
             this.btnAddJoin.TabIndex = 7;
             this.btnAddJoin.Text = "Add Join";
             this.btnAddJoin.UseVisualStyleBackColor = true;
+            this.btnAddJoin.Click += new System.EventHandler(this.btnAddJoin_Click);
             // 
             // groupBox4
             // 
@@ -543,6 +590,7 @@ namespace FdoToolbox.Tasks.Controls
             this.btnSave.TabIndex = 10;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // groupBox6
             // 
@@ -595,6 +643,16 @@ namespace FdoToolbox.Tasks.Controls
             this.label16.TabIndex = 0;
             this.label16.Text = "Left";
             // 
+            // chkOneToOne
+            // 
+            this.chkOneToOne.AutoSize = true;
+            this.chkOneToOne.Location = new System.Drawing.Point(243, 72);
+            this.chkOneToOne.Name = "chkOneToOne";
+            this.chkOneToOne.Size = new System.Drawing.Size(83, 17);
+            this.chkOneToOne.TabIndex = 16;
+            this.chkOneToOne.Text = "Force 1 to 1";
+            this.chkOneToOne.UseVisualStyleBackColor = true;
+            // 
             // FdoJoinCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -639,8 +697,6 @@ namespace FdoToolbox.Tasks.Controls
         private System.Windows.Forms.Button btnAddJoin;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DataGridView grdJoin;
-        private System.Windows.Forms.DataGridViewTextBoxColumn COL_LEFT;
-        private System.Windows.Forms.DataGridViewTextBoxColumn COL_RIGHT;
         private System.Windows.Forms.CheckBox chkJoinPredicate;
         private System.Windows.Forms.ComboBox cmbSpatialPredicate;
         private System.Windows.Forms.ComboBox cmbJoinTypes;
@@ -677,9 +733,15 @@ namespace FdoToolbox.Tasks.Controls
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.NumericUpDown numBatchSize;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.ComboBox cmbGeometryProperty;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkGeometryProperty;
         private System.Windows.Forms.TextBox txtTargetClass;
+        private System.Windows.Forms.RadioButton rdRightGeom;
+        private System.Windows.Forms.RadioButton rdLeftGeom;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn COL_LEFT;
+        private System.Windows.Forms.DataGridViewComboBoxColumn COL_RIGHT;
+        private System.Windows.Forms.CheckBox chkOneToOne;
 
     }
 }

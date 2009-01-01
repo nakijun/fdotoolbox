@@ -68,18 +68,23 @@
     </Compile>
     <Compile Include="AppFramework\CommandStatus.cs" />
     <Compile Include="AppFramework\ConsoleApplication.cs" />
+    <Compile Include="AppFramework\ConsoleColorSwitcher.cs" />
     <Compile Include="AppFramework\ConsoleCommand.cs" />
     <Compile Include="AppFramework\IConsoleCommand.cs" />
-    <Compile Include="Configuration\DbConnection.cs" />
+    <Compile Include="Configuration\BulkCopyTask.cs" />
+    <Compile Include="Configuration\JoinTask.cs" />
     <Compile Include="Configuration\SpatialConnection.cs" />
     <Compile Include="Connections\EnumerableDictionaryProperty.cs" />
     <Compile Include="Connections\DictionaryProperty.cs" />
     <Compile Include="CoordinateSystems\CoordinateSystemDefinition.cs" />
+    <Compile Include="ETL\DefinitionLoader.cs" />
     <Compile Include="ETL\Enumerables\CachingEnumerable.cs" />
     <Compile Include="ETL\Enumerables\EventRaisingEnumerator.cs" />
     <Compile Include="ETL\Enumerables\ThreadSafeEnumerator.cs" />
     <Compile Include="ETL\EtlProcess.cs" />
     <Compile Include="ETL\EtlProcessBase.cs" />
+    <Compile Include="ETL\FdoRow.cs" />
+    <Compile Include="ETL\IPipelineExecuter.cs" />
     <Compile Include="ETL\ObjectArrayKeys.cs" />
     <Compile Include="ETL\Operations\FdoBatchedOutputOperation.cs" />
     <Compile Include="ETL\Operations\FdoBranchingOperation.cs" />
@@ -88,10 +93,8 @@
     <Compile Include="ETL\Operations\FdoJoinOperation.cs" />
     <Compile Include="ETL\Operations\FdoNestedLoopsJoinOperation.cs" />
     <Compile Include="ETL\Operations\FdoOperationBase.cs" />
-    <Compile Include="ETL\FdoRow.cs" />
     <Compile Include="ETL\Operations\FdoOutputOperation.cs" />
     <Compile Include="ETL\Operations\IFdoOperation.cs" />
-    <Compile Include="ETL\IPipelineExecuter.cs" />
     <Compile Include="ETL\Operations\JoinType.cs" />
     <Compile Include="ETL\Operations\OperationStatistics.cs" />
     <Compile Include="ETL\Operations\PartialProcessOperation.cs" />
@@ -161,18 +164,15 @@
   <ItemGroup>
     <None Include="Schemas\BulkCopyTask.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Schemas\DbConnection.xsd">
-      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Schemas\JoinTask.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Schemas\JoinTask.xsx">
-      <DependentUpon>JoinTask.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Schemas\SpatialConnection.xsd">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

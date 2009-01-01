@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="Join" type="FdoJoin"></xs:element>
-    <xs:complexType name="FdoJoin">
+    <xs:element name="Join" type="FdoJoinTaskDefinition"></xs:element>
+    <xs:complexType name="FdoJoinTaskDefinition">
         <xs:sequence>
-            <xs:element name="Left" type="FdoSource" minOccurs="1" maxOccurs="1" />
-            <xs:element name="Right" type="FdoSource" minOccurs="1" maxOccurs="1" />
+            <xs:element name="Left" type="FdoJoinSource" minOccurs="1" maxOccurs="1" />
+            <xs:element name="Right" type="FdoJoinSource" minOccurs="1" maxOccurs="1" />
             <xs:element name="Target" type="FdoJoinTarget" minOccurs="1" maxOccurs="1" />
             <xs:element name="JoinSettings" type="FdoJoinSettings" minOccurs="1" maxOccurs="1" />
         </xs:sequence>
         <xs:attribute name="name" use="required" type="xs:string" />
     </xs:complexType>
-    <xs:complexType name="FdoSource">
+    <xs:complexType name="FdoJoinSource">
         <xs:sequence>
             <xs:element name="Provider" type="xs:string" minOccurs="1" maxOccurs="1" />
             <xs:element name="ConnectionString" type="xs:string" minOccurs="1" maxOccurs="1" />
