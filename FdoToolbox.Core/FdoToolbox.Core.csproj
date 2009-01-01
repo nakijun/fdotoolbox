@@ -90,7 +90,7 @@
     <Compile Include="ETL\Operations\FdoBranchingOperation.cs" />
     <Compile Include="ETL\Operations\FdoFilteredOperation.cs" />
     <Compile Include="ETL\Operations\FdoInputOperation.cs" />
-    <Compile Include="ETL\Operations\FdoJoinOperation.cs" />
+    <None Include="ETL\Operations\FdoJoinOperation.cs" />
     <Compile Include="ETL\Operations\FdoNestedLoopsJoinOperation.cs" />
     <Compile Include="ETL\Operations\FdoOperationBase.cs" />
     <Compile Include="ETL\Operations\FdoOutputOperation.cs" />
