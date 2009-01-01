@@ -35,7 +35,7 @@ SetCompressor /SOLID /FINAL lzma
 
 !define SLN_DIR ".."
 !define SLN_THIRDPARTY "${SLN_DIR}\Thirdparty"
-!define RELEASE_VERSION "0.6.0"
+!define RELEASE_VERSION "0.7.0"
 
 # Installer vars
 !if ${SLN_CONFIG} == "Release"
@@ -123,6 +123,7 @@ Section
 	# directories
 	File /r "${INST_OUTPUT_FDOTOOLBOX}\FDO"
 	File /r "${INST_OUTPUT_FDOTOOLBOX}\AddIns"
+	File /r "${INST_OUTPUT_FDOTOOLBOX}\Schemas"
 	
 	# docs
 	File "${INST_OUTPUT_FDOTOOLBOX}\userdoc.chm"
@@ -131,12 +132,16 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\license.txt"
 	File "${INST_OUTPUT_FDOTOOLBOX}\cmd_readme.txt"
 	
-	# files
+	# data/config files
 	File "${INST_OUTPUT_FDOTOOLBOX}\cscatalog.sqlite"
-	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Base.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.Core.xml"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.XML"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.exe.config"
+	
+	# libraries
+	
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Base.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.Core.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.TextEditor.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\Iesi.Collections.dll"
