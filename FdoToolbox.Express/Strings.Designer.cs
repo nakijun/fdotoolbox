@@ -88,6 +88,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to SHP directory.
+        /// </summary>
+        internal static string CMD_ConnectShpDir {
+            get {
+                return ResourceManager.GetString("CMD_ConnectShpDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create SDF file.
         /// </summary>
         internal static string CMD_CreateSdf {
@@ -228,6 +237,15 @@ namespace FdoToolbox.Express {
         internal static string TITLE_CONNECT_SHP {
             get {
                 return ResourceManager.GetString("TITLE_CONNECT_SHP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create SHP directory connection.
+        /// </summary>
+        internal static string TITLE_CONNECT_SHP_DIR {
+            get {
+                return ResourceManager.GetString("TITLE_CONNECT_SHP_DIR", resourceCulture);
             }
         }
         

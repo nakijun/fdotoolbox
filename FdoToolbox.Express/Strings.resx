@@ -126,6 +126,9 @@
   <data name="CMD_ConnectShp" xml:space="preserve">
     <value>Connect to SHP</value>
   </data>
+  <data name="CMD_ConnectShpDir" xml:space="preserve">
+    <value>Connect to SHP directory</value>
+  </data>
   <data name="CMD_CreateSdf" xml:space="preserve">
     <value>Create SDF file</value>
   </data>
@@ -173,6 +176,9 @@
   </data>
   <data name="TITLE_CONNECT_SHP" xml:space="preserve">
     <value>Create SHP Connection</value>
+  </data>
+  <data name="TITLE_CONNECT_SHP_DIR" xml:space="preserve">
+    <value>Create SHP directory connection</value>
   </data>
   <data name="TITLE_CONNECTION_NAME" xml:space="preserve">
     <value>Connection Name</value>
