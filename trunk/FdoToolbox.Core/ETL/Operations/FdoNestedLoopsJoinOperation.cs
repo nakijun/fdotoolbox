@@ -14,7 +14,14 @@ namespace FdoToolbox.Core.ETL.Operations
         private readonly PartialProcessOperation right = new PartialProcessOperation();
         private static readonly string IsEmptyRowMarker = Guid.NewGuid().ToString();
 
+        /// <summary>
+        /// The type of join
+        /// </summary>
         protected FdoJoinType joinType = FdoJoinType.Inner;
+        /// <summary>
+        /// If true will only merge the first matching result. Otherwise all matching results
+        /// are merged.
+        /// </summary>
         protected bool forceOneToOne = true;
         private FdoRow currentRightRow, currentLeftRow;
         /// <summary>

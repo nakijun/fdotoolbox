@@ -12,12 +12,31 @@ using System.Collections.Specialized;
 
 namespace FdoToolbox.Core.ETL
 {
+    /// <summary>
+    /// Task definition loader base class
+    /// </summary>
     public abstract class BaseDefinitionLoader
     {
+        /// <summary>
+        /// Creates the connection.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="connStr">The conn STR.</param>
+        /// <returns></returns>
         protected abstract FdoConnection CreateConnection(string provider, string connStr);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseDefinitionLoader"/> class.
+        /// </summary>
         protected BaseDefinitionLoader() { }
 
+        /// <summary>
+        /// Loads bulk copy options from xml
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="owner">if set to <c>true</c> [owner].</param>
+        /// <returns></returns>
         public FdoBulkCopyOptions BulkCopyFromXml(string file, ref string name, bool owner)
         {
             FdoBulkCopyTaskDefinition def = null;
@@ -27,6 +46,13 @@ namespace FdoToolbox.Core.ETL
             return BulkCopyFromXml(def, ref name, owner);
         }
 
+        /// <summary>
+        /// Loads join options from xml
+        /// </summary>
+        /// <param name="def">The deserialized definition.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="owner">if set to <c>true</c> [owner].</param>
+        /// <returns></returns>
         public FdoBulkCopyOptions BulkCopyFromXml(FdoBulkCopyTaskDefinition def, ref string name, bool owner)
         {
             FdoBulkCopyOptions opt = new FdoBulkCopyOptions(
@@ -69,6 +95,13 @@ namespace FdoToolbox.Core.ETL
             return opt;
         }
 
+        /// <summary>
+        /// Loads join options from xml
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="owner">if set to <c>true</c> [owner].</param>
+        /// <returns></returns>
         public FdoJoinOptions JoinFromXml(string file, ref string name, bool owner)
         {
             FdoJoinTaskDefinition def = null;
@@ -78,6 +111,13 @@ namespace FdoToolbox.Core.ETL
             return JoinFromXml(def, ref name, owner);
         }
 
+        /// <summary>
+        /// Loads join options from xml
+        /// </summary>
+        /// <param name="def">The deserialized definition</param>
+        /// <param name="name">The name.</param>
+        /// <param name="owner">if set to <c>true</c> [owner].</param>
+        /// <returns></returns>
         private FdoJoinOptions JoinFromXml(FdoJoinTaskDefinition def, ref string name, bool owner)
         {
             FdoJoinOptions opts = new FdoJoinOptions(owner);
@@ -118,6 +158,12 @@ namespace FdoToolbox.Core.ETL
             return opts;
         }
 
+        /// <summary>
+        /// Saves the join options to xml
+        /// </summary>
+        /// <param name="opts">The opts.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="file">The file.</param>
         public void ToXml(FdoJoinOptions opts, string name, string file)
         {
             FdoJoinTaskDefinition jdef = new FdoJoinTaskDefinition();
@@ -167,11 +213,27 @@ namespace FdoToolbox.Core.ETL
         }
     }
 
+    /// <summary>
+    /// Helper class for Task Definition serialization
+    /// </summary>
     public sealed class TaskDefinitionHelper
     {
+        /// <summary>
+        /// File extension for bulk copy definitions
+        /// </summary>
         public const string BULKCOPYDEFINITION = ".BulkCopyDefinition";
+        /// <summary>
+        /// File extension for join definitions
+        /// </summary>
         public const string JOINDEFINITION = ".JoinDefinition";
 
+        /// <summary>
+        /// Determines whether [the specified file] is a definition
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>
+        /// 	<c>true</c> if [the specified file] is a definition; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsDefinitionFile(string file)
         {
             if (!File.Exists(file))
@@ -182,19 +244,43 @@ namespace FdoToolbox.Core.ETL
             return (ext == BULKCOPYDEFINITION.ToLower()) || (ext == JOINDEFINITION.ToLower());
         }
 
+        /// <summary>
+        /// Determines whether [the specified file] is a bulk copy definition
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>
+        /// 	<c>true</c> if [the specified file] is a bulk copy definition; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsBulkCopy(string file)
         {
             return IsDefinitionFile(file) && (Path.GetExtension(file).ToLower() == BULKCOPYDEFINITION.ToLower());
         }
 
+        /// <summary>
+        /// Determines whether the specified file is a join definition
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified file is a join definition; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsJoin(string file)
         {
             return IsDefinitionFile(file) && (Path.GetExtension(file).ToLower() == JOINDEFINITION.ToLower());
         }
     }
 
+    /// <summary>
+    /// Standalone task definition loader. Use this loader when using only the Core API. 
+    /// Do not use this loader in the context of the FDO Toolbox application.
+    /// </summary>
     public class DefinitionLoader : BaseDefinitionLoader
     {
+        /// <summary>
+        /// Creates the connection.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="connStr">The conn STR.</param>
+        /// <returns></returns>
         protected override FdoConnection CreateConnection(string provider, string connStr)
         {
             return new FdoConnection(provider, connStr);
