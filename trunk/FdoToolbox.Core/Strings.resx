@@ -123,6 +123,9 @@
   <data name="ERR_CANNOT_ALTER_OBJECT" xml:space="preserve">
     <value>Object properties cannot be altered into something else</value>
   </data>
+  <data name="ERR_CANNOT_CREATE_DATA_FILE" xml:space="preserve">
+    <value>Unable to create file data source: {0}</value>
+  </data>
   <data name="ERR_CANNOT_ENUMERATE_MORE_THAN_ONCE" xml:space="preserve">
     <value>Cannot enumerate more than once</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="ERR_CONNECTION_UNKNOWN_STATE" xml:space="preserve">
     <value>Connection is in an unknown state</value>
+  </data>
+  <data name="ERR_FEATURE_ROW_HAS_NO_PARENT_TABLE" xml:space="preserve">
+    <value>This feature row has no parent table</value>
   </data>
   <data name="ERR_INCOMPATIBLE_CLASS_NOT_FOUND" xml:space="preserve">
     <value>Could not find incompatible class: {0}</value>

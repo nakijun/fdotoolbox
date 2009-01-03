@@ -79,6 +79,15 @@ namespace FdoToolbox.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to create file data source: {0}.
+        /// </summary>
+        internal static string ERR_CANNOT_CREATE_DATA_FILE {
+            get {
+                return ResourceManager.GetString("ERR_CANNOT_CREATE_DATA_FILE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot enumerate more than once.
         /// </summary>
         internal static string ERR_CANNOT_ENUMERATE_MORE_THAN_ONCE {
@@ -138,6 +147,15 @@ namespace FdoToolbox.Core {
         internal static string ERR_CONNECTION_UNKNOWN_STATE {
             get {
                 return ResourceManager.GetString("ERR_CONNECTION_UNKNOWN_STATE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This feature row has no parent table.
+        /// </summary>
+        internal static string ERR_FEATURE_ROW_HAS_NO_PARENT_TABLE {
+            get {
+                return ResourceManager.GetString("ERR_FEATURE_ROW_HAS_NO_PARENT_TABLE", resourceCulture);
             }
         }
         

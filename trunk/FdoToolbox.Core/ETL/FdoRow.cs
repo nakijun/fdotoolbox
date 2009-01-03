@@ -450,5 +450,23 @@ namespace FdoToolbox.Core.ETL
                 return null;
             }
         }
+
+        /// <summary>
+        /// Creates a new <see cref="FdoRow"/> from a <see cref="FdoFeature"/> instance
+        /// </summary>
+        /// <param name="feat">The <see cref="FdoFeature"/> instance</param>
+        /// <returns>A new <see cref="FdoRow"/> instance</returns>
+        public static FdoRow FromFeatureRow(FdoFeature feat)
+        {
+            if (feat.Table == null)
+                throw new InvalidOperationException(ResourceUtil.GetString("ERR_FEATURE_ROW_HAS_NO_PARENT_TABLE"));
+
+            FdoRow row = new FdoRow();
+            foreach (DataColumn dc in feat.Table.Columns)
+            {
+                row[dc.ColumnName] = feat[dc];
+            }
+            return row;
+        }
     }
 }

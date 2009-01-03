@@ -124,7 +124,7 @@ namespace FdoToolbox.Base.Controls
                         reader = service.SelectFeatures((e.Argument as StandardQuery).query, (e.Argument as StandardQuery).Limit);
                     else if (e.Argument is string)
                         reader = service.ExecuteSQLQuery(e.Argument.ToString());
-
+                    
                     //Init the data grid view
                     FdoFeatureTable table = new FdoFeatureTable();
                     table.InitTable(reader);

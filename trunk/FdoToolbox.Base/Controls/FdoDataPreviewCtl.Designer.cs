@@ -166,8 +166,9 @@ namespace FdoToolbox.Base.Controls
             // 
             this.sDFToolStripMenuItem.Image = global::FdoToolbox.Base.Images.database;
             this.sDFToolStripMenuItem.Name = "sDFToolStripMenuItem";
-            this.sDFToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.sDFToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.sDFToolStripMenuItem.Text = "SDF";
+            this.sDFToolStripMenuItem.Click += new System.EventHandler(this.saveSdf_Click);
             // 
             // lblCount
             // 

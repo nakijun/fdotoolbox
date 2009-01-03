@@ -26,14 +26,13 @@ using SharpMap.Data.Providers;
 using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Geometry;
 using SharpMap.Converters.WellKnownBinary;
+using FdoToolbox.Core;
 
 namespace FdoToolbox.Base.SharpMapProvider
 {
     public class FdoInMemoryProvider : IProvider
     {
         private FdoFeatureTable _data;
-
-        private FgfGeometryFactory _factory = new FgfGeometryFactory();
 
         public FdoInMemoryProvider() { }
 
@@ -45,6 +44,8 @@ namespace FdoToolbox.Base.SharpMapProvider
 
         public List<SharpMap.Geometries.Geometry> GetGeometriesInView(SharpMap.Geometries.BoundingBox bbox)
         {
+            FdoGeometryFactory fact = FdoGeometryFactory.Instance;
+
             if (_data == null || _data.Rows.Count == 0 || string.IsNullOrEmpty(_data.GeometryColumn))
                 return new List<SharpMap.Geometries.Geometry>();
 
@@ -55,7 +56,7 @@ namespace FdoToolbox.Base.SharpMapProvider
                 {
                     //Get the WKB form of the geometry
                     OSGeo.FDO.Geometry.IGeometry geom = (OSGeo.FDO.Geometry.IGeometry)feat[_data.GeometryColumn];
-                    byte[] wkb = _factory.GetWkb(geom);
+                    byte[] wkb = fact.GetWkb(geom);
                     geoms.Add(GeometryFromWKB.Parse(wkb));
                 }
                 catch { }
@@ -168,7 +169,7 @@ namespace FdoToolbox.Base.SharpMapProvider
 
         public void Dispose()
         {
-            _factory.Dispose();
+            throw new Exception("The method or operation is not implemented.");
         }
     }
 }
