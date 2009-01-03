@@ -222,6 +222,9 @@
   <data name="ERR_UNSUITABLE_DATA_TYPE_REPLACEMENT" xml:space="preserve">
     <value>Unable to find a suitable replacement for data type: {0}</value>
   </data>
+  <data name="ERR_UNSUPPORTED_CAPABILITY" xml:space="preserve">
+    <value>Unsupported capability: {0}</value>
+  </data>
   <data name="ERR_UNSUPPORTED_CLONE_ASSOCIATION" xml:space="preserve">
     <value>Cloning association properties is currently not supported</value>
   </data>

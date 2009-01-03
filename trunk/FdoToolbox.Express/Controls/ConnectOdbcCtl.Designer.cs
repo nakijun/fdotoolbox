@@ -35,6 +35,9 @@ namespace FdoToolbox.Express.Controls
             this.cmbDataType = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtConfiguration = new System.Windows.Forms.TextBox();
+            this.btnBrowse = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -68,9 +71,12 @@ namespace FdoToolbox.Express.Controls
             // 
             // propGrid
             // 
+            this.propGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.propGrid.Location = new System.Drawing.Point(16, 61);
             this.propGrid.Name = "propGrid";
-            this.propGrid.Size = new System.Drawing.Size(492, 234);
+            this.propGrid.Size = new System.Drawing.Size(492, 197);
             this.propGrid.TabIndex = 4;
             // 
             // cmbDataType
@@ -101,10 +107,39 @@ namespace FdoToolbox.Express.Controls
             this.txtName.Size = new System.Drawing.Size(395, 20);
             this.txtName.TabIndex = 7;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(13, 267);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(88, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Configuration File";
+            // 
+            // txtConfiguration
+            // 
+            this.txtConfiguration.Location = new System.Drawing.Point(113, 264);
+            this.txtConfiguration.Name = "txtConfiguration";
+            this.txtConfiguration.Size = new System.Drawing.Size(357, 20);
+            this.txtConfiguration.TabIndex = 9;
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Location = new System.Drawing.Point(476, 262);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(32, 23);
+            this.btnBrowse.TabIndex = 10;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
             // ConnectOdbcCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnBrowse);
+            this.Controls.Add(this.txtConfiguration);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbDataType);
@@ -128,5 +163,8 @@ namespace FdoToolbox.Express.Controls
         private System.Windows.Forms.ComboBox cmbDataType;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtName;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtConfiguration;
+        private System.Windows.Forms.Button btnBrowse;
     }
 }

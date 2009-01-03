@@ -169,6 +169,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML files (*.xml)|*.xml.
+        /// </summary>
+        internal static string FILTER_XML_FILES {
+            get {
+                return ResourceManager.GetString("FILTER_XML_FILES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SDF file created. Create a connection?.
         /// </summary>
         internal static string MSG_CONNECT_SDF {
@@ -282,6 +291,15 @@ namespace FdoToolbox.Express {
         internal static string TITLE_EXPRESS_BULK_COPY {
             get {
                 return ResourceManager.GetString("TITLE_EXPRESS_BULK_COPY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load configuration file.
+        /// </summary>
+        internal static string TITLE_LOAD_CONFIGURATION {
+            get {
+                return ResourceManager.GetString("TITLE_LOAD_CONFIGURATION", resourceCulture);
             }
         }
         

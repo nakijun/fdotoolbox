@@ -50,6 +50,7 @@ using System.IO;
 
 using Res = FdoToolbox.Core.ResourceUtil;
 using FdoToolbox.Core.Connections;
+using OSGeo.FDO.Common.Io;
 
 namespace FdoToolbox.Core.Feature
 {
@@ -273,6 +274,19 @@ namespace FdoToolbox.Core.Feature
             dp.Required = dict.IsPropertyRequired(name);
 
             return dp;
+        }
+
+        /// <summary>
+        /// Sets the configuration for this connection
+        /// </summary>
+        /// <param name="file">The configuration file</param>
+        public void SetConfiguration(string file)
+        {
+            CapabilityType cap = CapabilityType.FdoCapabilityType_SupportsConfiguration;
+            if (!this.Capability.GetBooleanCapability(cap).Value)
+                throw new InvalidOperationException(ResourceUtil.GetStringFormatted("ERR_UNSUPPORTED_CAPABILITY", cap));
+            IoFileStream confStream = new IoFileStream(file, "r");
+            _Connection.Configuration = confStream;
         }
     }
 
