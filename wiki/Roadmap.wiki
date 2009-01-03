@@ -24,6 +24,7 @@
 
 === Future ===
 
+ * Express support for OGR provider
  * Class to Feature Class conversion
  * FDO Connection configuration support
  * Boo scriptability / DSL
