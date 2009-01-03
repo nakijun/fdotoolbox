@@ -8,10 +8,10 @@
  * ~~NSIS installer packages~~
  * ~~Standalone Feature Schema Editor~~
  * ~~Express support for ODBC provider~~
- * Spatial Join support
 
 === 0.8 ===
 
+ * Spatial Join support
  * Connection configuration support
  * Express support for SQLite provider 
  * Localization
