@@ -232,6 +232,12 @@
   <data name="ERR_FIELD_REQUIRED" xml:space="preserve">
     <value>This field is required</value>
   </data>
+  <data name="ERR_SCHEMA_CANNOT_BE_APPLIED" xml:space="preserve">
+    <value>Unable to apply schema: {0}</value>
+  </data>
+  <data name="ERR_SCHEMA_ZERO_LENGTH_PROPERTIES" xml:space="preserve">
+    <value>Schema contains zero-length string/blob/clob properties: {0}</value>
+  </data>
   <data name="ERR_UNABLE_TO_SAVE_SCHEMAS" xml:space="preserve">
     <value>Could not save schema changes</value>
   </data>

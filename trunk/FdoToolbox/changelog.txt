@@ -10,9 +10,13 @@
 	- Added a Preference UI extension API. To register and expose your preference UIs, implement IPreferenceSheet 
 	  and specify the concrete type under the path "/FdoToolbox/Preferences" in your addin definition.
 	- Express module now supports connecting to common ODBC formats (MS Access, Excel, SQL Server, Text files)
+	- Added ability to specify a configuration file for both generic and odbc express connection dialogs.
+	- Revised ETL API is now fully implemented. All existing ETL functionality has been migrated over.
 	
 - Other:
 	- Nearly everything has been re-written from the ground up. 
+	- Database/Non-spatial support has been dropped in favour of more specialized support for the ODBC provider.
+	- Core API is now fully documented.
 
 v0.6.0
 ------

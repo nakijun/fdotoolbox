@@ -410,6 +410,24 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to apply schema: {0}.
+        /// </summary>
+        internal static string ERR_SCHEMA_CANNOT_BE_APPLIED {
+            get {
+                return ResourceManager.GetString("ERR_SCHEMA_CANNOT_BE_APPLIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schema contains zero-length string/blob/clob properties: {0}.
+        /// </summary>
+        internal static string ERR_SCHEMA_ZERO_LENGTH_PROPERTIES {
+            get {
+                return ResourceManager.GetString("ERR_SCHEMA_ZERO_LENGTH_PROPERTIES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not save schema changes.
         /// </summary>
         internal static string ERR_UNABLE_TO_SAVE_SCHEMAS {
