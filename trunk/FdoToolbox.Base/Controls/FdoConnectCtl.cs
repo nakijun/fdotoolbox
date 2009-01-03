@@ -272,5 +272,29 @@ namespace FdoToolbox.Base.Controls
                 grdProperties.CurrentCell.Value = dir;
             }
         }
+
+
+        public bool ConfigEnabled
+        {
+            set 
+            {
+                txtConfiguration.Enabled = btnBrowse.Enabled = value;
+            }
+        }
+
+        public string ConfigFile
+        {
+            get { return txtConfiguration.Text; }
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            txtConfiguration.Text = FileService.OpenFile(ResourceService.GetString("TITLE_LOAD_CONFIGURATION"), ResourceService.GetString("FILTER_XML_FILES"));
+        }
+
+        public void FlagConfigError(string msg)
+        {
+            errorProvider1.SetError(txtConfiguration, msg);
+        }
     }
 }

@@ -48,6 +48,11 @@ namespace FdoToolbox.Base.Controls
         void AddEnumerableProperty(string name, string defaultValue, string[] values);
 
         void AddProperty(DictionaryProperty p);
+
+        bool ConfigEnabled { set; }
+        string ConfigFile { get; }
+
+        void FlagConfigError(string p);
     }
 
     /// <summary>
@@ -139,7 +144,7 @@ namespace FdoToolbox.Base.Controls
                 _view.FlagNameError("A connection named " + _view.ConnectionName + " already exists");
                 return false;
             }
-
+            
             FdoProviderInfo provider = _view.SelectedProvider;
             //string connStr = ExpressUtility.ConvertFromNameValueCollection(_view.ConnectProperties);
 
@@ -152,38 +157,61 @@ namespace FdoToolbox.Base.Controls
             string connStr = ExpressUtility.ConvertFromNameValueCollection(cp);
 
             conn = new FdoConnection(provider.Name, connStr);
-            FdoConnectionState state = conn.Open();
-            if (state == FdoConnectionState.Open)
+            if (FileService.FileExists(_view.ConfigFile))
             {
-                _manager.AddConnection(_view.ConnectionName, conn);
-                return true;
-            }
-            else if (state == FdoConnectionState.Pending)
-            {
-                //Re-query the pending parameters and re-prompt in a new dialog
-                if (_pendingProperties.Count > 0)
+                try
                 {
-                    List<DictionaryProperty> pend = new List<DictionaryProperty>();
-                    foreach (DictionaryProperty p in _pendingProperties)
-                    {
-                        pend.Add(conn.GetConnectTimeProperty(p.Name));
-                    }
-                    NameValueCollection extra = PendingParameterDialog.GetExtraParameters(pend);
-                    //Cancelled action
-                    if (extra == null)
-                        return false;
-
-                    cp.Add(extra);
-                    conn.ConnectionString = ExpressUtility.ConvertFromNameValueCollection(cp);
-                    if (conn.Open() == FdoConnectionState.Open)
-                    {
-                        _manager.AddConnection(_view.ConnectionName, conn);
-                        return true;
-                    }
+                    conn.SetConfiguration(_view.ConfigFile);
+                }
+                catch (Exception ex)
+                {
+                    conn.Dispose();
+                    _view.FlagConfigError(ex.Message);
+                    return false;
                 }
             }
-            else
+
+            try
             {
+                FdoConnectionState state = conn.Open();
+                if (state == FdoConnectionState.Open)
+                {
+                    _manager.AddConnection(_view.ConnectionName, conn);
+                    return true;
+                }
+                else if (state == FdoConnectionState.Pending)
+                {
+                    //Re-query the pending parameters and re-prompt in a new dialog
+                    if (_pendingProperties.Count > 0)
+                    {
+                        List<DictionaryProperty> pend = new List<DictionaryProperty>();
+                        foreach (DictionaryProperty p in _pendingProperties)
+                        {
+                            pend.Add(conn.GetConnectTimeProperty(p.Name));
+                        }
+                        NameValueCollection extra = PendingParameterDialog.GetExtraParameters(pend);
+                        //Cancelled action
+                        if (extra == null)
+                            return false;
+
+                        cp.Add(extra);
+                        conn.ConnectionString = ExpressUtility.ConvertFromNameValueCollection(cp);
+                        if (conn.Open() == FdoConnectionState.Open)
+                        {
+                            _manager.AddConnection(_view.ConnectionName, conn);
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageService.ShowError(ex);
+                conn.Dispose();
                 return false;
             }
             return false;

@@ -265,6 +265,9 @@
   <data name="FILTER_SDF_FILE" xml:space="preserve">
     <value>SDF Files (*.sdf)|*.sdf</value>
   </data>
+  <data name="FILTER_XML_FILES" xml:space="preserve">
+    <value>XML files (*.xml)|*.xml</value>
+  </data>
   <data name="Global.AddButtonText" xml:space="preserve">
     <value>&amp;Add</value>
     <comment>Required by SharpDevelop Core</comment>
@@ -510,6 +513,9 @@
   </data>
   <data name="TITLE_EXPRESSION_EDITOR" xml:space="preserve">
     <value>Expression Editor</value>
+  </data>
+  <data name="TITLE_LOAD_CONFIGURATION" xml:space="preserve">
+    <value>Load configuration file</value>
   </data>
   <data name="TITLE_LOAD_CONNECTION" xml:space="preserve">
     <value>Load Connection</value>
