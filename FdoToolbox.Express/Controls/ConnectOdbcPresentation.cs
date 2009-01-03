@@ -28,6 +28,7 @@ using FdoToolbox.Base;
 using FdoToolbox.Base.Services;
 using ICSharpCode.Core;
 using FdoToolbox.Core;
+using OSGeo.FDO.Common.Io;
 
 namespace FdoToolbox.Express.Controls
 {
@@ -38,6 +39,7 @@ namespace FdoToolbox.Express.Controls
 
         IOdbcConnectionBuilder BuilderObject { get; set; }
         string ConnectionName { get; }
+        string ConfigurationFile { get; }
     }
 
     public class ConnectOdbcPresenter
@@ -77,6 +79,10 @@ namespace FdoToolbox.Express.Controls
             }
 
             FdoConnection conn = new FdoConnection("OSGeo.ODBC", string.Format("ConnectionString=\"{0}\"", _view.BuilderObject.ToConnectionString()));
+            if (FileService.FileExists(_view.ConfigurationFile))
+            {
+                conn.SetConfiguration(_view.ConfigurationFile);
+            }
             if (conn.Open() == FdoConnectionState.Open)
             {
                 IFdoConnectionManager mgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();

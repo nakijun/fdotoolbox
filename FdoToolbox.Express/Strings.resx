@@ -153,6 +153,9 @@
   <data name="FILTER_SHP" xml:space="preserve">
     <value>SHP Files (*.shp)|*.shp</value>
   </data>
+  <data name="FILTER_XML_FILES" xml:space="preserve">
+    <value>XML files (*.xml)|*.xml</value>
+  </data>
   <data name="MSG_CONNECT_SDF" xml:space="preserve">
     <value>SDF file created. Create a connection?</value>
   </data>
@@ -191,6 +194,9 @@
   </data>
   <data name="TITLE_EXPRESS_BULK_COPY" xml:space="preserve">
     <value>Express Bulk Copy</value>
+  </data>
+  <data name="TITLE_LOAD_CONFIGURATION" xml:space="preserve">
+    <value>Load configuration file</value>
   </data>
   <data name="TITLE_OPEN_FILE" xml:space="preserve">
     <value>Open File</value>

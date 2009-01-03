@@ -28,6 +28,7 @@ using System.Text;
 using System.Windows.Forms;
 using FdoToolbox.Base;
 using ICSharpCode.Core;
+using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Express.Controls
 {
@@ -123,6 +124,17 @@ namespace FdoToolbox.Express.Controls
         public string ConnectionName
         {
             get { return txtName.Text; }
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            txtConfiguration.Text = FileService.OpenFile(ResourceService.GetString("TITLE_LOAD_CONFIGURATION"), ResourceService.GetString("FILTER_XML_FILES"));
+        }
+
+
+        public string ConfigurationFile
+        {
+            get { return txtConfiguration.Text; }
         }
     }
 }

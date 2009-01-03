@@ -376,6 +376,15 @@ namespace FdoToolbox.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unsupported capability: {0}.
+        /// </summary>
+        internal static string ERR_UNSUPPORTED_CAPABILITY {
+            get {
+                return ResourceManager.GetString("ERR_UNSUPPORTED_CAPABILITY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cloning association properties is currently not supported.
         /// </summary>
         internal static string ERR_UNSUPPORTED_CLONE_ASSOCIATION {
