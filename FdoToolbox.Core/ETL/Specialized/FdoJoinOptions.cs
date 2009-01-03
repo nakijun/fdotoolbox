@@ -393,6 +393,7 @@ namespace FdoToolbox.Core.ETL.Specialized
     /// <summary>
     /// Defines the possible join types
     /// </summary>
+    [Flags]
     public enum FdoJoinType
     {
         /// <summary>
@@ -410,6 +411,6 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <summary>
         /// Full join, both sides of the join are merged regardless of whether either side exists or not
         /// </summary>
-        Full,
+        Full = Left | Right,
     }
 }

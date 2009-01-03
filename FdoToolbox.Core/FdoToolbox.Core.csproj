@@ -96,7 +96,6 @@
     <Compile Include="ETL\Operations\FdoOperationBase.cs" />
     <Compile Include="ETL\Operations\FdoOutputOperation.cs" />
     <Compile Include="ETL\Operations\IFdoOperation.cs" />
-    <Compile Include="ETL\Operations\JoinType.cs" />
     <Compile Include="ETL\Operations\OperationStatistics.cs" />
     <Compile Include="ETL\Operations\PartialProcessOperation.cs" />
     <Compile Include="ETL\Pipelines\BasePipelineExecuter.cs" />
