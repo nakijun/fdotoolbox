@@ -45,11 +45,16 @@ namespace FdoToolbox.Base.Controls
             this.insertFilePathOpenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertFilePathSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtConfiguration = new System.Windows.Forms.TextBox();
+            this.btnBrowse = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.ctxHelper.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -114,7 +119,7 @@ namespace FdoToolbox.Base.Controls
             this.groupBox2.Controls.Add(this.grdProperties);
             this.groupBox2.Location = new System.Drawing.Point(4, 111);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(590, 228);
+            this.groupBox2.Size = new System.Drawing.Size(590, 176);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Connection Properties";
@@ -129,7 +134,7 @@ namespace FdoToolbox.Base.Controls
             this.grdProperties.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdProperties.Location = new System.Drawing.Point(26, 20);
             this.grdProperties.Name = "grdProperties";
-            this.grdProperties.Size = new System.Drawing.Size(539, 202);
+            this.grdProperties.Size = new System.Drawing.Size(539, 150);
             this.grdProperties.TabIndex = 0;
             this.grdProperties.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.grdProperties_CellMouseDown);
             // 
@@ -178,7 +183,7 @@ namespace FdoToolbox.Base.Controls
             this.insertFilePathSaveToolStripMenuItem,
             this.insertDirectoryToolStripMenuItem});
             this.ctxHelper.Name = "ctxHelper";
-            this.ctxHelper.Size = new System.Drawing.Size(235, 114);
+            this.ctxHelper.Size = new System.Drawing.Size(235, 92);
             // 
             // insertCurrentApplicationPathToolStripMenuItem
             // 
@@ -208,10 +213,54 @@ namespace FdoToolbox.Base.Controls
             this.insertDirectoryToolStripMenuItem.Text = "Insert Directory";
             this.insertDirectoryToolStripMenuItem.Click += new System.EventHandler(this.insertDirectoryToolStripMenuItem_Click);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.btnBrowse);
+            this.groupBox3.Controls.Add(this.txtConfiguration);
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Location = new System.Drawing.Point(4, 293);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(590, 47);
+            this.groupBox3.TabIndex = 5;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Configuration";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(23, 22);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(88, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Configuration File";
+            // 
+            // txtConfiguration
+            // 
+            this.txtConfiguration.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtConfiguration.Location = new System.Drawing.Point(121, 19);
+            this.txtConfiguration.Name = "txtConfiguration";
+            this.txtConfiguration.Size = new System.Drawing.Size(413, 20);
+            this.txtConfiguration.TabIndex = 1;
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowse.Location = new System.Drawing.Point(540, 17);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(25, 23);
+            this.btnBrowse.TabIndex = 2;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
             // FdoConnectCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.btnTest);
@@ -225,6 +274,8 @@ namespace FdoToolbox.Base.Controls
             ((System.ComponentModel.ISupportInitialize)(this.grdProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ctxHelper.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -247,5 +298,9 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.ToolStripMenuItem insertFilePathOpenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insertFilePathSaveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insertDirectoryToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.TextBox txtConfiguration;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -51,6 +51,7 @@ namespace FdoToolbox.Express.Controls
             // 
             // btnConnect
             // 
+            this.btnConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnConnect.Location = new System.Drawing.Point(433, 301);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
@@ -61,6 +62,7 @@ namespace FdoToolbox.Express.Controls
             // 
             // btnTest
             // 
+            this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnTest.Location = new System.Drawing.Point(16, 301);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(75, 23);
@@ -102,6 +104,8 @@ namespace FdoToolbox.Express.Controls
             // 
             // txtName
             // 
+            this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.Location = new System.Drawing.Point(113, 8);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(395, 20);
@@ -109,6 +113,7 @@ namespace FdoToolbox.Express.Controls
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(13, 267);
             this.label3.Name = "label3";
@@ -118,6 +123,8 @@ namespace FdoToolbox.Express.Controls
             // 
             // txtConfiguration
             // 
+            this.txtConfiguration.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtConfiguration.Location = new System.Drawing.Point(113, 264);
             this.txtConfiguration.Name = "txtConfiguration";
             this.txtConfiguration.Size = new System.Drawing.Size(357, 20);
@@ -125,6 +132,7 @@ namespace FdoToolbox.Express.Controls
             // 
             // btnBrowse
             // 
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBrowse.Location = new System.Drawing.Point(476, 262);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(32, 23);

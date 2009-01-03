@@ -500,6 +500,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML files (*.xml)|*.xml.
+        /// </summary>
+        internal static string FILTER_XML_FILES {
+            get {
+                return ResourceManager.GetString("FILTER_XML_FILES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Add.
         /// </summary>
         internal static string Global_AddButtonText {
@@ -1144,6 +1153,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_EXPRESSION_EDITOR {
             get {
                 return ResourceManager.GetString("TITLE_EXPRESSION_EDITOR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load configuration file.
+        /// </summary>
+        internal static string TITLE_LOAD_CONFIGURATION {
+            get {
+                return ResourceManager.GetString("TITLE_LOAD_CONFIGURATION", resourceCulture);
             }
         }
         
