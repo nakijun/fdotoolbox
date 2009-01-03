@@ -14,6 +14,7 @@
 	- Revised ETL API is now fully implemented. All existing ETL functionality has been migrated over.
 	
 - Other:
+	- FDO Toolbox is now based on FDO v3.4.x. This means that providers that are not bundled will not work if they were built against FDO v3.3.x.
 	- Nearly everything has been re-written from the ground up. 
 	- Database/Non-spatial support has been dropped in favour of more specialized support for the ODBC provider.
 	- Core API is now fully documented.

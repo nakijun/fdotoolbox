@@ -50,7 +50,7 @@ SetCompressor /SOLID /FINAL lzma
 
 # Project Output
 !define INST_OUTPUT_FDOTOOLBOX "${SLN_DIR}\out\${SLN_CONFIG}"
-!define INST_OUTDIR "${INST_OUTPUT_FDOTOOLBOX}"
+!define INST_OUTDIR "${SLN_DIR}\out"
 
 # Executables
 !define EXE_FDOTOOLBOX "FdoToolbox.exe"
