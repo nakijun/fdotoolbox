@@ -212,6 +212,8 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        const int DEFAULT_PROPERTY_LENGTH = 255;
+
         public void PropertySelected()
         {
             PropertyDefinition prop = GetProperty(_view.SelectedClass, _view.SelectedProperty);
@@ -222,6 +224,15 @@ namespace FdoToolbox.Base.Controls
                 {
                     if(e.PropertyName == "Name")
                         _view.SelectedName = p.Name;
+                    else if (e.PropertyName == "DataType")
+                    {
+                        DataPropertyDefinitionDesign dd = (DataPropertyDefinitionDesign)p;
+                        DataType dt = dd.DataType;
+                        if ((dt == DataType.DataType_String || dt == DataType.DataType_BLOB || dt == DataType.DataType_CLOB) && dd.Length == 0)
+                            dd.Length = DEFAULT_PROPERTY_LENGTH;
+                        else
+                            dd.Length = 0;
+                    }
                     CheckDirtyState();
                 };
                 _view.SelectedObject = p;
@@ -310,7 +321,7 @@ namespace FdoToolbox.Base.Controls
                 DataPropertyDefinition dp = new DataPropertyDefinition(name, "");
                 //Make some sensible string default length
                 if (dp.DataType == DataType.DataType_String && dp.Length == 0)
-                    dp.Length = 25;
+                    dp.Length = DEFAULT_PROPERTY_LENGTH;
                 cls.Properties.Add(dp);
                 _view.AddPropertyNode(cls.Name, dp.Name, RES_DATA_PROPERTY);
                 CheckDirtyState();
@@ -347,12 +358,34 @@ namespace FdoToolbox.Base.Controls
                 {
                     IncompatibleSchema incSchema;
                     if (!service.CanApplySchema(_schema, out incSchema))
-                        throw new NotSupportedException("Schema cannot be applied: " + incSchema.ToString());
+                        throw new NotSupportedException(ResourceService.GetStringFormatted("ERR_SCHEMA_CANNOT_BE_APPLIED", incSchema.ToString()));
                 }
             }
             else 
             { 
                 //
+            }
+
+            //Check zero-length strings/blobs/clobs
+            foreach (ClassDefinition cd in _schema.Classes)
+            {
+                List<string> zeroLengthProps = new List<string>();
+                foreach (PropertyDefinition pd in cd.Properties)
+                {
+                    if (pd.PropertyType == PropertyType.PropertyType_DataProperty)
+                    {
+                        DataPropertyDefinition dp = (DataPropertyDefinition)pd;
+                        if ((dp.DataType == DataType.DataType_BLOB || dp.DataType == DataType.DataType_CLOB || dp.DataType == DataType.DataType_String) && dp.Length <= 0)
+                        {
+                            zeroLengthProps.Add(dp.Name);
+                        }
+                    }
+                }
+                if (zeroLengthProps.Count > 0)
+                {
+                    string msg = cd.Name + "\n\n" + string.Join("\n", zeroLengthProps.ToArray());
+                    throw new InvalidOperationException(ResourceService.GetStringFormatted("ERR_SCHEMA_ZERO_LENGTH_PROPERTIES", msg));
+                }
             }
         }
 
