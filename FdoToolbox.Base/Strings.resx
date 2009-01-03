@@ -433,6 +433,9 @@
   <data name="MSG_PROVIDER_UNREGISTERED" xml:space="preserve">
     <value>Provider un-registered</value>
   </data>
+  <data name="MSG_SAVE_QUERY_AS" xml:space="preserve">
+    <value>Enter the class name for this result table</value>
+  </data>
   <data name="MSG_SCHEMA_APPLIED" xml:space="preserve">
     <value>Schema Applied</value>
   </data>
@@ -546,6 +549,12 @@
   </data>
   <data name="TITLE_SAVE_LOG" xml:space="preserve">
     <value>Save Log</value>
+  </data>
+  <data name="TITLE_SAVE_QUERY_AS" xml:space="preserve">
+    <value>Save Query</value>
+  </data>
+  <data name="TITLE_SAVE_QUERY_RESULT" xml:space="preserve">
+    <value>Save Query Result</value>
   </data>
   <data name="TITLE_SAVE_SCHEMA" xml:space="preserve">
     <value>Save Feature Schema</value>

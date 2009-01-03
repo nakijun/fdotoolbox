@@ -914,6 +914,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter the class name for this result table.
+        /// </summary>
+        internal static string MSG_SAVE_QUERY_AS {
+            get {
+                return ResourceManager.GetString("MSG_SAVE_QUERY_AS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schema Applied.
         /// </summary>
         internal static string MSG_SCHEMA_APPLIED {
@@ -1252,6 +1261,24 @@ namespace FdoToolbox.Base {
         internal static string TITLE_SAVE_LOG {
             get {
                 return ResourceManager.GetString("TITLE_SAVE_LOG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Query.
+        /// </summary>
+        internal static string TITLE_SAVE_QUERY_AS {
+            get {
+                return ResourceManager.GetString("TITLE_SAVE_QUERY_AS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Query Result.
+        /// </summary>
+        internal static string TITLE_SAVE_QUERY_RESULT {
+            get {
+                return ResourceManager.GetString("TITLE_SAVE_QUERY_RESULT", resourceCulture);
             }
         }
         

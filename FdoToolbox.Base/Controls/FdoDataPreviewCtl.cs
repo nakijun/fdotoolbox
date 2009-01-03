@@ -28,6 +28,8 @@ using System.Text;
 using System.Windows.Forms;
 using ICSharpCode.Core;
 using FdoToolbox.Core.Feature;
+using FdoToolbox.Base.Services;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -262,6 +264,28 @@ namespace FdoToolbox.Base.Controls
         public void DisplayError(Exception exception)
         {
             MessageService.ShowError(exception);
+        }
+
+        private void saveSdf_Click(object sender, EventArgs e)
+        {
+            string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_QUERY_RESULT"), ResourceService.GetString("FILTER_SDF_FILE"));
+            if (file != null)
+            {
+                FdoFeatureTable table = this.ResultTable;
+
+                //Ask for class name
+                if (string.IsNullOrEmpty(table.TableName))
+                {
+                    string name = MessageService.ShowInputBox(ResourceService.GetString("TITLE_SAVE_QUERY_AS"), ResourceService.GetString("MSG_SAVE_QUERY_AS"), "QueryResult");
+                    while(string.IsNullOrEmpty(name))
+                        name = MessageService.ShowInputBox(ResourceService.GetString("TITLE_SAVE_QUERY_AS"), ResourceService.GetString("MSG_SAVE_QUERY_AS"), "QueryResult");
+
+                    table.TableName = name;
+                }
+
+                EtlProcessCtl ctl = new EtlProcessCtl(new TableToFlatFile(table, file));
+                Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
+            }
         }
     }
 }
