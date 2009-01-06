@@ -39,7 +39,7 @@ namespace FdoToolbox.Core
         }
 
         /// <summary>
-        /// Gets the string.
+        /// Gets the string resource.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
@@ -49,7 +49,7 @@ namespace FdoToolbox.Core
         }
 
         /// <summary>
-        /// Gets the string formatted.
+        /// Gets the string resource formatted.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="args">The args.</param>
@@ -61,7 +61,7 @@ namespace FdoToolbox.Core
         }
 
         /// <summary>
-        /// Gets the resource manager for this string bundle
+        /// Gets the resource manager for this string resource bundle
         /// </summary>
         public static ResourceManager StringResourceManager
         {
