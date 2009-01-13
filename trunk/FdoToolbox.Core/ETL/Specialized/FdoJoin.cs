@@ -221,7 +221,13 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <param name="op">The op.</param>
         protected override void OnFinishedProcessing(FdoOperationBase op)
         {
-            if (op is FdoOutputOperation)
+            if (op is FdoBatchedOutputOperation)
+            {
+                FdoBatchedOutputOperation bop = op as FdoBatchedOutputOperation;
+                string className = bop.ClassName;
+                SendMessageFormatted("[Join => {0}]: {1} features written in {2}", className, bop.BatchInsertTotal, op.Statistics.Duration.ToString());
+            }
+            else if (op is FdoOutputOperation)
             {
                 string className = (op as FdoOutputOperation).ClassName;
                 SendMessageFormatted("[Join => {0}]: {1} features written in {2}", className, op.Statistics.OutputtedRows, op.Statistics.Duration.ToString());
