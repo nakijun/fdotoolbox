@@ -80,7 +80,7 @@ namespace FdoToolbox.Base.Controls
             get { return ResourceService.GetString("TITLE_ETL_PROCESS"); }
         }
 
-        public event EventHandler TitleChanged;
+        public event EventHandler TitleChanged = delegate { };
 
         public bool CanClose
         {

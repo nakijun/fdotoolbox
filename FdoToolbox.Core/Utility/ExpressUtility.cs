@@ -442,8 +442,8 @@ namespace FdoToolbox.Core.Utility
                 }
 
                 //Flick on batch support if we can
-                //if (destService.SupportsBatchInsertion())
-                //    options.BatchSize = 300; //Madness? THIS IS SPARTA!
+                if (destService.SupportsBatchInsertion())
+                    options.BatchSize = 300; //Madness? THIS IS SPARTA!
             }
             
 
