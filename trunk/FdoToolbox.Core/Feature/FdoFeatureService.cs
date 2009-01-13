@@ -654,7 +654,7 @@ namespace FdoToolbox.Core.Feature
                     }
                 }
             }
-            else if (SupportsCommand(CommandType.CommandType_SelectAggregates))
+            else if (SupportsCommand(CommandType.CommandType_SelectAggregates) && classDef.IdentityProperties.Count > 0)
             {
                 using (ISelectAggregates select = CreateCommand<ISelectAggregates>(CommandType.CommandType_SelectAggregates))
                 {
@@ -1703,7 +1703,7 @@ namespace FdoToolbox.Core.Feature
                 select.PropertyNames.Clear();
                 foreach (string propName in options.PropertyList)
                 {
-                    select.PropertyNames.Add((Identifier)Identifier.Parse(propName));
+                    select.PropertyNames.Add(new Identifier(propName));
                 }
             }
 
@@ -1719,7 +1719,7 @@ namespace FdoToolbox.Core.Feature
             {
                 foreach (string propertyName in options.OrderBy)
                 {
-                    select.Ordering.Add((Identifier)Identifier.Parse(propertyName));
+                    select.Ordering.Add(new Identifier(propertyName));
                 }
                 select.OrderingOption = options.OrderOption;
             }
