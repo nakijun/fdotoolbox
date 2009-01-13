@@ -25,6 +25,7 @@
 
 === Future ===
 
+ * MapGuide 6.5 SDF conversion tools.
  * Express support for OGR provider
  * Class to Feature Class conversion
  * FDO Connection configuration support
