@@ -66,9 +66,6 @@ namespace FdoToolbox.Core.ETL
             return (TDerived)this;
         }
 
-
-
-
         /// <summary>
         /// Registers the operation at the end of the operations queue
         /// </summary>

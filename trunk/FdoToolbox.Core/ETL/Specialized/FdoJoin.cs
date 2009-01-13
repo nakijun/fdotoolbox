@@ -96,7 +96,16 @@ namespace FdoToolbox.Core.ETL.Specialized
                 SendMessageFormatted("Applying altered schema: {0}", _options.Target.SchemaName);
 
                 //Apply altered schema
-                service.ApplySchema(schema);
+                IncompatibleSchema incSchema;
+                if (!service.CanApplySchema(schema, out incSchema))
+                {
+                    schema = service.AlterSchema(schema, incSchema);
+                    service.ApplySchema(schema);
+                }
+                else
+                {
+                    service.ApplySchema(schema);
+                }
 
                 //Check batch support
                 if (_options.BatchSize > 0 && !service.SupportsBatchInsertion())
