@@ -128,4 +128,14 @@ namespace FdoToolbox.Express.Commands
             wb.ShowContent(ctl, ViewRegion.Dialog);
         }
     }
+
+    public class ConnectOgrCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            ConnectOgrCtl ctl = new ConnectOgrCtl();
+            Workbench wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
 }

@@ -667,7 +667,19 @@ namespace FdoToolbox.Core.Feature
                     {
                         if (reader.ReadNext() && !reader.IsNull(property))
                         {
-                            count = reader.GetInt64(property);
+                            DataType dt = reader.GetDataType(property);
+                            switch (dt)
+                            {
+                                case DataType.DataType_Int16:
+                                    count = reader.GetInt16(property);
+                                    break;
+                                case DataType.DataType_Int32:
+                                    count = reader.GetInt32(property);
+                                    break;
+                                case DataType.DataType_Int64:
+                                    count = reader.GetInt64(property);
+                                    break;
+                            }
                         }
                         reader.Close();
                     }

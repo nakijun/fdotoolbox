@@ -32,6 +32,7 @@ namespace FdoToolbox.Express.Controls.Odbc
 
         [Editor(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
         [Description("The path to the Microsoft Access Database")]
+        [DisplayName("MDB File Path")]
         public string File
         {
             get { return _File; }

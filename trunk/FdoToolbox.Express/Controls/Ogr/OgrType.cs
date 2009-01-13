@@ -19,29 +19,50 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.ComponentModel;
 
-namespace FdoToolbox.Express.Controls.Odbc
+namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OdbcExcel : IOdbcConnectionBuilder
+    public enum OgrType
     {
-        private string _File;
-
-        [Editor(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        [Description("The path to the excel spreadsheet")]
-        [DisplayName("Excel Spreadsheet")]
-        public string File
-        {
-            get { return _File; }
-            set { _File = value; }
-        }
-	
-        public string ToConnectionString()
-        {
-            return string.Format("Driver={{Microsoft Excel Driver (*.xls)}};DriverId=790;Dbq={0}", this.File);
-        }
+        /// <summary>
+        /// MapInfo
+        /// </summary>
+        MapInfo,
+        ///// <summary>
+        ///// ESRI Shape File
+        ///// </summary>
+        //ShapeFile,
+        ///// <summary>
+        ///// Geography Markup Language
+        ///// </summary>
+        //GML,
+        ///// <summary>
+        ///// MySQL
+        ///// </summary>
+        //MySQL,
+        ///// <summary>
+        ///// S-57
+        ///// </summary>
+        //S57,
+        /// <summary>
+        /// Comma Separated values
+        /// </summary>
+        CSV,
+        ///// <summary>
+        ///// Microstation DGN
+        ///// </summary>
+        //DGN,
+        ///// <summary>
+        ///// GeoJSON
+        ///// </summary>
+        //GeoJSON,
+        /// <summary>
+        /// ESRI Personal Geodatabase
+        /// </summary>
+        EsriPGB
     }
 }

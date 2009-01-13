@@ -19,29 +19,17 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.ComponentModel;
 
-namespace FdoToolbox.Express.Controls.Odbc
+namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OdbcExcel : IOdbcConnectionBuilder
+    public interface IOgrConnectionBuilder
     {
-        private string _File;
+        bool ReadOnly { get; set; }
 
-        [Editor(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        [Description("The path to the excel spreadsheet")]
-        [DisplayName("Excel Spreadsheet")]
-        public string File
-        {
-            get { return _File; }
-            set { _File = value; }
-        }
-	
-        public string ToConnectionString()
-        {
-            return string.Format("Driver={{Microsoft Excel Driver (*.xls)}};DriverId=790;Dbq={0}", this.File);
-        }
+        string ToConnectionString();
     }
 }

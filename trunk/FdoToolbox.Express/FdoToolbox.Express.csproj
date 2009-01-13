@@ -66,6 +66,13 @@
       <DependentUpon>ConnectOdbcCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectOdbcPresentation.cs" />
+    <Compile Include="Controls\ConnectOgrCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectOgrCtl.Designer.cs">
+      <DependentUpon>ConnectOgrCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectOgrPresentation.cs" />
     <Compile Include="Controls\CreateShpCtlPresentation.cs" />
     <Compile Include="Controls\CreateShpCtl.cs">
       <SubType>UserControl</SubType>
@@ -93,6 +100,12 @@
     <Compile Include="Controls\Odbc\OdbcSqlServer.cs" />
     <Compile Include="Controls\Odbc\OdbcText.cs" />
     <Compile Include="Controls\Odbc\OdbcType.cs" />
+    <Compile Include="Controls\Ogr\BaseOgrConnectionBuilder.cs" />
+    <Compile Include="Controls\Ogr\IOgrConnectionBuilder.cs" />
+    <Compile Include="Controls\Ogr\OgrCsv.cs" />
+    <Compile Include="Controls\Ogr\OgrEsriPgb.cs" />
+    <Compile Include="Controls\Ogr\OgrMapInfo.cs" />
+    <Compile Include="Controls\Ogr\OgrType.cs" />
     <Compile Include="Images.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -115,6 +128,10 @@
     <EmbeddedResource Include="Controls\ConnectOdbcCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ConnectOdbcCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ConnectOgrCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ConnectOgrCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\CreateShpCtl.resx">
       <DependentUpon>CreateShpCtl.cs</DependentUpon>

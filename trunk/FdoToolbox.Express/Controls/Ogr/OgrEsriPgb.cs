@@ -19,29 +19,32 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using System.Drawing.Design;
+using System.Windows.Forms.Design;
 
-namespace FdoToolbox.Express.Controls.Odbc
+namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OdbcExcel : IOdbcConnectionBuilder
+    public class OgrEsriPgb : BaseOgrConnectionBuilder
     {
-        private string _File;
+        private string _MdbPath;
 
-        [Editor(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        [Description("The path to the excel spreadsheet")]
-        [DisplayName("Excel Spreadsheet")]
-        public string File
+        [Description("The path to the ESRI Personal Geodatabase")]
+        [DisplayName("ESRI PGB Path")]
+        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+        public string MdbPath
         {
-            get { return _File; }
-            set { _File = value; }
+            get { return _MdbPath; }
+            set { _MdbPath = value; }
         }
 	
-        public string ToConnectionString()
+        public override string ToConnectionString()
         {
-            return string.Format("Driver={{Microsoft Excel Driver (*.xls)}};DriverId=790;Dbq={0}", this.File);
+            return string.Format("DataSource={0};ReadOnly={1}", this.MdbPath, this.ReadOnly.ToString().ToUpper());
         }
     }
 }
