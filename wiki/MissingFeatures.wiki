@@ -6,7 +6,6 @@
  * ~~Coordinate System Definition browser (for assigning spatial contexts)~~
  * ~~Data Store Management~~
  * ~~Delete Schema Command~~
- * Insert Data Scaffold
  * ~~Command-line utilities~~
  * ~~Session persistence (connections~~ / tasks)
  * Bulk Copy features
@@ -23,9 +22,10 @@
  * File to File Bulk Copy
    * ~~SDF to SDF~~
    * ~~SHP to SDF~~
-   * SDF to SHP
+   * ~~SDF to SHP~~
    * SHP to SHP
  * ~~Save query result to SDF~~
  * Capability-aware user interface
 
-Database support will not be ported over to 0.7. See [http://themapguyde.blogspot.com/2008/12/heres-another-little-fdo-toolbox-update.html this blog post] for an explanation.
+# Database support will not be ported over to 0.7. See [http://themapguyde.blogspot.com/2008/12/heres-another-little-fdo-toolbox-update.html this blog post] for an explanation.
+# Insert Data Scaffold will be reworked for beyond 0.7
