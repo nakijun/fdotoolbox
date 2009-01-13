@@ -40,6 +40,9 @@
                 <MenuItem id="ConnectOdbc"
                           label="${res:CMD_ConnectOdbc}"
                           class="FdoToolbox.Express.Commands.ConnectOdbcCommand" />
+                <MenuItem id="ConnectOgr"
+                          label="${res:CMD_ConnectOgr}"
+                          class="FdoToolbox.Express.Commands.ConnectOgrCommand" />
             </MenuItem>
             <MenuItem id="ExpressCreate"
                       label="Create"

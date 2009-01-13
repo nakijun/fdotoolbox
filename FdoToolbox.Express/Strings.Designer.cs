@@ -70,6 +70,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect via OGR.
+        /// </summary>
+        internal static string CMD_ConnectOgr {
+            get {
+                return ResourceManager.GetString("CMD_ConnectOgr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect to SDF.
         /// </summary>
         internal static string CMD_ConnectSdf {
@@ -219,6 +228,15 @@ namespace FdoToolbox.Express {
         internal static string TITLE_CONNECT_ODBC {
             get {
                 return ResourceManager.GetString("TITLE_CONNECT_ODBC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create OGR Connection.
+        /// </summary>
+        internal static string TITLE_CONNECT_OGR {
+            get {
+                return ResourceManager.GetString("TITLE_CONNECT_OGR", resourceCulture);
             }
         }
         

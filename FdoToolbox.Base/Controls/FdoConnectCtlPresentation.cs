@@ -97,6 +97,10 @@ namespace FdoToolbox.Base.Controls
             {
                 MessageService.ShowError(ex.InnerException.Message);
             }
+            finally
+            {
+                conn.Dispose();
+            }
         }
 
         private List<DictionaryProperty> _pendingProperties = new List<DictionaryProperty>();

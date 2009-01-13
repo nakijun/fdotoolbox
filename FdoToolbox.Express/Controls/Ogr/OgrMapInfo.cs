@@ -19,29 +19,35 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using System.Windows.Forms.Design;
+using System.Drawing.Design;
 
-namespace FdoToolbox.Express.Controls.Odbc
+namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OdbcExcel : IOdbcConnectionBuilder
+    public class OgrMapInfo : BaseOgrConnectionBuilder
     {
-        private string _File;
+        private string _Directory;
 
-        [Editor(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        [Description("The path to the excel spreadsheet")]
-        [DisplayName("Excel Spreadsheet")]
-        public string File
+        [Description("The path to the directory containing the MapInfo files")]
+        [DisplayName("MapInfo directory")]
+        [Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
+        public string Directory
         {
-            get { return _File; }
-            set { _File = value; }
+            get { return _Directory; }
+            set { _Directory = value; }
         }
-	
-        public string ToConnectionString()
+
+        public override string ToConnectionString()
         {
-            return string.Format("Driver={{Microsoft Excel Driver (*.xls)}};DriverId=790;Dbq={0}", this.File);
+            if(this.Directory.EndsWith("\\"))
+                return string.Format("DataSource={0};ReadOnly={1}", this.Directory.Substring(0, this.Directory.Length - 1), this.ReadOnly.ToString().ToUpper());
+            else
+                return string.Format("DataSource={0};ReadOnly={1}", this.Directory, this.ReadOnly.ToString().ToUpper());
         }
     }
 }

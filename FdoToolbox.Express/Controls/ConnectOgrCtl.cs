@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,18 +29,17 @@ using System.Text;
 using System.Windows.Forms;
 using FdoToolbox.Base;
 using ICSharpCode.Core;
-using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class ConnectOdbcCtl : UserControl, IViewContent, IConnectOdbcView
+    public partial class ConnectOgrCtl : UserControl, IConnectOgrView, IViewContent
     {
-        private ConnectOdbcPresenter _presenter;
+        private ConnectOgrPresenter _presenter;
 
-        public ConnectOdbcCtl()
+        public ConnectOgrCtl()
         {
             InitializeComponent();
-            _presenter = new ConnectOdbcPresenter(this);
+            _presenter = new ConnectOgrPresenter(this);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -48,21 +48,37 @@ namespace FdoToolbox.Express.Controls
             base.OnLoad(e);
         }
 
-        public FdoToolbox.Express.Controls.Odbc.OdbcType[] OdbcTypes
+        private void cmbDataType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _presenter.OgrTypeChanged();
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            _presenter.TestConnection();
+        }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            if (_presenter.Connect())
+                ViewContentClosing(this, EventArgs.Empty);
+        }
+
+        public FdoToolbox.Express.Controls.Ogr.OgrType[] OgrTypes
         {
             set { cmbDataType.DataSource = value; }
         }
 
-        public FdoToolbox.Express.Controls.Odbc.OdbcType SelectedOdbcType
+        public FdoToolbox.Express.Controls.Ogr.OgrType SelectedOgrType
         {
-            get { return (FdoToolbox.Express.Controls.Odbc.OdbcType)cmbDataType.SelectedItem; }
+            get { return (FdoToolbox.Express.Controls.Ogr.OgrType)cmbDataType.SelectedItem; }
         }
 
-        public FdoToolbox.Express.Controls.Odbc.IOdbcConnectionBuilder BuilderObject
+        public FdoToolbox.Express.Controls.Ogr.IOgrConnectionBuilder BuilderObject
         {
             get
             {
-                return (FdoToolbox.Express.Controls.Odbc.IOdbcConnectionBuilder)propGrid.SelectedObject;
+                return (FdoToolbox.Express.Controls.Ogr.IOgrConnectionBuilder)propGrid.SelectedObject;
             }
             set
             {
@@ -70,9 +86,14 @@ namespace FdoToolbox.Express.Controls
             }
         }
 
+        public string ConnectionName
+        {
+            get { return txtName.Text; }
+        }
+
         public string Title
         {
-            get { return ResourceService.GetString("TITLE_CONNECT_ODBC"); }
+            get { return ResourceService.GetString("TITLE_CONNECT_OGR"); }
         }
 
         public event EventHandler TitleChanged = delegate { };
@@ -102,38 +123,6 @@ namespace FdoToolbox.Express.Controls
         public Control ContentControl
         {
             get { return this; }
-        }
-
-        private void cmbDataType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _presenter.OdbcTypeChanged();
-        }
-
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-            _presenter.TestConnection();
-        }
-
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            if (_presenter.Connect())
-                ViewContentClosing(this, EventArgs.Empty);
-        }
-
-        public string ConnectionName
-        {
-            get { return txtName.Text; }
-        }
-
-        private void btnBrowse_Click(object sender, EventArgs e)
-        {
-            txtConfiguration.Text = FileService.OpenFile(ResourceService.GetString("TITLE_LOAD_CONFIGURATION"), ResourceService.GetString("FILTER_XML_FILES"));
-        }
-
-
-        public string ConfigurationFile
-        {
-            get { return txtConfiguration.Text; }
         }
     }
 }
