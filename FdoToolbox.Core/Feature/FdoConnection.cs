@@ -168,7 +168,7 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
-        /// Creates a new feature service
+        /// Creates a new feature service bound to this connection
         /// </summary>
         /// <returns></returns>
         public FdoFeatureService CreateFeatureService()

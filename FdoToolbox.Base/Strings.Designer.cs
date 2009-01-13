@@ -896,6 +896,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} errors were encountered when running this ETL process..
+        /// </summary>
+        internal static string MSG_ETL_ERRORS {
+            get {
+                return ResourceManager.GetString("MSG_ETL_ERRORS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Showing all Data Stores.
         /// </summary>
         internal static string MSG_LISTING_DATA_STORES {
@@ -1036,6 +1045,15 @@ namespace FdoToolbox.Base {
         internal static string PROMPT_ENTER_NEW_CONNECTION_NAME {
             get {
                 return ResourceManager.GetString("PROMPT_ENTER_NEW_CONNECTION_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your query will be returning {0} results. Do you want to continue..
+        /// </summary>
+        internal static string QUESTION_DATA_PREVIEW_LIMIT {
+            get {
+                return ResourceManager.GetString("QUESTION_DATA_PREVIEW_LIMIT", resourceCulture);
             }
         }
         

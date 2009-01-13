@@ -427,6 +427,9 @@
   <data name="MSG_DATA_STORE_CREATED" xml:space="preserve">
     <value>Data store created.</value>
   </data>
+  <data name="MSG_ETL_ERRORS" xml:space="preserve">
+    <value>{0} errors were encountered when running this ETL process.</value>
+  </data>
   <data name="MSG_LISTING_DATA_STORES" xml:space="preserve">
     <value>Showing all Data Stores</value>
   </data>
@@ -474,6 +477,9 @@
   </data>
   <data name="PROMPT_ENTER_NEW_CONNECTION_NAME" xml:space="preserve">
     <value>Enter the new name for the connection</value>
+  </data>
+  <data name="QUESTION_DATA_PREVIEW_LIMIT" xml:space="preserve">
+    <value>Your query will be returning {0} results. Do you want to continue.</value>
   </data>
   <data name="QUESTION_UNSAVED_CHANGES" xml:space="preserve">
     <value>You have unsaved changes. Save now?</value>

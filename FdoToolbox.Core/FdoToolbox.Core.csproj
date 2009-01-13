@@ -77,6 +77,7 @@
     <Compile Include="Connections\EnumerableDictionaryProperty.cs" />
     <Compile Include="Connections\DictionaryProperty.cs" />
     <Compile Include="CoordinateSystems\CoordinateSystemDefinition.cs" />
+    <Compile Include="ETL\CopySpatialContext.cs" />
     <Compile Include="ETL\DefinitionLoader.cs" />
     <Compile Include="ETL\Enumerables\CachingEnumerable.cs" />
     <Compile Include="ETL\Enumerables\EventRaisingEnumerator.cs" />
@@ -98,6 +99,11 @@
     <Compile Include="ETL\Operations\IFdoOperation.cs" />
     <Compile Include="ETL\Operations\OperationStatistics.cs" />
     <Compile Include="ETL\Operations\PartialProcessOperation.cs" />
+    <Compile Include="ETL\Overrides\CopySpatialContextOverrideFactory.cs" />
+    <Compile Include="ETL\ICopySpatialContext.cs" />
+    <Compile Include="ETL\Overrides\MsSqlCopySpatialContextOverride.cs" />
+    <Compile Include="ETL\Overrides\MySqlCopySpatialContextOverride.cs" />
+    <Compile Include="ETL\Overrides\ShpCopySpatialContextOverride.cs" />
     <Compile Include="ETL\Pipelines\BasePipelineExecuter.cs" />
     <Compile Include="ETL\Pipelines\SingleThreadedPipelineExecuter.cs" />
     <Compile Include="ETL\Pipelines\ThreadPoolPipelineExecuter.cs" />
@@ -154,6 +160,7 @@
     </Compile>
     <Compile Include="Utility\ExpressUtility.cs" />
     <Compile Include="Utility\FdoGeometryUtil.cs" />
+    <Compile Include="Utility\WKTParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Strings.resx">

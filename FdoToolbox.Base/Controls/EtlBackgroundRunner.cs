@@ -60,6 +60,11 @@ namespace FdoToolbox.Base.Controls
             try
             {
                 _proc.Execute();
+                EtlProcess p = _proc.ToEtlProcess();
+                if (p.Errors.Length > 0)
+                {
+                    this.ProcessMessage(this, new MessageEventArgs(p.Errors.Length + " errors were found"));
+                }
             }
             catch (ThreadAbortException)
             {

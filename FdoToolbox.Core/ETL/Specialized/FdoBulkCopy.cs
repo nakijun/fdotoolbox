@@ -122,16 +122,34 @@ namespace FdoToolbox.Core.ETL.Specialized
                 if (copt.PropertyMappings.Count > 0)
                 {
                     if (_options.BatchSize > 0)
-                        output = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings, _options.BatchSize);
+                    {
+                        FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings, _options.BatchSize);
+                        b.BatchInserted += delegate
+                        {
+                            SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, b.BatchSize);
+                        };
+                        output = b;
+                    }
                     else
+                    {
                         output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings);
+                    }
                 }
                 else
                 {
-                    if(_options.BatchSize > 0)
-                        output = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, _options.BatchSize);
+                    if (_options.BatchSize > 0)
+                    {
+                        FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, _options.BatchSize);
+                        b.BatchInserted += delegate
+                        {
+                            SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, b.BatchSize);
+                        };
+                        output = b;
+                    }
                     else
+                    {
                         output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName);
+                    }
                 }
 
                 string sourceClass = copt.SourceClassName;

@@ -31,6 +31,7 @@ using OSGeo.FDO.Expression;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Filter;
 using System.Data;
+using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -280,6 +281,12 @@ namespace FdoToolbox.Base.Controls
             }
             if (query != null)
             {
+                long count = GetFeatureCount();
+                int limit = Preferences.DataPreviewWarningLimit;
+                if (count > limit && !MessageService.AskQuestionFormatted(ResourceService.GetString("TITLE_DATA_PREVIEW"), ResourceService.GetString("QUESTION_DATA_PREVIEW_LIMIT"), count.ToString()))
+                {
+                    return;
+                }
                 Clear();
                 _view.CancelEnabled = true;
                 _view.ClearEnabled = false;

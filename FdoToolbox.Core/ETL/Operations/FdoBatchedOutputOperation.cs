@@ -37,6 +37,8 @@ namespace FdoToolbox.Core.ETL.Operations
     /// </summary>
     public class FdoBatchedOutputOperation : FdoOutputOperation
     {
+        public event EventHandler BatchInserted = delegate { };
+
         private int _BatchSize;
 
         /// <summary>
@@ -109,6 +111,7 @@ namespace FdoToolbox.Core.ETL.Operations
                         using (IFeatureReader reader = insertCmd.Execute())
                         {
                             reader.Close();
+                            this.BatchInserted(this, EventArgs.Empty);
                         }
                         count = 0;
                     }
