@@ -25,6 +25,7 @@
 
 === Future ===
 
+ * Visual ETL pipeline editor
  * MapGuide 6.5 SDF conversion tools
  * Class to Feature Class conversion
  * FDO Connection configuration support
