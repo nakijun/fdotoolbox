@@ -11,6 +11,7 @@
 
 === 0.8 ===
 
+ * Express support for OGR provider
  * Spatial Join support
  * Connection configuration support
  * Express support for SQLite provider 
