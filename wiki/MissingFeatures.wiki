@@ -9,7 +9,7 @@
  * ~~Command-line utilities~~
  * ~~Session persistence (connections~~ / tasks)
  * Bulk Copy features
-   * Batch insert support
+   * ~~Batch insert support~~
    * Data value conversion support
  * Task Management
    * ~~Create Task~~
@@ -19,11 +19,11 @@
    * ~~Execute Task~~
    * Load Task
    * Save Task
- * File to File Bulk Copy
+ * ~~File to File Bulk Copy~~
    * ~~SDF to SDF~~
    * ~~SHP to SDF~~
    * ~~SDF to SHP~~
-   * SHP to SHP
+   * ~~SHP to SHP~~
  * ~~Save query result to SDF~~
  * Capability-aware user interface
 
