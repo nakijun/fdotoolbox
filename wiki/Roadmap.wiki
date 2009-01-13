@@ -8,10 +8,10 @@
  * ~~NSIS installer packages~~
  * ~~Standalone Feature Schema Editor~~
  * ~~Express support for ODBC provider~~
+ * ~~Express support for OGR provider~~
 
 === 0.8 ===
 
- * Express support for OGR provider
  * Spatial Join support
  * Connection configuration support
  * Express support for SQLite provider 
