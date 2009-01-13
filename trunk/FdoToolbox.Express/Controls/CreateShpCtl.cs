@@ -83,7 +83,7 @@ namespace FdoToolbox.Express.Controls
             get { return ResourceService.GetString("TITLE_CREATE_SHP"); }
         }
 
-        public event EventHandler TitleChanged;
+        public event EventHandler TitleChanged = delegate { };
 
         public bool CanClose
         {

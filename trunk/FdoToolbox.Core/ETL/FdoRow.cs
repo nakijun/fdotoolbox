@@ -196,7 +196,8 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// Generate a row from a Feature Reader
         /// </summary>
-        /// <param name="reader"></param>
+        /// <param name="reader">The feature reader</param>
+        /// <param name="ignoreProperties">A list of properties to exclude from the row</param>
         /// <returns></returns>
         public static FdoRow FromFeatureReader(FdoFeatureReader reader, ICollection<string> ignoreProperties)
         {

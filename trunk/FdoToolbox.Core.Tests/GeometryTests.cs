@@ -487,8 +487,6 @@ namespace FdoToolbox.Core.Tests
         {
             IRing extRing = CreateRing(offset + 100);
 
-            int numIntRings = 2;
-
             RingCollection intRings = new RingCollection();
 
             IRing ring1 = CreateRing(offset + 200);

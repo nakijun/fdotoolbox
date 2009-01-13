@@ -34,8 +34,6 @@ namespace FdoToolbox.Base.Services
     {
         private Dictionary<string, FdoConnection> _ConnectionDict = new Dictionary<string, FdoConnection>();
 
-        private int counter = 0;
-
         public void Clear()
         {
             List<string> names = new List<string>(GetConnectionNames());
@@ -76,10 +74,6 @@ namespace FdoToolbox.Base.Services
                 conn.Dispose();
                 if (this.ConnectionRemoved != null)
                     this.ConnectionRemoved(this, new EventArgs<string>(name));
-
-                //Reset counter if no connections left
-                if (_ConnectionDict.Count == 0)
-                    counter = 0;
             }
         }
 

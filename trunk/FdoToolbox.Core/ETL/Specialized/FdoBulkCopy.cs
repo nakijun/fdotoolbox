@@ -28,6 +28,7 @@ namespace FdoToolbox.Core.ETL.Specialized
     using Operations;
     using FdoToolbox.Core.Feature;
     using OSGeo.FDO.Commands.Feature;
+    using FdoToolbox.Core.ETL.Pipelines;
 
     /// <summary>
     /// A specialized form of <see cref="EtlProcess"/> that copies
@@ -36,9 +37,6 @@ namespace FdoToolbox.Core.ETL.Specialized
     public class FdoBulkCopy : FdoSpecializedEtlProcess
     {
         private FdoBulkCopyOptions _options;
-
-        //private TimeSpan _totalSpan;
-        //private int _featuresCopied;
 
         /// <summary>
         /// Constructor
@@ -124,9 +122,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                     if (_options.BatchSize > 0)
                     {
                         FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings, _options.BatchSize);
-                        b.BatchInserted += delegate
+                        b.BatchInserted += delegate(object sender, BatchInsertEventArgs e)
                         {
-                            SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, b.BatchSize);
+                            SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, e.BatchSize);
                         };
                         output = b;
                     }
@@ -140,9 +138,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                     if (_options.BatchSize > 0)
                     {
                         FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, _options.BatchSize);
-                        b.BatchInserted += delegate
+                        b.BatchInserted += delegate(object sender, BatchInsertEventArgs e)
                         {
-                            SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, b.BatchSize);
+                            SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, e.BatchSize);
                         };
                         output = b;
                     }
@@ -183,7 +181,13 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <param name="op">The op.</param>
         protected override void OnFinishedProcessing(FdoOperationBase op)
         {
-            if (op is FdoOutputOperation)
+            if (op is FdoBatchedOutputOperation)
+            {
+                FdoBatchedOutputOperation bop = op as FdoBatchedOutputOperation;
+                string className = bop.ClassName;
+                SendMessageFormatted("[Bulk Copy => {0}]: {1} features written in {2}", className, bop.BatchInsertTotal, op.Statistics.Duration.ToString());
+            }
+            else if (op is FdoOutputOperation)
             {
                 string className = (op as FdoOutputOperation).ClassName;
                 SendMessageFormatted("[Bulk Copy => {0}]: {1} features written in {2}", className, op.Statistics.OutputtedRows, op.Statistics.Duration.ToString());
