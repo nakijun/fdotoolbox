@@ -32,6 +32,9 @@ using OSGeo.FDO.Commands.DataStore;
 using System.IO;
 using FdoToolbox.Core.ETL.Specialized;
 using System.Data;
+using System.Collections.ObjectModel;
+using FdoToolbox.Core.ETL.Overrides;
+using FdoToolbox.Core.ETL;
 
 namespace FdoToolbox.Core.Utility
 {
@@ -377,13 +380,13 @@ namespace FdoToolbox.Core.Utility
             FdoConnection source = null;
             FdoConnection target = null;
             //Is a directory. Implies a SHP connection
-            if (Directory.Exists(targetPath))
+            if (IsShp(targetPath))
             {
                 //SHP doesn't actually support CreateDataStore. We use the following technique:
                 // - Connect to base directory
                 // - Clone source schema and apply to SHP connection.
                 // - A SHP file and related files are created for each feature class.
-                string shpdir = Path.GetDirectoryName(targetPath);
+                string shpdir = Directory.Exists(targetPath) ? targetPath : Path.GetDirectoryName(targetPath);
                 source = CreateFlatFileConnection(sourceFile);
                 target = new FdoConnection("OSGeo.SHP", "DefaultFileLocation=" + shpdir);
             }
@@ -399,6 +402,11 @@ namespace FdoToolbox.Core.Utility
             target.Open();
 
             options = new FdoBulkCopyOptions(source, target, true);
+
+            if (copySpatialContexts)
+            {
+                CopyAllSpatialContexts(source, target, true);
+            }
 
             using (FdoFeatureService srcService = source.CreateFeatureService())
             using (FdoFeatureService destService = target.CreateFeatureService())
@@ -433,20 +441,36 @@ namespace FdoToolbox.Core.Utility
                     options.AddClassCopyOption(cd.Name, cd.Name);
                 }
 
-                if (copySpatialContexts)
-                {
-                    //Assume single spatial context. So use the active one
-                    SpatialContextInfo srcCtx = srcService.GetActiveSpatialContext();
-                    if(srcCtx != null)
-                        options.AddSourceSpatialContext(srcCtx);
-                }
                 //Flick on batch support if we can
-                if (destService.SupportsBatchInsertion())
-                    options.BatchSize = 300; //Madness? THIS IS SPARTA!
+                //if (destService.SupportsBatchInsertion())
+                //    options.BatchSize = 300; //Madness? THIS IS SPARTA!
             }
             
 
             return new FdoBulkCopy(options);
+        }
+
+        /// <summary>
+        /// Copies all spatial contexts from one connection to another. If the target connection
+        /// only supports one spatial context, then the active spatial context is copied across.
+        /// </summary>
+        /// <param name="source">The source connection</param>
+        /// <param name="target">The target connection</param>
+        /// <param name="overwrite">If true will overwrite any existing spatial contexts, otherwise it will add them. This value is ignored if the target connection does not support multiple spatial contexts</param>
+        public static void CopyAllSpatialContexts(FdoConnection source, FdoConnection target, bool overwrite)
+        {
+            using (FdoFeatureService srcService = source.CreateFeatureService())
+            using (FdoFeatureService destService = target.CreateFeatureService())
+            {
+                ICopySpatialContext copy = CopySpatialContextOverrideFactory.GetCopySpatialContextOverride(target);
+                
+                copy.Execute(source, target, true);
+            }
+        }
+
+        private static bool IsShp(string targetPath)
+        {
+            return Directory.Exists(targetPath) || targetPath.EndsWith(".shp");
         }
     }
 }

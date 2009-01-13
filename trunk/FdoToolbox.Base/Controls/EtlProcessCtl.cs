@@ -66,6 +66,7 @@ namespace FdoToolbox.Base.Controls
         private void AppendText(string msg)
         {
             txtOutput.AppendText(msg + "\n");
+            txtOutput.ScrollToCaret();
         }
 
         protected override void OnLoad(EventArgs e)

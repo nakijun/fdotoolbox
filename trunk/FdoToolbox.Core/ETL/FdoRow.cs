@@ -198,13 +198,13 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public static FdoRow FromFeatureReader(FdoFeatureReader reader)
+        public static FdoRow FromFeatureReader(FdoFeatureReader reader, ICollection<string> ignoreProperties)
         {
             FdoRow row = new FdoRow();
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 string name = reader.GetName(i);
-                if (!reader.IsNull(name))
+                if (!ignoreProperties.Contains(name) && !reader.IsNull(name))
                 {
                     if (name == reader.DefaultGeometryProperty)
                     {
