@@ -55,8 +55,8 @@ namespace FdoToolbox.Base.SharpMapProvider
                 try
                 {
                     //Get the WKB form of the geometry
-                    OSGeo.FDO.Geometry.IGeometry geom = (OSGeo.FDO.Geometry.IGeometry)feat[_data.GeometryColumn];
-                    byte[] wkb = fact.GetWkb(geom);
+                    FdoGeometry geom = (FdoGeometry)feat[_data.GeometryColumn];
+                    byte[] wkb = fact.GetWkb(geom.InternalGeometry);
                     geoms.Add(GeometryFromWKB.Parse(wkb));
                 }
                 catch { }

@@ -174,11 +174,23 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        public string CountMessage
+        public string ElapsedMessage
         {
-            set { lblCount.Text = value; }
+            set 
+            { 
+                lblElapsedTime.Text = value;
+                sepElapsed.Visible = !string.IsNullOrEmpty(value);
+            }
         }
 
+        public string CountMessage
+        {
+            set 
+            { 
+                lblResultCount.Text = value; 
+                sepCount.Visible = !string.IsNullOrEmpty(value);
+            }
+        }
 
         public bool ClearEnabled
         {
@@ -208,39 +220,13 @@ namespace FdoToolbox.Base.Controls
                     grdResults.DataSource = null;
                     grdResults.Columns.Clear();
                     grdResults.Rows.Clear();
-                    lblCount.Text = string.Empty;
+                    lblElapsedTime.Text = string.Empty;
                 }
                 else
                 {
                     _table = value;
+                    grdResults.DataSource = _table;
                     mapCtl.DataSource = _table;
-                    foreach (DataColumn col in _table.Columns)
-                    {
-                        grdResults.Columns.Add(col.ColumnName, col.ColumnName);
-                    }
-                    _table.FeatureChanged += new FdoToolbox.Core.FdoFeatureChangeEventHandler(FeatureAdded);
-                }
-            }
-        }
-
-        void FeatureAdded(object sender, FdoToolbox.Core.FdoFeatureChangeEventArgs e)
-        {
-            if (e.Action == DataRowAction.Add)
-            {
-                if (grdResults.InvokeRequired)
-                {
-                    grdResults.Invoke(
-                        new MethodInvoker(
-                            delegate { 
-                                grdResults.Rows.Add(e.Feature.GeometriesAsText());
-                                lblCount.Text = grdResults.Rows.Count + " results";
-                            }
-                    ));
-                }
-                else
-                {
-                    grdResults.Rows.Add(e.Feature.GeometriesAsText());
-                    lblCount.Text = grdResults.Rows.Count + " results";
                 }
             }
         }
