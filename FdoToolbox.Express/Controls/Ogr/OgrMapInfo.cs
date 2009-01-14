@@ -31,6 +31,8 @@ namespace FdoToolbox.Express.Controls.Ogr
 {
     public class OgrMapInfo : BaseOgrConnectionBuilder
     {
+        public OgrMapInfo() { base.ReadOnly = true; }
+
         private string _Directory;
 
         [Description("The path to the directory containing the MapInfo files")]

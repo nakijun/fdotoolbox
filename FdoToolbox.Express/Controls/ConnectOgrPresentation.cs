@@ -75,14 +75,19 @@ namespace FdoToolbox.Express.Controls
             }
 
             FdoConnection conn = new FdoConnection("OSGeo.OGR", _view.BuilderObject.ToConnectionString());
-            if (conn.Open() == FdoConnectionState.Open)
+            try
             {
-                IFdoConnectionManager mgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
-                mgr.AddConnection(_view.ConnectionName, conn);
-                return true;
+                if (conn.Open() == FdoConnectionState.Open)
+                {
+                    IFdoConnectionManager mgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
+                    mgr.AddConnection(_view.ConnectionName, conn);
+                    return true;
+                }
             }
-
-            MessageService.ShowMessage("Connection test failed");
+            catch (FdoException ex)
+            {
+                MessageService.ShowError(ex);
+            }
             return false;
         }
 
