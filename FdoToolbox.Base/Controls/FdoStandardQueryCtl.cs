@@ -49,9 +49,32 @@ namespace FdoToolbox.Base.Controls
             _presenter = new FdoStandardQueryPresenter(this, conn);
         }
 
+        private string _initSchema;
+        private string _initClass;
+
+        public FdoStandardQueryCtl(FdoConnection conn, string initSchema, string initClass)
+            : this(conn)
+        {
+            _initSchema = initSchema;
+            _initClass = initClass;
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             _presenter.GetSchemas();
+            if (!string.IsNullOrEmpty(_initSchema))
+            {
+                int idx = cmbSchema.FindString(_initSchema);
+                if (idx >= 0)
+                    cmbSchema.SelectedIndex = idx;
+
+                if (!string.IsNullOrEmpty(_initClass))
+                {
+                    idx = cmbClass.FindString(_initClass);
+                    if (idx >= 0)
+                        cmbClass.SelectedIndex = idx;
+                }
+            }
             base.OnLoad(e);
         }
 

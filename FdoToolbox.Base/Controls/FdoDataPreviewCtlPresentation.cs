@@ -230,18 +230,18 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        public void Init()
+        public void Init(string initSchema, string initClass)
         {
             List<QueryMode> modes = new List<QueryMode>();
             if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select))
             {
                 modes.Add(QueryMode.Standard);
-                _queryViews.Add(QueryMode.Standard, new FdoStandardQueryCtl(_connection));
+                _queryViews.Add(QueryMode.Standard, new FdoStandardQueryCtl(_connection, initSchema, initClass));
             }
             if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
             {
                 modes.Add(QueryMode.Aggregate);
-                _queryViews.Add(QueryMode.Aggregate, new FdoAggregateQueryCtl(_connection));
+                _queryViews.Add(QueryMode.Aggregate, new FdoAggregateQueryCtl(_connection, initSchema, initClass));
             }
             if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand))
             {
