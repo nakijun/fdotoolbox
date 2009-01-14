@@ -138,6 +138,7 @@
     <Compile Include="Feature\FdoFeatureTable.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Feature\FdoGeometry.cs" />
     <Compile Include="Feature\FdoPropertyType.cs" />
     <Compile Include="Feature\FdoProviderInfo.cs" />
     <Compile Include="Feature\FdoReader.cs" />

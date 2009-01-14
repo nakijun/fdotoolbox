@@ -255,7 +255,7 @@ namespace FdoToolbox.Core.Feature
                 string name = reader.GetName(i);
                 Type type = reader.GetFieldType(i);
                 if (Array.IndexOf<string>(geometries, name) >= 0)
-                    type = typeof(IGeometry);
+                    type = typeof(FdoGeometry);
                 this.Columns.Add(name, type);
             }
         }

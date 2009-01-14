@@ -28,6 +28,7 @@ namespace FdoToolbox.Base.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.queryPanel = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -39,13 +40,15 @@ namespace FdoToolbox.Base.Controls
             this.btnClear = new System.Windows.Forms.ToolStripButton();
             this.btnSave = new System.Windows.Forms.ToolStripDropDownButton();
             this.sDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lblCount = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.lblElapsedTime = new System.Windows.Forms.ToolStripLabel();
+            this.sepElapsed = new System.Windows.Forms.ToolStripSeparator();
             this.resultTab = new System.Windows.Forms.TabControl();
             this.TAB_GRID = new System.Windows.Forms.TabPage();
             this.grdResults = new System.Windows.Forms.DataGridView();
             this.TAB_MAP = new System.Windows.Forms.TabPage();
             this.mapCtl = new FdoToolbox.Base.Controls.FdoMapPreview();
+            this.lblResultCount = new System.Windows.Forms.ToolStripLabel();
+            this.sepCount = new System.Windows.Forms.ToolStripSeparator();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -97,8 +100,10 @@ namespace FdoToolbox.Base.Controls
             this.toolStripSeparator2,
             this.btnClear,
             this.btnSave,
-            this.lblCount,
-            this.toolStripSeparator1});
+            this.lblElapsedTime,
+            this.sepElapsed,
+            this.lblResultCount,
+            this.sepCount});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(684, 25);
@@ -170,17 +175,17 @@ namespace FdoToolbox.Base.Controls
             this.sDFToolStripMenuItem.Text = "SDF";
             this.sDFToolStripMenuItem.Click += new System.EventHandler(this.saveSdf_Click);
             // 
-            // lblCount
+            // lblElapsedTime
             // 
-            this.lblCount.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(0, 22);
+            this.lblElapsedTime.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.lblElapsedTime.Name = "lblElapsedTime";
+            this.lblElapsedTime.Size = new System.Drawing.Size(0, 22);
             // 
-            // toolStripSeparator1
+            // sepElapsed
             // 
-            this.toolStripSeparator1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.sepElapsed.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.sepElapsed.Name = "sepElapsed";
+            this.sepElapsed.Size = new System.Drawing.Size(6, 25);
             // 
             // resultTab
             // 
@@ -208,6 +213,15 @@ namespace FdoToolbox.Base.Controls
             this.grdResults.AllowUserToAddRows = false;
             this.grdResults.AllowUserToDeleteRows = false;
             this.grdResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.NullValue = "<null>";
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.grdResults.DefaultCellStyle = dataGridViewCellStyle1;
             this.grdResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grdResults.Location = new System.Drawing.Point(0, 0);
             this.grdResults.Name = "grdResults";
@@ -232,6 +246,18 @@ namespace FdoToolbox.Base.Controls
             this.mapCtl.Name = "mapCtl";
             this.mapCtl.Size = new System.Drawing.Size(676, 227);
             this.mapCtl.TabIndex = 0;
+            // 
+            // lblResultCount
+            // 
+            this.lblResultCount.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.lblResultCount.Name = "lblResultCount";
+            this.lblResultCount.Size = new System.Drawing.Size(0, 22);
+            // 
+            // sepCount
+            // 
+            this.sepCount.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.sepCount.Name = "sepCount";
+            this.sepCount.Size = new System.Drawing.Size(6, 25);
             // 
             // FdoDataPreviewCtl
             // 
@@ -271,8 +297,10 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.TabPage TAB_GRID;
         private System.Windows.Forms.TabPage TAB_MAP;
         private System.Windows.Forms.DataGridView grdResults;
-        private System.Windows.Forms.ToolStripLabel lblCount;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripLabel lblElapsedTime;
+        private System.Windows.Forms.ToolStripSeparator sepElapsed;
         private FdoMapPreview mapCtl;
+        private System.Windows.Forms.ToolStripLabel lblResultCount;
+        private System.Windows.Forms.ToolStripSeparator sepCount;
     }
 }

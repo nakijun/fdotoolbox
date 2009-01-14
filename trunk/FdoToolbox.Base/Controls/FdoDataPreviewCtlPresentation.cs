@@ -32,6 +32,8 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Filter;
 using System.Data;
 using ICSharpCode.Core;
+using System.Diagnostics;
+using System.Timers;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -55,6 +57,7 @@ namespace FdoToolbox.Base.Controls
         bool ExecuteEnabled { get; set; }
 
         string CountMessage { set; }
+        string ElapsedMessage { set; }
         FdoFeatureTable ResultTable { set; get; }
 
         bool MapEnabled { set; }
@@ -70,9 +73,12 @@ namespace FdoToolbox.Base.Controls
         private BackgroundWorker _queryWorker;
 
         private Dictionary<QueryMode, IQuerySubView> _queryViews;
+        private Timer _timer;
+        private DateTime _queryStart;
 
         public FdoDataPreviewPresenter(IFdoDataPreviewView view, FdoConnection conn)
         {
+            _timer = new Timer();
             _view = view;
             _connection = conn;
             _service = conn.CreateFeatureService();
@@ -81,34 +87,42 @@ namespace FdoToolbox.Base.Controls
             _queryWorker.WorkerReportsProgress = true;
             _queryWorker.WorkerSupportsCancellation = true;
             _queryWorker.DoWork += new DoWorkEventHandler(DoWork);
-            _queryWorker.ProgressChanged += new ProgressChangedEventHandler(ProgressChanged);
+            //_queryWorker.ProgressChanged += new ProgressChangedEventHandler(ProgressChanged);
             _queryWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(RunWorkerCompleted);
 
-            _view.CountMessage = string.Empty;
+            _view.ElapsedMessage = string.Empty;
             _view.CancelEnabled = false;
             _view.ExecuteEnabled = true;
+
+            _timer.Interval = 1000;
+            _timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
+        }
+
+        void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            TimeSpan ts = e.SignalTime.Subtract(_queryStart);
+            _view.ElapsedMessage = string.Format("{0}h {1}m {2}s", ts.Hours, ts.Minutes, ts.Seconds);
         }
 
         void RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            _timer.Stop();
             _view.CancelEnabled = false;
             _view.ClearEnabled = true;
             _view.ExecuteEnabled = true;
-            
+
             if (e.Error != null)
             {
                 _view.DisplayError(e.Error);
             }
-        }
-
-        const int PRG_INIT_GRID = 1;
-        const int PRG_REFRESH = 2;
-
-        void ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            if (e.ProgressPercentage == PRG_INIT_GRID)
+            else
             {
-                _view.ResultTable = e.UserState as FdoFeatureTable;
+                FdoFeatureTable result = e.Result as FdoFeatureTable;
+                if (result != null)
+                {
+                    _view.ResultTable = result;
+                    _view.CountMessage = string.Format("{0} results", result.Rows.Count);
+                }
             }
         }
 
@@ -129,10 +143,7 @@ namespace FdoToolbox.Base.Controls
                     //Init the data grid view
                     FdoFeatureTable table = new FdoFeatureTable();
                     table.InitTable(reader);
-                    _queryWorker.ReportProgress(PRG_INIT_GRID, table);
-
-                    System.Threading.Thread.Sleep(50);
-
+                    
                     while (reader.ReadNext() && !_queryWorker.CancellationPending)
                     {
                         //Pass processed feature to data grid view
@@ -143,6 +154,7 @@ namespace FdoToolbox.Base.Controls
                             if (!reader.IsNull(name))
                             {
                                 FdoPropertyType pt = reader.GetFdoPropertyType(name);
+
                                 switch (pt)
                                 {
                                     //case FdoPropertyType.Association:
@@ -169,7 +181,8 @@ namespace FdoToolbox.Base.Controls
                                         break;
                                     case FdoPropertyType.Geometry:
                                         byte[] fgf = reader.GetGeometry(name);
-                                        feat[name] = service.GeometryFactory.CreateGeometryFromFgf(fgf);
+                                        OSGeo.FDO.Geometry.IGeometry geom = service.GeometryFactory.CreateGeometryFromFgf(fgf);
+                                        feat[name] = new FdoGeometry(geom);
                                         break;
                                     case FdoPropertyType.Int16:
                                         feat[name] = reader.GetInt16(name);
@@ -190,6 +203,10 @@ namespace FdoToolbox.Base.Controls
                                         break;
                                 }
                             }
+                            else
+                            {
+                                feat[name] = DBNull.Value;
+                            }
                         }
                         table.AddRow(feat);
 
@@ -198,10 +215,8 @@ namespace FdoToolbox.Base.Controls
                             System.Threading.Thread.Sleep(50);
                         }
                     }
-                }
-                catch (Exception)
-                {
-                    throw;
+
+                    e.Result = table;
                 }
                 finally
                 {
@@ -209,6 +224,8 @@ namespace FdoToolbox.Base.Controls
                         reader.Close();
                     if (_queryWorker.CancellationPending)
                         e.Cancel = true;
+
+                    System.Threading.Thread.Sleep(250);
                 }
             }
         }
@@ -291,6 +308,10 @@ namespace FdoToolbox.Base.Controls
                 _view.CancelEnabled = true;
                 _view.ClearEnabled = false;
                 _view.ExecuteEnabled = false;
+                _timer.Start();
+                _view.CountMessage = string.Empty;
+                _view.ElapsedMessage = "0h 0m 0s";
+                _queryStart = DateTime.Now;
                 _queryWorker.RunWorkerAsync(query);
             }
         }
