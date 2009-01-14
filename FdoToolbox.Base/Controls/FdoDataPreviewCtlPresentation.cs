@@ -300,9 +300,16 @@ namespace FdoToolbox.Base.Controls
             {
                 long count = GetFeatureCount();
                 int limit = Preferences.DataPreviewWarningLimit;
-                if (count > limit && !MessageService.AskQuestionFormatted(ResourceService.GetString("TITLE_DATA_PREVIEW"), ResourceService.GetString("QUESTION_DATA_PREVIEW_LIMIT"), count.ToString()))
+
+                if (_view.SelectedQueryMode == QueryMode.Standard)
                 {
-                    return;
+                    if ((query as StandardQuery).Limit <= 0)
+                    {
+                        if (count > limit && !MessageService.AskQuestionFormatted(ResourceService.GetString("TITLE_DATA_PREVIEW"), ResourceService.GetString("QUESTION_DATA_PREVIEW_LIMIT"), count.ToString()))
+                        {
+                            return;
+                        }
+                    }
                 }
                 Clear();
                 _view.CancelEnabled = true;
