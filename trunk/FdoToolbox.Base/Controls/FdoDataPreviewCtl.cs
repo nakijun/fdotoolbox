@@ -53,9 +53,19 @@ namespace FdoToolbox.Base.Controls
             _presenter = new FdoDataPreviewPresenter(this, conn);
         }
 
+        private string _initSchema;
+        private string _initClass;
+
+        public FdoDataPreviewCtl(FdoConnection conn, string initialSchema, string initialClass)
+            : this(conn)
+        {
+            _initSchema = initialSchema;
+            _initClass = initialClass;
+        }
+
         protected override void OnLoad(EventArgs e)
         {
-            _presenter.Init();
+            _presenter.Init(_initSchema, _initClass);
             base.OnLoad(e);
         }
 
