@@ -56,7 +56,7 @@ namespace FdoToolbox.Base.Controls
         bool ClearEnabled { get; set; }
         bool ExecuteEnabled { get; set; }
 
-        string CountMessage { set; }
+        string StatusMessage { set; }
         string ElapsedMessage { set; }
         FdoFeatureTable ResultTable { set; get; }
 
@@ -101,7 +101,7 @@ namespace FdoToolbox.Base.Controls
         void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
             TimeSpan ts = e.SignalTime.Subtract(_queryStart);
-            _view.ElapsedMessage = string.Format("{0}h {1}m {2}s", ts.Hours, ts.Minutes, ts.Seconds);
+            _view.ElapsedMessage = string.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
         }
 
         void RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -117,14 +117,31 @@ namespace FdoToolbox.Base.Controls
             }
             else
             {
-                FdoFeatureTable result = e.Result as FdoFeatureTable;
+                FdoFeatureTable result = null;
+                if (e.Cancelled)
+                    result = _cancelResult;
+                else
+                    result = e.Result as FdoFeatureTable;
+
                 if (result != null)
                 {
                     _view.ResultTable = result;
-                    _view.CountMessage = string.Format("{0} results", result.Rows.Count);
+                    if (e.Cancelled)
+                        _view.StatusMessage = string.Format("Query cancelled. {0} results", result.Rows.Count);
+                    else
+                        _view.StatusMessage = string.Format("{0} results", result.Rows.Count);
+                }
+                else //No result table
+                {
+                    if (e.Cancelled)
+                        _view.StatusMessage = "Query cancelled";
+                    else
+                        _view.StatusMessage = string.Format("0 results");
                 }
             }
         }
+
+        private FdoFeatureTable _cancelResult;
 
         void DoWork(object sender, DoWorkEventArgs e)
         {
@@ -216,16 +233,20 @@ namespace FdoToolbox.Base.Controls
                         }
                     }
 
-                    e.Result = table;
+                    if (_queryWorker.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        _cancelResult = table;
+                    }
+                    else
+                    {
+                        e.Result = table;
+                    }
                 }
                 finally
                 {
                     if(reader != null)
                         reader.Close();
-                    if (_queryWorker.CancellationPending)
-                        e.Cancel = true;
-
-                    System.Threading.Thread.Sleep(250);
                 }
             }
         }
@@ -316,8 +337,8 @@ namespace FdoToolbox.Base.Controls
                 _view.ClearEnabled = false;
                 _view.ExecuteEnabled = false;
                 _timer.Start();
-                _view.CountMessage = string.Empty;
-                _view.ElapsedMessage = "0h 0m 0s";
+                _view.StatusMessage = "Executing Query";
+                _view.ElapsedMessage = "00:00:00";
                 _queryStart = DateTime.Now;
                 _queryWorker.RunWorkerAsync(query);
             }

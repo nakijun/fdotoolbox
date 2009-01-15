@@ -189,16 +189,14 @@ namespace FdoToolbox.Base.Controls
             set 
             { 
                 lblElapsedTime.Text = value;
-                sepElapsed.Visible = !string.IsNullOrEmpty(value);
             }
         }
 
-        public string CountMessage
+        public string StatusMessage
         {
             set 
             { 
-                lblResultCount.Text = value; 
-                sepCount.Visible = !string.IsNullOrEmpty(value);
+                lblMessage.Text = value; 
             }
         }
 
