@@ -48,6 +48,8 @@ namespace FdoToolbox.Base.Controls
             this.deleteClassItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToNewSDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnLoad = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -61,6 +63,8 @@ namespace FdoToolbox.Base.Controls
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnApply,
             this.btnAdd,
+            this.toolStripSeparator3,
+            this.btnLoad,
             this.btnSave});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -171,7 +175,7 @@ namespace FdoToolbox.Base.Controls
             // deletePropertyItem
             // 
             this.deletePropertyItem.Name = "deletePropertyItem";
-            this.deletePropertyItem.Size = new System.Drawing.Size(152, 22);
+            this.deletePropertyItem.Size = new System.Drawing.Size(116, 22);
             this.deletePropertyItem.Text = "Delete";
             this.deletePropertyItem.Click += new System.EventHandler(this.deletePropertyItem_Click);
             // 
@@ -182,7 +186,7 @@ namespace FdoToolbox.Base.Controls
             this.toolStripSeparator2,
             this.deleteClassItem});
             this.ctxClass.Name = "ctxClass";
-            this.ctxClass.Size = new System.Drawing.Size(153, 76);
+            this.ctxClass.Size = new System.Drawing.Size(129, 54);
             // 
             // mnuAddNewProperty
             // 
@@ -198,7 +202,7 @@ namespace FdoToolbox.Base.Controls
             // deleteClassItem
             // 
             this.deleteClassItem.Name = "deleteClassItem";
-            this.deleteClassItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteClassItem.Size = new System.Drawing.Size(128, 22);
             this.deleteClassItem.Text = "Delete";
             this.deleteClassItem.Click += new System.EventHandler(this.deleteClassItem_Click);
             // 
@@ -215,6 +219,20 @@ namespace FdoToolbox.Base.Controls
             this.saveToNewSDFToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.saveToNewSDFToolStripMenuItem.Text = "Save to new SDF";
             this.saveToNewSDFToolStripMenuItem.Click += new System.EventHandler(this.saveToNewSDFToolStripMenuItem_Click);
+            // 
+            // btnLoad
+            // 
+            this.btnLoad.Image = global::FdoToolbox.Base.Images.folder;
+            this.btnLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(50, 22);
+            this.btnLoad.Text = "Load";
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // FdoSchemaDesignerCtl
             // 
@@ -257,6 +275,8 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.ToolStripDropDownButton btnSave;
         private System.Windows.Forms.ToolStripMenuItem saveAsXMLToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsNewSDFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton btnLoad;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 
     }
 }

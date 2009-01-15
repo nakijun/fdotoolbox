@@ -39,6 +39,16 @@ namespace FdoToolbox.Core.ETL.Specialized
         private FdoBulkCopyOptions _options;
 
         /// <summary>
+        /// Gets or sets the options.
+        /// </summary>
+        /// <value>The options.</value>
+        public FdoBulkCopyOptions Options
+        {
+            get { return _options; }
+            set { _options = value; }
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="options"></param>

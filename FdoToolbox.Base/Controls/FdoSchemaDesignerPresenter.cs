@@ -58,6 +58,8 @@ namespace FdoToolbox.Base.Controls
         bool ApplyEnabled { set; }
 
         event EventHandler SchemaApplied;
+
+        bool LoadEnabled { set; }
     }
 
     public class FdoSchemaDesignerPresenter
@@ -86,6 +88,7 @@ namespace FdoToolbox.Base.Controls
             _schema = new FeatureSchema("Schema1", "");
             SetSchemaNode();
             SetCapabilities();
+            _view.LoadEnabled = true;
         }
 
         public FdoSchemaDesignerPresenter(IFdoSchemaDesignerView view, FdoConnection conn, string schemaName)
@@ -100,29 +103,35 @@ namespace FdoToolbox.Base.Controls
                     throw new InvalidOperationException("Could not find schema named " + schemaName);
                 SetSchemaNode();
                 SetCapabilities();
-                foreach (ClassDefinition cls in _schema.Classes)
+                FillTree();
+            }
+            _view.LoadEnabled = false;
+        }
+
+        private void FillTree()
+        {
+            foreach (ClassDefinition cls in _schema.Classes)
+            {
+                _view.AddClassNode(cls.Name, RES_CLASS);
+                foreach (PropertyDefinition pd in cls.Properties)
                 {
-                    _view.AddClassNode(cls.Name, RES_CLASS);
-                    foreach (PropertyDefinition pd in cls.Properties)
+                    switch (pd.PropertyType)
                     {
-                        switch (pd.PropertyType)
-                        {
-                            case PropertyType.PropertyType_DataProperty:
-                                _view.AddPropertyNode(cls.Name, pd.Name, RES_DATA_PROPERTY);
-                                break;
-                            case PropertyType.PropertyType_AssociationProperty:
-                                _view.AddPropertyNode(cls.Name, pd.Name, RES_ASSOC);
-                                break;
-                            case PropertyType.PropertyType_GeometricProperty:
-                                _view.AddPropertyNode(cls.Name, pd.Name, RES_GEOM);
-                                break;
-                            case PropertyType.PropertyType_ObjectProperty:
-                                _view.AddPropertyNode(cls.Name, pd.Name, RES_OBJECT);
-                                break;
-                            case PropertyType.PropertyType_RasterProperty:
-                                _view.AddPropertyNode(cls.Name, pd.Name, RES_RASTER);
-                                break;
-                        }
+                        case PropertyType.PropertyType_DataProperty:
+                            _view.AddPropertyNode(cls.Name, pd.Name, RES_DATA_PROPERTY);
+                            break;
+                        case PropertyType.PropertyType_AssociationProperty:
+                            _view.AddPropertyNode(cls.Name, pd.Name, RES_ASSOC);
+                            break;
+                        case PropertyType.PropertyType_GeometricProperty:
+                            _view.AddPropertyNode(cls.Name, pd.Name, RES_GEOM);
+                            break;
+                        case PropertyType.PropertyType_ObjectProperty:
+                            _view.AddPropertyNode(cls.Name, pd.Name, RES_OBJECT);
+                            break;
+                        case PropertyType.PropertyType_RasterProperty:
+                            _view.AddPropertyNode(cls.Name, pd.Name, RES_RASTER);
+                            break;
                     }
                 }
             }
@@ -455,6 +464,15 @@ namespace FdoToolbox.Base.Controls
         public void ValidateProperty(object obj, string name, object value)
         {
             
+        }
+
+        public void Load(string file)
+        {
+            FeatureSchemaCollection fsc = new FeatureSchemaCollection(null);
+            fsc.ReadXml(file);
+            _schema = fsc[0];
+            SetSchemaNode();
+            FillTree();
         }
     }
 }

@@ -127,9 +127,9 @@ namespace FdoToolbox.Base.Controls
                 {
                     _view.ResultTable = result;
                     if (e.Cancelled)
-                        _view.StatusMessage = string.Format("Query cancelled. {0} results", result.Rows.Count);
+                        _view.StatusMessage = string.Format("Query cancelled. Returned {0} results", result.Rows.Count);
                     else
-                        _view.StatusMessage = string.Format("{0} results", result.Rows.Count);
+                        _view.StatusMessage = string.Format("Returned{ 0} results", result.Rows.Count);
                 }
                 else //No result table
                 {
@@ -363,7 +363,9 @@ namespace FdoToolbox.Base.Controls
 
         public void Clear()
         {
-            _view.ResultTable = null;   
+            _view.ResultTable = null;
+            _view.StatusMessage = string.Empty;
+            _view.ElapsedMessage = string.Empty;
         }
     }
 }
