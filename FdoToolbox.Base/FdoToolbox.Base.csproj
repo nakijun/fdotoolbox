@@ -70,6 +70,7 @@
     <Compile Include="Commands\ObjectExplorerCommands.cs" />
     <Compile Include="Commands\TextEditorCommands.cs" />
     <Compile Include="Commands\ToolCommands.cs" />
+    <Compile Include="Conditions\CommandSupportConditionEvaluator.cs" />
     <Compile Include="Controls\BasePreferencesCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>

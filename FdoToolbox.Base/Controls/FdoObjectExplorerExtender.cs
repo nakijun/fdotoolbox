@@ -35,7 +35,7 @@ namespace FdoToolbox.Base.Controls
 {
     public class FdoObjectExplorerExtender : IObjectExplorerExtender
     {
-        private string RootNodeName = "NODE_FDO";
+        public const string RootNodeName = "NODE_FDO";
 
         private const string IMG_CONNECTION = "database_connect";
         private const string IMG_SCHEMA = "chart_organisation";
