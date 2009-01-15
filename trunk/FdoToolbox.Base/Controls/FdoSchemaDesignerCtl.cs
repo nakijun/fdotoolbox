@@ -64,6 +64,7 @@ namespace FdoToolbox.Base.Controls
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
             node.ImageKey = node.SelectedImageKey = FdoSchemaDesignerPresenter.RES_SCHEMA;
+            schemaTree.Nodes.Clear();
             schemaTree.Nodes.Add(node);
             schemaTree.SelectedNode = node;
         }
@@ -354,6 +355,20 @@ namespace FdoToolbox.Base.Controls
             {
                 classNode.Nodes.RemoveByKey(propName);
             }
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            string file = FileService.OpenFile(ResourceService.GetString("TITLE_LOAD_SCHEMA"), ResourceService.GetString("FILTER_SCHEMA_FILE"));
+            if (FileService.FileExists(file))
+            {
+                _presenter.Load(file);
+            }
+        }
+
+        public bool LoadEnabled
+        {
+            set { btnLoad.Enabled = value; }
         }
     }
 }

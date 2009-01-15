@@ -28,7 +28,7 @@ namespace FdoToolbox.Base.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.queryPanel = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -42,21 +42,21 @@ namespace FdoToolbox.Base.Controls
             this.sDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resultTab = new System.Windows.Forms.TabControl();
             this.TAB_GRID = new System.Windows.Forms.TabPage();
-            this.TAB_MAP = new System.Windows.Forms.TabPage();
+            this.grdResults = new System.Windows.Forms.DataGridView();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
+            this.TAB_MAP = new System.Windows.Forms.TabPage();
             this.mapCtl = new FdoToolbox.Base.Controls.FdoMapPreview();
-            this.grdResults = new System.Windows.Forms.DataGridView();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.resultTab.SuspendLayout();
             this.TAB_GRID.SuspendLayout();
-            this.TAB_MAP.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdResults)).BeginInit();
+            this.statusStrip1.SuspendLayout();
+            this.TAB_MAP.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -193,15 +193,27 @@ namespace FdoToolbox.Base.Controls
             this.TAB_GRID.Text = "Grid View";
             this.TAB_GRID.UseVisualStyleBackColor = true;
             // 
-            // TAB_MAP
+            // grdResults
             // 
-            this.TAB_MAP.Controls.Add(this.mapCtl);
-            this.TAB_MAP.Location = new System.Drawing.Point(4, 22);
-            this.TAB_MAP.Name = "TAB_MAP";
-            this.TAB_MAP.Size = new System.Drawing.Size(676, 227);
-            this.TAB_MAP.TabIndex = 1;
-            this.TAB_MAP.Text = "Map View";
-            this.TAB_MAP.UseVisualStyleBackColor = true;
+            this.grdResults.AllowUserToAddRows = false;
+            this.grdResults.AllowUserToDeleteRows = false;
+            this.grdResults.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.grdResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.NullValue = "<null>";
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.grdResults.DefaultCellStyle = dataGridViewCellStyle1;
+            this.grdResults.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grdResults.Location = new System.Drawing.Point(0, 0);
+            this.grdResults.Name = "grdResults";
+            this.grdResults.ReadOnly = true;
+            this.grdResults.Size = new System.Drawing.Size(676, 205);
+            this.grdResults.TabIndex = 3;
             // 
             // statusStrip1
             // 
@@ -214,9 +226,9 @@ namespace FdoToolbox.Base.Controls
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // lblResultCount
+            // lblMessage
             // 
-            this.lblMessage.Name = "lblResultCount";
+            this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(0, 17);
             // 
             // lblElapsedTime
@@ -226,6 +238,16 @@ namespace FdoToolbox.Base.Controls
             this.lblElapsedTime.Spring = true;
             this.lblElapsedTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // TAB_MAP
+            // 
+            this.TAB_MAP.Controls.Add(this.mapCtl);
+            this.TAB_MAP.Location = new System.Drawing.Point(4, 22);
+            this.TAB_MAP.Name = "TAB_MAP";
+            this.TAB_MAP.Size = new System.Drawing.Size(676, 227);
+            this.TAB_MAP.TabIndex = 1;
+            this.TAB_MAP.Text = "Map View";
+            this.TAB_MAP.UseVisualStyleBackColor = true;
+            // 
             // mapCtl
             // 
             this.mapCtl.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -233,27 +255,6 @@ namespace FdoToolbox.Base.Controls
             this.mapCtl.Name = "mapCtl";
             this.mapCtl.Size = new System.Drawing.Size(676, 227);
             this.mapCtl.TabIndex = 0;
-            // 
-            // grdResults
-            // 
-            this.grdResults.AllowUserToAddRows = false;
-            this.grdResults.AllowUserToDeleteRows = false;
-            this.grdResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.NullValue = "<null>";
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.grdResults.DefaultCellStyle = dataGridViewCellStyle3;
-            this.grdResults.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grdResults.Location = new System.Drawing.Point(0, 0);
-            this.grdResults.Name = "grdResults";
-            this.grdResults.ReadOnly = true;
-            this.grdResults.Size = new System.Drawing.Size(676, 205);
-            this.grdResults.TabIndex = 3;
             // 
             // FdoDataPreviewCtl
             // 
@@ -271,10 +272,10 @@ namespace FdoToolbox.Base.Controls
             this.resultTab.ResumeLayout(false);
             this.TAB_GRID.ResumeLayout(false);
             this.TAB_GRID.PerformLayout();
-            this.TAB_MAP.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdResults)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grdResults)).EndInit();
+            this.TAB_MAP.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
