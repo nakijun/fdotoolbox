@@ -108,14 +108,18 @@ namespace FdoToolbox.Core.ETL.Operations
                     {
                         foreach (string col in row.Columns)
                         {
-                            string pName = col;
-                            string paramName = prefix + pName;
-                            insertCmd.PropertyValues.Add(new PropertyValue(pName, new Parameter(paramName)));
+                            //Exclude un-writeable properties
+                            if (!_unWritableProperties.Contains(col))
+                            {
+                                string pName = col;
+                                string paramName = prefix + pName;
+                                insertCmd.PropertyValues.Add(new PropertyValue(pName, new Parameter(paramName)));
+                            }
                         }
                     }
 
                     //Load the batch parameter values
-                    ParameterValueCollection pVals = row.ToParameterValueCollection(prefix, _mappings);
+                    ParameterValueCollection pVals = row.ToParameterValueCollection(prefix, _mappings, _unWritableProperties);
                     insertCmd.BatchParameterValues.Add(pVals);
                     count++;
 

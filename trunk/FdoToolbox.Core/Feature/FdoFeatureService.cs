@@ -786,6 +786,29 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
+        /// Gets the first matching class definition.
+        /// </summary>
+        /// <param name="className">The name of the class</param>
+        /// <returns></returns>
+        public ClassDefinition GetClassByName(string className)
+        {
+            if (string.IsNullOrEmpty(className))
+                return null;
+
+            FeatureSchemaCollection schemas = this.DescribeSchema();
+            if (schemas != null && schemas.Count > 0)
+            {
+                foreach (FeatureSchema sc in schemas)
+                {
+                    int cidx = sc.Classes.IndexOf(className);
+                    if (cidx >= 0)
+                        return sc.Classes[cidx];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets a class definition by name
         /// </summary>
         /// <param name="schemaName">The parent schema name</param>
@@ -2104,5 +2127,7 @@ namespace FdoToolbox.Core.Feature
             }
             return null;
         }
+
+        
     }
 }
