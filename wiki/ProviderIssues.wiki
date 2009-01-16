@@ -1,6 +1,5 @@
 #summary Quirks and Notes on various FDO providers
 
-
 === OSGeo.PostGIS ===
 
  * The provider is very unstable, any operations with a PostGIS connection may throw anything from win32 exceptions to System.AccessViolationException
@@ -11,7 +10,9 @@
 
 === OSGeo.OGR ===
 
- * Can get VC++ "pure virtual function calls" at random
+ * Can get VC++ "pure virtual function calls" at random. This mostly happens in the generic connect dialog. If you are connecting to an OGR format via methods supported by the Express Module, you can safely bypass this error.
+
+ * Using FDO 3.4.0. There are still occasional instability with this provider.
 
 === OSGeo.KingOracle ===
 
