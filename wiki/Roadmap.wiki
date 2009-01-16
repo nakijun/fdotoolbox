@@ -9,14 +9,13 @@
  * ~~Standalone Feature Schema Editor~~
  * ~~Express support for ODBC provider~~
  * ~~Express support for OGR provider~~
+ * ~~Create FDO connections with loaded configuration~~
 
 === 0.8 ===
 
- * Spatial Join support
- * Connection configuration support
+ * Save data preview query results to other flat-file sources
  * Express support for SQLite provider 
  * Localization
- * Raster Provider support
  * Additional Property support
       * Raster Properties
  * Additional Property support
@@ -25,15 +24,18 @@
 
 === Future ===
 
+ * Raster Provider support
+ * FGF geometry (non-WKB) rendering support for Data Preview
+ * Support for creating join tasks on Spatial Predicates
  * Visual ETL pipeline editor
  * MapGuide 6.5 SDF conversion tools
- * Class to Feature Class conversion
+ * DWF support
  * FDO Connection configuration support
  * Boo scriptability / DSL
  * MapGuide Enterprise/Open Source integration
  * Schema Mapping support
  * KML support
- * Coordinate System Re-Projection
+ * Coordinate System Re-Projection via Proj/CSMap
  * Provider-specific extension modules
  * Product-specific extension modules
  * Linux port of command-line utilities
