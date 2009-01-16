@@ -67,9 +67,9 @@ namespace FdoToolbox.Base.Controls
             get { return true; }
         }
 
-        public bool Close()
+        public void Close()
         {
-            return true;
+            ViewContentClosing(this, EventArgs.Empty);
         }
 
         public bool Save()

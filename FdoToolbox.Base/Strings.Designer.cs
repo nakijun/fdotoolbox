@@ -1049,6 +1049,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are about to close a connection that some open tabs depend on. Are you sure you want to continue?.
+        /// </summary>
+        internal static string QUESTION_CLOSE_TABS {
+            get {
+                return ResourceManager.GetString("QUESTION_CLOSE_TABS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your query will be returning {0} results. Do you want to continue..
         /// </summary>
         internal static string QUESTION_DATA_PREVIEW_LIMIT {

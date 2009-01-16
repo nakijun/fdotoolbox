@@ -19,13 +19,34 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
 using System.Text;
+using System.Windows.Forms;
 
-namespace FdoToolbox.Base
+namespace FdoToolbox.Base.Controls
 {
-    public class TabManager
+    public partial class ViewContent : UserControl
     {
+        public ViewContent()
+        {
+            InitializeComponent();
+        }
+
+        public virtual bool CanClose
+        {
+            get { return true; }
+        }
+
+        public void Close()
+        {
+            ViewContentClosing(this, EventArgs.Empty);
+        }
+
+        public event EventHandler ViewContentClosing;
     }
 }

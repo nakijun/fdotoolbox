@@ -33,7 +33,7 @@ using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class CoordSysCatalog : UserControl, IViewContent, ICoordSysCatalogView
+    public partial class CoordSysCatalog : ViewContent, IViewContent, ICoordSysCatalogView
     {
         private CoordSysCatalogPresenter _presenter;
 
@@ -61,26 +61,6 @@ namespace FdoToolbox.Base.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
         public CoordinateSystemDefinition SelectedCS
         {
             get
@@ -92,13 +72,6 @@ namespace FdoToolbox.Base.Controls
                 else
                     return null;
             }
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
-
-        public void OnClose()
-        {
-            ViewContentClosing(this, EventArgs.Empty);
         }
 
         private void btnResetFilter_Click(object sender, EventArgs e)

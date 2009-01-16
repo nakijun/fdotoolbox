@@ -29,10 +29,11 @@ using System.Windows.Forms;
 using FdoToolbox.Base;
 using ICSharpCode.Core;
 using FdoToolbox.Base.Services;
+using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class ConnectOdbcCtl : UserControl, IViewContent, IConnectOdbcView
+    public partial class ConnectOdbcCtl : ViewContent, IViewContent, IConnectOdbcView
     {
         private ConnectOdbcPresenter _presenter;
 
@@ -77,28 +78,6 @@ namespace FdoToolbox.Express.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
-
         public Control ContentControl
         {
             get { return this; }
@@ -117,7 +96,7 @@ namespace FdoToolbox.Express.Controls
         private void btnConnect_Click(object sender, EventArgs e)
         {
             if (_presenter.Connect())
-                ViewContentClosing(this, EventArgs.Empty);
+                base.Close();
         }
 
         public string ConnectionName

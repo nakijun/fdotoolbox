@@ -265,7 +265,7 @@ namespace FdoToolbox.Base
 
             vc.ViewContentClosing += delegate(object sender, EventArgs e)
             {
-                if(vc.CanClose && vc.Close())
+                if(vc.CanClose)
                     content.Close();
             };
 

@@ -40,10 +40,13 @@ namespace FdoToolbox.Base.Services
                 if (instance == null)
                 {
                     instance = new ServiceManager();
+                    ServiceManagerInitialized(instance, EventArgs.Empty);
                 }
                 return instance;
             }
         }
+
+        public static event EventHandler ServiceManagerInitialized = delegate { };
 
         private ServiceManager() { InitializeServicesSubsystem("/FdoToolbox/Services"); }
 

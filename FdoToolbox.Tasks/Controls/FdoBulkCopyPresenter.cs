@@ -290,6 +290,19 @@ namespace FdoToolbox.Tasks.Controls
 
         public void SaveTask()
         {
+            this.ApplySettings();
+            _taskMgr.AddTask(_view.TaskName, _bcp);
+        }
+
+        private NameValueCollection GetSourceExpressions(string className)
+        {
+            return _view.GetExpressions(className);
+        }
+
+        private FdoBulkCopy _bcp;
+
+        internal void ApplySettings()
+        {
             //Validate
             List<string> errors = new List<string>();
             if (string.IsNullOrEmpty(_view.TaskName))
@@ -347,13 +360,15 @@ namespace FdoToolbox.Tasks.Controls
             if (errors.Count > 0)
                 throw new TaskValidationException(errors);
 
-            FdoBulkCopy proc = new FdoBulkCopy(options);
-            _taskMgr.AddTask(_view.TaskName, proc);
+            if (_bcp == null)
+                _bcp = new FdoBulkCopy(options);
+            else
+                _bcp.Options = options;
         }
 
-        private NameValueCollection GetSourceExpressions(string className)
+        internal void LoadFrom(FdoBulkCopy copy)
         {
-            return _view.GetExpressions(className);
+            
         }
     }
 

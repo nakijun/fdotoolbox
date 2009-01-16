@@ -30,7 +30,7 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class PreferencesCtl : UserControl, IPreferencesView
+    public partial class PreferencesCtl : ViewContent, IPreferencesView
     {
         private PreferencesCtlPresenter _presenter;
 
@@ -58,33 +58,11 @@ namespace FdoToolbox.Base.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             _presenter.SaveChanges();
             MessageService.ShowMessage(ResourceService.GetString("MSG_PREFS_SAVED"));
-            ViewContentClosing(this, EventArgs.Empty);
+            base.Close();
         }
 
         private IList<IPreferenceSheet> _sheets;
@@ -111,7 +89,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            ViewContentClosing(this, EventArgs.Empty);
+            base.Close();
         }
     }
 }

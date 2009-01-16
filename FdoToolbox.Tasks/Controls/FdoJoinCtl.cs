@@ -34,10 +34,11 @@ using FdoToolbox.Core;
 using FdoToolbox.Core.ETL.Specialized;
 using FdoToolbox.Tasks.Services;
 using FdoToolbox.Core.ETL.Operations;
+using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Tasks.Controls
 {
-    public partial class FdoJoinCtl : UserControl, IViewContent, IFdoJoinView
+    public partial class FdoJoinCtl : ViewContent, IViewContent, IFdoJoinView
     {
         private FdoJoinPresenter _presenter;
 
@@ -63,33 +64,10 @@ namespace FdoToolbox.Tasks.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing;
-
         public Control ContentControl
         {
             get { return this; }
         }
-
 
         public List<string> LeftConnections
         {
@@ -416,7 +394,7 @@ namespace FdoToolbox.Tasks.Controls
             try
             {
                 _presenter.SaveTask();
-                ViewContentClosing(this, EventArgs.Empty);
+                base.Close();
             }
             catch (TaskValidationException ex)
             {

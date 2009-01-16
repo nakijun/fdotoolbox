@@ -31,7 +31,7 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoUnregProviderCtl : UserControl, IViewContent, IFdoUnregProviderView
+    public partial class FdoUnregProviderCtl : ViewContent, IViewContent, IFdoUnregProviderView
     {
         private FdoUnregProviderPresenter _presenter;
 
@@ -49,7 +49,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            ViewContentClosing(this, EventArgs.Empty);
+            base.Close();
         }
 
         public Control ContentControl
@@ -63,28 +63,6 @@ namespace FdoToolbox.Base.Controls
         }
 
         public event EventHandler TitleChanged = delegate { };
-
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
 
         private void lstProviders_SelectedIndexChanged(object sender, EventArgs e)
         {

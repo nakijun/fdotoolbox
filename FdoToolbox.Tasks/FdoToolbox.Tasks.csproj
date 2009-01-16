@@ -73,6 +73,7 @@
     <Compile Include="Controls\FdoJoinPresenter.cs" />
     <Compile Include="Controls\TaskObjectExplorerExtender.cs" />
     <Compile Include="EventWatcher.cs" />
+    <Compile Include="IEtlProcessEditor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\TaskLoader.cs" />
     <Compile Include="Strings.Designer.cs">
