@@ -31,6 +31,7 @@ using OSGeo.FDO.Commands;
 using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Geometry;
 using System.Collections.Specialized;
+using Iesi.Collections.Generic;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -46,6 +47,8 @@ namespace FdoToolbox.Core.ETL
     {
         static readonly Dictionary<Type, List<PropertyInfo>> propertiesCache = new Dictionary<Type, List<PropertyInfo>>();
         static readonly Dictionary<Type, List<FieldInfo>> fieldsCache = new Dictionary<Type, List<FieldInfo>>();
+
+        private HashedSet<string> readOnlyProperties = new HashedSet<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FdoRow"/> class.
@@ -64,6 +67,26 @@ namespace FdoToolbox.Core.ETL
         {
         }
 
+        /// <summary>
+        /// Marks a property as read only.
+        /// </summary>
+        /// <param name="property">The property name</param>
+        public void MarkReadOnly(string property)
+        {
+            readOnlyProperties.Add(property);
+        }
+
+        /// <summary>
+        /// Determines whether a specified property is read only
+        /// </summary>
+        /// <param name="property">The property name</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified property is read only; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsReadOnly(string property)
+        {
+            return readOnlyProperties.Contains(property);
+        }
 
         /// <summary>
         /// Creates a copy of the given source, erasing whatever is in the row currently.
@@ -199,13 +222,13 @@ namespace FdoToolbox.Core.ETL
         /// <param name="reader">The feature reader</param>
         /// <param name="ignoreProperties">A list of properties to exclude from the row</param>
         /// <returns></returns>
-        public static FdoRow FromFeatureReader(FdoFeatureReader reader, ICollection<string> ignoreProperties)
+        public static FdoRow FromFeatureReader(FdoFeatureReader reader, ICollection<string> readOnlyProperties)
         {
             FdoRow row = new FdoRow();
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 string name = reader.GetName(i);
-                if (!ignoreProperties.Contains(name) && !reader.IsNull(name))
+                if (!reader.IsNull(name))
                 {
                     if (name == reader.DefaultGeometryProperty)
                     {
@@ -219,6 +242,11 @@ namespace FdoToolbox.Core.ETL
                     else
                     {
                         row[name] = reader.GetValue(i);
+                    }
+
+                    if (readOnlyProperties.Contains(name))
+                    {
+                        row.MarkReadOnly(name);
                     }
                 }
             }
@@ -262,40 +290,55 @@ namespace FdoToolbox.Core.ETL
         /// <returns></returns>
         public PropertyValueCollection ToPropertyValueCollection()
         {
-            return ToPropertyValueCollection(null);
+            return ToPropertyValueCollection(null, null);
+        }
+
+        /// <summary>
+        /// Converts this feature to a property value collection.
+        /// </summary>
+        /// <param name="excludeProperties">A list of properties to exclude from the converted collection</param>
+        /// <returns></returns>
+        public PropertyValueCollection ToPropertyValueCollection(ICollection<string> excludeProperties)
+        {
+            return ToPropertyValueCollection(null, excludeProperties);
         }
 
         /// <summary>
         /// Converts this feature to a property value collection.
         /// </summary>
         /// <param name="mappings">The mappings.</param>
+        /// <param name="excludeProperties">A list of properties to exclude from the converted collection</param>
         /// <returns></returns>
-        public PropertyValueCollection ToPropertyValueCollection(NameValueCollection mappings)
+        public PropertyValueCollection ToPropertyValueCollection(NameValueCollection mappings, ICollection<string> excludeProperties)
         {
             PropertyValueCollection values = new PropertyValueCollection();
             if (mappings == null)
             {
                 foreach (string col in this.Columns)
                 {
-                    //Omit null values
-                    if (this[col] != null && this[col] != DBNull.Value)
+                    //No excluded properties or property not in exclusion list
+                    if (excludeProperties == null || excludeProperties.Count == 0 || !excludeProperties.Contains(col))
                     {
-                        if (!IsGeometryProperty(col))
+                        //Omit null values
+                        if (this[col] != null && this[col] != DBNull.Value)
                         {
-                            ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
-                            if (dv != null)
+                            if (!IsGeometryProperty(col))
                             {
-                                PropertyValue pv = new PropertyValue(col, dv);
-                                values.Add(pv);
+                                ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
+                                if (dv != null)
+                                {
+                                    PropertyValue pv = new PropertyValue(col, dv);
+                                    values.Add(pv);
+                                }
                             }
-                        }
-                        else
-                        {
-                            IGeometry geom = this[col] as IGeometry;
-                            if (geom != null)
+                            else
                             {
-                                PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
-                                values.Add(pv);
+                                IGeometry geom = this[col] as IGeometry;
+                                if (geom != null)
+                                {
+                                    PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                                    values.Add(pv);
+                                }
                             }
                         }
                     }
@@ -339,41 +382,57 @@ namespace FdoToolbox.Core.ETL
         /// <returns></returns>
         public ParameterValueCollection ToParameterValueCollection(string prefix)
         {
-            return ToParameterValueCollection(prefix, null);
+            return ToParameterValueCollection(prefix, null, null);
         }
 
         /// <summary>
         /// Converts this feature to a parameter value collection.
         /// </summary>
-        /// <param name="prefix"></param>
-        /// <param name="mappings"></param>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="excludeProperties">The list of properties to exclude.</param>
         /// <returns></returns>
-        public ParameterValueCollection ToParameterValueCollection(string prefix, NameValueCollection mappings)
+        public ParameterValueCollection ToParameterValueCollection(string prefix, ICollection<string> excludeProperties)
+        {
+            return ToParameterValueCollection(prefix, null, excludeProperties);
+        }
+
+        /// <summary>
+        /// Converts this feature to a parameter value collection.
+        /// </summary>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="mappings">The mappings.</param>
+        /// <param name="excludeProperties">The list of properties to exclude.</param>
+        /// <returns></returns>
+        public ParameterValueCollection ToParameterValueCollection(string prefix, NameValueCollection mappings, ICollection<string> excludeProperties)
         {
             ParameterValueCollection values = new ParameterValueCollection();
             if (mappings == null)
             {
                 foreach (string col in this.Columns)
                 {
-                    //Omit null values
-                    if (this[col] != null && this[col] != DBNull.Value)
+                    //No excluded properties or property not in exclusion list
+                    if (excludeProperties == null || excludeProperties.Count == 0 || !excludeProperties.Contains(col))
                     {
-                        if (!IsGeometryProperty(col))
+                        //Omit null values
+                        if (this[col] != null && this[col] != DBNull.Value)
                         {
-                            LiteralValue dv = ValueConverter.GetConvertedValue(this[col]);
-                            if (dv != null)
+                            if (!IsGeometryProperty(col))
                             {
-                                ParameterValue pv = new ParameterValue(prefix + col, dv);
-                                values.Add(pv);
+                                LiteralValue dv = ValueConverter.GetConvertedValue(this[col]);
+                                if (dv != null)
+                                {
+                                    ParameterValue pv = new ParameterValue(prefix + col, dv);
+                                    values.Add(pv);
+                                }
                             }
-                        }
-                        else
-                        {
-                            IGeometry geom = this[col] as IGeometry;
-                            if (geom != null)
+                            else
                             {
-                                ParameterValue pv = new ParameterValue(prefix + col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
-                                values.Add(pv);
+                                IGeometry geom = this[col] as IGeometry;
+                                if (geom != null)
+                                {
+                                    ParameterValue pv = new ParameterValue(prefix + col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                                    values.Add(pv);
+                                }
                             }
                         }
                     }
@@ -383,25 +442,29 @@ namespace FdoToolbox.Core.ETL
             {
                 foreach (string col in this.Columns)
                 {
-                    //Omit null and un-mapped values
-                    if (mappings[col] != null && this[col] != null && this[col] != DBNull.Value)
+                    //No excluded properties or property not in exclusion list
+                    if (excludeProperties == null || excludeProperties.Count == 0 || !excludeProperties.Contains(col))
                     {
-                        if (!IsGeometryProperty(col))
+                        //Omit null and un-mapped values
+                        if (mappings[col] != null && this[col] != null && this[col] != DBNull.Value)
                         {
-                            LiteralValue dv = ValueConverter.GetConvertedValue(this[col]);
-                            if (dv != null)
+                            if (!IsGeometryProperty(col))
                             {
-                                ParameterValue pv = new ParameterValue(prefix + col, dv);
-                                values.Add(pv);
+                                LiteralValue dv = ValueConverter.GetConvertedValue(this[col]);
+                                if (dv != null)
+                                {
+                                    ParameterValue pv = new ParameterValue(prefix + col, dv);
+                                    values.Add(pv);
+                                }
                             }
-                        }
-                        else
-                        {
-                            IGeometry geom = this[col] as IGeometry;
-                            if (geom != null)
+                            else
                             {
-                                ParameterValue pv = new ParameterValue(prefix + col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
-                                values.Add(pv);
+                                IGeometry geom = this[col] as IGeometry;
+                                if (geom != null)
+                                {
+                                    ParameterValue pv = new ParameterValue(prefix + col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                                    values.Add(pv);
+                                }
                             }
                         }
                     }
@@ -466,6 +529,11 @@ namespace FdoToolbox.Core.ETL
             foreach (DataColumn dc in feat.Table.Columns)
             {
                 row[dc.ColumnName] = feat[dc];
+
+                if (dc.ReadOnly)
+                {
+                    row.MarkReadOnly(dc.ColumnName);
+                }
             }
             return row;
         }
