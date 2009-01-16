@@ -229,6 +229,8 @@ namespace FdoToolbox.Base.Commands
                     ctl = new FdoDataPreviewCtl(conn, node.Parent.Name, node.Name);
                 else
                     ctl = new FdoDataPreviewCtl(conn);
+                TabManager tm = ServiceManager.Instance.GetService<TabManager>();
+                tm.Register(ctl);
                 wb.ShowContent(ctl, ViewRegion.Document);
             }
         }
@@ -255,6 +257,8 @@ namespace FdoToolbox.Base.Commands
                     {
                         mgr.RefreshConnection(name);
                     };
+                    TabManager tm = ServiceManager.Instance.GetService<TabManager>();
+                    tm.Register(ctl);
                     wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }
@@ -346,6 +350,8 @@ namespace FdoToolbox.Base.Commands
                     FdoConnection conn = mgr.GetConnection(node.Name);
 
                     FdoSpatialContextMgrCtl ctl = new FdoSpatialContextMgrCtl(conn);
+                    TabManager tm = ServiceManager.Instance.GetService<TabManager>();
+                    tm.Register(ctl);
                     wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }
@@ -366,6 +372,8 @@ namespace FdoToolbox.Base.Commands
                     FdoConnection conn = mgr.GetConnection(node.Name);
 
                     FdoDataStoreMgrCtl ctl = new FdoDataStoreMgrCtl(conn);
+                    TabManager tm = ServiceManager.Instance.GetService<TabManager>();
+                    tm.Register(ctl);
                     wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }
@@ -391,6 +399,8 @@ namespace FdoToolbox.Base.Commands
                     {
                         mgr.RefreshConnection(name);
                     };
+                    TabManager tm = ServiceManager.Instance.GetService<TabManager>();
+                    tm.Register(ctl);
                     wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }

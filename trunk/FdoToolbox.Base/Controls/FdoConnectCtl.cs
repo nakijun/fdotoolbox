@@ -33,7 +33,7 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoConnectCtl : UserControl, IFdoConnectView
+    public partial class FdoConnectCtl : ViewContent, IFdoConnectView
     {
         private FdoConnectCtlPresenter _presenter;
 
@@ -117,26 +117,6 @@ namespace FdoToolbox.Base.Controls
         }
 
         public event EventHandler TitleChanged = delegate { };
-
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
 
         public IList<FdoProviderInfo> ProviderList
         {

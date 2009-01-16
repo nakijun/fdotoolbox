@@ -33,7 +33,7 @@ using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoDataPreviewCtl : UserControl, IViewContent, IFdoDataPreviewView
+    public partial class FdoDataPreviewCtl : ViewContent, IViewContent, IFdoDataPreviewView, IConnectionDependentView
     {
         private FdoDataPreviewPresenter _presenter;
 
@@ -80,28 +80,6 @@ namespace FdoToolbox.Base.Controls
         }
 
         public event EventHandler TitleChanged = delegate { };
-
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
 
         public List<QueryMode> QueryModes
         {
@@ -280,6 +258,11 @@ namespace FdoToolbox.Base.Controls
                 EtlProcessCtl ctl = new EtlProcessCtl(new TableToFlatFile(table, file));
                 Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
             }
+        }
+
+        public bool DependsOnConnection(FdoConnection conn)
+        {
+            return _presenter.ConnectionMatch(conn);
         }
     }
 }

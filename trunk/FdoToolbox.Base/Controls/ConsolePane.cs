@@ -36,7 +36,7 @@ using log4net.Config;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class ConsolePane : UserControl, IViewContent, IConsole
+    public partial class ConsolePane : ViewContent, IViewContent, IConsole
     {
         private ToolStrip toolStrip1;
         private RichTextBox txtConsole;
@@ -77,14 +77,9 @@ namespace FdoToolbox.Base.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
+        public override bool CanClose
         {
             get { return false; }
-        }
-
-        public bool Close()
-        {
-            return false;
         }
 
         public bool Save()
@@ -96,8 +91,6 @@ namespace FdoToolbox.Base.Controls
         {
             return false;
         }
-
-        public event EventHandler ViewContentClosing = delegate { };
 
         public string TextContent
         {

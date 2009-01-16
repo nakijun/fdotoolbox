@@ -31,7 +31,7 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoRegProviderCtl : UserControl, IViewContent, IFdoRegProviderView
+    public partial class FdoRegProviderCtl : ViewContent, IViewContent, IFdoRegProviderView
     {
         private FdoRegProviderPresentation _presenter;
 
@@ -53,28 +53,6 @@ namespace FdoToolbox.Base.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
-
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             txtLibraryPath.Text = FileService.OpenFile(ResourceService.GetString("TITLE_OPEN_FILE"), ResourceService.GetString("FILTER_DLL"));
@@ -82,7 +60,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            ViewContentClosing(this, EventArgs.Empty);
+            base.Close();
         }
 
         private void btnRegister_Click(object sender, EventArgs e)
@@ -90,7 +68,7 @@ namespace FdoToolbox.Base.Controls
             if (_presenter.Register())
             {
                 MessageService.ShowMessage(ResourceService.GetString("MSG_PROVIDER_REGISTERED"), ResourceService.GetString("TITLE_REGISTER_PROVIDER"));
-                ViewContentClosing(this, EventArgs.Empty);
+                base.Close();
             }
         }
 

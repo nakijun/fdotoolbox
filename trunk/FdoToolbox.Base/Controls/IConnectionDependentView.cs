@@ -19,49 +19,21 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
+using FdoToolbox.Core.Feature;
 
-namespace FdoToolbox.Base
+namespace FdoToolbox.Base.Controls
 {
-    /// <summary>
-    /// Abstract view interface. Can only be closed externally.
-    /// </summary>
-    public interface IViewContent : ISubView
+    public interface IConnectionDependentView : IViewContent
     {
         /// <summary>
-        /// The title of the view
+        /// Determines if this control has a reference to the specified connection
         /// </summary>
-        string Title { get; }
-        /// <summary>
-        /// Fires when the title has been changed
-        /// </summary>
-        event EventHandler TitleChanged;
-        /// <summary>
-        /// Detrmines if this view can be closed
-        /// </summary>
-        bool CanClose { get; }
-        /// <summary>
-        /// Closes the view. This raises the <see cref="ViewContentClosing"/> event
-        /// </summary>
+        /// <param name="conn"></param>
         /// <returns></returns>
-        void Close();
-        /// <summary>
-        /// Fired when the view has been closed internally
-        /// </summary>
-        event EventHandler ViewContentClosing;
-    }
-
-    public enum ViewRegion
-    {
-        Left,
-        Right,
-        Bottom,
-        Top,
-        Document,
-        Floating,
-        Dialog
+        bool DependsOnConnection(FdoConnection conn);
     }
 }

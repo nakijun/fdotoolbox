@@ -34,10 +34,11 @@ using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core;
 using FdoToolbox.Tasks.Services;
+using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Tasks.Controls
 {
-    public partial class FdoBulkCopyCtl : UserControl, IViewContent, IFdoBulkCopyView
+    public partial class FdoBulkCopyCtl : ViewContent, IViewContent, IFdoBulkCopyView, IEtlProcessEditor
     {
         private FdoBulkCopyPresenter _presenter;
 
@@ -62,28 +63,6 @@ namespace FdoToolbox.Tasks.Controls
         }
 
         public event EventHandler TitleChanged = delegate { };
-
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
 
         public Control ContentControl
         {
@@ -600,7 +579,7 @@ namespace FdoToolbox.Tasks.Controls
             try
             {
                 _presenter.SaveTask();
-                ViewContentClosing(this, EventArgs.Empty);
+                base.Close();
             }
             catch (Exception ex)
             {
@@ -708,6 +687,16 @@ namespace FdoToolbox.Tasks.Controls
                 }
             }
             return exprs;
+        }
+
+        public void LoadSettings(FdoToolbox.Core.ETL.EtlProcess proc)
+        {
+            _presenter.LoadFrom((FdoToolbox.Core.ETL.Specialized.FdoBulkCopy)proc);
+        }
+
+        public void ApplySettings()
+        {
+            _presenter.ApplySettings();
         }
     }
 }

@@ -367,5 +367,10 @@ namespace FdoToolbox.Base.Controls
             _view.StatusMessage = string.Empty;
             _view.ElapsedMessage = string.Empty;
         }
+
+        internal bool ConnectionMatch(FdoConnection conn)
+        {
+            return _connection == conn;
+        }
     }
 }

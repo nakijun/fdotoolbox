@@ -32,7 +32,7 @@ using FdoToolbox.Core.Connections;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoCreateDataStoreCtl : UserControl, IViewContent, IFdoCreateDataStoreView
+    public partial class FdoCreateDataStoreCtl : ViewContent, IViewContent, IFdoCreateDataStoreView
     {
         private FdoCreateDataStorePresenter _presenter;
 
@@ -95,39 +95,17 @@ namespace FdoToolbox.Base.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
-
         private void btnCreate_Click(object sender, EventArgs e)
         {
             if (_presenter.CreateDataStore())
             {
-                ViewContentClosing(this, EventArgs.Empty);
+                base.Close();
             }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            ViewContentClosing(this, EventArgs.Empty);
+            base.Close();
         }
 
         private void cmbProvider_SelectionChanged(object sender, EventArgs e)
@@ -261,11 +239,6 @@ namespace FdoToolbox.Base.Controls
         public FdoToolbox.Core.Feature.FdoProviderInfo SelectedProvider
         {
             get { return cmbProvider.SelectedItem as FdoToolbox.Core.Feature.FdoProviderInfo; }
-        }
-
-        public void OnClose()
-        {
-            ViewContentClosing(this, EventArgs.Empty);
         }
 
         public bool CreateEnabled

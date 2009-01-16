@@ -33,7 +33,7 @@ using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class EtlProcessCtl : UserControl, IViewContent
+    public partial class EtlProcessCtl : ViewContent, IViewContent
     {
         private EtlProcessCtl()
         {
@@ -82,28 +82,6 @@ namespace FdoToolbox.Base.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
-
         public Control ContentControl
         {
             get { return this; }
@@ -126,7 +104,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            ViewContentClosing(this, EventArgs.Empty);
+            base.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -134,7 +112,7 @@ namespace FdoToolbox.Base.Controls
             if (_runner.ExecutingThread.IsAlive)
                 _runner.ExecutingThread.Abort();
             else
-                ViewContentClosing(this, EventArgs.Empty);
+                base.Close();
         }
     }
 }

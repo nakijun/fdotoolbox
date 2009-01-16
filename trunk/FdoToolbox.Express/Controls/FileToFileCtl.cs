@@ -35,7 +35,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class FileToFileCtl : UserControl, IViewContent
+    public partial class FileToFileCtl : ViewContent, IViewContent
     {
         public FileToFileCtl()
         {
@@ -48,28 +48,6 @@ namespace FdoToolbox.Express.Controls
         }
 
         public event EventHandler TitleChanged = delegate { };
-
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
 
         public Control ContentControl
         {
@@ -101,7 +79,7 @@ namespace FdoToolbox.Express.Controls
                 {
                     EtlProcessCtl ctl = new EtlProcessCtl(bcp);
                     Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
-                    ViewContentClosing(this, EventArgs.Empty);
+                    base.Close();
                 }
             }
             else

@@ -29,10 +29,11 @@ using System.Text;
 using System.Windows.Forms;
 using FdoToolbox.Base;
 using ICSharpCode.Core;
+using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class ConnectOgrCtl : UserControl, IConnectOgrView, IViewContent
+    public partial class ConnectOgrCtl : ViewContent, IConnectOgrView, IViewContent
     {
         private ConnectOgrPresenter _presenter;
 
@@ -61,7 +62,7 @@ namespace FdoToolbox.Express.Controls
         private void btnConnect_Click(object sender, EventArgs e)
         {
             if (_presenter.Connect())
-                ViewContentClosing(this, EventArgs.Empty);
+                base.Close();
         }
 
         public FdoToolbox.Express.Controls.Ogr.OgrType[] OgrTypes
@@ -97,28 +98,6 @@ namespace FdoToolbox.Express.Controls
         }
 
         public event EventHandler TitleChanged = delegate { };
-
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
 
         public Control ContentControl
         {

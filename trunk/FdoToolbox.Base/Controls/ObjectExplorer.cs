@@ -27,7 +27,7 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class ObjectExplorer : UserControl, IObjectExplorer
+    public partial class ObjectExplorer : ViewContent, IObjectExplorer
     {
         private ToolStrip objToolStrip;
         private TreeView objTreeView;
@@ -67,6 +67,14 @@ namespace FdoToolbox.Base.Controls
             AfterSelection(this, EventArgs.Empty);
         }
 
+        public override bool CanClose
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public Control ContentControl
         {
             get { return this; }
@@ -78,26 +86,6 @@ namespace FdoToolbox.Base.Controls
         }
 
         public event EventHandler TitleChanged = delegate { };
-
-        public bool CanClose
-        {
-            get { return false; }
-        }
-
-        public bool Close()
-        {
-            return false;
-        }
-
-        public bool Save()
-        {
-            return false;
-        }
-
-        public bool SaveAs()
-        {
-            return false;
-        }
 
         public void RegisterImage(string imgResource)
         {
@@ -146,8 +134,6 @@ namespace FdoToolbox.Base.Controls
                 return _ContextMenus[nodeType];
             return null;
         }
-
-        public event EventHandler ViewContentClosing = delegate { };
 
         public event EventHandler AfterSelection = delegate { };
     }

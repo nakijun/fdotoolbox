@@ -32,7 +32,7 @@ using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoSpatialContextMgrCtl : UserControl, IFdoSpatialContextMgrView, IViewContent
+    public partial class FdoSpatialContextMgrCtl : ViewContent, IFdoSpatialContextMgrView, IViewContent, IConnectionDependentView
     {
         private FdoSpatialContextMgrPresenter _presenter;
 
@@ -135,28 +135,6 @@ namespace FdoToolbox.Base.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
-
         public Control ContentControl
         {
             get { return this; }
@@ -165,6 +143,11 @@ namespace FdoToolbox.Base.Controls
         public bool CreateEnabled
         {
             set { btnCreate.Enabled = value; }
+        }
+
+        public bool DependsOnConnection(FdoConnection conn)
+        {
+            return _presenter.Connection == conn;
         }
     }
 }

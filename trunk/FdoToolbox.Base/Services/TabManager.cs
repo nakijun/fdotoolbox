@@ -1,0 +1,106 @@
+using System;
+#region LGPL Header
+// Copyright (C) 2009, Jackie Ng
+// http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
+// 
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+//
+// See license.txt for more/additional licensing information
+#endregion
+
+using System.Collections.Generic;
+using System.Text;
+using FdoToolbox.Base.Controls;
+using FdoToolbox.Core.Feature;
+using ICSharpCode.Core;
+
+namespace FdoToolbox.Base.Services
+{
+    public class TabManager : IService
+    {
+        private IFdoConnectionManager connMgr;
+        private bool _init = false;
+        private List<IConnectionDependentView> _tabs;
+
+        public bool IsInitialized
+        {
+            get { return _init; }
+        }
+
+        public void InitializeService()
+        {
+            _tabs = new List<IConnectionDependentView>();
+            //Can't get instance here otherwise it will cause a recurive loop resulting in a stack overflow.
+            //So do it after the ServiceManager has been initialized
+            ServiceManager.ServiceManagerInitialized += delegate
+            {
+                connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
+                connMgr.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(OnBeforeRemoveConnection);
+            };
+            _init = true;
+            Initialize(this, EventArgs.Empty);
+        }
+
+        void OnBeforeRemoveConnection(object sender, ConnectionBeforeRenameEventArgs e)
+        {
+            FdoConnection conn = connMgr.GetConnection(e.ConnectionName);
+            //Get all views that depend on connection
+            List<IConnectionDependentView> matches = _tabs.FindAll(delegate(IConnectionDependentView c) { return c.DependsOnConnection(conn); });
+            if (matches.Count > 0)
+            {
+                //Don't close then cancel
+                if (!MessageService.AskQuestion(ResourceService.GetString("QUESTION_CLOSE_TABS")))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                else //Otherwise remove from watch list and close the view
+                {
+                    foreach (IConnectionDependentView view in matches)
+                    {
+                        _tabs.Remove(view);
+                        view.Close();
+                    }
+                }
+            }
+        }
+
+        public void UnloadService()
+        {
+            _tabs.Clear();
+            Unload(this, EventArgs.Empty);
+        }
+
+        public void Load()
+        {
+            
+        }
+
+        public void Save()
+        {
+            
+        }
+
+        public void Register(IConnectionDependentView view)
+        {
+            _tabs.Add(view);
+        }
+
+        public event EventHandler Initialize = delegate { };
+
+        public event EventHandler Unload = delegate { };
+    }
+}

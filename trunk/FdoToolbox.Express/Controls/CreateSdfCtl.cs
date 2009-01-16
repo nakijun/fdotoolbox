@@ -29,12 +29,13 @@ using System.Windows.Forms;
 using FdoToolbox.Base.Services;
 using ICSharpCode.Core;
 using FdoToolbox.Base;
+using FdoToolbox.Base.Controls;
 
 //TODO: Attach validation.
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class CreateSdfCtl : UserControl, IViewContent, ICreateSdfView
+    public partial class CreateSdfCtl : ViewContent, IViewContent, ICreateSdfView
     {
         private CreateSdfPresenter _presenter;
 
@@ -61,7 +62,7 @@ namespace FdoToolbox.Express.Controls
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            ViewContentClosing(this, EventArgs.Empty);
+            base.Close();
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -69,7 +70,7 @@ namespace FdoToolbox.Express.Controls
             if (_presenter.CheckConnectionName() && _presenter.CreateSdf())
             {
                 MessageService.ShowMessage(ResourceService.GetString("MSG_SDF_CREATED"), ResourceService.GetString("TITLE_CREATE_SDF"));
-                ViewContentClosing(this, EventArgs.Empty);
+                base.Close();
             }
         }
 
@@ -84,28 +85,6 @@ namespace FdoToolbox.Express.Controls
         }
 
         public event EventHandler TitleChanged = delegate { };
-
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing;
 
         public string SdfFile
         {

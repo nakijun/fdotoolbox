@@ -33,7 +33,7 @@ using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoDataStoreMgrCtl : UserControl, IFdoDataStoreMgrView, IViewContent
+    public partial class FdoDataStoreMgrCtl : ViewContent, IFdoDataStoreMgrView, IViewContent, IConnectionDependentView
     {
         private FdoDataStoreMgrPresenter _presenter;
 
@@ -76,28 +76,6 @@ namespace FdoToolbox.Base.Controls
 
         public event EventHandler TitleChanged = delegate { };
 
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public bool Close()
-        {
-            return true;
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
-
-        public bool SaveAs()
-        {
-            return true;
-        }
-
-        public event EventHandler ViewContentClosing = delegate { };
-
         public Control ContentControl
         {
             get { return this; }
@@ -126,6 +104,11 @@ namespace FdoToolbox.Base.Controls
                 _presenter.DestroyDataStore(props);
                 MessageService.ShowMessage(ResourceService.GetString("MSG_DATA_STORE_DESTROYED"));
             }
+        }
+
+        public bool DependsOnConnection(FdoConnection conn)
+        {
+            return _presenter.Connection == conn;
         }
     }
 }

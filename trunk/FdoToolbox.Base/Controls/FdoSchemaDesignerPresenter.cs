@@ -474,5 +474,10 @@ namespace FdoToolbox.Base.Controls
             SetSchemaNode();
             FillTree();
         }
+
+        internal bool MatchesConnection(FdoConnection conn)
+        {
+            return _conn == conn;
+        }
     }
 }
