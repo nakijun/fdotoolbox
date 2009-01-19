@@ -113,5 +113,30 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// Occurs when [process aborted].
         /// </summary>
         public event EventHandler ProcessAborted = delegate { };
+
+        /// <summary>
+        /// Determines if this process is capable of persistence
+        /// </summary>
+        public virtual bool CanSave { get { return false; } }
+
+        /// <summary>
+        /// Saves this process to a file
+        /// </summary>
+        /// <param name="file">The file to save this process to</param>
+        /// <param name="name">The name of the process</param>
+        public virtual void Save(string file, string name) { }
+
+        /// <summary>
+        /// Gets the file extension associated with this process. For tasks where <see cref="CanSave"/> is
+        /// false, an empty string is returned
+        /// </summary>
+        /// <returns></returns>
+        public virtual string GetFileExtension() { return string.Empty; }
+
+        /// <summary>
+        /// Gets a description of this process
+        /// </summary>
+        /// <returns></returns>
+        public virtual string GetDescription() { return string.Empty; }
     }
 }

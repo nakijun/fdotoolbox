@@ -85,6 +85,9 @@ namespace FdoToolbox.Core.ETL.Operations
             set { _ClassName = value; }
         }
 
+        /// <summary>
+        /// A set of un-writeable properties
+        /// </summary>
         protected HashedSet<string> _unWritableProperties = new HashedSet<string>();
 
         /// <summary>

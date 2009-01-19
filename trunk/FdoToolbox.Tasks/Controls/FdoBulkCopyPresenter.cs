@@ -318,6 +318,8 @@ namespace FdoToolbox.Tasks.Controls
                 errors.Add(ResourceService.GetStringFormatted("ERR_UNSUPPORTED_CMD", OSGeo.FDO.Commands.CommandType.CommandType_Insert));
 
             FdoBulkCopyOptions options = new FdoBulkCopyOptions(source, target);
+            options.SourceSchema = _view.SelectedSourceSchema;
+            options.TargetSchema = _view.SelectedTargetSchema;
 
             using (srcService)
             using (destService)

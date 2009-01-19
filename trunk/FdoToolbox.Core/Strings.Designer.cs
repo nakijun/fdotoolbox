@@ -61,6 +61,24 @@ namespace FdoToolbox.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bulk Copy Definition.
+        /// </summary>
+        internal static string DESC_BULK_COPY_DEFINITION {
+            get {
+                return ResourceManager.GetString("DESC_BULK_COPY_DEFINITION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Join Definition.
+        /// </summary>
+        internal static string DESC_JOIN_DEFINITION {
+            get {
+                return ResourceManager.GetString("DESC_JOIN_DEFINITION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Association properties cannot be altered into something else.
         /// </summary>
         internal static string ERR_CANNOT_ALTER_ASSOCIATION {
@@ -354,6 +372,15 @@ namespace FdoToolbox.Core {
         internal static string ERR_SCHEMA_NOT_FOUND {
             get {
                 return ResourceManager.GetString("ERR_SCHEMA_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find mapped property for source expression: {0} =&gt; {1}.
+        /// </summary>
+        internal static string ERR_SOURCE_EXPRESSION_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ERR_SOURCE_EXPRESSION_NOT_FOUND", resourceCulture);
             }
         }
         

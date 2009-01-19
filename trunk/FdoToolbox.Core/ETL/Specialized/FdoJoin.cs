@@ -34,6 +34,9 @@ namespace FdoToolbox.Core.ETL.Specialized
     using FdoToolbox.Core.Feature;
     using OSGeo.FDO.Schema;
     using System.Collections.ObjectModel;
+    using FdoToolbox.Core.Configuration;
+    using System.Xml.Serialization;
+    using System.IO;
 
     /// <summary>
     /// A specialized form of <see cref="EtlProcess"/> that merges
@@ -488,6 +491,98 @@ namespace FdoToolbox.Core.ETL.Specialized
                 }
                 return equals;
             }
+        }
+
+        /// <summary>
+        /// Saves this process to a file
+        /// </summary>
+        /// <param name="file">The file to save this process to</param>
+        /// <param name="name">The name of the process</param>
+        public override void Save(string file, string name)
+        {
+            FdoJoinTaskDefinition join = new FdoJoinTaskDefinition();
+            join.name = name;
+            join.Left = new FdoJoinSource();
+            join.Right = new FdoJoinSource();
+            join.Target = new FdoJoinTarget();
+            join.JoinSettings = new FdoJoinSettings();
+
+            join.Left.Class = _options.Left.ClassName;
+            join.Left.ConnectionString = _options.Left.Connection.ConnectionString;
+            join.Left.FeatureSchema = _options.Left.SchemaName;
+            join.Left.Prefix = _options.LeftPrefix;
+            join.Left.PropertyList = new List<string>(_options.LeftProperties).ToArray();
+            join.Left.Provider = _options.Left.Connection.Provider;
+
+            join.Right.Class = _options.Right.ClassName;
+            join.Right.ConnectionString = _options.Right.Connection.ConnectionString;
+            join.Right.FeatureSchema = _options.Right.SchemaName;
+            join.Right.Prefix = _options.RightPrefix;
+            join.Right.PropertyList = new List<string>(_options.RightProperties).ToArray();
+            join.Right.Provider = _options.Right.Connection.Provider;
+
+            join.Target.Class = _options.Target.ClassName;
+            join.Target.ConnectionString = _options.Target.Connection.ConnectionString;
+            join.Target.FeatureSchema = _options.Target.SchemaName;
+            join.Target.Provider = _options.Target.Connection.Provider;
+
+            join.JoinSettings.DesignatedGeometry = new FdoDesignatedGeometry();
+            if (!string.IsNullOrEmpty(_options.GeometryProperty))
+            {
+                join.JoinSettings.DesignatedGeometry.Property = _options.GeometryProperty;
+                join.JoinSettings.DesignatedGeometry.Side = _options.Side;
+            }
+            if (_options.SpatialJoinPredicate.HasValue)
+            {
+                join.JoinSettings.SpatialPredicate = (SpatialPredicate)Enum.Parse(typeof(SpatialPredicate), _options.SpatialJoinPredicate.Value.ToString());
+            }
+            join.JoinSettings.JoinType = (JoinType)Enum.Parse(typeof(JoinType), _options.JoinType.ToString());
+            List<JoinKey> keys = new List<JoinKey>();
+            foreach (string key in _options.JoinPairs.Keys)
+            {
+                JoinKey k = new JoinKey();
+                k.left = key;
+                k.right = _options.JoinPairs[key];
+                keys.Add(k);
+            }
+            join.JoinSettings.JoinKeys = keys.ToArray();
+
+            XmlSerializer serializer = new XmlSerializer(typeof(FdoJoinTaskDefinition));
+            using (StreamWriter writer = new StreamWriter(file, false))
+            {
+                serializer.Serialize(writer, join);
+            }
+        }
+
+        /// <summary>
+        /// Determines if this process is capable of persistence
+        /// </summary>
+        /// <value></value>
+        public override bool CanSave
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets the file extension associated with this process. For tasks where <see cref="CanSave"/> is
+        /// false, an empty string is returned
+        /// </summary>
+        /// <returns></returns>
+        public override string GetFileExtension()
+        {
+            return TaskDefinitionHelper.JOINDEFINITION;
+        }
+
+        /// <summary>
+        /// Gets a description of this process
+        /// </summary>
+        /// <returns></returns>
+        public override string GetDescription()
+        {
+            return ResourceUtil.GetString("DESC_JOIN_DEFINITION");
         }
     }
 }

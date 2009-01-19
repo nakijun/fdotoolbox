@@ -40,7 +40,12 @@
 
     <!-- Object Explorer toolbar definition -->
     <Path name="/ObjectExplorer/Toolbar">
-
+        <!--
+        <MenuItem id="Task"
+                  label="Task"
+                  icon="application_go"
+                  type="Menu" />
+        -->
     </Path>
 
     <!-- Application Console toolbar definition -->
@@ -80,6 +85,10 @@
                   icon="application_go"
                   class="FdoToolbox.Tasks.Commands.ExecuteTaskCommand" />
         <MenuItem type="Separator" />
+        <MenuItem id="SaveTask"
+                  label="${res:CMD_SaveTask}"
+                  icon="disk"
+                  class="FdoToolbox.Tasks.Commands.SaveTaskCommand" />
         <MenuItem id="EditTask"
                   label="${res:CMD_EditTask}"
                   icon="application_edit"

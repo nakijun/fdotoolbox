@@ -69,7 +69,18 @@ namespace FdoToolbox.Core.ETL.Specialized
             get { return _BatchSize; }
             set { _BatchSize = value; }
         }
-	
+
+        private JoinSide _Side;
+
+        /// <summary>
+        /// Gets or sets the side of the join the designated geometry properties comes from
+        /// </summary>
+        /// <value>The side.</value>
+        public JoinSide Side
+        {
+            get { return _Side; }
+            set { _Side = value; }
+        }
 
         private FdoJoinType _JoinType;
 

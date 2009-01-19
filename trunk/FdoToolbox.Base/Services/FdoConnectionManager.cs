@@ -231,7 +231,7 @@ namespace FdoToolbox.Base.Services
         {
             foreach (FdoConnection conn in _ConnectionDict.Values)
             {
-                if (conn.Provider.StartsWith(provider) && conn.ConnectionString.ToLower() == connStr)
+                if (conn.Provider.StartsWith(provider) && conn.ConnectionString.ToLower() == connStr.ToLower())
                     return conn;
             }
             return null;

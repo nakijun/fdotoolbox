@@ -340,9 +340,15 @@ namespace FdoToolbox.Tasks.Controls
             if (_view.TargetGeometryPropertyEnabled)
             {
                 if (!string.IsNullOrEmpty(_view.LeftGeometryName) && _view.LeftGeometryChecked)
+                {
                     options.GeometryProperty = _view.LeftGeometryName;
+                    options.Side = FdoToolbox.Core.Configuration.JoinSide.Left;
+                }
                 else if (!string.IsNullOrEmpty(_view.RightGeometryName) && _view.RightGeometryChecked)
+                {
                     options.GeometryProperty = _view.RightGeometryName;
+                    options.Side = FdoToolbox.Core.Configuration.JoinSide.Right;
+                }
             }
 
             options.SetJoinPairs(_view.GetJoinedProperties());

@@ -83,7 +83,7 @@ namespace FdoToolbox.Core.ETL
         /// <returns>
         /// 	<c>true</c> if the specified property is read only; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsReadOnly(string property)
+        public bool IsPropertyReadOnly(string property)
         {
             return readOnlyProperties.Contains(property);
         }
@@ -220,7 +220,7 @@ namespace FdoToolbox.Core.ETL
         /// Generate a row from a Feature Reader
         /// </summary>
         /// <param name="reader">The feature reader</param>
-        /// <param name="ignoreProperties">A list of properties to exclude from the row</param>
+        /// <param name="readOnlyProperties">A list of properties to mark as read-only</param>
         /// <returns></returns>
         public static FdoRow FromFeatureReader(FdoFeatureReader reader, ICollection<string> readOnlyProperties)
         {

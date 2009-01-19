@@ -35,7 +35,7 @@ namespace FdoToolbox.Core.Feature
         private IGeometry _geom;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Geometry"/> class.
+        /// Initializes a new instance of the <see cref="FdoGeometry"/> class.
         /// </summary>
         /// <param name="geom">The geom.</param>
         public FdoGeometry(IGeometry geom)

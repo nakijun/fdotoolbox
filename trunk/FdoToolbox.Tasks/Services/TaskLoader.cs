@@ -38,8 +38,11 @@ namespace FdoToolbox.Tasks.Services
 
             FdoConnection conn = connMgr.GetConnection(provider, connStr);
             if (conn == null)
+            {
                 conn = new FdoConnection(provider, connStr);
-
+                string name = ServiceManager.Instance.GetService<NamingService>().GetDefaultConnectionName(provider);
+                connMgr.AddConnection(name, conn);
+            }
             return conn;
         }
     }

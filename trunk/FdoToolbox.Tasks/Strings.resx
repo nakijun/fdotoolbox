@@ -141,6 +141,9 @@
   <data name="CMD_RenameTask" xml:space="preserve">
     <value>Rename Task</value>
   </data>
+  <data name="CMD_SaveTask" xml:space="preserve">
+    <value>Save Task</value>
+  </data>
   <data name="ERR_CANNOT_EXECUTE_UNSPECIALIZED_ETL_PROCESS" xml:space="preserve">
     <value>Cannot execute generic ETL process</value>
     <comment>Thrown when the task being executed is not a specialized ETL task.</comment>
@@ -165,6 +168,9 @@
   </data>
   <data name="MSG_DELETE_UNSUPPORTED" xml:space="preserve">
     <value>Delete is not supported</value>
+  </data>
+  <data name="MSG_TASK_SAVED" xml:space="preserve">
+    <value>Task saved to {0}</value>
   </data>
   <data name="NODE_EXPRESSION" xml:space="preserve">
     <value>Class Computed Properties</value>
@@ -195,6 +201,9 @@
   </data>
   <data name="TITLE_RENAME_TASK" xml:space="preserve">
     <value>Rename Task</value>
+  </data>
+  <data name="TITLE_SAVE_TASK" xml:space="preserve">
+    <value>Save Task</value>
   </data>
   <data name="TOOLTIP_JOIN_TYPE" xml:space="preserve">
     <value>The type of join to perform</value>

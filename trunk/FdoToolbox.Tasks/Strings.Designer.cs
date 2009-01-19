@@ -133,6 +133,15 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Task.
+        /// </summary>
+        internal static string CMD_SaveTask {
+            get {
+                return ResourceManager.GetString("CMD_SaveTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot execute generic ETL process.
         /// </summary>
         internal static string ERR_CANNOT_EXECUTE_UNSPECIALIZED_ETL_PROCESS {
@@ -201,6 +210,15 @@ namespace FdoToolbox.Tasks {
         internal static string MSG_DELETE_UNSUPPORTED {
             get {
                 return ResourceManager.GetString("MSG_DELETE_UNSUPPORTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task saved to {0}.
+        /// </summary>
+        internal static string MSG_TASK_SAVED {
+            get {
+                return ResourceManager.GetString("MSG_TASK_SAVED", resourceCulture);
             }
         }
         
@@ -291,6 +309,15 @@ namespace FdoToolbox.Tasks {
         internal static string TITLE_RENAME_TASK {
             get {
                 return ResourceManager.GetString("TITLE_RENAME_TASK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Task.
+        /// </summary>
+        internal static string TITLE_SAVE_TASK {
+            get {
+                return ResourceManager.GetString("TITLE_SAVE_TASK", resourceCulture);
             }
         }
         
