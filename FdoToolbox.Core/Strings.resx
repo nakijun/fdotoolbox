@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DESC_BULK_COPY_DEFINITION" xml:space="preserve">
+    <value>Bulk Copy Definition</value>
+  </data>
+  <data name="DESC_JOIN_DEFINITION" xml:space="preserve">
+    <value>Join Definition</value>
+  </data>
   <data name="ERR_CANNOT_ALTER_ASSOCIATION" xml:space="preserve">
     <value>Association properties cannot be altered into something else</value>
   </data>
@@ -215,6 +221,9 @@
   </data>
   <data name="ERR_SCHEMA_NOT_FOUND" xml:space="preserve">
     <value>Schema {0} not found</value>
+  </data>
+  <data name="ERR_SOURCE_EXPRESSION_NOT_FOUND" xml:space="preserve">
+    <value>Could not find mapped property for source expression: {0} =&gt; {1}</value>
   </data>
   <data name="ERR_UNABLE_TO_CONVERT_CLASS" xml:space="preserve">
     <value>Unable to convert class to different type</value>

@@ -37,10 +37,20 @@
         <xs:sequence>
             <xs:element name="JoinType" type="JoinType" minOccurs="1" maxOccurs="1" />
             <xs:element name="SpatialPredicate" type="SpatialPredicate" minOccurs="0" maxOccurs="1" />
-            <xs:element name="DesignatedGeometry" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="DesignatedGeometry" type="FdoDesignatedGeometry" minOccurs="0" maxOccurs="1" />
             <xs:element name="JoinKeys" type="JoinKeyList" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
     </xs:complexType>
+    <xs:complexType name="FdoDesignatedGeometry">
+        <xs:attribute name="Property" type="xs:string" use="required" />
+        <xs:attribute name="Side" type="JoinSide" use="required" />
+    </xs:complexType>
+    <xs:simpleType name="JoinSide">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Left" />
+            <xs:enumeration value="Right" />
+        </xs:restriction>
+    </xs:simpleType> 
     <xs:simpleType name="JoinType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="Inner" />

@@ -128,22 +128,24 @@ namespace FdoToolbox.Tasks.Commands
         {
             TreeNode taskNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
             TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
-            EtlProcess proc = mgr.GetTask(taskNode.Name);
-            if (proc != null)
+            //EtlProcess proc = mgr.GetTask(taskNode.Name);
+            FdoSpecializedEtlProcess proc = mgr.GetTask(taskNode.Name) as FdoSpecializedEtlProcess;
+            if (proc != null && proc.CanSave)
             {
-                //try
-                //{
-                //    string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_TASK"), proc.GetFileExtension());
-                //    if (FileService.FileExists(file))
-                //    {
-                //        proc.Save(file);
-                //        MessageService.ShowMessage(ResourceService.GetStringFormatted("MSG_TASK_SAVED", file));
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    MessageService.ShowError(ex.Message);
-                //}
+                try
+                {
+                    string filter = string.Format("{0} (*{1})|*{1}", proc.GetDescription(), proc.GetFileExtension());
+                    string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_TASK"), filter);
+                    if (file != null)
+                    {
+                        proc.Save(file, taskNode.Name);
+                        MessageService.ShowMessage(ResourceService.GetStringFormatted("MSG_TASK_SAVED", file));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageService.ShowError(ex.Message);
+                }
             }
         }
     }

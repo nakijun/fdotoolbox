@@ -95,6 +95,30 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
         }
 
+        private string _SourceSchema;
+
+        /// <summary>
+        /// Gets or sets the source schema.
+        /// </summary>
+        /// <value>The source schema.</value>
+        public string SourceSchema
+        {
+            get { return _SourceSchema; }
+            set { _SourceSchema = value; }
+        }
+
+        private string _TargetSchema;
+
+        /// <summary>
+        /// Gets or sets the target schema.
+        /// </summary>
+        /// <value>The target schema.</value>
+        public string TargetSchema
+        {
+            get { return _TargetSchema; }
+            set { _TargetSchema = value; }
+        }
+
         /// <summary>
         /// Determines if this object owns the connections.
         /// </summary>
@@ -150,10 +174,11 @@ namespace FdoToolbox.Core.ETL.Specialized
         public void AddClassCopyOption(string sourceClass, string targetClass, NameValueCollection mappings, NameValueCollection sourceExpressions, bool deleteTarget, string sourceFilter)
         {
             //All source expressions passsed in must be mapped.
-            foreach (string key in sourceExpressions.AllKeys)
+            foreach (string expr in sourceExpressions.Keys)
             {
-                if (mappings[key] == null)
-                    throw new InvalidOperationException("Could not find mapped property for source expression: " + key);
+                string alias = sourceExpressions[expr];
+                if (mappings[alias] == null)
+                    throw new InvalidOperationException(ResourceUtil.GetStringFormatted("ERR_SOURCE_EXPRESSION_NOT_FOUND", alias, expr));
             }
             FdoClassCopyOptions copt = new FdoClassCopyOptions(_sourceConn, _targetConn, sourceClass, targetClass);
             copt.DeleteTarget = deleteTarget;

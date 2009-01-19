@@ -86,13 +86,13 @@ namespace FdoToolbox.Core.ETL
             {
                 NameValueCollection exprs = new NameValueCollection();
                 NameValueCollection maps = new NameValueCollection();
-                foreach (FdoPropertyMapping pmap in mapping.Properties)
-                {
-                    maps.Add(pmap.SourceProperty, pmap.TargetProperty);
-                }
                 foreach (FdoExpressionMapping emap in mapping.Expressions)
                 {
                     exprs.Add(emap.SourceExpression, emap.TargetProperty);
+                }
+                foreach (FdoPropertyMapping pmap in mapping.Properties)
+                {
+                    maps.Add(pmap.SourceProperty, pmap.TargetProperty);
                 }
                 opt.AddClassCopyOption(mapping.SourceClass, mapping.TargetClass, maps, exprs, mapping.DeleteTarget, mapping.Filter);
             }
@@ -143,7 +143,11 @@ namespace FdoToolbox.Core.ETL
         {
             FdoJoinOptions opts = new FdoJoinOptions(owner);
             name = def.name;
-            opts.GeometryProperty = def.JoinSettings.DesignatedGeometry;
+            if (def.JoinSettings.DesignatedGeometry != null)
+            {
+                opts.GeometryProperty = def.JoinSettings.DesignatedGeometry.Property;
+                opts.Side = def.JoinSettings.DesignatedGeometry.Side;
+            }
             foreach (JoinKey key in def.JoinSettings.JoinKeys)
             {
                 opts.JoinPairs.Add(key.left, key.right);
@@ -190,7 +194,12 @@ namespace FdoToolbox.Core.ETL
             FdoJoinTaskDefinition jdef = new FdoJoinTaskDefinition();
             jdef.name = name;
             jdef.JoinSettings = new FdoJoinSettings();
-            jdef.JoinSettings.DesignatedGeometry = opts.GeometryProperty;
+            if (!string.IsNullOrEmpty(opts.GeometryProperty))
+            {
+                jdef.JoinSettings.DesignatedGeometry = new FdoDesignatedGeometry();
+                jdef.JoinSettings.DesignatedGeometry.Property = opts.GeometryProperty;
+                jdef.JoinSettings.DesignatedGeometry.Side = opts.Side;
+            }
             List<JoinKey> keys = new List<JoinKey>();
             foreach (string left in opts.JoinPairs.Keys)
             {
