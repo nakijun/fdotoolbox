@@ -7,7 +7,9 @@
  * ~~Data Store Management~~
  * ~~Delete Schema Command~~
  * ~~Command-line utilities~~
- * ~~Session persistence (connections~~ / tasks)
+ * Session persistence 
+   * ~~connections~~ 
+   * tasks
  * Bulk Copy features
    * ~~Batch insert support~~
    * Data value conversion support
@@ -18,7 +20,7 @@
    * ~~Delete Task~~
    * ~~Execute Task~~
    * Load Task
-   * Save Task
+   * ~~Save Task~~
  * ~~File to File Bulk Copy~~
    * ~~SDF to SDF~~
    * ~~SHP to SDF~~
