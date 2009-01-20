@@ -19,7 +19,7 @@
      * ~~Database Join~~
    * ~~Delete Task~~
    * ~~Execute Task~~
-   * Load Task
+   * ~~Load Task~~
    * ~~Save Task~~
  * ~~File to File Bulk Copy~~
    * ~~SDF to SDF~~
