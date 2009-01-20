@@ -3,7 +3,7 @@
 === 0.7 ===
 
  * ~~Overhaul extensibility framework~~
- * [http://code.google.com/p/fdotoolbox/wiki/MissingFeatures Port over 0.6 feature set]
+ * ~~[http://code.google.com/p/fdotoolbox/wiki/MissingFeatures Port over 0.6 feature set]~~
  * ~~Spatial ETL pipelining API~~
  * ~~NSIS installer packages~~
  * ~~Standalone Feature Schema Editor~~
@@ -13,6 +13,7 @@
 
 === 0.8 ===
 
+ * User Documentation
  * Save data preview query results to other flat-file sources
  * Express support for SQLite provider 
  * Localization
