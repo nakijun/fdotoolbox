@@ -202,7 +202,7 @@
     <value>The join target must be a feature class that doesn't already exist</value>
   </data>
   <data name="ERR_JOIN_TARGET_GEOMETRY_PROPERTY_NOT_FOUND" xml:space="preserve">
-    <value>Unable to find geometry property {0} in joined class</value>
+    <value>Unable to find geometry property {0} in {1} joined class</value>
   </data>
   <data name="ERR_JOIN_TARGET_UNDEFINED" xml:space="preserve">
     <value>Join target has not been defined</value>

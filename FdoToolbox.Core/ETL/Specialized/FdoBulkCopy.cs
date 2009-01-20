@@ -131,7 +131,7 @@ namespace FdoToolbox.Core.ETL.Specialized
 
                 IFdoOperation input = new FdoInputOperation(_options.SourceConnection, CreateSourceQuery(copt)); 
                 IFdoOperation output = null;
-                if (copt.PropertyMappingCount > 0)
+                if (copt.SourcePropertyNames.Length > 0)
                 {
                     NameValueCollection propertyMappings = new NameValueCollection();
                     foreach (string srcProp in copt.SourcePropertyNames)
@@ -278,21 +278,21 @@ namespace FdoToolbox.Core.ETL.Specialized
                 FdoClassMapping map = new FdoClassMapping();
                 map.DeleteTarget = copt.DeleteTarget;
                 List<FdoExpressionMapping> exprs = new List<FdoExpressionMapping>();
-                foreach (string key in copt.SourceExpressions.Keys)
+                foreach (string key in copt.SourceAliases)
                 {
                     FdoExpressionMapping e = new FdoExpressionMapping();
                     e.TargetProperty = key;
-                    e.SourceExpression = copt.SourceExpressions[key];
+                    e.SourceExpression = copt.GetExpression(key);
                     exprs.Add(e);
                 }
                 map.Expressions = exprs.ToArray();
                 map.Filter = copt.SourceFilter;
                 List<FdoPropertyMapping> props = new List<FdoPropertyMapping>();
-                foreach (string key in copt.PropertyMappings.Keys)
+                foreach (string key in copt.SourcePropertyNames)
                 {
                     FdoPropertyMapping p = new FdoPropertyMapping();
                     p.SourceProperty = key;
-                    p.TargetProperty = copt.PropertyMappings[key];
+                    p.TargetProperty = copt.GetTargetProperty(key);
                     props.Add(p);
                 }
                 map.Properties = props.ToArray();

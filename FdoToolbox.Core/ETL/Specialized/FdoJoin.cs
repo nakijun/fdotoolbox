@@ -195,16 +195,31 @@ namespace FdoToolbox.Core.ETL.Specialized
                 //Set designated geometry if specified
                 if (!string.IsNullOrEmpty(_options.GeometryProperty))
                 {
-                    int pidx = fc.Properties.IndexOf(_options.GeometryProperty);
-                    if (pidx < 0)
-                        throw new FdoETLException(ResourceUtil.GetStringFormatted("ERR_JOIN_TARGET_GEOMETRY_PROPERTY_NOT_FOUND"));
+                    GeometricPropertyDefinition geom = null;
+                    if (_options.Side == JoinSide.Left)
+                    {
+                        int lidx = leftClass.Properties.IndexOf(_options.GeometryProperty);
+                        if(lidx > 0)
+                            geom = FdoFeatureService.CloneProperty(leftClass.Properties[lidx]) as GeometricPropertyDefinition;
+                    }
+                    else
+                    {
+                        int ridx = rightClass.Properties.IndexOf(_options.GeometryProperty);
+                        if (ridx > 0)
+                            geom = FdoFeatureService.CloneProperty(rightClass.Properties[ridx]) as GeometricPropertyDefinition;
+                    }
 
-                    PropertyDefinition pd = fc.Properties[pidx];
-                    if (pd.PropertyType != PropertyType.PropertyType_GeometricProperty)
-                        throw new FdoETLException(ResourceUtil.GetStringFormatted("ERR_JOIN_NOT_TARGET_GEOMETRY_PROPERTY", _options.GeometryProperty));
-
-                    //Set geometry property
-                    fc.GeometryProperty = (GeometricPropertyDefinition)pd;
+                    if (geom == null)
+                    {
+                        throw new FdoETLException(ResourceUtil.GetStringFormatted("ERR_JOIN_TARGET_GEOMETRY_PROPERTY_NOT_FOUND", _options.GeometryProperty, _options.Side));
+                    }
+                    else
+                    {
+                        //Set geometry property
+                        fc.Properties.Add(geom);
+                        fc.GeometryProperty = geom;
+                    }
+                    
                 }
             }
 
@@ -311,6 +326,17 @@ namespace FdoToolbox.Core.ETL.Specialized
                 set { _GeometryProperty = value; }
             }
 
+            private JoinSide _side;
+
+            /// <summary>
+            /// Gets or sets the side of the join where the geometry property originates.
+            /// </summary>
+            /// <value>The side.</value>
+            public JoinSide Side
+            {
+                get { return _side; }
+                set { _side = value; }
+            }
 
             /// <summary>
             /// The left side properties
@@ -448,6 +474,8 @@ namespace FdoToolbox.Core.ETL.Specialized
                             currentRow[_RightPrefix + prop] = rightRow[prop];
                         }
                     }
+                    if (_side == JoinSide.Right)
+                        currentRow[_GeometryProperty] = rightRow[_GeometryProperty];
                 }
             }
 
@@ -469,6 +497,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                             currentRow[_LeftPrefix + prop] = leftRow[prop];
                         }
                     }
+
+                    if (_side == JoinSide.Left)
+                        currentRow[_GeometryProperty] = leftRow[_GeometryProperty];
                 }
             }
 
