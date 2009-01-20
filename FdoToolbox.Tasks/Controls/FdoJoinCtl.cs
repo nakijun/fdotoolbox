@@ -35,12 +35,15 @@ using FdoToolbox.Core.ETL.Specialized;
 using FdoToolbox.Tasks.Services;
 using FdoToolbox.Core.ETL.Operations;
 using FdoToolbox.Base.Controls;
+using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Tasks.Controls
 {
-    public partial class FdoJoinCtl : ViewContent, IViewContent, IFdoJoinView
+    public partial class FdoJoinCtl : ViewContent, IConnectionDependentView, IFdoJoinView
     {
         private FdoJoinPresenter _presenter;
+
+        private FdoJoin _initOptions;
 
         public FdoJoinCtl()
         {
@@ -51,9 +54,20 @@ namespace FdoToolbox.Tasks.Controls
                 sm.GetService<TaskManager>());
         }
 
+        public FdoJoinCtl(string taskName, FdoJoin options)
+            : this()
+        {
+            _initOptions = options;
+            txtName.Text = taskName;
+            txtName.ReadOnly = true; //This is edit mode, so the task name can't be changed
+        }
+
         protected override void OnLoad(EventArgs e)
         {
-            _presenter.Init();
+            if (_initOptions == null)
+                _presenter.Init();
+            else
+                _presenter.Init(_initOptions);
             base.OnLoad(e);
         }
 
@@ -122,6 +136,7 @@ namespace FdoToolbox.Tasks.Controls
         public FdoJoinType SelectedJoinType
         {
             get { return (FdoJoinType)cmbJoinTypes.SelectedItem; }
+            set { cmbJoinTypes.SelectedItem = value; }
         }
 
         public string SelectedLeftConnection
@@ -133,6 +148,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbLeftConnection.SelectedItem = value;
+                cmbLeftConnection_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -145,6 +161,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbRightConnection.SelectedItem = value;
+                cmbRightConnection_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -157,6 +174,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbTargetConnection.SelectedItem = value;
+                cmbTargetConnection_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -169,6 +187,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbLeftSchema.SelectedItem = value;
+                cmbLeftSchema_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -181,6 +200,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbRightSchema.SelectedItem = value;
+                cmbRightSchema_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -193,6 +213,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbTargetSchema.SelectedItem = value;
+                cmbTargetSchema_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -205,6 +226,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbLeftClass.SelectedItem = value;
+                cmbLeftClass_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -217,6 +239,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbRightClass.SelectedItem = value;
+                cmbRightClass_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -400,6 +423,10 @@ namespace FdoToolbox.Tasks.Controls
             {
                 MessageService.ShowError(ex.Message);
             }
+            catch (Exception ex)
+            {
+                MessageService.ShowError(ex);
+            }
         }
 
         public string TaskName
@@ -427,7 +454,7 @@ namespace FdoToolbox.Tasks.Controls
         public string LeftPrefix
         {
             get { return txtLeftPrefix.Text; }
-            set { txtRightPrefix.Text = value; }
+            set { txtLeftPrefix.Text = value; }
         }
 
         public string RightPrefix
@@ -511,6 +538,46 @@ namespace FdoToolbox.Tasks.Controls
         {
             get { return chkOneToOne.Checked; }
             set { chkOneToOne.Checked = value; }
+        }
+
+        public bool DependsOnConnection(FdoToolbox.Core.Feature.FdoConnection conn)
+        {
+            IFdoConnectionManager connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
+            FdoConnection left = connMgr.GetConnection(this.SelectedLeftConnection);
+            FdoConnection right = connMgr.GetConnection(this.SelectedRightConnection);
+            FdoConnection target = connMgr.GetConnection(this.SelectedTargetConnection);
+
+            return conn == left || conn == right || conn == target;
+        }
+
+        public void CheckLeftProperties(ICollection<string> properties)
+        {
+            foreach (int idx in chkLeftProperties.CheckedIndices)
+            {
+                chkLeftProperties.SetItemChecked(idx, false);
+            }
+
+            foreach (string prop in properties)
+            {
+                int idx = chkLeftProperties.Items.IndexOf(prop);
+                if (idx >= 0)
+                    chkLeftProperties.SetItemChecked(idx, true);
+            }
+        }
+
+        public void CheckRightProperties(ICollection<string> properties)
+        {
+            foreach (int idx in chkRightProperties.CheckedIndices)
+            {
+                chkRightProperties.SetItemChecked(idx, false);
+            }
+
+            foreach (string prop in properties)
+            {
+                int idx = chkRightProperties.Items.IndexOf(prop);
+                if (idx >= 0)
+                    chkRightProperties.SetItemChecked(idx, true);
+            }
         }
     }
 }

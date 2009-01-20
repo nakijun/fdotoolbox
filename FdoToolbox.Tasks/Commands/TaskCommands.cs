@@ -122,6 +122,36 @@ namespace FdoToolbox.Tasks.Commands
         }
     }
 
+    public class EditTaskCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            TreeNode taskNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
+            TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
+            //EtlProcess proc = mgr.GetTask(taskNode.Name);
+            FdoSpecializedEtlProcess proc = mgr.GetTask(taskNode.Name) as FdoSpecializedEtlProcess;
+            if (proc != null)
+            {
+                if (proc is FdoBulkCopy)
+                {
+                    FdoBulkCopy copy = proc as FdoBulkCopy;
+                    FdoBulkCopyCtl ctl = new FdoBulkCopyCtl(taskNode.Name, copy);
+                    Workbench.Instance.ShowContent(ctl, ViewRegion.Document);
+                }
+                else if (proc is FdoJoin)
+                {
+                    FdoJoin join = proc as FdoJoin;
+                    FdoJoinCtl ctl = new FdoJoinCtl(taskNode.Name, join);
+                    Workbench.Instance.ShowContent(ctl, ViewRegion.Document);
+                }
+                else
+                {
+                    MessageService.ShowError(ResourceService.GetString("ERR_NO_EDITOR_FOR_TASK"));
+                }
+            }
+        }
+    }
+
     public class SaveTaskCommand : AbstractMenuCommand
     {
         public override void Run()
@@ -147,6 +177,15 @@ namespace FdoToolbox.Tasks.Commands
                     MessageService.ShowError(ex.Message);
                 }
             }
+        }
+    }
+
+    public class RemoveAllTasksCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            TaskManager tm = ServiceManager.Instance.GetService<TaskManager>();
+            tm.Clear();
         }
     }
 }

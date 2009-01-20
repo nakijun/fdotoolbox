@@ -82,6 +82,9 @@ namespace FdoToolbox.Core.ETL
 
             name = def.name;
 
+            opt.SourceSchema = def.Source.Schema;
+            opt.TargetSchema = def.Target.Schema;
+
             foreach (FdoClassMapping mapping in def.ClassMappings)
             {   
                 FdoClassCopyOptions copt = new FdoClassCopyOptions(mapping.SourceClass, mapping.TargetClass);
@@ -178,11 +181,12 @@ namespace FdoToolbox.Core.ETL
 
             opts.SetTarget(
                 CreateConnection(def.Target.Provider, def.Target.ConnectionString),
-                def.Right.FeatureSchema,
-                def.Right.Class);
+                def.Target.FeatureSchema,
+                def.Target.Class);
 
             opts.LeftPrefix = def.Left.Prefix;
             opts.RightPrefix = def.Right.Prefix;
+            opts.ForceOneToOne = def.JoinSettings.ForceOneToOne;
             if (def.JoinSettings.SpatialPredicateSpecified)
                 opts.SpatialJoinPredicate = (SpatialOperations)Enum.Parse(typeof(SpatialOperations), def.JoinSettings.SpatialPredicate.ToString());
 

@@ -33,6 +33,7 @@ namespace FdoToolbox.Tasks.Controls
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.chkOneToOne = new System.Windows.Forms.CheckBox();
             this.label19 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.rdRightGeom = new System.Windows.Forms.RadioButton();
@@ -82,7 +83,6 @@ namespace FdoToolbox.Tasks.Controls
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.chkOneToOne = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).BeginInit();
@@ -149,6 +149,16 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox5.TabIndex = 6;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Join Options";
+            // 
+            // chkOneToOne
+            // 
+            this.chkOneToOne.AutoSize = true;
+            this.chkOneToOne.Location = new System.Drawing.Point(243, 72);
+            this.chkOneToOne.Name = "chkOneToOne";
+            this.chkOneToOne.Size = new System.Drawing.Size(83, 17);
+            this.chkOneToOne.TabIndex = 16;
+            this.chkOneToOne.Text = "Force 1 to 1";
+            this.chkOneToOne.UseVisualStyleBackColor = true;
             // 
             // label19
             // 
@@ -427,6 +437,7 @@ namespace FdoToolbox.Tasks.Controls
             // 
             // chkRightProperties
             // 
+            this.chkRightProperties.CheckOnClick = true;
             this.chkRightProperties.FormattingEnabled = true;
             this.chkRightProperties.Location = new System.Drawing.Point(77, 92);
             this.chkRightProperties.Name = "chkRightProperties";
@@ -509,6 +520,7 @@ namespace FdoToolbox.Tasks.Controls
             // 
             // chkLeftProperties
             // 
+            this.chkLeftProperties.CheckOnClick = true;
             this.chkLeftProperties.FormattingEnabled = true;
             this.chkLeftProperties.Location = new System.Drawing.Point(77, 92);
             this.chkLeftProperties.Name = "chkLeftProperties";
@@ -642,16 +654,6 @@ namespace FdoToolbox.Tasks.Controls
             this.label16.Size = new System.Drawing.Size(25, 13);
             this.label16.TabIndex = 0;
             this.label16.Text = "Left";
-            // 
-            // chkOneToOne
-            // 
-            this.chkOneToOne.AutoSize = true;
-            this.chkOneToOne.Location = new System.Drawing.Point(243, 72);
-            this.chkOneToOne.Name = "chkOneToOne";
-            this.chkOneToOne.Size = new System.Drawing.Size(83, 17);
-            this.chkOneToOne.TabIndex = 16;
-            this.chkOneToOne.Text = "Force 1 to 1";
-            this.chkOneToOne.UseVisualStyleBackColor = true;
             // 
             // FdoJoinCtl
             // 

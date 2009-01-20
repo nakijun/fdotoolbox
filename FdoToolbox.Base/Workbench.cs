@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using ICSharpCode.Core;
 using FdoToolbox.Base.Controls;
+using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base
 {
@@ -228,6 +229,8 @@ namespace FdoToolbox.Base
 
         public void ShowContent(IViewContent vc, ViewRegion region)
         {
+            TabManager tm = ServiceManager.Instance.GetService<TabManager>();
+
             DockContent content = new DockContent();
             content.TabText = vc.Title;
             content.Text = vc.Title;
@@ -274,6 +277,11 @@ namespace FdoToolbox.Base
 
             vc.ContentControl.Dock = DockStyle.Fill;
             content.Controls.Add(vc.ContentControl);
+
+            if (vc is IConnectionDependentView)
+            {
+                tm.Register((IConnectionDependentView)vc);
+            }
 
             if (region == ViewRegion.Dialog)
             {   

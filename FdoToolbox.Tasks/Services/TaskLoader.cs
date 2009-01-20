@@ -26,6 +26,7 @@ using FdoToolbox.Core.ETL;
 using FdoToolbox.Base;
 using FdoToolbox.Base.Services;
 using FdoToolbox.Core.Feature;
+using ICSharpCode.Core;
 
 namespace FdoToolbox.Tasks.Services
 {
@@ -39,6 +40,7 @@ namespace FdoToolbox.Tasks.Services
             FdoConnection conn = connMgr.GetConnection(provider, connStr);
             if (conn == null)
             {
+                LoggingService.Info(ResourceService.GetString("INFO_REFERENCED_CONNECTION_NOT_FOUND"));
                 conn = new FdoConnection(provider, connStr);
                 string name = ServiceManager.Instance.GetService<NamingService>().GetDefaultConnectionName(provider);
                 connMgr.AddConnection(name, conn);

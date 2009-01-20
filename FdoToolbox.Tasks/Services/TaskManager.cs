@@ -28,6 +28,8 @@ using FdoToolbox.Core;
 
 namespace FdoToolbox.Tasks.Services
 {
+    //TODO: Prevent orphaned tasks with dead connections by hooking to BeforeConnectionRemove event of FdoConnectionManager
+    //and determining if any tasks currently in this object have references to the connection to be removed.
     public class TaskManager : IService
     {
         private bool _init = false;
@@ -113,6 +115,20 @@ namespace FdoToolbox.Tasks.Services
         public bool NameExists(string name)
         {
             return _taskDict.ContainsKey(name);
+        }
+
+        public ICollection<string> GetTaskNames()
+        {
+            return _taskDict.Keys;
+        }
+
+        public void Clear()
+        {
+            List<string> names = new List<string>(GetTaskNames());
+            foreach (string name in names)
+            {
+                this.RemoveTask(name);
+            }
         }
     }
 

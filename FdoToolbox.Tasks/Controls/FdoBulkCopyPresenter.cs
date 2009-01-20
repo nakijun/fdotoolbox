@@ -80,6 +80,11 @@ namespace FdoToolbox.Tasks.Controls
         void RemoveExpression(string className, string alias);
         void MapExpression(string className, string alias, string targetProp);
         NameValueCollection GetExpressions(string className);
+
+        void CheckSpatialContext(string context, bool state);
+
+        void SetSourceFilter(string className, string value);
+        void SetClassDelete(string className, bool value);
     }
 
     public class FdoBulkCopyPresenter
@@ -109,9 +114,11 @@ namespace FdoToolbox.Tasks.Controls
             this.TargetConnectionChanged();
         }
 
-        public void Init(FdoBulkCopyOptions options)
+        public void Init(FdoBulkCopy copy)
         {
             this.Init();
+            _bcp = copy;
+            FdoBulkCopyOptions options = _bcp.Options;
 
             _view.SelectedSourceConnection = _connMgr.GetName(options.SourceConnection);
             _view.SelectedSourceSchema = options.SourceSchema;
@@ -121,12 +128,35 @@ namespace FdoToolbox.Tasks.Controls
 
             foreach (FdoClassCopyOptions copt in options.ClassCopyOptions)
             {
-                _view.MapClass(copt.SourceClassName, copt.TargetClassName);
+                MapClass(copt.SourceClassName, copt.TargetClassName);
 
                 foreach (string srcProp in copt.SourcePropertyNames)
                 {
-                    _view.MapClassProperty(copt.SourceClassName, srcProp, copt.GetTargetProperty(srcProp));
+                    string targetAlias = copt.GetTargetPropertyForAlias(srcProp);
+                    if (targetAlias == null)
+                        MapProperty(copt.SourceClassName, srcProp, copt.TargetClassName, copt.GetTargetProperty(srcProp));
+                    else
+                    {
+                        _view.AddExpression(copt.SourceClassName, srcProp, copt.GetExpression(srcProp));
+                        MapExpression(copt.SourceClassName, srcProp, copt.TargetClassName, targetAlias);
+                    }
                 }
+
+                _view.SetClassDelete(copt.SourceClassName, copt.DeleteTarget);
+                _view.SetSourceFilter(copt.SourceClassName, copt.SourceFilter);
+            }
+
+            if (options.SourceSpatialContexts.Count > 0)
+            {
+                _view.CopySpatialContexts = true;
+                foreach (SpatialContextInfo context in options.SourceSpatialContexts)
+                {
+                    _view.CheckSpatialContext(context.Name, true);
+                }
+            }
+            else
+            {
+                _view.CopySpatialContexts = false;
             }
         }
 
@@ -311,8 +341,15 @@ namespace FdoToolbox.Tasks.Controls
 
         public void SaveTask()
         {
-            this.ApplySettings();
-            _taskMgr.AddTask(_view.TaskName, _bcp);
+            if (_bcp == null)
+            {
+                this.ApplySettings();
+                _taskMgr.AddTask(_view.TaskName, _bcp);
+            }
+            else
+            {
+                this.ApplySettings();
+            }
         }
 
         private NameValueCollection GetSourceExpressions(string className)
@@ -338,7 +375,16 @@ namespace FdoToolbox.Tasks.Controls
             if (!destService.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert))
                 errors.Add(ResourceService.GetStringFormatted("ERR_UNSUPPORTED_CMD", OSGeo.FDO.Commands.CommandType.CommandType_Insert));
 
-            FdoBulkCopyOptions options = new FdoBulkCopyOptions(source, target);
+            FdoBulkCopyOptions options = null;
+            if (_bcp == null)
+            {
+                options = new FdoBulkCopyOptions(source, target);
+            }
+            else
+            {
+                options = _bcp.Options;
+                options.Reset(source, target);
+            }
             options.SourceSchema = _view.SelectedSourceSchema;
             options.TargetSchema = _view.SelectedTargetSchema;
 
@@ -374,6 +420,8 @@ namespace FdoToolbox.Tasks.Controls
                             string targetClass = _classMappings[srcClass];
 
                             FdoClassCopyOptions copt = new FdoClassCopyOptions(srcClass, targetClass);
+                            copt.DeleteTarget = delete;
+                            copt.SourceFilter = filter;
                             foreach (string srcProp in propMaps.Keys)
                             {
                                 copt.AddPropertyMapping(srcProp, propMaps[srcProp]);
@@ -393,14 +441,19 @@ namespace FdoToolbox.Tasks.Controls
                         }
                     }
                 }
+
+                foreach (string context in _view.SourceSpatialContexts)
+                {
+                    options.AddSourceSpatialContext(srcService.GetSpatialContext(context));
+                }
             }
 
             if (errors.Count > 0)
                 throw new TaskValidationException(errors);
 
-            if (_bcp == null)
+            if (_bcp == null) //New bulk copy
                 _bcp = new FdoBulkCopy(options);
-            else
+            else //Bulk copy was loaded. Update its options
                 _bcp.Options = options;
         }
 
