@@ -1,16 +1,5 @@
 #summary Planned features for upcoming releases
 
-=== 0.7 ===
-
- * ~~Overhaul extensibility framework~~
- * ~~[http://code.google.com/p/fdotoolbox/wiki/MissingFeatures Port over 0.6 feature set]~~
- * ~~Spatial ETL pipelining API~~
- * ~~NSIS installer packages~~
- * ~~Standalone Feature Schema Editor~~
- * ~~Express support for ODBC provider~~
- * ~~Express support for OGR provider~~
- * ~~Create FDO connections with loaded configuration~~
-
 === 0.8 ===
 
  * Raster Provider support
