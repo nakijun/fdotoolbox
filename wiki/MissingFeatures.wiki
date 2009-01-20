@@ -7,9 +7,9 @@
  * ~~Data Store Management~~
  * ~~Delete Schema Command~~
  * ~~Command-line utilities~~
- * Session persistence 
+ * ~~Session persistence~~
    * ~~connections~~ 
-   * tasks
+   * ~~tasks~~
  * Bulk Copy features
    * ~~Batch insert support~~
  * Task Management
