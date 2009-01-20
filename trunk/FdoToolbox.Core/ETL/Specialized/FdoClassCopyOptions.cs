@@ -77,35 +77,7 @@ namespace FdoToolbox.Core.ETL.Specialized
 	
         private NameValueCollection _propertyMappings;
 
-        /// <summary>
-        /// Gets the property mappings. If this is empty, then all source properties 
-        /// will be used as target properties
-        /// </summary>
-        [Obsolete]
-        internal NameValueCollection PropertyMappings
-        {
-            get { return _propertyMappings; }
-        }
-
         private NameValueCollection _sourceExpressions;
-
-        /// <summary>
-        /// Gets the source expressions. 
-        /// </summary>
-        [Obsolete]
-        internal NameValueCollection SourceExpressions
-        {
-            get { return _sourceExpressions; }
-        }
-
-        /// <summary>
-        /// Gets the property mapping count.
-        /// </summary>
-        /// <value>The property mapping count.</value>
-        public int PropertyMappingCount
-        {
-            get { return _propertyMappings.Count; }
-        }
 
         /// <summary>
         /// Gets the list of source property names. Use this to get the mapped (target)

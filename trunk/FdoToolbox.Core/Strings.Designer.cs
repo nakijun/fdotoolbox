@@ -313,7 +313,7 @@ namespace FdoToolbox.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to find geometry property {0} in joined class.
+        ///   Looks up a localized string similar to Unable to find geometry property {0} in {1} joined class.
         /// </summary>
         internal static string ERR_JOIN_TARGET_GEOMETRY_PROPERTY_NOT_FOUND {
             get {
