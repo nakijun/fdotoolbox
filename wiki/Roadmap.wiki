@@ -13,6 +13,7 @@
 
 === 0.8 ===
 
+ * Raster Provider support
  * User Documentation
  * Save data preview query results to other flat-file sources
  * Express support for SQLite provider 
@@ -25,7 +26,6 @@
 
 === Future ===
 
- * Raster Provider support
  * FGF geometry (non-WKB) rendering support for Data Preview
  * Support for creating join tasks on Spatial Predicates
  * Visual ETL pipeline editor
