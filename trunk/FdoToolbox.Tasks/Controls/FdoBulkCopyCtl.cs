@@ -35,12 +35,15 @@ using OSGeo.FDO.Schema;
 using FdoToolbox.Core;
 using FdoToolbox.Tasks.Services;
 using FdoToolbox.Base.Controls;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Tasks.Controls
 {
-    public partial class FdoBulkCopyCtl : ViewContent, IViewContent, IFdoBulkCopyView, IEtlProcessEditor
+    public partial class FdoBulkCopyCtl : ViewContent, IConnectionDependentView, IFdoBulkCopyView, IEtlProcessEditor
     {
         private FdoBulkCopyPresenter _presenter;
+
+        private FdoBulkCopy _initOptions;
 
         public FdoBulkCopyCtl()
         {
@@ -51,9 +54,20 @@ namespace FdoToolbox.Tasks.Controls
                 sm.GetService<TaskManager>());
         }
 
+        public FdoBulkCopyCtl(string taskName, FdoBulkCopy copy)
+            : this()
+        {
+            _initOptions = copy;
+            txtName.Text = taskName;
+            txtName.ReadOnly = true; //This is edit mode, so the task name can't be changed
+        }
+
         protected override void OnLoad(EventArgs e)
         {
-            _presenter.Init();
+            if (_initOptions == null)
+                _presenter.Init();
+            else
+                _presenter.Init(_initOptions);
             base.OnLoad(e);
         }
 
@@ -110,6 +124,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbSrcConnection.SelectedItem = value;
+                cmbSrcConnection_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -122,6 +137,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbTargetConnection.SelectedItem = value;
+                cmbTargetConnection_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -134,6 +150,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbSrcSchema.SelectedItem = value;
+                cmbSrcSchema_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -146,6 +163,7 @@ namespace FdoToolbox.Tasks.Controls
             set
             {
                 cmbTargetSchema.SelectedItem = value;
+                cmbTargetSchema_SelectionChangeCommitted(this, EventArgs.Empty);
             }
         }
 
@@ -281,6 +299,43 @@ namespace FdoToolbox.Tasks.Controls
                 deleteNode.Name = deleteNode.Text = ResourceService.GetString("LBL_DELETE_TARGET");
                 deleteNode.ContextMenuStrip = ctxDelete;
                 classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes.Add(deleteNode);
+            }
+        }
+
+        public void SetSourceFilter(string className, string value)
+        {
+            TreeNode classNode = ClassesNode.Nodes[className];
+            if (classNode != null)
+            {
+                TreeNode filterNode = classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes[ResourceService.GetString("LBL_SOURCE_FILTER")];
+                if (filterNode != null)
+                {
+                    filterNode.Tag = value;
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        filterNode.Text = filterNode.Name + " (set)";
+                        filterNode.ToolTipText = value;
+                    }
+                    else 
+                    {
+                        filterNode.Text = filterNode.Name;
+                        filterNode.ToolTipText = string.Empty;
+                    }
+                }
+            }
+        }
+
+        public void SetClassDelete(string className, bool value)
+        {
+            TreeNode classNode = ClassesNode.Nodes[className];
+            if (classNode != null)
+            {
+                TreeNode deleteNode = classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes[ResourceService.GetString("LBL_DELETE_TARGET")];
+                if (deleteNode != null)
+                {
+                    deleteNode.Tag = value;
+                    deleteNode.Text = deleteNode.Name + " (" + value + ")";
+                }
             }
         }
 
@@ -637,8 +692,7 @@ namespace FdoToolbox.Tasks.Controls
                     string expr = ExpressionEditor.NewExpression(conn, cd, ExpressionMode.Filter);
                     if (!string.IsNullOrEmpty(expr))
                     {
-                        filterNode.Tag = filterNode.ToolTipText = expr;
-                        filterNode.Text = ResourceService.GetString("LBL_SOURCE_FILTER") + " (set)";
+                        SetSourceFilter(cd.Name, expr);
                     }
                 }
             }
@@ -652,14 +706,13 @@ namespace FdoToolbox.Tasks.Controls
             {
                 if (service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Delete))
                 {
-                    delNode.Tag = true;
+                    SetClassDelete(delNode.Parent.Parent.Name, true);
                 }
                 else
                 {
                     MessageService.ShowMessage(ResourceService.GetString("MSG_DELETE_UNSUPPORTED"));
-                    delNode.Tag = false;
+                    SetClassDelete(delNode.Parent.Parent.Name, false);
                 }
-                delNode.Text = delNode.Name + " (" + delNode.Tag + ")";
             }
         }
 
@@ -697,6 +750,23 @@ namespace FdoToolbox.Tasks.Controls
         public void ApplySettings()
         {
             _presenter.ApplySettings();
+        }
+
+        public bool DependsOnConnection(FdoConnection conn)
+        {
+            IFdoConnectionManager connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
+            FdoConnection src = connMgr.GetConnection(this.SelectedSourceConnection);
+            FdoConnection dest = connMgr.GetConnection(this.SelectedSourceConnection);
+
+            return conn == src || conn == dest;
+        }
+
+
+        public void CheckSpatialContext(string context, bool state)
+        {
+            int idx = chkListSpatialContexts.Items.IndexOf(context);
+            if (idx >= 0)
+                chkListSpatialContexts.SetItemChecked(idx, state);
         }
     }
 }

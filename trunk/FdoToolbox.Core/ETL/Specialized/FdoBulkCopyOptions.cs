@@ -169,6 +169,21 @@ namespace FdoToolbox.Core.ETL.Specialized
         }
 
         /// <summary>
+        /// Resets this instance.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        public void Reset(FdoConnection source, FdoConnection target)
+        {
+            _spatialContextList.Clear();
+            _classOptions.Clear();
+            _sourceConn = source;
+            _targetConn = target;
+            this.BatchSize = 0;
+            _owner = false;
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()

@@ -62,7 +62,7 @@ namespace FdoToolbox.Base.Services
             if (matches.Count > 0)
             {
                 //Don't close then cancel
-                if (!MessageService.AskQuestion(ResourceService.GetString("QUESTION_CLOSE_TABS")))
+                if (!MessageService.AskQuestion(ResourceService.GetStringFormatted("QUESTION_CLOSE_TABS", e.ConnectionName)))
                 {
                     e.Cancel = true;
                     return;

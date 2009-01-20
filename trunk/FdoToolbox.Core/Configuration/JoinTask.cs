@@ -314,6 +314,8 @@ namespace FdoToolbox.Core.Configuration {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class FdoJoinSettings : object, System.ComponentModel.INotifyPropertyChanged {
         
+        private bool forceOneToOneField;
+        
         private JoinType joinTypeField;
         
         private SpatialPredicate spatialPredicateField;
@@ -323,6 +325,18 @@ namespace FdoToolbox.Core.Configuration {
         private FdoDesignatedGeometry designatedGeometryField;
         
         private JoinKey[] joinKeysField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool ForceOneToOne {
+            get {
+                return this.forceOneToOneField;
+            }
+            set {
+                this.forceOneToOneField = value;
+                this.RaisePropertyChanged("ForceOneToOne");
+            }
+        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]

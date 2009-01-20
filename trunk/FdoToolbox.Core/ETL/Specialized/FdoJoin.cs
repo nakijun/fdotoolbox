@@ -48,6 +48,16 @@ namespace FdoToolbox.Core.ETL.Specialized
         private FdoJoinOptions _options;
 
         /// <summary>
+        /// Gets or sets the options.
+        /// </summary>
+        /// <value>The options.</value>
+        public FdoJoinOptions Options
+        {
+            get { return _options; }
+            set { _options = value; }
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="options"></param>
@@ -536,6 +546,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             {
                 join.JoinSettings.SpatialPredicate = (SpatialPredicate)Enum.Parse(typeof(SpatialPredicate), _options.SpatialJoinPredicate.Value.ToString());
             }
+            join.JoinSettings.ForceOneToOne = _options.ForceOneToOne;
             join.JoinSettings.JoinType = (JoinType)Enum.Parse(typeof(JoinType), _options.JoinType.ToString());
             List<JoinKey> keys = new List<JoinKey>();
             foreach (string key in _options.JoinPairs.Keys)

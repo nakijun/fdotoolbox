@@ -69,7 +69,7 @@ namespace FdoToolbox.Tasks.Controls
         string LeftPrefix { get; set; }
         string RightPrefix { get; set; }
 
-        FdoJoinType SelectedJoinType { get; }
+        FdoJoinType SelectedJoinType { get; set; }
 
         bool TargetGeometryPropertyEnabled { get; set; }
 
@@ -104,6 +104,10 @@ namespace FdoToolbox.Tasks.Controls
         bool RightGeometryEnabled { get; set; }
         string RightGeometryName { get; set; }
         bool RightGeometryChecked { get; set; }
+
+        void CheckLeftProperties(ICollection<string> iCollection);
+
+        void CheckRightProperties(ICollection<string> iCollection);
     }
 
     internal enum JoinSourceType
@@ -147,6 +151,72 @@ namespace FdoToolbox.Tasks.Controls
 
             JoinPredicateCheckChanged();
             GeometryPropertyCheckChanged();
+        }
+
+        private FdoJoin _join;
+
+        public void Init(FdoJoin join)
+        {
+            this.Init();
+            _join = join;
+
+            FdoJoinOptions options = join.Options;
+
+            _view.SelectedJoinType = options.JoinType;
+
+            _view.SelectedLeftConnection = _connMgr.GetName(options.Left.Connection);
+            _view.SelectedLeftSchema = options.Left.SchemaName;
+            _view.SelectedLeftClass = options.Left.ClassName;
+
+            _view.SelectedRightConnection = _connMgr.GetName(options.Right.Connection);
+            _view.SelectedRightSchema = options.Right.SchemaName;
+            _view.SelectedRightClass = options.Right.ClassName;
+
+            if (options.SpatialJoinPredicate.HasValue)
+            {
+                _view.SpatialPredicateEnabled = true;
+                _view.SelectedSpatialPredicate = options.SpatialJoinPredicate.Value;
+            }
+            else
+            {
+                _view.SpatialPredicateEnabled = false;
+            }
+
+            _view.SelectedTargetConnection = _connMgr.GetName(options.Target.Connection);
+            _view.SelectedTargetSchema = options.Target.SchemaName;
+            _view.SelectedTargetClass = options.Target.ClassName;
+
+            _view.LeftPrefix = options.LeftPrefix;
+            _view.RightPrefix = options.RightPrefix;
+            _view.CheckLeftProperties(options.LeftProperties);
+            _view.CheckRightProperties(options.RightProperties);
+
+            if (options.BatchSize > 0)
+            {
+                //assert _view.BatchEnabled == true;
+                _view.BatchSize = options.BatchSize;
+            }
+            _view.ForceOneToOne = options.ForceOneToOne;
+
+            if (!string.IsNullOrEmpty(options.GeometryProperty))
+            {
+                _view.TargetGeometryPropertyEnabled = true;
+                if (options.Side == FdoToolbox.Core.Configuration.JoinSide.Left)
+                {
+                    _view.LeftGeometryChecked = true;
+                    //_view.LeftGeometryEnabled = true;
+                }
+                else //Right
+                {
+                    _view.RightGeometryChecked = true;
+                    //_view.RightGeometryEnabled = true;
+                }
+            }
+
+            foreach (string leftProp in options.JoinPairs.Keys)
+            {
+                _view.AddPropertyJoin(leftProp, options.JoinPairs[leftProp]);
+            }
         }
 
         internal FdoConnection GetConnection(JoinSourceType type)
@@ -320,7 +390,16 @@ namespace FdoToolbox.Tasks.Controls
             if (string.IsNullOrEmpty(_view.TaskName))
                 throw new TaskValidationException(ResourceService.GetString("ERR_TASK_NAME_REQUIRED"));
 
-            FdoJoinOptions options = new FdoJoinOptions();
+            FdoJoinOptions options = null;
+            if (_join == null)
+            {
+                options = new FdoJoinOptions();
+            }
+            else
+            {
+                options = _join.Options;
+                options.Reset();
+            }
             options.SetLeft(
                 _connMgr.GetConnection(_view.SelectedLeftConnection),
                 _view.SelectedLeftSchema,
@@ -373,8 +452,16 @@ namespace FdoToolbox.Tasks.Controls
 
             options.Validate();
 
-            FdoJoin join = new FdoJoin(options);
-            _taskMgr.AddTask(_view.TaskName, join);
+            FdoJoin join = null;
+            if (_join == null) //New join
+            {
+                join = new FdoJoin(options);
+                _taskMgr.AddTask(_view.TaskName, join);
+            }
+            else //Join was loaded. Update its options
+            {
+                _join.Options = options;
+            }
         }
 
         internal void JoinPredicateCheckChanged()

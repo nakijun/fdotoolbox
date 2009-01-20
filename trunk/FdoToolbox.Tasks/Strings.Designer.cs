@@ -160,6 +160,15 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No editor specified for editing this particular task.
+        /// </summary>
+        internal static string ERR_NO_EDITOR_FOR_TASK {
+            get {
+                return ResourceManager.GetString("ERR_NO_EDITOR_FOR_TASK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Task name required.
         /// </summary>
         internal static string ERR_TASK_NAME_REQUIRED {
@@ -174,6 +183,15 @@ namespace FdoToolbox.Tasks {
         internal static string FILTER_TASK_DEFINITION {
             get {
                 return ResourceManager.GetString("FILTER_TASK_DEFINITION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find referenced connection. Creating one and adding it to connection manager.
+        /// </summary>
+        internal static string INFO_REFERENCED_CONNECTION_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("INFO_REFERENCED_CONNECTION_NOT_FOUND", resourceCulture);
             }
         }
         

@@ -1058,7 +1058,7 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to close a connection that some open tabs depend on. Are you sure you want to continue?.
+        ///   Looks up a localized string similar to You are about to close a connection named {0} that some open tabs depend on. Are you sure you want to continue?.
         /// </summary>
         internal static string QUESTION_CLOSE_TABS {
             get {

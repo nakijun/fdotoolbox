@@ -151,11 +151,17 @@
   <data name="ERR_CLASS_NOT_FOUND" xml:space="preserve">
     <value>Class {0} not found in schema {1}</value>
   </data>
+  <data name="ERR_NO_EDITOR_FOR_TASK" xml:space="preserve">
+    <value>No editor specified for editing this particular task</value>
+  </data>
   <data name="ERR_TASK_NAME_REQUIRED" xml:space="preserve">
     <value>Task name required</value>
   </data>
   <data name="FILTER_TASK_DEFINITION" xml:space="preserve">
     <value>Bulk Copy Definition (*.BulkCopyDefinition)|*.BulkCopyDefinition|Join Task Definition (*.JoinDefinition)|*.JoinDefinition</value>
+  </data>
+  <data name="INFO_REFERENCED_CONNECTION_NOT_FOUND" xml:space="preserve">
+    <value>Could not find referenced connection. Creating one and adding it to connection manager</value>
   </data>
   <data name="LBL_DELETE_TARGET" xml:space="preserve">
     <value>Delete target</value>

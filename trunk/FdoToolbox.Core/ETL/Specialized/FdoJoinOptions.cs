@@ -190,6 +190,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <param name="pairs"></param>
         public void SetJoinPairs(NameValueCollection pairs)
         {
+            _joinPairs.Clear();
             _joinPairs.Add(pairs);
         }
 
@@ -346,6 +347,19 @@ namespace FdoToolbox.Core.ETL.Specialized
                 _Right.Connection.Dispose();
                 _Target.Connection.Dispose();
             }
+        }
+
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
+        public void Reset()
+        {
+            _Left = null;
+            _Right = null;
+            _Target = null;
+            _owner = false;
+            _LeftProperties.Clear();
+            _RightProperties.Clear();
         }
     }
 

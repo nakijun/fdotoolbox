@@ -482,7 +482,7 @@
     <value>Enter the new name for the connection</value>
   </data>
   <data name="QUESTION_CLOSE_TABS" xml:space="preserve">
-    <value>You are about to close a connection that some open tabs depend on. Are you sure you want to continue?</value>
+    <value>You are about to close a connection named {0} that some open tabs depend on. Are you sure you want to continue?</value>
   </data>
   <data name="QUESTION_DATA_PREVIEW_LIMIT" xml:space="preserve">
     <value>Your query will be returning {0} results. Do you want to continue.</value>
