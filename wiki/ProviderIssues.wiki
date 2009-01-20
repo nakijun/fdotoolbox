@@ -1,4 +1,5 @@
 #summary Quirks and Notes on various FDO providers
+#labels Featured
 
 === OSGeo.PostGIS ===
 
