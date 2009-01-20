@@ -12,7 +12,6 @@
    * tasks
  * Bulk Copy features
    * ~~Batch insert support~~
-   * Data value conversion support
  * Task Management
    * ~~Create Task~~
      * ~~Bulk Copy~~
@@ -30,4 +29,5 @@
  * ~~Capability-aware user interface~~
 
  # Database support will not be ported over to 0.7. See [http://themapguyde.blogspot.com/2008/12/heres-another-little-fdo-toolbox-update.html this blog post] for an explanation.
- # Insert Data Scaffold will be reworked for beyond 0.7
+ # Insert Data Scaffold will be reworked for a post 0.7 release
+ # Data value conversion support will be reworked for a post 0.7 release
