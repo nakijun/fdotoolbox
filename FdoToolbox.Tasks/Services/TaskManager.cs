@@ -25,6 +25,8 @@ using System.Text;
 using FdoToolbox.Base.Services;
 using FdoToolbox.Core.ETL;
 using FdoToolbox.Core;
+using FdoToolbox.Core.ETL.Specialized;
+using FdoToolbox.Base;
 
 namespace FdoToolbox.Tasks.Services
 {
@@ -51,12 +53,65 @@ namespace FdoToolbox.Tasks.Services
 
         public void Load()
         {
-            
+            TaskLoader ldr = new TaskLoader();
+            string path = Preferences.SessionDirectory;
+            if (System.IO.Directory.Exists(path))
+            {
+                string[] files = System.IO.Directory.GetFiles(path, "*" + TaskDefinitionHelper.BULKCOPYDEFINITION);
+                foreach (string f in files)
+                {
+                    try
+                    {
+                        string name = string.Empty;
+                        FdoBulkCopyOptions opt = ldr.BulkCopyFromXml(f, ref name, false);
+                        FdoBulkCopy cpy = new FdoBulkCopy(opt);
+                        AddTask(name, cpy);
+                    }
+                    catch { }
+                }
+                files = System.IO.Directory.GetFiles(path, "*" + TaskDefinitionHelper.JOINDEFINITION);
+                foreach (string f in files)
+                {
+                    try
+                    {
+                        string name = string.Empty;
+                        FdoJoinOptions opt = ldr.JoinFromXml(f, ref name, false);
+                        FdoJoin join = new FdoJoin(opt);
+                        AddTask(name, join);
+                    }
+                    catch { }
+                }
+            }
         }
 
         public void Save()
         {
-            
+            string path = Preferences.SessionDirectory;
+            if (!System.IO.Directory.Exists(path))
+                System.IO.Directory.CreateDirectory(path);
+            else
+            {
+                string [] files = System.IO.Directory.GetFiles(path, "*" + TaskDefinitionHelper.BULKCOPYDEFINITION);
+                foreach (string f in files)
+                {
+                    System.IO.File.Delete(f);
+                }
+                files = System.IO.Directory.GetFiles(path, "*" + TaskDefinitionHelper.JOINDEFINITION);
+                foreach (string f in files)
+                {
+                    System.IO.File.Delete(f);
+                }
+            }
+
+            foreach (string key in _taskDict.Keys)
+            {
+                FdoSpecializedEtlProcess proc = _taskDict[key] as FdoSpecializedEtlProcess;
+                if (proc != null)
+                {
+                    string file = System.IO.Path.Combine(path, key + proc.GetFileExtension());
+                    proc.Save(file, key);
+                }
+            }
         }
 
         public event TaskRenameEventHandler TaskRenamed = delegate { };
