@@ -528,11 +528,29 @@ namespace FdoToolbox.Core.ETL
             FdoRow row = new FdoRow();
             foreach (DataColumn dc in feat.Table.Columns)
             {
-                row[dc.ColumnName] = feat[dc];
-
-                if (dc.ReadOnly)
+                if (feat[dc] != null && feat[dc] != DBNull.Value)
                 {
-                    row.MarkReadOnly(dc.ColumnName);
+                    FdoGeometry geom = feat[dc] as FdoGeometry;
+                    if (geom != null)
+                    {
+                        if (feat.Table.GeometryColumn == dc.ColumnName)
+                        {
+                            row.AddGeometry(dc.ColumnName, geom.InternalInstance);
+                            row.DefaultGeometryProperty = dc.ColumnName;
+                        }
+                        else
+                        {
+                            row.AddGeometry(dc.ColumnName, geom.InternalInstance);
+                        }
+                    }
+                    else
+                    {
+                        row[dc.ColumnName] = feat[dc];
+                    }
+                    if (dc.ReadOnly)
+                    {
+                        row.MarkReadOnly(dc.ColumnName);
+                    }
                 }
             }
             return row;

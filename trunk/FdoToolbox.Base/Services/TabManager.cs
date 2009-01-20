@@ -97,6 +97,12 @@ namespace FdoToolbox.Base.Services
         public void Register(IConnectionDependentView view)
         {
             _tabs.Add(view);
+            //If view was not closed programmatically, ViewContentClosing won't fire.
+            //So hook onto the Disposed event to remove the view from the watch list.
+            view.Disposed += delegate
+            {
+                _tabs.Remove(view);
+            };
         }
 
         public event EventHandler Initialize = delegate { };

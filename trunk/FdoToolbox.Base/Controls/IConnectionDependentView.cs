@@ -35,5 +35,10 @@ namespace FdoToolbox.Base.Controls
         /// <param name="conn"></param>
         /// <returns></returns>
         bool DependsOnConnection(FdoConnection conn);
+
+        /// <summary>
+        /// Raised when this component is disposed
+        /// </summary>
+        event EventHandler Disposed;
     }
 }

@@ -83,18 +83,24 @@ namespace FdoToolbox.Core.ETL
             name = def.name;
 
             foreach (FdoClassMapping mapping in def.ClassMappings)
-            {
-                NameValueCollection exprs = new NameValueCollection();
-                NameValueCollection maps = new NameValueCollection();
-                foreach (FdoExpressionMapping emap in mapping.Expressions)
-                {
-                    exprs.Add(emap.SourceExpression, emap.TargetProperty);
-                }
+            {   
+                FdoClassCopyOptions copt = new FdoClassCopyOptions(mapping.SourceClass, mapping.TargetClass);
                 foreach (FdoPropertyMapping pmap in mapping.Properties)
                 {
-                    maps.Add(pmap.SourceProperty, pmap.TargetProperty);
+                    copt.AddPropertyMapping(pmap.SourceProperty, pmap.TargetProperty);
                 }
-                opt.AddClassCopyOption(mapping.SourceClass, mapping.TargetClass, maps, exprs, mapping.DeleteTarget, mapping.Filter);
+                foreach (FdoExpressionMapping emap in mapping.Expressions)
+                {
+                    string alias = emap.TargetProperty;
+                    string expr = emap.SourceExpression;
+                    string targetProp = copt.GetTargetProperty(alias);
+                    copt.AddSourceExpression(alias, expr, targetProp);
+                }
+                copt.DeleteTarget = mapping.DeleteTarget;
+                copt.SourceFilter = mapping.Filter;
+                opt.AddClassCopyOption(copt);
+
+                //opt.AddClassCopyOption(mapping.SourceClass, mapping.TargetClass, maps, exprs, mapping.DeleteTarget, mapping.Filter);
             }
 
             if (def.Source.SpatialContextList.Length > 0)

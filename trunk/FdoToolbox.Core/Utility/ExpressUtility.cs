@@ -438,7 +438,8 @@ namespace FdoToolbox.Core.Utility
                 //Copy all classes
                 foreach (ClassDefinition cd in fs.Classes)
                 {
-                    options.AddClassCopyOption(cd.Name, cd.Name);
+                    FdoClassCopyOptions copt = new FdoClassCopyOptions(cd.Name, cd.Name);
+                    options.AddClassCopyOption(copt);
                 }
 
                 //Flick on batch support if we can

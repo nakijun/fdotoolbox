@@ -105,27 +105,20 @@ namespace FdoUtil
                     {
                         Console.WriteLine("Applying source schema to target");
                         destService.ApplySchema(srcSchema);
-
-                        //Now set class copy options
-                        foreach (ClassDefinition cd in srcSchema.Classes)
-                        {
-                            options.AddClassCopyOption(cd.Name, cd.Name);
-                        }
                     }
                     else
                     {
                         Console.WriteLine("Applying modified source schema to target");
                         FeatureSchema fixedSchema = destService.AlterSchema(srcSchema, incSchema);
                         destService.ApplySchema(fixedSchema);
-
-                        //Now set class copy options
-                        foreach (ClassDefinition cd in fixedSchema.Classes)
-                        {
-                            options.AddClassCopyOption(cd.Name, cd.Name);
-                        }
                     }
 
-                    
+                    //Now set class copy options
+                    foreach (ClassDefinition cd in srcSchema.Classes)
+                    {
+                        FdoClassCopyOptions copt = new FdoClassCopyOptions(cd.Name, cd.Name);
+                        options.AddClassCopyOption(copt);
+                    }
 
 
                     FdoBulkCopy copy = new FdoBulkCopy(options);

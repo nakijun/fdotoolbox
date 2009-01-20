@@ -129,7 +129,7 @@ namespace FdoToolbox.Base.Controls
                     if (e.Cancelled)
                         _view.StatusMessage = string.Format("Query cancelled. Returned {0} results", result.Rows.Count);
                     else
-                        _view.StatusMessage = string.Format("Returned{ 0} results", result.Rows.Count);
+                        _view.StatusMessage = string.Format("Returned {0} results", result.Rows.Count);
                 }
                 else //No result table
                 {

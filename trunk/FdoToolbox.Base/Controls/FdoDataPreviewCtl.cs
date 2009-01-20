@@ -240,17 +240,24 @@ namespace FdoToolbox.Base.Controls
 
         private void saveSdf_Click(object sender, EventArgs e)
         {
+            FdoFeatureTable table = this.ResultTable;
+            if (table == null || table.Rows.Count == 0)
+            {
+                MessageService.ShowError(ResourceService.GetString("ERR_NO_RESULT_TABLE_TO_SAVE"));
+                return;
+            }
             string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_QUERY_RESULT"), ResourceService.GetString("FILTER_SDF_FILE"));
             if (file != null)
             {
-                FdoFeatureTable table = this.ResultTable;
-
                 //Ask for class name
                 if (string.IsNullOrEmpty(table.TableName))
                 {
                     string name = MessageService.ShowInputBox(ResourceService.GetString("TITLE_SAVE_QUERY_AS"), ResourceService.GetString("MSG_SAVE_QUERY_AS"), "QueryResult");
-                    while(string.IsNullOrEmpty(name))
+                    while(name != null && name.Trim() == string.Empty)
                         name = MessageService.ShowInputBox(ResourceService.GetString("TITLE_SAVE_QUERY_AS"), ResourceService.GetString("MSG_SAVE_QUERY_AS"), "QueryResult");
+
+                    if (name == null)
+                        return;
 
                     table.TableName = name;
                 }

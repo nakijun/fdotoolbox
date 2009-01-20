@@ -161,14 +161,12 @@ namespace FdoToolbox.Base.Controls
             if (!_presenter.Connect())
                 MessageService.ShowError("Connection test failed");
             else
-                ViewContentClosing(this, EventArgs.Empty);
+                base.Close();
         }
-
-        public event EventHandler ViewContentClosing = delegate { };
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            ViewContentClosing(this, EventArgs.Empty);
+            base.Close();
         }
 
         public void AddProperty(FdoToolbox.Core.Connections.DictionaryProperty p)

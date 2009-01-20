@@ -32,6 +32,7 @@ namespace FdoToolbox.Core.ETL.Specialized
     using FdoToolbox.Core.Configuration;
     using System.Xml.Serialization;
     using System.IO;
+    using System.Collections.Specialized;
 
     /// <summary>
     /// A specialized form of <see cref="EtlProcess"/> that copies
@@ -110,7 +111,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                 if (copt.DeleteTarget)
                 {
                     Info("Deleting data in target class {0} before copying", copt.TargetClassName);
-                    using (FdoFeatureService service = copt.TargetConnection.CreateFeatureService())
+                    using (FdoFeatureService service = _options.TargetConnection.CreateFeatureService())
                     {
                         using (IDelete del = service.CreateCommand<IDelete>(OSGeo.FDO.Commands.CommandType.CommandType_Delete) as IDelete)
                         {
@@ -128,13 +129,18 @@ namespace FdoToolbox.Core.ETL.Specialized
                     }
                 }
 
-                IFdoOperation input = new FdoInputOperation(copt.SourceConnection, CreateSourceQuery(copt)); 
+                IFdoOperation input = new FdoInputOperation(_options.SourceConnection, CreateSourceQuery(copt)); 
                 IFdoOperation output = null;
-                if (copt.PropertyMappings.Count > 0)
+                if (copt.PropertyMappingCount > 0)
                 {
+                    NameValueCollection propertyMappings = new NameValueCollection();
+                    foreach (string srcProp in copt.SourcePropertyNames)
+                    {
+                        propertyMappings.Add(srcProp, copt.GetTargetProperty(srcProp));
+                    }
                     if (_options.BatchSize > 0)
                     {
-                        FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings, _options.BatchSize);
+                        FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(_options.TargetConnection, copt.TargetClassName, propertyMappings, _options.BatchSize);
                         b.BatchInserted += delegate(object sender, BatchInsertEventArgs e)
                         {
                             SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, e.BatchSize);
@@ -143,14 +149,14 @@ namespace FdoToolbox.Core.ETL.Specialized
                     }
                     else
                     {
-                        output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName, copt.PropertyMappings);
+                        output = new FdoOutputOperation(_options.TargetConnection, copt.TargetClassName, propertyMappings);
                     }
                 }
                 else
                 {
                     if (_options.BatchSize > 0)
                     {
-                        FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(copt.TargetConnection, copt.TargetClassName, _options.BatchSize);
+                        FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(_options.TargetConnection, copt.TargetClassName, _options.BatchSize);
                         b.BatchInserted += delegate(object sender, BatchInsertEventArgs e)
                         {
                             SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, e.BatchSize);
@@ -159,7 +165,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                     }
                     else
                     {
-                        output = new FdoOutputOperation(copt.TargetConnection, copt.TargetClassName);
+                        output = new FdoOutputOperation(_options.TargetConnection, copt.TargetClassName);
                     }
                 }
 
@@ -211,7 +217,12 @@ namespace FdoToolbox.Core.ETL.Specialized
         {
             FeatureQueryOptions query = new FeatureQueryOptions(copt.SourceClassName);
             query.AddFeatureProperty(copt.SourcePropertyNames);
-            query.AddComputedProperty(copt.SourceExpressions);
+
+            foreach (string alias in copt.SourceAliases)
+            {
+                query.AddComputedProperty(alias, copt.GetExpression(alias));
+            }
+
             if (!string.IsNullOrEmpty(copt.SourceFilter))
                 query.Filter = copt.SourceFilter;
 

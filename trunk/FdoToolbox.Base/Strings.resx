@@ -232,6 +232,9 @@
   <data name="ERR_FIELD_REQUIRED" xml:space="preserve">
     <value>This field is required</value>
   </data>
+  <data name="ERR_NO_RESULT_TABLE_TO_SAVE" xml:space="preserve">
+    <value>No query result to save!</value>
+  </data>
   <data name="ERR_SCHEMA_CANNOT_BE_APPLIED" xml:space="preserve">
     <value>Unable to apply schema: {0}</value>
   </data>

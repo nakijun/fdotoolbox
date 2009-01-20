@@ -35,6 +35,16 @@ namespace FdoToolbox.Core.Feature
         internal FdoFeature(DataRowBuilder rb) : base(rb) { }
 
         /// <summary>
+        /// Gets the <see cref="T:System.Data.DataTable"/> for which this row has a schema.
+        /// </summary>
+        /// <value></value>
+        /// <returns>The <see cref="T:System.Data.DataTable"/> to which this row belongs.</returns>
+        public new FdoFeatureTable Table
+        {
+            get { return base.Table as FdoFeatureTable; }
+        }
+
+        /// <summary>
         /// Returns the item array for this feature. Geometry values are
         /// converted to FGF text form.
         /// </summary>

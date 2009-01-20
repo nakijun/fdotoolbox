@@ -24,13 +24,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Geometry;
+using OSGeo.FDO.Spatial;
 
 namespace FdoToolbox.Core.Feature
 {
     /// <summary>
-    /// <see cref="IGeometry"/> decorator
+    /// <see cref="IGeometry"/> decorator object.
     /// </summary>
-    public class FdoGeometry : IGeometry
+    public class FdoGeometry : IFdoGeometry
     {
         private IGeometry _geom;
 
@@ -88,9 +89,14 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
-        /// Gets the decorated/wrapped geometry
+        /// Gets the decorated/wrapped geometry.
         /// </summary>
-        public IGeometry InternalGeometry
+        /// <remarks>
+        /// When passing any <see cref="IGeometry"/> instances to any FDO API, you cannot pass this decorated version
+        /// you must pass the internal geometry represented by this property. Otherwise, unexpected behaviour may
+        /// occur.
+        /// </remarks>
+        public IGeometry InternalInstance
         {
             get { return _geom; }
         }
@@ -104,7 +110,210 @@ namespace FdoToolbox.Core.Feature
         public override string ToString()
         {
             //This is the whole reason for having a decorator. When in a DataTable, the native IGeometry's ToString() shows nothing, when it should be really showing the FGF text
-            return _geom.Text; 
+            return _geom.Text;
         }
+
+        /// <summary>
+        /// Determines whether this instance contains the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool Contains(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Contains, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance crosses the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool Crosses(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Crosses, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance is disjoint with the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool Disjoint(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Disjoint, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance is equal to the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool Equals(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Equals, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance intersects the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool Intersects(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Intersects, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance overlaps the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool Overlaps(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Overlaps, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance touches the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool Touches(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Touches, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance is within the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool Within(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Within, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance is covered by the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool CoveredBy(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_CoveredBy, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance is inside the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool Inside(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Inside, geom.InternalInstance);
+        }
+
+        /// <summary>
+        /// Determines whether this instance's envelope intersects the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        public bool EnvelopeIntersects(IFdoGeometry geom)
+        {
+            return SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_EnvelopeIntersects, geom.InternalInstance);
+        }
+    }
+
+    /// <summary>
+    /// FDO Geometry interface
+    /// </summary>
+    public interface IFdoGeometry : IGeometry
+    {
+        /// <summary>
+        /// Gets the decorated/wrapped geometry.
+        /// </summary>
+        /// <remarks>
+        /// When passing any <see cref="IGeometry"/> instances to any FDO API, you cannot pass this decorated version
+        /// you must pass the internal geometry represented by this property. Otherwise, unexpected behaviour may
+        /// occur.
+        /// </remarks>
+        IGeometry InternalInstance { get; }
+
+        /// <summary>
+        /// Determines whether this instance contains the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool Contains(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance crosses the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool Crosses(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance is disjoint with the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool Disjoint(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance is equal to the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool Equals(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance intersects the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool Intersects(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance overlaps the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool Overlaps(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance touches the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool Touches(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance is within the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool Within(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance is covered by the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool CoveredBy(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance is inside the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool Inside(IFdoGeometry geom);
+
+        /// <summary>
+        /// Determines whether this instance's envelope intersects the specified geometry
+        /// </summary>
+        /// <param name="geom">The geometry to test against</param>
+        /// <returns></returns>
+        bool EnvelopeIntersects(IFdoGeometry geom);
     }
 }
