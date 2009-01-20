@@ -2,6 +2,7 @@
 
 === 0.8 ===
 
+ * Express support for additional OGR formats
  * Raster Provider support
  * User Documentation
  * Save data preview query results to other flat-file sources
