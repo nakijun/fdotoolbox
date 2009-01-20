@@ -1,4 +1,4 @@
-#summary Features yet to be ported to the new version of FDO Toolbox
+#summary Features yet to be ported to FDO Toolbox 0.7 from 0.6
 
  * ~~Schema Management~~
    * ~~Class Editor~~
