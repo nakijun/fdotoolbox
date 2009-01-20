@@ -153,46 +153,10 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <summary>
         /// Adds a class copy option
         /// </summary>
-        /// <param name="sourceClass"></param>
-        /// <param name="targetClass"></param>
-        public void AddClassCopyOption(string sourceClass, string targetClass)
+        /// <param name="option">The class copy option</param>
+        public void AddClassCopyOption(FdoClassCopyOptions option)
         {
-            FdoClassCopyOptions copt = new FdoClassCopyOptions(_sourceConn, _targetConn, sourceClass, targetClass);
-            copt.BatchSize = this.BatchSize;
-            _classOptions.Add(copt);
-        }
-
-        /// <summary>
-        /// Adds a class copy option with property mappings
-        /// </summary>
-        /// <param name="sourceClass"></param>
-        /// <param name="targetClass"></param>
-        /// <param name="mappings"></param>
-        /// <param name="sourceExpressions"></param>
-        /// <param name="deleteTarget"></param>
-        /// <param name="sourceFilter"></param>
-        public void AddClassCopyOption(string sourceClass, string targetClass, NameValueCollection mappings, NameValueCollection sourceExpressions, bool deleteTarget, string sourceFilter)
-        {
-            //All source expressions passsed in must be mapped.
-            foreach (string expr in sourceExpressions.Keys)
-            {
-                string alias = sourceExpressions[expr];
-                if (mappings[alias] == null)
-                    throw new InvalidOperationException(ResourceUtil.GetStringFormatted("ERR_SOURCE_EXPRESSION_NOT_FOUND", alias, expr));
-            }
-            FdoClassCopyOptions copt = new FdoClassCopyOptions(_sourceConn, _targetConn, sourceClass, targetClass);
-            copt.DeleteTarget = deleteTarget;
-            copt.SourceFilter = sourceFilter;
-            foreach (string key in mappings.AllKeys)
-            {
-                copt.AddPropertyMapping(key, mappings[key]);
-            }
-            foreach (string key in sourceExpressions.AllKeys)
-            {
-                copt.AddSourceExpression(key, sourceExpressions[key]);
-            }
-            copt.BatchSize = this.BatchSize;
-            _classOptions.Add(copt);
+            _classOptions.Add(option);
         }
 
         /// <summary>

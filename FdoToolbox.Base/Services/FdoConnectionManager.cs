@@ -236,5 +236,15 @@ namespace FdoToolbox.Base.Services
             }
             return null;
         }
+
+        public string GetName(FdoConnection conn)
+        {
+            foreach (string key in _ConnectionDict.Keys)
+            {
+                if (_ConnectionDict[key] == conn)
+                    return key;
+            }
+            return null;
+        }
     }
 }

@@ -32,26 +32,6 @@ namespace FdoToolbox.Core.ETL.Specialized
     /// </summary>
     public class FdoClassCopyOptions
     {
-        private FdoConnection _source;
-
-        /// <summary>
-        /// Gets the source connection which to copy features from
-        /// </summary>
-        public FdoConnection SourceConnection
-        {
-            get { return _source; }
-        }
-
-        private FdoConnection _target;
-       
-        /// <summary>
-        /// Gets the target connection which to write features to
-        /// </summary>
-        public FdoConnection TargetConnection
-        {
-            get { return _target; }
-        }
-
         private string _sourceClass;
 
         /// <summary>
@@ -101,7 +81,8 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// Gets the property mappings. If this is empty, then all source properties 
         /// will be used as target properties
         /// </summary>
-        public NameValueCollection PropertyMappings
+        [Obsolete]
+        internal NameValueCollection PropertyMappings
         {
             get { return _propertyMappings; }
         }
@@ -111,9 +92,19 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <summary>
         /// Gets the source expressions. 
         /// </summary>
-        public NameValueCollection SourceExpressions
+        [Obsolete]
+        internal NameValueCollection SourceExpressions
         {
             get { return _sourceExpressions; }
+        }
+
+        /// <summary>
+        /// Gets the property mapping count.
+        /// </summary>
+        /// <value>The property mapping count.</value>
+        public int PropertyMappingCount
+        {
+            get { return _propertyMappings.Count; }
         }
 
         /// <summary>
@@ -124,6 +115,15 @@ namespace FdoToolbox.Core.ETL.Specialized
         public string[] SourcePropertyNames
         {
             get { return _propertyMappings.AllKeys; }
+        }
+
+        /// <summary>
+        /// Gets the list of source expression aliases.
+        /// </summary>
+        /// <value>The source aliases.</value>
+        public string[] SourceAliases
+        {
+            get { return _sourceExpressions.AllKeys; }
         }
 
         /// <summary>
@@ -152,16 +152,10 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="srcConn"></param>
-        /// <param name="destConn"></param>
         /// <param name="srcClass"></param>
         /// <param name="destClass"></param>
-        public FdoClassCopyOptions(FdoConnection srcConn, FdoConnection destConn, string srcClass, string destClass)
+        public FdoClassCopyOptions(string srcClass, string destClass)
         {
-            if (srcConn == null)
-                throw new ArgumentNullException("srcConn");
-            if (destConn == null)
-                throw new ArgumentNullException("destConn");
             if (string.IsNullOrEmpty(srcClass))
                 throw new ArgumentException("parameter srcClass is null or empty");
             if (string.IsNullOrEmpty(destClass))
@@ -169,8 +163,6 @@ namespace FdoToolbox.Core.ETL.Specialized
 
             _propertyMappings = new NameValueCollection();
             _sourceExpressions = new NameValueCollection();
-            _source = srcConn;
-            _target = destConn;
             _sourceClass = srcClass;
             _targetClass = destClass;
         }
@@ -178,11 +170,46 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <summary>
         /// Adds the source expression.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        public void AddSourceExpression(string key, string value)
+        /// <param name="alias">The alias.</param>
+        /// <param name="expression">The expression.</param>
+        /// <param name="targetProp">The target property.</param>
+        public void AddSourceExpression(string alias, string expression, string targetProp)
         {
-            _sourceExpressions[key] = value;
+            _sourceExpressions[alias] = expression;
+            _propertyMappings[alias] = targetProp;
+        }
+
+        /// <summary>
+        /// Gets the target property.
+        /// </summary>
+        /// <param name="srcProp">The source prop.</param>
+        /// <returns></returns>
+        public string GetTargetProperty(string srcProp)
+        {
+            return _propertyMappings[srcProp];
+        }
+
+        /// <summary>
+        /// Gets the expression.
+        /// </summary>
+        /// <param name="alias">The alias.</param>
+        /// <returns></returns>
+        public string GetExpression(string alias)
+        {
+            return _sourceExpressions[alias];
+        }
+
+        /// <summary>
+        /// Gets the target property for alias.
+        /// </summary>
+        /// <param name="alias">The alias.</param>
+        /// <returns></returns>
+        public string GetTargetPropertyForAlias(string alias)
+        {
+            if (_sourceExpressions[alias] != null)
+                return _propertyMappings[alias];
+
+            return null;
         }
     }
 }

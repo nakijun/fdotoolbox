@@ -410,6 +410,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No query result to save!.
+        /// </summary>
+        internal static string ERR_NO_RESULT_TABLE_TO_SAVE {
+            get {
+                return ResourceManager.GetString("ERR_NO_RESULT_TABLE_TO_SAVE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to apply schema: {0}.
         /// </summary>
         internal static string ERR_SCHEMA_CANNOT_BE_APPLIED {

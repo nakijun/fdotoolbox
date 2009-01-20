@@ -109,6 +109,27 @@ namespace FdoToolbox.Tasks.Controls
             this.TargetConnectionChanged();
         }
 
+        public void Init(FdoBulkCopyOptions options)
+        {
+            this.Init();
+
+            _view.SelectedSourceConnection = _connMgr.GetName(options.SourceConnection);
+            _view.SelectedSourceSchema = options.SourceSchema;
+            
+            _view.SelectedTargetConnection = _connMgr.GetName(options.TargetConnection);
+            _view.SelectedTargetSchema = options.TargetSchema;
+
+            foreach (FdoClassCopyOptions copt in options.ClassCopyOptions)
+            {
+                _view.MapClass(copt.SourceClassName, copt.TargetClassName);
+
+                foreach (string srcProp in copt.SourcePropertyNames)
+                {
+                    _view.MapClassProperty(copt.SourceClassName, srcProp, copt.GetTargetProperty(srcProp));
+                }
+            }
+        }
+
         public void SourceConnectionChanged()
         {
             string connName = _view.SelectedSourceConnection;
@@ -349,7 +370,22 @@ namespace FdoToolbox.Tasks.Controls
                             bool delete = _view.GetClassDeleteOption(srcClass);
                             string filter = _view.GetClassFilterOption(srcClass);
                             NameValueCollection sourceExpr = GetSourceExpressions(srcClass);
-                            options.AddClassCopyOption(srcClass, _classMappings[srcClass], _propertyMappings[srcClass], sourceExpr, delete, filter);
+                            NameValueCollection propMaps = _propertyMappings[srcClass];
+                            string targetClass = _classMappings[srcClass];
+
+                            FdoClassCopyOptions copt = new FdoClassCopyOptions(srcClass, targetClass);
+                            foreach (string srcProp in propMaps.Keys)
+                            {
+                                copt.AddPropertyMapping(srcProp, propMaps[srcProp]);
+                            }
+                            foreach (string alias in sourceExpr.Keys)
+                            {
+                                string expr = sourceExpr[alias];
+                                string targetProp = copt.GetTargetProperty(alias);
+                                copt.AddSourceExpression(alias, expr, targetProp);
+                            }
+                            options.AddClassCopyOption(copt);
+                            //options.AddClassCopyOption(srcClass, _classMappings[srcClass], _propertyMappings[srcClass], sourceExpr, delete, filter);
                         }
                         else
                         {

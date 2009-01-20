@@ -50,6 +50,8 @@ namespace FdoToolbox.Base.Services
         event ConnectionEventHandler ConnectionRemoved;
         event ConnectionRenamedEventHandler ConnectionRenamed;
         event ConnectionEventHandler ConnectionRefreshed;
+
+        string GetName(FdoConnection fdoConnection);
     }
 
     public class ConnectionRenameResult
