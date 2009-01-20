@@ -8,4 +8,6 @@ This application uses the following thirdparty libraries and resources:
 - Iesi.Collections (c) Jason Smith
 - SharpMap 0.9 (c) Morten Nielsen (http://www.codeplex.com/SharpMap)
 
-This application is licensed under the GNU Lesser General Public Licence (see http://www.gnu.org/licenses/lgpl.html) 
+FdoToolbox Core ETL framework is based on Rhino ETL (c) Oren Eini / Ayende Rahien (http://www.ayende.com)
+
+This application is licensed under the GNU Lesser General Public Licence (see http://www.gnu.org/licenses/lgpl.html) see license.txt for more/additional licensing information.
