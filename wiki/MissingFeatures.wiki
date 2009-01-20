@@ -10,9 +10,9 @@
  * ~~Session persistence~~
    * ~~connections~~ 
    * ~~tasks~~
- * Bulk Copy features
+ * ~~Bulk Copy features~~
    * ~~Batch insert support~~
- * Task Management
+ * ~~Task Management~~
    * ~~Create Task~~
      * ~~Bulk Copy~~
      * ~~Database Join~~
