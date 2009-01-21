@@ -477,7 +477,14 @@ namespace FdoToolbox.Core.Utility
             copy.Execute(spatialContexts, target, overwrite);
         }
 
-        private static bool IsShp(string targetPath)
+        /// <summary>
+        /// Determines whether the specified target path is a valid SHP provider file path
+        /// </summary>
+        /// <param name="targetPath">The target path.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified target path is SHP; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsShp(string targetPath)
         {
             return Directory.Exists(targetPath) || targetPath.EndsWith(".shp");
         }
