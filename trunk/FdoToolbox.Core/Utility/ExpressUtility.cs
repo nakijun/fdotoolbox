@@ -488,5 +488,24 @@ namespace FdoToolbox.Core.Utility
         {
             return Directory.Exists(targetPath) || targetPath.EndsWith(".shp");
         }
+
+        /// <summary>
+        /// Determines whether the specified class has a raster property.
+        /// </summary>
+        /// <param name="cls">The class</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified class has a raster property; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool HasRaster(ClassDefinition cls)
+        {
+            foreach (PropertyDefinition p in cls.Properties)
+            {
+                if (p.PropertyType == PropertyType.PropertyType_RasterProperty)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

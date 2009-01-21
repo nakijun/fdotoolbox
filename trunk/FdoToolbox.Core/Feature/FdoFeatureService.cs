@@ -19,25 +19,6 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-#region LGPL Header
-// Copyright (C) 2008, Jackie Ng
-// http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
-// 
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-// 
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-// 
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -623,7 +604,8 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
-        /// Gets the number of features in a given class definition
+        /// Gets the number of features in a given class definition. If the class definition is a raster
+        /// feature class, it will always return 0
         /// </summary>
         /// <param name="classDef"></param>
         /// <param name="filter"></param>
@@ -631,6 +613,11 @@ namespace FdoToolbox.Core.Feature
         public long GetFeatureCount(ClassDefinition classDef, string filter)
         {
             long count = 0;
+            
+            //HACK: Raster feature classes are un-countable.
+            if (ExpressUtility.HasRaster(classDef))
+                return count;
+
             string className = classDef.Name;
             string property = "FEATURECOUNT";
             if (SupportsCommand(CommandType.CommandType_SQLCommand))
@@ -1702,7 +1689,9 @@ namespace FdoToolbox.Core.Feature
             using (select)
             {
                 SetSelectOptions(options, select);
-                select.Distinct = options.Distinct;
+                //HACK: Only set distinct if true, so we don't upset the GDAL provider
+                if (options.Distinct)
+                    select.Distinct = true;
                 if(!string.IsNullOrEmpty(options.GroupFilter))
                     select.GroupingFilter = Filter.Parse(options.GroupFilter);
                 foreach (string propName in options.GroupByProperties)

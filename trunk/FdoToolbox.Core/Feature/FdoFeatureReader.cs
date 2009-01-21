@@ -45,6 +45,7 @@ using OSGeo.FDO.Commands.Feature;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core.Utility;
 using OSGeo.FDO.Geometry;
+using OSGeo.FDO.Raster;
 
 namespace FdoToolbox.Core.Feature
 {
@@ -110,6 +111,7 @@ namespace FdoToolbox.Core.Feature
                 else if (pd.PropertyType == PropertyType.PropertyType_RasterProperty)
                 {
                     _ptypes[name] = FdoPropertyType.Raster;
+                    _types[i] = typeof(IRaster);
                 }
                 else if (pd.PropertyType == PropertyType.PropertyType_AssociationProperty)
                 {
