@@ -114,7 +114,7 @@ namespace FdoToolbox.Core.Feature
                 }
             }
             _geometryNames = geoms.ToArray();
-            if (_classDefinition is FeatureClass)
+            if (_classDefinition is FeatureClass && (_classDefinition as FeatureClass).GeometryProperty != null)
                 _defaultGeometryName = (_classDefinition as FeatureClass).GeometryProperty.Name;
             else if(geoms.Count > 0)
                 _defaultGeometryName = geoms[0];
