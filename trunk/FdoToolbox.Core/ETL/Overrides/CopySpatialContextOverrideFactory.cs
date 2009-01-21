@@ -70,10 +70,6 @@ namespace FdoToolbox.Core.ETL.Overrides
             RegisterCopySpatialContextOverride("OSGeo.MySQL", typeof(MySqlCopySpatialContextOverride));
             RegisterCopySpatialContextOverride("OSGeo.SHP", typeof(ShpCopySpatialContextOverride));
             RegisterCopySpatialContextOverride("OSGeo.SQLServerSpatial", typeof(MsSqlCopySpatialContextOverride));
-
-            RegisterCopySpatialContextOverride("OSGeo.MySQL.3.4", typeof(MySqlCopySpatialContextOverride));
-            RegisterCopySpatialContextOverride("OSGeo.SHP.3.4", typeof(ShpCopySpatialContextOverride));
-            RegisterCopySpatialContextOverride("OSGeo.SQLServerSpatial.3.4", typeof(MsSqlCopySpatialContextOverride));
         }
     }
 }
