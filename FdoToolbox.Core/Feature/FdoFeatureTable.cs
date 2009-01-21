@@ -46,6 +46,60 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
+        /// Raised when the table requests more information about a spatial context association
+        /// </summary>
+        public event FdoSpatialContextRequestEventHandler RequestSpatialContext = delegate { };
+
+        private List<SpatialContextInfo> _spatialContexts = new List<SpatialContextInfo>();
+
+        /// <summary>
+        /// Adds a spatial context.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        public void AddSpatialContext(SpatialContextInfo ctx)
+        {
+            _spatialContexts.Add(ctx);
+        }
+
+        /// <summary>
+        /// Gets a spatial context by name
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public SpatialContextInfo GetSpatialContext(string name)
+        {
+            return _spatialContexts.Find(delegate(SpatialContextInfo s) { return s.Name == name; });
+        }
+
+        /// <summary>
+        /// Gets the spatial contexts attached to this table
+        /// </summary>
+        /// <value>The spatial contexts.</value>
+        public ICollection<SpatialContextInfo> SpatialContexts
+        {
+            get { return _spatialContexts; }
+        }
+
+        /// <summary>
+        /// Gets the active spatial context. If no active spatial contexts are found, the first one is returned.
+        /// If no spatial contexts are found, null is returned.
+        /// </summary>
+        /// <value>The active spatial context.</value>
+        public SpatialContextInfo ActiveSpatialContext
+        {
+            get
+            {
+                SpatialContextInfo c = _spatialContexts.Find(delegate(SpatialContextInfo s) { return s.IsActive; });
+                if (c != null)
+                    return c;
+                else if (_spatialContexts.Count > 0)
+                    return _spatialContexts[0];
+                else
+                    return null;
+            }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FdoFeatureTable"/> class.
         /// </summary>
         /// <param name="table">The table.</param>
@@ -255,7 +309,12 @@ namespace FdoToolbox.Core.Feature
                 string name = reader.GetName(i);
                 Type type = reader.GetFieldType(i);
                 if (Array.IndexOf<string>(geometries, name) >= 0)
+                {
                     type = typeof(FdoGeometry);
+                    string assoc = reader.GetSpatialContextAssociation(name);
+                    if (!string.IsNullOrEmpty(assoc))
+                        this.RequestSpatialContext(this, assoc);
+                }
                 this.Columns.Add(name, type);
             }
         }

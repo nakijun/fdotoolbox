@@ -717,5 +717,12 @@ namespace FdoToolbox.Core.Feature
         /// <param name="name">The name.</param>
         /// <returns></returns>
         public abstract FdoPropertyType GetFdoPropertyType(string name);
+
+        /// <summary>
+        /// Gets the spatial context association for a geometry property
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public abstract string GetSpatialContextAssociation(string name);
     }
 }

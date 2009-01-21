@@ -68,6 +68,58 @@ namespace FdoToolbox.Core.ETL
         }
 
         /// <summary>
+        /// Copies all spatial contexts
+        /// </summary>
+        /// <param name="spatialContexts">The spatial contexts.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
+        public virtual void Execute(ICollection<SpatialContextInfo> spatialContexts, FdoConnection target, bool overwrite)
+        {
+            bool supportsMultipleScs = target.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value;
+            bool supportsDestroySc = target.Capability.HasArrayCapability(CapabilityType.FdoCapabilityType_CommandList, (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext);
+
+            using (FdoFeatureService service = target.CreateFeatureService())
+            {
+                if (supportsMultipleScs)
+                {
+                    if (overwrite && supportsDestroySc)
+                    {
+                        foreach (SpatialContextInfo sc in spatialContexts)
+                        {
+                            service.DestroySpatialContext(sc);
+                        }
+                    }
+                    foreach (SpatialContextInfo sc in spatialContexts)
+                    {
+                        service.CreateSpatialContext(sc, overwrite);
+                    }
+                }
+                else
+                {
+                    List<SpatialContextInfo> contexts = new List<SpatialContextInfo>(spatialContexts);
+                    //Copy either the active spatial context in the list or the first
+                    //spatial context (if no active one is found)
+                    SpatialContextInfo active = null;
+                    if (contexts.Count > 0)
+                    {
+                        foreach (SpatialContextInfo sc in contexts)
+                        {
+                            if (sc.IsActive)
+                            {
+                                active = sc;
+                                break;
+                            }
+                        }
+                        if (active == null)
+                            active = contexts[0];
+                    }
+                    if(active != null)
+                        service.CreateSpatialContext(active, overwrite);
+                }
+            }
+        }
+
+        /// <summary>
         /// Copies the spatial contexts given in the list
         /// </summary>
         /// <param name="source">The source connection</param>
@@ -83,7 +135,7 @@ namespace FdoToolbox.Core.ETL
             using (FdoFeatureService tService = target.CreateFeatureService())
             {
                 bool supportsMultipleScs = target.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value;
-                bool supportsDestroySc = tService.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext);
+                bool supportsDestroySc = target.Capability.HasArrayCapability(CapabilityType.FdoCapabilityType_CommandList, (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext);
                 if (supportsMultipleScs)
                 {
                     ReadOnlyCollection<SpatialContextInfo> contexts = tService.GetSpatialContexts();

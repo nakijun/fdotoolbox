@@ -460,13 +460,21 @@ namespace FdoToolbox.Core.Utility
         /// <param name="overwrite">If true will overwrite any existing spatial contexts, otherwise it will add them. This value is ignored if the target connection does not support multiple spatial contexts</param>
         public static void CopyAllSpatialContexts(FdoConnection source, FdoConnection target, bool overwrite)
         {
-            using (FdoFeatureService srcService = source.CreateFeatureService())
-            using (FdoFeatureService destService = target.CreateFeatureService())
-            {
-                ICopySpatialContext copy = CopySpatialContextOverrideFactory.GetCopySpatialContextOverride(target);
-                
-                copy.Execute(source, target, true);
-            }
+            ICopySpatialContext copy = CopySpatialContextOverrideFactory.GetCopySpatialContextOverride(target);
+            copy.Execute(source, target, overwrite);
+        }
+
+        /// <summary>
+        /// Copies all spatial contexts from one connection to another. If the target connection
+        /// only supports one spatial context, then the active spatial context is copied across.
+        /// </summary>
+        /// <param name="spatialContexts">The spatial contexts.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
+        public static void CopyAllSpatialContexts(ICollection<SpatialContextInfo> spatialContexts, FdoConnection target, bool overwrite)
+        {
+            ICopySpatialContext copy = CopySpatialContextOverrideFactory.GetCopySpatialContextOverride(target);
+            copy.Execute(spatialContexts, target, overwrite);
         }
 
         private static bool IsShp(string targetPath)

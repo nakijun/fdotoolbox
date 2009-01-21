@@ -36,6 +36,14 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// Copies all spatial contexts
         /// </summary>
+        /// <param name="spatialContexts">The spatial contexts.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
+        void Execute(ICollection<SpatialContextInfo> spatialContexts, FdoConnection target, bool overwrite);
+
+        /// <summary>
+        /// Copies all spatial contexts
+        /// </summary>
         /// <param name="source">The source connection</param>
         /// <param name="target">The target connection</param>
         /// <param name="overwrite">If true will overwrite any existing spatial contexts</param>
