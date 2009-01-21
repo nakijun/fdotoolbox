@@ -34,6 +34,7 @@ using System.Data;
 using ICSharpCode.Core;
 using System.Diagnostics;
 using System.Timers;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -264,8 +265,15 @@ namespace FdoToolbox.Base.Controls
             List<QueryMode> modes = new List<QueryMode>();
             if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select))
             {
-                modes.Add(QueryMode.Standard);
-                _queryViews.Add(QueryMode.Standard, new FdoStandardQueryCtl(_connection, initSchema, initClass));
+                using (FdoFeatureService service = _connection.CreateFeatureService())
+                {
+                    ClassDefinition classDef = service.GetClassByName(initSchema, initClass);
+                    if (!ExpressUtility.HasRaster(classDef))
+                    {
+                        modes.Add(QueryMode.Standard);
+                        _queryViews.Add(QueryMode.Standard, new FdoStandardQueryCtl(_connection, initSchema, initClass));
+                    }
+                }
             }
             if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
             {

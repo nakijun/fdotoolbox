@@ -307,15 +307,29 @@ namespace FdoToolbox.Core.Feature
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 string name = reader.GetName(i);
-                Type type = reader.GetFieldType(i);
-                if (Array.IndexOf<string>(geometries, name) >= 0)
+                FdoPropertyType ptype = reader.GetFdoPropertyType(name);
+                if (ptype == FdoPropertyType.Raster)
                 {
-                    type = typeof(FdoGeometry);
-                    string assoc = reader.GetSpatialContextAssociation(name);
-                    if (!string.IsNullOrEmpty(assoc))
-                        this.RequestSpatialContext(this, assoc);
+                    //Raster's can't conceivably be previewed in tabular form, so omit it
                 }
-                this.Columns.Add(name, type);
+                else if (ptype == FdoPropertyType.Object)
+                {
+                }
+                else if (ptype == FdoPropertyType.Association)
+                {
+                }
+                else
+                {
+                    Type type = reader.GetFieldType(i);
+                    if (Array.IndexOf<string>(geometries, name) >= 0)
+                    {
+                        type = typeof(FdoGeometry);
+                        string assoc = reader.GetSpatialContextAssociation(name);
+                        if (!string.IsNullOrEmpty(assoc))
+                            this.RequestSpatialContext(this, assoc);
+                    }
+                    this.Columns.Add(name, type);
+                }
             }
         }
 

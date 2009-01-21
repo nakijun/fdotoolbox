@@ -146,7 +146,7 @@ namespace FdoToolbox.Base.Controls
             this.lstComputed.Location = new System.Drawing.Point(3, 3);
             this.lstComputed.MultiSelect = false;
             this.lstComputed.Name = "lstComputed";
-            this.lstComputed.Size = new System.Drawing.Size(332, 82);
+            this.lstComputed.Size = new System.Drawing.Size(354, 101);
             this.lstComputed.TabIndex = 8;
             this.lstComputed.UseCompatibleStateImageBehavior = false;
             this.lstComputed.View = System.Windows.Forms.View.Details;
@@ -172,7 +172,7 @@ namespace FdoToolbox.Base.Controls
             this.chkProperties.FormattingEnabled = true;
             this.chkProperties.Location = new System.Drawing.Point(3, 2);
             this.chkProperties.Name = "chkProperties";
-            this.chkProperties.Size = new System.Drawing.Size(332, 79);
+            this.chkProperties.Size = new System.Drawing.Size(354, 109);
             this.chkProperties.TabIndex = 9;
             // 
             // ctxProperties
@@ -248,7 +248,7 @@ namespace FdoToolbox.Base.Controls
             // btnSelectNone
             // 
             this.btnSelectNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSelectNone.Location = new System.Drawing.Point(84, 89);
+            this.btnSelectNone.Location = new System.Drawing.Point(84, 113);
             this.btnSelectNone.Name = "btnSelectNone";
             this.btnSelectNone.Size = new System.Drawing.Size(75, 23);
             this.btnSelectNone.TabIndex = 11;
@@ -259,7 +259,7 @@ namespace FdoToolbox.Base.Controls
             // btnSelectAll
             // 
             this.btnSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSelectAll.Location = new System.Drawing.Point(3, 89);
+            this.btnSelectAll.Location = new System.Drawing.Point(3, 113);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(75, 23);
             this.btnSelectAll.TabIndex = 10;
@@ -284,7 +284,7 @@ namespace FdoToolbox.Base.Controls
             // lblComputedHint
             // 
             this.lblComputedHint.AutoSize = true;
-            this.lblComputedHint.Location = new System.Drawing.Point(136, 120);
+            this.lblComputedHint.Location = new System.Drawing.Point(147, 115);
             this.lblComputedHint.Name = "lblComputedHint";
             this.lblComputedHint.Size = new System.Drawing.Size(188, 13);
             this.lblComputedHint.TabIndex = 11;
@@ -294,7 +294,7 @@ namespace FdoToolbox.Base.Controls
             // 
             this.btnEditComputed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnEditComputed.Enabled = false;
-            this.btnEditComputed.Location = new System.Drawing.Point(69, 91);
+            this.btnEditComputed.Location = new System.Drawing.Point(69, 110);
             this.btnEditComputed.Name = "btnEditComputed";
             this.btnEditComputed.Size = new System.Drawing.Size(61, 23);
             this.btnEditComputed.TabIndex = 10;
@@ -305,7 +305,7 @@ namespace FdoToolbox.Base.Controls
             // btnAddComputed
             // 
             this.btnAddComputed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAddComputed.Location = new System.Drawing.Point(3, 91);
+            this.btnAddComputed.Location = new System.Drawing.Point(3, 110);
             this.btnAddComputed.Name = "btnAddComputed";
             this.btnAddComputed.Size = new System.Drawing.Size(60, 23);
             this.btnAddComputed.TabIndex = 9;
