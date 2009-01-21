@@ -826,5 +826,16 @@ namespace FdoToolbox.Core.Feature
         {
             return _ptypes[name];
         }
+
+        /// <summary>
+        /// Gets the spatial context association for a geometry property
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetSpatialContextAssociation(string name)
+        {
+            //ISQLReader does not hold a class definition so this information is not available
+            return string.Empty;
+        }
     }
 }

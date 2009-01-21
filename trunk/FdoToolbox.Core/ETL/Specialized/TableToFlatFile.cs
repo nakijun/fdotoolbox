@@ -70,6 +70,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                 service.ApplySchema(schema);
             }
 
+            SendMessage("Copying any attached spatial contexts");
+            ExpressUtility.CopyAllSpatialContexts(_table.SpatialContexts, conn, true);
+
             Register(new FdoFeatureTableInputOperation(_table));
             Register(new FdoOutputOperation(conn, cd.Name));
         }

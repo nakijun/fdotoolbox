@@ -64,6 +64,7 @@ namespace FdoToolbox.Core.Feature
         private string _defaultGeometryName;
         private Dictionary<string, FdoPropertyType> _ptypes;
         private FgfGeometryFactory _internalFactory;
+        private Dictionary<string, string> _associations;
 
         internal FdoFeatureReader(IFeatureReader reader, int limit)
             : this(reader)
@@ -76,6 +77,7 @@ namespace FdoToolbox.Core.Feature
             _internalFactory = new FgfGeometryFactory();
             _classDefinition = reader.GetClassDefinition();
             _ptypes = new Dictionary<string, FdoPropertyType>();
+            _associations = new Dictionary<string, string>();
             _ordinals = new Dictionary<string, int>();
             _types = new Type[_classDefinition.Properties.Count];
             _names = new string[_classDefinition.Properties.Count];
@@ -99,6 +101,7 @@ namespace FdoToolbox.Core.Feature
                     _types[i] = typeof(byte[]);
                     geoms.Add(gp.Name);
                     _ptypes[name] = FdoPropertyType.Geometry;
+                    _associations[name] = gp.SpatialContextAssociation;
                 }
                 else if (pd.PropertyType == PropertyType.PropertyType_ObjectProperty)
                 {
@@ -300,6 +303,19 @@ namespace FdoToolbox.Core.Feature
         {
             byte[] fgf = GetGeometry(name);
             return _internalFactory.CreateGeometryFromFgf(fgf);
+        }
+
+        /// <summary>
+        /// Gets the spatial context association for a geometry property
+        /// </summary>
+        /// <param name="name">The name of the geometry property</param>
+        /// <returns></returns>
+        public override string GetSpatialContextAssociation(string name)
+        {
+            if (_associations.ContainsKey(name))
+                return _associations[name];
+
+            return string.Empty;
         }
     }
 }

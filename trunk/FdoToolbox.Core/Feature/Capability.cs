@@ -73,6 +73,13 @@ namespace FdoToolbox.Core.Feature
         /// <param name="cap">The cap.</param>
         /// <returns></returns>
         object GetObjectCapability(CapabilityType cap);
+        /// <summary>
+        /// Determines if an array capability contains the specified value
+        /// </summary>
+        /// <param name="capabilityType">The capability (must be an array capability)</param>
+        /// <param name="value">The value to check for</param>
+        /// <returns>True of the value exists; false otherwise</returns>
+        bool HasArrayCapability(CapabilityType capabilityType, int value);
     }
 
     /// <summary>
@@ -483,6 +490,23 @@ namespace FdoToolbox.Core.Feature
                 default:
                     return null;
             }
+        }
+
+
+        /// <summary>
+        /// Determines if an array capability contains the specified value
+        /// </summary>
+        /// <param name="capabilityType">The capability (must be an array capability)</param>
+        /// <param name="value">The value to check for</param>
+        /// <returns>
+        /// True of the value exists; false otherwise
+        /// </returns>
+        public bool HasArrayCapability(CapabilityType capabilityType, int value)
+        {
+            int [] values = this.GetArrayCapability(capabilityType);
+            if (values != null)
+                return Array.IndexOf<int>(values, value) >= 0;
+            return false;
         }
     }
 }

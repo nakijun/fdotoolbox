@@ -63,5 +63,27 @@ namespace FdoToolbox.Core.ETL.Overrides
                 }
             }
         }
+
+        /// <summary>
+        /// Copies all spatial contexts
+        /// </summary>
+        /// <param name="spatialContexts">The spatial contexts.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
+        public override void Execute(ICollection<SpatialContextInfo> spatialContexts, FdoConnection target, bool overwrite)
+        {
+            List<SpatialContextInfo> contexts = new List<SpatialContextInfo>(spatialContexts);
+            foreach (SpatialContextInfo sc in contexts)
+            {
+                //Make sure that CSName != Spatial Context Name
+                WKTParser parser = new WKTParser(sc.CoordinateSystemWkt);
+                if (!string.IsNullOrEmpty(parser.CSName))
+                {
+                    sc.CoordinateSystem = parser.CSName;
+                    sc.Name = parser.CSName;
+                }
+            }
+            base.Execute(contexts, target, overwrite);
+        }
     }
 }

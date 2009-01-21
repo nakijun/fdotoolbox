@@ -159,8 +159,16 @@ namespace FdoToolbox.Base.Controls
                     
                     //Init the data grid view
                     FdoFeatureTable table = new FdoFeatureTable();
+
+                    table.RequestSpatialContext += delegate(object o, string name)
+                    {
+                        SpatialContextInfo c = service.GetSpatialContext(name);
+                        if (c != null)
+                            table.AddSpatialContext(c);
+                    };
+
                     table.InitTable(reader);
-                    
+
                     while (reader.ReadNext() && !_queryWorker.CancellationPending)
                     {
                         //Pass processed feature to data grid view

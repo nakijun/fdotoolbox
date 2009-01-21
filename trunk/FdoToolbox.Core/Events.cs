@@ -39,6 +39,13 @@ namespace FdoToolbox.Core
     public delegate void FdoFeatureChangeEventHandler(object sender, FdoFeatureChangeEventArgs e);
 
     /// <summary>
+    /// Represents a method that will handle requests for a spatial context
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="name"></param>
+    public delegate void FdoSpatialContextRequestEventHandler(object sender, string name);
+
+    /// <summary>
     /// Occures after a Feature has been changed
     /// </summary>
     [DebuggerStepThrough]
