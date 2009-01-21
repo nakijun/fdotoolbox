@@ -19,6 +19,7 @@ SET FDOTOOLBOXBASE=%CD%\FdoToolbox.Base
 SET FDOTOOLBOXADDINMGR=%CD%\FdoToolbox.AddInManager
 SET FDOTOOLBOXADODB=%CD%\FdoToolbox.AdoDb
 SET FDOTOOLBOXEXPRESS=%CD%\FdoToolbox.Express
+SET FDOTOOLBOXRASTER=%CD%\FdoToolbox.Raster
 SET TESTMODULE=%CD%\TestModule
 SET MGMODULE=%CD%\MGModule
 
@@ -138,6 +139,9 @@ rd /S /Q %FDOTOOLBOXADODB%\obj
 echo Cleaning FdoToolbox.Express
 rd /S /Q %FDOTOOLBOXEXPRESS%\bin
 rd /S /Q %FDOTOOLBOXEXPRESS%\obj
+echo Cleaning FdoToolbox.Raster
+rd /S /Q %FDOTOOLBOXRASTER%\bin
+rd /S /Q %FDOTOOLBOXRASTER%\obj
 goto quit
 
 :test
