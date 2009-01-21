@@ -139,12 +139,35 @@ namespace FdoToolbox.Core.Feature
             set { this.InternalConnection.ConnectionString = value; }
         }
 
+        private string _name;
+
         /// <summary>
-        /// The name of the connection's underlying provider
+        /// The name of the connection's underlying provider. This does not include the version number. Use the <see cref="ProviderQualified"/>
+        /// property for the full provider name
         /// </summary>
         public string Provider
         {
-            get { return this.InternalConnection.ConnectionInfo.ProviderName; }
+            get 
+            {
+                if (_name == null)
+                {
+                    ProviderNameTokens providerName = new ProviderNameTokens(this.InternalConnection.ConnectionInfo.ProviderName);
+                    string [] tokens = providerName.GetNameTokens();
+                    _name = tokens[0] + "." + tokens[1];
+                }
+                return _name;
+            }
+        }
+
+        /// <summary>
+        /// The fully-qualified name of the connection's underlying provider
+        /// </summary>
+        public string ProviderQualified
+        {
+            get 
+            {
+                return this.InternalConnection.ConnectionInfo.ProviderName;
+            }
         }
 
         /// <summary>
