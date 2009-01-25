@@ -48,6 +48,7 @@ namespace FdoToolbox.Base.Controls
             this.lblElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.TAB_MAP = new System.Windows.Forms.TabPage();
             this.mapCtl = new FdoToolbox.Base.Controls.FdoMapPreview();
+            this.sQLiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -156,7 +157,8 @@ namespace FdoToolbox.Base.Controls
             // btnSave
             // 
             this.btnSave.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sDFToolStripMenuItem});
+            this.sDFToolStripMenuItem,
+            this.sQLiteToolStripMenuItem});
             this.btnSave.Image = global::FdoToolbox.Base.Images.disk;
             this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSave.Name = "btnSave";
@@ -167,7 +169,7 @@ namespace FdoToolbox.Base.Controls
             // 
             this.sDFToolStripMenuItem.Image = global::FdoToolbox.Base.Images.database;
             this.sDFToolStripMenuItem.Name = "sDFToolStripMenuItem";
-            this.sDFToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.sDFToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.sDFToolStripMenuItem.Text = "SDF";
             this.sDFToolStripMenuItem.Click += new System.EventHandler(this.saveSdf_Click);
             // 
@@ -256,6 +258,14 @@ namespace FdoToolbox.Base.Controls
             this.mapCtl.Size = new System.Drawing.Size(676, 227);
             this.mapCtl.TabIndex = 0;
             // 
+            // sQLiteToolStripMenuItem
+            // 
+            this.sQLiteToolStripMenuItem.Image = global::FdoToolbox.Base.Images.database;
+            this.sQLiteToolStripMenuItem.Name = "sQLiteToolStripMenuItem";
+            this.sQLiteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sQLiteToolStripMenuItem.Text = "SQLite";
+            this.sQLiteToolStripMenuItem.Click += new System.EventHandler(this.saveSQLite_Click);
+            // 
             // FdoDataPreviewCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -301,5 +311,6 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.ToolStripStatusLabel lblMessage;
         private System.Windows.Forms.ToolStripStatusLabel lblElapsedTime;
         private System.Windows.Forms.DataGridView grdResults;
+        private System.Windows.Forms.ToolStripMenuItem sQLiteToolStripMenuItem;
     }
 }
