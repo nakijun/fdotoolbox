@@ -57,6 +57,9 @@
                 <MenuItem id="CreateShp"
                           label="${res:CMD_CreateShp}"
                           class="FdoToolbox.Express.Commands.CreateShpCommand" />
+                <MenuItem id="CreateSqlite"
+                          label="${res:CMD_CreateSqlite}"
+                          class="FdoToolbox.Express.Commands.CreateSqliteCommand" />
             </MenuItem>
             <MenuItem id="ExpressBulkCopy"
                       label="${res:CMD_ExpressBcp}"

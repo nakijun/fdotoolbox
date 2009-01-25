@@ -133,6 +133,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create SQLite file.
+        /// </summary>
+        internal static string CMD_CreateSqlite {
+            get {
+                return ResourceManager.GetString("CMD_CreateSqlite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bulk Copy.
         /// </summary>
         internal static string CMD_ExpressBcp {
@@ -232,6 +241,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SQLite file created.
+        /// </summary>
+        internal static string MSG_SQLITE_CREATED {
+            get {
+                return ResourceManager.GetString("MSG_SQLITE_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter the name of the new connection.
         /// </summary>
         internal static string PROMPT_ENTER_CONNECTION {
@@ -318,6 +336,15 @@ namespace FdoToolbox.Express {
         internal static string TITLE_CREATE_SHP {
             get {
                 return ResourceManager.GetString("TITLE_CREATE_SHP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create SQLite file.
+        /// </summary>
+        internal static string TITLE_CREATE_SQLITE {
+            get {
+                return ResourceManager.GetString("TITLE_CREATE_SQLITE", resourceCulture);
             }
         }
         

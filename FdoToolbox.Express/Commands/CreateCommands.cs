@@ -38,35 +38,16 @@ namespace FdoToolbox.Express.Commands
             Workbench wb = Workbench.Instance;
             CreateSdfCtl ctl = new CreateSdfCtl();
             wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
 
-            //string sdfFile = FileService.SaveFile(ResourceService.GetString("TITLE_CREATE_SDF"), ResourceService.GetString("FILTER_SDF"));
-            //if (sdfFile != null)
-            //{
-            //    if (System.IO.File.Exists(sdfFile))
-            //        System.IO.File.Delete(sdfFile);
-
-            //    if (ExpressUtility.CreateFlatFileDataSource("OSGeo.SDF", sdfFile))
-            //    {
-            //        if (MessageService.AskQuestion(ResourceService.GetString("MSG_CONNECT_SDF"), ResourceService.GetString("TITLE_CREATE_SDF")))
-            //        {
-            //            string name = string.Empty;
-            //            name = MessageService.ShowInputBox(ResourceService.GetString("TITLE_NEW_CONNECTION"), ResourceService.GetString("PROMPT_ENTER_NEW_CONNECTION_NAME"), name);
-            //            if (name == null)
-            //                return;
-
-            //            while (name == string.Empty)
-            //            {
-            //                name = MessageService.ShowInputBox(ResourceService.GetString("TITLE_NEW_CONNECTION"), ResourceService.GetString("PROMPT_ENTER_NEW_CONNECTION_NAME"), name);
-            //                if (name == null)
-            //                    return;
-            //            }
-
-            //            FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
-            //            FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SDF", sdfFile);
-            //            mgr.AddConnection(name, conn);
-            //        }
-            //    }
-            //}
+    public class CreateSqliteCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            CreateSqliteCtl ctl = new CreateSqliteCtl();
+            wb.ShowContent(ctl, ViewRegion.Dialog);
         }
     }
 

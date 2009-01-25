@@ -73,6 +73,13 @@
       <DependentUpon>ConnectOgrCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectOgrPresentation.cs" />
+    <Compile Include="Controls\CreateSqliteCtlPresentation.cs" />
+    <Compile Include="Controls\CreateSqliteCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CreateSqliteCtl.Designer.cs">
+      <DependentUpon>CreateSqliteCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CreateShpCtlPresentation.cs" />
     <Compile Include="Controls\CreateShpCtl.cs">
       <SubType>UserControl</SubType>
@@ -132,6 +139,10 @@
     <EmbeddedResource Include="Controls\ConnectOgrCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ConnectOgrCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CreateSqliteCtl.resx">
+      <DependentUpon>CreateSqliteCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\CreateShpCtl.resx">
       <DependentUpon>CreateShpCtl.cs</DependentUpon>
