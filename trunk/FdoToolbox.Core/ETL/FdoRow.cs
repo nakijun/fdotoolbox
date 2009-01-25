@@ -555,5 +555,35 @@ namespace FdoToolbox.Core.ETL
             }
             return row;
         }
+
+
+        internal void Bind(PropertyValueCollection propVals, HashedSet<string> ignoreProperties)
+        {
+            propVals.Clear();
+            foreach (string col in this.Columns)
+            {
+                if (this[col] != null && this[col] != DBNull.Value && !ignoreProperties.Contains(col))
+                {
+                    if (!IsGeometryProperty(col))
+                    {
+                        ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
+                        if (dv != null)
+                        {
+                            PropertyValue pv = new PropertyValue(col, dv);
+                            propVals.Add(pv);
+                        }
+                    }
+                    else
+                    {
+                        IGeometry geom = this[col] as IGeometry;
+                        if (geom != null)
+                        {
+                            PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                            propVals.Add(pv);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

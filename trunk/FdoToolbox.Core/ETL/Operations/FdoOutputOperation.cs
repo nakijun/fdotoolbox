@@ -136,6 +136,7 @@ namespace FdoToolbox.Core.ETL.Operations
         /// <returns></returns>
         public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
         {
+            /*
             foreach (FdoRow row in rows)
             {
                 using (PropertyValueCollection propVals = row.ToPropertyValueCollection(_mappings, _unWritableProperties))
@@ -143,7 +144,23 @@ namespace FdoToolbox.Core.ETL.Operations
                     _service.InsertFeature(this.ClassName, propVals, false);
                     RaiseFeatureProcessed(row);
                 }
+            }*/
+            IInsert insert = null;
+            using (FdoFeatureService service = _conn.CreateFeatureService())
+            {
+                insert = service.CreateCommand<IInsert>(CommandType.CommandType_Insert);
             }
+            insert.SetFeatureClassName(this.ClassName);
+            PropertyValueCollection propVals = insert.PropertyValues;
+            foreach (FdoRow row in rows)
+            {
+                row.Bind(propVals, _unWritableProperties);
+                using (IFeatureReader reader = insert.Execute())
+                {
+                    RaiseFeatureProcessed(row);
+                }
+            }
+            insert.Dispose();
             yield break;
         }
     }

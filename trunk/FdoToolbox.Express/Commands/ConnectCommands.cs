@@ -63,6 +63,34 @@ namespace FdoToolbox.Express.Commands
         }
     }
 
+    public class ConnectSqliteCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            string file = FileService.OpenFile(Res.GetString("TITLE_CONNECT_SQLITE"), Res.GetString("FILTER_SQLITE"));
+            if (FileService.FileExists(file))
+            {
+                FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SQLite", file);
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                NamingService namer = ServiceManager.Instance.GetService<NamingService>();
+
+                string name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), namer.GetDefaultConnectionName("OSGeo.SQLite"));
+                if (name == null)
+                    return;
+
+                while (name == string.Empty || mgr.NameExists(name))
+                {
+                    Msg.ShowError(Res.GetString("ERR_CONNECTION_NAME_EMPTY_OR_EXISTS"));
+                    name = Msg.ShowInputBox(Res.GetString("TITLE_CONNECTION_NAME"), Res.GetString("PROMPT_ENTER_CONNECTION"), name);
+
+                    if (name == null)
+                        return;
+                }
+                mgr.AddConnection(name, conn);
+            }
+        }
+    }
+
     public class ConnectShpCommand : AbstractMenuCommand
     {
         public override void Run()
