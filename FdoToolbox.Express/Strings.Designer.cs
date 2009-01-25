@@ -106,6 +106,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to SQLite.
+        /// </summary>
+        internal static string CMD_ConnectSqlite {
+            get {
+                return ResourceManager.GetString("CMD_ConnectSqlite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create SDF file.
         /// </summary>
         internal static string CMD_CreateSdf {
@@ -174,6 +183,15 @@ namespace FdoToolbox.Express {
         internal static string FILTER_SHP {
             get {
                 return ResourceManager.GetString("FILTER_SHP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SQLite files (*.db)|*.db|SQLite Files (*.sqlite)|*.sqlite.
+        /// </summary>
+        internal static string FILTER_SQLITE {
+            get {
+                return ResourceManager.GetString("FILTER_SQLITE", resourceCulture);
             }
         }
         
@@ -264,6 +282,15 @@ namespace FdoToolbox.Express {
         internal static string TITLE_CONNECT_SHP_DIR {
             get {
                 return ResourceManager.GetString("TITLE_CONNECT_SHP_DIR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create SQLite Connection.
+        /// </summary>
+        internal static string TITLE_CONNECT_SQLITE {
+            get {
+                return ResourceManager.GetString("TITLE_CONNECT_SQLITE", resourceCulture);
             }
         }
         

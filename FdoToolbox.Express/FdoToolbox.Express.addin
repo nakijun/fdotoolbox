@@ -31,6 +31,9 @@
                 <MenuItem id="ConnectSdf"
                           label="${res:CMD_ConnectSdf}"
                           class="FdoToolbox.Express.Commands.ConnectSdfCommand" />
+                <MenuItem id="ConnectSqlite"
+                          label="${res:CMD_ConnectSqlite}"
+                          class="FdoToolbox.Express.Commands.ConnectSqliteCommand" />
                 <MenuItem id="ConnectShp"
                           label="${res:CMD_ConnectShp}"
                           class="FdoToolbox.Express.Commands.ConnectShpCommand" />
