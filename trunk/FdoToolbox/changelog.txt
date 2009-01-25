@@ -1,4 +1,14 @@
 - Enhancements:
+	- Improve bulk copy insert performance by using cached IInsert (and its PropertyValues) instead of FdoFeatureService.InsertFeature(). Performance gains are significant, for SQLite performance is *lightning* fast as opposed to dog-slow in the previous release.
+	- Add express module support for SQLite.
+	- Data Preview: Add SQLite output format.
+	- Data Preview: Saved query results now have spatial context information included.
+	- Saved connections and tasks should now be compatible with any FDO version, as version number strings are omitted from any provider names.
+	
+v0.7.0
+------
+
+- Enhancements:
     - FdoFeatureService (formerly FeatureService) has been updated to take advantage of new APIs in FDO v3.4.x
 	- Based on SharpDevelop Core, allowing for cleaner and simpler extensibility.
 	- Helper macros for Generic Connect/Create datastore controls.
