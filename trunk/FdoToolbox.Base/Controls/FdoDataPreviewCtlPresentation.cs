@@ -263,22 +263,38 @@ namespace FdoToolbox.Base.Controls
         public void Init(string initSchema, string initClass)
         {
             List<QueryMode> modes = new List<QueryMode>();
-            if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select))
+            if (!string.IsNullOrEmpty(initSchema) && !string.IsNullOrEmpty(initClass))
             {
-                using (FdoFeatureService service = _connection.CreateFeatureService())
+                if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select))
                 {
-                    ClassDefinition classDef = service.GetClassByName(initSchema, initClass);
-                    if (!ExpressUtility.HasRaster(classDef))
+                    using (FdoFeatureService service = _connection.CreateFeatureService())
                     {
-                        modes.Add(QueryMode.Standard);
-                        _queryViews.Add(QueryMode.Standard, new FdoStandardQueryCtl(_connection, initSchema, initClass));
+                        ClassDefinition classDef = service.GetClassByName(initSchema, initClass);
+                        if (!ExpressUtility.HasRaster(classDef))
+                        {
+                            modes.Add(QueryMode.Standard);
+                            _queryViews.Add(QueryMode.Standard, new FdoStandardQueryCtl(_connection, initSchema, initClass));
+                        }
                     }
                 }
+                if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
+                {
+                    modes.Add(QueryMode.Aggregate);
+                    _queryViews.Add(QueryMode.Aggregate, new FdoAggregateQueryCtl(_connection, initSchema, initClass));
+                }
             }
-            if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
+            else
             {
-                modes.Add(QueryMode.Aggregate);
-                _queryViews.Add(QueryMode.Aggregate, new FdoAggregateQueryCtl(_connection, initSchema, initClass));
+                if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select))
+                {
+                    modes.Add(QueryMode.Standard);
+                    _queryViews.Add(QueryMode.Standard, new FdoStandardQueryCtl(_connection));
+                }
+                if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
+                {
+                    modes.Add(QueryMode.Aggregate);
+                    _queryViews.Add(QueryMode.Aggregate, new FdoAggregateQueryCtl(_connection));
+                }
             }
             if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand))
             {
