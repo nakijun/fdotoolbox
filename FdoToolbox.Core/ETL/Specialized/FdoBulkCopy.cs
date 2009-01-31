@@ -40,6 +40,18 @@ namespace FdoToolbox.Core.ETL.Specialized
     /// </summary>
     public class FdoBulkCopy : FdoSpecializedEtlProcess
     {
+        private int _ReportFrequency = 50;
+
+        /// <summary>
+        /// Gets or sets the frequency at which progress feedback is made
+        /// </summary>
+        /// <value>The report frequency.</value>
+        public int ReportFrequency
+        {
+            get { return _ReportFrequency; }
+            set { _ReportFrequency = value; }
+        }
+
         private FdoBulkCopyOptions _options;
 
         /// <summary>
@@ -53,13 +65,23 @@ namespace FdoToolbox.Core.ETL.Specialized
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FdoBulkCopy"/> class.
         /// </summary>
-        /// <param name="options"></param>
+        /// <param name="options">The options.</param>
         public FdoBulkCopy(FdoBulkCopyOptions options)
         {
             _options = options;
-            //_totalSpan = new TimeSpan();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoBulkCopy"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="reportFrequency">The report frequency.</param>
+        public FdoBulkCopy(FdoBulkCopyOptions options, int reportFrequency)
+            : this(options)
+        {
+            _ReportFrequency = reportFrequency;
         }
 
         /// <summary>
@@ -184,7 +206,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <param name="dictionary">The dictionary.</param>
         protected override void OnFeatureProcessed(FdoOperationBase op, FdoRow dictionary)
         {
-            if (op.Statistics.OutputtedRows % 50 == 0)
+            if (op.Statistics.OutputtedRows % this.ReportFrequency == 0)
             {
                 if (op is FdoOutputOperation)
                 {

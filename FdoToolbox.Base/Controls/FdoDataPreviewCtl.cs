@@ -247,7 +247,7 @@ namespace FdoToolbox.Base.Controls
                 return;
             }
             string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_QUERY_RESULT"), ResourceService.GetString("FILTER_SDF_FILE"));
-            if (file != null)
+            if (!string.IsNullOrEmpty(file))
             {
                 //Ask for class name
                 if (string.IsNullOrEmpty(table.TableName))
@@ -262,8 +262,11 @@ namespace FdoToolbox.Base.Controls
                     table.TableName = name;
                 }
 
-                EtlProcessCtl ctl = new EtlProcessCtl(new TableToFlatFile(table, file));
-                Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
+                using (TableToFlatFile proc = new TableToFlatFile(table, file))
+                {
+                    EtlProcessCtl ctl = new EtlProcessCtl(proc);
+                    Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
+                }
             }
         }
 
@@ -276,7 +279,7 @@ namespace FdoToolbox.Base.Controls
                 return;
             }
             string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_QUERY_RESULT"), ResourceService.GetString("FILTER_SQLITE"));
-            if (file != null)
+            if (!string.IsNullOrEmpty(file))
             {
                 //Ask for class name
                 if (string.IsNullOrEmpty(table.TableName))
@@ -291,8 +294,11 @@ namespace FdoToolbox.Base.Controls
                     table.TableName = name;
                 }
 
-                EtlProcessCtl ctl = new EtlProcessCtl(new TableToFlatFile(table, file));
-                Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
+                using (TableToFlatFile proc = new TableToFlatFile(table, file))
+                {
+                    EtlProcessCtl ctl = new EtlProcessCtl(proc);
+                    Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
+                }
             }
         }
 
