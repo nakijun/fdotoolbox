@@ -59,6 +59,13 @@
     <Compile Include="Commands\CreateCommands.cs" />
     <Compile Include="Commands\ObjectExplorerCommands.cs" />
     <Compile Include="Commands\StartupCommand.cs" />
+    <Compile Include="Controls\ConnectArcSdeCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectArcSdeCtl.Designer.cs">
+      <DependentUpon>ConnectArcSdeCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectArcSdePresentation.cs" />
     <Compile Include="Controls\ConnectOdbcCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -132,6 +139,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\ConnectArcSdeCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ConnectArcSdeCtl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConnectOdbcCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ConnectOdbcCtl.cs</DependentUpon>

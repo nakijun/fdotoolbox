@@ -112,7 +112,7 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
-        /// The connection string of the underlying connection
+        /// Gets or sets the connection string of the underlying connection
         /// </summary>
         public string ConnectionString
         {

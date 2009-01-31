@@ -166,4 +166,14 @@ namespace FdoToolbox.Express.Commands
             wb.ShowContent(ctl, ViewRegion.Dialog);
         }
     }
+
+    public class ConnectArcSdeCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            ConnectArcSdeCtl ctl = new ConnectArcSdeCtl();
+            Workbench wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
 }
