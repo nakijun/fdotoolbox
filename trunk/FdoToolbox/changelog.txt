@@ -4,6 +4,9 @@
 	- Data Preview: Add SQLite output format.
 	- Data Preview: Saved query results now have spatial context information included.
 	- Saved connections and tasks should now be compatible with any FDO version, as version number strings are omitted from any provider names.
+
+- Other:
+	- Fixed crash in data preview when querying in standard mode without a geometry property specified.
 	
 v0.7.0
 ------
