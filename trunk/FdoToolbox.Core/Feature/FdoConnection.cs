@@ -251,6 +251,8 @@ namespace FdoToolbox.Core.Feature
         {
             if (disposing)
             {
+                if(_caps != null)
+                    _caps.Dispose();
                 this.Close();
                 this.InternalConnection.Dispose();
             }

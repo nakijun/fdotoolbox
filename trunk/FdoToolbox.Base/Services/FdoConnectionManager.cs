@@ -79,9 +79,10 @@ namespace FdoToolbox.Base.Services
 
         public FdoToolbox.Core.Feature.FdoConnection GetConnection(string name)
         {
+            FdoConnection conn = null;
             if (_ConnectionDict.ContainsKey(name))
-                return _ConnectionDict[name];
-            return null;
+                conn = _ConnectionDict[name];
+            return conn;
         }
 
         public ICollection<string> GetConnectionNames()
