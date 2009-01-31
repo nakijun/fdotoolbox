@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CMD_ConnectArcSde" xml:space="preserve">
+    <value>Connect to ArcSDE</value>
+  </data>
   <data name="CMD_ConnectOdbc" xml:space="preserve">
     <value>Connect via ODBC</value>
   </data>
@@ -182,6 +185,9 @@
   </data>
   <data name="PROMPT_ENTER_CONNECTION" xml:space="preserve">
     <value>Enter the name of the new connection</value>
+  </data>
+  <data name="TITLE_CONNECT_ARCSDE" xml:space="preserve">
+    <value>Connect to ArcSDE</value>
   </data>
   <data name="TITLE_CONNECT_ODBC" xml:space="preserve">
     <value>Create ODBC Connection</value>

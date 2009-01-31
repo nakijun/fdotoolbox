@@ -61,6 +61,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to ArcSDE.
+        /// </summary>
+        internal static string CMD_ConnectArcSde {
+            get {
+                return ResourceManager.GetString("CMD_ConnectArcSde", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect via ODBC.
         /// </summary>
         internal static string CMD_ConnectOdbc {
@@ -255,6 +264,15 @@ namespace FdoToolbox.Express {
         internal static string PROMPT_ENTER_CONNECTION {
             get {
                 return ResourceManager.GetString("PROMPT_ENTER_CONNECTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect to ArcSDE.
+        /// </summary>
+        internal static string TITLE_CONNECT_ARCSDE {
+            get {
+                return ResourceManager.GetString("TITLE_CONNECT_ARCSDE", resourceCulture);
             }
         }
         

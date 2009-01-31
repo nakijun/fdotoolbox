@@ -46,6 +46,9 @@
                 <MenuItem id="ConnectOgr"
                           label="${res:CMD_ConnectOgr}"
                           class="FdoToolbox.Express.Commands.ConnectOgrCommand" />
+                <MenuItem id="ConnectArcSde"
+                          label="${res:CMD_ConnectArcSde}"
+                          class="FdoToolbox.Express.Commands.ConnectArcSdeCommand" />
             </MenuItem>
             <MenuItem id="ExpressCreate"
                       label="Create"
