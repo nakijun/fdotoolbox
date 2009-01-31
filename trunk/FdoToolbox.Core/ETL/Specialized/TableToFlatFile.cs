@@ -34,6 +34,18 @@ namespace FdoToolbox.Core.ETL.Specialized
     /// </summary>
     public class TableToFlatFile : FdoSpecializedEtlProcess
     {
+        private int _ReportFrequency = 50;
+
+        /// <summary>
+        /// Gets or sets the frequency at which progress feedback is made
+        /// </summary>
+        /// <value>The report frequency.</value>
+        public int ReportFrequency
+        {
+            get { return _ReportFrequency; }
+            set { _ReportFrequency = value; }
+        }
+
         private FdoFeatureTable _table;
         private string _outputFile;
 
@@ -49,6 +61,20 @@ namespace FdoToolbox.Core.ETL.Specialized
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="TableToFlatFile"/> class.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="file">The file.</param>
+        /// <param name="reportFrequency">The report frequency.</param>
+        public TableToFlatFile(FdoFeatureTable table, string file, int reportFrequency)
+            : this(table, file)
+        {
+            _ReportFrequency = reportFrequency;
+        }
+
+        private FdoConnection _outConn;
+
+        /// <summary>
         /// Initializes this instance.
         /// </summary>
         protected override void Initialize()
@@ -57,12 +83,12 @@ namespace FdoToolbox.Core.ETL.Specialized
             if (!ExpressUtility.CreateFlatFileDataSource(_outputFile))
                 throw new FdoETLException(ResourceUtil.GetStringFormatted("ERR_CANNOT_CREATE_DATA_FILE", _outputFile));
 
-            FdoConnection conn = ExpressUtility.CreateFlatFileConnection(_outputFile);
-            conn.Open();
+            _outConn = ExpressUtility.CreateFlatFileConnection(_outputFile);
+            _outConn.Open();
 
             ClassDefinition cd = _table.CreateClassDefinition(true);
 
-            using (FdoFeatureService service = conn.CreateFeatureService())
+            using (FdoFeatureService service = _outConn.CreateFeatureService())
             {
                 SendMessage("Applying schema to target");
                 FeatureSchema schema = new FeatureSchema("Schema1", "Default schema");
@@ -71,10 +97,10 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
 
             SendMessage("Copying any attached spatial contexts");
-            ExpressUtility.CopyAllSpatialContexts(_table.SpatialContexts, conn, true);
+            ExpressUtility.CopyAllSpatialContexts(_table.SpatialContexts, _outConn, true);
 
             Register(new FdoFeatureTableInputOperation(_table));
-            Register(new FdoOutputOperation(conn, cd.Name));
+            Register(new FdoOutputOperation(_outConn, cd.Name));
         }
 
         /// <summary>
@@ -84,7 +110,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <param name="dictionary">The dictionary.</param>
         protected override void OnFeatureProcessed(FdoOperationBase op, FdoRow dictionary)
         {
-            if (op.Statistics.OutputtedRows % 50 == 0)
+            if (op.Statistics.OutputtedRows % this.ReportFrequency == 0)
             {
                 if (op is FdoOutputOperation)
                 {
@@ -105,6 +131,16 @@ namespace FdoToolbox.Core.ETL.Specialized
                 string className = (op as FdoOutputOperation).ClassName;
                 SendMessageFormatted("[Conversion => {0}]: {1} features written in {2}", className, op.Statistics.OutputtedRows, op.Statistics.Duration.ToString());
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _outConn.Close();
+                _outConn.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

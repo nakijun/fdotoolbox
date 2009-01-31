@@ -45,6 +45,18 @@ namespace FdoToolbox.Core.ETL.Specialized
     /// </summary>
     public class FdoJoin : FdoSpecializedEtlProcess
     {
+        private int _ReportFrequency = 50;
+
+        /// <summary>
+        /// Gets or sets the frequency at which progress feedback is made
+        /// </summary>
+        /// <value>The report frequency.</value>
+        public int ReportFrequency
+        {
+            get { return _ReportFrequency; }
+            set { _ReportFrequency = value; }
+        }
+
         private FdoJoinOptions _options;
 
         /// <summary>
@@ -58,10 +70,17 @@ namespace FdoToolbox.Core.ETL.Specialized
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FdoJoin"/> class.
         /// </summary>
-        /// <param name="options"></param>
+        /// <param name="options">The options.</param>
         public FdoJoin(FdoJoinOptions options) { _options = options; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoJoin"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="reportFrequency">The report frequency.</param>
+        public FdoJoin(FdoJoinOptions options, int reportFrequency) : this(options) { _ReportFrequency = reportFrequency; }
 
         /// <summary>
         /// Initializes this instance.
@@ -233,7 +252,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <param name="dictionary">The dictionary.</param>
         protected override void OnFeatureProcessed(FdoOperationBase op, FdoRow dictionary)
         {
-            if (op.Statistics.OutputtedRows % 50 == 0)
+            if (op.Statistics.OutputtedRows % this.ReportFrequency == 0)
             {
                 if (op is FdoOutputOperation)
                 {
