@@ -65,13 +65,22 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FdoConnection"/> class.
         /// </summary>
-        /// <param name="provider">The provider name</param>
-        /// <param name="connectionString">The connection string</param>
-        public FdoConnection(string provider, string connectionString)
+        /// <param name="provider">The provider name.</param>
+        public FdoConnection(string provider)
         {
             this.InternalConnection = FeatureAccessManager.GetConnectionManager().CreateConnection(provider);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoConnection"/> class.
+        /// </summary>
+        /// <param name="provider">The provider name.</param>
+        /// <param name="connectionString">The connection string.</param>
+        public FdoConnection(string provider, string connectionString)
+            : this(provider)
+        {
             this.InternalConnection.ConnectionString = connectionString;
         }
 

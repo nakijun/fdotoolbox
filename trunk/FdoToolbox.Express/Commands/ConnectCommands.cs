@@ -176,4 +176,24 @@ namespace FdoToolbox.Express.Commands
             wb.ShowContent(ctl, ViewRegion.Dialog);
         }
     }
+
+    public class ConnectMySqlCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            ConnectMySqlCtl ctl = new ConnectMySqlCtl();
+            Workbench wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
+
+    public class ConnectPostGisCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            ConnectPostGisCtl ctl = new ConnectPostGisCtl();
+            Workbench wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
 }
