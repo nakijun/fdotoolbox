@@ -50,6 +50,9 @@ namespace FdoToolbox.Express.Controls
         {
             try
             {
+                if (_conn.State != FdoConnectionState.Closed)
+                    _conn.Close();
+
                 _conn.ConnectionString = string.Format("Server={0};Instance={1};Username={2};Password={3}", _view.Server, _view.Instance, _view.Username, _view.Password);
                 if (_conn.Open() != FdoConnectionState.Pending)
                 {
