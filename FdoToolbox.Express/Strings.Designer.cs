@@ -70,6 +70,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to MySQL.
+        /// </summary>
+        internal static string CMD_ConnectMySql {
+            get {
+                return ResourceManager.GetString("CMD_ConnectMySql", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect via ODBC.
         /// </summary>
         internal static string CMD_ConnectOdbc {
@@ -84,6 +93,15 @@ namespace FdoToolbox.Express {
         internal static string CMD_ConnectOgr {
             get {
                 return ResourceManager.GetString("CMD_ConnectOgr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect to PostGIS.
+        /// </summary>
+        internal static string CMD_ConnectPostGis {
+            get {
+                return ResourceManager.GetString("CMD_ConnectPostGis", resourceCulture);
             }
         }
         
@@ -277,6 +295,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to MySQL.
+        /// </summary>
+        internal static string TITLE_CONNECT_MYSQL {
+            get {
+                return ResourceManager.GetString("TITLE_CONNECT_MYSQL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create ODBC Connection.
         /// </summary>
         internal static string TITLE_CONNECT_ODBC {
@@ -291,6 +318,15 @@ namespace FdoToolbox.Express {
         internal static string TITLE_CONNECT_OGR {
             get {
                 return ResourceManager.GetString("TITLE_CONNECT_OGR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect to PostGIS.
+        /// </summary>
+        internal static string TITLE_CONNECT_POSTGIS {
+            get {
+                return ResourceManager.GetString("TITLE_CONNECT_POSTGIS", resourceCulture);
             }
         }
         

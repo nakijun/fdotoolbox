@@ -97,9 +97,16 @@ namespace FdoToolbox.Base.Controls
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            if (_presenter.CreateDataStore())
+            try
             {
-                base.Close();
+                if (_presenter.CreateDataStore())
+                {
+                    base.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageService.ShowError(ex.Message);
             }
         }
 

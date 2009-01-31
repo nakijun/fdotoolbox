@@ -263,7 +263,7 @@ namespace FdoToolbox.Core.Feature
         /// <param name="conn"></param>
         public FdoFeatureService(IConnection conn)
         {
-            if (conn.ConnectionState != ConnectionState.ConnectionState_Open)
+            if (conn.ConnectionState == ConnectionState.ConnectionState_Closed)
                 throw new FeatureServiceException(Res.GetString("ERR_CONNECTION_NOT_OPEN"));
             _conn = conn;
             _GeomFactory = new FgfGeometryFactory();

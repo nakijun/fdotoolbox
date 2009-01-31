@@ -49,6 +49,12 @@
                 <MenuItem id="ConnectArcSde"
                           label="${res:CMD_ConnectArcSde}"
                           class="FdoToolbox.Express.Commands.ConnectArcSdeCommand" />
+                <MenuItem id="ConnectPostGis"
+                          label="${res:CMD_ConnectPostGis}"
+                          class="FdoToolbox.Express.Commands.ConnectPostGisCommand" />
+                <MenuItem id="ConnectMySql"
+                          label="${res:CMD_ConnectMySql}"
+                          class="FdoToolbox.Express.Commands.ConnectMySqlCommand" />
             </MenuItem>
             <MenuItem id="ExpressCreate"
                       label="Create"

@@ -80,6 +80,20 @@
       <DependentUpon>ConnectOgrCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectOgrPresentation.cs" />
+    <Compile Include="Controls\ConnectMySqlCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectMySqlCtl.Designer.cs">
+      <DependentUpon>ConnectMySqlCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectMySqlPresentation.cs" />
+    <Compile Include="Controls\ConnectPostGisCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectPostGisCtl.Designer.cs">
+      <DependentUpon>ConnectPostGisCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectPostGisPresentation.cs" />
     <Compile Include="Controls\CreateSqliteCtlPresentation.cs" />
     <Compile Include="Controls\CreateSqliteCtl.cs">
       <SubType>UserControl</SubType>
@@ -150,6 +164,14 @@
     <EmbeddedResource Include="Controls\ConnectOgrCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ConnectOgrCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ConnectMySqlCtl.resx">
+      <DependentUpon>ConnectMySqlCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ConnectPostGisCtl.resx">
+      <DependentUpon>ConnectPostGisCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\CreateSqliteCtl.resx">
       <DependentUpon>CreateSqliteCtl.cs</DependentUpon>
