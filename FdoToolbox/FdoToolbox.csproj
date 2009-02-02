@@ -56,6 +56,21 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="..\FdoToolbox.Core\Schemas\BulkCopyTask.xsd">
+      <Link>Schemas\BulkCopyTask.xsd</Link>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\FdoToolbox.Core\Schemas\JoinTask.xsd">
+      <Link>Schemas\JoinTask.xsd</Link>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\FdoToolbox.Core\Schemas\SpatialConnection.xsd">
+      <Link>Schemas\SpatialConnection.xsd</Link>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
