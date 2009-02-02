@@ -64,22 +64,27 @@
     <ProjectReference Include="..\FdoToolbox.Base\FdoToolbox.Base.csproj">
       <Project>{9A3DA959-2B7E-4407-9DF8-DA56178D211A}</Project>
       <Name>FdoToolbox.Base</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\FdoToolbox.Core\FdoToolbox.Core.csproj">
       <Project>{6AAE821C-D27F-47D2-8F1B-D748AF145B0A}</Project>
       <Name>FdoToolbox.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Thirdparty\SharpDevelop\ICSharpCode.Core\ICSharpCode.Core.csproj">
       <Project>{35CEF10F-2D4C-45F2-9DD1-161E0FEC583C}</Project>
       <Name>ICSharpCode.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Thirdparty\SharpMap\SharpMap.UI\SharpMap.UI.csproj">
       <Project>{DD1CC1DB-4BF9-4C88-A100-733D84795F3A}</Project>
       <Name>SharpMap.UI</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Thirdparty\SharpMap\SharpMap\SharpMap.csproj">
       <Project>{C83777FC-AABB-47D9-911F-D76255D4D541}</Project>
       <Name>SharpMap</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

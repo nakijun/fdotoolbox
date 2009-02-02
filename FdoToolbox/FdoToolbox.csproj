@@ -56,6 +56,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="..\FdoToolbox.Base\cscatalog.sqlite">
+      <Link>cscatalog.sqlite</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\FdoToolbox.Core\Schemas\BulkCopyTask.xsd">
       <Link>Schemas\BulkCopyTask.xsd</Link>
       <SubType>Designer</SubType>

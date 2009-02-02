@@ -306,6 +306,7 @@
     <Compile Include="NameValuePair.cs" />
     <Compile Include="Services\ManagerBase.cs" />
     <Compile Include="Services\NamingService.cs" />
+    <Compile Include="Services\AddInAssemblyResolver.cs" />
     <Compile Include="Services\Preferences.cs" />
     <Compile Include="Services\CoordSysCatalog.cs" />
     <Compile Include="Services\FdoConnectionManager.cs" />
@@ -354,7 +355,6 @@
   <ItemGroup>
     <Content Include="FdoToolbox.Base.addin" />
     <None Include="cscatalog.sqlite">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\wrench.ico" />
     <None Include="Resources\wrench_orange.png" />
