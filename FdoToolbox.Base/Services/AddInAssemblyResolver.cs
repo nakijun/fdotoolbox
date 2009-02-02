@@ -29,10 +29,33 @@ namespace FdoToolbox.Base.Services
 {
     /// <summary>
     /// This is a helper class that aids in resolving assemblies that are outside
-    /// of the application's directory or the Global Assembly Cache
+    /// of the application's directory or the Global Assembly Cache.
     /// </summary>
-    public class AddInAssemblyResolver
+    /// <remarks>
+    /// This class is designed to be used from within an add-in context. Do not 
+    /// use <see cref="FdoAssemblyResolver"/> from within an add-in context. Only 
+    /// use <see cref="FdoAssemblyResolver"/> when using the Core API from a standalone 
+    /// context (outside of FDO Toolbox)
+    /// </remarks>
+    public sealed class AddInAssemblyResolver
     {
+        static AddInAssemblyResolver()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(OnAssemblyResolve);
+        }
+
+        static Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            string asmName = args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll";
+            if (assemblyPaths.ContainsKey(asmName))
+            {
+                return Assembly.LoadFrom(Path.Combine(assemblyPaths[asmName], asmName));
+            }
+            return null;
+        }
+
+        static Dictionary<string, string> assemblyPaths = new Dictionary<string, string>();
+
         /// <summary>
         /// Registers the libraries. Use this method if your add-in references additional
         /// libraries that are not part of the FDO Toolbox installation.
@@ -44,35 +67,11 @@ namespace FdoToolbox.Base.Services
         /// <param name="assemblies">The assemblies to register</param>
         public static void RegisterLibraries(string path, params string[] assemblies)
         {
-            AppDomain.CurrentDomain.AssemblyResolve += delegate(object sender, ResolveEventArgs args)
+            foreach (string asm in assemblies)
             {
-                string fdoPath = path;
-
-                //Retrieve the list of referenced assemblies in an array of AssemblyName.
-                Assembly MyAssembly, objExecutingAssemblies;
-                string strTempAssmbPath = "";
-
-                objExecutingAssemblies = Assembly.GetExecutingAssembly();
-                AssemblyName[] arrReferencedAssmbNames = objExecutingAssemblies.GetReferencedAssemblies();
-
-                //Loop through the array of referenced assembly names.
-                foreach (AssemblyName strAssmbName in arrReferencedAssmbNames)
-                {
-                    //Check for the assembly names that have raised the "AssemblyResolve" event.
-                    if (strAssmbName.FullName.Substring(0, strAssmbName.FullName.IndexOf(",")) == args.Name.Substring(0, args.Name.IndexOf(",")))
-                    {
-                        //Build the path of the assembly from where it has to be loaded.				
-                        strTempAssmbPath = Path.Combine(fdoPath, args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll");
-                        break;
-                    }
-
-                }
-                //Load the assembly from the specified path. 					
-                MyAssembly = Assembly.LoadFrom(strTempAssmbPath);
-
-                //Return the loaded assembly.
-                return MyAssembly;
-            };
+                if(!assemblyPaths.ContainsKey(asm))
+                    assemblyPaths.Add(asm, path);
+            }
         }
     }
 }
