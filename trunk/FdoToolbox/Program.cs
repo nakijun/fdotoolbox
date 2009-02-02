@@ -95,8 +95,8 @@ namespace FdoToolbox
                 fdoPath = Path.Combine(FileUtility.ApplicationRootPath, "FDO");
                 Preferences.FdoPath = fdoPath;
             }
-            //FdoAssemblyResolver.SetFdoPath(fdoPath);
-            FdoAssemblyResolver.InitializeFdo(fdoPath);
+            AddInAssemblyResolver.RegisterLibraries(fdoPath, "OSGeo.FDO.dll", "OSGeo.FDO.Common.dll", "OSGeo.FDO.Geometry.dll", "OSGeo.FDO.Spatial.dll");
+
             LoggingService.Info("FDO path set to: " + fdoPath);
 
             LoggingService.Info("Loading AddInTree...");
