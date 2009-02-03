@@ -22,26 +22,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Reflection;
-using System.IO;
+using NUnit.Framework;
 
-namespace FdoToolbox.Core.Tests
+namespace FdoToolbox.Base.Tests
 {
-    public sealed class TestHelper
+    [TestFixture]
+    public class ManagerTests
     {
-        private static string _asmPath;
-
-        public static string CurrentPath
-        {
-            get
-            {
-                if (_asmPath == null)
-                {
-                    UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
-                    _asmPath = Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
-                }
-                return _asmPath;
-            }
-        }
     }
 }
