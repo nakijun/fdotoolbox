@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoUtil", "FdoUtil\FdoUtil.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Raster", "FdoToolbox.Raster\FdoToolbox.Raster.csproj", "{C6D1F465-958B-4C6A-8514-1E413B81A18E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Base.Tests", "FdoToolbox.Base.Tests\FdoToolbox.Base.Tests.csproj", "{5E033A7E-77C1-4877-A4E1-8F4164601481}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{C6D1F465-958B-4C6A-8514-1E413B81A18E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6D1F465-958B-4C6A-8514-1E413B81A18E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6D1F465-958B-4C6A-8514-1E413B81A18E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,5 +111,6 @@ Global
 		{C83777FC-AABB-47D9-911F-D76255D4D541} = {7A40B29A-0ACD-4DA3-A0A6-52C1456B55BB}
 		{DD1CC1DB-4BF9-4C88-A100-733D84795F3A} = {7A40B29A-0ACD-4DA3-A0A6-52C1456B55BB}
 		{A4AEC2DB-276F-4814-8D5D-E8101187E9D1} = {41738CE5-A068-49D2-94D5-1CE6EB3C2683}
+		{5E033A7E-77C1-4877-A4E1-8F4164601481} = {41738CE5-A068-49D2-94D5-1CE6EB3C2683}
 	EndGlobalSection
 EndGlobal

@@ -22,26 +22,54 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Reflection;
-using System.IO;
+using NUnit.Framework;
+using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Core.Tests
 {
-    public sealed class TestHelper
+    [TestFixture]
+    public class FeatureTests
     {
-        private static string _asmPath;
-
-        public static string CurrentPath
+        [Test]
+        public void TestClassToTable()
         {
-            get
-            {
-                if (_asmPath == null)
-                {
-                    UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
-                    _asmPath = Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
-                }
-                return _asmPath;
-            }
+            Assert.Fail("Not Implemented");
+        }
+
+        [Test]
+        public void TestFeatureClassToTable()
+        {
+            Assert.Fail("Not Implemented");
+        }
+
+        [Test]
+        public void TestTableToClass()
+        {
+            Assert.Fail("Not Implemented");
+        }
+
+        [Test]
+        public void TestRawTableToClass()
+        {
+            Assert.Fail("Not Implemented");
+        }
+
+        [Test]
+        public void TestTableToFeatureClass()
+        {
+            Assert.Fail("Not Implemented");
+        }
+
+        [Test]
+        public void TestBadRawTable()
+        {
+            Assert.Fail("Not Implemented");
+        }
+
+        [Test]
+        public void TestBadRawTable2()
+        {
+            Assert.Fail("Not Implemented");
         }
     }
 }
