@@ -17,9 +17,13 @@ namespace FdoToolbox.Core.Tests
     // Most of the FdoFeatureService methods wrapper existing FDO APIs
     //
     // This test fixture only concerns methods/functionality of FdoFeatureService
-    // that are unique to this class
+    // that are unique to this class, namely:
     //
-    //
+    // - Schema alteration
+    // - Schema validity checking
+    // - Schema cloning
+    // - Class cloning
+    // - Property cloning
 
     [TestFixture]
     public class FeatureServiceTests
