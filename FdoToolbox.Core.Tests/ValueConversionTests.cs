@@ -18,7 +18,7 @@ namespace FdoToolbox.Core.Tests
             DataValue dv = null;
 
             //To BLOB
-            dv = ValueConverter.ConvertDataValue(b, DataType.DataType_Boolean, true, true);
+            dv = ValueConverter.ConvertDataValue(b, DataType.DataType_BLOB, true, true);
             Assert.IsNull(dv);
 
             //To Boolean

@@ -10,7 +10,7 @@ SET INSTALL=%CD%\Install
 SET FDOINFO=%CD%\FdoInfo
 SET FDOUTIL=%CD%\FdoUtil
 SET TESTAPP=%CD%\TestApp
-SET TESTLIBRARY=%CD%\TestLibrary
+SET TESTLIBRARY=%CD%\FdoToolbox.Core.Tests
 SET TESTDATA=%CD%\UnitTestData
 SET TESTPATH=%CD%\out\Test
 SET FDOTOOLBOX=%CD%\FdoToolbox
@@ -146,12 +146,12 @@ goto quit
 
 :test
 echo Building unit tests
-msbuild.exe /p:Configuration=Test %VERBOSITY% %TESTLIBRARY%\TestLibrary.csproj
+msbuild.exe /p:Configuration=Test %VERBOSITY% %TESTLIBRARY%\FdoToolbox.Core.Tests.csproj
 xcopy /S /Y /I %TESTDATA%\*.* %TESTPATH%
 xcopy /S /Y /I %THIRDPARTY%\Fdo\*.* %TESTPATH%
 xcopy /S /Y /I %THIRDPARTY%\NUnit\bin\*.* %TESTPATH%
 echo Running unit tests
-%TESTPATH%\nunit-console.exe /labels /wait /exclude=Stress,RawFdo %TESTPATH%\TestLibrary.dll
+%TESTPATH%\nunit-console.exe /labels /wait /exclude=Stress,RawFdo %TESTPATH%\FdoToolbox.Core.Tests.dll
 goto quit
 
 :custom_error
