@@ -78,72 +78,11 @@ namespace FdoToolbox.Base.Controls
             _explorer.RegisterImage(IMG_RASTER_PROPERTY);
             _explorer.RegisterImage(IMG_SCHEMA);
 
-            _explorer.AfterSelection += new EventHandler(OnAfterSelection);
-
             _explorer.RegisterRootNode(RootNodeName, "FDO Data Sources", "database_connect", "/ObjectExplorer/ContextMenus/FdoConnections");
             _explorer.RegisterContextMenu(NODE_CONNECTION, PATH_SELECTED_CONNECTION);
             _explorer.RegisterContextMenu(NODE_SCHEMA, PATH_SELECTED_SCHEMA);
             _explorer.RegisterContextMenu(NODE_CLASS, PATH_SELECTED_CLASS);
             //_explorer.RegisterContextMenu(NODE_PROPERTY, "/ObjectExplorer/ContextMenus/SelectedProperty");
-        }
-
-        void OnAfterSelection(object sender, EventArgs e)
-        {
-            //We want to selectively disable commands if the connection in context does not support
-            //such capability
-            //TreeNode node = _explorer.GetSelectedNode();
-            //FdoConnectionManager mgr = ServiceManager.Services.GetService<FdoConnectionManager>();
-            //FdoConnection conn = null;
-            //ResetCommandState();
-            //switch (node.Level)
-            //{
-            //    case 1: //Connections
-            //        conn = mgr.GetConnection(node.Name);
-            //        break;
-            //    case 2: //Schemas
-            //        conn = mgr.GetConnection(node.Parent.Name);
-            //        break;
-            //    case 3: //Classes
-            //        conn = mgr.GetConnection(node.Parent.Parent.Name);
-            //        break;
-            //    case 4: //Property
-            //        conn = mgr.GetConnection(node.Parent.Parent.Parent.Name);
-            //        break;
-            //    default: //Unknown node or root node. Do nothing
-            //        return;
-            //}
-
-            //Toggle state of capability sensitive commands
-            //CheckConnectionCommands(conn);
-            //CheckSchemaCommands(conn);
-            //CheckClassCommands(conn);
-        }
-
-        private void ResetCommandState()
-        {
-            //LoggingService.Debug("Resetting command state");
-            //throw new Exception("The method or operation is not implemented.");
-            ArrayList cmds = AddInTree.BuildItems(PATH_SELECTED_CLASS, this, false);
-            foreach (object c in cmds)
-            {
-                ToolStripMenuItem t = c as ToolStripMenuItem;
-                if (t != null)
-                    t.Enabled = true;
-            }
-            cmds = AddInTree.BuildItems(PATH_SELECTED_CONNECTION, this, false);
-            foreach (object c in cmds)
-            {
-                ToolStripMenuItem t = c as ToolStripMenuItem;
-                if (t != null)
-                    t.Enabled = true;
-            }
-            cmds = AddInTree.BuildItems(PATH_SELECTED_SCHEMA, this, false);
-            foreach (object c in cmds)
-            {
-                ToolStripMenuItem t = c as ToolStripMenuItem;
-                if (t != null)
-                    t.Enabled = true;
-            }
         }
 
         void OnConnectionRefreshed(object sender, FdoToolbox.Core.EventArgs<string> e)
