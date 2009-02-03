@@ -146,47 +146,6 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        private void CheckClassCommands(FdoConnection conn)
-        {
-            //LoggingService.Debug("Checking class command state");
-            //throw new Exception("The method or operation is not implemented.");
-            ArrayList cmds = AddInTree.BuildItems(PATH_SELECTED_CLASS, this, false);
-            foreach (object c in cmds)
-            {
-                //if (c is InsertDataCommand)
-                //{
-                //    int [] cmds = conn.Capabilities.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList);
-                //    c.IsEnabled = Array.IndexOf<int>(cmds, (int)CommandType.CommandType_Insert) >= 0;
-                //}
-            }
-        }
-
-        private void CheckSchemaCommands(FdoConnection conn)
-        {
-            //LoggingService.Debug("Checking schema command state");
-            //throw new Exception("The method or operation is not implemented.");
-            //ArrayList cmds = AddInTree.BuildItems(PATH_SELECTED_SCHEMA, this, false);
-            //foreach (object c in cmds)
-            //{
-            //    if (m.Command is DeleteSchemaCommand)
-            //    {
-            //        int[] cds = conn.Capabilities.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList);
-            //        m.Enabled = Array.IndexOf<int>(cds, (int)CommandType.CommandType_Delete) >= 0;
-            //    }
-            //    //else if (c is ManageSchemaCommand)
-            //    //{
-            //    //    bool? value = conn.Capabilities.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSchemaModification);
-            //    //    c.IsEnabled = value.HasValue ? value : false;
-            //    //}
-            //}
-        }
-
-        private void CheckConnectionCommands(FdoConnection conn)
-        {
-            //LoggingService.Debug("Checking connection command state");
-            //throw new Exception("The method or operation is not implemented.");
-        }
-
         void OnConnectionRefreshed(object sender, FdoToolbox.Core.EventArgs<string> e)
         {
             TreeNode root = _explorer.GetRootNode(RootNodeName);
