@@ -132,19 +132,42 @@ namespace FdoToolbox.Base.Controls
             FdoConnection conn = _connMgr.GetConnection(connNode.Name);
             if (conn != null)
             {
-                FdoFeatureService service = conn.CreateFeatureService();
-                connNode.ToolTipText = string.Format("Provider: {0}\nConnection String: {1}", conn.Provider, conn.ConnectionString);
-                FeatureSchemaCollection schemas = service.DescribeSchema();
-                foreach (FeatureSchema schema in schemas)
+                SetConnectionToolTip(connNode, conn);
+                using (FdoFeatureService service = conn.CreateFeatureService())
                 {
-                    TreeNode schemaNode = new TreeNode();
-                    schemaNode.Name = schemaNode.Text = schema.Name;
-                    schemaNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_SCHEMA);
-                    schemaNode.ImageKey = schemaNode.SelectedImageKey = IMG_SCHEMA;
-                    GetClassNodes(schema, schemaNode);
-                    connNode.Nodes.Add(schemaNode);
-                    schemaNode.Expand();
+                    FeatureSchemaCollection schemas = service.DescribeSchema();
+                    foreach (FeatureSchema schema in schemas)
+                    {
+                        TreeNode schemaNode = new TreeNode();
+                        schemaNode.Name = schemaNode.Text = schema.Name;
+                        schemaNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_SCHEMA);
+                        schemaNode.ImageKey = schemaNode.SelectedImageKey = IMG_SCHEMA;
+                        GetClassNodes(schema, schemaNode);
+                        connNode.Nodes.Add(schemaNode);
+                        schemaNode.Expand();
+                    }
                 }
+            }
+        }
+
+        private static void SetConnectionToolTip(TreeNode connNode, FdoConnection conn)
+        {
+            using (FdoFeatureService service = conn.CreateFeatureService())
+            {
+                List<string> ctxStrings = new List<string>();
+                ICollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                foreach (SpatialContextInfo sci in contexts)
+                {
+                    if (sci.IsActive)
+                        ctxStrings.Add("- " + sci.Name + " (Active)");
+                    else
+                        ctxStrings.Add("- " + sci.Name);
+                }
+                connNode.ToolTipText = string.Format(
+                    "Provider: {0}\nConnection String: {1}\nSpatial Contexts:\n{2}",
+                    conn.Provider,
+                    conn.ConnectionString,
+                    ctxStrings.Count > 0 ? string.Join("\n", ctxStrings.ToArray()) : "none");
             }
         }
 
