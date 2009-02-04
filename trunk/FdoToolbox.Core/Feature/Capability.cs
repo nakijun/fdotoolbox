@@ -112,6 +112,15 @@ namespace FdoToolbox.Core.Feature
 
         public void Dispose()
         {
+            commandCaps.Dispose();
+            connCaps.Dispose();
+            exprCaps.Dispose();
+            geomCaps.Dispose();
+            filterCaps.Dispose();
+            rasterCaps.Dispose();
+            schemaCaps.Dispose();
+            topoCaps.Dispose();
+
             commandCaps = null;
             connCaps = null;
             exprCaps = null;

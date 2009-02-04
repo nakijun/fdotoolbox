@@ -274,6 +274,9 @@
   <data name="FILTER_SDF_FILE" xml:space="preserve">
     <value>SDF Files (*.sdf)|*.sdf</value>
   </data>
+  <data name="FILTER_SHP" xml:space="preserve">
+    <value>SHP Files (*.shp)|*.shp</value>
+  </data>
   <data name="FILTER_XML_FILES" xml:space="preserve">
     <value>XML files (*.xml)|*.xml</value>
   </data>

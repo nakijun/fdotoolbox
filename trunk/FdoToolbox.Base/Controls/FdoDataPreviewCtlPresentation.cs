@@ -206,9 +206,16 @@ namespace FdoToolbox.Base.Controls
                                         feat[name] = reader.GetDouble(name);
                                         break;
                                     case FdoPropertyType.Geometry:
-                                        byte[] fgf = reader.GetGeometry(name);
-                                        OSGeo.FDO.Geometry.IGeometry geom = service.GeometryFactory.CreateGeometryFromFgf(fgf);
-                                        feat[name] = new FdoGeometry(geom);
+                                        try
+                                        {
+                                            byte[] fgf = reader.GetGeometry(name);
+                                            OSGeo.FDO.Geometry.IGeometry geom = service.GeometryFactory.CreateGeometryFromFgf(fgf);
+                                            feat[name] = new FdoGeometry(geom);
+                                        }
+                                        catch
+                                        {
+                                            feat[name] = DBNull.Value;
+                                        }
                                         break;
                                     case FdoPropertyType.Int16:
                                         feat[name] = reader.GetInt16(name);

@@ -29,6 +29,7 @@ using OSGeo.FDO.Commands;
 using OSGeo.FDO.Expression;
 using OSGeo.FDO.Schema;
 using Iesi.Collections.Generic;
+using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
@@ -154,14 +155,45 @@ namespace FdoToolbox.Core.ETL.Operations
             PropertyValueCollection propVals = insert.PropertyValues;
             foreach (FdoRow row in rows)
             {
-                row.Bind(propVals, _unWritableProperties);
+                Bind(row, propVals, _unWritableProperties);
+                insert.Prepare();
                 using (IFeatureReader reader = insert.Execute())
                 {
+                    reader.Close();
                     RaiseFeatureProcessed(row);
                 }
             }
             insert.Dispose();
             yield break;
+        }
+
+        private void Bind(FdoRow row, PropertyValueCollection propVals, HashedSet<string> ignoreProperties)
+        {
+            propVals.Clear();
+            foreach (string col in row.Columns)
+            {
+                if (row[col] != null && row[col] != DBNull.Value && !ignoreProperties.Contains(col))
+                {
+                    if (!row.IsGeometryProperty(col))
+                    {
+                        ValueExpression dv = ValueConverter.GetConvertedValue(row[col]);
+                        if (dv != null)
+                        {
+                            PropertyValue pv = new PropertyValue(col, dv);
+                            propVals.Add(pv);
+                        }
+                    }
+                    else
+                    {
+                        IGeometry geom = row[col] as IGeometry;
+                        if (geom != null)
+                        {
+                            PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                            propVals.Add(pv);
+                        }
+                    }
+                }
+            }
         }
     }
 }

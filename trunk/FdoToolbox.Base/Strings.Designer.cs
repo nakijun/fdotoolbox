@@ -527,6 +527,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SHP Files (*.shp)|*.shp.
+        /// </summary>
+        internal static string FILTER_SHP {
+            get {
+                return ResourceManager.GetString("FILTER_SHP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XML files (*.xml)|*.xml.
         /// </summary>
         internal static string FILTER_XML_FILES {
