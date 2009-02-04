@@ -1,11 +1,14 @@
 - Enhancements:
-	- Improve bulk copy insert performance by using cached IInsert (and its PropertyValues) instead of FdoFeatureService.InsertFeature(). Performance gains are significant, for SQLite performance is *lightning* fast as opposed to dog-slow in the previous release.
+	- Connection nodes in the Object Explorer now show tooltips
+	- Improve bulk copy insert performance by using cached IInsert (and its PropertyValues) instead of FdoFeatureService.InsertFeature(). Performance gains are significant, for SQLite performance is *lightning* fast as opposed to dog-slow using the previous approach.
 	- Add express module support for SQLite.
+	- Add express connection support for the following providers: ArcSDE, MySQL and PostGIS
 	- Data Preview: Add SQLite output format.
 	- Data Preview: Saved query results now have spatial context information included.
 	- Saved connections and tasks should now be compatible with any FDO version, as version number strings are omitted from any provider names.
 
 - Other:
+	- Now runs in 64-bit windows.
 	- Fixed crash in data preview when querying in standard mode without a geometry property specified.
 	
 v0.7.0

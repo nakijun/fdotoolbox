@@ -247,27 +247,7 @@ namespace FdoToolbox.Base.Controls
                 return;
             }
             string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_QUERY_RESULT"), ResourceService.GetString("FILTER_SDF_FILE"));
-            if (!string.IsNullOrEmpty(file))
-            {
-                //Ask for class name
-                if (string.IsNullOrEmpty(table.TableName))
-                {
-                    string name = MessageService.ShowInputBox(ResourceService.GetString("TITLE_SAVE_QUERY_AS"), ResourceService.GetString("MSG_SAVE_QUERY_AS"), "QueryResult");
-                    while(name != null && name.Trim() == string.Empty)
-                        name = MessageService.ShowInputBox(ResourceService.GetString("TITLE_SAVE_QUERY_AS"), ResourceService.GetString("MSG_SAVE_QUERY_AS"), "QueryResult");
-
-                    if (name == null)
-                        return;
-
-                    table.TableName = name;
-                }
-
-                using (TableToFlatFile proc = new TableToFlatFile(table, file))
-                {
-                    EtlProcessCtl ctl = new EtlProcessCtl(proc);
-                    Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
-                }
-            }
+            SaveQueryResult(table, file);
         }
 
         private void saveSQLite_Click(object sender, EventArgs e)
@@ -279,6 +259,11 @@ namespace FdoToolbox.Base.Controls
                 return;
             }
             string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_QUERY_RESULT"), ResourceService.GetString("FILTER_SQLITE"));
+            SaveQueryResult(table, file);
+        }
+
+        private static void SaveQueryResult(FdoFeatureTable table, string file)
+        {
             if (!string.IsNullOrEmpty(file))
             {
                 //Ask for class name

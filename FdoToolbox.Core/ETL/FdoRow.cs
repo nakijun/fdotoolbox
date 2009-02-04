@@ -285,97 +285,6 @@ namespace FdoToolbox.Core.ETL
         }
 
         /// <summary>
-        /// Converts this feature to a property value collection.
-        /// </summary>
-        /// <returns></returns>
-        public PropertyValueCollection ToPropertyValueCollection()
-        {
-            return ToPropertyValueCollection(null, null);
-        }
-
-        /// <summary>
-        /// Converts this feature to a property value collection.
-        /// </summary>
-        /// <param name="excludeProperties">A list of properties to exclude from the converted collection</param>
-        /// <returns></returns>
-        public PropertyValueCollection ToPropertyValueCollection(ICollection<string> excludeProperties)
-        {
-            return ToPropertyValueCollection(null, excludeProperties);
-        }
-
-        /// <summary>
-        /// Converts this feature to a property value collection.
-        /// </summary>
-        /// <param name="mappings">The mappings.</param>
-        /// <param name="excludeProperties">A list of properties to exclude from the converted collection</param>
-        /// <returns></returns>
-        public PropertyValueCollection ToPropertyValueCollection(NameValueCollection mappings, ICollection<string> excludeProperties)
-        {
-            PropertyValueCollection values = new PropertyValueCollection();
-            if (mappings == null)
-            {
-                foreach (string col in this.Columns)
-                {
-                    //No excluded properties or property not in exclusion list
-                    if (excludeProperties == null || excludeProperties.Count == 0 || !excludeProperties.Contains(col))
-                    {
-                        //Omit null values
-                        if (this[col] != null && this[col] != DBNull.Value)
-                        {
-                            if (!IsGeometryProperty(col))
-                            {
-                                ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
-                                if (dv != null)
-                                {
-                                    PropertyValue pv = new PropertyValue(col, dv);
-                                    values.Add(pv);
-                                }
-                            }
-                            else
-                            {
-                                IGeometry geom = this[col] as IGeometry;
-                                if (geom != null)
-                                {
-                                    PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
-                                    values.Add(pv);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                foreach (string col in this.Columns)
-                {
-                    //Omit null and un-mapped values
-                    if (mappings[col] != null && this[col] != null && this[col] != DBNull.Value)
-                    {
-                        if (!IsGeometryProperty(col))
-                        {
-                            ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
-                            if (dv != null)
-                            {
-                                PropertyValue pv = new PropertyValue(col, dv);
-                                values.Add(pv);
-                            }
-                        }
-                        else
-                        {
-                            IGeometry geom = this[col] as IGeometry;
-                            if (geom != null)
-                            {
-                                PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
-                                values.Add(pv);
-                            }
-                        }
-                    }
-                }
-            }
-            return values;
-        }
-
-        /// <summary>
         /// Converts this feature to a parameter value collection.
         /// </summary>
         /// <param name="prefix">The prefix.</param>
@@ -486,7 +395,14 @@ namespace FdoToolbox.Core.ETL
             this[name] = value;
         }
 
-        private bool IsGeometryProperty(string name)
+        /// <summary>
+        /// Determines whether [is geometry property] [the specified name].
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is geometry property] [the specified name]; otherwise, <c>false</c>.
+        /// </returns>
+        internal bool IsGeometryProperty(string name)
         {
             return _geometryProperties.Contains(name);
         }
@@ -554,36 +470,6 @@ namespace FdoToolbox.Core.ETL
                 }
             }
             return row;
-        }
-
-
-        internal void Bind(PropertyValueCollection propVals, HashedSet<string> ignoreProperties)
-        {
-            propVals.Clear();
-            foreach (string col in this.Columns)
-            {
-                if (this[col] != null && this[col] != DBNull.Value && !ignoreProperties.Contains(col))
-                {
-                    if (!IsGeometryProperty(col))
-                    {
-                        ValueExpression dv = ValueConverter.GetConvertedValue(this[col]);
-                        if (dv != null)
-                        {
-                            PropertyValue pv = new PropertyValue(col, dv);
-                            propVals.Add(pv);
-                        }
-                    }
-                    else
-                    {
-                        IGeometry geom = this[col] as IGeometry;
-                        if (geom != null)
-                        {
-                            PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
-                            propVals.Add(pv);
-                        }
-                    }
-                }
-            }
         }
     }
 }
