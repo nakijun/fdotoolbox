@@ -3,7 +3,7 @@
 
 === OSGeo.SQLite ===
 
- * Do not use SQLite as an output format for bulk copy or saving of query results. This is due to assumptions made by the SQLite provider that our insert operations do not satisfy (see: http://trac.osgeo.org/fdo/ticket/454)
+ * Do not use SQLite as an output format for bulk copy or saving of query results. This is due to assumptions made by the SQLite provider that our insert operations do not currently satisfy (see: http://trac.osgeo.org/fdo/ticket/454)
 
 === OSGeo.PostGIS ===
 
