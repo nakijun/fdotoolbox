@@ -142,6 +142,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy Spatial Contexts.
+        /// </summary>
+        internal static string CMD_CopySpatialContexts {
+            get {
+                return ResourceManager.GetString("CMD_CopySpatialContexts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create SDF file.
         /// </summary>
         internal static string CMD_CreateSdf {
@@ -250,6 +259,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Spatial Contexts copied.
+        /// </summary>
+        internal static string MSG_NO_SPATIAL_CONTEXTS_COPIED {
+            get {
+                return ResourceManager.GetString("MSG_NO_SPATIAL_CONTEXTS_COPIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SDF file created.
         /// </summary>
         internal static string MSG_SDF_CREATED {
@@ -264,6 +282,15 @@ namespace FdoToolbox.Express {
         internal static string MSG_SHP_CREATED {
             get {
                 return ResourceManager.GetString("MSG_SHP_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spatial Contexts copied.
+        /// </summary>
+        internal static string MSG_SPATIAL_CONTEXTS_COPIED {
+            get {
+                return ResourceManager.GetString("MSG_SPATIAL_CONTEXTS_COPIED", resourceCulture);
             }
         }
         
@@ -372,6 +399,15 @@ namespace FdoToolbox.Express {
         internal static string TITLE_CONNECTION_NAME {
             get {
                 return ResourceManager.GetString("TITLE_CONNECTION_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy Spatial Contexts.
+        /// </summary>
+        internal static string TITLE_COPY_SPATIAL_CONTEXTS {
+            get {
+                return ResourceManager.GetString("TITLE_COPY_SPATIAL_CONTEXTS", resourceCulture);
             }
         }
         

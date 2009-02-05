@@ -31,6 +31,7 @@ using FdoToolbox.Core.Utility;
 
 using Msg = ICSharpCode.Core.MessageService;
 using Res = ICSharpCode.Core.ResourceService;
+using FdoToolbox.Express.Controls;
 
 namespace FdoToolbox.Express.Commands
 {
@@ -79,6 +80,18 @@ namespace FdoToolbox.Express.Commands
                     }
                 }
             }
+        }
+    }
+
+    public class CopySpatialContextsCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            TreeNode connNode = wb.ObjectExplorer.GetSelectedNode();
+            string srcConnName = connNode.Name;
+            CopySpatialContextsCtl ctl = new CopySpatialContextsCtl(srcConnName);
+            wb.ShowContent(ctl, ViewRegion.Dialog);
         }
     }
 }
