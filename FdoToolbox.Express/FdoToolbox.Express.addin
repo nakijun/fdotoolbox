@@ -46,9 +46,11 @@
                 <MenuItem id="ConnectOgr"
                           label="${res:CMD_ConnectOgr}"
                           class="FdoToolbox.Express.Commands.ConnectOgrCommand" />
+                <!--
                 <MenuItem id="ConnectArcSde"
                           label="${res:CMD_ConnectArcSde}"
                           class="FdoToolbox.Express.Commands.ConnectArcSdeCommand" />
+                -->
                 <MenuItem id="ConnectPostGis"
                           label="${res:CMD_ConnectPostGis}"
                           class="FdoToolbox.Express.Commands.ConnectPostGisCommand" />
