@@ -93,8 +93,10 @@ call build_userdoc.bat
 copy userdoc.chm %FDOTOOLBOX_OUTDIR%
 popd
 
+:copy_thirdparty
 IF NOT EXIST %FDOTOOLBOX_OUTDIR%\FDO xcopy /S /Y /I %THIRDPARTY%\Fdo\*.* %FDOTOOLBOX_OUTDIR%\FDO
 
+:create_installer
 echo Creating installer
 pushd %INSTALL%
 makensis /DSLN_CONFIG=%TYPEBUILD% FdoToolbox.nsi
