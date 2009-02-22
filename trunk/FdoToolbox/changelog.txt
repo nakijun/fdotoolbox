@@ -1,14 +1,15 @@
 - Enhancements:
-	- Connection nodes in the Object Explorer now show tooltips
+	- Support for creating flat-file FDO data connections via drag and drop.
+	- Add new "Copy Spatial Contexts" command, allowing you to copy spatial contexts from one connection to another.
+	- Connection nodes in the Object Explorer now show all spatial contexts in tooltips
 	- Improve bulk copy insert performance by using cached IInsert (and its PropertyValues) instead of FdoFeatureService.InsertFeature(). Performance gains are significant, for SQLite performance is *lightning* fast as opposed to dog-slow using the previous approach.
 	- Add express module support for SQLite.
-	- Add express connection support for the following providers: ArcSDE, MySQL and PostGIS
+	- Add express connection support for the following providers: MySQL and PostGIS
 	- Data Preview: Add SQLite output format.
 	- Data Preview: Saved query results now have spatial context information included.
 	- Saved connections and tasks should now be compatible with any FDO version, as version number strings are omitted from any provider names.
 
 - Other:
-	- Now runs in 64-bit windows.
 	- Fixed crash in data preview when querying in standard mode without a geometry property specified.
 	
 v0.7.0
