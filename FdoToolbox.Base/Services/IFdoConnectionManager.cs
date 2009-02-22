@@ -73,7 +73,7 @@ namespace FdoToolbox.Base.Services
 
     public delegate void ConnectionEventHandler(object sender, EventArgs<string> e);
     public delegate void ConnectionRenamedEventHandler(object sender, ConnectionRenameEventArgs e);
-    public delegate void ConnectionBeforeRemoveHandler(object sender, ConnectionBeforeRenameEventArgs e);
+    public delegate void ConnectionBeforeRemoveHandler(object sender, ConnectionBeforeRemoveEventArgs e);
 
     public class ConnectionRenameEventArgs : EventArgs
     {
@@ -98,7 +98,7 @@ namespace FdoToolbox.Base.Services
         }
     }
 
-    public class ConnectionBeforeRenameEventArgs : CancelEventArgs
+    public class ConnectionBeforeRemoveEventArgs : CancelEventArgs
     {
         private readonly string _ConnectionName;
 
@@ -107,7 +107,7 @@ namespace FdoToolbox.Base.Services
             get { return _ConnectionName; }
         }
 
-        public ConnectionBeforeRenameEventArgs(string name)
+        public ConnectionBeforeRemoveEventArgs(string name)
         {
             _ConnectionName = name;
             this.Cancel = false;
