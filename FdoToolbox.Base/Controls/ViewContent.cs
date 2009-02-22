@@ -27,14 +27,43 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {
     public partial class ViewContent : UserControl
     {
+        private IFdoConnectionManager connMgr;
+
         public ViewContent()
         {
             InitializeComponent();
+            this.Disposed += new EventHandler(OnDisposed);
+            connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
+            connMgr.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(OnBeforeConnectionRemove);
+            connMgr.ConnectionAdded += new ConnectionEventHandler(OnConnectionAdded);
+            connMgr.ConnectionRefreshed += new ConnectionEventHandler(OnConnectionRefreshed);
+            connMgr.ConnectionRemoved += new ConnectionEventHandler(OnConnectionRemoved);
+            connMgr.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
+        }
+
+        protected virtual void OnConnectionRenamed(object sender, ConnectionRenameEventArgs e) { }
+
+        protected virtual void OnConnectionRemoved(object sender, FdoToolbox.Core.EventArgs<string> e) { }
+
+        protected virtual void OnConnectionRefreshed(object sender, FdoToolbox.Core.EventArgs<string> e) { }
+
+        protected virtual void OnConnectionAdded(object sender, FdoToolbox.Core.EventArgs<string> e) { }
+
+        protected virtual void OnBeforeConnectionRemove(object sender, ConnectionBeforeRemoveEventArgs e) { }
+
+        void OnDisposed(object sender, EventArgs e)
+        {
+            connMgr.BeforeConnectionRemove -= OnBeforeConnectionRemove;
+            connMgr.ConnectionAdded -= OnConnectionAdded;
+            connMgr.ConnectionRefreshed -= OnConnectionRefreshed;
+            connMgr.ConnectionRemoved -= OnConnectionRemoved;
+            connMgr.ConnectionRenamed -= OnConnectionRenamed;
         }
 
         public virtual bool CanClose
