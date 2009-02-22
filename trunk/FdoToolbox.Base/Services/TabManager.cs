@@ -54,7 +54,7 @@ namespace FdoToolbox.Base.Services
             Initialize(this, EventArgs.Empty);
         }
 
-        void OnBeforeRemoveConnection(object sender, ConnectionBeforeRenameEventArgs e)
+        void OnBeforeRemoveConnection(object sender, ConnectionBeforeRemoveEventArgs e)
         {
             FdoConnection conn = connMgr.GetConnection(e.ConnectionName);
             //Get all views that depend on connection

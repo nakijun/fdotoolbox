@@ -63,7 +63,7 @@ namespace FdoToolbox.Base.Services
         {
             if (_ConnectionDict.ContainsKey(name))
             {
-                ConnectionBeforeRenameEventArgs e = new ConnectionBeforeRenameEventArgs(name);
+                ConnectionBeforeRemoveEventArgs e = new ConnectionBeforeRemoveEventArgs(name);
                 this.BeforeConnectionRemove(this, e);
                 if (e.Cancel)
                     return;
