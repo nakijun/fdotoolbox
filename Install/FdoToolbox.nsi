@@ -16,6 +16,10 @@
 # File functions
 !include "FileFunc.nsh"
 
+!include "WordFunc.nsh"
+!insertmacro VersionCompare
+!include "LogicLib.nsh"
+
 ;-------------------------------
 ; Installer compilation settings
 ;-------------------------------
@@ -35,7 +39,7 @@ SetCompressor /SOLID /FINAL lzma
 
 !define SLN_DIR ".."
 !define SLN_THIRDPARTY "${SLN_DIR}\Thirdparty"
-!define RELEASE_VERSION "0.7.0"
+!define RELEASE_VERSION "0.7.1"
 
 # Installer vars
 !if ${SLN_CONFIG} == "Release"
@@ -117,6 +121,7 @@ LicenseData "${INST_SRC}\${INST_LICENSE}"
 
 # default section
 Section 
+
 	# set installation dir
 	SetOutPath $INSTDIR
 	
@@ -205,6 +210,41 @@ Section "uninstall"
 	RMDir /r "$SMPROGRAMS\${INST_PRODUCT}"
 SectionEnd
 
+Function .onInit
+	!insertmacro MUI_LANGDLL_DISPLAY
+  
+	; Check .NET version
+	Call GetDotNETVersion
+	Pop $0
+	
+	${If} $0 == "not found"
+	    MessageBox MB_OK|MB_ICONINFORMATION "${INST_PRODUCT} requires that the .net Framework 2.0 or above is installed. Please download and install the .net Framework 2.0 or above before installing ${INST_PRODUCT}."
+	    Quit
+	${EndIf}
+	
+	StrCpy $0 $0 "" 1 # skip "v"
+	
+	${VersionCompare} $0 "2.0" $1
+	${If} $1 == 2
+	    MessageBox MB_OK|MB_ICONINFORMATION "${INST_PRODUCT} requires that the .net Framework 2.0 or above is installed. Please download and install the .net Framework 2.0 or above before installing ${INST_PRODUCT}."
+	    Quit
+	${EndIf}
+	; Check VC++ 2008
+	
+FunctionEnd
+
 Function LaunchLink
 	ExecShell "" "$INSTDIR\${EXE_FDOTOOLBOX}"
+FunctionEnd
+
+Function GetDotNETVersion
+    Push $0
+    Push $1
+
+    System::Call "mscoree::GetCORVersion(w .r0, i ${NSIS_MAX_STRLEN}, *i) i .r1"
+    StrCmp $1 "error" 0 +2
+    StrCpy $0 "not found"
+
+    Pop $1
+    Exch $0
 FunctionEnd

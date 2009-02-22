@@ -42,6 +42,7 @@ namespace FdoToolbox
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(true);
+            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
 
             // The LoggingService is a small wrapper around log4net.
             // Our application contains a .config file telling log4net to write
@@ -110,8 +111,6 @@ namespace FdoToolbox
             // of the main form.
             log4net.Config.XmlConfigurator.Configure();
             Workbench.InitializeWorkbench();
-
-            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             
             try
             {
