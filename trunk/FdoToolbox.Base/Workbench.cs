@@ -44,10 +44,16 @@ namespace FdoToolbox.Base
 
         public static event EventHandler WorkbenchInitialized = delegate { };
 
+        private static bool _init = false;
+
         public static void InitializeWorkbench()
         {
-            instance = new Workbench();
-            WorkbenchInitialized(instance, EventArgs.Empty);
+            if (!_init)
+            {
+                instance = new Workbench();
+                _init = true;
+                WorkbenchInitialized(instance, EventArgs.Empty);
+            }
         }
  
         MenuStrip menu;
