@@ -2,7 +2,7 @@
 	- Support for creating flat-file FDO data connections via drag and drop.
 	- Add new "Copy Spatial Contexts" command, allowing you to copy spatial contexts from one connection to another.
 	- Connection nodes in the Object Explorer now show all spatial contexts in tooltips
-	- Improve bulk copy insert performance by using cached IInsert (and its PropertyValues) instead of FdoFeatureService.InsertFeature(). Performance gains are significant, for SQLite performance is *lightning* fast as opposed to dog-slow using the previous approach.
+	- Improved bulk copy insert performance by using cached IInsert (and its PropertyValues) instead of FdoFeatureService.InsertFeature(). Performance gains are significant, for SQLite performance is *lightning* fast as opposed to dog-slow using the previous approach.
 	- Add express module support for SQLite.
 	- Add express connection support for the following providers: MySQL and PostGIS
 	- Data Preview: Add SQLite output format.
@@ -11,6 +11,9 @@
 
 - Other:
 	- Fixed crash in data preview when querying in standard mode without a geometry property specified.
+	- Fix bulk copy property name mappings being ignored
+	- Visual C++ 2008 CRT dlls bundled alongside FDO. This removes the VC++ 2008 runtime library requirement.
+	- NSIS installer checks for .net Framework
 	
 v0.7.0
 ------
