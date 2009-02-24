@@ -291,5 +291,10 @@ namespace FdoToolbox.Base.Controls
         {
             return _presenter.ConnectionMatch(conn);
         }
+
+        public void SetBusyCursor(bool busy)
+        {
+            this.Cursor = busy ? Cursors.WaitCursor : Cursors.Default;
+        }
     }
 }

@@ -64,6 +64,8 @@ namespace FdoToolbox.Base.Controls
         bool MapEnabled { set; }
 
         void DisplayError(Exception exception);
+
+        void SetBusyCursor(bool busy);
     }
 
     public class FdoDataPreviewPresenter
@@ -107,6 +109,7 @@ namespace FdoToolbox.Base.Controls
 
         void RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            _view.SetBusyCursor(false);
             _timer.Stop();
             _view.CancelEnabled = false;
             _view.ClearEnabled = true;
@@ -334,6 +337,7 @@ namespace FdoToolbox.Base.Controls
 
         public void ExecuteQuery()
         {
+            _view.SetBusyCursor(true);
             object query = null;
             switch (_view.SelectedQueryMode)
             {

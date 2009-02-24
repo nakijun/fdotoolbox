@@ -129,7 +129,10 @@ namespace FdoToolbox.Base.Commands
                         return;
                 }
 
-                mgr.AddConnection(name, conn);
+                using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+                {
+                    mgr.AddConnection(name, conn);
+                }
             }
         }
     }
@@ -146,7 +149,10 @@ namespace FdoToolbox.Base.Commands
                 FdoConnection conn = mgr.GetConnection(connNode.Name);
                 using (FdoFeatureService service = conn.CreateFeatureService())
                 {
-                    service.LoadSchemasFromXml(path);
+                    using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+                    {
+                        service.LoadSchemasFromXml(path);
+                    }
                     MessageService.ShowMessageFormatted(Res.GetString("MSG_SCHEMA_LOADED"), connNode.Name, path);
                     Log.InfoFormatted(Res.GetString("MSG_SCHEMA_LOADED"), connNode.Name, path);
                 }
