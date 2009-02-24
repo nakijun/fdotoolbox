@@ -83,9 +83,12 @@ namespace FdoToolbox.Base.Controls
                     //(eg. Saved connections, saved tasks, etc)
                     try
                     {
-                        FdoConnection conn = ExpressUtility.CreateFlatFileConnection(file);
-                        string name = namer.GetDefaultConnectionName(conn.Provider);
-                        connMgr.AddConnection(name, conn);
+                        using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+                        {
+                            FdoConnection conn = ExpressUtility.CreateFlatFileConnection(file);
+                            string name = namer.GetDefaultConnectionName(conn.Provider);
+                            connMgr.AddConnection(name, conn);
+                        }
                     }
                     catch (Exception ex)
                     {

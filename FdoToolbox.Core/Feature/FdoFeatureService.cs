@@ -1837,6 +1837,55 @@ namespace FdoToolbox.Core.Feature
             }
             return inserted;
         }
+        
+        /// <summary>
+        /// Deletes features from a feature class. The delete operation will run as-is, without a transaction.
+        /// </summary>
+        /// <param name="className">The feature class</param>
+        /// <param name="filter">The filter that determines which features will be deleted</param>
+        /// <returns></returns>
+        public int DeleteFeatures(string className, string filter)
+        {
+            return DeleteFeatures(className, filter, false);
+        }
+
+        /// <summary>
+        /// Deletes features from a feature class
+        /// </summary>
+        /// <param name="className">The feature class</param>
+        /// <param name="filter">The filter that determines which features will be deleted</param>
+        /// <param name="useTransaction">If true, the delete operation will run in a transaction. Will not use transactions if false or not supported</param>
+        /// <returns></returns>
+        public int DeleteFeatures(string className, string filter, bool useTransaction)
+        {
+            if (!SupportsCommand(CommandType.CommandType_Delete))
+                throw new FeatureServiceException(Res.GetStringFormatted("ERR_UNSUPPORTED_CMD", CommandType.CommandType_Delete));
+
+            bool useTrans = (useTransaction && this.Connection.ConnectionCapabilities.SupportsConfiguration());
+
+            int deleted = 0;
+
+            using (IDelete del = CreateCommand<IDelete>(CommandType.CommandType_Delete))
+            {
+                del.SetFeatureClassName(className);
+                del.SetFilter(filter);
+
+                if (useTrans)
+                {
+                    using (ITransaction trans = this.Connection.BeginTransaction())
+                    {
+                        deleted = del.Execute();
+                        trans.Commit();
+                    }
+                }
+                else
+                {
+                    deleted = del.Execute();
+                }
+            }
+
+            return deleted;
+        }
 
         /// <summary>
         /// Inserts a new feature into the given feature class

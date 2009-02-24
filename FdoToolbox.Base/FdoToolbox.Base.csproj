@@ -233,6 +233,7 @@
       <DependentUpon>ValueConstraintDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SchemaDesigner\ValueConstraintEditor.cs" />
+    <Compile Include="Controls\TempCursor.cs" />
     <Compile Include="Controls\TextBoxAppender.cs" />
     <Compile Include="Controls\TextEditor.cs">
       <SubType>UserControl</SubType>
