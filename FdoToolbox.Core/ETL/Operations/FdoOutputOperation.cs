@@ -179,7 +179,10 @@ namespace FdoToolbox.Core.ETL.Operations
                         ValueExpression dv = ValueConverter.GetConvertedValue(row[col]);
                         if (dv != null)
                         {
-                            PropertyValue pv = new PropertyValue(col, dv);
+                            string name = col;
+                            if (_mappings[col] != null)
+                                name = _mappings[col];
+                            PropertyValue pv = new PropertyValue(name, dv);
                             propVals.Add(pv);
                         }
                     }
@@ -188,7 +191,10 @@ namespace FdoToolbox.Core.ETL.Operations
                         IGeometry geom = row[col] as IGeometry;
                         if (geom != null)
                         {
-                            PropertyValue pv = new PropertyValue(col, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
+                            string name = col;
+                            if (_mappings[col] != null)
+                                name = _mappings[col];
+                            PropertyValue pv = new PropertyValue(name, new GeometryValue(FdoGeometryFactory.Instance.GetFgf(geom)));
                             propVals.Add(pv);
                         }
                     }
