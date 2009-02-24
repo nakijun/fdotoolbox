@@ -38,13 +38,16 @@ namespace FdoToolbox.Base.Controls
         public ViewContent()
         {
             InitializeComponent();
-            this.Disposed += new EventHandler(OnDisposed);
             connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
-            connMgr.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(OnBeforeConnectionRemove);
-            connMgr.ConnectionAdded += new ConnectionEventHandler(OnConnectionAdded);
-            connMgr.ConnectionRefreshed += new ConnectionEventHandler(OnConnectionRefreshed);
-            connMgr.ConnectionRemoved += new ConnectionEventHandler(OnConnectionRemoved);
-            connMgr.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
+            if (connMgr != null) //Will be null in design mode. this.DesignMode is lying to me!?
+            {
+                this.Disposed += new EventHandler(OnDisposed);
+                connMgr.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(OnBeforeConnectionRemove);
+                connMgr.ConnectionAdded += new ConnectionEventHandler(OnConnectionAdded);
+                connMgr.ConnectionRefreshed += new ConnectionEventHandler(OnConnectionRefreshed);
+                connMgr.ConnectionRemoved += new ConnectionEventHandler(OnConnectionRemoved);
+                connMgr.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
+            }
         }
 
         protected virtual void OnConnectionRenamed(object sender, ConnectionRenameEventArgs e) { }

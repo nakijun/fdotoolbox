@@ -254,7 +254,7 @@ namespace FdoToolbox.Base.Controls
         private void saveToXMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string xmlFile = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_SCHEMA"), ResourceService.GetString("FILTER_SCHEMA_FILE"));
-            if (xmlFile != null)
+            if (!string.IsNullOrEmpty(xmlFile))
             {
                 try
                 {
@@ -271,7 +271,7 @@ namespace FdoToolbox.Base.Controls
         private void saveToNewSDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string sdfFile = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_SCHEMA"), ResourceService.GetString("FILTER_SDF_FILE"));
-            if (sdfFile != null)
+            if (!string.IsNullOrEmpty(sdfFile))
             {
                 try
                 {
