@@ -33,7 +33,7 @@ namespace FdoToolbox.Core.ETL
     /// </summary>
     public abstract class EtlProcess : EtlProcessBase<EtlProcess>, IDisposable
     {
-        private IPipelineExecuter pipelineExecuter = new ThreadPoolPipelineExecuter();
+        private IPipelineExecuter pipelineExecuter = new SingleThreadedPipelineExecuter();
 
         /// <summary>
         /// Gets the pipeline executer.
