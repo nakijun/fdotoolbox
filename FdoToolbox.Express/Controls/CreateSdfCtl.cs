@@ -67,7 +67,12 @@ namespace FdoToolbox.Express.Controls
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (_presenter.CheckConnectionName() && _presenter.CreateSdf())
+            bool ok = false;
+            using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+            {
+                ok = _presenter.CheckConnectionName() && _presenter.CreateSdf();
+            }
+            if (ok)
             {
                 MessageService.ShowMessage(ResourceService.GetString("MSG_SDF_CREATED"), ResourceService.GetString("TITLE_CREATE_SDF"));
                 base.Close();
