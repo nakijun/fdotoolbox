@@ -52,7 +52,10 @@ namespace FdoToolbox.Base.Commands
         {
             TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
             FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-            mgr.RefreshConnection(connNode.Name);
+            using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+            {
+                mgr.RefreshConnection(connNode.Name);
+            }
         }
     }
 
