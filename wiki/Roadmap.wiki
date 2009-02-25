@@ -5,8 +5,8 @@
  * Express support for additional OGR formats
  * Raster Provider support
  * User Documentation
- * Save data preview query results to other flat-file sources
- * Express support for SQLite provider 
+ * ~~Save data preview query results to other flat-file sources~~
+ * ~~Express support for SQLite provider~~
  * Localization
  * Additional Property support
       * Raster Properties
@@ -19,17 +19,10 @@
  * FGF geometry (non-WKB) rendering support for Data Preview
  * Support for creating join tasks on Spatial Predicates
  * Visual ETL pipeline editor
- * MapGuide 6.5 SDF conversion tools
- * DWF support
  * FDO Connection configuration support
  * Boo scriptability / DSL
- * MapGuide Enterprise/Open Source integration
  * Schema Mapping support
  * KML support
  * Coordinate System Re-Projection via Proj/CSMap
- * Provider-specific extension modules
- * Product-specific extension modules
  * Linux port of command-line utilities
  * LINQ to FDO
- * Integration with other OSGeo tools/libraries
- * Java GIS library integration via IKVM
