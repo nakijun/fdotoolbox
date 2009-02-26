@@ -32,6 +32,9 @@ using FdoToolbox.Core.Connections;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A view that allows the creation of FDO data stores in a generic fashion
+    /// </summary>
     public partial class FdoCreateDataStoreCtl : ViewContent, IViewContent, IFdoCreateDataStoreView
     {
         private FdoCreateDataStorePresenter _presenter;

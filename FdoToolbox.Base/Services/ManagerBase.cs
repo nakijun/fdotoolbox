@@ -26,6 +26,10 @@ using FdoToolbox.Core;
 
 namespace FdoToolbox.Base.Services
 {
+    /// <summary>
+    /// A generic object manager.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class ManagerBase<T> where T : class
     {
         protected Dictionary<string, T> _dict;
@@ -35,11 +39,20 @@ namespace FdoToolbox.Base.Services
             _dict = new Dictionary<string, T>();
         }
 
+        /// <summary>
+        /// Gets the object names
+        /// </summary>
+        /// <returns></returns>
         public ICollection<string> GetNames()
         {
             return _dict.Keys;
         }
 
+        /// <summary>
+        /// Adds the specified object.
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <param name="value">The object.</param>
         public virtual void Add(string name, T value)
         {
             if (_dict.ContainsKey(name))
@@ -49,6 +62,11 @@ namespace FdoToolbox.Base.Services
             ObjectAdded(this, new EventArgs<string>(name));
         }
 
+        /// <summary>
+        /// Gets the specified object.
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <returns></returns>
         public virtual T Get(string name)
         {
             if (_dict.ContainsKey(name))
@@ -56,6 +74,11 @@ namespace FdoToolbox.Base.Services
             return null;
         }
 
+        /// <summary>
+        /// Renames a specified object
+        /// </summary>
+        /// <param name="oldName">The current name of the specified object.</param>
+        /// <param name="newName">The new name of the specified object.</param>
         public virtual void Rename(string oldName, string newName)
         {
             if(!_dict.ContainsKey(oldName))
@@ -71,6 +94,10 @@ namespace FdoToolbox.Base.Services
             ObjectRenamed(this, e);
         }
 
+        /// <summary>
+        /// Removes an object by name
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
         public virtual void Remove(string name)
         {
             if (_dict.ContainsKey(name))
@@ -85,11 +112,19 @@ namespace FdoToolbox.Base.Services
             }
         }
 
+        /// <summary>
+        /// Determines if an object exists (by name)
+        /// </summary>
+        /// <param name="name">The name of the object.</param>
+        /// <returns></returns>
         public virtual bool NameExists(string name)
         {
             return _dict.ContainsKey(name);
         }
 
+        /// <summary>
+        /// Removes all objects
+        /// </summary>
         public virtual void Clear()
         {
             List<string> names = new List<string>(GetNames());
@@ -99,9 +134,23 @@ namespace FdoToolbox.Base.Services
             }
         }
 
+        /// <summary>
+        /// Occurs before an object is removed. Subscribers have the opportunity to 
+        /// cancel the removal operation by setting the Cancel property of the 
+        /// <see cref="ManagerObjectBeforeRemoveEventArgs"/> object to true
+        /// </summary>
         public event ManagerObjectBeforeRemoveEventHandler BeforeRemove = delegate { };
+        /// <summary>
+        /// Occurs when an object is added
+        /// </summary>
         public event ManagerObjectEventHandler ObjectAdded = delegate { };
+        /// <summary>
+        /// Occurs when an object is removed
+        /// </summary>
         public event ManagerObjectEventHandler ObjectRemoved = delegate { };
+        /// <summary>
+        /// Occurs when an object is renamed
+        /// </summary>
         public event ManagerObjectRenamedEventHandler ObjectRenamed = delegate { };
     }
 

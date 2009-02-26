@@ -30,6 +30,9 @@ using FdoToolbox.Core;
 
 namespace FdoToolbox.Base.SharpMapProvider
 {
+    /// <summary>
+    /// An in-memory data provider for SharpMap
+    /// </summary>
     public class FdoInMemoryProvider : IProvider
     {
         private FdoFeatureTable _data;

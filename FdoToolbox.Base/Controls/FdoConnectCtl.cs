@@ -33,6 +33,9 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A view that allows the creation of FDO connection in a generic fashion
+    /// </summary>
     public partial class FdoConnectCtl : ViewContent, IFdoConnectView
     {
         private FdoConnectCtlPresenter _presenter;

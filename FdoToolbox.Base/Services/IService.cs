@@ -25,16 +25,43 @@ using System.Text;
 
 namespace FdoToolbox.Base.Services
 {
+    /// <summary>
+    /// Service base class.
+    /// </summary>
     public interface IService
     {
+        /// <summary>
+        /// Gets a value indicating whether this instance is initialized.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
         bool IsInitialized { get; }
+        /// <summary>
+        /// Initializes the service.
+        /// </summary>
         void InitializeService();
+        /// <summary>
+        /// Unloads the service.
+        /// </summary>
         void UnloadService();
 
+        /// <summary>
+        /// Loads any persisted objects from the session directory
+        /// </summary>
         void Load();
+        /// <summary>
+        /// Persists any managed objects to the session directory
+        /// </summary>
         void Save();
 
+        /// <summary>
+        /// Occurs when the service is initialized
+        /// </summary>
         event EventHandler Initialize;
+        /// <summary>
+        /// Occurs when the service is unloaded
+        /// </summary>
         event EventHandler Unload;
     }
 }

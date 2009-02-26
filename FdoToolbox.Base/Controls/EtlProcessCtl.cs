@@ -33,6 +33,9 @@ using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// Dialog view used to relay the activity of a running <see cref="EtlProcess"/>
+    /// </summary>
     public partial class EtlProcessCtl : ViewContent, IViewContent
     {
         private EtlProcessCtl()

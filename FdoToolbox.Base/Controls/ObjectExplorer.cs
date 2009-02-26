@@ -30,6 +30,9 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// The Object Explorer
+    /// </summary>
     public partial class ObjectExplorer : ViewContent, IObjectExplorer
     {
         private ToolStrip objToolStrip;

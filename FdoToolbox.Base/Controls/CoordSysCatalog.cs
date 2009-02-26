@@ -33,6 +33,9 @@ using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A view to maintain a list of coordinate system definitions
+    /// </summary>
     public partial class CoordSysCatalog : ViewContent, IViewContent, ICoordSysCatalogView
     {
         private CoordSysCatalogPresenter _presenter;

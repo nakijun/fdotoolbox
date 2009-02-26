@@ -31,6 +31,9 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A user interface to allow for registration of new FDO providers
+    /// </summary>
     public partial class FdoRegProviderCtl : ViewContent, IViewContent, IFdoRegProviderView
     {
         private FdoRegProviderPresentation _presenter;

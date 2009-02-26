@@ -31,6 +31,9 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A base view class that provides common functionality for all view content
+    /// </summary>
     public partial class ViewContent : UserControl
     {
         private IFdoConnectionManager connMgr;
