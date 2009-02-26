@@ -27,6 +27,9 @@ using System.IO;
 
 namespace FdoToolbox.Base
 {
+    /// <summary>
+    /// A strongly-typed preferences class
+    /// </summary>
     public static class Preferences
     {
         /// <summary>

@@ -26,6 +26,9 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A <see cref="FdoDataPreviewCtl"/> sub view interface
+    /// </summary>
     public interface IQuerySubView : ISubView
     {
         void FireMapPreviewStateChanged(bool enabled);

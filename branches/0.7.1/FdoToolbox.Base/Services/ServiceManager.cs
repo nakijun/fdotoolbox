@@ -26,6 +26,9 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Services
 {
+    /// <summary>
+    /// Initializes services defined in all addins and handles requests for services.
+    /// </summary>
     public class ServiceManager
     {
         private static ServiceManager instance = null;

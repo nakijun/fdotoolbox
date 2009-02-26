@@ -31,6 +31,9 @@ using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A <see cref="FdoDataPreviewCtl"/> sub-view for standard FDO queries
+    /// </summary>
     public partial class FdoStandardQueryCtl : UserControl, IFdoStandardQueryView
     {
         private FdoStandardQueryPresenter _presenter;

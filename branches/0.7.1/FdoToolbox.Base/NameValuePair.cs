@@ -25,6 +25,9 @@ using System.Text;
 
 namespace FdoToolbox.Base
 {
+    /// <summary>
+    /// A name/value class
+    /// </summary>
     public class NameValuePair
     {
         private string _Name;

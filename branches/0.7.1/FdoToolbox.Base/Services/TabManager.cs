@@ -29,6 +29,9 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Services
 {
+    /// <summary>
+    /// Manages connection dependent view content
+    /// </summary>
     public class TabManager : IService
     {
         private IFdoConnectionManager connMgr;

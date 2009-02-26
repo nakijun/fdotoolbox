@@ -30,6 +30,10 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A container of <see cref="IPreferenceSheet"/> instances. Each instance is contained
+    /// in a tab.
+    /// </summary>
     public partial class PreferencesCtl : ViewContent, IPreferencesView
     {
         private PreferencesCtlPresenter _presenter;

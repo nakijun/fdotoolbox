@@ -29,6 +29,10 @@ using FdoToolbox.Core;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A <see cref="EtlProcess"/> runner class. Provides delegation of events raised by the <see cref="EtlProcess"/> to any
+    /// interested user interface elements.
+    /// </summary>
     public class EtlBackgroundRunner
     {
         private IFdoSpecializedEtlProcess _proc;
