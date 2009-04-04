@@ -1,5 +1,10 @@
 #summary Planned features for upcoming releases
 
+=== 0.7.2 ===
+ * SQL Server 2008 support
+ * Use FDO 3.4.0
+ * Revert to simple geometry types in Schema Editor
+
 === 0.8 ===
 
  * x64 compatibility
