@@ -54,14 +54,38 @@ namespace FdoToolbox.Base
         event EventHandler ViewContentClosing;
     }
 
+    /// <summary>
+    /// Defines the possible regions of the user interface a <see cref="IViewContent"/> can reside in 
+    /// </summary>
     public enum ViewRegion
     {
+        /// <summary>
+        /// The view content will be docked to the left
+        /// </summary>
         Left,
+        /// <summary>
+        /// The view content will be docked to the right
+        /// </summary>
         Right,
+        /// <summary>
+        /// The view content will be docked to the bottom
+        /// </summary>
         Bottom,
+        /// <summary>
+        /// The view content will be docked to the top
+        /// </summary>
         Top,
+        /// <summary>
+        /// The view content will be docked to the center, (in a tabbed document interface)
+        /// </summary>
         Document,
+        /// <summary>
+        /// The view content will reside in a floating dialog
+        /// </summary>
         Floating,
+        /// <summary>
+        /// The view content will reside in a modal dialog
+        /// </summary>
         Dialog
     }
 }

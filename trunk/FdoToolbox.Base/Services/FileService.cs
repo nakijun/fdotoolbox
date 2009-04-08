@@ -28,6 +28,9 @@ using System.IO;
 
 namespace FdoToolbox.Base.Services
 {
+    /// <summary>
+    /// Provides file/directory browsing and selection services
+    /// </summary>
     public sealed class FileService
     {
         static OpenFileDialog _openDialog = new OpenFileDialog();
@@ -43,6 +46,12 @@ namespace FdoToolbox.Base.Services
             _folderDialog.ShowNewFolderButton = true;
         }
 
+        /// <summary>
+        /// Opens the file.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns></returns>
         public static string OpenFile(string title, string filter)
         {
             _openDialog.FileName = string.Empty;
@@ -56,6 +65,12 @@ namespace FdoToolbox.Base.Services
             return string.Empty;
         }
 
+        /// <summary>
+        /// Opens the files.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns></returns>
         public static string[] OpenFiles(string title, string filter)
         {
             _openDialog.Title = title;
@@ -68,6 +83,12 @@ namespace FdoToolbox.Base.Services
             return new string[0];
         }
 
+        /// <summary>
+        /// Saves the file.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns></returns>
         public static string SaveFile(string title, string filter)
         {
             _openDialog.FileName = string.Empty;
@@ -80,6 +101,11 @@ namespace FdoToolbox.Base.Services
             return string.Empty;
         }
 
+        /// <summary>
+        /// Gets the directory.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <returns></returns>
         public static string GetDirectory(string title)
         {
             _folderDialog.Description = title;
@@ -90,11 +116,21 @@ namespace FdoToolbox.Base.Services
             return string.Empty;
         }
 
+        /// <summary>
+        /// Determines if the specified file exists
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
         public static bool FileExists(string file)
         {
             return !string.IsNullOrEmpty(file) && File.Exists(file);
         }
 
+        /// <summary>
+        /// Determines if the specified directory exists
+        /// </summary>
+        /// <param name="dir">The directory.</param>
+        /// <returns></returns>
         public static bool DirectoryExists(string dir)
         {
             return !string.IsNullOrEmpty(dir) && Directory.Exists(dir);

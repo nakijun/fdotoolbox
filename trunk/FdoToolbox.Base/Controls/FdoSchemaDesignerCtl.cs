@@ -32,6 +32,11 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A view to create/edit FDO feature schemas. Can operate in two modes, standalone or contextual. In contextual mode,
+    /// certain elements of this view are disabled based on the capabilities of the underlying connection. In standalone mode,
+    /// no view elements are disabled.
+    /// </summary>
     public partial class FdoSchemaDesignerCtl : ViewContent, IFdoSchemaDesignerView, IViewContent, IConnectionDependentView
     {
         private FdoSchemaDesignerPresenter _presenter;

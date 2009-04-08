@@ -30,10 +30,16 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Services
 {
+    /// <summary>
+    /// Manages FDO connections.
+    /// </summary>
     public sealed class FdoConnectionManager : IFdoConnectionManager
     {
         private Dictionary<string, FdoConnection> _ConnectionDict = new Dictionary<string, FdoConnection>();
 
+        /// <summary>
+        /// Removes all connections
+        /// </summary>
         public void Clear()
         {
             List<string> names = new List<string>(GetConnectionNames());
@@ -43,6 +49,11 @@ namespace FdoToolbox.Base.Services
             }
         }
 
+        /// <summary>
+        /// Determines whether a connection exists (by name)
+        /// </summary>
+        /// <param name="name">The name of the connection</param>
+        /// <returns></returns>
         public bool NameExists(string name)
         {
             if (name == null)
@@ -50,6 +61,11 @@ namespace FdoToolbox.Base.Services
             return _ConnectionDict.ContainsKey(name);
         }
 
+        /// <summary>
+        /// Adds a FDO connection.
+        /// </summary>
+        /// <param name="name">The name of the connection.</param>
+        /// <param name="conn">The connection.</param>
         public void AddConnection(string name, FdoToolbox.Core.Feature.FdoConnection conn)
         {
             if (_ConnectionDict.ContainsKey(name))
@@ -59,6 +75,10 @@ namespace FdoToolbox.Base.Services
             this.ConnectionAdded(this, new EventArgs<string>(name));
         }
 
+        /// <summary>
+        /// Removes the connection.
+        /// </summary>
+        /// <param name="name">The name of the connection.</param>
         public void RemoveConnection(string name)
         {
             if (_ConnectionDict.ContainsKey(name))
@@ -77,6 +97,11 @@ namespace FdoToolbox.Base.Services
             }
         }
 
+        /// <summary>
+        /// Gets the connection.
+        /// </summary>
+        /// <param name="name">The name of the connection.</param>
+        /// <returns></returns>
         public FdoToolbox.Core.Feature.FdoConnection GetConnection(string name)
         {
             FdoConnection conn = null;
@@ -85,11 +110,20 @@ namespace FdoToolbox.Base.Services
             return conn;
         }
 
+        /// <summary>
+        /// Gets the connection names.
+        /// </summary>
+        /// <returns></returns>
         public ICollection<string> GetConnectionNames()
         {
             return _ConnectionDict.Keys;
         }
 
+        /// <summary>
+        /// Renames a connection.
+        /// </summary>
+        /// <param name="oldName">The old name.</param>
+        /// <param name="newName">The new name.</param>
         public void RenameConnection(string oldName, string newName)
         {
             if (!_ConnectionDict.ContainsKey(oldName))
@@ -105,6 +139,12 @@ namespace FdoToolbox.Base.Services
             this.ConnectionRenamed(this, e);
         }
 
+        /// <summary>
+        /// Determines whether this this connection can be renamed to the specified name
+        /// </summary>
+        /// <param name="oldName">The old name.</param>
+        /// <param name="newName">The new name.</param>
+        /// <returns></returns>
         public ConnectionRenameResult CanRenameConnection(string oldName, string newName)
         {
             string reason = string.Empty;
@@ -124,23 +164,49 @@ namespace FdoToolbox.Base.Services
             return new ConnectionRenameResult();
         }
 
+        /// <summary>
+        /// Occurs before a connection is removed. Subscribers have the opportunity to 
+        /// cancel the removal operation by setting the Cancel property of the 
+        /// <see cref="ConnectionBeforeRemoveEventArgs"/> object to true
+        /// </summary>
         public event ConnectionBeforeRemoveHandler BeforeConnectionRemove = delegate { };
 
+        /// <summary>
+        /// Occurs when a connection is added
+        /// </summary>
         public event ConnectionEventHandler ConnectionAdded = delegate { };
 
+        /// <summary>
+        /// Occurs when a connection is removed
+        /// </summary>
         public event ConnectionEventHandler ConnectionRemoved = delegate { };
 
+        /// <summary>
+        /// Occurs when a connection is renamed
+        /// </summary>
         public event ConnectionRenamedEventHandler ConnectionRenamed = delegate { };
 
+        /// <summary>
+        /// Occurs when a connection is refreshed
+        /// </summary>
         public event ConnectionEventHandler ConnectionRefreshed = delegate { };
 
         private bool _init = false;
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is initialized.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool IsInitialized
         {
             get { return _init; }
         }
 
+        /// <summary>
+        /// Initializes the service.
+        /// </summary>
         public void InitializeService()
         {
             LoggingService.Info("Initialized Connection Manager Service");
@@ -148,15 +214,28 @@ namespace FdoToolbox.Base.Services
             Initialize(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Unloads the service.
+        /// </summary>
         public void UnloadService()
         {
             Unload(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Occurs when this instnace is initialized
+        /// </summary>
         public event EventHandler Initialize = delegate { };
 
+        /// <summary>
+        /// Occurs when this service is unloded
+        /// </summary>
         public event EventHandler Unload = delegate { };
 
+        /// <summary>
+        /// Refreshes the connection.
+        /// </summary>
+        /// <param name="name">The name of the connection.</param>
         public void RefreshConnection(string name)
         {
             if (NameExists(name))
@@ -182,7 +261,9 @@ namespace FdoToolbox.Base.Services
             }
         }
 
-
+        /// <summary>
+        /// Load all persisted connections from the session directory
+        /// </summary>
         public void Load()
         {
             string path = Preferences.SessionDirectory;
@@ -205,6 +286,9 @@ namespace FdoToolbox.Base.Services
             }
         }
 
+        /// <summary>
+        /// Saves all currently loaded connections to the session directory
+        /// </summary>
         public void Save()
         {
             string path = Preferences.SessionDirectory;
@@ -228,6 +312,12 @@ namespace FdoToolbox.Base.Services
         }
 
 
+        /// <summary>
+        /// Gets the connection by provider and connection string
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="connStr">The connection string.</param>
+        /// <returns></returns>
         public FdoConnection GetConnection(string provider, string connStr)
         {
             foreach (FdoConnection conn in _ConnectionDict.Values)
@@ -238,6 +328,11 @@ namespace FdoToolbox.Base.Services
             return null;
         }
 
+        /// <summary>
+        /// Gets the name of a connection
+        /// </summary>
+        /// <param name="conn">The connection.</param>
+        /// <returns></returns>
         public string GetName(FdoConnection conn)
         {
             foreach (string key in _ConnectionDict.Keys)

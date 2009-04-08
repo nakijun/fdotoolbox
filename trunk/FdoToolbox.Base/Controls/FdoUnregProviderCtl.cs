@@ -31,6 +31,9 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A view that allows for un-registration of FDO providers from the provider registry
+    /// </summary>
     public partial class FdoUnregProviderCtl : ViewContent, IViewContent, IFdoUnregProviderView
     {
         private FdoUnregProviderPresenter _presenter;

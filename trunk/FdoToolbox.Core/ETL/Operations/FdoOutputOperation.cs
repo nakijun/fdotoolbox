@@ -88,6 +88,10 @@ namespace FdoToolbox.Core.ETL.Operations
 
         private NameValueCollection Reverse(NameValueCollection propertyMappings)
         {
+            // The API specifies mappings are [source] -> [target], but the
+            // revised implementation only works if it is [target] -> [source]
+            // so we have to reverse the mappings
+
             NameValueCollection nvc = new NameValueCollection();
             if (propertyMappings == null || propertyMappings.Count == 0)
                 return nvc;
@@ -142,7 +146,7 @@ namespace FdoToolbox.Core.ETL.Operations
             //
             // So what we do is load it up once with LiteralValue references and manipulate these
             // outside of the collection (via a cached dictionary). We cache everything from the wrapper API 
-            // that can be  cached in the managed world so that we only have minimal contact with it
+            // that can be cached in the managed world so that we only have minimal contact with it
 
             // Omit read-only properties
             using (FdoFeatureService service = _conn.CreateFeatureService())

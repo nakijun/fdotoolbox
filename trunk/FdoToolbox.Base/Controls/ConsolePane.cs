@@ -36,6 +36,9 @@ using log4net.Config;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// The application console
+    /// </summary>
     public partial class ConsolePane : ViewContent, IViewContent, IConsole
     {
         private ToolStrip toolStrip1;

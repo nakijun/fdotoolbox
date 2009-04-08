@@ -34,6 +34,9 @@ using SharpMap.Layers;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A <see cref="FdoDataPreviewCtl"/> sub-view that provides a visual preview of the data preview query result set
+    /// </summary>
     public partial class FdoMapPreview : UserControl, IFdoMapView
     {
         private FdoMapPreviewPresenter _presenter;
