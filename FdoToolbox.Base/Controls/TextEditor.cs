@@ -28,6 +28,9 @@ using ICSharpCode.TextEditor;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A text editor component
+    /// </summary>
     public class TextEditor : UserControl, IViewContent
     {
         ToolStrip toolstrip;

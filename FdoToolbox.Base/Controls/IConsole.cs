@@ -25,6 +25,9 @@ using System.Text;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// Application Console interface
+    /// </summary>
     public interface IConsole
     {
         string TextContent { get; }

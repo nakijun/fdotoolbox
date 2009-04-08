@@ -26,6 +26,10 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A helper class to temporarily change the active cursor. All operations done within
+    /// the scope of this class (up to its disposal) will run with the specified active cursor.
+    /// </summary>
     public class TempCursor : IDisposable
     {
         public TempCursor(Cursor cr)

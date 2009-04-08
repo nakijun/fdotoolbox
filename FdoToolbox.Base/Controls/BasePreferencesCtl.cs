@@ -31,6 +31,9 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// User Interface for FDO Toolbox's preferences
+    /// </summary>
     public partial class BasePreferencesCtl : UserControl, IPreferenceSheet
     {
         public BasePreferencesCtl()

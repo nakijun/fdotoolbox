@@ -33,6 +33,9 @@ using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A view that allows the query and preview of FDO feature data
+    /// </summary>
     public partial class FdoDataPreviewCtl : ViewContent, IViewContent, IFdoDataPreviewView, IConnectionDependentView
     {
         private FdoDataPreviewPresenter _presenter;

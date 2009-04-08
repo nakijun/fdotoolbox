@@ -25,6 +25,9 @@ using System.Text;
 
 namespace FdoToolbox.Base.Services
 {
+    /// <summary>
+    /// A service that provides name generation for FDO connections
+    /// </summary>
     public class NamingService : IService
     {
         private bool _init = false;
@@ -32,11 +35,20 @@ namespace FdoToolbox.Base.Services
         private Dictionary<string, string> _namePrefixes;
         private Dictionary<string, int> _counter;
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is initialized.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool IsInitialized
         {
             get { return _init; }
         }
 
+        /// <summary>
+        /// Initializes the service.
+        /// </summary>
         public void InitializeService()
         {
             _namePrefixes = new Dictionary<string, string>();
@@ -48,16 +60,27 @@ namespace FdoToolbox.Base.Services
             Initialize(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Unloads the service.
+        /// </summary>
         public void UnloadService()
         {
             Unload(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Sets the preferred name prefix for a given provider
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="prefix">The prefix.</param>
         public void SetPreferredNamePrefix(string provider, string prefix)
         {
             _namePrefixes[provider] = prefix;
         }
 
+        /// <summary>
+        /// Resets the connection counter.
+        /// </summary>
         public void ResetCounter()
         {
             List<string> keys = new List<string>(_counter.Keys);
@@ -69,6 +92,11 @@ namespace FdoToolbox.Base.Services
 
         private FdoConnectionManager _manager;
 
+        /// <summary>
+        /// Gets the default name of the connection based on its provider
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <returns></returns>
         public string GetDefaultConnectionName(string provider)
         {
             if (!_namePrefixes.ContainsKey(provider))
@@ -89,16 +117,28 @@ namespace FdoToolbox.Base.Services
             return name;
         }
 
+        /// <summary>
+        /// Occurs when the service is initialized
+        /// </summary>
         public event EventHandler Initialize = delegate { };
 
+        /// <summary>
+        /// Occurs when the service is unloaded
+        /// </summary>
         public event EventHandler Unload = delegate { };
 
 
+        /// <summary>
+        /// Loads any persisted objects from the session directory
+        /// </summary>
         public void Load()
         {
             
         }
 
+        /// <summary>
+        /// Persists any managed objects to the session directory
+        /// </summary>
         public void Save()
         {
             

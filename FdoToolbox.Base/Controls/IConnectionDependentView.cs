@@ -27,6 +27,9 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A view interface that allows content to be aware of connections
+    /// </summary>
     public interface IConnectionDependentView : IViewContent
     {
         /// <summary>
