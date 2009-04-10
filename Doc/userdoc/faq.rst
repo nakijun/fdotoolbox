@@ -13,6 +13,12 @@ You must surround the value in double quotes
 
 The user preferences are stored at "%APPDATA%\\FDO Toolbox" (eg. C:\\Documents and Settings\\YOURUSERNAME\\Application Data\\FDO Toolbox)
 
+**Why are some of my commands disabled?**
+
+FDO Toolbox uses the FDO capability API to disable certain commands if the provider in context 
+does not support such action. For example, if a provider does not support the **IApplySchema** FDO command, then
+if you are editing a Feature Schema on a connection to that provider, the **Apply Schema** button is disabled.
+
 **Does FDO Toolbox support class inheritance?**
 
 Not at this point in time
