@@ -27,12 +27,71 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using FdoToolbox.Core.Feature;
-using OSGeo.FDO.Common;
+using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
     public partial class GeometryTypeCtl : CheckedListBox
     {
+        public GeometryTypeCtl()
+        {
+            InitializeComponent();
+            GeometricType[] gtypes = (GeometricType[])Enum.GetValues(typeof(GeometricType));
+            LoadGeometricTypes(gtypes);
+        }
+
+        public GeometryTypeCtl(FdoConnection conn) : this() { }
+
+        private void LoadGeometricTypes(GeometricType[] gtypes)
+        {
+            foreach (GeometricType gt in gtypes)
+            {
+                if(gt != GeometricType.GeometricType_All)
+                    this.Items.Add(gt, false);
+            }
+        }
+
+        public int GeometryTypes
+        {
+            get
+            {
+                GeometricType gtype = default(GeometricType);
+                foreach (int idx in this.CheckedIndices)
+                {
+                    gtype |= (GeometricType)Enum.Parse(typeof(GeometricType), this.Items[idx].ToString());
+                }
+                return (int)gtype;
+            }
+            set
+            {
+                this.SelectedItems.Clear();
+                if (value == (int)GeometricType.GeometricType_All)
+                {
+                    for (int i = 0; i < this.Items.Count; i++)
+                    {
+                        this.SetItemChecked(i, true);
+                    }
+                }
+                else
+                {
+                    GeometricType[] gtypes = (GeometricType[])Enum.GetValues(typeof(GeometricType));
+                    foreach (GeometricType gt in gtypes)
+                    {
+                        CheckIfSet(value, gt);
+                    }
+                }
+            }
+        }
+
+        private void CheckIfSet(int value, GeometricType gtype)
+        {
+            if ((value & (int)gtype) == (int)gtype)
+                this.SetItemChecked(this.Items.IndexOf(gtype), true);
+        }
+
+        /*
+         * FDO trunk actually fixes this, but we'll only use it when it becomes FDO 3.5 proper
+         * 
         public GeometryTypeCtl()
         {
             InitializeComponent();
@@ -95,5 +154,6 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                 }
             }
         }
+        */
     }
 }
