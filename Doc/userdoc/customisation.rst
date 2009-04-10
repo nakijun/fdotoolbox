@@ -1,3 +1,6 @@
+.. index::
+   single: Customisation
+
 Customisation
 =============
 
