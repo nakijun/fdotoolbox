@@ -1,3 +1,6 @@
+.. index::
+   single: FAQ
+
 Frequently Asked Questions (FAQ)
 ================================
 

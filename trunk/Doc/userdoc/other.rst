@@ -1,3 +1,6 @@
+.. index::
+   single: Other Resources
+
 Other Resources
 ===============
 

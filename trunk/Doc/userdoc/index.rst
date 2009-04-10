@@ -21,6 +21,7 @@ Contents:
    etl
    express
    customisation
+   addins
    cmdline
    providernotes
    faq
@@ -31,6 +32,5 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
