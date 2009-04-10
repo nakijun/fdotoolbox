@@ -40,7 +40,7 @@ namespace FdoToolbox.Base.Commands
     {
         public override void Run()
         {
-            Process.Start("userdoc.chm"); //TODO: Don't hardcode
+            Process.Start("FDOToolbox.chm"); //TODO: Don't hardcode
         }
     }
 

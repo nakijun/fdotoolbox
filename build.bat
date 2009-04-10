@@ -1,8 +1,9 @@
-@echo off
+rem @echo off
 
 SET TYPEACTION=build
 SET TYPEBUILD=Release
 
+SET HTMLHELP=C:\Program Files\HTML Help Workshop
 SET FDOTOOLBOX_OUTDIR=%CD%\out\%TYPEBUILD%
 SET DOCPATH=%CD%\Doc
 SET THIRDPARTY=%CD%\Thirdparty
@@ -24,7 +25,7 @@ SET FDOTOOLBOXRASTER=%CD%\FdoToolbox.Raster
 SET TESTMODULE=%CD%\TestModule
 SET MGMODULE=%CD%\MGModule
 
-SET PATH=%PATH%;%systemroot%\Microsoft.NET\Framework\v2.0.50727;%THIRDPARTY%\NDoc;%THIRDPARTY%\NSIS
+SET PATH=%PATH%;%systemroot%\Microsoft.NET\Framework\v2.0.50727;%THIRDPARTY%\NDoc;%THIRDPARTY%\NSIS;%HTMLHELP%
 SET VERBOSITY=/v:q
 
 :study_params
@@ -88,10 +89,14 @@ copy "msdn-chm\FDO Toolbox Core API.chm" %FDOTOOLBOX_OUTDIR%
 popd
 
 echo Building User Documentation
-pushd %DOCPATH%\userdoc_tmphhp
-call build_userdoc.bat
-copy userdoc.chm %FDOTOOLBOX_OUTDIR%
+pushd %DOCPATH%\userdoc
+call make htmlhelp
 popd
+pushd %DOCPATH%\userdoc\_build\htmlhelp
+hhc FDOToolbox.hhp
+copy FDOToolbox.chm %FDOTOOLBOX_OUTDIR%
+popd
+
 
 :copy_thirdparty
 IF NOT EXIST %FDOTOOLBOX_OUTDIR%\FDO xcopy /S /Y /I %THIRDPARTY%\Fdo\*.* %FDOTOOLBOX_OUTDIR%\FDO
@@ -148,6 +153,10 @@ rd /S /Q %FDOTOOLBOXEXPRESS%\obj
 echo Cleaning FdoToolbox.Raster
 rd /S /Q %FDOTOOLBOXRASTER%\bin
 rd /S /Q %FDOTOOLBOXRASTER%\obj
+echo Cleaning Documentation
+pushd %DOCPATH%\userdoc
+make clean
+popd
 goto quit
 
 :test

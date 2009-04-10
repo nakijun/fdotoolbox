@@ -131,7 +131,7 @@ Section
 	File /r "${INST_OUTPUT_FDOTOOLBOX}\Schemas"
 	
 	# docs
-	File "${INST_OUTPUT_FDOTOOLBOX}\userdoc.chm"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FDOToolbox.chm"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FDO Toolbox Core API.chm"
 	File "${INST_OUTPUT_FDOTOOLBOX}\changelog.txt"
 	File "${INST_OUTPUT_FDOTOOLBOX}\license.txt"
