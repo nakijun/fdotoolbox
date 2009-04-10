@@ -327,7 +327,24 @@ namespace FdoToolbox.Base
             this.ClientSize = new System.Drawing.Size(792, 566);
             this.Name = "Workbench";
             this.ResumeLayout(false);
+        }
 
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == NativeMethods.WM_SHOWME)
+            {
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    WindowState = FormWindowState.Normal;
+                }
+                // get our current "TopMost" value (ours will always be false though)
+                bool top = TopMost;
+                // make our form jump to the top of everything
+                TopMost = true;
+                // set it back to whatever it was
+                TopMost = top;
+            }
+            base.WndProc(ref m);
         }
     }
 
