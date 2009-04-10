@@ -305,6 +305,7 @@
     <Compile Include="Controls\IQuerySubView.cs" />
     <Compile Include="ISubView.cs" />
     <Compile Include="NameValuePair.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Services\ManagerBase.cs" />
     <Compile Include="Services\NamingService.cs" />
     <Compile Include="Services\AddInAssemblyResolver.cs" />
