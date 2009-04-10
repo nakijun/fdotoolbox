@@ -23,4 +23,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+//when making releases, change the * to the SVN revision number
+//of the WC used to produce the release.
 [assembly: AssemblyVersion("0.7.1.*")]
