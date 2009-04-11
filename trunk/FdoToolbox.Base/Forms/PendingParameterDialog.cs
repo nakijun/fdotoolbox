@@ -65,9 +65,11 @@ namespace FdoToolbox.Base.Forms
             colName.Name = "COL_NAME";
             colName.HeaderText = "Name";
             colName.ReadOnly = true;
+            colName.CellTemplate = new DataGridViewTextBoxCell();
             DataGridViewColumn colValue = new DataGridViewColumn();
             colValue.Name = "COL_VALUE";
             colValue.HeaderText = "Value";
+            colValue.CellTemplate = new DataGridViewTextBoxCell();
 
             colValue.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             grdPendingProperties.Columns.Add(colName);

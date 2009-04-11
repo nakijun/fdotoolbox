@@ -59,6 +59,8 @@ namespace FdoToolbox.Base.Forms
             // 
             // grdPendingProperties
             // 
+            this.grdPendingProperties.AllowUserToAddRows = false;
+            this.grdPendingProperties.AllowUserToDeleteRows = false;
             this.grdPendingProperties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
