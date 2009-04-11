@@ -137,6 +137,8 @@ namespace FdoToolbox.Base.Controls
             this.grdConnectionProperties.Size = new System.Drawing.Size(469, 104);
             this.grdConnectionProperties.TabIndex = 0;
             this.grdConnectionProperties.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.grdConnectionProperties_CellMouseDown);
+            this.grdConnectionProperties.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.grdConnectionProperties_CellPainting);
+            this.grdConnectionProperties.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.grdConnectionProperties_EditingControlShowing);
             // 
             // btnCreate
             // 
