@@ -151,6 +151,7 @@ namespace FdoToolbox.Base.Controls
 
         private void cmbProvider_SelectionChanged(object sender, EventArgs e)
         {
+            pwdCells.Clear();
             _presenter.ProviderChanged();
         }
 
@@ -185,33 +186,14 @@ namespace FdoToolbox.Base.Controls
                 valueCell.ToolTipText = "Right click for helpful options";
             }
             valueCell.Value = p.DefaultValue;
-            
-            //DataGridViewCell valueCell = null;
-            //if (p.IsFile)
-            //{
-            //    DataGridViewFileCell cell = new DataGridViewFileCell();
-            //    cell.Mode = DataGridViewFileCell.DataGridViewFileCellMode.File;
-            //    cell.Value = p.DefaultValue;
-            //    valueCell = cell;
-            //}
-            //else if (p.IsPath)
-            //{
-            //    DataGridViewFileCell cell = new DataGridViewFileCell();
-            //    cell.Mode = DataGridViewFileCell.DataGridViewFileCellMode.Directory;
-            //    cell.Value = p.DefaultValue;
-            //    valueCell = cell;
-            //}
-            //else
-            //{
-            //    DataGridViewTextBoxCell cell = new DataGridViewTextBoxCell();
-            //    cell.Value = p.DefaultValue;
-            //    valueCell = cell;
-            //}
 
             row.Cells.Add(nameCell);
             row.Cells.Add(valueCell);
             
             grdProperties.Rows.Add(row);
+
+            if (p.Protected)
+                pwdCells.Add(valueCell);
         }
 
         private void grdProperties_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -276,6 +258,41 @@ namespace FdoToolbox.Base.Controls
         public void FlagConfigError(string msg)
         {
             errorProvider1.SetError(txtConfiguration, msg);
+        }
+
+        private void grdProperties_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            DataGridViewCell cell = grdProperties.SelectedCells[0];
+            if (cell != null)
+            {
+                TextBox t = e.Control as TextBox;
+                if (t != null)
+                {
+                    t.UseSystemPasswordChar = IsPasswordCell(cell);
+                }
+            }
+        }
+
+        private List<DataGridViewCell> pwdCells = new List<DataGridViewCell>();
+
+        private bool IsPasswordCell(DataGridViewCell cell)
+        {
+            return pwdCells.Contains(cell);
+        }
+
+        private void grdProperties_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                DataGridViewCell cell = grdProperties.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                if (cell != null && IsPasswordCell(cell) && cell.Value != null)
+                {
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
+                    Graphics g = e.Graphics;
+                    g.DrawString(new string('*', cell.Value.ToString().Length), this.Font, new SolidBrush(Color.Black), e.CellBounds);
+                    e.Handled = true;
+                }
+            }
         }
     }
 }

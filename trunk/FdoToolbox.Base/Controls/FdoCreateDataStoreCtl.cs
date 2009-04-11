@@ -120,6 +120,7 @@ namespace FdoToolbox.Base.Controls
 
         private void cmbProvider_SelectionChanged(object sender, EventArgs e)
         {
+            pwdCells.Clear();
             _presenter.ProviderChanged();
         }
 
@@ -190,6 +191,9 @@ namespace FdoToolbox.Base.Controls
             row.Cells.Add(valueCell);
 
             grdConnectionProperties.Rows.Add(row);
+
+            if (p.Protected)
+                pwdCells.Add(valueCell);
         }
 
         public void AddEnumerableConnectProperty(string name, string defaultValue, string[] values)
@@ -317,6 +321,42 @@ namespace FdoToolbox.Base.Controls
             if (e.Button == MouseButtons.Right)
             {
                 _currentCell = grdConnectionProperties.CurrentCell = grdConnectionProperties.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            }
+        }
+
+
+        private List<DataGridViewCell> pwdCells = new List<DataGridViewCell>();
+
+        private bool IsPasswordCell(DataGridViewCell cell)
+        {
+            return pwdCells.Contains(cell);
+        }
+
+        private void grdConnectionProperties_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                DataGridViewCell cell = grdConnectionProperties.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                if (cell != null && IsPasswordCell(cell) && cell.Value != null)
+                {
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All & ~DataGridViewPaintParts.ContentForeground);
+                    Graphics g = e.Graphics;
+                    g.DrawString(new string('*', cell.Value.ToString().Length), this.Font, new SolidBrush(Color.Black), e.CellBounds);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void grdConnectionProperties_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            DataGridViewCell cell = grdConnectionProperties.SelectedCells[0];
+            if (cell != null)
+            {
+                TextBox t = e.Control as TextBox;
+                if (t != null)
+                {
+                    t.UseSystemPasswordChar = IsPasswordCell(cell);
+                }
             }
         }
     }

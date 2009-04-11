@@ -46,9 +46,9 @@ namespace FdoToolbox.Base.Controls
             this.insertFilePathSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtConfiguration = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
+            this.txtConfiguration = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdProperties)).BeginInit();
@@ -137,6 +137,8 @@ namespace FdoToolbox.Base.Controls
             this.grdProperties.Size = new System.Drawing.Size(539, 150);
             this.grdProperties.TabIndex = 0;
             this.grdProperties.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.grdProperties_CellMouseDown);
+            this.grdProperties.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.grdProperties_CellPainting);
+            this.grdProperties.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.grdProperties_EditingControlShowing);
             // 
             // btnTest
             // 
@@ -227,24 +229,6 @@ namespace FdoToolbox.Base.Controls
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Configuration";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Configuration File";
-            // 
-            // txtConfiguration
-            // 
-            this.txtConfiguration.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtConfiguration.Location = new System.Drawing.Point(121, 19);
-            this.txtConfiguration.Name = "txtConfiguration";
-            this.txtConfiguration.Size = new System.Drawing.Size(413, 20);
-            this.txtConfiguration.TabIndex = 1;
-            // 
             // btnBrowse
             // 
             this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -255,6 +239,24 @@ namespace FdoToolbox.Base.Controls
             this.btnBrowse.Text = "...";
             this.btnBrowse.UseVisualStyleBackColor = true;
             this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
+            // txtConfiguration
+            // 
+            this.txtConfiguration.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtConfiguration.Location = new System.Drawing.Point(121, 19);
+            this.txtConfiguration.Name = "txtConfiguration";
+            this.txtConfiguration.Size = new System.Drawing.Size(413, 20);
+            this.txtConfiguration.TabIndex = 1;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(23, 22);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(88, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Configuration File";
             // 
             // FdoConnectCtl
             // 
