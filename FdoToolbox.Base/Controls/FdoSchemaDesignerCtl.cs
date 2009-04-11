@@ -152,7 +152,6 @@ namespace FdoToolbox.Base.Controls
             set { propGrid.SelectedObject = value; }
         }
 
-
         public OSGeo.FDO.Schema.ClassType[] SupportedClassTypes
         {
             set 
@@ -175,7 +174,6 @@ namespace FdoToolbox.Base.Controls
                             });
                             break;
                     }
-                    
                 }
             }
         }
@@ -199,6 +197,22 @@ namespace FdoToolbox.Base.Controls
                             mnuAddNewProperty.DropDown.Items.Add(ResourceService.GetString("LBL_DATA_PROPERTY"), ResourceService.GetBitmap("table"), delegate
                             {
                                 _presenter.AddDataProperty();
+                            });
+                            break;
+                        case OSGeo.FDO.Schema.PropertyType.PropertyType_AssociationProperty:
+                            mnuAddNewProperty.DropDown.Items.Add(ResourceService.GetString("LBL_ASSOCIATION_PROPERTY"), ResourceService.GetBitmap("table_relationship"), delegate
+                            {
+                                //Only add association property if there is at least one other class definition in the current schema
+                                //that satisifies the requirements of this association property
+                                _presenter.AddAssocationProperty();
+                            });
+                            break;
+                        case OSGeo.FDO.Schema.PropertyType.PropertyType_ObjectProperty:
+                            mnuAddNewProperty.DropDown.Items.Add(ResourceService.GetString("LBL_OBJECT_PROPERTY"), ResourceService.GetBitmap("package"), delegate
+                            {
+                                //Only add object property if there is at least one other class definition in the current schema
+                                //that satisfies the requirements of this object property
+                                _presenter.AddObjectProperty();
                             });
                             break;
                     }
@@ -230,13 +244,13 @@ namespace FdoToolbox.Base.Controls
         {
             switch (e.Node.Level)
             {
-                case 0:
+                case 0: //Schema level
                     _presenter.SchemaSelected();
                     break;
-                case 1:
+                case 1: //Class level
                     _presenter.ClassSelected();
                     break;
-                case 2:
+                case 2: //Property level
                     _presenter.PropertySelected();
                     break;
             }
@@ -304,7 +318,6 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-
         public event EventHandler SchemaApplied = delegate { };
 
         private void deletePropertyItem_Click(object sender, EventArgs e)
@@ -316,7 +329,6 @@ namespace FdoToolbox.Base.Controls
         {
             _presenter.RemoveClass();
         }
-
 
         public void RemoveClassNode(string className)
         {

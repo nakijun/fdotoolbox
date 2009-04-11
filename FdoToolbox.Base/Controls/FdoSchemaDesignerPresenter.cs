@@ -149,8 +149,26 @@ namespace FdoToolbox.Base.Controls
         private void SetCapabilities()
         {
             CheckDirtyState();
-            _view.SupportedClassTypes = (ClassType[])Enum.GetValues(typeof(ClassType));
-            _view.SupportedPropertyTypes = (PropertyType[])Enum.GetValues(typeof(PropertyType));
+            //Standalone
+            if (_conn == null)
+            {
+                _view.SupportedClassTypes = (ClassType[])Enum.GetValues(typeof(ClassType));
+                _view.SupportedPropertyTypes = (PropertyType[])Enum.GetValues(typeof(PropertyType));
+            }
+            else //Contextual
+            {
+                _view.SupportedClassTypes = (ClassType[])_conn.Capability.GetObjectCapability(CapabilityType.FdoCapabilityType_ClassTypes);
+
+                List<PropertyType> ptypes = new List<PropertyType>();
+                ptypes.Add(PropertyType.PropertyType_DataProperty);
+                ptypes.Add(PropertyType.PropertyType_GeometricProperty);
+                if (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsAssociationProperties).Value)
+                    ptypes.Add(PropertyType.PropertyType_AssociationProperty);
+                if (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsObjectProperties).Value)
+                    ptypes.Add(PropertyType.PropertyType_ObjectProperty);
+
+                _view.SupportedPropertyTypes = ptypes.ToArray();
+            }
         }
 
         private void SetSchemaNode()
@@ -256,6 +274,10 @@ namespace FdoToolbox.Base.Controls
                     return new DataPropertyDefinitionDesign((DataPropertyDefinition)prop, _conn);
                 case PropertyType.PropertyType_GeometricProperty:
                     return new GeometricPropertyDefinitionDesign((GeometricPropertyDefinition)prop, _conn);
+                case PropertyType.PropertyType_AssociationProperty:
+                    return new AssociationPropertyDefinitionDesign((AssociationPropertyDefinition)prop, _conn);
+                case PropertyType.PropertyType_ObjectProperty:
+                    return new ObjectPropertyDefinitionDesign((ObjectPropertyDefinition)prop, _conn);
                 default:
                     return null;
             }
@@ -350,6 +372,41 @@ namespace FdoToolbox.Base.Controls
                 GeometricPropertyDefinition dp = new GeometricPropertyDefinition(name, "");
                 cls.Properties.Add(dp);
                 _view.AddPropertyNode(cls.Name, dp.Name, RES_GEOM);
+                CheckDirtyState();
+            }
+        }
+
+        public void AddAssocationProperty()
+        {
+            ClassDefinition cls = GetClass(_view.SelectedClass);
+            if (cls != null)
+            {
+                string name = "AssocProperty" + counter++;
+                while (cls.Properties.IndexOf(name) >= 0)
+                {
+                    name = "AssocProperty" + counter++;
+                }
+                AssociationPropertyDefinition ap = new AssociationPropertyDefinition(name, "");
+                ap.ReverseMultiplicity = "0";
+                cls.Properties.Add(ap);
+                _view.AddPropertyNode(cls.Name, ap.Name, RES_ASSOC);
+                CheckDirtyState();
+            }
+        }
+
+        public void AddObjectProperty()
+        {
+            ClassDefinition cls = GetClass(_view.SelectedClass);
+            if (cls != null)
+            {
+                string name = "ObjectProperty" + counter++;
+                while (cls.Properties.IndexOf(name) >= 0)
+                {
+                    name = "ObjectProperty" + counter++;
+                }
+                ObjectPropertyDefinition op = new ObjectPropertyDefinition(name, "");
+                cls.Properties.Add(op);
+                _view.AddPropertyNode(cls.Name, op.Name, RES_OBJECT);
                 CheckDirtyState();
             }
         }

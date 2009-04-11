@@ -197,6 +197,7 @@
     </Compile>
     <Compile Include="Controls\FdoUnregProviderCtlPresentation.cs">
     </Compile>
+    <Compile Include="Controls\SchemaDesigner\AssociationPropertyDefinitionDesign.cs" />
     <Compile Include="Controls\SchemaDesigner\ClassDesign.cs" />
     <Compile Include="Controls\SchemaDesigner\ClassDefinitionDesign.cs" />
     <Compile Include="Controls\SchemaDesigner\DataPropertyDefinitionDesign.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Controls\SchemaDesigner\ListConstraintSettingsCtl.Designer.cs">
       <DependentUpon>ListConstraintSettingsCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SchemaDesigner\ObjectPropertyDefinitionDesign.cs" />
     <Compile Include="Controls\SchemaDesigner\PropertyDefinitionDesign.cs" />
     <Compile Include="Controls\SchemaDesigner\RangeConstraintSettingsCtl.cs">
       <SubType>UserControl</SubType>
