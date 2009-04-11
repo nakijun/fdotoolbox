@@ -17,11 +17,13 @@ Contents:
    objectexplorer
    schemamgmt
    datastores
+   spatialcontexts
    datapreview
    etl
    express
    customisation
    addins
+   cmdref
    cmdline
    providernotes
    faq
