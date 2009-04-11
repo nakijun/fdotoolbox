@@ -265,7 +265,7 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public DictionaryProperty GetConnectTimeProperty(string name)
         {
-            if (this.State != FdoConnectionState.Open)
+            if (this.State != FdoConnectionState.Open && this.State != FdoConnectionState.Pending)
                 throw new InvalidOperationException(Res.GetString("ERR_CONNECTION_NOT_OPEN"));
 
             IConnectionPropertyDictionary dict = this.InternalConnection.ConnectionInfo.ConnectionProperties;

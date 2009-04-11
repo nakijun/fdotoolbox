@@ -83,7 +83,7 @@ namespace FdoToolbox.Base.Controls
             try
             {
                 FdoConnectionState state = conn.Open();
-                if (state == FdoConnectionState.Open)
+                if (state == FdoConnectionState.Open || state == FdoConnectionState.Pending)
                 {
                     MessageService.ShowMessage("Test successful");
                     conn.Close();
