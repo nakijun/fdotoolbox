@@ -400,6 +400,9 @@
     <value>Show Exception</value>
     <comment>Required by SharpDevelop Core</comment>
   </data>
+  <data name="LBL_ASSOCIATION_PROPERTY" xml:space="preserve">
+    <value>Association Property</value>
+  </data>
   <data name="LBL_CLASS" xml:space="preserve">
     <value>Class</value>
   </data>
@@ -414,6 +417,9 @@
   </data>
   <data name="LBL_GEOMETRIC_PROPERTY" xml:space="preserve">
     <value>Geometric Property</value>
+  </data>
+  <data name="LBL_OBJECT_PROPERTY" xml:space="preserve">
+    <value>Object Property</value>
   </data>
   <data name="LOG_SCHEMA_DELETED" xml:space="preserve">
     <value>Schema {0} deleted from connection: {1}</value>
