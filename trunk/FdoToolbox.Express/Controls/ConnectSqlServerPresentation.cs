@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Base.Services;
-using ICSharpCode.Core;
 using FdoToolbox.Core.Feature;
+using ICSharpCode.Core;
 
 namespace FdoToolbox.Express.Controls
 {
-    public interface IConnectPostGisView
+    public interface IConnectSqlServerView
     {
         string Service { get; }
         string Username { get; }
@@ -23,17 +23,17 @@ namespace FdoToolbox.Express.Controls
         void AlertError(string msg);
     }
 
-    public class ConnectPostGisPresenter
+    public class ConnectSqlServerPresenter
     {
-        private readonly IConnectPostGisView _view;
+        private readonly IConnectSqlServerView _view;
         private readonly IFdoConnectionManager _connMgr;
         private FdoConnection _conn;
 
-        public ConnectPostGisPresenter(IConnectPostGisView view, IFdoConnectionManager connMgr)
+        public ConnectSqlServerPresenter(IConnectSqlServerView view, IFdoConnectionManager connMgr)
         {
             _view = view;
             _connMgr = connMgr;
-            _conn = new FdoConnection("OSGeo.PostGIS");
+            _conn = new FdoConnection("OSGeo.SQLServerSpatial");
             _view.DataStoreEnabled = false;
             _view.SubmitEnabled = false; 
         }

@@ -1,6 +1,6 @@
 namespace FdoToolbox.Express.Controls
 {
-    partial class ConnectPostGisCtl
+    partial class ConnectSqlServerCtl
     {
         /// <summary> 
         /// Required designer variable.

@@ -12,19 +12,19 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class ConnectPostGisCtl : ViewContent, IViewContent, IConnectPostGisView
+    public partial class ConnectSqlServerCtl : ViewContent, IViewContent, IConnectSqlServerView
     {
-        private ConnectPostGisPresenter _presenter;
+        private ConnectSqlServerPresenter _presenter;
 
-        public ConnectPostGisCtl()
+        public ConnectSqlServerCtl()
         {
             InitializeComponent();
-            _presenter = new ConnectPostGisPresenter(this, ServiceManager.Instance.GetService<IFdoConnectionManager>());
+            _presenter = new ConnectSqlServerPresenter(this, ServiceManager.Instance.GetService<IFdoConnectionManager>());
         }
 
         public string Title
         {
-            get { return ResourceService.GetString("TITLE_CONNECT_POSTGIS"); }
+            get { return ResourceService.GetString("TITLE_CONNECT_SQLSERVER"); }
         }
 
         public event EventHandler TitleChanged = delegate { };
