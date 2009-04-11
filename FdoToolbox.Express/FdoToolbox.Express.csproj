@@ -87,13 +87,20 @@
       <DependentUpon>ConnectMySqlCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectMySqlPresentation.cs" />
+    <Compile Include="Controls\ConnectPostGisPresentation.cs" />
+    <Compile Include="Controls\ConnectSqlServerPresentation.cs" />
+    <Compile Include="Controls\ConnectSqlServerCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectSqlServerCtl.Designer.cs">
+      <DependentUpon>ConnectSqlServerCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ConnectPostGisCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ConnectPostGisCtl.Designer.cs">
       <DependentUpon>ConnectPostGisCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ConnectPostGisPresentation.cs" />
     <Compile Include="Controls\CopySpatialContextsCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -175,6 +182,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConnectMySqlCtl.resx">
       <DependentUpon>ConnectMySqlCtl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ConnectSqlServerCtl.resx">
+      <DependentUpon>ConnectSqlServerCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConnectPostGisCtl.resx">

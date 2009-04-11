@@ -57,6 +57,9 @@
                 <MenuItem id="ConnectMySql"
                           label="${res:CMD_ConnectMySql}"
                           class="FdoToolbox.Express.Commands.ConnectMySqlCommand" />
+                <MenuItem id="ConnectSqlServer"
+                          label="${res:CMD_ConnectSqlServer}"
+                          class="FdoToolbox.Express.Commands.ConnectSqlServerCommand" />
             </MenuItem>
             <MenuItem id="ExpressCreate"
                       label="Create"

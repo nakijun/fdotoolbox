@@ -196,4 +196,14 @@ namespace FdoToolbox.Express.Commands
             wb.ShowContent(ctl, ViewRegion.Dialog);
         }
     }
+
+    public class ConnectSqlServerCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            ConnectSqlServerCtl ctl = new ConnectSqlServerCtl();
+            Workbench wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
 }
