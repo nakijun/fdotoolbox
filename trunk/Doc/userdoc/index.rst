@@ -19,6 +19,7 @@ Contents:
    datastores
    spatialcontexts
    datapreview
+   expreditor
    etl
    express
    customisation
