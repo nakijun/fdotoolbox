@@ -131,16 +131,9 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_SPATIAL_CONTEXT_MGMT"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
 
         public bool CreateEnabled

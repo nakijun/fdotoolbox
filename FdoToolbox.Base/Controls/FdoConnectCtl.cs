@@ -106,21 +106,6 @@ namespace FdoToolbox.Base.Controls
             errorProvider1.SetError(txtConnectionName, msg);
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        private string _Title;
-
-        public string Title
-        {
-            get { return _Title; }
-            private set { _Title = value; TitleChanged(this, EventArgs.Empty); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
         public IList<FdoProviderInfo> ProviderList
         {
             set 

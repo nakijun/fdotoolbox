@@ -78,16 +78,9 @@ namespace FdoToolbox.Base.Controls
             base.OnLoad(e);
         }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_ETL_PROCESS"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
 
         private void bgEtlProc_DoWork(object sender, DoWorkEventArgs e)

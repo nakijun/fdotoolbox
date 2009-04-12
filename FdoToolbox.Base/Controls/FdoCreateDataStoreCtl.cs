@@ -86,17 +86,11 @@ namespace FdoToolbox.Base.Controls
             grdDataStoreProperties.Columns.Add(colValue);
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_CREATE_DATA_STORE"); }
         }
-
-        public event EventHandler TitleChanged = delegate { };
 
         private void btnCreate_Click(object sender, EventArgs e)
         {

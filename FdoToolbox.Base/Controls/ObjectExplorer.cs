@@ -130,17 +130,10 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("UI_OBJECT_EXPLORER"); }
         }
-
-        public event EventHandler TitleChanged = delegate { };
 
         public void RegisterImage(string imgResource)
         {

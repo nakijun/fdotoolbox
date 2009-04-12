@@ -72,16 +72,9 @@ namespace FdoToolbox.Base.Controls
             set { grdDataStores.DataSource = value; }
         }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_DATA_STORE_MGMT"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
 
         public string Message

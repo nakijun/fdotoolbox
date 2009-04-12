@@ -27,7 +27,7 @@ using System.Windows.Forms;
 namespace FdoToolbox.Base
 {
     /// <summary>
-    /// Abstract view interface. Can only be closed externally.
+    /// Abstract view interface.
     /// </summary>
     public interface IViewContent : ISubView
     {
@@ -52,6 +52,25 @@ namespace FdoToolbox.Base
         /// Fired when the view has been closed internally
         /// </summary>
         event EventHandler ViewContentClosing;
+        /// <summary>
+        /// Displays an exception message
+        /// </summary>
+        /// <param name="title">The title of this message</param>
+        /// <param name="ex">The exception object</param>
+        void ShowError(Exception ex);
+        /// <summary>
+        /// Displays an alert message
+        /// </summary>
+        /// <param name="title">The title of this message</param>
+        /// <param name="message">The message</param>
+        void ShowAlert(string title, string message);
+        /// <summary>
+        /// Make a request for confirmation
+        /// </summary>
+        /// <param name="title">The title of the confirmation message</param>
+        /// <param name="message">The message</param>
+        /// <returns>true if confirmed, false otherwise</returns>
+        bool Confirm(string title, string message);
     }
 
     /// <summary>

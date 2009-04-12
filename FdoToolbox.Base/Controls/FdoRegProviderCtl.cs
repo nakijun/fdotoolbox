@@ -34,7 +34,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A user interface to allow for registration of new FDO providers
     /// </summary>
-    public partial class FdoRegProviderCtl : ViewContent, IViewContent, IFdoRegProviderView
+    public partial class FdoRegProviderCtl : ViewContent, IFdoRegProviderView
     {
         private FdoRegProviderPresentation _presenter;
 
@@ -44,17 +44,10 @@ namespace FdoToolbox.Base.Controls
             _presenter = new FdoRegProviderPresentation(this);
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_REGISTER_PROVIDER"); }
         }
-
-        public event EventHandler TitleChanged = delegate { };
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {

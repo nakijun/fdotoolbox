@@ -68,17 +68,10 @@ namespace FdoToolbox.Base.Controls
             base.OnLoad(e);
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("UI_CONSOLE"); }
         }
-
-        public event EventHandler TitleChanged = delegate { };
 
         public override bool CanClose
         {

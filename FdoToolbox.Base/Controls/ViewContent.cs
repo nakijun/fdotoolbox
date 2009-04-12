@@ -28,13 +28,14 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using FdoToolbox.Base.Services;
+using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
     /// <summary>
     /// A base view class that provides common functionality for all view content
     /// </summary>
-    public partial class ViewContent : UserControl
+    public partial class ViewContent : UserControl, IViewContent
     {
         private IFdoConnectionManager connMgr;
 
@@ -83,5 +84,41 @@ namespace FdoToolbox.Base.Controls
         }
 
         public event EventHandler ViewContentClosing;
+
+        private string _title;
+
+        public virtual string Title
+        {
+            get { return _title; }
+            set { _title = value; TitleChanged(this, EventArgs.Empty); }
+        }
+
+        public event EventHandler TitleChanged = delegate { };
+
+        public Control ContentControl
+        {
+            get { return this; }
+        }
+
+        public void ShowError(Exception ex)
+        {
+            MessageService.ShowError(ex);
+        }
+
+        public void ShowAlert(string title, string message)
+        {
+            if (!string.IsNullOrEmpty(title))
+                MessageService.ShowMessage(message, title);
+            else
+                MessageService.ShowMessage(message);
+        }
+
+        public bool Confirm(string title, string message)
+        {
+            if (!string.IsNullOrEmpty(title))
+                return MessageService.AskQuestion(message, title);
+            else
+                return MessageService.AskQuestion(message);
+        }
     }
 }
