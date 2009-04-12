@@ -120,8 +120,11 @@ namespace FdoToolbox.Base.Controls
 
         private void cmbProvider_SelectionChanged(object sender, EventArgs e)
         {
-            pwdCells.Clear();
-            _presenter.ProviderChanged();
+            using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+            {
+                pwdCells.Clear();
+                _presenter.ProviderChanged();
+            }
         }
 
         public IList<FdoToolbox.Core.Feature.FdoProviderInfo> ProviderList
