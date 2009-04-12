@@ -11,12 +11,10 @@ The generic dialog is a "one size fits all" approach to connecting to a data sou
 
 To connect, enter a name for this connection and select a provider from the :guilabel:`Provider` combo box.
 
-[Image]
-
 When selected, the property grid will be initialized with the required parameters. Enter the required parameters and click :guilabel:`Connect` to
 create a new connection. You can click :guilabel:`Test` beforehand to ensure the connection is a valid one.
 
-[Image]
+.. image:: content/generic-connect.png
 
 When the connection is created, a new connection object is visible in the **Object Explorer**
 
