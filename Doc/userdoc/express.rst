@@ -1,7 +1,13 @@
 The Express Add-In
 ==================
 
-[TODO]
+FDO Toolbox is a front-end for the FDO API. The FDO API allows us to access and manipulate any geospatial data in a generic fashion.
+
+Sometimes however, having to create connections for something as simple as a SDF file is quite slow and cumbersome using 
+generic methods provided. Similarly, having to use the generic create data store dialog for creating SDF files is just
+as equally slow and cumbersome. 
+
+The Express Add-In has been developed for the purpose of making this process quicker for commonly-used providers, especially file-based ones like SDF, SHP and SQLite.
 
 .. index::
    single: Connecting to Data; Express
@@ -38,20 +44,7 @@ The following providers, have express connection support:
 Creating Flat Files
 -------------------
 
-The Express Add-In also offers a faster method of creating data stores. For example, creating a SDF data store is as simple as opening a save dialog and entering
-the name of the SDF file to create. The following providers, have support for creating data stores:
-
- * SDF
- * SHP
- * SQLite
- 
-When creating a data store, the following dialog will be presented:
-
-[Image]
-
-Fill in the fields and click :guilabel:`OK` to create the data store.
-
-For SHP, the feature schema **is required**. Creating a SHP file will fail if a feature schema definition is not specified.
+See :ref:`create-data-store-express`
 
 Express Bulk Copy
 -----------------

@@ -27,11 +27,13 @@ does not support data store creation, you will be greeted with the following mes
 .. index::
    single: Create Data Store; Flat File
 
+.. _create-data-store-express:
+
 Creating flat file data sources
 -------------------------------
 
-The Express Add-In provides a specialized dialog for creating data stores for file-based providers. The following
-file-based providers are supported:
+The Express Add-In provides a faster method of creating data stores. For example, creating a SDF data store is as simple as opening a save dialog and entering
+the name of the SDF file to create. The following providers, have support for creating data stores:
 
  * SDF
  * SHP
@@ -50,6 +52,7 @@ To create your data store, specify the following information:
  * The path where the file will be created. This can be any of the supported file formats as stated above.
  * The path to a serialized feature schema definition. If this is specified, after the data store is created the specified feature schema definition will be deserialized and applied to the newly created data store. Feature Schema Definitions can be created from the :ref:`schema-editor` or by saving the schema of an existing connection.
  * The name of the connection. If this is specified, once the data store is created a connection of the specified name will be created to it.
- 
- Please note that some feature schema definitions may not be applicable because it contains schema elements not
- supported by the target FDO provider. See :ref:`provider-support` for more information.
+
+For SHP, the feature schema **is required**. Creating a SHP file will fail if a feature schema definition is not specified.
+
+Please note that some feature schema definitions may not be applicable because it contains schema elements not supported by the target FDO provider. See :ref:`provider-support` for more information.
