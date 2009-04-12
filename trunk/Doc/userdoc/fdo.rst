@@ -54,16 +54,16 @@ A schema is a logical description of the data types used to model real-world
 objects. A schema is not the actual data instances (that is, not a particular
 road or land parcel), rather it is metadata. A schema is a model of the types
 of data that would be found in a data store. For example, a schema which
-models the layout of city streets has a class called Road, and this class has a
-property called Name. The definition of Road and its associated classes
+models the layout of city streets has a class called ``Road``, and this class has a
+property called ``Name``. The definition of ``Road`` and its associated classes
 constitute the schema.
 
 A schema consists of a collection of schema elements. In the FDO API, schema
 elements are related to one another by derivation and by aggregation. An
 element of a schema defines a particular type of data, such as a feature class
 or a property, or an association. For example, a feature class definition for a
-road includes the class name (for example, Road), and the class properties (for
-example, Name, NumberLanes, PavementType, and Geometry).
+road includes the class name (for example, ``Road``), and the class properties (for
+example, ``Name``, ``NumberLanes``, ``PavementType``, and ``Geometry``).
 
 
 .. index::
@@ -99,11 +99,11 @@ Properties
 ----------
 
 A property is a single attribute of a class and a class is defined by one or more
-property definitions. For example, a Road feature class may have properties
-called Name, NumberLanes, or Location. A property has a particular type,
+property definitions. For example, a ``Road`` feature class may have properties
+called ``Name``, ``NumberLanes``, or ``Location``. A property has a particular type,
 which can be a simple type, such as a string or number, or a complex type
-defined by a class, such as an Address type, which itself is defined by a set of
-properties, such as StreetNumber, StreetName, or StreetType.
+defined by a class, such as an ``Address`` type, which itself is defined by a set of
+properties, such as ``StreetNumber``, ``StreetName``, or ``StreetType``.
 
 There are five kinds of properties: association properties, data properties,
 geometric properties, object properties, and raster properties.
@@ -117,7 +117,7 @@ The FdoAssociationPropertyDefinition class is used to model a peer-to-peer
 relationship between two classes. This relationship is defined at schema
 creation time and instantiated at object creation time. The association property
 supports various cardinality settings, cascading locks, and differing delete
-rules. An FDO filter can be based on association properties and FdoIFeatureReader can handle associated objects through the GetObject()
+rules. An FDO filter can be based on association properties and ``FdoIFeatureReader`` can handle associated objects through the GetObject()
 method.
 
 .. index::
@@ -148,7 +148,7 @@ With respect to ordinate dimensionality, all instances of a geometric property
 must have the same ordinate dimension. The default is XY.
 
 Geometric property definitions have two attributes regarding ordinate
-dimensionality: HasElevation for Z and HasMeasure for M.
+dimensionality: ``HasElevation`` for Z and ``HasMeasure`` for M.
 
 .. index::
    single: FDO Concepts; Object Properties
@@ -181,8 +181,8 @@ Data Stores
 
 A data store is a repository of an integrated set of objects. The objects in a data
 store are modeled either by classes or feature classes defined within one or
-more schemas. For example, a data store may contain data for both a LandUse
-schema and a TelcoOutsidePlant schema. Some data stores can represent data
+more schemas. For example, a data store may contain data for both a ``LandUse``
+schema and a ``TelcoOutsidePlant`` schema. Some data stores can represent data
 in only one schema, while other data stores can represent data in many
 schemas (for example, RDBMS-based data stores, such as MySQL).
 
@@ -197,7 +197,7 @@ Capabilities
 The FDO Capabilities API allows client applications to determine the capabilities and features supported by a given FDO provider.
 
 FDO Toolbox uses the capabilities API to selectively enable/disable certain commands based on the provider's support. For example, 
-the FDO Toolbox **Delete Schema** command will be disabled if the underlying provider does not support the **IDestroySchema** FDO command.
+the FDO Toolbox **Delete Schema** command will be disabled if the underlying provider does not support the ``IDestroySchema`` FDO command.
 
 .. index::
    single: FDO Concepts; Spatial Context
