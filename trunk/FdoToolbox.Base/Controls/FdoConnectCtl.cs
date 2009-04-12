@@ -151,21 +151,30 @@ namespace FdoToolbox.Base.Controls
 
         private void cmbProvider_SelectionChanged(object sender, EventArgs e)
         {
-            pwdCells.Clear();
-            _presenter.ProviderChanged();
+            using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+            {
+                pwdCells.Clear();
+                _presenter.ProviderChanged();
+            }
         }
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            _presenter.TestConnection();
+            using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+            {
+                _presenter.TestConnection();
+            }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            if (!_presenter.Connect())
-                MessageService.ShowError("Connection test failed");
-            else
-                base.Close();
+            using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+            {
+                if (!_presenter.Connect())
+                    MessageService.ShowError("Failed to connect");
+                else
+                    base.Close();
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
