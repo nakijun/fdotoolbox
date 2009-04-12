@@ -25,10 +25,11 @@ using System.Text;
 using FdoToolbox.Base.Services;
 using FdoToolbox.Core.Utility;
 using FdoToolbox.Core.Feature;
+using FdoToolbox.Base;
 
 namespace FdoToolbox.Express.Controls
 {
-    public interface ICreateSqliteView
+    public interface ICreateSqliteView : IViewContent
     {
         string SQLiteFile { get; }
         string FeatureSchemaDefinition { get; }

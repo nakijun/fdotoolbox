@@ -35,7 +35,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class CreateSqliteCtl : ViewContent, IViewContent, ICreateSqliteView
+    public partial class CreateSqliteCtl : ViewContent, ICreateSqliteView
     {
         private CreateSqlitePresenter _presenter;
 
@@ -79,17 +79,10 @@ namespace FdoToolbox.Express.Controls
             }
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_CREATE_SQLITE"); }
         }
-
-        public event EventHandler TitleChanged = delegate { };
 
         public string SQLiteFile
         {

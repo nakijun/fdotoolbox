@@ -33,7 +33,7 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class CopySpatialContextsCtl : ViewContent, ICopySpatialContextsView, IViewContent
+    public partial class CopySpatialContextsCtl : ViewContent, ICopySpatialContextsView
     {
         private CopySpatialContextsCtlPresenter _presenter;
 
@@ -144,16 +144,9 @@ namespace FdoToolbox.Express.Controls
             }
         }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_COPY_SPATIAL_CONTEXTS"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
 
         public void ShowMessage(string msg)

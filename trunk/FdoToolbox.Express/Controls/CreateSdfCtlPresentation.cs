@@ -25,10 +25,11 @@ using System.Text;
 using FdoToolbox.Base.Services;
 using FdoToolbox.Core.Utility;
 using FdoToolbox.Core.Feature;
+using FdoToolbox.Base;
 
 namespace FdoToolbox.Express.Controls
 {
-    public interface ICreateSdfView
+    public interface ICreateSdfView : IViewContent
     {
         string SdfFile { get; }
         string FeatureSchemaDefinition { get; }

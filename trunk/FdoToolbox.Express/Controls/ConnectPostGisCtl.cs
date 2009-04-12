@@ -33,7 +33,7 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class ConnectPostGisCtl : ViewContent, IViewContent, IConnectPostGisView
+    public partial class ConnectPostGisCtl : ViewContent, IConnectPostGisView
     {
         private ConnectPostGisPresenter _presenter;
 
@@ -43,16 +43,9 @@ namespace FdoToolbox.Express.Controls
             _presenter = new ConnectPostGisPresenter(this, ServiceManager.Instance.GetService<IFdoConnectionManager>());
         }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_CONNECT_POSTGIS"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -106,11 +99,6 @@ namespace FdoToolbox.Express.Controls
         public string ConnectionName
         {
             get { return txtConnectionName.Text; }
-        }
-
-        public void AlertError(string msg)
-        {
-            MessageService.ShowError(msg);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

@@ -26,10 +26,11 @@ using FdoToolbox.Base.Services;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Core.Utility;
 using ICSharpCode.Core;
+using FdoToolbox.Base;
 
 namespace FdoToolbox.Express.Controls
 {
-    public interface ICopySpatialContextsView
+    public interface ICopySpatialContextsView : IViewContent
     {
         string SourceConnectionName { get; set; }
         IList<string> TargetConnectionNames { set; }
@@ -38,8 +39,6 @@ namespace FdoToolbox.Express.Controls
         IList<string> SpatialContexts { get; set; }
         bool Overwrite { get; set; }
         bool OverwriteEnabled { get; set; }
-        void Close();
-        void ShowMessage(string msg);
     }
 
     public class CopySpatialContextsCtlPresenter
@@ -110,12 +109,12 @@ namespace FdoToolbox.Express.Controls
 
             if (contexts.Count == 0)
             {
-                _view.ShowMessage(ResourceService.GetString("MSG_NO_SPATIAL_CONTEXTS_COPIED"));
+                _view.ShowAlert(null, ResourceService.GetString("MSG_NO_SPATIAL_CONTEXTS_COPIED"));
                 return;
             }
 
             ExpressUtility.CopyAllSpatialContexts(contexts, targetConn, _view.Overwrite);
-            _view.ShowMessage(ResourceService.GetString("MSG_SPATIAL_CONTEXTS_COPIED"));
+            _view.ShowAlert(null, ResourceService.GetString("MSG_SPATIAL_CONTEXTS_COPIED"));
             _view.Close();
         }
     }
