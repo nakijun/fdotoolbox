@@ -156,7 +156,7 @@ namespace FdoToolbox.Base.Controls
             using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
             {
                 if (!_presenter.Connect())
-                    MessageService.ShowError("Failed to connect");
+                    this.ShowError("Failed to connect");
                 else
                     base.Close();
             }

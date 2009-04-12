@@ -46,7 +46,7 @@ namespace FdoToolbox.Base.Controls
         SQL
     }
 
-    public interface IFdoDataPreviewView
+    public interface IFdoDataPreviewView : IViewContent
     {
         List<QueryMode> QueryModes { set; }
         QueryMode SelectedQueryMode { get; }
@@ -369,7 +369,7 @@ namespace FdoToolbox.Base.Controls
                 {
                     if ((query as StandardQuery).Limit <= 0)
                     {
-                        if (count > limit && !MessageService.AskQuestionFormatted(ResourceService.GetString("TITLE_DATA_PREVIEW"), ResourceService.GetString("QUESTION_DATA_PREVIEW_LIMIT"), count.ToString()))
+                        if (count > limit && !_view.ConfirmFormatted(ResourceService.GetString("TITLE_DATA_PREVIEW"), ResourceService.GetString("QUESTION_DATA_PREVIEW_LIMIT"), count.ToString()))
                         {
                             return;
                         }

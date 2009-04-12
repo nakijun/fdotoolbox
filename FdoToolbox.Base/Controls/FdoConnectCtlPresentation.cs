@@ -85,17 +85,17 @@ namespace FdoToolbox.Base.Controls
                 FdoConnectionState state = conn.Open();
                 if (state == FdoConnectionState.Open || state == FdoConnectionState.Pending)
                 {
-                    MessageService.ShowMessage("Test successful");
+                    _view.ShowMessage(null, "Test successful");
                     conn.Close();
                 }
                 else
                 {
-                    MessageService.ShowError("Connection test failed");
+                    _view.ShowError("Connection test failed");
                 }
             }
             catch (FdoException ex)
             {
-                MessageService.ShowError(ex.InnerException.Message);
+                _view.ShowError(ex.InnerException.Message);
             }
             finally
             {
@@ -214,7 +214,7 @@ namespace FdoToolbox.Base.Controls
             }
             catch (Exception ex)
             {
-                MessageService.ShowError(ex);
+                _view.ShowError(ex);
                 conn.Dispose();
                 return false;
             }

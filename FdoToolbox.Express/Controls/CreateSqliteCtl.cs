@@ -74,7 +74,7 @@ namespace FdoToolbox.Express.Controls
             }
             if (ok)
             {
-                MessageService.ShowMessage(ResourceService.GetString("MSG_SQLITE_CREATED"), ResourceService.GetString("TITLE_CREATE_SQLITE"));
+                this.ShowMessage(ResourceService.GetString("MSG_SQLITE_CREATED"), ResourceService.GetString("TITLE_CREATE_SQLITE"));
                 base.Close();
             }
         }

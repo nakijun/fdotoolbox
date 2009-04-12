@@ -68,7 +68,7 @@ namespace FdoToolbox.Base
         /// </summary>
         /// <param name="title">The title of this message</param>
         /// <param name="message">The message</param>
-        void ShowAlert(string title, string message);
+        void ShowMessage(string title, string message);
         /// <summary>
         /// Make a request for confirmation
         /// </summary>
@@ -76,6 +76,14 @@ namespace FdoToolbox.Base
         /// <param name="message">The message</param>
         /// <returns>true if confirmed, false otherwise</returns>
         bool Confirm(string title, string message);
+        /// <summary>
+        /// Make a request for confirmation
+        /// </summary>
+        /// <param name="title">The title of the confirmation message</param>
+        /// <param name="format">The message template</param>
+        /// <param name="args">The template values</param>
+        /// <returns>true if confirmed, false otherwise</returns>
+        bool ConfirmFormatted(string title, string format, params string[] args);
     }
 
     /// <summary>

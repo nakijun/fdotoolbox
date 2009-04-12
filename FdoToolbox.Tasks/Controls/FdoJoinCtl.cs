@@ -421,11 +421,11 @@ namespace FdoToolbox.Tasks.Controls
             }
             catch (TaskValidationException ex)
             {
-                MessageService.ShowError(ex.Message);
+                this.ShowError(ex.Message);
             }
             catch (Exception ex)
             {
-                MessageService.ShowError(ex);
+                this.ShowError(ex);
             }
         }
 

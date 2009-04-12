@@ -88,7 +88,7 @@ namespace FdoToolbox.Base.Controls
             if (props != null)
             {
                 _presenter.CreateDataStore(props);
-                MessageService.ShowMessage(ResourceService.GetString("MSG_DATA_STORE_CREATED"));
+                this.ShowMessage(null, ResourceService.GetString("MSG_DATA_STORE_CREATED"));
             }
         }
 
@@ -98,7 +98,7 @@ namespace FdoToolbox.Base.Controls
             if (props != null)
             {
                 _presenter.DestroyDataStore(props);
-                MessageService.ShowMessage(ResourceService.GetString("MSG_DATA_STORE_DESTROYED"));
+                this.ShowMessage(null, ResourceService.GetString("MSG_DATA_STORE_DESTROYED"));
             }
         }
 
