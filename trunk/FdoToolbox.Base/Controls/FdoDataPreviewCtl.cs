@@ -72,17 +72,10 @@ namespace FdoToolbox.Base.Controls
             base.OnLoad(e);
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_DATA_PREVIEW"); }
         }
-
-        public event EventHandler TitleChanged = delegate { };
 
         public List<QueryMode> QueryModes
         {

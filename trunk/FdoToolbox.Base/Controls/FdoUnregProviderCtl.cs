@@ -55,17 +55,10 @@ namespace FdoToolbox.Base.Controls
             base.Close();
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_UNREGISTER_PROVIDER"); }
         }
-
-        public event EventHandler TitleChanged = delegate { };
 
         private void lstProviders_SelectedIndexChanged(object sender, EventArgs e)
         {

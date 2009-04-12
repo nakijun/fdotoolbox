@@ -37,7 +37,7 @@ namespace FdoToolbox.Base.Controls
     /// certain elements of this view are disabled based on the capabilities of the underlying connection. In standalone mode,
     /// no view elements are disabled.
     /// </summary>
-    public partial class FdoSchemaDesignerCtl : ViewContent, IFdoSchemaDesignerView, IViewContent, IConnectionDependentView
+    public partial class FdoSchemaDesignerCtl : ViewContent, IFdoSchemaDesignerView, IConnectionDependentView
     {
         private FdoSchemaDesignerPresenter _presenter;
 
@@ -223,21 +223,6 @@ namespace FdoToolbox.Base.Controls
         public string SelectedName
         {
             set { schemaTree.SelectedNode.Name = schemaTree.SelectedNode.Text = value; }
-        }
-
-        private string _title;
-
-        public string Title
-        {
-            get { return _title; }
-            set { _title = value; TitleChanged(this, EventArgs.Empty); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
 
         private void schemaTree_AfterSelect(object sender, TreeViewEventArgs e)

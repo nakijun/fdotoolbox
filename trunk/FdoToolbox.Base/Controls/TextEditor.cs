@@ -31,7 +31,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A text editor component
     /// </summary>
-    public class TextEditor : UserControl, IViewContent
+    public class TextEditor : ViewContent
     {
         ToolStrip toolstrip;
         TextEditorControl editor;
@@ -53,26 +53,9 @@ namespace FdoToolbox.Base.Controls
             
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_TEXT_EDITOR"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public bool CanClose
-        {
-            get { return true; }
-        }
-
-        public void Close()
-        {
-            ViewContentClosing(this, EventArgs.Empty);
         }
 
         public bool Save()
@@ -84,7 +67,5 @@ namespace FdoToolbox.Base.Controls
         {
             return true;
         }
-
-        public event EventHandler ViewContentClosing = delegate { };
     }
 }
