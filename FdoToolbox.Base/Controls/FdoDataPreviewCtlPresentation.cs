@@ -371,6 +371,7 @@ namespace FdoToolbox.Base.Controls
                     {
                         if (count > limit && !_view.ConfirmFormatted(ResourceService.GetString("TITLE_DATA_PREVIEW"), ResourceService.GetString("QUESTION_DATA_PREVIEW_LIMIT"), count.ToString()))
                         {
+                            _view.SetBusyCursor(false);
                             return;
                         }
                     }
