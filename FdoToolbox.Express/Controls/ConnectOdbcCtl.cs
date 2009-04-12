@@ -33,7 +33,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class ConnectOdbcCtl : ViewContent, IViewContent, IConnectOdbcView
+    public partial class ConnectOdbcCtl : ViewContent, IConnectOdbcView
     {
         private ConnectOdbcPresenter _presenter;
 
@@ -71,16 +71,9 @@ namespace FdoToolbox.Express.Controls
             }
         }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_CONNECT_ODBC"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
 
         private void cmbDataType_SelectedIndexChanged(object sender, EventArgs e)
@@ -108,8 +101,7 @@ namespace FdoToolbox.Express.Controls
         {
             txtConfiguration.Text = FileService.OpenFile(ResourceService.GetString("TITLE_LOAD_CONFIGURATION"), ResourceService.GetString("FILTER_XML_FILES"));
         }
-
-
+        
         public string ConfigurationFile
         {
             get { return txtConfiguration.Text; }

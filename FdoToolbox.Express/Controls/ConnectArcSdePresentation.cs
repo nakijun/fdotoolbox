@@ -4,10 +4,11 @@ using System.Text;
 using FdoToolbox.Base.Services;
 using ICSharpCode.Core;
 using FdoToolbox.Core.Feature;
+using FdoToolbox.Base;
 
 namespace FdoToolbox.Express.Controls
 {
-    public interface IConnectArcSdeView
+    public interface IConnectArcSdeView : IViewContent
     {
         string Server { get; }
         string Instance { get; }
@@ -20,8 +21,6 @@ namespace FdoToolbox.Express.Controls
         string[] DataStores { set; }
         string SelectedDataStore { get; }
         string ConnectionName { get; }
-
-        void AlertError(string msg);
     }
 
     public class ConnectArcSdePresenter
@@ -70,7 +69,7 @@ namespace FdoToolbox.Express.Controls
             }
             catch (Exception ex)
             {
-                _view.AlertError(ex.Message);
+                _view.ShowError(ex.Message);
             }
         }
 
@@ -78,7 +77,7 @@ namespace FdoToolbox.Express.Controls
         {
             if (string.IsNullOrEmpty(_view.ConnectionName) || _connMgr.NameExists(_view.ConnectionName))
             {
-                _view.AlertError(ResourceService.GetString("ERR_CONNECTION_NAME_EMPTY_OR_EXISTS"));
+                _view.ShowError(ResourceService.GetString("ERR_CONNECTION_NAME_EMPTY_OR_EXISTS"));
                 return false;
             }
 
@@ -93,7 +92,7 @@ namespace FdoToolbox.Express.Controls
             }
             catch (Exception ex)
             {
-                _view.AlertError(ex.Message);
+                _view.ShowError(ex.Message);
             }
 
             return false;

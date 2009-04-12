@@ -33,7 +33,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class ConnectOgrCtl : ViewContent, IConnectOgrView, IViewContent
+    public partial class ConnectOgrCtl : ViewContent, IConnectOgrView
     {
         private ConnectOgrPresenter _presenter;
 
@@ -92,16 +92,9 @@ namespace FdoToolbox.Express.Controls
             get { return txtName.Text; }
         }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_CONNECT_OGR"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
     }
 }

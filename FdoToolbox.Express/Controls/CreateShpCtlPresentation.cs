@@ -27,10 +27,11 @@ using FdoToolbox.Core.Utility;
 using FdoToolbox.Core.Feature;
 using System.IO;
 using ICSharpCode.Core;
+using FdoToolbox.Base;
 
 namespace FdoToolbox.Express.Controls
 {
-    public interface ICreateShpView
+    public interface ICreateShpView : IViewContent
     {
         string ShpFile { get; }
         string FeatureSchemaDefinition { get; }

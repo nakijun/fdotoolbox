@@ -35,23 +35,16 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class FileToFileCtl : ViewContent, IViewContent
+    public partial class FileToFileCtl : ViewContent
     {
         public FileToFileCtl()
         {
             InitializeComponent();
         }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_EXPRESS_BULK_COPY"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
 
         private void btnOpen_Click(object sender, EventArgs e)

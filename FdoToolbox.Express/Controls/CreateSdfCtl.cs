@@ -35,7 +35,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class CreateSdfCtl : ViewContent, IViewContent, ICreateSdfView
+    public partial class CreateSdfCtl : ViewContent, ICreateSdfView
     {
         private CreateSdfPresenter _presenter;
 
@@ -79,17 +79,10 @@ namespace FdoToolbox.Express.Controls
             }
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_CREATE_SDF"); }
         }
-
-        public event EventHandler TitleChanged = delegate { };
 
         public string SdfFile
         {

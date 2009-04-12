@@ -28,10 +28,11 @@ using FdoToolbox.Core.Feature;
 using FdoToolbox.Base.Services;
 using ICSharpCode.Core;
 using FdoToolbox.Core;
+using FdoToolbox.Base;
 
 namespace FdoToolbox.Express.Controls
 {
-    public interface IConnectOgrView
+    public interface IConnectOgrView : IViewContent
     {
         OgrType[] OgrTypes { set; }
         OgrType SelectedOgrType { get; }

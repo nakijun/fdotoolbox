@@ -35,7 +35,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class CreateShpCtl : ViewContent, IViewContent, ICreateShpView
+    public partial class CreateShpCtl : ViewContent, ICreateShpView
     {
         private CreateShpPresenter _presenter;
 
@@ -79,17 +79,10 @@ namespace FdoToolbox.Express.Controls
             }
         }
 
-        public Control ContentControl
-        {
-            get { return this; }
-        }
-
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_CREATE_SHP"); }
         }
-
-        public event EventHandler TitleChanged = delegate { };
 
         public string ShpFile
         {

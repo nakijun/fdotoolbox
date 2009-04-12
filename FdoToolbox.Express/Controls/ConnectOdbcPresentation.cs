@@ -32,7 +32,7 @@ using OSGeo.FDO.Common.Io;
 
 namespace FdoToolbox.Express.Controls
 {
-    public interface IConnectOdbcView
+    public interface IConnectOdbcView : IViewContent
     {
         OdbcType[] OdbcTypes { set; }
         OdbcType SelectedOdbcType { get; }

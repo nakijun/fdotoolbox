@@ -105,6 +105,11 @@ namespace FdoToolbox.Base.Controls
             MessageService.ShowError(ex);
         }
 
+        public void ShowError(string message)
+        {
+            MessageService.ShowError(message);
+        }
+
         public void ShowAlert(string title, string message)
         {
             if (!string.IsNullOrEmpty(title))
