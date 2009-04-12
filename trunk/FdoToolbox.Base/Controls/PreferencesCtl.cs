@@ -58,7 +58,7 @@ namespace FdoToolbox.Base.Controls
         private void btnSave_Click(object sender, EventArgs e)
         {
             _presenter.SaveChanges();
-            MessageService.ShowMessage(ResourceService.GetString("MSG_PREFS_SAVED"));
+            this.ShowMessage(null, ResourceService.GetString("MSG_PREFS_SAVED"));
             base.Close();
         }
 

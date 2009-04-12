@@ -30,7 +30,7 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoCreateDataStoreView
+    public interface IFdoCreateDataStoreView : IViewContent
     {
         IList<FdoProviderInfo> ProviderList { set; }
         FdoProviderInfo SelectedProvider { get; }
@@ -97,7 +97,7 @@ namespace FdoToolbox.Base.Controls
                 }
                 else
                 {
-                    MessageService.ShowError("Selected provider does not support creation of data stores");
+                    _view.ShowError("Selected provider does not support creation of data stores");
                     _view.ResetDataStoreGrid();
                     _view.ResetConnectGrid();
                     _view.CreateEnabled = false;
@@ -136,7 +136,7 @@ namespace FdoToolbox.Base.Controls
                 NameValueCollection dp = _view.DataStoreProperties;
                 NameValueCollection cp = _view.ConnectProperties;
                 FdoFeatureService.CreateDataStore(prov.Name, dp, cp);
-                MessageService.ShowMessage(ResourceService.GetString("MSG_DATA_STORE_CREATED"), ResourceService.GetString("TITLE_CREATE_DATA_STORE"));
+                _view.ShowMessage(ResourceService.GetString("MSG_DATA_STORE_CREATED"), ResourceService.GetString("TITLE_CREATE_DATA_STORE"));
                 return true;
             }
             return false;

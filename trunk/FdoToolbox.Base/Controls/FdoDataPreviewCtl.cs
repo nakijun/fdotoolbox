@@ -231,7 +231,7 @@ namespace FdoToolbox.Base.Controls
 
         public void DisplayError(Exception exception)
         {
-            MessageService.ShowError(exception);
+            this.ShowError(exception);
         }
 
         private void saveSdf_Click(object sender, EventArgs e)
@@ -239,7 +239,7 @@ namespace FdoToolbox.Base.Controls
             FdoFeatureTable table = this.ResultTable;
             if (table == null || table.Rows.Count == 0)
             {
-                MessageService.ShowError(ResourceService.GetString("ERR_NO_RESULT_TABLE_TO_SAVE"));
+                this.ShowError(ResourceService.GetString("ERR_NO_RESULT_TABLE_TO_SAVE"));
                 return;
             }
             string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_QUERY_RESULT"), ResourceService.GetString("FILTER_SDF_FILE"));
@@ -251,7 +251,7 @@ namespace FdoToolbox.Base.Controls
             FdoFeatureTable table = this.ResultTable;
             if (table == null || table.Rows.Count == 0)
             {
-                MessageService.ShowError(ResourceService.GetString("ERR_NO_RESULT_TABLE_TO_SAVE"));
+                this.ShowError(ResourceService.GetString("ERR_NO_RESULT_TABLE_TO_SAVE"));
                 return;
             }
             string file = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_QUERY_RESULT"), ResourceService.GetString("FILTER_SQLITE"));

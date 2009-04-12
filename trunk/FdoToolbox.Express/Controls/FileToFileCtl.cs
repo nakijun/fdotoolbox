@@ -77,7 +77,7 @@ namespace FdoToolbox.Express.Controls
             }
             else
             {
-                MessageService.ShowError("Source and Target fields are required");
+                this.ShowError("Source and Target fields are required");
             }
         }
 

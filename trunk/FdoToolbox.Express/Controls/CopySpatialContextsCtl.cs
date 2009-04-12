@@ -148,10 +148,5 @@ namespace FdoToolbox.Express.Controls
         {
             get { return ResourceService.GetString("TITLE_COPY_SPATIAL_CONTEXTS"); }
         }
-
-        public void ShowMessage(string msg)
-        {
-            MessageService.ShowMessage(msg);
-        }
     }
 }

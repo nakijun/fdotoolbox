@@ -103,7 +103,7 @@ namespace FdoToolbox.Base.Controls
             }
             catch (Exception ex)
             {
-                MessageService.ShowError(ex.Message);
+                this.ShowError(ex.Message);
             }
         }
 

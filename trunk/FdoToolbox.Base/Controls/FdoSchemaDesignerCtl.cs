@@ -263,11 +263,11 @@ namespace FdoToolbox.Base.Controls
                 try
                 {
                     _presenter.SaveSchemaToXml(xmlFile);
-                    MessageService.ShowMessage(ResourceService.GetString("MSG_SCHEMA_SAVED"));
+                    this.ShowMessage(null, ResourceService.GetString("MSG_SCHEMA_SAVED"));
                 }
                 catch (Exception ex)
                 {
-                    MessageService.ShowError(ex);
+                    this.ShowError(ex);
                 }
             }
         }
@@ -280,11 +280,11 @@ namespace FdoToolbox.Base.Controls
                 try
                 {
                     _presenter.SaveSchemaToSdf(sdfFile);
-                    MessageService.ShowMessage(ResourceService.GetString("MSG_SCHEMA_SAVED"));
+                    this.ShowMessage(null, ResourceService.GetString("MSG_SCHEMA_SAVED"));
                 }
                 catch (Exception ex)
                 {
-                    MessageService.ShowError(ex);
+                    this.ShowError(ex);
                 }
             }
         }
@@ -294,12 +294,12 @@ namespace FdoToolbox.Base.Controls
             try
             {
                 _presenter.ApplySchema();
-                MessageService.ShowMessage(ResourceService.GetString("MSG_SCHEMA_APPLIED"));
+                this.ShowMessage(null, ResourceService.GetString("MSG_SCHEMA_APPLIED"));
                 this.SchemaApplied(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                MessageService.ShowError(ex);
+                this.ShowError(ex);
             }
         }
 

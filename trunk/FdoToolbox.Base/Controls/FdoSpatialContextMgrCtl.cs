@@ -96,7 +96,7 @@ namespace FdoToolbox.Base.Controls
             if (sci != null)
             {
                 _presenter.AddSpatialContext(sci);
-                MessageService.ShowMessage(ResourceService.GetString("MSG_SPATIAL_CONTEXT_CREATED"));
+                this.ShowMessage(null, ResourceService.GetString("MSG_SPATIAL_CONTEXT_CREATED"));
                 _presenter.GetSpatialContexts();
             }
         }
@@ -110,7 +110,7 @@ namespace FdoToolbox.Base.Controls
                 if (sci2 != null)
                 {
                     _presenter.UpdateSpatialContext(sci2);
-                    MessageService.ShowMessage(ResourceService.GetString("MSG_SPATIAL_CONTEXT_UPDATED"));
+                    this.ShowMessage(null, ResourceService.GetString("MSG_SPATIAL_CONTEXT_UPDATED"));
                     _presenter.GetSpatialContexts();
                 }
             }
@@ -121,7 +121,7 @@ namespace FdoToolbox.Base.Controls
             SpatialContextInfo sci = this.SelectedSpatialContext;
             if (sci != null)
             {
-                if (MessageService.AskQuestion(
+                if (this.Confirm(
                     ResourceService.GetString("MSG_CONFIRM_DELETE_SPATIAL_CONTEXT"),
                     ResourceService.GetString("TITLE_CONFIRM_DELETE_SPATIAL_CONTEXT")))
                 {

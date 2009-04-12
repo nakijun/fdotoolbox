@@ -415,7 +415,7 @@ namespace FdoToolbox.Tasks.Controls
                             }
                             catch (MappingException ex)
                             {
-                                MessageService.ShowError(ex);
+                                this.ShowError(ex);
                             }
                         });
                 }
@@ -452,7 +452,7 @@ namespace FdoToolbox.Tasks.Controls
                             }
                             catch (MappingException ex)
                             {
-                                MessageService.ShowError(ex);
+                                this.ShowError(ex);
                             }
                         });
                     mapExpressionItem.DropDown.Items.Add(
@@ -468,7 +468,7 @@ namespace FdoToolbox.Tasks.Controls
                             }
                             catch (MappingException ex)
                             {
-                                MessageService.ShowError(ex);
+                                this.ShowError(ex);
                             }
                         });
                 }
@@ -638,7 +638,7 @@ namespace FdoToolbox.Tasks.Controls
             }
             catch (Exception ex)
             {
-                MessageService.ShowError(ex);
+                this.ShowError(ex);
             }
         }
 
@@ -710,7 +710,7 @@ namespace FdoToolbox.Tasks.Controls
                 }
                 else
                 {
-                    MessageService.ShowMessage(ResourceService.GetString("MSG_DELETE_UNSUPPORTED"));
+                    this.ShowMessage(null, ResourceService.GetString("MSG_DELETE_UNSUPPORTED"));
                     SetClassDelete(delNode.Parent.Parent.Name, false);
                 }
             }

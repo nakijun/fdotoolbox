@@ -110,7 +110,7 @@ namespace FdoToolbox.Base.Controls
             MessageService.ShowError(message);
         }
 
-        public void ShowAlert(string title, string message)
+        public void ShowMessage(string title, string message)
         {
             if (!string.IsNullOrEmpty(title))
                 MessageService.ShowMessage(message, title);
@@ -124,6 +124,14 @@ namespace FdoToolbox.Base.Controls
                 return MessageService.AskQuestion(message, title);
             else
                 return MessageService.AskQuestion(message);
+        }
+
+        public bool ConfirmFormatted(string title, string format, params string[] args)
+        {
+            if (!string.IsNullOrEmpty(title))
+                return MessageService.AskQuestionFormatted(title, format, args);
+            else
+                return MessageService.AskQuestionFormatted(format, args);
         }
     }
 }

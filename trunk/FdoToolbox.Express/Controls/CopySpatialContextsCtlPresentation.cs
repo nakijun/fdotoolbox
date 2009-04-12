@@ -109,12 +109,12 @@ namespace FdoToolbox.Express.Controls
 
             if (contexts.Count == 0)
             {
-                _view.ShowAlert(null, ResourceService.GetString("MSG_NO_SPATIAL_CONTEXTS_COPIED"));
+                _view.ShowMessage(null, ResourceService.GetString("MSG_NO_SPATIAL_CONTEXTS_COPIED"));
                 return;
             }
 
             ExpressUtility.CopyAllSpatialContexts(contexts, targetConn, _view.Overwrite);
-            _view.ShowAlert(null, ResourceService.GetString("MSG_SPATIAL_CONTEXTS_COPIED"));
+            _view.ShowMessage(null, ResourceService.GetString("MSG_SPATIAL_CONTEXTS_COPIED"));
             _view.Close();
         }
     }

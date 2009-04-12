@@ -74,7 +74,7 @@ namespace FdoToolbox.Express.Controls
         {
             if (string.IsNullOrEmpty(_view.ConnectionName))
             {
-                MessageService.ShowMessage("Name required");
+                _view.ShowMessage(null, "Name required");
                 return false;
             }
 
@@ -90,7 +90,7 @@ namespace FdoToolbox.Express.Controls
                 return true;
             }
 
-            MessageService.ShowMessage("Connection test failed");
+            _view.ShowMessage(null, "Connection test failed");
             return false;
         }
 
@@ -102,17 +102,17 @@ namespace FdoToolbox.Express.Controls
                 FdoConnectionState state = conn.Open();
                 if (state == FdoConnectionState.Open)
                 {
-                    MessageService.ShowMessage("Test successful");
+                    _view.ShowMessage(null, "Test successful");
                     conn.Close();
                 }
                 else
                 {
-                    MessageService.ShowError("Connection test failed");
+                    _view.ShowError("Connection test failed");
                 }
             }
             catch (FdoException ex)
             {
-                MessageService.ShowError(ex.InnerException.Message);
+                _view.ShowError(ex.InnerException.Message);
             }
         }
     }
