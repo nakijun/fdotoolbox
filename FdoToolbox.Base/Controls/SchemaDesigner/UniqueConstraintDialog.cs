@@ -141,5 +141,10 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             }
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            return _str.GetHashCode();
+        }
     }
 }

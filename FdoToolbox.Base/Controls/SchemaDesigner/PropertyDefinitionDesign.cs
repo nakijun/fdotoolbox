@@ -38,6 +38,11 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             _conn = conn;
         }
 
+        internal OSGeo.FDO.Schema.PropertyDefinition WrappedPropertyDefinition
+        {
+            get { return _propDef; }
+        }
+
         protected void FirePropertyChanged(string property)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(property));
