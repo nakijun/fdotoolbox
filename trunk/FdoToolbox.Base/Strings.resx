@@ -178,6 +178,9 @@
   <data name="CMD_InsertData" xml:space="preserve">
     <value>Insert Data</value>
   </data>
+  <data name="CMD_InsertFeature" xml:space="preserve">
+    <value>Insert New Feature</value>
+  </data>
   <data name="CMD_LoadConnection" xml:space="preserve">
     <value>Load Connection</value>
   </data>
@@ -540,6 +543,9 @@
   </data>
   <data name="TITLE_EXPRESSION_EDITOR" xml:space="preserve">
     <value>Expression Editor</value>
+  </data>
+  <data name="TITLE_INSERT_FEATURE" xml:space="preserve">
+    <value>Insert New Feature</value>
   </data>
   <data name="TITLE_LOAD_CONFIGURATION" xml:space="preserve">
     <value>Load configuration file</value>

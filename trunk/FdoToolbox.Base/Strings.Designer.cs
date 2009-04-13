@@ -248,6 +248,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Insert New Feature.
+        /// </summary>
+        internal static string CMD_InsertFeature {
+            get {
+                return ResourceManager.GetString("CMD_InsertFeature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load Connection.
         /// </summary>
         internal static string CMD_LoadConnection {
@@ -1234,6 +1243,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_EXPRESSION_EDITOR {
             get {
                 return ResourceManager.GetString("TITLE_EXPRESSION_EDITOR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert New Feature.
+        /// </summary>
+        internal static string TITLE_INSERT_FEATURE {
+            get {
+                return ResourceManager.GetString("TITLE_INSERT_FEATURE", resourceCulture);
             }
         }
         

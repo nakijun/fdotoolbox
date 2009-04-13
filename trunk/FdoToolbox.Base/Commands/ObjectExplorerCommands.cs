@@ -415,6 +415,7 @@ namespace FdoToolbox.Base.Commands
     {
         public override void Run()
         {
+            /*
             Workbench wb = Workbench.Instance;
             TreeNode node = wb.ObjectExplorer.GetSelectedNode();
             if (node.Level == 1)
@@ -427,6 +428,24 @@ namespace FdoToolbox.Base.Commands
                 {
 
                 }
+            }*/
+            MessageService.ShowError("Not Implemented");
+        }
+    }
+
+    public class InsertFeatureCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            TreeNode node = wb.ObjectExplorer.GetSelectedNode();
+            if (node.Level == 3)
+            {
+                string name = node.Name;
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                FdoConnection conn = mgr.GetConnection(node.Parent.Parent.Name);
+                FdoInsertScaffold ctl = new FdoInsertScaffold(conn, name);
+                wb.ShowContent(ctl, ViewRegion.Dialog);
             }
         }
     }
