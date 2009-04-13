@@ -60,3 +60,4 @@ Please take note of the following when using the Express Bulk Copy:
 
  * When copying from source to target, the target is always overwritten.
  * Copying to SHP may fail if certain conditions are not met. See :ref:`shp-constraints`
+ * Object and Assocation properties are omitted from the bulk copy.
