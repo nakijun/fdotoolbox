@@ -71,16 +71,9 @@ namespace FdoToolbox.Tasks.Controls
             base.OnLoad(e);
         }
 
-        public string Title
+        public override string Title
         {
             get { return ResourceService.GetString("TITLE_BULK_COPY_SETTINGS"); }
-        }
-
-        public event EventHandler TitleChanged = delegate { };
-
-        public Control ContentControl
-        {
-            get { return this; }
         }
 
         public string TaskName

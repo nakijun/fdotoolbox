@@ -33,7 +33,7 @@ using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoSchemaDesignerView
+    public interface IFdoSchemaDesignerView : IViewContent
     {
         void AddImage(string name, Bitmap bmp);
         void SetSchemaNode(string name);
@@ -54,7 +54,6 @@ namespace FdoToolbox.Base.Controls
         ClassType[] SupportedClassTypes { set; }
         PropertyType[] SupportedPropertyTypes { set; }
 
-        string Title { set; }
         bool ApplyEnabled { set; }
 
         event EventHandler SchemaApplied;
@@ -239,6 +238,34 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        public bool CanAddAssociationProperty(ref string reason)
+        {
+            //The only requirement is that another class definition exists in the schema
+            foreach (ClassDefinition cd in _schema.Classes)
+            {
+                if (cd.Name != _view.SelectedClass)
+                {
+                    return true;
+                }
+            }
+            reason = "No other class definitions exist in the current schema";
+            return false;
+        }
+
+        public bool CanAddObjectProperty(ref string reason)
+        {
+            //The only requirement is that another class definition exists in the schema
+            foreach (ClassDefinition cd in _schema.Classes)
+            {
+                if (cd.Name != _view.SelectedClass)
+                {
+                    return true;
+                }
+            }
+            reason = "No other class definitions exist in the current schema";
+            return false;
+        }
+
         const int DEFAULT_PROPERTY_LENGTH = 255;
 
         public void PropertySelected()
@@ -378,36 +405,56 @@ namespace FdoToolbox.Base.Controls
 
         public void AddAssocationProperty()
         {
-            ClassDefinition cls = GetClass(_view.SelectedClass);
-            if (cls != null)
+            //Only add association property if there is at least one other class definition in the current schema
+            //that satisifies the requirements of this association property
+            string reason = null;
+            if (!this.CanAddAssociationProperty(ref reason))
             {
-                string name = "AssocProperty" + counter++;
-                while (cls.Properties.IndexOf(name) >= 0)
+                _view.ShowError(reason);
+            }
+            else
+            {
+                ClassDefinition cls = GetClass(_view.SelectedClass);
+                if (cls != null)
                 {
-                    name = "AssocProperty" + counter++;
+                    string name = "AssocProperty" + counter++;
+                    while (cls.Properties.IndexOf(name) >= 0)
+                    {
+                        name = "AssocProperty" + counter++;
+                    }
+                    AssociationPropertyDefinition ap = new AssociationPropertyDefinition(name, "");
+                    ap.ReverseMultiplicity = "0";
+                    cls.Properties.Add(ap);
+                    _view.AddPropertyNode(cls.Name, ap.Name, RES_ASSOC);
+                    CheckDirtyState();
                 }
-                AssociationPropertyDefinition ap = new AssociationPropertyDefinition(name, "");
-                ap.ReverseMultiplicity = "0";
-                cls.Properties.Add(ap);
-                _view.AddPropertyNode(cls.Name, ap.Name, RES_ASSOC);
-                CheckDirtyState();
             }
         }
 
         public void AddObjectProperty()
         {
-            ClassDefinition cls = GetClass(_view.SelectedClass);
-            if (cls != null)
+            //Only add object property if there is at least one other class definition in the current schema
+            //that satisfies the requirements of this object property
+            string reason = null;
+            if (!this.CanAddObjectProperty(ref reason))
             {
-                string name = "ObjectProperty" + counter++;
-                while (cls.Properties.IndexOf(name) >= 0)
+                _view.ShowError(reason);
+            }
+            else
+            {
+                ClassDefinition cls = GetClass(_view.SelectedClass);
+                if (cls != null)
                 {
-                    name = "ObjectProperty" + counter++;
+                    string name = "ObjectProperty" + counter++;
+                    while (cls.Properties.IndexOf(name) >= 0)
+                    {
+                        name = "ObjectProperty" + counter++;
+                    }
+                    ObjectPropertyDefinition op = new ObjectPropertyDefinition(name, "");
+                    cls.Properties.Add(op);
+                    _view.AddPropertyNode(cls.Name, op.Name, RES_OBJECT);
+                    CheckDirtyState();
                 }
-                ObjectPropertyDefinition op = new ObjectPropertyDefinition(name, "");
-                cls.Properties.Add(op);
-                _view.AddPropertyNode(cls.Name, op.Name, RES_OBJECT);
-                CheckDirtyState();
             }
         }
 
