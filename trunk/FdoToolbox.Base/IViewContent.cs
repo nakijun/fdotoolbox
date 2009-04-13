@@ -34,7 +34,7 @@ namespace FdoToolbox.Base
         /// <summary>
         /// The title of the view
         /// </summary>
-        string Title { get; }
+        string Title { get; set; }
         /// <summary>
         /// Fires when the title has been changed
         /// </summary>

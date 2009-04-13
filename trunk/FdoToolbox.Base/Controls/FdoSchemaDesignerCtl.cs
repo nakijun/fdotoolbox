@@ -178,6 +178,10 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Sets the supported property types.
+        /// </summary>
+        /// <value>The supported property types.</value>
         public OSGeo.FDO.Schema.PropertyType[] SupportedPropertyTypes
         {
             set 
@@ -202,16 +206,12 @@ namespace FdoToolbox.Base.Controls
                         case OSGeo.FDO.Schema.PropertyType.PropertyType_AssociationProperty:
                             mnuAddNewProperty.DropDown.Items.Add(ResourceService.GetString("LBL_ASSOCIATION_PROPERTY"), ResourceService.GetBitmap("table_relationship"), delegate
                             {
-                                //Only add association property if there is at least one other class definition in the current schema
-                                //that satisifies the requirements of this association property
                                 _presenter.AddAssocationProperty();
                             });
                             break;
                         case OSGeo.FDO.Schema.PropertyType.PropertyType_ObjectProperty:
                             mnuAddNewProperty.DropDown.Items.Add(ResourceService.GetString("LBL_OBJECT_PROPERTY"), ResourceService.GetBitmap("package"), delegate
                             {
-                                //Only add object property if there is at least one other class definition in the current schema
-                                //that satisfies the requirements of this object property
                                 _presenter.AddObjectProperty();
                             });
                             break;
