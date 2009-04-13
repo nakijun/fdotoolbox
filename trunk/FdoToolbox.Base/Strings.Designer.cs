@@ -176,7 +176,7 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data Preview.
+        ///   Looks up a localized string similar to Data Query.
         /// </summary>
         internal static string CMD_DataPreview {
             get {
@@ -1184,7 +1184,7 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data Preview.
+        ///   Looks up a localized string similar to Data Query.
         /// </summary>
         internal static string TITLE_DATA_PREVIEW {
             get {

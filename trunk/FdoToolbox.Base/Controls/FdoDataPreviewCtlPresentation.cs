@@ -56,6 +56,7 @@ namespace FdoToolbox.Base.Controls
         bool CancelEnabled { get; set; }
         bool ClearEnabled { get; set; }
         bool ExecuteEnabled { get; set; }
+        bool InsertEnabled { get; set; }
 
         string StatusMessage { set; }
         string ElapsedMessage { set; }
@@ -78,6 +79,7 @@ namespace FdoToolbox.Base.Controls
         private Dictionary<QueryMode, IQuerySubView> _queryViews;
         private Timer _timer;
         private DateTime _queryStart;
+        private bool insertSupported;
 
         public FdoDataPreviewPresenter(IFdoDataPreviewView view, FdoConnection conn)
         {
@@ -96,7 +98,8 @@ namespace FdoToolbox.Base.Controls
             _view.ElapsedMessage = string.Empty;
             _view.CancelEnabled = false;
             _view.ExecuteEnabled = true;
-
+            insertSupported = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Insert) >= 0);
+            
             _timer.Interval = 1000;
             _timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
         }
@@ -316,6 +319,8 @@ namespace FdoToolbox.Base.Controls
                 qv.MapPreviewStateChanged += new MapPreviewStateEventHandler(OnMapPreviewStateChanged);
             }
             _view.QueryModes = modes;
+
+            _view.InsertEnabled = (_view.SelectedQueryMode != QueryMode.SQL) && insertSupported;
         }
 
         void OnMapPreviewStateChanged(object sender, bool enabled)
@@ -326,6 +331,7 @@ namespace FdoToolbox.Base.Controls
         public void QueryModeChanged()
         {
             _view.QueryView = _queryViews[_view.SelectedQueryMode];
+            _view.InsertEnabled = insertSupported && (_view.SelectedQueryMode != QueryMode.SQL);
             //_view.MapEnabled = (_view.SelectedQueryMode == QueryMode.Standard);
         }
 
@@ -415,6 +421,30 @@ namespace FdoToolbox.Base.Controls
         internal bool ConnectionMatch(FdoConnection conn)
         {
             return _connection == conn;
+        }
+
+        internal void DoInsert()
+        {
+            FeatureQueryOptions query = null;
+            switch (_view.SelectedQueryMode)
+            {
+                case QueryMode.Aggregate:
+                    {
+                        query = (_view.QueryView as IFdoAggregateQueryView).QueryObject;
+                    }
+                    break;
+                case QueryMode.Standard:
+                    {
+                        query = (_view.QueryView as IFdoStandardQueryView).QueryObject;
+                    }
+                    break;
+            }
+            if (query != null)
+            {
+                Workbench wb = Workbench.Instance;
+                FdoInsertScaffold ctl = new FdoInsertScaffold(_connection, query.ClassName);
+                wb.ShowContent(ctl, ViewRegion.Dialog);
+            }
         }
     }
 }
