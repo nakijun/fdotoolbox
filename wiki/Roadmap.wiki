@@ -1,9 +1,11 @@
 #summary Planned features for upcoming releases
 
-=== 0.7.2 ===
- * SQL Server 2008 support
- * Use FDO 3.4.0
+=== 0.7.5 ===
+ * ~~SQL Server 2008 support~~
+ * Use FDO 3.4.0 final release
  * ~~Revert to simple geometry types in Schema Editor~~
+ * ~~CRUD support~~
+ * ~~Bulk Delete support~~
 
 === 0.8 ===
 
