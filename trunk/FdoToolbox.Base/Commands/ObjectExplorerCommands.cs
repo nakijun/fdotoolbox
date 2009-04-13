@@ -153,8 +153,9 @@ namespace FdoToolbox.Base.Commands
                     {
                         service.LoadSchemasFromXml(path);
                     }
-                    MessageService.ShowMessageFormatted(Res.GetString("MSG_SCHEMA_LOADED"), connNode.Name, path);
+                    MessageService.ShowMessage(Res.GetStringFormatted("MSG_SCHEMA_LOADED", connNode.Name, path));
                     Log.InfoFormatted(Res.GetString("MSG_SCHEMA_LOADED"), connNode.Name, path);
+                    mgr.RefreshConnection(connNode.Name);
                 }
             }
         }
@@ -200,20 +201,23 @@ namespace FdoToolbox.Base.Commands
         public override void Run()
         {
             TreeNode schemaNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-            FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-            FdoConnection conn = mgr.GetConnection(schemaNode.Parent.Name);
-            using (FdoFeatureService service = conn.CreateFeatureService())
+            if (schemaNode.Level == 2 && MessageService.AskQuestion("Are you sure you want to delete this schema?"))
             {
-                //TODO: This command should be preemptively disabled, as it was in 0.6 and before.
-                try
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                FdoConnection conn = mgr.GetConnection(schemaNode.Parent.Name);
+                using (FdoFeatureService service = conn.CreateFeatureService())
                 {
-                    service.DestroySchema(schemaNode.Name);
-                    Msg.ShowMessage(Res.GetString("MSG_SCHEMA_DELETED"), Res.GetString("TITLE_DELETE_SCHEMA"));
-                    Log.InfoFormatted(Res.GetString("LOG_SCHEMA_DELETED"), schemaNode.Name, schemaNode.Parent.Name);
-                }
-                catch (OSGeo.FDO.Common.Exception ex)
-                {
-                    Msg.ShowError(ex);
+                    try
+                    {
+                        service.DestroySchema(schemaNode.Name);
+                        Msg.ShowMessage(Res.GetString("MSG_SCHEMA_DELETED"), Res.GetString("TITLE_DELETE_SCHEMA"));
+                        Log.InfoFormatted(Res.GetString("LOG_SCHEMA_DELETED"), schemaNode.Name, schemaNode.Parent.Name);
+                        mgr.RefreshConnection(schemaNode.Parent.Name);
+                    }
+                    catch (OSGeo.FDO.Common.Exception ex)
+                    {
+                        Msg.ShowError(ex);
+                    }
                 }
             }
         }
