@@ -449,6 +449,51 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        internal void DoUpdate(FdoFeature feat)
+        {
+            FeatureQueryOptions query = null;
+            switch (_view.SelectedQueryMode)
+            {
+                case QueryMode.Aggregate:
+                    {
+                        query = (_view.QueryView as IFdoAggregateQueryView).QueryObject;
+                    }
+                    break;
+                case QueryMode.Standard:
+                    {
+                        query = (_view.QueryView as IFdoStandardQueryView).QueryObject;
+                    }
+                    break;
+            }
+            if (query != null)
+            {
+                string filter = GenerateFilter(feat);
+                if (string.IsNullOrEmpty(filter))
+                {
+                    _view.ShowError("Unable to generate an update filter. Possibly this result set has no unique identifiers or this result set was produced from a SQL query");
+                    return;
+                }
+                using (FdoFeatureService service = _connection.CreateFeatureService())
+                {
+                    //Update is based on a very simple premise, the filter should produce the
+                    //same number of affected results when selecting and updating.
+                    //
+                    //In our case, the filter should affect exactly one result when selecting and updating.
+                    long count = service.GetFeatureCount(feat.Table.TableName, filter, true);
+                    if (1 == count)
+                    {
+                        Workbench wb = Workbench.Instance;
+                        FdoUpdateScaffold ctl = new FdoUpdateScaffold(feat, _connection, filter);
+                        wb.ShowContent(ctl, ViewRegion.Dialog);
+                    }
+                }
+            }
+            else
+            {
+                _view.ShowError("Could not determine the feature class name from the result set");
+            }
+        }
+
         internal void DoDelete(FdoFeature feat)
         {
             string filter = GenerateFilter(feat);

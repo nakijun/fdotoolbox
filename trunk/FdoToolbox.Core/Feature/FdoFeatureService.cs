@@ -1983,6 +1983,66 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
+        /// Updates the features.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
+        /// <param name="values">The values.</param>
+        /// <param name="filter">The filter.</param>
+        /// <param name="useTransaction">if set to <c>true</c> [use transaction].</param>
+        /// <returns></returns>
+        public int UpdateFeatures(string className, Dictionary<string, ValueExpression> values, string filter, bool useTransaction)
+        {
+            if (values == null || values.Count == 0)
+                return 0;
+
+            if (!SupportsCommand(CommandType.CommandType_Update))
+                throw new FeatureServiceException(Res.GetStringFormatted("ERR_UNSUPPORTED_CMD", CommandType.CommandType_Update));
+
+            int updated = 0;
+            bool useTrans = (useTransaction && this.Connection.ConnectionCapabilities.SupportsTransactions());
+            using (IUpdate update = CreateCommand<IUpdate>(CommandType.CommandType_Update))
+            {
+                update.SetFeatureClassName(className);
+                if (!string.IsNullOrEmpty(filter))
+                    update.SetFilter(filter);
+                foreach (string propName in values.Keys)
+                {
+                    update.PropertyValues.Add(new PropertyValue(propName, values[propName]));
+                }
+                if (useTrans)
+                {
+                    ITransaction trans = this.Connection.BeginTransaction();
+                    using (trans)
+                    {
+                        try
+                        {
+                            updated = update.Execute();
+                            trans.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            trans.Rollback();
+                            throw new FeatureServiceException(Res.GetString("ERR_UPDATE"), ex);
+                        }
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        updated = update.Execute();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new FeatureServiceException(Res.GetString("ERR_UPDATE"), ex);
+                    }
+                }
+            }
+
+            return updated;
+        }
+
+        /// <summary>
         /// Inserts a new feature into the given feature class
         /// </summary>
         /// <param name="className"></param>
@@ -2260,7 +2320,5 @@ namespace FdoToolbox.Core.Feature
             }
             return null;
         }
-
-        
     }
 }

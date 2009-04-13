@@ -29,7 +29,7 @@ namespace FdoToolbox.Base.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.queryPanel = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -48,13 +48,13 @@ namespace FdoToolbox.Base.Controls
             this.TAB_GRID = new System.Windows.Forms.TabPage();
             this.grdResults = new System.Windows.Forms.DataGridView();
             this.ctxGridView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.updateThisFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteThisFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.TAB_MAP = new System.Windows.Forms.TabPage();
             this.mapCtl = new FdoToolbox.Base.Controls.FdoMapPreview();
-            this.updateThisFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -233,15 +233,15 @@ namespace FdoToolbox.Base.Controls
             this.grdResults.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.grdResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdResults.ContextMenuStrip = this.ctxGridView;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.NullValue = "<null>";
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.grdResults.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.NullValue = "<null>";
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.grdResults.DefaultCellStyle = dataGridViewCellStyle1;
             this.grdResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grdResults.Location = new System.Drawing.Point(0, 0);
             this.grdResults.Name = "grdResults";
@@ -259,6 +259,14 @@ namespace FdoToolbox.Base.Controls
             this.deleteThisFeatureToolStripMenuItem});
             this.ctxGridView.Name = "ctxGridView";
             this.ctxGridView.Size = new System.Drawing.Size(182, 70);
+            // 
+            // updateThisFeatureToolStripMenuItem
+            // 
+            this.updateThisFeatureToolStripMenuItem.Image = global::FdoToolbox.Base.Images.application_form_edit;
+            this.updateThisFeatureToolStripMenuItem.Name = "updateThisFeatureToolStripMenuItem";
+            this.updateThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.updateThisFeatureToolStripMenuItem.Text = "Update this Feature";
+            this.updateThisFeatureToolStripMenuItem.Click += new System.EventHandler(this.updateThisFeatureToolStripMenuItem_Click);
             // 
             // deleteThisFeatureToolStripMenuItem
             // 
@@ -308,13 +316,6 @@ namespace FdoToolbox.Base.Controls
             this.mapCtl.Name = "mapCtl";
             this.mapCtl.Size = new System.Drawing.Size(676, 227);
             this.mapCtl.TabIndex = 0;
-            // 
-            // updateThisFeatureToolStripMenuItem
-            // 
-            this.updateThisFeatureToolStripMenuItem.Image = global::FdoToolbox.Base.Images.application_form_edit;
-            this.updateThisFeatureToolStripMenuItem.Name = "updateThisFeatureToolStripMenuItem";
-            this.updateThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.updateThisFeatureToolStripMenuItem.Text = "Update this Feature";
             // 
             // FdoDataPreviewCtl
             // 
