@@ -96,7 +96,7 @@ namespace FdoToolbox.Base.Controls
         {
             if (_presenter.Unregister())
             {
-                this.ShowMessage(ResourceService.GetString("MSG_PROVIDER_UNREGISTERED"), ResourceService.GetString("TITLE_UNREGISTER_PROVIDER"));
+                this.ShowMessage(ResourceService.GetString("TITLE_UNREGISTER_PROVIDER"), ResourceService.GetString("MSG_PROVIDER_UNREGISTERED"));
                 _presenter.GetProviders();
             }
         }

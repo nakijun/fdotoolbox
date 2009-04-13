@@ -74,7 +74,7 @@ namespace FdoToolbox.Express.Controls
             }
             if (ok)
             {
-                this.ShowMessage(ResourceService.GetString("MSG_SDF_CREATED"), ResourceService.GetString("TITLE_CREATE_SDF"));
+                this.ShowMessage(ResourceService.GetString("TITLE_CREATE_SDF"), ResourceService.GetString("MSG_SDF_CREATED"));
                 base.Close();
             }
         }

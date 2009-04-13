@@ -74,7 +74,7 @@ namespace FdoToolbox.Express.Controls
             }
             if (ok)
             {
-                this.ShowMessage(ResourceService.GetString("MSG_SHP_CREATED"), ResourceService.GetString("TITLE_CREATE_SHP"));
+                this.ShowMessage(ResourceService.GetString("TITLE_CREATE_SHP"), ResourceService.GetString("MSG_SHP_CREATED"));
                 base.Close();
             }
         }
