@@ -84,6 +84,13 @@
       <DependentUpon>CoordSysCatalog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\CoordSysCatalogPresenter.cs" />
+    <Compile Include="Controls\FdoBulkDeleteCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoBulkDeleteCtl.Designer.cs">
+      <DependentUpon>FdoBulkDeleteCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoBulkDeleteCtlPresentation.cs" />
     <Compile Include="Controls\FdoUpdateScaffoldPresentation.cs" />
     <Compile Include="Controls\FdoUpdateScaffold.cs">
       <SubType>UserControl</SubType>
@@ -444,6 +451,10 @@
     <EmbeddedResource Include="Controls\CoordSysCatalog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CoordSysCatalog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoBulkDeleteCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoBulkDeleteCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoUpdateScaffold.resx">
       <DependentUpon>FdoUpdateScaffold.cs</DependentUpon>
