@@ -218,5 +218,28 @@ namespace FdoToolbox.Core.Feature
             //IDataReader does not hold a class definition, so this information is not available
             return string.Empty;
         }
+
+        /// <summary>
+        /// Determines whether the specified property name is an identity property
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified property is an identity property; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool IsIdentity(string name)
+        {
+            //Because there is no way to infer the structure behind a data reader this will always be false.
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the name of the feature class that this reader originates from. If this reader was
+        /// produced from a SQL or aggregate query, an empty string is returned.
+        /// </summary>
+        /// <returns></returns>
+        public override string GetClassName()
+        {
+            return string.Empty;
+        }
     }
 }

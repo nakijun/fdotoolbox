@@ -28,6 +28,7 @@ namespace FdoToolbox.Base.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.queryPanel = new System.Windows.Forms.Panel();
@@ -41,16 +42,19 @@ namespace FdoToolbox.Base.Controls
             this.btnSave = new System.Windows.Forms.ToolStripDropDownButton();
             this.sDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sQLiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnInsert = new System.Windows.Forms.ToolStripButton();
             this.resultTab = new System.Windows.Forms.TabControl();
             this.TAB_GRID = new System.Windows.Forms.TabPage();
             this.grdResults = new System.Windows.Forms.DataGridView();
+            this.ctxGridView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteThisFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblElapsedTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.TAB_MAP = new System.Windows.Forms.TabPage();
             this.mapCtl = new FdoToolbox.Base.Controls.FdoMapPreview();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnInsert = new System.Windows.Forms.ToolStripButton();
+            this.updateThisFeatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -58,6 +62,7 @@ namespace FdoToolbox.Base.Controls
             this.resultTab.SuspendLayout();
             this.TAB_GRID.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdResults)).BeginInit();
+            this.ctxGridView.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.TAB_MAP.SuspendLayout();
             this.SuspendLayout();
@@ -185,6 +190,20 @@ namespace FdoToolbox.Base.Controls
             this.sQLiteToolStripMenuItem.Text = "SQLite";
             this.sQLiteToolStripMenuItem.Click += new System.EventHandler(this.saveSQLite_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnInsert
+            // 
+            this.btnInsert.Image = global::FdoToolbox.Base.Images.application_form_edit;
+            this.btnInsert.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnInsert.Name = "btnInsert";
+            this.btnInsert.Size = new System.Drawing.Size(89, 22);
+            this.btnInsert.Text = "New Feature";
+            this.btnInsert.Click += new System.EventHandler(this.btnInsert_Click);
+            // 
             // resultTab
             // 
             this.resultTab.Controls.Add(this.TAB_GRID);
@@ -213,6 +232,7 @@ namespace FdoToolbox.Base.Controls
             this.grdResults.AllowUserToDeleteRows = false;
             this.grdResults.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.grdResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdResults.ContextMenuStrip = this.ctxGridView;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -226,8 +246,27 @@ namespace FdoToolbox.Base.Controls
             this.grdResults.Location = new System.Drawing.Point(0, 0);
             this.grdResults.Name = "grdResults";
             this.grdResults.ReadOnly = true;
+            this.grdResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.grdResults.Size = new System.Drawing.Size(676, 205);
             this.grdResults.TabIndex = 3;
+            this.grdResults.MouseDown += new System.Windows.Forms.MouseEventHandler(this.grdResults_MouseDown);
+            this.grdResults.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.grdResults_CellMouseDown);
+            // 
+            // ctxGridView
+            // 
+            this.ctxGridView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.updateThisFeatureToolStripMenuItem,
+            this.deleteThisFeatureToolStripMenuItem});
+            this.ctxGridView.Name = "ctxGridView";
+            this.ctxGridView.Size = new System.Drawing.Size(182, 70);
+            // 
+            // deleteThisFeatureToolStripMenuItem
+            // 
+            this.deleteThisFeatureToolStripMenuItem.Image = global::FdoToolbox.Base.Images.cross;
+            this.deleteThisFeatureToolStripMenuItem.Name = "deleteThisFeatureToolStripMenuItem";
+            this.deleteThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.deleteThisFeatureToolStripMenuItem.Text = "Delete this Feature";
+            this.deleteThisFeatureToolStripMenuItem.Click += new System.EventHandler(this.deleteThisFeatureToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -270,19 +309,12 @@ namespace FdoToolbox.Base.Controls
             this.mapCtl.Size = new System.Drawing.Size(676, 227);
             this.mapCtl.TabIndex = 0;
             // 
-            // toolStripSeparator1
+            // updateThisFeatureToolStripMenuItem
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // btnInsert
-            // 
-            this.btnInsert.Image = global::FdoToolbox.Base.Images.application_form_edit;
-            this.btnInsert.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnInsert.Name = "btnInsert";
-            this.btnInsert.Size = new System.Drawing.Size(89, 22);
-            this.btnInsert.Text = "New Feature";
-            this.btnInsert.Click += new System.EventHandler(this.btnInsert_Click);
+            this.updateThisFeatureToolStripMenuItem.Image = global::FdoToolbox.Base.Images.application_form_edit;
+            this.updateThisFeatureToolStripMenuItem.Name = "updateThisFeatureToolStripMenuItem";
+            this.updateThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.updateThisFeatureToolStripMenuItem.Text = "Update this Feature";
             // 
             // FdoDataPreviewCtl
             // 
@@ -301,6 +333,7 @@ namespace FdoToolbox.Base.Controls
             this.TAB_GRID.ResumeLayout(false);
             this.TAB_GRID.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdResults)).EndInit();
+            this.ctxGridView.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.TAB_MAP.ResumeLayout(false);
@@ -332,5 +365,8 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.ToolStripMenuItem sQLiteToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton btnInsert;
+        private System.Windows.Forms.ContextMenuStrip ctxGridView;
+        private System.Windows.Forms.ToolStripMenuItem deleteThisFeatureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateThisFeatureToolStripMenuItem;
     }
 }

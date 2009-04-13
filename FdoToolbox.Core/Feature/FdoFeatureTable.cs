@@ -302,8 +302,10 @@ namespace FdoToolbox.Core.Feature
         public void InitTable(IFdoReader reader)
         {
             this.Columns.Clear();
+            this.TableName = reader.GetClassName();
             string[] geometries = reader.GeometryProperties;
             _geometryColumn = reader.DefaultGeometryProperty;
+            List<DataColumn> pk = new List<DataColumn>();
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 string name = reader.GetName(i);
@@ -328,8 +330,17 @@ namespace FdoToolbox.Core.Feature
                         if (!string.IsNullOrEmpty(assoc))
                             this.RequestSpatialContext(this, assoc);
                     }
-                    this.Columns.Add(name, type);
+                    DataColumn dc = this.Columns.Add(name, type);
+
+                    if (ptype != FdoPropertyType.Geometry && reader.IsIdentity(name))
+                    {
+                        pk.Add(dc);
+                    }
                 }
+            }
+            if (pk.Count > 0)
+            {
+                this.PrimaryKey = pk.ToArray();
             }
         }
 
