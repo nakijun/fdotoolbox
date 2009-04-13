@@ -212,7 +212,6 @@
       <DependentUpon>GeometryTypeCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SchemaDesigner\GeometryTypeEditor.cs" />
-    <Compile Include="Controls\SchemaDesigner\IdentityPropertyLookupEditor.cs" />
     <Compile Include="Controls\SchemaDesigner\ListConstraintSettingsCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>

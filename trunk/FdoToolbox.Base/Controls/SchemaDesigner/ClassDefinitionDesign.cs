@@ -26,16 +26,27 @@ using OSGeo.FDO.Schema;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
+using System.Windows.Forms.Design;
+using System.Windows.Forms;
+using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
     public abstract class ClassDefinitionDesign : INotifyPropertyChanged
     {
         private OSGeo.FDO.Schema.ClassDefinition _classDef;
+        private FdoConnection _conn;
 
-        public ClassDefinitionDesign(OSGeo.FDO.Schema.ClassDefinition cd)
+        public ClassDefinitionDesign(OSGeo.FDO.Schema.ClassDefinition cd, FdoConnection conn)
         {
             _classDef = cd;
+            _conn = conn;
+        }
+
+        [Browsable(false)]
+        public FdoConnection Connection
+        {
+            get { return _conn; }
         }
         
         [Browsable(false)]
@@ -62,7 +73,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         }
 
         [Description("The identity properties of this class")]
-        [Editor(typeof(IdentityPropertyLookupEditor), typeof(UITypeEditor))]
+        [Editor(typeof(ClassIdentityPropertyLookupEditor), typeof(UITypeEditor))]
         public DataPropertyDefinitionCollection IdentityProperties 
         {
             get { return _classDef.IdentityProperties; }
@@ -122,5 +133,74 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
+    }
+
+    public class ClassIdentityPropertyLookupEditor : UITypeEditor
+    {
+        public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider != null)
+            {
+                ClassDefinitionDesign design = (ClassDefinitionDesign)context.Instance;
+                ClassDefinition cls = design.ClassDefinition;
+                CheckedListBox box = new CheckedListBox();
+                FdoConnection conn = design.Connection;
+                DataType[] idTypes = null;
+                if (conn != null)
+                    idTypes = (DataType[])conn.Capability.GetObjectCapability(CapabilityType.FdoCapabilityType_SupportedIdentityPropertyTypes);
+
+                foreach (PropertyDefinition pd in cls.Properties)
+                {
+                    if (pd.PropertyType == PropertyType.PropertyType_DataProperty)
+                    {
+                        if (idTypes != null)
+                        {
+                            //Only add if its data type matches any one in the array
+                            if(Array.IndexOf<DataType>(idTypes, (pd as DataPropertyDefinition).DataType) >= 0)
+                                box.Items.Add(pd.Name, false);
+                        }
+                        else
+                        {
+                            box.Items.Add(pd.Name, false);
+                        }
+                    }
+                }
+
+                if (value != null)
+                {
+                    foreach (DataPropertyDefinition dp in (DataPropertyDefinitionCollection)value)
+                    {
+                        int idx = box.Items.IndexOf(dp.Name);
+                        if (idx >= 0)
+                            box.SetItemChecked(idx, true);
+                    }
+                }
+
+                IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+
+                editorService.DropDownControl(box);
+                if (box.CheckedItems.Count > 0)
+                {
+                    DataPropertyDefinitionCollection dpdc = new DataPropertyDefinitionCollection(cls);
+                    foreach (object obj in box.CheckedItems)
+                    {
+                        int pidx = cls.Properties.IndexOf(obj.ToString());
+                        if (pidx >= 0)
+                        {
+                            PropertyDefinition pd = cls.Properties[pidx];
+                            if (pd.PropertyType == PropertyType.PropertyType_DataProperty)
+                                dpdc.Add((DataPropertyDefinition)pd);
+                        }
+                    }
+                    value = dpdc;
+                }
+            }
+            return value;
+        }
+
+        public override UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.DropDown;
+        }
     }
 }

@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
@@ -29,8 +30,8 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
     {
         private OSGeo.FDO.Schema.Class _cls;
 
-        public ClassDesign(OSGeo.FDO.Schema.Class cls)
-            : base(cls)
+        public ClassDesign(OSGeo.FDO.Schema.Class cls, FdoConnection conn)
+            : base(cls, conn)
         {
             _cls = cls;
         }

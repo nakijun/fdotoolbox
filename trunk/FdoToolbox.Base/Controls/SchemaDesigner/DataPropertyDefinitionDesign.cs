@@ -25,6 +25,9 @@ using System.Text;
 using System.ComponentModel;
 using System.Drawing.Design;
 using FdoToolbox.Core.Feature;
+using System.Windows.Forms;
+using OSGeo.FDO.Schema;
+using System.Windows.Forms.Design;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
@@ -32,18 +35,13 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
     {
         private OSGeo.FDO.Schema.DataPropertyDefinition _dataDef;
         
-        public DataPropertyDefinitionDesign(OSGeo.FDO.Schema.DataPropertyDefinition dp)
-            : base(dp)
-        {
-            _dataDef = dp;
-        }
-
         public DataPropertyDefinitionDesign(OSGeo.FDO.Schema.DataPropertyDefinition dp, FdoConnection conn) : base(dp, conn)
         {
             _dataDef = dp;
         }
 
         [Description("The FDO data type of this property")]
+        [Editor(typeof(DataPropertyTypeEditor), typeof(UITypeEditor))]
         public OSGeo.FDO.Schema.DataType DataType
         { 
             get { return _dataDef.DataType; } 
@@ -144,6 +142,57 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                 _dataDef.ValueConstraint = value;
                 FirePropertyChanged("ValueConstraint");
             } 
+        }
+    }
+
+    internal class DataPropertyTypeEditor : UITypeEditor
+    {
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider != null)
+            {
+                DataPropertyDefinitionDesign dp = (DataPropertyDefinitionDesign)context.Instance;
+                ListBox lb = new ListBox();
+                lb.SelectionMode = SelectionMode.One;
+                FdoConnection conn = dp.Connection;
+                DataType[] values = null;
+                if (conn != null)
+                    values = (DataType[])conn.Capability.GetObjectCapability(CapabilityType.FdoCapabilityType_DataTypes);
+                else
+                    values = (DataType[])Enum.GetValues(typeof(DataType));
+                
+                foreach(DataType dt in values)
+                {
+                    lb.Items.Add(dt);
+                }
+
+                if (value != null)
+                {
+                    int idx = lb.Items.IndexOf(value);
+                    lb.SelectedIndex = idx;
+                }
+
+                IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+
+                lb.SelectedIndexChanged += delegate
+                {
+                    if (lb.SelectedItem != null)
+                        editorService.CloseDropDown();
+                };
+
+                editorService.DropDownControl(lb);
+
+                if (lb.SelectedItem != null)
+                {
+                    value = lb.SelectedItem;
+                }
+            }
+            return value;
+        }
+
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.DropDown;
         }
     }
 }

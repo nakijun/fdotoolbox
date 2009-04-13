@@ -35,12 +35,6 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
     {
         private AssociationPropertyDefinition _assocDef;
 
-        public AssociationPropertyDefinitionDesign(AssociationPropertyDefinition ap)
-            : base(ap)
-        {
-            _assocDef = ap;
-        }
-
         public AssociationPropertyDefinitionDesign(AssociationPropertyDefinition ap, FdoConnection conn)
             : base(ap, conn)
         {

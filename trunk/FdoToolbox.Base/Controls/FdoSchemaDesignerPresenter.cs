@@ -231,9 +231,9 @@ namespace FdoToolbox.Base.Controls
             switch (cls.ClassType)
             {
                 case ClassType.ClassType_Class:
-                    return new ClassDesign((Class)cls);
+                    return new ClassDesign((Class)cls, _conn);
                 case ClassType.ClassType_FeatureClass:
-                    return new FeatureClassDesign((FeatureClass)cls);
+                    return new FeatureClassDesign((FeatureClass)cls, _conn);
                 default:
                     return null;
             }
