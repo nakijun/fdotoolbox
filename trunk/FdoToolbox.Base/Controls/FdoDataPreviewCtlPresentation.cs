@@ -58,6 +58,7 @@ namespace FdoToolbox.Base.Controls
         bool ExecuteEnabled { get; set; }
         bool InsertEnabled { get; set; }
         bool DeleteEnabled { get; set; }
+        bool UpdateEnabled { get; set; }
 
         string StatusMessage { set; }
         string ElapsedMessage { set; }
@@ -81,6 +82,8 @@ namespace FdoToolbox.Base.Controls
         private Timer _timer;
         private DateTime _queryStart;
         private bool insertSupported;
+        private bool updateSupported;
+        private bool deleteSupported;
 
         public FdoDataPreviewPresenter(IFdoDataPreviewView view, FdoConnection conn)
         {
@@ -99,8 +102,13 @@ namespace FdoToolbox.Base.Controls
             _view.ElapsedMessage = string.Empty;
             _view.CancelEnabled = false;
             _view.ExecuteEnabled = true;
+
             insertSupported = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Insert) >= 0);
-            _view.DeleteEnabled = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Delete) >= 0);
+            updateSupported = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Update) >= 0);
+            deleteSupported = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Delete) >= 0);
+
+            _view.DeleteEnabled = deleteSupported;
+            _view.UpdateEnabled = updateSupported;
 
             _timer.Interval = 1000;
             _timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
