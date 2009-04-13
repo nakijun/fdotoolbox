@@ -173,6 +173,13 @@
     </Compile>
     <Compile Include="Controls\IConnectionDependentView.cs" />
     <Compile Include="Controls\IConsole.cs" />
+    <Compile Include="Controls\FdoInsertScaffold.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoInsertScaffold.Designer.cs">
+      <DependentUpon>FdoInsertScaffold.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoInsertScaffoldPresentation.cs" />
     <Compile Include="Controls\IObjectExplorer.cs" />
     <Compile Include="Controls\IObjectExplorerExtender.cs" />
     <Compile Include="Controls\IPreferenceSheet.cs" />
@@ -478,6 +485,10 @@
     <EmbeddedResource Include="Controls\FdoStandardQueryCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoStandardQueryCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoInsertScaffold.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoInsertScaffold.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PreferencesCtl.resx">
       <SubType>Designer</SubType>
