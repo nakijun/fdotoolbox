@@ -155,7 +155,7 @@
     <value>Create New Schema</value>
   </data>
   <data name="CMD_DataPreview" xml:space="preserve">
-    <value>Data Preview</value>
+    <value>Data Query</value>
   </data>
   <data name="CMD_DeleteSchema" xml:space="preserve">
     <value>Delete Schema</value>
@@ -524,7 +524,7 @@
     <value>Create Spatial Context</value>
   </data>
   <data name="TITLE_DATA_PREVIEW" xml:space="preserve">
-    <value>Data Preview</value>
+    <value>Data Query</value>
   </data>
   <data name="TITLE_DATA_STORE_MGMT" xml:space="preserve">
     <value>Data Store Management</value>

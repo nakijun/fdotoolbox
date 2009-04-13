@@ -52,7 +52,9 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             if (supportsRange)
                 cmbConstraintType.Items.Add(PropertyValueConstraintType.PropertyValueConstraintType_Range);
 
-            cmbConstraintType_SelectedIndexChanged(null, null);
+            if (cmbConstraintType.Items.Count > 0)
+                cmbConstraintType.SelectedIndex = 0;
+            //cmbConstraintType_SelectedIndexChanged(null, null);
         }
 
         public static OSGeo.FDO.Schema.PropertyValueConstraint GetConstraint()

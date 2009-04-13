@@ -36,7 +36,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A view that allows the query and preview of FDO feature data
     /// </summary>
-    public partial class FdoDataPreviewCtl : ViewContent, IViewContent, IFdoDataPreviewView, IConnectionDependentView
+    public partial class FdoDataPreviewCtl : ViewContent, IFdoDataPreviewView, IConnectionDependentView
     {
         private FdoDataPreviewPresenter _presenter;
 
@@ -291,6 +291,24 @@ namespace FdoToolbox.Base.Controls
         public void SetBusyCursor(bool busy)
         {
             this.Cursor = busy ? Cursors.WaitCursor : Cursors.Default;
+        }
+
+        private void btnInsert_Click(object sender, EventArgs e)
+        {
+            _presenter.DoInsert();
+        }
+
+
+        public bool InsertEnabled
+        {
+            get
+            {
+                return btnInsert.Enabled;
+            }
+            set
+            {
+                btnInsert.Enabled = value;
+            }
         }
     }
 }

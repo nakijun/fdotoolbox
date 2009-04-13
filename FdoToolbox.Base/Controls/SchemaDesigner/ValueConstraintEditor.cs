@@ -35,7 +35,8 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             if (provider != null)
             {
                 DataPropertyDefinitionDesign design = (DataPropertyDefinitionDesign)context.Instance;
-                if (design.Connection == null)
+                FdoToolbox.Core.Feature.FdoConnection conn = design.Connection;
+                if (conn == null)
                 {
                     if (value == null)
                     {
@@ -52,17 +53,28 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                 }
                 else
                 {
-                    if (value == null)
+                    bool supportsList = conn.Capability.GetBooleanCapability(FdoToolbox.Core.Feature.CapabilityType.FdoCapabilityType_SupportsValueConstraintsList).Value;
+                    bool supportsRange = conn.Capability.GetBooleanCapability(FdoToolbox.Core.Feature.CapabilityType.FdoCapabilityType_SupportsInclusiveValueRangeConstraints).Value ||
+                        conn.Capability.GetBooleanCapability(FdoToolbox.Core.Feature.CapabilityType.FdoCapabilityType_SupportsExclusiveValueRangeConstraints).Value;
+
+                    if (supportsList || supportsRange)
                     {
-                        PropertyValueConstraint constraint = ValueConstraintDialog.GetConstraint(design.Connection);
-                        if (constraint != null)
-                            value = constraint;
+                        if (value == null)
+                        {
+                            PropertyValueConstraint constraint = ValueConstraintDialog.GetConstraint(design.Connection);
+                            if (constraint != null)
+                                value = constraint;
+                        }
+                        else
+                        {
+                            PropertyValueConstraint constraint = ValueConstraintDialog.GetConstraint((PropertyValueConstraint)value, design.Connection);
+                            if (constraint != null)
+                                value = constraint;
+                        }
                     }
                     else
                     {
-                        PropertyValueConstraint constraint = ValueConstraintDialog.GetConstraint((PropertyValueConstraint)value, design.Connection);
-                        if (constraint != null)
-                            value = constraint;
+                        ICSharpCode.Core.MessageService.ShowError("Value constraints not supported");
                     }
                 }
             }
