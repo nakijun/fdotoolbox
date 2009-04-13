@@ -264,4 +264,7 @@
   <data name="ERR_UNSUPPORTED_SQL" xml:space="preserve">
     <value>This connection does not support SQL queries</value>
   </data>
+  <data name="ERR_UPDATE" xml:space="preserve">
+    <value>Error updating features</value>
+  </data>
 </root>

@@ -335,6 +335,15 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        private void updateThisFeatureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (grdResults.SelectedRows.Count == 1)
+            {
+                FdoFeature feat = (FdoFeature)((grdResults.SelectedRows[0].DataBoundItem as DataRowView).Row);
+                _presenter.DoUpdate(feat);
+            }
+        }
+
         private void grdResults_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
