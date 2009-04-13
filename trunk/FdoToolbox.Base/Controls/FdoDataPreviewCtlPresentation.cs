@@ -454,11 +454,15 @@ namespace FdoToolbox.Base.Controls
             string filter = GenerateFilter(feat);
             if (string.IsNullOrEmpty(filter))
             {
-                _view.ShowError("Unable to generate a delete filter. Possibly this feature class has no identity properties or this selection was produced from a SQL query result set");
+                _view.ShowError("Unable to generate a delete filter. Possibly this result set has no unique identifiers or this result set was produced from a SQL query");
                 return;
             }
             using (FdoFeatureService service = _connection.CreateFeatureService())
             {
+                //Deleting is based on a very simple premise, the filter should produce the
+                //same number of affected results when selecting and deleting.
+                //
+                //In our case, the filter should affect exactly one result when selecting and deleting.
                 long count = service.GetFeatureCount(feat.Table.TableName, filter, true);
                 if (1 == count)
                 {
