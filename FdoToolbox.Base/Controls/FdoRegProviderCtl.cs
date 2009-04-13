@@ -63,7 +63,7 @@ namespace FdoToolbox.Base.Controls
         {
             if (_presenter.Register())
             {
-                this.ShowMessage(ResourceService.GetString("MSG_PROVIDER_REGISTERED"), ResourceService.GetString("TITLE_REGISTER_PROVIDER"));
+                this.ShowMessage(ResourceService.GetString("TITLE_REGISTER_PROVIDER"), ResourceService.GetString("MSG_PROVIDER_REGISTERED"));
                 base.Close();
             }
         }

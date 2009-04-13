@@ -136,7 +136,7 @@ namespace FdoToolbox.Base.Controls
                 NameValueCollection dp = _view.DataStoreProperties;
                 NameValueCollection cp = _view.ConnectProperties;
                 FdoFeatureService.CreateDataStore(prov.Name, dp, cp);
-                _view.ShowMessage(ResourceService.GetString("MSG_DATA_STORE_CREATED"), ResourceService.GetString("TITLE_CREATE_DATA_STORE"));
+                _view.ShowMessage(ResourceService.GetString("TITLE_CREATE_DATA_STORE"), ResourceService.GetString("MSG_DATA_STORE_CREATED"));
                 return true;
             }
             return false;
