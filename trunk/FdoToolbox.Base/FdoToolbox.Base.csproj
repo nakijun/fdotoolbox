@@ -227,6 +227,12 @@
       <DependentUpon>RangeConstraintSettingsCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SchemaDesigner\SpatialContextAssociationEditor.cs" />
+    <Compile Include="Controls\SchemaDesigner\UniqueConstraintDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\UniqueConstraintDialog.Designer.cs">
+      <DependentUpon>UniqueConstraintDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SchemaDesigner\ValueConstraintDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -492,6 +498,10 @@
     <EmbeddedResource Include="Controls\SchemaDesigner\RangeConstraintSettingsCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>RangeConstraintSettingsCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\UniqueConstraintDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UniqueConstraintDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SchemaDesigner\ValueConstraintDialog.resx">
       <SubType>Designer</SubType>

@@ -179,9 +179,34 @@ namespace FdoToolbox.Base.Controls
                 classNode.Name = classNode.Text = classDef.Name;
                 classNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_CLASS);
                 classNode.ImageKey = classNode.SelectedImageKey = IMG_CLASS;
-                classNode.ToolTipText = string.Format("Type: {0}", classDef.ClassType);
+                classNode.ToolTipText = string.Format("Type: {0}\nIsAbstract: {1}\nIsComputed: {2}\nBase Class: {3}\nUnique Constraints: {4}", 
+                    classDef.ClassType,
+                    classDef.IsAbstract,
+                    classDef.IsComputed,
+                    classDef.BaseClass != null ? classDef.BaseClass.Name : "(none)",
+                    GetUniqueConstraintString(classDef.UniqueConstraints));
                 GetPropertyNodes(classDef, classNode);
                 schemaNode.Nodes.Add(classNode);
+            }
+        }
+
+        private static string GetUniqueConstraintString(UniqueConstraintCollection constraints)
+        {
+            if (constraints.Count == 0)
+                return "(none)";
+            else
+            {
+                List<string> ucstr = new List<string>();
+                foreach (UniqueConstraint uc in constraints)
+                {
+                    List<string> str = new List<string>();
+                    foreach (DataPropertyDefinition dp in uc.Properties)
+                    {
+                        str.Add(dp.Name);
+                    }
+                    ucstr.Add(" - (" + string.Join(",", str.ToArray()) + ")");
+                }
+                return "\n" + string.Join("\n", ucstr.ToArray());
             }
         }
 

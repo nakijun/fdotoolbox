@@ -122,9 +122,19 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         }
 
         [Description("The unique constraints of this class")]
+        [Editor(typeof(ClassUniqueConstraintEditor), typeof(UITypeEditor))]
         public UniqueConstraintCollection UniqueConstraints
         {
             get { return _classDef.UniqueConstraints; }
+            set
+            {
+                _classDef.UniqueConstraints.Clear();
+                foreach (UniqueConstraint uniq in value)
+                {
+                    _classDef.UniqueConstraints.Add(uniq);
+                }
+                FirePropertyChanged("UniqueConstraints");
+            }
         }
 
         protected void FirePropertyChanged(string property)
@@ -194,6 +204,10 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                     }
                     value = dpdc;
                 }
+                else
+                {
+                    (value as DataPropertyDefinitionCollection).Clear();
+                }
             }
             return value;
         }
@@ -201,6 +215,67 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         public override UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;
+        }
+    }
+
+    internal class ClassUniqueConstraintEditor : UITypeEditor
+    {
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider != null)
+            {
+                ClassDefinitionDesign cd = (ClassDefinitionDesign)context.Instance;
+                ClassDefinition cls = cd.ClassDefinition;
+                FdoConnection conn = cd.Connection;
+                if (conn != null && !conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsUniqueValueConstraints).Value)
+                {
+                    ICSharpCode.Core.MessageService.ShowError("Unique constraints not supported");
+                    return value;
+                }
+
+                UniqueConstraintDialog diag = new UniqueConstraintDialog();
+                List<string> dataProps = new List<string>();
+                List<UniqueConstraintInfo> ucs = new List<UniqueConstraintInfo>();
+                foreach (PropertyDefinition pd in cls.Properties)
+                {
+                    if (pd.PropertyType == PropertyType.PropertyType_DataProperty)
+                        dataProps.Add(pd.Name);
+                }
+                diag.PropertyNames = dataProps;
+                foreach (UniqueConstraint uc in cls.UniqueConstraints)
+                {
+                    List<string> tuple = new List<string>();
+                    foreach (DataPropertyDefinition dp in uc.Properties)
+                    {
+                        tuple.Add(dp.Name);
+                    }
+                    ucs.Add(new UniqueConstraintInfo(tuple.ToArray()));
+                }
+                diag.Constraints = ucs;
+                if (diag.ShowDialog() == DialogResult.OK)
+                {
+                    //Rebuild unique constraint collection
+                    cls.UniqueConstraints.Clear();
+                    foreach (UniqueConstraintInfo uc in diag.Constraints)
+                    {
+                        UniqueConstraint constraint = new UniqueConstraint();
+                        foreach (string name in uc.PropertyNames)
+                        {
+                            int idx = cls.Properties.IndexOf(name);
+                            if (idx >= 0)
+                                constraint.Properties.Add((DataPropertyDefinition)cls.Properties[idx]);
+                        }
+                        cls.UniqueConstraints.Add(constraint);
+                    }
+                    value = cls.UniqueConstraints;
+                }
+            }
+            return value;
+        }
+
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.Modal;
         }
     }
 }
