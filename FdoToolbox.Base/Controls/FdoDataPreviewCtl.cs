@@ -362,5 +362,18 @@ namespace FdoToolbox.Base.Controls
             if(e.RowIndex >= 0 && e.ColumnIndex >= 0)
                 grdResults.CurrentCell = grdResults.Rows[e.RowIndex].Cells[e.ColumnIndex];
         }
+
+
+        public bool UpdateEnabled
+        {
+            get
+            {
+                return updateThisFeatureToolStripMenuItem.Enabled;
+            }
+            set
+            {
+                updateThisFeatureToolStripMenuItem.Enabled = value;
+            }
+        }
     }
 }
