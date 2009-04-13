@@ -1,3 +1,4 @@
+#define EXTENDED_PROPERTY_SUPPORT
 #region LGPL Header
 // Copyright (C) 2009, Jackie Ng
 // http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
@@ -301,10 +302,12 @@ namespace FdoToolbox.Base.Controls
                     return new DataPropertyDefinitionDesign((DataPropertyDefinition)prop, _conn);
                 case PropertyType.PropertyType_GeometricProperty:
                     return new GeometricPropertyDefinitionDesign((GeometricPropertyDefinition)prop, _conn);
+#if EXTENDED_PROPERTY_SUPPORT
                 case PropertyType.PropertyType_AssociationProperty:
                     return new AssociationPropertyDefinitionDesign((AssociationPropertyDefinition)prop, _conn);
                 case PropertyType.PropertyType_ObjectProperty:
                     return new ObjectPropertyDefinitionDesign((ObjectPropertyDefinition)prop, _conn);
+#endif
                 default:
                     return null;
             }

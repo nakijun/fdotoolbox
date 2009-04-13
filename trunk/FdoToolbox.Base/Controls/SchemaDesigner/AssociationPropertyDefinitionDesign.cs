@@ -27,27 +27,34 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
     public class AssociationPropertyDefinitionDesign : PropertyDefinitionDesign
     {
-        private OSGeo.FDO.Schema.AssociationPropertyDefinition _assocDef;
+        private AssociationPropertyDefinition _assocDef;
 
-        public AssociationPropertyDefinitionDesign(OSGeo.FDO.Schema.AssociationPropertyDefinition ap)
+        public AssociationPropertyDefinitionDesign(AssociationPropertyDefinition ap)
             : base(ap)
         {
             _assocDef = ap;
         }
 
-        public AssociationPropertyDefinitionDesign(OSGeo.FDO.Schema.AssociationPropertyDefinition ap, FdoConnection conn)
+        public AssociationPropertyDefinitionDesign(AssociationPropertyDefinition ap, FdoConnection conn)
             : base(ap, conn)
         {
             _assocDef = ap;
         }
 
-        [Description("A reference to the associated class. ")]
-        public OSGeo.FDO.Schema.ClassDefinition AssociatedClass
+        internal ClassDefinition GetParent()
+        {
+            return _assocDef.Parent as ClassDefinition;
+        }
+
+        [Description("A reference to the associated class.")]
+        [Editor(typeof(AssocClassBrowserEditor), typeof(UITypeEditor))]
+        public ClassDefinition AssociatedClass
         {
             get { return _assocDef.AssociatedClass; }
             set
@@ -58,7 +65,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         }
 
         [Description("The delete rule")]
-        public OSGeo.FDO.Schema.DeleteRule DeleteRule
+        public DeleteRule DeleteRule
         {
             get { return _assocDef.DeleteRule; }
             set
@@ -70,13 +77,13 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
 
         [Description("The collection of properties of the current class that are used as key for this association. Initially, this collection is empty. The user can optionally add any number of properties. If the collection is left empty, the identity properties of the associated class are added to the current class. The number, order and types should match the property of the ReverseIdentityProperties collection. All properties in the collection should already exist in the containing class. This is needed in case the current class already has properties (foreign keys) that are used to reference the associated feature.")]
         [Editor(typeof(AssocIdentityPropertyLookupEditor), typeof(UITypeEditor))]
-        public OSGeo.FDO.Schema.DataPropertyDefinitionCollection IdentityProperties
+        public DataPropertyDefinitionCollection IdentityProperties
         {
             get { return _assocDef.IdentityProperties; }
             set
             {
                 _assocDef.IdentityProperties.Clear();
-                foreach (OSGeo.FDO.Schema.DataPropertyDefinition dp in value)
+                foreach (DataPropertyDefinition dp in value)
                 {
                     _assocDef.IdentityProperties.Add(dp);
                 }
@@ -86,13 +93,13 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
 
         [Description("The collection of properties of the associated class that are used as key for this association. The number, order and types should match the IdentityProperties. If the reverse identity collection is empty, then the associated class identity properties will be used. The properties of the collection should already exist on the associated class.")]
         [Editor(typeof(AssocReverseIdentityPropertyLookupEditor), typeof(UITypeEditor))]
-        public OSGeo.FDO.Schema.DataPropertyDefinitionCollection ReverseIdentityProperties
+        public DataPropertyDefinitionCollection ReverseIdentityProperties
         {
             get { return _assocDef.ReverseIdentityProperties; }
             set
             {
                 _assocDef.ReverseIdentityProperties.Clear();
-                foreach (OSGeo.FDO.Schema.DataPropertyDefinition dp in value)
+                foreach (DataPropertyDefinition dp in value)
                 {
                     _assocDef.ReverseIdentityProperties.Add(dp);
                 }
@@ -150,6 +157,56 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                 _assocDef.ReverseName = value;
                 this.FirePropertyChanged("ReverseName");
             }
+        }
+    }
+
+    internal class AssocClassBrowserEditor : UITypeEditor
+    {
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider != null)
+            {
+                AssociationPropertyDefinitionDesign ad = (AssociationPropertyDefinitionDesign)context.Instance;
+                ClassDefinition cd = ad.GetParent();
+                if (cd != null)
+                {
+                    FeatureSchema schema = cd.Parent as FeatureSchema;
+                    if (schema != null)
+                    {
+                        ListBox lb = new ListBox();
+                        lb.SelectionMode = SelectionMode.One;
+
+                        foreach (ClassDefinition cls in schema.Classes)
+                        {
+                            if (cls.Name != cd.Name)
+                                lb.Items.Add(cls.Name);
+                        }
+
+                        IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+
+                        lb.SelectedIndexChanged += delegate
+                        {
+                            if (lb.SelectedItem != null)
+                                editorService.CloseDropDown();
+                        };
+
+                        editorService.DropDownControl(lb);
+
+                        if (lb.SelectedItem != null)
+                        {
+                            int idx = schema.Classes.IndexOf(lb.SelectedItem.ToString());
+                            if (idx >= 0)
+                                value = schema.Classes[idx];
+                        }
+                    }
+                }
+            }
+            return value;
+        }
+
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.DropDown;
         }
     }
 
@@ -211,9 +268,110 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
 
     internal class AssocIdentityPropertyLookupEditor : UITypeEditor
     {
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider != null)
+            {
+                DataPropertyDefinitionCollection dpcol = (DataPropertyDefinitionCollection)value;
+                AssociationPropertyDefinitionDesign ad = (AssociationPropertyDefinitionDesign)context.Instance;
+                ClassDefinition cd = ad.GetParent();
+                if (cd != null)
+                {
+                    CheckedListBox box = new CheckedListBox();
+
+                    //Grab all the "foreign key" candidates
+                    foreach (PropertyDefinition pd in cd.Properties)
+                    {
+                        DataPropertyDefinition dp = pd as DataPropertyDefinition;
+                        if(dp != null)
+                            box.Items.Add(dp.Name, dpcol.Contains(dp));
+                    }
+
+                    IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+                    editorService.DropDownControl(box);
+
+                    if (box.CheckedItems.Count > 0)
+                    {
+                        DataPropertyDefinitionCollection dpdc = new DataPropertyDefinitionCollection(cd);
+                        foreach (object obj in box.CheckedItems)
+                        {
+                            int pidx = cd.Properties.IndexOf(obj.ToString());
+                            if (pidx >= 0)
+                            {
+                                PropertyDefinition pd = cd.Properties[pidx];
+                                if (pd.PropertyType == PropertyType.PropertyType_DataProperty)
+                                    dpdc.Add((DataPropertyDefinition)pd);
+                            }
+                        }
+                        value = dpdc;
+                    }
+                    else
+                    {
+                        dpcol.Clear();
+                    }
+                }
+            }
+            return value;
+        }
+
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.DropDown;
+        }
     }
 
     internal class AssocReverseIdentityPropertyLookupEditor : UITypeEditor
     {
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider != null)
+            {
+                DataPropertyDefinitionCollection dpcol = (DataPropertyDefinitionCollection)value;
+                AssociationPropertyDefinitionDesign ad = (AssociationPropertyDefinitionDesign)context.Instance;
+                ClassDefinition cd = ad.AssociatedClass;
+                if (cd == null)
+                {
+                    ICSharpCode.Core.MessageService.ShowError("Please specify the associated class");
+                    return value;
+                }
+                else
+                {
+                    CheckedListBox box = new CheckedListBox();
+                    foreach (DataPropertyDefinition dp in cd.IdentityProperties)
+                    {
+                        box.Items.Add(dp.Name, dpcol.Contains(dp));
+                    }
+
+                    IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+                    editorService.DropDownControl(box);
+
+                    if (box.CheckedItems.Count > 0)
+                    {
+                        DataPropertyDefinitionCollection dpdc = new DataPropertyDefinitionCollection(cd);
+                        foreach (object obj in box.CheckedItems)
+                        {
+                            int pidx = cd.Properties.IndexOf(obj.ToString());
+                            if (pidx >= 0)
+                            {
+                                PropertyDefinition pd = cd.Properties[pidx];
+                                if (pd.PropertyType == PropertyType.PropertyType_DataProperty)
+                                    dpdc.Add((DataPropertyDefinition)pd);
+                            }
+                        }
+                        value = dpdc;
+                    }
+                    else
+                    {
+                        dpcol.Clear();
+                    }
+                }
+            }
+            return value;
+        }
+
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.DropDown;
+        }
     }
 }
