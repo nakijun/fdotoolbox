@@ -300,5 +300,27 @@ namespace FdoToolbox.Core.Feature
 
             return string.Empty;
         }
+
+        /// <summary>
+        /// Determines whether the specified property name is an identity property
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified property is an identity property; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool IsIdentity(string name)
+        {
+            return _classDefinition.IdentityProperties.Contains(name);
+        }
+
+        /// <summary>
+        /// Gets the name of the feature class that this reader originates from. If this reader was
+        /// produced from a SQL or aggregate query, an empty string is returned.
+        /// </summary>
+        /// <returns></returns>
+        public override string GetClassName()
+        {
+            return _classDefinition.Name;
+        }
     }
 }

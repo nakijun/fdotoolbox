@@ -134,5 +134,20 @@ namespace FdoToolbox.Core.Feature
         /// <param name="name"></param>
         /// <returns></returns>
         string GetSpatialContextAssociation(string name);
+        /// <summary>
+        /// Determines whether the specified property name is an identity property
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified property is an identity property; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsIdentity(string name);
+
+        /// <summary>
+        /// Gets the name of the feature class that this reader originates from. If this reader was
+        /// produced from a SQL or aggregate query, an empty string is returned.
+        /// </summary>
+        /// <returns></returns>
+        string GetClassName();
     }
 }

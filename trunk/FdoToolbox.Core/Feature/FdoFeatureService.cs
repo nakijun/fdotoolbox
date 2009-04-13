@@ -604,13 +604,79 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
+        /// Gets the number of features in a given class definition.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
+        /// <param name="filter">The filter.</param>
+        /// <param name="bruteForce">Uses a brute force counting approach if no other approaches are available</param>
+        /// <returns></returns>
+        public long GetFeatureCount(string className, string filter, bool bruteForce)
+        {
+            long count = 0;
+            string property = "FEATURECOUNT";
+            if (SupportsCommand(CommandType.CommandType_SQLCommand))
+            {
+                using (ISQLCommand cmd = CreateCommand<ISQLCommand>(CommandType.CommandType_SQLCommand))
+                {
+                    string sql = string.Empty;
+                    sql = string.Format("SELECT COUNT(*) AS {0} FROM {1}", property, className);
+                    if (!string.IsNullOrEmpty(filter))
+                        sql += " WHERE " + filter;
+
+                    cmd.SQLStatement = sql;
+
+                    using (ISQLDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.ReadNext())
+                        {
+                            count = reader.GetInt64(property);
+                        }
+                        reader.Close();
+                    }
+                }
+            }
+            else if (SupportsCommand(CommandType.CommandType_ExtendedSelect))
+            {
+                using (IExtendedSelect select = CreateCommand<IExtendedSelect>(CommandType.CommandType_ExtendedSelect))
+                {
+                    select.SetFeatureClassName(className);
+                    if (!string.IsNullOrEmpty(filter))
+                        select.Filter = Filter.Parse(filter);
+
+                    using (IScrollableFeatureReader reader = select.ExecuteScrollable())
+                    {
+                        count = reader.Count();
+                        reader.Close();
+                    }
+                }
+            }
+            else if (bruteForce)
+            {
+                using (ISelect select = CreateCommand<ISelect>(CommandType.CommandType_Select))
+                {
+                    select.SetFeatureClassName(className);
+                    using (IFeatureReader reader = select.Execute())
+                    {
+                        while (reader.ReadNext())
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        /// <summary>
         /// Gets the number of features in a given class definition. If the class definition is a raster
-        /// feature class, it will always return 0
+        /// feature class, it will always return 0. This does not do counting by brute force if other
         /// </summary>
         /// <param name="classDef"></param>
         /// <param name="filter"></param>
+        /// <param name="bruteForce">Use the brute force approach if no other approaches are available</param>
         /// <returns></returns>
-        public long GetFeatureCount(ClassDefinition classDef, string filter)
+        public long GetFeatureCount(ClassDefinition classDef, string filter, bool bruteForce)
         {
             long count = 0;
             
@@ -669,6 +735,35 @@ namespace FdoToolbox.Core.Feature
                             }
                         }
                         reader.Close();
+                    }
+                }
+            }
+            else if (SupportsCommand(CommandType.CommandType_ExtendedSelect))
+            {
+                using (IExtendedSelect select = CreateCommand<IExtendedSelect>(CommandType.CommandType_ExtendedSelect))
+                {
+                    select.SetFeatureClassName(className);
+                    if (!string.IsNullOrEmpty(filter))
+                        select.Filter = Filter.Parse(filter);
+
+                    using (IScrollableFeatureReader reader = select.ExecuteScrollable())
+                    {
+                        count = reader.Count();
+                        reader.Close();
+                    }
+                }
+            }
+            else if (bruteForce)
+            {
+                using (ISelect select = CreateCommand<ISelect>(CommandType.CommandType_Select))
+                {
+                    select.SetFeatureClassName(className);
+                    using (IFeatureReader reader = select.Execute())
+                    {
+                        while (reader.ReadNext())
+                        {
+                            count++;
+                        }
                     }
                 }
             }

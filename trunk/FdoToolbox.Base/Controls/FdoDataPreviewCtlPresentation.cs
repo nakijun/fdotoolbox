@@ -57,6 +57,7 @@ namespace FdoToolbox.Base.Controls
         bool ClearEnabled { get; set; }
         bool ExecuteEnabled { get; set; }
         bool InsertEnabled { get; set; }
+        bool DeleteEnabled { get; set; }
 
         string StatusMessage { set; }
         string ElapsedMessage { set; }
@@ -99,7 +100,8 @@ namespace FdoToolbox.Base.Controls
             _view.CancelEnabled = false;
             _view.ExecuteEnabled = true;
             insertSupported = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Insert) >= 0);
-            
+            _view.DeleteEnabled = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Delete) >= 0);
+
             _timer.Interval = 1000;
             _timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
         }
@@ -408,7 +410,7 @@ namespace FdoToolbox.Base.Controls
             ClassDefinition classDef = qv.SelectedClass;
             string filter = qv.Filter;
 
-            return _service.GetFeatureCount(classDef, filter);
+            return _service.GetFeatureCount(classDef, filter, false);
         }
 
         public void Clear()
@@ -445,6 +447,54 @@ namespace FdoToolbox.Base.Controls
                 FdoInsertScaffold ctl = new FdoInsertScaffold(_connection, query.ClassName);
                 wb.ShowContent(ctl, ViewRegion.Dialog);
             }
+        }
+
+        internal void DoDelete(FdoFeature feat)
+        {
+            string filter = GenerateFilter(feat);
+            if (string.IsNullOrEmpty(filter))
+            {
+                _view.ShowError("Unable to generate a delete filter. Possibly this feature class has no identity properties or this selection was produced from a SQL query result set");
+                return;
+            }
+            using (FdoFeatureService service = _connection.CreateFeatureService())
+            {
+                long count = service.GetFeatureCount(feat.Table.TableName, filter, true);
+                if (1 == count)
+                {
+                    int deleted = service.DeleteFeatures(feat.Table.TableName, filter, true);
+                    if (1 == deleted)
+                    {
+                        FdoFeatureTable table = feat.Table;
+                        table.Rows.Remove(feat);
+                        _view.ShowMessage("Delete Feature", "Feature Deleted");
+                    }
+                }
+                else if (count > 1)
+                {
+                    _view.ShowError("Delete operation would delete more than one feature");
+                }
+                else if (count == 0)
+                {
+                    _view.ShowError("Delete operation would not delete any features");
+                }
+            }
+        }
+
+        private string GenerateFilter(FdoFeature feat)
+        {
+            FdoFeatureTable table = feat.Table;
+            if (table.PrimaryKey.Length > 0)
+            {
+                List<string> filters = new List<string>();
+                foreach (DataColumn col in table.PrimaryKey)
+                {
+                    string f = col.ColumnName + " = '" + feat[col] + "'";
+                    filters.Add(f);
+                }
+                return string.Join(" AND ", filters.ToArray());
+            }
+            return null;
         }
     }
 }
