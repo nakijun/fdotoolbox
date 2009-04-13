@@ -1963,7 +1963,8 @@ namespace FdoToolbox.Core.Feature
             using (IDelete del = CreateCommand<IDelete>(CommandType.CommandType_Delete))
             {
                 del.SetFeatureClassName(className);
-                del.SetFilter(filter);
+                if(!string.IsNullOrEmpty(filter))
+                    del.SetFilter(filter);
 
                 if (useTrans)
                 {

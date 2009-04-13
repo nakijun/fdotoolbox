@@ -131,6 +131,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bulk Delete.
+        /// </summary>
+        internal static string CMD_BulkDelete {
+            get {
+                return ResourceManager.GetString("CMD_BulkDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear Console.
         /// </summary>
         internal static string CMD_Clear {
@@ -1117,6 +1126,24 @@ namespace FdoToolbox.Base {
         internal static string QUESTION_UNSAVED_CHANGES {
             get {
                 return ResourceManager.GetString("QUESTION_UNSAVED_CHANGES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bulk Delete.
+        /// </summary>
+        internal static string TITLE_BULK_DELETE {
+            get {
+                return ResourceManager.GetString("TITLE_BULK_DELETE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bulk Update.
+        /// </summary>
+        internal static string TITLE_BULK_UPDATE {
+            get {
+                return ResourceManager.GetString("TITLE_BULK_UPDATE", resourceCulture);
             }
         }
         

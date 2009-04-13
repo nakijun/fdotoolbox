@@ -453,4 +453,25 @@ namespace FdoToolbox.Base.Commands
             }
         }
     }
+
+    public class BulkDeleteCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            TreeNode node = wb.ObjectExplorer.GetSelectedNode();
+            if (node.Level == 3)
+            {
+                if (MessageService.AskQuestion("This is a dangerous operation. One false filter could cause irreversible data loss. Do you want to continue?"))
+                {
+                    string name = node.Name;
+                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                    FdoConnection conn = mgr.GetConnection(node.Parent.Parent.Name);
+
+                    FdoBulkDeleteCtl ctl = new FdoBulkDeleteCtl(conn, node.Name);
+                    wb.ShowContent(ctl, ViewRegion.Dialog);
+                }
+            }
+        }
+    }
 }
