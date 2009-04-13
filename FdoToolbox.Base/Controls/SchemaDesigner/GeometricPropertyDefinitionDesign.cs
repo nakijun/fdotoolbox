@@ -32,12 +32,6 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
     {
         private OSGeo.FDO.Schema.GeometricPropertyDefinition _geomDef;
 
-        public GeometricPropertyDefinitionDesign(OSGeo.FDO.Schema.GeometricPropertyDefinition gd)
-            : base(gd)
-        {
-            _geomDef = gd;
-        }
-
         public GeometricPropertyDefinitionDesign(OSGeo.FDO.Schema.GeometricPropertyDefinition gd, FdoConnection conn)
             : base(gd, conn)
         {

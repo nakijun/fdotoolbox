@@ -32,14 +32,9 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         private OSGeo.FDO.Schema.PropertyDefinition _propDef;
         private FdoConnection _conn;
 
-        public PropertyDefinitionDesign(OSGeo.FDO.Schema.PropertyDefinition pd)
+        public PropertyDefinitionDesign(OSGeo.FDO.Schema.PropertyDefinition pd, FdoConnection conn)
         {
             _propDef = pd;
-        }
-
-        public PropertyDefinitionDesign(OSGeo.FDO.Schema.PropertyDefinition pd, FdoConnection conn)
-            : this(pd)
-        {
             _conn = conn;
         }
 

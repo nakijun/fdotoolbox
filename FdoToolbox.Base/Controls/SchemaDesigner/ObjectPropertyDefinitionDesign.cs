@@ -35,12 +35,6 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
     {
         private ObjectPropertyDefinition _objDef;
         
-        public ObjectPropertyDefinitionDesign(ObjectPropertyDefinition op)
-            : base(op)
-        {
-            _objDef = op;
-        }
-
         public ObjectPropertyDefinitionDesign(ObjectPropertyDefinition op, FdoConnection conn)
             : base(op, conn)
         {

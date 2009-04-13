@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using System.Drawing.Design;
+using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
@@ -31,8 +32,8 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
     {
         private OSGeo.FDO.Schema.FeatureClass _featClass;
 
-        public FeatureClassDesign(OSGeo.FDO.Schema.FeatureClass fc)
-            : base(fc)
+        public FeatureClassDesign(OSGeo.FDO.Schema.FeatureClass fc, FdoConnection conn)
+            : base(fc, conn)
         {
             _featClass = fc;
         }
