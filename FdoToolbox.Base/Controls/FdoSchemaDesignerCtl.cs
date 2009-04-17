@@ -1,4 +1,4 @@
-#define EXTENDED_PROPERTY_SUPPORT
+//#define EXTENDED_PROPERTY_SUPPORT
 #region LGPL Header
 // Copyright (C) 2009, Jackie Ng
 // http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
