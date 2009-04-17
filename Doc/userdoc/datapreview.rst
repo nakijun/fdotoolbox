@@ -1,8 +1,9 @@
 .. index::
    single: Previewing Data
+   single: Querying Data
 
-Previewing Data
-===============
+Previewing and Querying Data
+============================
 
 FDO Toolbox has a powerful Data Previewing component which allows you to inspect the data in any FDO data source. The Data Preview component
 can support multiple methods of querying (depending on the connection's provider). To preview a data source, right click the connection on
