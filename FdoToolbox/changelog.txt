@@ -3,14 +3,17 @@ v0.7.5
 
 - Enhancements:
 	- Now uses FDO 3.4.0 final release.
-	- Re-integrated insert feature scaffold from v0.6
 	- CRUD (Create Read Update Delete) support. Be very careful with the Update and Delete functions. One false move and your data could be toast!
+	- Bulk update support. Be VERY careful with this function! A false filter could cause irreversible changes to your data!
 	- Bulk delete support. Be ESPECIALLY careful with this function! Words in all caps cannot emphasise the potential destruction wrought by this function!
 	- Express support for SQL Server 2008 spatial.
 	- Schema editor is now smarter in contextual mode. Will prevent you from adding most unsupported features.
 	- Password properties are now properly masked in the Generic connect and create data store dialogs.
 
 - Other:
+	- ETL processes now gracefully continue on failed features.
+	- ETL processes now log any errors encountered during execution.
+    - Now a proper single-instance application. Subsequent attempts to launch a new process will instead re-focus the main application window.
 	- Data Preview is now Data Query
 	- Schema editor now reverts to using GeometricType instead of GeometryType, it will remain this way until FDO 3.5 enters beta.
 	- RDBMS provider fixes for the Generic connect dialog.
