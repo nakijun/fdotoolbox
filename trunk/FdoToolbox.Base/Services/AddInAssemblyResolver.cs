@@ -67,6 +67,16 @@ namespace FdoToolbox.Base.Services
         /// <param name="assemblies">The assemblies to register</param>
         public static void RegisterLibraries(string path, params string[] assemblies)
         {
+            //As of FDO 3.4 final, it somehow fails when the unmanaged FDO dlls are not the application path
+            //This appends the given path to the PATH enviornment variable in the scope of this
+            //process so the system knows where to look for the unmanaged FDO dlls.
+            string envPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
+            if (!envPath.Contains(path))
+            {
+                envPath += ";" + path;
+                Environment.SetEnvironmentVariable("PATH", envPath);
+            }
+            
             foreach (string asm in assemblies)
             {
                 if(!assemblyPaths.ContainsKey(asm))
