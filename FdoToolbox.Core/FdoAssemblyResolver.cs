@@ -59,6 +59,16 @@ namespace FdoToolbox.Core
         /// <param name="path"></param>
         public static void InitializeFdo(string path)
         {
+            //As of FDO 3.4 final, it somehow fails when the unmanaged FDO dlls are not the application path
+            //This appends the given path to the PATH enviornment variable in the scope of this
+            //process so the system knows where to look for the unmanaged FDO dlls.
+            string envPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Process);
+            if (!envPath.Contains(path))
+            {
+                envPath += ";" + path;
+                Environment.SetEnvironmentVariable("PATH", envPath);
+            }
+
             AppDomain.CurrentDomain.AssemblyResolve += delegate(object sender, ResolveEventArgs args)
             {
                 string fdoPath = path;
