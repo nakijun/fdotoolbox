@@ -119,5 +119,14 @@ namespace FdoToolbox.Core.ETL.Operations
         {
             Interlocked.Increment(ref outputtedRows);
         }
+
+        /// <summary>
+        /// Marks the feature batch processed.
+        /// </summary>
+        /// <param name="count">The count.</param>
+        public void MarkFeatureProcessed(int count)
+        {
+            Interlocked.Add(ref outputtedRows, count);
+        }
     }
 }

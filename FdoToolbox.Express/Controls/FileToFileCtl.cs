@@ -32,6 +32,7 @@ using FdoToolbox.Base.Services;
 using FdoToolbox.Core.ETL.Specialized;
 using FdoToolbox.Core.Utility;
 using FdoToolbox.Base.Controls;
+using System.IO;
 
 namespace FdoToolbox.Express.Controls
 {
@@ -61,13 +62,58 @@ namespace FdoToolbox.Express.Controls
                 txtTarget.Text = file;
         }
 
+        private bool DeleteRelated(string target)
+        {
+            string[] files = ExpressUtility.GetRelatedFiles(target);
+            List<string> delete = new List<string>();
+            foreach (string f in files)
+            {
+                if (File.Exists(f))
+                {
+                    delete.Add(f);
+                }
+            }
+
+            if (delete.Count > 0)
+            {
+                if (this.Confirm("Express Bulk Copy",
+                    string.Format("The following files will be deleted along with the shape file: {0}\n\n{1}\n\nAre you sure you want to continue?",
+                        target,
+                        string.Join("\n", delete.ToArray()))))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void btnExecute_Click(object sender, EventArgs e)
         {
             string source = txtSource.Text;
             string target = txtTarget.Text;
-
+            
             if (FileService.FileExists(source) && !string.IsNullOrEmpty(target))
             {
+                if (ExpressUtility.IsShp(target))
+                {
+                    if (File.Exists(target))
+                    {
+                        if (!DeleteRelated(target))
+                            return;
+                        else
+                            DeleteRelatedFiles(target);
+                    }
+                    else if (Directory.Exists(target))
+                    {
+                        string shp = Path.Combine(target, Path.GetFileNameWithoutExtension(source) + ".shp");
+                        if (File.Exists(shp) && !DeleteRelated(shp))
+                            return;
+                        else
+                            DeleteRelatedFiles(shp);
+                    }
+                }
+
                 using (FdoBulkCopy bcp = ExpressUtility.CreateBulkCopy(source, target, chkCopySpatialContexts.Checked, true))
                 {
                     EtlProcessCtl ctl = new EtlProcessCtl(bcp);
@@ -79,6 +125,21 @@ namespace FdoToolbox.Express.Controls
             {
                 this.ShowError("Source and Target fields are required");
             }
+        }
+
+        private void DeleteRelatedFiles(string shp)
+        {
+            string[] files = ExpressUtility.GetRelatedFiles(shp);
+            foreach (string f in files)
+            {
+                if (File.Exists(f))
+                {
+                    File.Delete(f);
+                    LoggingService.Info("File deleted: " + f);
+                }
+            }
+            if (File.Exists(shp))
+                File.Delete(shp);
         }
 
         private void btnBrowseDir_Click(object sender, EventArgs e)
