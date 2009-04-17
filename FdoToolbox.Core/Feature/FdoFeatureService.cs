@@ -614,7 +614,7 @@ namespace FdoToolbox.Core.Feature
         {
             long count = 0;
             string property = "FEATURECOUNT";
-            if (SupportsCommand(CommandType.CommandType_SQLCommand))
+            if (SupportsCommand(CommandType.CommandType_SQLCommand) && IsValidSqlFilter(filter))
             {
                 using (ISQLCommand cmd = CreateCommand<ISQLCommand>(CommandType.CommandType_SQLCommand))
                 {
@@ -655,6 +655,8 @@ namespace FdoToolbox.Core.Feature
                 using (ISelect select = CreateCommand<ISelect>(CommandType.CommandType_Select))
                 {
                     select.SetFeatureClassName(className);
+                    if(!string.IsNullOrEmpty(filter))
+                        select.SetFilter(filter);
                     using (IFeatureReader reader = select.Execute())
                     {
                         while (reader.ReadNext())
@@ -666,6 +668,26 @@ namespace FdoToolbox.Core.Feature
             }
 
             return count;
+        }
+
+        private bool IsValidSqlFilter(string filter)
+        {
+            Filter fltr = Filter.Parse(filter);
+            SearchCondition sc = fltr as SearchCondition;
+            if (sc != null)
+            {
+                NullCondition nc = sc as NullCondition;
+                GeometricCondition gc = sc as GeometricCondition;
+                if (nc != null)
+                {
+                    return false;
+                }
+                else if (gc != null)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -758,6 +780,8 @@ namespace FdoToolbox.Core.Feature
                 using (ISelect select = CreateCommand<ISelect>(CommandType.CommandType_Select))
                 {
                     select.SetFeatureClassName(className);
+                    if (!string.IsNullOrEmpty(filter))
+                        select.SetFilter(filter);
                     using (IFeatureReader reader = select.Execute())
                     {
                         while (reader.ReadNext())

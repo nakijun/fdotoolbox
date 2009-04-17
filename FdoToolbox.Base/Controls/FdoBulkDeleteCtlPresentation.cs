@@ -30,6 +30,8 @@ namespace FdoToolbox.Base.Controls
     {
         string ClassName { get; set; }
         string Filter { get; set; }
+        bool UseTransaction { get; set; }
+        bool TransactionEnabled { get; set; }
     }
 
     public class FdoBulkDeleteCtlPresenter
@@ -45,6 +47,7 @@ namespace FdoToolbox.Base.Controls
             _className = className;
             _view.ClassName = className;
             _view.Title = ICSharpCode.Core.ResourceService.GetString("TITLE_BULK_DELETE");
+            _view.TransactionEnabled = (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsTransactions).Value);
         }
 
         internal void Cancel()
@@ -58,7 +61,7 @@ namespace FdoToolbox.Base.Controls
             {
                 using (FdoFeatureService service = _conn.CreateFeatureService())
                 {
-                    int deleted = service.DeleteFeatures(_className, _view.Filter.Trim());
+                    int deleted = service.DeleteFeatures(_className, _view.Filter.Trim(), _view.UseTransaction);
                     _view.ShowMessage(null, deleted + " feature(s) deleted");
                     _view.Close();
                 }
