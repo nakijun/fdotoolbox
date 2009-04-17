@@ -39,7 +39,7 @@ SetCompressor /SOLID /FINAL lzma
 
 !define SLN_DIR ".."
 !define SLN_THIRDPARTY "${SLN_DIR}\Thirdparty"
-!define RELEASE_VERSION "0.7.1"
+!define RELEASE_VERSION "0.7.5"
 
 # Installer vars
 !if ${SLN_CONFIG} == "Release"
@@ -70,10 +70,6 @@ SetCompressor /SOLID /FINAL lzma
 Name "${INST_PRODUCT}"
 Caption "${INST_PRODUCT}"
 OutFile "${INST_OUTDIR}\${INST_OUTPUT}"
-
-!ifdef INST_ICON
-Icon "${INST_ICON}"
-!endif
 
 ; Default installation folder
 InstallDir "$PROGRAMFILES\${INST_PRODUCT}"
@@ -119,6 +115,9 @@ LicenseData "${INST_SRC}\${INST_LICENSE}"
 ; Installer Sections
 ;-------------------
 
+!define HELP_USER "FDOToolbox.chm"
+!define HELP_API "FDO Toolbox Core API.chm"
+
 # default section
 Section 
 
@@ -131,8 +130,8 @@ Section
 	File /r "${INST_OUTPUT_FDOTOOLBOX}\Schemas"
 	
 	# docs
-	File "${INST_OUTPUT_FDOTOOLBOX}\FDOToolbox.chm"
-	File "${INST_OUTPUT_FDOTOOLBOX}\FDO Toolbox Core API.chm"
+	File "${INST_OUTPUT_FDOTOOLBOX}\${HELP_USER}"
+	File "${INST_OUTPUT_FDOTOOLBOX}\${HELP_API}"
 	File "${INST_OUTPUT_FDOTOOLBOX}\changelog.txt"
 	File "${INST_OUTPUT_FDOTOOLBOX}\license.txt"
 	File "${INST_OUTPUT_FDOTOOLBOX}\cmd_readme.txt"
@@ -184,8 +183,8 @@ Section
 	CreateDirectory "$SMPROGRAMS\${INST_PRODUCT}"
 	
 	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\${LNK_FDOTOOLBOX}.lnk" "$INSTDIR\${EXE_FDOTOOLBOX}"
-	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\User Documentation.lnk" "$INSTDIR\userdoc.chm"
-	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\Core API Documentation.lnk" "$INSTDIR\FDO Toolbox Core API.chm"
+	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\User Documentation.lnk" "$INSTDIR\${HELP_USER}"
+	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\Core API Documentation.lnk" "$INSTDIR\${HELP_API}"
 	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 	
 	CreateShortCut "$DESKTOP\${LNK_FDOTOOLBOX}.lnk" "$INSTDIR\${EXE_FDOTOOLBOX}"
