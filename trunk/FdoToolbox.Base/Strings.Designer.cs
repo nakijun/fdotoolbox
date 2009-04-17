@@ -1526,6 +1526,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update Feature.
+        /// </summary>
+        internal static string TITLE_UPDATE_FEATURE {
+            get {
+                return ResourceManager.GetString("TITLE_UPDATE_FEATURE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Spatial Context.
         /// </summary>
         internal static string TITLE_UPDATE_SPATIAL_CONTEXT {

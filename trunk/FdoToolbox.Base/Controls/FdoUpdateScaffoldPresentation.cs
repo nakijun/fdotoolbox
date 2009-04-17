@@ -56,7 +56,7 @@ namespace FdoToolbox.Base.Controls
             _view = view;
             _conn = conn;
             _className = feat.Table.TableName;
-            _view.Title = ICSharpCode.Core.ResourceService.GetString("TITLE_INSERT_FEATURE");
+            _view.Title = ICSharpCode.Core.ResourceService.GetString("TITLE_UPDATE_FEATURE");
             _view.UpdateFilter = filter;
             _filter = filter;
             _feature = feat;
