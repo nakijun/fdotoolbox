@@ -142,6 +142,9 @@
   <data name="CMD_BulkDelete" xml:space="preserve">
     <value>Bulk Delete</value>
   </data>
+  <data name="CMD_BulkUpdate" xml:space="preserve">
+    <value>Bulk Update</value>
+  </data>
   <data name="CMD_Clear" xml:space="preserve">
     <value>Clear Console</value>
   </data>
@@ -510,6 +513,9 @@
   </data>
   <data name="TITLE_BULK_UPDATE" xml:space="preserve">
     <value>Bulk Update</value>
+  </data>
+  <data name="TITLE_BULK_UPDATE_FEATURE" xml:space="preserve">
+    <value>Bulk Update Features</value>
   </data>
   <data name="TITLE_COMPUTE_EXTENTS" xml:space="preserve">
     <value>Compute Extents</value>

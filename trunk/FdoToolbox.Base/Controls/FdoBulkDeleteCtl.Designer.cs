@@ -35,6 +35,7 @@ namespace FdoToolbox.Base.Controls
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
+            this.chkTransaction = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -95,6 +96,7 @@ namespace FdoToolbox.Base.Controls
             // 
             // btnTest
             // 
+            this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnTest.Location = new System.Drawing.Point(19, 173);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(75, 23);
@@ -103,10 +105,22 @@ namespace FdoToolbox.Base.Controls
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
+            // chkTransaction
+            // 
+            this.chkTransaction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkTransaction.AutoSize = true;
+            this.chkTransaction.Location = new System.Drawing.Point(100, 177);
+            this.chkTransaction.Name = "chkTransaction";
+            this.chkTransaction.Size = new System.Drawing.Size(104, 17);
+            this.chkTransaction.TabIndex = 7;
+            this.chkTransaction.Text = "Use Transaction";
+            this.chkTransaction.UseVisualStyleBackColor = true;
+            // 
             // FdoBulkDeleteCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkTransaction);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnDelete);
@@ -130,5 +144,6 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.CheckBox chkTransaction;
     }
 }

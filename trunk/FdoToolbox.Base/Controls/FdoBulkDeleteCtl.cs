@@ -117,5 +117,30 @@ namespace FdoToolbox.Base.Controls
                 txtFilter.Text = value;
             }
         }
+
+
+        public bool UseTransaction
+        {
+            get
+            {
+                return chkTransaction.Checked;
+            }
+            set
+            {
+                chkTransaction.Checked = value;
+            }
+        }
+
+        public bool TransactionEnabled
+        {
+            get
+            {
+                return chkTransaction.Enabled;
+            }
+            set
+            {
+                chkTransaction.Enabled = value;
+            }
+        }
     }
 }

@@ -474,4 +474,25 @@ namespace FdoToolbox.Base.Commands
             }
         }
     }
+
+    public class BulkUpdateCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            TreeNode node = wb.ObjectExplorer.GetSelectedNode();
+            if (node.Level == 3)
+            {
+                if (MessageService.AskQuestion("This is a dangerous operation. One false filter could cause irreversible data changes. Do you want to continue?"))
+                {
+                    string name = node.Name;
+                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                    FdoConnection conn = mgr.GetConnection(node.Parent.Parent.Name);
+
+                    FdoBulkUpdateCtl ctl = new FdoBulkUpdateCtl(conn, node.Name);
+                    wb.ShowContent(ctl, ViewRegion.Dialog);
+                }
+            }
+        }
+    }
 }
