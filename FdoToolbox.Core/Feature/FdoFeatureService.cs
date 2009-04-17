@@ -672,6 +672,9 @@ namespace FdoToolbox.Core.Feature
 
         private bool IsValidSqlFilter(string filter)
         {
+            if (string.IsNullOrEmpty(filter))
+                return true;
+
             Filter fltr = Filter.Parse(filter);
             SearchCondition sc = fltr as SearchCondition;
             if (sc != null)

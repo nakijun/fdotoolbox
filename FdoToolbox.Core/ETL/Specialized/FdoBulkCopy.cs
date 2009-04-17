@@ -226,12 +226,12 @@ namespace FdoToolbox.Core.ETL.Specialized
             {
                 FdoBatchedOutputOperation bop = op as FdoBatchedOutputOperation;
                 string className = bop.ClassName;
-                SendMessageFormatted("[Bulk Copy => {0}]: {1} features written in {2}", className, bop.BatchInsertTotal, op.Statistics.Duration.ToString());
+                SendMessageFormatted("[Bulk Copy => {0}]: {1}", className, op.Statistics.ToString());
             }
             else if (op is FdoOutputOperation)
             {
                 string className = (op as FdoOutputOperation).ClassName;
-                SendMessageFormatted("[Bulk Copy => {0}]: {1} features written in {2}", className, op.Statistics.OutputtedRows, op.Statistics.Duration.ToString());
+                SendMessageFormatted("[Bulk Copy => {0}]: {1}", className, op.Statistics.ToString());
             }
         }
 

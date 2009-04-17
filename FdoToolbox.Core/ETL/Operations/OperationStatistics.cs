@@ -34,6 +34,7 @@ namespace FdoToolbox.Core.ETL.Operations
         private DateTime? start;
         private DateTime? end;
         private long outputtedRows = 0;
+        private long failedRows = 0;
 
         /// <summary>
         /// Gets number of the outputted rows.
@@ -42,6 +43,14 @@ namespace FdoToolbox.Core.ETL.Operations
         public long OutputtedRows
         {
             get { return outputtedRows; }
+        }
+
+        /// <summary>
+        /// Gets number of the failed rows
+        /// </summary>
+        public long FailedRows
+        {
+            get { return failedRows; }
         }
 
         /// <summary>
@@ -84,6 +93,14 @@ namespace FdoToolbox.Core.ETL.Operations
         }
 
         /// <summary>
+        /// Marks a failed row
+        /// </summary>
+        public void MarkFeatureFailed()
+        {
+            Interlocked.Increment(ref failedRows);
+        }
+
+        /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>
         /// <returns>
@@ -91,7 +108,7 @@ namespace FdoToolbox.Core.ETL.Operations
         /// </returns>
         public override string ToString()
         {
-            return OutputtedRows + " Rows in " + Duration;
+            return OutputtedRows + " features in " + Duration + ". " + FailedRows + " features failed to be processed.";
         }
 
         /// <summary>

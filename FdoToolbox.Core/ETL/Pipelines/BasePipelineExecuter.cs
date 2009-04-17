@@ -111,16 +111,19 @@ namespace FdoToolbox.Core.ETL.Pipelines
         protected virtual void ExecutePipeline(IEnumerable<FdoRow> pipeline)
         {
             IEnumerator<FdoRow> enumerator = pipeline.GetEnumerator();
-            try
+            bool hasMore = true;
+            do
             {
-#pragma warning disable 642
-                while (enumerator.MoveNext()) ;
-#pragma warning restore 642
+                try
+                {
+                    hasMore = enumerator.MoveNext();
+                }
+                catch (Exception e)
+                {
+                    Error(e, "Failed to execute operation {0}", enumerator.Current);
+                }
             }
-            catch (Exception e)
-            {
-                Error(e, "Failed to execute operation {0}", enumerator.Current);
-            }
+            while (hasMore);
         }
 
 

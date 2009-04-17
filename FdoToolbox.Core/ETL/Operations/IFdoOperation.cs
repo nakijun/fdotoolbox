@@ -85,4 +85,12 @@ namespace FdoToolbox.Core.ETL.Operations
     /// Event handler for processed features
     /// </summary>
     public delegate void FeatureProcessedEventHandler(FdoOperationBase op, FdoRow row);
+
+    /// <summary>
+    /// Event handler for failed features
+    /// </summary>
+    /// <param name="op"></param>
+    /// <param name="row"></param>
+    /// <param name="ex"></param>
+    public delegate void FeatureFailedEventHandler(FdoOperationBase op, FdoRow row, Exception ex);
 }
