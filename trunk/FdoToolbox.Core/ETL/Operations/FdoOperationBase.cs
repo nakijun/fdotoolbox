@@ -80,6 +80,11 @@ namespace FdoToolbox.Core.ETL.Operations
         public event FdoOperationEventHandler OnFinishedProcessing = delegate { };
 
         /// <summary>
+        /// Raised when a feature has failed to be processed.
+        /// </summary>
+        public event FeatureFailedEventHandler OnFeatureFailed = delegate { };
+
+        /// <summary>
         /// Executes the operation
         /// </summary>
         /// <param name="rows"></param>
@@ -103,6 +108,18 @@ namespace FdoToolbox.Core.ETL.Operations
         {
             Statistics.MarkFinished();
             OnFinishedProcessing(this);
+        }
+
+        /// <summary>
+        /// Raises the OnFeatureFailed event
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="ex"></param>
+        public void RaiseFailedFeatureProcessed(FdoRow row, Exception ex)
+        {
+            Statistics.MarkFeatureFailed();
+            this.Error(ex, "Error encountered processing feature");
+            OnFeatureFailed(this, row, ex);
         }
 
         /// <summary>

@@ -214,9 +214,14 @@ namespace FdoToolbox.Tasks.Controls
                             _view.AddClass(cd.Name);
                             _view.AddClassSourceFilterOption(cd.Name);
                             _view.AddClassDeleteOption(cd.Name);
+                            SortedDictionary<string, PropertyDefinition> orderedProps = new SortedDictionary<string, PropertyDefinition>();
                             foreach (PropertyDefinition pd in cd.Properties)
                             {
-                                _view.AddClassProperty(cd.Name, pd.Name, GetImageKey(pd.PropertyType));
+                                orderedProps.Add(pd.Name, pd);
+                            }
+                            foreach (string propName in orderedProps.Keys)
+                            {
+                                _view.AddClassProperty(cd.Name, propName, GetImageKey(orderedProps[propName].PropertyType));
                             }
                         }
                     }
