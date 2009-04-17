@@ -148,5 +148,20 @@ namespace FdoToolbox.Core.ETL.Operations
         {
             
         }
+
+        /// <summary>
+        /// Raised when a feature batch has been processed
+        /// </summary>
+        public event FeatureBatchProcessedEventHandler OnBatchProcessed = delegate { };
+
+        /// <summary>
+        /// Raises the OnBatchProcessed event
+        /// </summary>
+        /// <param name="count"></param>
+        public void RaiseBatchProcessed(int count)
+        {
+            Statistics.MarkFeatureProcessed(count);
+            OnBatchProcessed(this, count);
+        }
     }
 }

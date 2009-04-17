@@ -379,75 +379,88 @@ namespace FdoToolbox.Core.Utility
             FdoBulkCopyOptions options = null;
             FdoConnection source = null;
             FdoConnection target = null;
-            //Is a directory. Implies a SHP connection
-            if (IsShp(targetPath))
-            {
-                //SHP doesn't actually support CreateDataStore. We use the following technique:
-                // - Connect to base directory
-                // - Clone source schema and apply to SHP connection.
-                // - A SHP file and related files are created for each feature class.
-                string shpdir = Directory.Exists(targetPath) ? targetPath : Path.GetDirectoryName(targetPath);
-                source = CreateFlatFileConnection(sourceFile);
-                target = new FdoConnection("OSGeo.SHP", "DefaultFileLocation=" + shpdir);
-            }
-            else
-            {
-                if (!CreateFlatFileDataSource(targetPath))
-                    throw new FdoException("Unable to create data source on: " + targetPath);
-                source = CreateFlatFileConnection(sourceFile);
-                target = CreateFlatFileConnection(targetPath);
-            }
 
-            source.Open();
-            target.Open();
-
-            options = new FdoBulkCopyOptions(source, target, true);
-
-            if (copySpatialContexts)
+            try
             {
-                CopyAllSpatialContexts(source, target, true);
-            }
 
-            using (FdoFeatureService srcService = source.CreateFeatureService())
-            using (FdoFeatureService destService = target.CreateFeatureService())
-            {
-                FeatureSchemaCollection schemas = srcService.DescribeSchema();
-                //Assume single-schema
-                FeatureSchema fs = schemas[0];
-                //Clone and apply to target
-                FeatureSchema targetSchema = FdoFeatureService.CloneSchema(fs);
-                IncompatibleSchema incSchema;
-                bool canApply = destService.CanApplySchema(targetSchema, out incSchema);
-                if (canApply)
+                //Is a directory. Implies a SHP connection
+                if (IsShp(targetPath))
                 {
-                    destService.ApplySchema(targetSchema);
+                    //SHP doesn't actually support CreateDataStore. We use the following technique:
+                    // - Connect to base directory
+                    // - Clone source schema and apply to SHP connection.
+                    // - A SHP file and related files are created for each feature class.
+                    string shpdir = Directory.Exists(targetPath) ? targetPath : Path.GetDirectoryName(targetPath);
+                    source = CreateFlatFileConnection(sourceFile);
+                    target = new FdoConnection("OSGeo.SHP", "DefaultFileLocation=" + shpdir);
                 }
                 else
                 {
-                    if (fixIncompatibleSchema)
+                    if (!CreateFlatFileDataSource(targetPath))
+                        throw new FdoException("Unable to create data source on: " + targetPath);
+                    source = CreateFlatFileConnection(sourceFile);
+                    target = CreateFlatFileConnection(targetPath);
+                }
+
+                source.Open();
+                target.Open();
+
+                options = new FdoBulkCopyOptions(source, target, true);
+
+                if (copySpatialContexts)
+                {
+                    CopyAllSpatialContexts(source, target, true);
+                }
+
+                using (FdoFeatureService srcService = source.CreateFeatureService())
+                using (FdoFeatureService destService = target.CreateFeatureService())
+                {
+                    FeatureSchemaCollection schemas = srcService.DescribeSchema();
+                    //Assume single-schema
+                    FeatureSchema fs = schemas[0];
+                    //Clone and apply to target
+                    FeatureSchema targetSchema = FdoFeatureService.CloneSchema(fs);
+                    IncompatibleSchema incSchema;
+                    bool canApply = destService.CanApplySchema(targetSchema, out incSchema);
+                    if (canApply)
                     {
-                        FeatureSchema fixedSchema = destService.AlterSchema(targetSchema, incSchema);
-                        destService.ApplySchema(fixedSchema);
+                        destService.ApplySchema(targetSchema);
                     }
                     else
                     {
-                        throw new Exception(incSchema.ToString());
+                        if (fixIncompatibleSchema)
+                        {
+                            FeatureSchema fixedSchema = destService.AlterSchema(targetSchema, incSchema);
+                            destService.ApplySchema(fixedSchema);
+                        }
+                        else
+                        {
+                            throw new Exception(incSchema.ToString());
+                        }
                     }
+
+                    //Copy all classes
+                    foreach (ClassDefinition cd in fs.Classes)
+                    {
+                        FdoClassCopyOptions copt = new FdoClassCopyOptions(cd.Name, cd.Name);
+                        options.AddClassCopyOption(copt);
+                    }
+
+                    //Flick on batch support if we can
+                    if (destService.SupportsBatchInsertion())
+                        options.BatchSize = 300; //Madness? THIS IS SPARTA!
                 }
 
-                //Copy all classes
-                foreach (ClassDefinition cd in fs.Classes)
-                {
-                    FdoClassCopyOptions copt = new FdoClassCopyOptions(cd.Name, cd.Name);
-                    options.AddClassCopyOption(copt);
-                }
-
-                //Flick on batch support if we can
-                if (destService.SupportsBatchInsertion())
-                    options.BatchSize = 300; //Madness? THIS IS SPARTA!
             }
-            
+            catch (OSGeo.FDO.Common.Exception ex)
+            {
+                if (source != null)
+                    source.Dispose();
+                if (target != null)
+                    target.Dispose();
 
+                throw;
+            }
             return new FdoBulkCopy(options);
         }
 
@@ -506,6 +519,27 @@ namespace FdoToolbox.Core.Utility
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Gets the related files of a Shape File
+        /// </summary>
+        /// <param name="shapeFile">The shape file.</param>
+        /// <returns></returns>
+        public static string[] GetRelatedFiles(string shapeFile)
+        {
+            string file = shapeFile.ToUpper();
+            if (file.EndsWith(".SHP"))
+            {
+                return new string[4] 
+                {
+                    file.Substring(0, file.Length - 3) + "CPG",
+                    file.Substring(0, file.Length - 3) + "DBF",
+                    file.Substring(0, file.Length - 3) + "SHX",
+                    file.Substring(0, file.Length - 3) + "PRJ"
+                };
+            }
+            return new string[0];
         }
     }
 }

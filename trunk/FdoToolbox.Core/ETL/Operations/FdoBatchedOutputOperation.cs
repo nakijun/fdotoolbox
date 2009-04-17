@@ -173,6 +173,7 @@ namespace FdoToolbox.Core.ETL.Operations
                         {
                             reader.Close();
                             this.BatchInserted(this, new BatchInsertEventArgs(count));
+                            this.RaiseBatchProcessed(count);
                             _batchTotal += count;
                         }
                         count = 0;
@@ -187,6 +188,7 @@ namespace FdoToolbox.Core.ETL.Operations
                     {
                         reader.Close();
                         this.BatchInserted(this, new BatchInsertEventArgs(count));
+                        this.RaiseBatchProcessed(count);
                         _batchTotal += count;
                     }
                     count = 0;
