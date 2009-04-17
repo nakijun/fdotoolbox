@@ -546,7 +546,13 @@ namespace FdoToolbox.Base.Controls
                 List<string> filters = new List<string>();
                 foreach (DataColumn col in table.PrimaryKey)
                 {
-                    string f = col.ColumnName + " = '" + feat[col] + "'";
+                    DataType dt = ExpressUtility.GetFdoDataTypeFromClrType(col.DataType);
+                    string f = string.Empty;
+                    if (dt == DataType.DataType_DateTime || dt == DataType.DataType_String)
+                        f = col.ColumnName + " = '" + feat[col] + "'";
+                    else
+                        f = col.ColumnName + " = " + feat[col];
+
                     filters.Add(f);
                 }
                 return string.Join(" AND ", filters.ToArray());

@@ -612,62 +612,10 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public long GetFeatureCount(string className, string filter, bool bruteForce)
         {
-            long count = 0;
-            string property = "FEATURECOUNT";
-            if (SupportsCommand(CommandType.CommandType_SQLCommand) && IsValidSqlFilter(filter))
-            {
-                using (ISQLCommand cmd = CreateCommand<ISQLCommand>(CommandType.CommandType_SQLCommand))
-                {
-                    string sql = string.Empty;
-                    sql = string.Format("SELECT COUNT(*) AS {0} FROM {1}", property, className);
-                    if (!string.IsNullOrEmpty(filter))
-                        sql += " WHERE " + filter;
-
-                    cmd.SQLStatement = sql;
-
-                    using (ISQLDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.ReadNext())
-                        {
-                            count = reader.GetInt64(property);
-                        }
-                        reader.Close();
-                    }
-                }
-            }
-            else if (SupportsCommand(CommandType.CommandType_ExtendedSelect))
-            {
-                using (IExtendedSelect select = CreateCommand<IExtendedSelect>(CommandType.CommandType_ExtendedSelect))
-                {
-                    select.SetFeatureClassName(className);
-                    if (!string.IsNullOrEmpty(filter))
-                        select.Filter = Filter.Parse(filter);
-
-                    using (IScrollableFeatureReader reader = select.ExecuteScrollable())
-                    {
-                        count = reader.Count();
-                        reader.Close();
-                    }
-                }
-            }
-            else if (bruteForce)
-            {
-                using (ISelect select = CreateCommand<ISelect>(CommandType.CommandType_Select))
-                {
-                    select.SetFeatureClassName(className);
-                    if(!string.IsNullOrEmpty(filter))
-                        select.SetFilter(filter);
-                    using (IFeatureReader reader = select.Execute())
-                    {
-                        while (reader.ReadNext())
-                        {
-                            count++;
-                        }
-                    }
-                }
-            }
-
-            return count;
+            ClassDefinition cls = GetClassByName(className);
+            if (cls != null)
+                return GetFeatureCount(cls, filter, bruteForce);
+            return 0;
         }
 
         private bool IsValidSqlFilter(string filter)
@@ -738,7 +686,7 @@ namespace FdoToolbox.Core.Feature
                 {
                     select.SetFeatureClassName(className);
                     if (!string.IsNullOrEmpty(filter))
-                        select.Filter = Filter.Parse(filter);
+                        select.SetFilter(filter);
                     select.PropertyNames.Add(new ComputedIdentifier(property, Expression.Parse("COUNT(" + classDef.IdentityProperties[0].Name + ")")));
 
                     using (IDataReader reader = select.Execute())
@@ -769,7 +717,7 @@ namespace FdoToolbox.Core.Feature
                 {
                     select.SetFeatureClassName(className);
                     if (!string.IsNullOrEmpty(filter))
-                        select.Filter = Filter.Parse(filter);
+                        select.SetFilter(filter);
 
                     using (IScrollableFeatureReader reader = select.ExecuteScrollable())
                     {
@@ -791,6 +739,7 @@ namespace FdoToolbox.Core.Feature
                         {
                             count++;
                         }
+                        reader.Close();
                     }
                 }
             }

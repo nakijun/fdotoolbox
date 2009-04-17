@@ -637,6 +637,9 @@
   <data name="TITLE_UNREGISTER_PROVIDER" xml:space="preserve">
     <value>Un-Register Provider</value>
   </data>
+  <data name="TITLE_UPDATE_FEATURE" xml:space="preserve">
+    <value>Update Feature</value>
+  </data>
   <data name="TITLE_UPDATE_SPATIAL_CONTEXT" xml:space="preserve">
     <value>Update Spatial Context</value>
   </data>
