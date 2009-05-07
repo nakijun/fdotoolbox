@@ -87,6 +87,13 @@ namespace FdoToolbox.Base.Controls
             colEnable.Name = "COL_ENABLE";
             colEnable.HeaderText = "Enable";
             colEnable.CellTemplate = new DataGridViewCheckBoxCell();
+            colEnable.Width = 60;
+
+            DataGridViewColumn colNull = new DataGridViewColumn();
+            colNull.Name = "COL_NULL";
+            colNull.HeaderText = "Null";
+            colNull.CellTemplate = new DataGridViewCheckBoxCell();
+            colNull.Width = 60;
 
             DataGridViewColumn colName = new DataGridViewColumn();
             colName.Name = "COL_NAME";
@@ -102,6 +109,7 @@ namespace FdoToolbox.Base.Controls
             colValue.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             grdProperties.Columns.Add(colEnable);
+            grdProperties.Columns.Add(colNull);
             grdProperties.Columns.Add(colName);
             grdProperties.Columns.Add(colValue);
 
@@ -191,7 +199,11 @@ namespace FdoToolbox.Base.Controls
 
             DataGridViewCheckBoxCell ecell = new DataGridViewCheckBoxCell(false);
             ecell.Value = true;
+            DataGridViewCheckBoxCell ncell = new DataGridViewCheckBoxCell(false);
+            ncell.Value = false;
+
             row.Cells.Add(ecell);
+            row.Cells.Add(ncell);
             row.Cells.Add(nameCell);
             row.Cells.Add(valueCell);
 
@@ -216,7 +228,11 @@ namespace FdoToolbox.Base.Controls
 
             DataGridViewCheckBoxCell ecell = new DataGridViewCheckBoxCell(false);
             ecell.Value = true;
+            DataGridViewCheckBoxCell ncell = new DataGridViewCheckBoxCell(false);
+            ncell.Value = false;
+
             row.Cells.Add(ecell);
+            row.Cells.Add(ncell);
             row.Cells.Add(nameCell);
             row.Cells.Add(valueCell);
 
@@ -232,66 +248,131 @@ namespace FdoToolbox.Base.Controls
             foreach (DataGridViewRow row in grdProperties.Rows)
             {
                 bool enabled = Convert.ToBoolean(row.Cells[0].Value);
+                bool setNull = Convert.ToBoolean(row.Cells[1].Value);
                 if (enabled)
                 {
-                    string name = row.Cells[1].Value.ToString();
-                    PropertyDefinition propDef = row.Cells[1].Tag as PropertyDefinition;
-                    if (row.Cells[1].Value != null)
+                    string name = row.Cells[2].Value.ToString();
+                    PropertyDefinition propDef = row.Cells[2].Tag as PropertyDefinition;
+                    if (setNull)
                     {
-                        string str = row.Cells[2].Value.ToString();
-                        if (!string.IsNullOrEmpty(str))
+                        LiteralValue expr = null;
+                        if (propDef.PropertyType == PropertyType.PropertyType_DataProperty)
                         {
-                            ValueExpression expr = null;
-                            if (propDef.PropertyType == PropertyType.PropertyType_DataProperty)
+                            DataPropertyDefinition dp = propDef as DataPropertyDefinition;
+                            switch (dp.DataType)
                             {
-                                DataPropertyDefinition dp = propDef as DataPropertyDefinition;
-                                switch (dp.DataType)
-                                {
-                                    case DataType.DataType_Boolean:
-                                        expr = new BooleanValue(Convert.ToBoolean(str));
-                                        break;
-                                    case DataType.DataType_Byte:
-                                        expr = new ByteValue(Convert.ToByte(str));
-                                        break;
-                                    case DataType.DataType_DateTime:
-                                        expr = new DateTimeValue(Convert.ToDateTime(str));
-                                        break;
-                                    case DataType.DataType_Decimal:
-                                        expr = new DecimalValue(Convert.ToDouble(str));
-                                        break;
-                                    case DataType.DataType_Double:
-                                        expr = new DoubleValue(Convert.ToDouble(str));
-                                        break;
-                                    case DataType.DataType_Int16:
-                                        expr = new Int16Value(Convert.ToInt16(str));
-                                        break;
-                                    case DataType.DataType_Int32:
-                                        expr = new Int32Value(Convert.ToInt32(str));
-                                        break;
-                                    case DataType.DataType_Int64:
-                                        expr = new Int64Value(Convert.ToInt64(str));
-                                        break;
-                                    case DataType.DataType_Single:
-                                        expr = new SingleValue(Convert.ToSingle(str));
-                                        break;
-                                    case DataType.DataType_String:
-                                        expr = new StringValue(str);
-                                        break;
-                                    default:
-                                        throw new NotSupportedException("Unsupported data type: " + dp.DataType);
-                                }
+                                case DataType.DataType_BLOB:
+                                    expr = new BLOBValue();
+                                    break;
+                                case DataType.DataType_Boolean:
+                                    expr = new BooleanValue();
+                                    break;
+                                case DataType.DataType_Byte:
+                                    expr = new ByteValue();
+                                    break;
+                                case DataType.DataType_CLOB:
+                                    expr = new CLOBValue();
+                                    break;
+                                case DataType.DataType_DateTime:
+                                    expr = new DateTimeValue();
+                                    break;
+                                case DataType.DataType_Decimal:
+                                    expr = new DecimalValue();
+                                    break;
+                                case DataType.DataType_Double:
+                                    expr = new DoubleValue();
+                                    break;
+                                case DataType.DataType_Int16:
+                                    expr = new Int16Value();
+                                    break;
+                                case DataType.DataType_Int32:
+                                    expr = new Int32Value();
+                                    break;
+                                case DataType.DataType_Int64:
+                                    expr = new Int64Value();
+                                    break;
+                                case DataType.DataType_Single:
+                                    expr = new SingleValue();
+                                    break;
+                                case DataType.DataType_String:
+                                    expr = new StringValue();
+                                    break;
                             }
-                            else if (propDef.PropertyType == PropertyType.PropertyType_GeometricProperty)
-                            {
-                                FdoGeometryFactory fact = FdoGeometryFactory.Instance;
-                                OSGeo.FDO.Geometry.IGeometry geom = fact.CreateGeometry(str);
-                                byte[] fgf = fact.GetFgf(geom);
-                                expr = new GeometryValue(fgf);
-                                geom.Dispose();
-                            }
+                        }
+                        else if (propDef.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                        {
+                            expr = new GeometryValue();
+                        }
 
-                            if (expr != null)
-                                values.Add(name, expr);
+                        if (expr != null)
+                        {
+                            if (expr.LiteralValueType == LiteralValueType.LiteralValueType_Data)
+                                (expr as DataValue).SetNull();
+                            else
+                                (expr as GeometryValue).SetNull();
+
+                            values.Add(name, expr);
+                        }
+                    }
+                    else
+                    {
+                        if (row.Cells[2].Value != null)
+                        {
+                            string str = row.Cells[3].Value.ToString();
+                            if (!string.IsNullOrEmpty(str))
+                            {
+                                ValueExpression expr = null;
+                                if (propDef.PropertyType == PropertyType.PropertyType_DataProperty)
+                                {
+                                    DataPropertyDefinition dp = propDef as DataPropertyDefinition;
+                                    switch (dp.DataType)
+                                    {
+                                        case DataType.DataType_Boolean:
+                                            expr = new BooleanValue(Convert.ToBoolean(str));
+                                            break;
+                                        case DataType.DataType_Byte:
+                                            expr = new ByteValue(Convert.ToByte(str));
+                                            break;
+                                        case DataType.DataType_DateTime:
+                                            expr = new DateTimeValue(Convert.ToDateTime(str));
+                                            break;
+                                        case DataType.DataType_Decimal:
+                                            expr = new DecimalValue(Convert.ToDouble(str));
+                                            break;
+                                        case DataType.DataType_Double:
+                                            expr = new DoubleValue(Convert.ToDouble(str));
+                                            break;
+                                        case DataType.DataType_Int16:
+                                            expr = new Int16Value(Convert.ToInt16(str));
+                                            break;
+                                        case DataType.DataType_Int32:
+                                            expr = new Int32Value(Convert.ToInt32(str));
+                                            break;
+                                        case DataType.DataType_Int64:
+                                            expr = new Int64Value(Convert.ToInt64(str));
+                                            break;
+                                        case DataType.DataType_Single:
+                                            expr = new SingleValue(Convert.ToSingle(str));
+                                            break;
+                                        case DataType.DataType_String:
+                                            expr = new StringValue(str);
+                                            break;
+                                        default:
+                                            throw new NotSupportedException("Unsupported data type: " + dp.DataType);
+                                    }
+                                }
+                                else if (propDef.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                                {
+                                    FdoGeometryFactory fact = FdoGeometryFactory.Instance;
+                                    OSGeo.FDO.Geometry.IGeometry geom = fact.CreateGeometry(str);
+                                    byte[] fgf = fact.GetFgf(geom);
+                                    expr = new GeometryValue(fgf);
+                                    geom.Dispose();
+                                }
+
+                                if (expr != null)
+                                    values.Add(name, expr);
+                            }
                         }
                     }
                 }
