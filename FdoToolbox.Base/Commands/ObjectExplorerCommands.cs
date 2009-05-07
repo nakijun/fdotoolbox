@@ -34,6 +34,7 @@ using Log = ICSharpCode.Core.LoggingService;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Base.Forms;
 using System.Collections.Specialized;
+using FdoToolbox.Core;
 
 namespace FdoToolbox.Base.Commands
 {
@@ -149,9 +150,39 @@ namespace FdoToolbox.Base.Commands
                 FdoConnection conn = mgr.GetConnection(connNode.Name);
                 using (FdoFeatureService service = conn.CreateFeatureService())
                 {
-                    using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+                    FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
+                    schemas.ReadXml(path);
+                    foreach (FeatureSchema fs in schemas)
                     {
-                        service.LoadSchemasFromXml(path);
+                        FeatureSchema theSchema = fs;
+                        IncompatibleSchema incSchema;
+                        bool canApply = service.CanApplySchema(schemas[0], out incSchema);
+                        if (!canApply)
+                        {
+                            bool attemptAlter = WrappedMessageBox.Confirm("Question", Res.GetStringFormatted("MSG_INCOMPATIBLE_SCHEMA", incSchema.ToString()), MessageBoxText.YesNo);
+                            if (attemptAlter)
+                            {
+                                try
+                                {
+                                    theSchema = service.AlterSchema(fs, incSchema);
+                                }
+                                catch (FeatureServiceException)
+                                {
+                                    string msg = Res.GetString("ERR_FAIL_ALTER_SCHEMA");
+                                    MessageService.ShowError(msg);
+                                    Log.Info(msg);
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                        using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
+                        {
+                            service.ApplySchema(theSchema);
+                        }
                     }
                     MessageService.ShowMessage(Res.GetStringFormatted("MSG_SCHEMA_LOADED", connNode.Name, path));
                     Log.InfoFormatted(Res.GetString("MSG_SCHEMA_LOADED"), connNode.Name, path);

@@ -99,21 +99,21 @@ namespace FdoToolbox.Core.Feature
         /// </returns>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder("Incompatible Class: " + this.Name + "\n");
+            StringBuilder sb = new StringBuilder("Incompatible Class: " + this.Name + Environment.NewLine);
             if (this.Reasons.Count > 0)
             {
-                sb.Append("Reasons:\n");
+                sb.Append("Reasons:"+Environment.NewLine);
                 foreach (string str in this.Reasons)
                 {
-                    sb.Append(" - " + str + "\n");
+                    sb.Append(" - " + str + Environment.NewLine);
                 }
             }
             if (this.Properties.Count > 0)
             {
-                sb.Append("Incompatible Properties:\n");
+                sb.Append("Incompatible Properties:" + Environment.NewLine);
                 foreach (IncompatibleProperty prop in this.Properties)
                 {
-                    sb.Append(prop.ToString() + "\n");
+                    sb.Append(prop.ToString() + Environment.NewLine);
                 }
             }
             return sb.ToString();

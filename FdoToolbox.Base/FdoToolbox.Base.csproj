@@ -338,6 +338,12 @@
       <DependentUpon>SchemaInfoDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\IQuerySubView.cs" />
+    <Compile Include="Forms\WrappedMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WrappedMessageBox.Designer.cs">
+      <DependentUpon>WrappedMessageBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="ISubView.cs" />
     <Compile Include="NameValuePair.cs" />
     <Compile Include="NativeMethods.cs" />
@@ -590,6 +596,10 @@
     <EmbeddedResource Include="Forms\SchemaInfoDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SchemaInfoDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WrappedMessageBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WrappedMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Images.resx">
       <SubType>Designer</SubType>
