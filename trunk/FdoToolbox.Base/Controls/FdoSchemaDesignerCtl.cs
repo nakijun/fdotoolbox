@@ -1,4 +1,3 @@
-#define EXTENDED_PROPERTY_SUPPORT
 #region LGPL Header
 // Copyright (C) 2009, Jackie Ng
 // http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
@@ -204,7 +203,6 @@ namespace FdoToolbox.Base.Controls
                                 _presenter.AddDataProperty();
                             });
                             break;
-#if EXTENDED_PROPERTY_SUPPORT
                         case OSGeo.FDO.Schema.PropertyType.PropertyType_AssociationProperty:
                             mnuAddNewProperty.DropDown.Items.Add(ResourceService.GetString("LBL_ASSOCIATION_PROPERTY"), ResourceService.GetBitmap("table_relationship"), delegate
                             {
@@ -217,7 +215,6 @@ namespace FdoToolbox.Base.Controls
                                 _presenter.AddObjectProperty();
                             });
                             break;
-#endif
                     }
                 }
             }
