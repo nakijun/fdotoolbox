@@ -397,21 +397,26 @@ namespace FdoToolbox.Tasks.Controls
                 ctxSelectedClass.Items.Clear();
                 foreach (string cls in value)
                 {
-                    ctxSelectedClass.Items.Add(
-                        "Map to: " + cls,
-                        null,
-                        delegate(object sender, EventArgs e)
-                        {
-                            try
-                            {
-                                _presenter.MapClass(treeMappings.SelectedNode.Name, cls);
-                            }
-                            catch (MappingException ex)
-                            {
-                                this.ShowError(ex);
-                            }
-                        });
+                    ToolStripMenuItem item = new ToolStripMenuItem();
+                    item.Text = "Map to: " + cls;
+                    item.Click += OnMapClass;
+                    item.Tag = cls;
+
+                    ctxSelectedClass.Items.Add(item);
                 }
+            }
+        }
+
+        private void OnMapClass(object sender, EventArgs e)
+        {
+            try
+            {
+                ToolStripMenuItem ctx = (ToolStripMenuItem)sender;
+                _presenter.MapClass(treeMappings.SelectedNode.Name, ctx.Tag.ToString());
+            }
+            catch (MappingException ex)
+            {
+                this.ShowError(ex);
             }
         }
 
