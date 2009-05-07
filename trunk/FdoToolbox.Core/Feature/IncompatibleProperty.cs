@@ -92,13 +92,13 @@ namespace FdoToolbox.Core.Feature
         /// </returns>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder("Incompatible Property: " + this.Name + "\n");
+            StringBuilder sb = new StringBuilder("Incompatible Property: " + this.Name + Environment.NewLine);
             if (this.Reasons.Count > 0)
             {
-                sb.Append("Reasons: \n");
+                sb.Append("Reasons: " + Environment.NewLine);
                 foreach (string str in this.Reasons)
                 {
-                    sb.Append(" - " + str + "\n");
+                    sb.Append(" - " + str + Environment.NewLine);
                 }
             }
             return sb.ToString();

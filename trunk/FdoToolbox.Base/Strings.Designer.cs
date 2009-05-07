@@ -428,6 +428,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alter schema failed.
+        /// </summary>
+        internal static string ERR_FAIL_ALTER_SCHEMA {
+            get {
+                return ResourceManager.GetString("ERR_FAIL_ALTER_SCHEMA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This field is required.
         /// </summary>
         internal static string ERR_FIELD_REQUIRED {
@@ -964,6 +973,15 @@ namespace FdoToolbox.Base {
         internal static string MSG_ETL_ERRORS {
             get {
                 return ResourceManager.GetString("MSG_ETL_ERRORS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schema is incompatible and cannot be applied. {0} Attempt to fix it?.
+        /// </summary>
+        internal static string MSG_INCOMPATIBLE_SCHEMA {
+            get {
+                return ResourceManager.GetString("MSG_INCOMPATIBLE_SCHEMA", resourceCulture);
             }
         }
         

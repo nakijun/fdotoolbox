@@ -238,6 +238,9 @@
   <data name="CMD_UnregProvider" xml:space="preserve">
     <value>Unregister Provider</value>
   </data>
+  <data name="ERR_FAIL_ALTER_SCHEMA" xml:space="preserve">
+    <value>Alter schema failed</value>
+  </data>
   <data name="ERR_FIELD_REQUIRED" xml:space="preserve">
     <value>This field is required</value>
   </data>
@@ -450,6 +453,9 @@
   </data>
   <data name="MSG_ETL_ERRORS" xml:space="preserve">
     <value>{0} errors were encountered when running this ETL process.</value>
+  </data>
+  <data name="MSG_INCOMPATIBLE_SCHEMA" xml:space="preserve">
+    <value>Schema is incompatible and cannot be applied. {0} Attempt to fix it?</value>
   </data>
   <data name="MSG_LISTING_DATA_STORES" xml:space="preserve">
     <value>Showing all Data Stores</value>

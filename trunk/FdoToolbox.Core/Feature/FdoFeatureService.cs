@@ -1214,6 +1214,21 @@ namespace FdoToolbox.Core.Feature
                         }
                     }
                     AlterClass(ref classDef, incClass.ReasonCodes);
+
+                    //Fix the spatial context association
+                    SpatialContextInfo scInfo = GetActiveSpatialContext();
+                    foreach (PropertyDefinition pd in classDef.Properties)
+                    {
+                        if (pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                        {
+                            GeometricPropertyDefinition g = pd as GeometricPropertyDefinition;
+                            if (scInfo != null)
+                                g.SpatialContextAssociation = scInfo.Name;
+                            else
+                                g.SpatialContextAssociation = string.Empty;
+                        }
+                    }
+
                     //Finally make sure the data properties lie within the limits of this
                     //connection
                     FixDataProperties(ref classDef);

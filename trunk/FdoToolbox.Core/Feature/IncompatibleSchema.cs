@@ -72,10 +72,10 @@ namespace FdoToolbox.Core.Feature
         /// </returns>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder("Incompatible schema: " + this.Name + "\n");
+            StringBuilder sb = new StringBuilder("Incompatible schema: " + this.Name + Environment.NewLine);
             foreach (IncompatibleClass cls in this.Classes)
             {
-                sb.Append(cls.ToString() + "\n");
+                sb.Append(cls.ToString() + System.Environment.NewLine);
             }
             return sb.ToString();
         }
