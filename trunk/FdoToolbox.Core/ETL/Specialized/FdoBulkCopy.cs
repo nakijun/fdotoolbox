@@ -153,13 +153,23 @@ namespace FdoToolbox.Core.ETL.Specialized
 
                 IFdoOperation input = new FdoInputOperation(_options.SourceConnection, CreateSourceQuery(copt)); 
                 IFdoOperation output = null;
+                NameValueCollection propertyMappings = new NameValueCollection();
                 if (copt.SourcePropertyNames.Length > 0)
                 {
-                    NameValueCollection propertyMappings = new NameValueCollection();
                     foreach (string srcProp in copt.SourcePropertyNames)
                     {
                         propertyMappings.Add(srcProp, copt.GetTargetProperty(srcProp));
                     }
+                }
+                if (copt.SourceAliases.Length > 0)
+                {
+                    foreach (string srcAlias in copt.SourceAliases)
+                    {
+                        propertyMappings.Add(srcAlias, copt.GetTargetPropertyForAlias(srcAlias));
+                    }
+                }
+                if (propertyMappings.Count > 0)
+                {   
                     if (_options.BatchSize > 0)
                     {
                         FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(_options.TargetConnection, copt.TargetClassName, propertyMappings, _options.BatchSize);
@@ -303,8 +313,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                 foreach (string key in copt.SourceAliases)
                 {
                     FdoExpressionMapping e = new FdoExpressionMapping();
-                    e.TargetProperty = key;
                     e.SourceExpression = copt.GetExpression(key);
+                    e.SourceAlias = key;
+                    e.TargetProperty = copt.GetTargetPropertyForAlias(key);
                     exprs.Add(e);
                 }
                 map.Expressions = exprs.ToArray();

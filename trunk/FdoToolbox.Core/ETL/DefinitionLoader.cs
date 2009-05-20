@@ -94,16 +94,14 @@ namespace FdoToolbox.Core.ETL
                 }
                 foreach (FdoExpressionMapping emap in mapping.Expressions)
                 {
-                    string alias = emap.TargetProperty;
+                    string alias = emap.SourceAlias;
                     string expr = emap.SourceExpression;
-                    string targetProp = copt.GetTargetProperty(alias);
+                    string targetProp = emap.TargetProperty;
                     copt.AddSourceExpression(alias, expr, targetProp);
                 }
                 copt.DeleteTarget = mapping.DeleteTarget;
                 copt.SourceFilter = mapping.Filter;
                 opt.AddClassCopyOption(copt);
-
-                //opt.AddClassCopyOption(mapping.SourceClass, mapping.TargetClass, maps, exprs, mapping.DeleteTarget, mapping.Filter);
             }
 
             if (def.Source.SpatialContextList.Length > 0)

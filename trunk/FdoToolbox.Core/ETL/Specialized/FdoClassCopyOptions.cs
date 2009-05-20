@@ -76,8 +76,8 @@ namespace FdoToolbox.Core.ETL.Specialized
         }
 	
         private NameValueCollection _propertyMappings;
-
-        private NameValueCollection _sourceExpressions;
+        private NameValueCollection _expressionMappings;
+        private NameValueCollection _expressionAliasMap;
 
         /// <summary>
         /// Gets the list of source property names. Use this to get the mapped (target)
@@ -95,7 +95,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <value>The source aliases.</value>
         public string[] SourceAliases
         {
-            get { return _sourceExpressions.AllKeys; }
+            get { return _expressionAliasMap.AllKeys; }
         }
 
         /// <summary>
@@ -134,7 +134,8 @@ namespace FdoToolbox.Core.ETL.Specialized
                 throw new ArgumentException("parameter destClass is null or empty");
 
             _propertyMappings = new NameValueCollection();
-            _sourceExpressions = new NameValueCollection();
+            _expressionAliasMap = new NameValueCollection();
+            _expressionMappings = new NameValueCollection();
             _sourceClass = srcClass;
             _targetClass = destClass;
         }
@@ -147,8 +148,8 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <param name="targetProp">The target property.</param>
         public void AddSourceExpression(string alias, string expression, string targetProp)
         {
-            _sourceExpressions[alias] = expression;
-            _propertyMappings[alias] = targetProp;
+            _expressionAliasMap[alias] = expression;
+            _expressionMappings[alias] = targetProp;
         }
 
         /// <summary>
@@ -168,7 +169,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <returns></returns>
         public string GetExpression(string alias)
         {
-            return _sourceExpressions[alias];
+            return _expressionAliasMap[alias];
         }
 
         /// <summary>
@@ -178,8 +179,8 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <returns></returns>
         public string GetTargetPropertyForAlias(string alias)
         {
-            if (_sourceExpressions[alias] != null)
-                return _propertyMappings[alias];
+            if (_expressionAliasMap[alias] != null)
+                return _expressionMappings[alias];
 
             return null;
         }

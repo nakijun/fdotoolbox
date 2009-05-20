@@ -64,6 +64,7 @@
     <xs:complexType name="FdoExpressionMapping">
         <xs:sequence>
             <xs:element name="SourceExpression" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="SourceAlias" type="xs:string" minOccurs="1" maxOccurs="1" />
             <xs:element name="TargetProperty" type="xs:string" minOccurs="1" maxOccurs="1" />
         </xs:sequence>
     </xs:complexType>
