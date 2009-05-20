@@ -54,6 +54,8 @@ namespace FdoToolbox.Core.Feature
         private string _defaultGeometryName;
         private Dictionary<string, FdoPropertyType> _ptypes;
 
+        protected FdoSqlReader() { }
+
         internal FdoSqlReader(ISQLDataReader reader)
         {
             _internalReader = reader;
@@ -104,7 +106,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <value></value>
         /// <returns>The level of nesting.</returns>
-        public int Depth
+        public virtual int Depth
         {
             get { return -1; }
         }
@@ -116,7 +118,7 @@ namespace FdoToolbox.Core.Feature
         /// A <see cref="T:System.Data.DataTable"/> that describes the column metadata.
         /// </returns>
         /// <exception cref="T:System.InvalidOperationException">The <see cref="T:System.Data.IDataReader"/> is closed. </exception>
-        public System.Data.DataTable GetSchemaTable()
+        public virtual System.Data.DataTable GetSchemaTable()
         {
             System.Data.DataTable schemaTable = new System.Data.DataTable();
 
@@ -185,7 +187,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <value></value>
         /// <returns>When not positioned in a valid recordset, 0; otherwise, the number of columns in the current record. The default is -1.</returns>
-        public int FieldCount
+        public virtual int FieldCount
         {
             get { return _internalReader.GetColumnCount(); }
         }
@@ -198,7 +200,7 @@ namespace FdoToolbox.Core.Feature
         /// The <see cref="T:System.Type"/> information corresponding to the type of <see cref="T:System.Object"/> that would be returned from <see cref="M:System.Data.IDataRecord.GetValue(System.Int32)"/>.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public Type GetFieldType(int i)
+        public virtual Type GetFieldType(int i)
         {
             return _types[i];
         }
@@ -208,7 +210,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name of the field to find.</param>
         /// <returns>The index of the named field.</returns>
-        public int GetOrdinal(string name)
+        public virtual int GetOrdinal(string name)
         {
             return _ordinals[name];   
         }
@@ -217,7 +219,7 @@ namespace FdoToolbox.Core.Feature
         /// Gets the column count.
         /// </summary>
         /// <returns></returns>
-        public int GetColumnCount()
+        public virtual int GetColumnCount()
         {
             return _internalReader.GetColumnCount();
         }
@@ -227,7 +229,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        public string GetColumnName(int index)
+        public virtual string GetColumnName(int index)
         {
             return _internalReader.GetColumnName(index);
         }
@@ -237,7 +239,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public OSGeo.FDO.Schema.DataType GetColumnType(string name)
+        public virtual OSGeo.FDO.Schema.DataType GetColumnType(string name)
         {
             return _internalReader.GetColumnType(name);
         }
@@ -247,7 +249,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public OSGeo.FDO.Schema.PropertyType GetPropertyType(string name)
+        public virtual OSGeo.FDO.Schema.PropertyType GetPropertyType(string name)
         {
             return _internalReader.GetPropertyType(name);
         }
@@ -255,7 +257,7 @@ namespace FdoToolbox.Core.Feature
         /// <summary>
         /// Closes this instance.
         /// </summary>
-        public void Close()
+        public virtual void Close()
         {
             _internalReader.Close();
         }
@@ -265,7 +267,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public bool GetBoolean(string name)
+        public virtual bool GetBoolean(string name)
         {
             return _internalReader.GetBoolean(name);
         }
@@ -275,7 +277,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public byte GetByte(string name)
+        public virtual byte GetByte(string name)
         {
             return _internalReader.GetByte(name);
         }
@@ -285,7 +287,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public DateTime GetDateTime(string name)
+        public virtual DateTime GetDateTime(string name)
         {
             return _internalReader.GetDateTime(name);
         }
@@ -295,7 +297,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public double GetDouble(string name)
+        public virtual double GetDouble(string name)
         {
             return _internalReader.GetDouble(name);
         }
@@ -305,7 +307,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public byte[] GetGeometry(string name)
+        public virtual byte[] GetGeometry(string name)
         {
             return _internalReader.GetGeometry(name);
         }
@@ -315,7 +317,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public short GetInt16(string name)
+        public virtual short GetInt16(string name)
         {
             return _internalReader.GetInt16(name);
         }
@@ -325,7 +327,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public int GetInt32(string name)
+        public virtual int GetInt32(string name)
         {
             return _internalReader.GetInt32(name);
         }
@@ -335,7 +337,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public long GetInt64(string name)
+        public virtual long GetInt64(string name)
         {
             return _internalReader.GetInt64(name);
         }
@@ -345,7 +347,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public OSGeo.FDO.Expression.LOBValue GetLOB(string name)
+        public virtual OSGeo.FDO.Expression.LOBValue GetLOB(string name)
         {
             return _internalReader.GetLOB(name);
         }
@@ -355,7 +357,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public OSGeo.FDO.Common.IStreamReader GetLOBStreamReader(string name)
+        public virtual OSGeo.FDO.Common.IStreamReader GetLOBStreamReader(string name)
         {
             return _internalReader.GetLOBStreamReader(name);
         }
@@ -365,7 +367,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public float GetSingle(string name)
+        public virtual float GetSingle(string name)
         {
             return _internalReader.GetSingle(name);
         }
@@ -375,7 +377,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public string GetString(string name)
+        public virtual string GetString(string name)
         {
             return _internalReader.GetString(name);
         }
@@ -387,7 +389,7 @@ namespace FdoToolbox.Core.Feature
         /// <returns>
         /// 	<c>true</c> if the specified name is null; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsNull(string name)
+        public virtual bool IsNull(string name)
         {
             return _internalReader.IsNull(name);
         }
@@ -396,7 +398,7 @@ namespace FdoToolbox.Core.Feature
         /// Reads the next feature/row
         /// </summary>
         /// <returns></returns>
-        public bool ReadNext()
+        public virtual bool ReadNext()
         {
             //HACK
             bool read = false;
@@ -414,7 +416,7 @@ namespace FdoToolbox.Core.Feature
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -437,7 +439,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <value></value>
         /// <returns>true if the data reader is closed; otherwise, false.</returns>
-        public bool IsClosed
+        public virtual bool IsClosed
         {
             get { return false; }
         }
@@ -448,7 +450,7 @@ namespace FdoToolbox.Core.Feature
         /// <returns>
         /// true if there are more rows; otherwise, false.
         /// </returns>
-        public bool NextResult()
+        public virtual bool NextResult()
         {
             return this.ReadNext();
         }
@@ -459,7 +461,7 @@ namespace FdoToolbox.Core.Feature
         /// <returns>
         /// true if there are more rows; otherwise, false.
         /// </returns>
-        public bool Read()
+        public virtual bool Read()
         {
             return this.ReadNext();
         }
@@ -469,7 +471,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <value></value>
         /// <returns>The number of rows changed, inserted, or deleted; 0 if no rows were affected or the statement failed; and -1 for SELECT statements.</returns>
-        public int RecordsAffected
+        public virtual int RecordsAffected
         {
             get { throw new Exception("The method or operation is not implemented."); }
         }
@@ -480,7 +482,7 @@ namespace FdoToolbox.Core.Feature
         /// <param name="i">The zero-based column ordinal.</param>
         /// <returns>The value of the column.</returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public bool GetBoolean(int i)
+        public virtual bool GetBoolean(int i)
         {
             return _internalReader.GetBoolean(GetName(i));
         }
@@ -493,7 +495,7 @@ namespace FdoToolbox.Core.Feature
         /// The 8-bit unsigned integer value of the specified column.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public byte GetByte(int i)
+        public virtual byte GetByte(int i)
         {
             return _internalReader.GetByte(GetName(i));
         }
@@ -508,7 +510,7 @@ namespace FdoToolbox.Core.Feature
         /// <param name="length">The number of bytes to read.</param>
         /// <returns>The actual number of bytes read.</returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
+        public virtual long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -521,7 +523,7 @@ namespace FdoToolbox.Core.Feature
         /// The character value of the specified column.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public char GetChar(int i)
+        public virtual char GetChar(int i)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -536,7 +538,7 @@ namespace FdoToolbox.Core.Feature
         /// <param name="length">The number of bytes to read.</param>
         /// <returns>The actual number of characters read.</returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
+        public virtual long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -549,7 +551,7 @@ namespace FdoToolbox.Core.Feature
         /// An <see cref="T:System.Data.IDataReader"/>.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public System.Data.IDataReader GetData(int i)
+        public virtual System.Data.IDataReader GetData(int i)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -562,7 +564,7 @@ namespace FdoToolbox.Core.Feature
         /// The data type information for the specified field.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public string GetDataTypeName(int i)
+        public virtual string GetDataTypeName(int i)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -575,7 +577,7 @@ namespace FdoToolbox.Core.Feature
         /// The date and time data value of the specified field.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public DateTime GetDateTime(int i)
+        public virtual DateTime GetDateTime(int i)
         {
             return _internalReader.GetDateTime(GetName(i));
         }
@@ -588,7 +590,7 @@ namespace FdoToolbox.Core.Feature
         /// The fixed-position numeric value of the specified field.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public decimal GetDecimal(int i)
+        public virtual decimal GetDecimal(int i)
         {
             return Convert.ToDecimal(_internalReader.GetDouble(GetName(i)));
         }
@@ -601,7 +603,7 @@ namespace FdoToolbox.Core.Feature
         /// The double-precision floating point number of the specified field.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public double GetDouble(int i)
+        public virtual double GetDouble(int i)
         {
             return _internalReader.GetDouble(GetName(i));
         }
@@ -614,7 +616,7 @@ namespace FdoToolbox.Core.Feature
         /// The single-precision floating point number of the specified field.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public float GetFloat(int i)
+        public virtual float GetFloat(int i)
         {
             return _internalReader.GetSingle(GetName(i));
         }
@@ -625,7 +627,7 @@ namespace FdoToolbox.Core.Feature
         /// <param name="i">The index of the field to find.</param>
         /// <returns>The GUID value of the specified field.</returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public Guid GetGuid(int i)
+        public virtual Guid GetGuid(int i)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -638,7 +640,7 @@ namespace FdoToolbox.Core.Feature
         /// The 16-bit signed integer value of the specified field.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public short GetInt16(int i)
+        public virtual short GetInt16(int i)
         {
             return _internalReader.GetInt16(GetName(i));
         }
@@ -651,7 +653,7 @@ namespace FdoToolbox.Core.Feature
         /// The 32-bit signed integer value of the specified field.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public int GetInt32(int i)
+        public virtual int GetInt32(int i)
         {
             return _internalReader.GetInt32(GetName(i));
         }
@@ -664,7 +666,7 @@ namespace FdoToolbox.Core.Feature
         /// The 64-bit signed integer value of the specified field.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public long GetInt64(int i)
+        public virtual long GetInt64(int i)
         {
             return _internalReader.GetInt64(GetName(i));
         }
@@ -677,7 +679,7 @@ namespace FdoToolbox.Core.Feature
         /// The name of the field or the empty string (""), if there is no value to return.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public string GetName(int i)
+        public virtual string GetName(int i)
         {
             return _internalReader.GetColumnName(i);
         }
@@ -688,7 +690,7 @@ namespace FdoToolbox.Core.Feature
         /// <param name="i">The index of the field to find.</param>
         /// <returns>The string value of the specified field.</returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public string GetString(int i)
+        public virtual string GetString(int i)
         {
             return _internalReader.GetString(GetName(i));
         }
@@ -701,7 +703,7 @@ namespace FdoToolbox.Core.Feature
         /// The <see cref="T:System.Object"/> which will contain the field value upon return.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public object GetValue(int i)
+        public virtual object GetValue(int i)
         {
             Type t = GetFieldType(i);
             string name = GetName(i);
@@ -735,7 +737,7 @@ namespace FdoToolbox.Core.Feature
         /// <returns>
         /// The number of instances of <see cref="T:System.Object"/> in the array.
         /// </returns>
-        public int GetValues(object[] values)
+        public virtual int GetValues(object[] values)
         {
             int numToFill = System.Math.Min(values.Length, this.FieldCount);
             for (int i = 0; i < numToFill; i++)
@@ -757,7 +759,7 @@ namespace FdoToolbox.Core.Feature
         /// true if the specified field is set to null; otherwise, false.
         /// </returns>
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
-        public bool IsDBNull(int i)
+        public virtual bool IsDBNull(int i)
         {
             return _internalReader.IsNull(GetName(i));
         }
@@ -766,7 +768,7 @@ namespace FdoToolbox.Core.Feature
         /// Gets the <see cref="System.Object"/> with the specified name.
         /// </summary>
         /// <value></value>
-        public object this[string name]
+        public virtual object this[string name]
         {
             get { return GetValue(GetOrdinal(name)); }
         }
@@ -775,7 +777,7 @@ namespace FdoToolbox.Core.Feature
         /// Gets the <see cref="System.Object"/> with the specified i.
         /// </summary>
         /// <value></value>
-        public object this[int i]
+        public virtual object this[int i]
         {
             get { return GetValue(i); }
         }
@@ -784,7 +786,7 @@ namespace FdoToolbox.Core.Feature
         /// Gets the geometry properties.
         /// </summary>
         /// <value>The geometry properties.</value>
-        public string[] GeometryProperties
+        public virtual string[] GeometryProperties
         {
             get { return _geometryNames; }
         }
@@ -793,7 +795,7 @@ namespace FdoToolbox.Core.Feature
         /// Gets the default geometry property.
         /// </summary>
         /// <value>The default geometry property.</value>
-        public string DefaultGeometryProperty
+        public virtual string DefaultGeometryProperty
         {
             get { return _defaultGeometryName; }
         }
@@ -803,7 +805,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns></returns>
-        public FdoPropertyType GetFdoPropertyType(string name)
+        public virtual FdoPropertyType GetFdoPropertyType(string name)
         {
             return _ptypes[name];
         }
@@ -813,7 +815,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public string GetSpatialContextAssociation(string name)
+        public virtual string GetSpatialContextAssociation(string name)
         {
             //ISQLReader does not hold a class definition so this information is not available
             return string.Empty;
@@ -826,7 +828,7 @@ namespace FdoToolbox.Core.Feature
         /// <returns>
         /// 	<c>true</c> if the specified property is an identity property; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsIdentity(string name)
+        public virtual bool IsIdentity(string name)
         {
             //Because there is no way to infer the structure behind a SQL reader this will always be false.
             //If FDO RFC 33 gets ratified and implemented, we may be able to change this
@@ -838,7 +840,7 @@ namespace FdoToolbox.Core.Feature
         /// produced from a SQL or aggregate query, an empty string is returned.
         /// </summary>
         /// <returns></returns>
-        public string GetClassName()
+        public virtual string GetClassName()
         {
             return string.Empty;
         }
