@@ -84,9 +84,13 @@ namespace FdoToolbox.Core.ETL
                 {
                     if (overwrite && supportsDestroySc)
                     {
+                        ReadOnlyCollection<SpatialContextInfo> targetContexts = service.GetSpatialContexts();
+
                         foreach (SpatialContextInfo sc in spatialContexts)
                         {
-                            service.DestroySpatialContext(sc);
+                            //Only destroy spatial context if it exists in target connection
+                            if(SpatialContextExists(targetContexts, sc))
+                                service.DestroySpatialContext(sc);
                         }
                     }
                     foreach (SpatialContextInfo sc in spatialContexts)
@@ -117,6 +121,26 @@ namespace FdoToolbox.Core.ETL
                         service.CreateSpatialContext(active, overwrite);
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines if a given spatial context exists in the given collection (comparison is by name). 
+        /// </summary>
+        /// <param name="targetContexts">The target spatial context list</param>
+        /// <param name="sc">The spatial context to look for</param>
+        /// <returns></returns>
+        protected static bool SpatialContextExists(ReadOnlyCollection<SpatialContextInfo> targetContexts, SpatialContextInfo sc)
+        {
+            bool found = false;
+            foreach (SpatialContextInfo tsc in targetContexts)
+            {
+                if (tsc.Name == sc.Name)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
         }
 
         /// <summary>

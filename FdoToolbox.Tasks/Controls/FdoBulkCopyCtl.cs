@@ -555,9 +555,18 @@ namespace FdoToolbox.Tasks.Controls
             }
         }
 
+        private TreeNode UnmapExpressionNode()
+        {
+            TreeNode exprNode = treeMappings.SelectedNode;
+            TreeNode classNode = exprNode.Parent.Parent;
+            _presenter.UnmapExpression(classNode.Name, exprNode.Name);
+            return exprNode;
+        }
+
         private void removeExpressionItem_Click(object sender, EventArgs e)
         {
-            treeMappings.Nodes.Remove(treeMappings.SelectedNode);
+            TreeNode exprNode = UnmapExpressionNode();
+            treeMappings.Nodes.Remove(exprNode);
         }
 
         private void editExpressionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -622,9 +631,7 @@ namespace FdoToolbox.Tasks.Controls
 
         private void removeMappingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TreeNode exprNode = treeMappings.SelectedNode;
-            TreeNode classNode = exprNode.Parent.Parent;
-            MapExpression(classNode.Name, exprNode.Name, null);
+            UnmapExpressionNode();
         }
 
         private void btnSave_Click(object sender, EventArgs e)

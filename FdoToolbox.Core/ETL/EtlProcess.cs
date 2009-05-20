@@ -95,7 +95,7 @@ namespace FdoToolbox.Core.ETL
         /// <summary>
         /// Executes this process
         /// </summary>
-        public void Execute()
+        public virtual void Execute()
         {
             Initialize();
             MergeLastOperationsToOperations();

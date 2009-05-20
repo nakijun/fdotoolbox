@@ -40,33 +40,9 @@ namespace FdoToolbox.Core.ETL.Specialized
         }
 
         /// <summary>
-        /// Sends the message.
-        /// </summary>
-        /// <param name="msg">The MSG.</param>
-        protected void SendMessage(string msg)
-        {
-            ProcessMessage(this, new MessageEventArgs(msg));
-        }
-
-        /// <summary>
-        /// Sends the message formatted.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="args">The args.</param>
-        protected void SendMessageFormatted(string format, params object[] args)
-        {
-            ProcessMessage(this, new MessageEventArgs(string.Format(format, args)));
-        }
-
-        /// <summary>
         /// Fires when a feature has been processed
         /// </summary>
         public event FeatureCountEventHandler FeatureProcessed = delegate { };
-
-        /// <summary>
-        /// Fires when a message is sent from this process
-        /// </summary>
-        public event MessageEventHandler ProcessMessage = delegate { };
 
         /// <summary>
         /// Called when a row is processed.

@@ -140,9 +140,10 @@ namespace FdoToolbox.Core.ETL.Operations
                     RaiseFailedFeatureProcessed(row, ex);
                     RePrepare(propVals);
                 }
+                yield return row;
             }
             insert.Dispose();
-            yield break;
+            //yield break;
         }
 
         /// <summary>
