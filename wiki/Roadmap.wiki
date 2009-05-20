@@ -11,9 +11,9 @@
  * Localization
  * Additional Property support
       * Raster Properties
- * Additional Property support
-      * Object Properties
-      * Association Properties
+ * ~~Additional Property support~~
+      * ~~Object Properties~~
+      * ~~Association Properties~~
 
 === Future ===
 
