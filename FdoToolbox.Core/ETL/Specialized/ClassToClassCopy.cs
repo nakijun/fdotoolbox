@@ -29,10 +29,17 @@ using OSGeo.FDO.Commands.Feature;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
+    /// <summary>
+    /// A specialized <see cref="EtlProcess" /> that copies data from one feature class to another
+    /// </summary>
     public class ClassToClassCopy : FdoSpecializedEtlProcess
     {
         private FdoClassCopyOptions _copt;
 
+        /// <summary>
+        /// Gets the name of this instance
+        /// </summary>
+        /// <value>The name.</value>
         public override string Name
         {
             get
@@ -43,6 +50,10 @@ namespace FdoToolbox.Core.ETL.Specialized
 
         private int _ReportFrequency;
 
+        /// <summary>
+        /// Gets or sets the report frequency.
+        /// </summary>
+        /// <value>The report frequency.</value>
         public int ReportFrequency
         {
             get { return _ReportFrequency; }
