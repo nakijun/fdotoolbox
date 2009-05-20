@@ -74,6 +74,17 @@ namespace FdoToolbox.Core.ETL.Specialized
             get { return _DeleteTarget; }
             set { _DeleteTarget = value; }
         }
+
+        private FdoBulkCopyOptions _Parent;
+
+        /// <summary>
+        /// Gets the bulk copy options
+        /// </summary>
+        public FdoBulkCopyOptions Parent
+        {
+            get { return _Parent; }
+            internal set { _Parent = value; }
+        }
 	
         private NameValueCollection _propertyMappings;
         private NameValueCollection _expressionMappings;

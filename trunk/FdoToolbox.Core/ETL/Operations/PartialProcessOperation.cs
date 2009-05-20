@@ -58,7 +58,7 @@ namespace FdoToolbox.Core.ETL.Operations
         /// Initializes the current instance
         /// </summary>
         /// <param name="pipelineExecuter">The current pipeline executer.</param>
-        public void PrepareForExecution(IPipelineExecuter pipelineExecuter)
+        public virtual void PrepareForExecution(IPipelineExecuter pipelineExecuter)
         {
             Statistics.MarkStarted();
             this.pipelineExeuter = pipelineExecuter;

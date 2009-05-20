@@ -157,6 +157,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         public void AddClassCopyOption(FdoClassCopyOptions option)
         {
             _classOptions.Add(option);
+            option.Parent = this;
         }
 
         /// <summary>

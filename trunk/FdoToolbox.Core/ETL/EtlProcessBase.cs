@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Core.ETL.Operations;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -83,6 +84,30 @@ namespace FdoToolbox.Core.ETL
         protected void MergeLastOperationsToOperations()
         {
             operations.AddRange(lastOperations);
+        }
+
+        /// <summary>
+        /// Fires when a message is sent from this process
+        /// </summary>
+        public event MessageEventHandler ProcessMessage = delegate { };
+
+        /// <summary>
+        /// Sends the message.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        protected void SendMessage(string msg)
+        {
+            ProcessMessage(this, new MessageEventArgs(msg));
+        }
+
+        /// <summary>
+        /// Sends the message formatted.
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="args">The args.</param>
+        protected void SendMessageFormatted(string format, params object[] args)
+        {
+            ProcessMessage(this, new MessageEventArgs(string.Format(format, args)));
         }
     }
 }

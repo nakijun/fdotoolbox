@@ -33,6 +33,23 @@ namespace FdoToolbox.Core.ETL.Specialized
     using System.Xml.Serialization;
     using System.IO;
     using System.Collections.Specialized;
+    using FdoToolbox.Core.ETL.Overrides;
+
+    /*
+        FdoBulkCopy is a special class. 
+
+        It was originally designed as a specialized EtlProcess that chains a series of FdoInputOperation 
+        and FdoOutputOperation objects together in the same pipeline. It turns out that this doesn't quite
+        work because FdoOutputOperation is designed to be used as the LAST operation in a pipeline, and throwing
+        down variable-sized enumerables can cause premature termination. Chaining operations after the FdoOutputOperation 
+        (such as new Fdo[Input/Output]Operation pairs, as the old implenentation does) does not quite work.
+
+        As a result, multi-class bulk copies do not work. So significant behind-the-scenes work had to be done.
+
+        Each Fdo[Input/Output]Operation pair is now encapsulated as a ClassToClassCopy sub-process, and
+        the FdoBulkCopy is a collection of these sub-processes. However, in order to maintain an identical interface,
+        most of the inherited methods had to be re-implemented. 
+     */
 
     /// <summary>
     /// A specialized form of <see cref="EtlProcess"/> that copies
@@ -85,6 +102,29 @@ namespace FdoToolbox.Core.ETL.Specialized
         }
 
         /// <summary>
+        /// Registers the specified operation.
+        /// </summary>
+        /// <param name="op">The operation.</param>
+        private new void Register(IFdoOperation op)
+        {
+            base.Register(op);
+        }
+
+        private List<EtlProcess> subProcesses = new List<EtlProcess>();
+        private Dictionary<string, List<Exception>> subProcessErrors = new Dictionary<string, List<Exception>>();
+
+        /// <summary>
+        /// Registers the class copy process
+        /// </summary>
+        /// <param name="copts">The copts.</param>
+        protected void RegisterClassCopy(FdoClassCopyOptions copts)
+        {
+            ClassToClassCopy proc = new ClassToClassCopy(copts);
+            proc.ReportFrequency = this.ReportFrequency;
+            subProcesses.Add(proc);
+        }
+
+        /// <summary>
         /// Initializes the process
         /// </summary>
         protected override void Initialize()
@@ -101,164 +141,69 @@ namespace FdoToolbox.Core.ETL.Specialized
                         _options.BatchSize = 0;
                     }
 
-                    SendMessage("Copying Spatial Contexts");
-                    if (_options.TargetConnection.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value)
+                    if (contexts.Count > 0)
                     {
-                        foreach (SpatialContextInfo ctx in contexts)
-                        {
-                            targetService.CreateSpatialContext(ctx, true);
-                            SendMessage("Spatial Context Copied: " + ctx.Name);
-                        }
-                    }
-                    else
-                    {
-                        SpatialContextInfo srcCtx = contexts[0];
-                        SpatialContextInfo destCtx = targetService.GetSpatialContext(srcCtx.Name);
-                        bool canDestroy = targetService.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_DestroySchema);
-                        if (canDestroy)
-                        {
-                            SendMessage("Destroying target spatial context: " + destCtx.Name);
-                            targetService.DestroySpatialContext(destCtx);
-                        }
-                        SendMessage("Copying spatial context to target: " + srcCtx.Name);
-                        targetService.CreateSpatialContext(srcCtx, !canDestroy);
+                        SendMessage("Copying Spatial Contexts");
+                        ICopySpatialContext copy = CopySpatialContextOverrideFactory.GetCopySpatialContextOverride(_options.TargetConnection);
+                        copy.Execute(contexts, _options.TargetConnection, true);
                     }
                 }
             }
 
             //Set class copy tasks
-            for(int i = 0; i < _options.ClassCopyOptions.Count; i++)
+            foreach (FdoClassCopyOptions copt in _options.ClassCopyOptions)
             {
-                FdoClassCopyOptions copt = _options.ClassCopyOptions[i];
-                if (copt.DeleteTarget)
-                {
-                    Info("Deleting data in target class {0} before copying", copt.TargetClassName);
-                    using (FdoFeatureService service = _options.TargetConnection.CreateFeatureService())
-                    {
-                        using (IDelete del = service.CreateCommand<IDelete>(OSGeo.FDO.Commands.CommandType.CommandType_Delete) as IDelete)
-                        {
-                            try
-                            {
-                                del.SetFeatureClassName(copt.TargetClassName);
-                                del.Execute();
-                                Info("Data in target class {0} deleted");
-                            }
-                            catch
-                            {
-
-                            }
-                        }
-                    }
-                }
-
-                IFdoOperation input = new FdoInputOperation(_options.SourceConnection, CreateSourceQuery(copt)); 
-                IFdoOperation output = null;
-                NameValueCollection propertyMappings = new NameValueCollection();
-                if (copt.SourcePropertyNames.Length > 0)
-                {
-                    foreach (string srcProp in copt.SourcePropertyNames)
-                    {
-                        propertyMappings.Add(srcProp, copt.GetTargetProperty(srcProp));
-                    }
-                }
-                if (copt.SourceAliases.Length > 0)
-                {
-                    foreach (string srcAlias in copt.SourceAliases)
-                    {
-                        propertyMappings.Add(srcAlias, copt.GetTargetPropertyForAlias(srcAlias));
-                    }
-                }
-                if (propertyMappings.Count > 0)
-                {   
-                    if (_options.BatchSize > 0)
-                    {
-                        FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(_options.TargetConnection, copt.TargetClassName, propertyMappings, _options.BatchSize);
-                        b.BatchInserted += delegate(object sender, BatchInsertEventArgs e)
-                        {
-                            SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, e.BatchSize);
-                        };
-                        output = b;
-                    }
-                    else
-                    {
-                        output = new FdoOutputOperation(_options.TargetConnection, copt.TargetClassName, propertyMappings);
-                    }
-                }
-                else
-                {
-                    if (_options.BatchSize > 0)
-                    {
-                        FdoBatchedOutputOperation b = new FdoBatchedOutputOperation(_options.TargetConnection, copt.TargetClassName, _options.BatchSize);
-                        b.BatchInserted += delegate(object sender, BatchInsertEventArgs e)
-                        {
-                            SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", copt.TargetClassName, e.BatchSize);
-                        };
-                        output = b;
-                    }
-                    else
-                    {
-                        output = new FdoOutputOperation(_options.TargetConnection, copt.TargetClassName);
-                    }
-                }
-
-                string sourceClass = copt.SourceClassName;
-                string targetClass = copt.TargetClassName;
-
-                Register(input);
-                Register(output);
+                RegisterClassCopy(copt);
             }
         }
 
         /// <summary>
-        /// Called when a row is processed.
+        /// Executes this process
         /// </summary>
-        /// <param name="op">The operation.</param>
-        /// <param name="dictionary">The dictionary.</param>
-        protected override void OnFeatureProcessed(FdoOperationBase op, FdoRow dictionary)
+        public override void Execute()
         {
-            if (op.Statistics.OutputtedRows % this.ReportFrequency == 0)
+            Initialize();
+            foreach (EtlProcess proc in subProcesses)
             {
-                if (op is FdoOutputOperation)
-                {
-                    string className = (op as FdoOutputOperation).ClassName;
-                    SendMessageFormatted("[Bulk Copy => {0}]: {1} features written", className, op.Statistics.OutputtedRows);
-                }
+                SendMessage("[Bulk Copy] Running sub-process [" + proc.Name + "]:");
+                proc.ProcessMessage += new MessageEventHandler(OnSubProcessMessage);
+                proc.Execute();
+                List<Exception> errors = new List<Exception>(proc.GetAllErrors());
+                SendMessageFormatted("[Bulk Copy] sub-process completed with {0} errors", errors.Count);
+                LogSubProcessErrors(proc.Name, errors);
             }
         }
 
         /// <summary>
-        /// Called when this process has finished processing.
+        /// Logs all the sub-process errors.
         /// </summary>
-        /// <param name="op">The op.</param>
-        protected override void OnFinishedProcessing(FdoOperationBase op)
+        /// <param name="procName">Name of the process.</param>
+        /// <param name="errors">The errors.</param>
+        private void LogSubProcessErrors(string procName, IEnumerable<Exception> errors)
         {
-            if (op is FdoBatchedOutputOperation)
-            {
-                FdoBatchedOutputOperation bop = op as FdoBatchedOutputOperation;
-                string className = bop.ClassName;
-                SendMessageFormatted("[Bulk Copy => {0}]: {1}", className, op.Statistics.ToString());
-            }
-            else if (op is FdoOutputOperation)
-            {
-                string className = (op as FdoOutputOperation).ClassName;
-                SendMessageFormatted("[Bulk Copy => {0}]: {1}", className, op.Statistics.ToString());
-            }
+            if (!subProcessErrors.ContainsKey(procName))
+                subProcessErrors[procName] = new List<Exception>();
+
+            subProcessErrors[procName].AddRange(errors);
         }
 
-        private static FeatureQueryOptions CreateSourceQuery(FdoClassCopyOptions copt)
+        /// <summary>
+        /// Gets all errors that occured during the execution of this process
+        /// </summary>
+        /// <returns></returns>
+        public new IEnumerable<Exception> GetAllErrors()
         {
-            FeatureQueryOptions query = new FeatureQueryOptions(copt.SourceClassName);
-            query.AddFeatureProperty(copt.SourcePropertyNames);
-
-            foreach (string alias in copt.SourceAliases)
+            List<Exception> errors = new List<Exception>();
+            foreach (string procName in subProcessErrors.Keys)
             {
-                query.AddComputedProperty(alias, copt.GetExpression(alias));
+                errors.AddRange(subProcessErrors[procName]);
             }
+            return errors;
+        }
 
-            if (!string.IsNullOrEmpty(copt.SourceFilter))
-                query.Filter = copt.SourceFilter;
-
-            return query;
+        void OnSubProcessMessage(object sender, MessageEventArgs e)
+        {
+            SendMessage(e.Message);
         }
 
         /// <summary>

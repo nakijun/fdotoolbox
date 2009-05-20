@@ -95,6 +95,7 @@ namespace FdoToolbox.Tasks.Controls
 
         private Dictionary<string, string> _classMappings;
         private Dictionary<string, NameValueCollection> _propertyMappings;
+        private Dictionary<string, NameValueCollection> _expressionMappings;
 
         public FdoBulkCopyPresenter(IFdoBulkCopyView view, IFdoConnectionManager connMgr, TaskManager taskMgr)
         {
@@ -102,6 +103,7 @@ namespace FdoToolbox.Tasks.Controls
             _connMgr = connMgr;
             _classMappings = new Dictionary<string, string>();
             _propertyMappings = new Dictionary<string, NameValueCollection>();
+            _expressionMappings = new Dictionary<string, NameValueCollection>();
             _taskMgr = taskMgr;
         }
 
@@ -132,14 +134,12 @@ namespace FdoToolbox.Tasks.Controls
 
                 foreach (string srcProp in copt.SourcePropertyNames)
                 {
-                    string targetAlias = copt.GetTargetPropertyForAlias(srcProp);
-                    if (targetAlias == null)
-                        MapProperty(copt.SourceClassName, srcProp, copt.TargetClassName, copt.GetTargetProperty(srcProp));
-                    else
-                    {
-                        _view.AddExpression(copt.SourceClassName, srcProp, copt.GetExpression(srcProp));
-                        MapExpression(copt.SourceClassName, srcProp, copt.TargetClassName, targetAlias);
-                    }
+                    MapProperty(copt.SourceClassName, srcProp, copt.TargetClassName, copt.GetTargetProperty(srcProp));
+                }
+                foreach (string srcAlias in copt.SourceAliases)
+                {
+                    _view.AddExpression(copt.SourceClassName, srcAlias, copt.GetExpression(srcAlias));
+                    MapExpression(copt.SourceClassName, srcAlias, copt.TargetClassName, copt.GetTargetPropertyForAlias(srcAlias));
                 }
 
                 _view.SetClassDelete(copt.SourceClassName, copt.DeleteTarget);
@@ -204,6 +204,7 @@ namespace FdoToolbox.Tasks.Controls
                 _view.ClearMappings();
                 _classMappings.Clear();
                 _propertyMappings.Clear();
+                _expressionMappings.Clear();
                 using (FdoFeatureService service = _connMgr.GetConnection(connName).CreateFeatureService())
                 {
                     FeatureSchema schema = service.GetSchemaByName(schemaName);
@@ -269,7 +270,7 @@ namespace FdoToolbox.Tasks.Controls
         {
             //TODO: Throw if not mappable
             _view.MapExpression(srcClassName, srcAlias, destProperty);
-            _propertyMappings[srcClassName][srcAlias] = destProperty;
+            _expressionMappings[srcClassName][srcAlias] = destProperty;
         }
 
         public void UnmapClass(string srcClass)
@@ -277,6 +278,15 @@ namespace FdoToolbox.Tasks.Controls
             _classMappings.Remove(srcClass);
             _propertyMappings.Remove(srcClass);
             _view.MapClass(srcClass, null);
+        }
+
+        public void UnmapExpression(string className, string expressionAlias)
+        {
+            if (_expressionMappings.ContainsKey(className))
+            {
+                _expressionMappings[className].Remove(expressionAlias);
+            }
+            _view.MapExpression(className, expressionAlias, null);
         }
 
         public void UnmapProperty(string srcClass, string srcProperty)
@@ -301,6 +311,7 @@ namespace FdoToolbox.Tasks.Controls
                 {
                     List<string> propNames = new List<string>();
                     _propertyMappings[srcClass] = new NameValueCollection();
+                    _expressionMappings[srcClass] = new NameValueCollection();
                     foreach (PropertyDefinition pd in cd.Properties)
                     {
                         //Ignore the following properties
@@ -434,7 +445,7 @@ namespace FdoToolbox.Tasks.Controls
                             foreach (string alias in sourceExpr.Keys)
                             {
                                 string expr = sourceExpr[alias];
-                                string targetProp = copt.GetTargetProperty(alias);
+                                string targetProp = _expressionMappings[srcClass][alias];
                                 copt.AddSourceExpression(alias, expr, targetProp);
                             }
                             options.AddClassCopyOption(copt);
