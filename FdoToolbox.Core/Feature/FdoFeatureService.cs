@@ -1824,10 +1824,10 @@ namespace FdoToolbox.Core.Feature
         }
         
         /// <summary>
-        /// Executes the SQL SELECT statement on this connection.
+        /// Executes a SQL statement on this connection.
         /// </summary>
-        /// <param name="sql"></param>
-        /// <returns></returns>
+        /// <param name="sql">The SQL statement</param>
+        /// <returns>A <see cref="FdoSqlReader"/> containing the results of the query. If this is not a SQL SELECT query, it will return a reader containing the number of results affected</returns>
         public FdoSqlReader ExecuteSQLQuery(string sql)
         {
             if (!SupportsCommand(CommandType.CommandType_SQLCommand))
@@ -1835,12 +1835,23 @@ namespace FdoToolbox.Core.Feature
 
             ISQLDataReader reader = null;
             ISQLCommand cmd = CreateCommand<ISQLCommand>(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand);
+            bool isSelect = sql.ToUpper().Trim().StartsWith("SELECT");
+            FdoSqlReader sqlReader = null;
             using (cmd)
             {
                 cmd.SQLStatement = sql;
-                reader = cmd.ExecuteReader();
+                if (isSelect)
+                {
+                    reader = cmd.ExecuteReader();
+                    sqlReader = new FdoSqlReader(reader);
+                }
+                else
+                {
+                    int affected = cmd.ExecuteNonQuery();
+                    sqlReader = new FdoSqlNonQueryReader(affected);
+                }
             }
-            return new FdoSqlReader(reader);
+            return sqlReader;
         }
 
         /// <summary>

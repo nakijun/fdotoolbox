@@ -143,6 +143,7 @@
     <Compile Include="Feature\FdoPropertyType.cs" />
     <Compile Include="Feature\FdoProviderInfo.cs" />
     <Compile Include="Feature\FdoReader.cs" />
+    <Compile Include="Feature\FdoSqlNonQueryReader.cs" />
     <Compile Include="Feature\FdoSqlReader.cs" />
     <Compile Include="Feature\FeatureQueryOptions.cs" />
     <Compile Include="Feature\FdoFeatureService.cs" />
