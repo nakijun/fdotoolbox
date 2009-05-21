@@ -105,9 +105,9 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// Registers the specified operation.
         /// </summary>
         /// <param name="op">The operation.</param>
-        private new void Register(IFdoOperation op)
+        public new void Register(IFdoOperation op)
         {
-            base.Register(op);
+            throw new NotSupportedException("Bulk Copy does not support direct registration of operations");
         }
 
         private List<EtlProcess> subProcesses = new List<EtlProcess>();
