@@ -26,90 +26,24 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using FdoToolbox.Base;
-using FdoToolbox.Base.Controls;
 using ICSharpCode.Core;
-using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class ConnectPostGisCtl : ViewContent, IConnectPostGisView
+    public partial class ConnectPostGisCtl : ConnectRdbmsCtl
     {
-        private ConnectPostGisPresenter _presenter;
-
         public ConnectPostGisCtl()
         {
             InitializeComponent();
-            _presenter = new ConnectPostGisPresenter(this, ServiceManager.Instance.GetService<IFdoConnectionManager>());
+            this.Title = ResourceService.GetString("TITLE_CONNECT_POSTGIS");
         }
 
-        public override string Title
+        public override string Provider
         {
-            get { return ResourceService.GetString("TITLE_CONNECT_POSTGIS"); }
-        }
-
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            _presenter.PendingConnect();
-        }
-
-        public string Service
-        {
-            get { return txtService.Text; }
-        }
-
-        public string Username
-        {
-            get { return txtUsername.Text; }
-        }
-
-        public string Password
-        {
-            get { return txtPassword.Text; }
-        }
-
-        public bool DataStoreEnabled
-        {
-            set { cmbDataStore.Enabled = value; }
-        }
-
-        public bool SubmitEnabled
-        {
-            set { btnOK.Enabled = value; }
-        }
-
-        public string[] DataStores
-        {
-            set 
-            { 
-                cmbDataStore.DataSource = value;
-                if (value.Length > 0)
-                    cmbDataStore.SelectedIndex = 0;
-            }
-        }
-
-        public string SelectedDataStore
-        {
-            get 
+            get
             {
-                return cmbDataStore.SelectedItem != null ? cmbDataStore.SelectedItem.ToString() : string.Empty;
+                return "OSGeo.PostGIS";
             }
-        }
-
-        public string ConnectionName
-        {
-            get { return txtConnectionName.Text; }
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            if (_presenter.Connect())
-                this.Close();
         }
     }
 }

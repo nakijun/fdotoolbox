@@ -66,6 +66,12 @@
       <DependentUpon>ConnectArcSdeCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectArcSdePresentation.cs" />
+    <Compile Include="Controls\ConnectMySqlCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectMySqlCtl.Designer.cs">
+      <DependentUpon>ConnectMySqlCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ConnectOdbcCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -80,26 +86,24 @@
       <DependentUpon>ConnectOgrCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectOgrPresentation.cs" />
-    <Compile Include="Controls\ConnectMySqlCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ConnectMySqlCtl.Designer.cs">
-      <DependentUpon>ConnectMySqlCtl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ConnectMySqlPresentation.cs" />
-    <Compile Include="Controls\ConnectPostGisPresentation.cs" />
-    <Compile Include="Controls\ConnectSqlServerPresentation.cs" />
-    <Compile Include="Controls\ConnectSqlServerCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ConnectSqlServerCtl.Designer.cs">
-      <DependentUpon>ConnectSqlServerCtl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ConnectPostGisCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ConnectPostGisCtl.Designer.cs">
       <DependentUpon>ConnectPostGisCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectRdbmsCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectRdbmsCtl.Designer.cs">
+      <DependentUpon>ConnectRdbmsCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectRdbmsPresentation.cs" />
+    <Compile Include="Controls\ConnectSqlServerCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectSqlServerCtl.Designer.cs">
+      <DependentUpon>ConnectSqlServerCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\CopySpatialContextsCtl.cs">
       <SubType>UserControl</SubType>
@@ -180,17 +184,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>ConnectOgrCtl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ConnectMySqlCtl.resx">
-      <DependentUpon>ConnectMySqlCtl.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\ConnectRdbmsCtl.resx">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ConnectSqlServerCtl.resx">
-      <DependentUpon>ConnectSqlServerCtl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ConnectPostGisCtl.resx">
-      <DependentUpon>ConnectPostGisCtl.cs</DependentUpon>
-      <SubType>Designer</SubType>
+      <DependentUpon>ConnectRdbmsCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\CopySpatialContextsCtl.resx">
       <SubType>Designer</SubType>
