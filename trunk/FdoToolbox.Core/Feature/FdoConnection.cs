@@ -129,6 +129,34 @@ namespace FdoToolbox.Core.Feature
             set { this.InternalConnection.ConnectionString = value; }
         }
 
+        private string _safeConnStr = null;
+
+        /// <summary>
+        /// Gets the connection string without the protected elements
+        /// </summary>
+        public string SafeConnectionString
+        {
+            get
+            {
+                if (_safeConnStr == null)
+                {
+                    List<string> safeParams = new List<string>();
+                    string[] parameters = this.ConnectionString.Split(';');
+                    IConnectionPropertyDictionary dict = this.InternalConnection.ConnectionInfo.ConnectionProperties;
+                    foreach (string p in parameters)
+                    {
+                        string[] tokens = p.Split(';');
+                        if (!dict.IsPropertyProtected(tokens[0]))
+                        {
+                            safeParams.Add(p);
+                        }
+                    }
+                    _safeConnStr = string.Join(";", safeParams.ToArray());
+                }
+                return _safeConnStr;
+            }
+        }
+
         private string _name;
 
         /// <summary>
