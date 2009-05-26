@@ -132,7 +132,7 @@ namespace FdoToolbox.Core.Feature
         private string _safeConnStr = null;
 
         /// <summary>
-        /// Gets the connection string without the protected elements
+        /// Gets the connection string with the protected elements obfuscated
         /// </summary>
         public string SafeConnectionString
         {
