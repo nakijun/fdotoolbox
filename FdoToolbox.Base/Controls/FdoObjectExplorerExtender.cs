@@ -166,7 +166,7 @@ namespace FdoToolbox.Base.Controls
                 connNode.ToolTipText = string.Format(
                     "Provider: {0}\nConnection String: {1}\nSpatial Contexts:\n{2}",
                     conn.Provider,
-                    conn.ConnectionString,
+                    conn.SafeConnectionString,
                     ctxStrings.Count > 0 ? string.Join("\n", ctxStrings.ToArray()) : "none");
             }
         }
