@@ -145,10 +145,19 @@ namespace FdoToolbox.Core.Feature
                     IConnectionPropertyDictionary dict = this.InternalConnection.ConnectionInfo.ConnectionProperties;
                     foreach (string p in parameters)
                     {
-                        string[] tokens = p.Split(';');
+                        string[] tokens = p.Split('=');
                         if (!dict.IsPropertyProtected(tokens[0]))
                         {
                             safeParams.Add(p);
+                        }
+                        else
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            for (int i = 0; i < tokens[1].Length; i++)
+                            {
+                                sb.Append("*");
+                            }
+                            safeParams.Add(tokens[0] + "=" + sb.ToString());
                         }
                     }
                     _safeConnStr = string.Join(";", safeParams.ToArray());
