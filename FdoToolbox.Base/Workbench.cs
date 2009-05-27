@@ -329,6 +329,25 @@ namespace FdoToolbox.Base
             this.ResumeLayout(false);
         }
 
+        /// <summary>
+        /// Invokes the method in the GUI thread context
+        /// </summary>
+        /// <param name="del">The delegate to invoke</param>
+        /// <param name="args">The arguments</param>
+        public void InvokeMethod(Delegate del, params object [] args)
+        {
+            this.Invoke(del, args);
+        }
+
+        /// <summary>
+        /// Invokes the method in the GUI thread context
+        /// </summary>
+        /// <param name="del">The delegate to invoke</param>
+        public void InvokeMethod(Delegate del)
+        {
+            this.Invoke(del);
+        }
+
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == NativeMethods.WM_SHOWME)

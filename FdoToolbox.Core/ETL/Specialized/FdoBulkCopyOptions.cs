@@ -119,6 +119,29 @@ namespace FdoToolbox.Core.ETL.Specialized
             set { _TargetSchema = value; }
         }
 
+        private bool _AlterSchema;
+
+        /// <summary>
+        /// If true, will alter the source schema before applying to the target connection
+        /// if the source schema is not compatible. Otherwise an exception will be thrown
+        /// if the source schema is not compatbile.
+        /// </summary>
+        public bool AlterSchema
+        {
+            get { return _AlterSchema; }
+            set { _AlterSchema = value; }
+        }
+
+        /// <summary>
+        /// If true, the mappings are ignored and the full source schema
+        /// will be applied to the target. Is only true if the target
+        /// schema is undefined
+        /// </summary>
+        public bool ApplySchemaToTarget
+        {
+            get { return string.IsNullOrEmpty(this.TargetSchema); }
+        }
+
         /// <summary>
         /// Determines if this object owns the connections.
         /// </summary>
