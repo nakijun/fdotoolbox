@@ -153,6 +153,10 @@
     <Compile Include="Controls\Ogr\OgrEsriPgb.cs" />
     <Compile Include="Controls\Ogr\OgrMapInfo.cs" />
     <Compile Include="Controls\Ogr\OgrType.cs" />
+    <Compile Include="DragDropHandlers\MsAccessFileHandler.cs" />
+    <Compile Include="DragDropHandlers\SdfFileHandler.cs" />
+    <Compile Include="DragDropHandlers\ShpFileHandler.cs" />
+    <Compile Include="DragDropHandlers\SQLiteFileHandler.cs" />
     <Compile Include="Images.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -332,7 +332,7 @@ namespace FdoToolbox.Core.Utility
                 return "OSGeo.SDF";
             else if (ext == ".shp")
                 return "OSGeo.SHP";
-            else if (ext == ".db" || ext == ".sqlite")
+            else if (ext == ".db" || ext == ".sqlite" || ext == ".slt")
                 return "OSGeo.SQLite";
             return null;
         }

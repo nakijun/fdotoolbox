@@ -31,6 +31,7 @@ using Res = ICSharpCode.Core.ResourceService;
 using Msg = ICSharpCode.Core.MessageService;
 using FdoToolbox.Core;
 using FdoToolbox.Base.Controls;
+using FdoToolbox.Base.Services.DragDropHandlers;
 
 namespace FdoToolbox.Base.Commands
 {
@@ -60,6 +61,17 @@ namespace FdoToolbox.Base.Commands
                 svcMgr.RestoreSession();
                 Msg.MainForm = wb;
                 wb.SetTitle(Res.GetString("UI_TITLE"));
+
+                //Find and register drag and drop handlers
+                List<IDragDropHandler> handlers = AddInTree.BuildItems<IDragDropHandler>("/FdoToolbox/DragDropHandlers", this);
+                if (handlers != null)
+                {
+                    IDragDropHandlerService handlerSvc = ServiceManager.Instance.GetService<IDragDropHandlerService>();
+                    foreach (IDragDropHandler h in handlers)
+                    {
+                        handlerSvc.RegisterHandler(h);
+                    }
+                }
 
                 wb.FormClosing += delegate
                 {

@@ -47,6 +47,7 @@ namespace FdoToolbox.Base.Controls
         string SelectedClass { get; }
         string SelectedProperty { get; }
 
+        void LoadSchema(string file);
         void RefreshTree();
         string SelectedName { set; }
         object SelectedObject { set; }

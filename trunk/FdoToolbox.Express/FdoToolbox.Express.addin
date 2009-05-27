@@ -17,6 +17,14 @@
         <FileFilter id="SDF" name="SDF Files" extensions="*.sdf" />
         <FileFilter id="SHP" name="SHP Files" extensions="*.shp" />
     </Path>
+
+    <!-- Drag and Drop handlers -->
+    <Path name="/FdoToolbox/DragDropHandlers">
+        <Class id="SdfHandler" class="FdoToolbox.Express.DragDropHandlers.SdfFileHandler" />
+        <Class id="ShpHandler" class="FdoToolbox.Express.DragDropHandlers.ShpFileHandler" />
+        <Class id="SltHandler" class="FdoToolbox.Express.DragDropHandlers.SQLiteFileHandler" />
+        <Class id="MdbHandler" class="FdoToolbox.Express.DragDropHandlers.MsAccessFileHandler" />
+    </Path>
     
     <!-- Main Menu definition -->
     <Path name="/Workbench/MainMenu">

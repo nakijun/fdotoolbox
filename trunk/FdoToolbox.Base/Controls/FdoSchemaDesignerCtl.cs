@@ -355,5 +355,10 @@ namespace FdoToolbox.Base.Controls
         {
             return _presenter.MatchesConnection(conn);
         }
+
+        public void LoadSchema(string file)
+        {
+            _presenter.Load(file);
+        }
     }
 }
