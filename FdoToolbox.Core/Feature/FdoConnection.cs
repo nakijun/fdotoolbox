@@ -81,7 +81,7 @@ namespace FdoToolbox.Core.Feature
         public FdoConnection(string provider, string connectionString)
             : this(provider)
         {
-            this.InternalConnection.ConnectionString = connectionString;
+            this.ConnectionString = connectionString;
         }
 
         /// <summary>
@@ -126,7 +126,32 @@ namespace FdoToolbox.Core.Feature
         public string ConnectionString
         {
             get { return this.InternalConnection.ConnectionString; }
-            set { this.InternalConnection.ConnectionString = value; }
+            set 
+            { 
+                this.InternalConnection.ConnectionString = value;
+
+                List<string> safeParams = new List<string>();
+                string[] parameters = this.ConnectionString.Split(';');
+                IConnectionPropertyDictionary dict = this.InternalConnection.ConnectionInfo.ConnectionProperties;
+                foreach (string p in parameters)
+                {
+                    string[] tokens = p.Split('=');
+                    if (!dict.IsPropertyProtected(tokens[0]))
+                    {
+                        safeParams.Add(p);
+                    }
+                    else
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 0; i < tokens[1].Length; i++)
+                        {
+                            sb.Append("*");
+                        }
+                        safeParams.Add(tokens[0] + "=" + sb.ToString());
+                    }
+                }
+                _safeConnStr = string.Join(";", safeParams.ToArray());
+            }
         }
 
         private string _safeConnStr = null;
@@ -138,30 +163,6 @@ namespace FdoToolbox.Core.Feature
         {
             get
             {
-                if (_safeConnStr == null)
-                {
-                    List<string> safeParams = new List<string>();
-                    string[] parameters = this.ConnectionString.Split(';');
-                    IConnectionPropertyDictionary dict = this.InternalConnection.ConnectionInfo.ConnectionProperties;
-                    foreach (string p in parameters)
-                    {
-                        string[] tokens = p.Split('=');
-                        if (!dict.IsPropertyProtected(tokens[0]))
-                        {
-                            safeParams.Add(p);
-                        }
-                        else
-                        {
-                            StringBuilder sb = new StringBuilder();
-                            for (int i = 0; i < tokens[1].Length; i++)
-                            {
-                                sb.Append("*");
-                            }
-                            safeParams.Add(tokens[0] + "=" + sb.ToString());
-                        }
-                    }
-                    _safeConnStr = string.Join(";", safeParams.ToArray());
-                }
                 return _safeConnStr;
             }
         }
