@@ -1,19 +1,25 @@
 #summary Planned features for upcoming releases
 
+=== 0.7.7 ===
+
+ * Run saved ETL tasks from the command-line
+ * ~~Save data preview query results to other flat-file sources~~
+ * ~~Express support for SQLite provider~~
+ * ~~Additional Property support~~
+      * ~~Object Properties~~
+      * ~~Association Properties~~
+
 === 0.8 ===
 
  * x64 compatibility
  * Express support for additional OGR formats
  * Raster Provider support
  * User Documentation
- * ~~Save data preview query results to other flat-file sources~~
- * ~~Express support for SQLite provider~~
  * Localization
+ * Modularised ETL task definition
  * Additional Property support
       * Raster Properties
- * ~~Additional Property support~~
-      * ~~Object Properties~~
-      * ~~Association Properties~~
+
 
 === Future ===
 
@@ -21,9 +27,6 @@
  * Support for creating join tasks on Spatial Predicates
  * Visual ETL pipeline editor
  * FDO Connection configuration support
- * Boo scriptability / DSL
  * Schema Mapping support
- * KML support
  * Coordinate System Re-Projection via Proj/CSMap
- * Linux port of command-line utilities
  * LINQ to FDO
