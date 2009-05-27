@@ -35,7 +35,7 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Tasks.Controls
 {
-    public interface IFdoBulkCopyView
+    public interface IFdoBulkCopyView : IViewContent
     {
         string TaskName { get; set; }
 
@@ -57,6 +57,7 @@ namespace FdoToolbox.Tasks.Controls
 
         bool BatchEnabled { set; }
         bool CopySpatialContexts { get; set; }
+        bool CanDefineMappings { set; }
 
         void ClearMappings();
         void AddClass(string className);
@@ -189,7 +190,14 @@ namespace FdoToolbox.Tasks.Controls
                 using (FdoFeatureService service = _connMgr.GetConnection(connName).CreateFeatureService())
                 {
                     _view.BatchEnabled = service.SupportsBatchInsertion();
-                    _view.TargetSchemas = service.GetSchemaNames();
+                    List<string> schemaNames = service.GetSchemaNames();
+                    _view.TargetSchemas = schemaNames;
+                    _view.CanDefineMappings = (schemaNames.Count > 0);
+                    if (schemaNames.Count == 0)
+                    {
+                        _view.ShowMessage("Warning", "There are no schemas in the target connection. If you save this task, all source classes will be copied");
+                        _view.RemoveAllMappings();
+                    }
                     this.TargetSchemaChanged();
                 }
             }

@@ -641,9 +641,9 @@ namespace FdoToolbox.Tasks.Controls
                 _presenter.SaveTask();
                 base.Close();
             }
-            catch (Exception ex)
+            catch (TaskValidationException ex)
             {
-                this.ShowError(ex);
+                WrappedMessageBox.ShowMessage("Error", string.Format("The following errors were found: {0}{1}Please correct", Environment.NewLine + Environment.NewLine, string.Join(Environment.NewLine, ex.Errors) + Environment.NewLine + Environment.NewLine));
             }
         }
 
@@ -772,6 +772,20 @@ namespace FdoToolbox.Tasks.Controls
             int idx = chkListSpatialContexts.Items.IndexOf(context);
             if (idx >= 0)
                 chkListSpatialContexts.SetItemChecked(idx, state);
+        }
+
+
+        public bool CanDefineMappings
+        {
+            set 
+            {
+                cmbTargetSchema.Enabled = value;
+                ctxSelectedClass.Enabled = value;
+                ctxDelete.Enabled = value;
+                ctxExpressions.Enabled = value;
+                ctxFilter.Enabled = value;
+                ctxSelectedExpression.Enabled = value;
+            }
         }
     }
 }

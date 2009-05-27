@@ -211,7 +211,7 @@ namespace FdoToolbox.Core
         /// Initializes a new instance of the <see cref="TaskValidationException"/> class.
         /// </summary>
         /// <param name="errors">The error list.</param>
-        public TaskValidationException(List<string> errors) : base() { }
+        public TaskValidationException(List<string> errors) : base() { _errors = errors.ToArray(); }
 
         /// <summary>
         /// Creates and returns a string representation of the current exception.

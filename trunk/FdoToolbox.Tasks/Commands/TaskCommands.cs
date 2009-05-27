@@ -35,6 +35,10 @@ using FdoToolbox.Tasks.Controls;
 using FdoToolbox.Base.Controls;
 using FdoToolbox.Core.ETL.Specialized;
 using System.IO;
+using System.ComponentModel;
+using FdoToolbox.Core.Feature;
+using OSGeo.FDO.Schema;
+using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Tasks.Commands
 {
@@ -45,6 +49,12 @@ namespace FdoToolbox.Tasks.Commands
             TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
             string name = Workbench.Instance.ObjectExplorer.GetSelectedNode().Name;
             EtlProcess proc = mgr.GetTask(name);
+            FdoBulkCopy bcp = proc as FdoBulkCopy;
+            CancelEventHandler ch = new CancelEventHandler(OnBeforeExecuteBulkCopy);
+            if (bcp != null)
+            {   
+                bcp.BeforeExecute += ch;
+            }
 
             if (proc != null)
             {
@@ -53,12 +63,65 @@ namespace FdoToolbox.Tasks.Commands
                 {
                     EtlProcessCtl ctl = new EtlProcessCtl(spec);
                     Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
+                    if (bcp != null)
+                    {
+                        bcp.BeforeExecute -= ch;
+                    }
                 }
                 else
                 {
                     MessageService.ShowError(ResourceService.GetString("ERR_CANNOT_EXECUTE_UNSPECIALIZED_ETL_PROCESS"));
                 }
             }
+        }
+
+        private void OnBeforeExecuteBulkCopy(object sender, CancelEventArgs e)
+        {
+            
+            Workbench wb = Workbench.Instance;
+            MethodInvoker invoker = new MethodInvoker(delegate
+            {
+                TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
+                string name = wb.ObjectExplorer.GetSelectedNode().Name;
+                EtlProcess proc = mgr.GetTask(name);
+                FdoBulkCopy bcp = proc as FdoBulkCopy;
+                if (bcp != null)
+                {
+                    FdoBulkCopyOptions opts = bcp.Options;
+                    using (FdoFeatureService srcService = opts.SourceConnection.CreateFeatureService())
+                    using (FdoFeatureService destService = opts.TargetConnection.CreateFeatureService())
+                    {
+                        FeatureSchema srcSchema = srcService.GetSchemaByName(opts.SourceSchema);
+                        IncompatibleSchema incSchema = null;
+                        if (!destService.CanApplySchema(srcSchema, out incSchema))
+                        {
+                            bool attemptAlter = WrappedMessageBox.Confirm("Incompatible Schema", "The source schema has incompatible elements:\n\n" + incSchema.ToString() + "\nThe source schema will be altered to be compatible with the target connection. Proceed?", MessageBoxText.YesNo);
+                            if (attemptAlter)
+                            {
+                                try
+                                {
+                                    FeatureSchema alteredSchema = destService.AlterSchema(srcSchema, incSchema);
+                                    if (alteredSchema != null)
+                                    {
+                                        opts.AlterSchema = true;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageService.ShowError(ex);
+                                    LoggingService.Error("Alter schema error", ex);
+                                    e.Cancel = true;
+                                }
+                            }
+                            else
+                            {
+                                e.Cancel = true;
+                            }
+                        }
+                    }
+                }
+            });
+            wb.Invoke(invoker);
         }
     }
 
