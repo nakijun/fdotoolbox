@@ -132,7 +132,6 @@ namespace FdoToolbox.Core.ETL.Operations
                     using (IFeatureReader reader = insert.Execute())
                     {
                         reader.Close();
-                        RaiseFeatureProcessed(row);
                     }
                 }
                 catch (OSGeo.FDO.Common.Exception ex)
