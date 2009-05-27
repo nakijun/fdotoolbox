@@ -130,6 +130,13 @@ namespace FdoToolbox.Core.Feature
             { 
                 this.InternalConnection.ConnectionString = value;
 
+                //HACK: ODBC doesn't want to play nice
+                if (this.Provider.StartsWith("OSGeo.ODBC"))
+                {
+                    _safeConnStr = value;
+                    return;
+                }
+
                 List<string> safeParams = new List<string>();
                 string[] parameters = this.ConnectionString.Split(';');
                 IConnectionPropertyDictionary dict = this.InternalConnection.ConnectionInfo.ConnectionProperties;

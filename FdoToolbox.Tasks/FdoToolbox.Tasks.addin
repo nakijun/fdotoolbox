@@ -22,6 +22,11 @@
     <Path name="/ObjectExplorer/Extenders">
         <Class id="Tasks" class="FdoToolbox.Tasks.Controls.TaskObjectExplorerExtender" />
     </Path>
+
+    <!-- Drag and Drop handlers -->
+    <Path name="/FdoToolbox/DragDropHandlers">
+        <Class id="BcpHandler" class="FdoToolbox.Tasks.DragDropHandlers.BulkCopyFileHandler" />
+    </Path>
     
     <!-- Main Menu definition -->
     <Path name = "/Workbench/MainMenu">

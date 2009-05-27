@@ -59,8 +59,6 @@ namespace FdoToolbox.Base.Controls
             objTreeView.ImageList = imgList;
             objTreeView.Dock = DockStyle.Fill;
             objTreeView.AllowDrop = true;
-            objTreeView.DragEnter += new DragEventHandler(OnTreeViewDragEnter);
-            objTreeView.DragDrop += new DragEventHandler(OnTreeViewDragDrop);
             objTreeView.MouseDown += delegate(object sender, MouseEventArgs e)
             {
                 if (e.Button == MouseButtons.Right)
@@ -69,52 +67,6 @@ namespace FdoToolbox.Base.Controls
                 }
             };
             objTreeView.AfterSelect += new TreeViewEventHandler(OnAfterSelect);
-        }
-
-        void OnTreeViewDragDrop(object sender, DragEventArgs e)
-        {
-            Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-            if (a != null && a.Length > 0)
-            {
-                IFdoConnectionManager connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
-                NamingService namer = ServiceManager.Instance.GetService<NamingService>();
-
-                for (int i = 0; i < a.Length; i++)
-                {
-                    string file = a.GetValue(i).ToString();
-                    //TODO: Allow drag/drop of files that are not spatial data 
-                    //(eg. Saved connections, saved tasks, etc)
-                    try
-                    {
-                        using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
-                        {
-                            FdoConnection conn = ExpressUtility.CreateFlatFileConnection(file);
-                            string name = namer.GetDefaultConnectionName(conn.Provider);
-                            connMgr.AddConnection(name, conn);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        LoggingService.Error("Failed to create connection", ex);
-                    }
-                }
-            }
-        }
-
-        void OnTreeViewDragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-                if (a != null && a.Length > 0)
-                {
-                    e.Effect = DragDropEffects.Copy;
-                }
-                else
-                    e.Effect = DragDropEffects.None;
-            }
-            else
-                e.Effect = DragDropEffects.None;
         }
 
         void OnAfterSelect(object sender, TreeViewEventArgs e)
