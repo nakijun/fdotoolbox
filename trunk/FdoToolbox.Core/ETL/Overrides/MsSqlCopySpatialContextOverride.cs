@@ -36,6 +36,42 @@ namespace FdoToolbox.Core.ETL.Overrides
     {
 
         /// <summary>
+        /// Copies all spatial contexts
+        /// </summary>
+        /// <param name="spatialContexts">The spatial contexts.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
+        public override void Execute(ICollection<SpatialContextInfo> spatialContexts, FdoConnection target, bool overwrite)
+        {
+            //SQL Server 2008 supports multiple spatial contexts and IDestorySpatialContext
+            //so in this case if overwrite == true, we want to destroy any ones that
+            //already exist in the target before creating new ones in its place. This does not
+            //prevent creating a series of spatial contexts if overwrite == false and one of
+            //the spatial contexts being copied already exists. This is an unfortunate leaky 
+            //abstraction in the FDO API.
+
+            using (FdoFeatureService service = target.CreateFeatureService())
+            {
+                if (overwrite)
+                {
+                    ReadOnlyCollection<SpatialContextInfo> targetContexts = service.GetSpatialContexts();
+
+                    foreach (SpatialContextInfo sc in spatialContexts)
+                    {
+                        //Only destroy spatial context if it exists in target connection
+                        if (SpatialContextExists(targetContexts, sc))
+                            service.DestroySpatialContext(sc);
+                    }
+                }
+
+                foreach (SpatialContextInfo sc in spatialContexts)
+                {
+                    service.CreateSpatialContext(sc, false);
+                }
+            }
+        }
+
+        /// <summary>
         /// Copies the spatial contexts given in the list
         /// </summary>
         /// <param name="source">The source connection</param>

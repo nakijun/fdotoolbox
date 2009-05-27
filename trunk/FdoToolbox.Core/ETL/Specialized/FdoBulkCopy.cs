@@ -285,20 +285,6 @@ namespace FdoToolbox.Core.ETL.Specialized
             subProcessErrors[procName].AddRange(errors);
         }
 
-        /// <summary>
-        /// Gets all errors that occured during the execution of this process
-        /// </summary>
-        /// <returns></returns>
-        public new IEnumerable<Exception> GetAllErrors()
-        {
-            List<Exception> errors = new List<Exception>();
-            foreach (string procName in subProcessErrors.Keys)
-            {
-                errors.AddRange(subProcessErrors[procName]);
-            }
-            return errors;
-        }
-
         void OnSubProcessMessage(object sender, MessageEventArgs e)
         {
             SendMessage(e.Message);
@@ -416,6 +402,21 @@ namespace FdoToolbox.Core.ETL.Specialized
         public override string GetDescription()
         {
             return ResourceUtil.GetString("DESC_BULK_COPY_DEFINITION");
+        }
+
+        /// <summary>
+        /// Gets all errors that occured during the execution of this process
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<Exception> GetAllErrors()
+        {
+            foreach (string key in subProcessErrors.Keys)
+            {
+                foreach (Exception ex in subProcessErrors[key])
+                {
+                    yield return ex;
+                }
+            }
         }
     }
 }

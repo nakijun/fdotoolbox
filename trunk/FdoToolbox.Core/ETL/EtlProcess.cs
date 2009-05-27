@@ -157,7 +157,7 @@ namespace FdoToolbox.Core.ETL
         /// Gets all errors that occured during the execution of this process
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Exception> GetAllErrors()
+        public virtual IEnumerable<Exception> GetAllErrors()
         {
             foreach (Exception error in Errors)
             {

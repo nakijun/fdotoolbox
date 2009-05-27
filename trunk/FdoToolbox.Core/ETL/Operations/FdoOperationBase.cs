@@ -118,7 +118,7 @@ namespace FdoToolbox.Core.ETL.Operations
         public void RaiseFailedFeatureProcessed(FdoRow row, Exception ex)
         {
             Statistics.MarkFeatureFailed();
-            this.Error(ex, "Error encountered processing feature");
+            this.Error(ex, "Error encountered processing feature: {0}", row.ToString());
             OnFeatureFailed(this, row, ex);
         }
 
