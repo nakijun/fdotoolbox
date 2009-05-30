@@ -752,6 +752,40 @@ namespace FdoToolbox.Core.Feature
         /// <param name="fs"></param>
         public void ApplySchema(FeatureSchema fs)
         {
+            // Fix any invalid spatial context assocations
+            IList<SpatialContextInfo> contexts = GetSpatialContexts();
+            foreach (ClassDefinition cls in fs.Classes)
+            {
+                foreach (PropertyDefinition pd in cls.Properties)
+                {
+                    if (pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                    {
+                        GeometricPropertyDefinition g = pd as GeometricPropertyDefinition;
+                        if (contexts.Count > 0)
+                        {
+                            bool found = false;
+                            foreach (SpatialContextInfo sci in contexts)
+                            {
+                                if (sci.Name == g.SpatialContextAssociation)
+                                {
+                                    found = true;
+                                }
+                            }
+
+                            // Set association to first one on the list if not found
+                            if (!found)
+                            {
+                                g.SpatialContextAssociation = contexts[0].Name;
+                            }
+                        }
+                        else //No spatial contexts found. So empty any assocations
+                        {
+                            g.SpatialContextAssociation = string.Empty;
+                        }
+                    }
+                }
+            }
+
             using (IApplySchema apply = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
             {
                 apply.FeatureSchema = fs;
