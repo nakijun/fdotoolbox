@@ -129,35 +129,37 @@ namespace FdoToolbox.Core.Feature
             set 
             { 
                 this.InternalConnection.ConnectionString = value;
-
-                //HACK: ODBC doesn't want to play nice
-                if (this.Provider.StartsWith("OSGeo.ODBC"))
+                if (!string.IsNullOrEmpty(value))
                 {
-                    _safeConnStr = value;
-                    return;
-                }
-
-                List<string> safeParams = new List<string>();
-                string[] parameters = this.ConnectionString.Split(';');
-                IConnectionPropertyDictionary dict = this.InternalConnection.ConnectionInfo.ConnectionProperties;
-                foreach (string p in parameters)
-                {
-                    string[] tokens = p.Split('=');
-                    if (!dict.IsPropertyProtected(tokens[0]))
+                    //HACK: ODBC doesn't want to play nice
+                    if (this.Provider.StartsWith("OSGeo.ODBC"))
                     {
-                        safeParams.Add(p);
+                        _safeConnStr = value;
+                        return;
                     }
-                    else
+
+                    List<string> safeParams = new List<string>();
+                    string[] parameters = this.ConnectionString.Split(';');
+                    IConnectionPropertyDictionary dict = this.InternalConnection.ConnectionInfo.ConnectionProperties;
+                    foreach (string p in parameters)
                     {
-                        StringBuilder sb = new StringBuilder();
-                        for (int i = 0; i < tokens[1].Length; i++)
+                        string[] tokens = p.Split('=');
+                        if (!dict.IsPropertyProtected(tokens[0]))
                         {
-                            sb.Append("*");
+                            safeParams.Add(p);
                         }
-                        safeParams.Add(tokens[0] + "=" + sb.ToString());
+                        else
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            for (int i = 0; i < tokens[1].Length; i++)
+                            {
+                                sb.Append("*");
+                            }
+                            safeParams.Add(tokens[0] + "=" + sb.ToString());
+                        }
                     }
+                    _safeConnStr = string.Join(";", safeParams.ToArray());
                 }
-                _safeConnStr = string.Join(";", safeParams.ToArray());
             }
         }
 

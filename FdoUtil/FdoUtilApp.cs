@@ -243,6 +243,27 @@ namespace FdoUtil
                         _Command = new CopyToFileCommand(srcProvider, srcConnStr, srcSchema, srcClasses, destFile, srcSpatialContext);
                     }
                     break;
+                case "RunTask":
+                    {
+                        if (IsSwitchDefined("-help", args))
+                        {
+                            Console.WriteLine("Description: {0}\nUsage: {1}\nNotes: {2}{3}{4}",
+                                "Runs a pre-defined task definition",
+                                "FdoUtil.exe -cmd:RunTask -task:<path to task definition>",
+                                "The task definition indicated by the -task parameter must be a valid\n",
+                                "Bulk Copy or Join Definition\n",
+                                "Valid file extensions include: BulkCopyDefinition, JoinDefinition");
+
+                            return;
+                        }
+
+                        string taskFile = GetArgument("-task", args);
+
+                        ThrowIfEmpty(taskFile, "-task");
+
+                        _Command = new RunTaskCommand(taskFile);
+                    }
+                    break;
                 default:
                     throw new ArgumentException("Unknown command name: " + cmdName);
             }
@@ -266,6 +287,7 @@ namespace FdoUtil
  - RegisterProvider
  - UnregisterProvider
  - BulkCopy
+ - RunTask
 For more information about a command type: FdoUtil.exe -cmd:<command name> -help
 For more help. Consult the help file cmd_readme.txt";
             Console.WriteLine(usage);
