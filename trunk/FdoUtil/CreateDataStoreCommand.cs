@@ -43,24 +43,14 @@ namespace FdoUtil
             _dstoreStr = dstoreStr;
         }
 
-        private IConnection CreateConnection()
-        {
-            IConnection conn = FeatureAccessManager.GetConnectionManager().CreateConnection(_provider);
-            return conn;
-        }
-
         public override int Execute()
         {
             CommandStatus retCode;
-            IConnection conn = null;
+            FdoConnection conn = null;
             try
             {
-                conn = CreateConnection(_provider, _connStr);
-                if (!string.IsNullOrEmpty(_connStr))
-                {
-                    conn.ConnectionString = _connStr;
-                    conn.Open();
-                }
+                conn = new FdoConnection(_provider, _connStr);
+                conn.Open();
             }
             catch (OSGeo.FDO.Common.Exception ex)
             {
@@ -71,7 +61,7 @@ namespace FdoUtil
 
             using (conn)
             {
-                using (FdoFeatureService service = new FdoFeatureService(conn))
+                using (FdoFeatureService service = conn.CreateFeatureService())
                 {
                     try
                     {
@@ -86,7 +76,7 @@ namespace FdoUtil
                         return (int)retCode;
                     }
                 }
-                if (conn.ConnectionState != ConnectionState.ConnectionState_Closed)
+                if (conn.State != FdoConnectionState.Closed)
                     conn.Close();
             }
             return (int)retCode;

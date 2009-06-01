@@ -87,8 +87,20 @@ namespace FdoToolbox.Core.AppFramework
         /// </summary>
         E_FAIL_LOAD_QUERY_RESULTS = 13,
         /// <summary>
+        /// The task definition being attempted to load is not a recognised format
+        /// </summary>
+        E_FAIL_UNRECOGNISED_TASK_FORMAT = 14,
+        /// <summary>
+        /// Bulk Copy ran with errors logged
+        /// </summary>
+        E_FAIL_BULK_COPY_WITH_ERRORS = 15,
+        /// <summary>
+        /// Join operation ran with errors logged
+        /// </summary>
+        E_FAIL_JOIN_WITH_ERRORS = 16,
+        /// <summary>
         /// Unknown failure
         /// </summary>
-        E_FAIL_UNKNOWN = 14
+        E_FAIL_UNKNOWN
     }
 }
