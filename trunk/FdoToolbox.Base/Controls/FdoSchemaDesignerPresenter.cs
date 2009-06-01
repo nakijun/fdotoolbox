@@ -547,7 +547,7 @@ namespace FdoToolbox.Base.Controls
                 PropertyDefinition pd = GetProperty(className, propName);
                 if (pd != null)
                 {
-                    cls.Properties.Remove(pd);
+                    pd.Delete();
                     _view.RemovePropertyNode(className, propName);
                     CheckDirtyState();
                 }
@@ -560,7 +560,7 @@ namespace FdoToolbox.Base.Controls
             ClassDefinition cls = GetClass(className);
             if (cls != null)
             {
-                _schema.Classes.Remove(cls);
+                cls.Delete();
                 _view.RemoveClassNode(className);
                 CheckDirtyState();
             }
