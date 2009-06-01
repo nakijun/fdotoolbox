@@ -30,6 +30,7 @@ The valid list of commands for FdoUtil.exe include:
 - RegisterProvider
 - UnregisterProvider
 - BulkCopy
+- RunTask
 
 The valid list of command for FdoInfo.exe include:
 - GetConnectionParameters
@@ -109,7 +110,7 @@ CreateFile
 
 Description: Creates a new flat-file data source with the option of applying a schema to it.
 
-Usage: FdoUtil.exe -cmd:MakeSdf -path:<path to sdf file> [-schema:<path to schema file>] [-quiet]
+Usage: FdoUtil.exe -cmd:CreateFile -path:<path to sdf file> [-schema:<path to schema file>] [-quiet]
 
 Notes: 
 
@@ -118,21 +119,21 @@ application will not take place.
 
 - If the file is a shp file, the -schema parameter must be defined
 
+- Valid file formats include: SDF, SHP and SQLite. SQLite can be any of the following file extensions: .sqlite, .db, .slt
+
 CreateDataStore
 ---------------
 
 Description: Create a new FDO data store
 
-Usage: FdoUtil.exe -cmd:CreateDataStore -provider:<provider> -properties:<data store properties> [-connection:<connection string>] [-quiet] [-test]
+Usage: FdoUtil.exe -cmd:CreateDataStore -provider:<provider> -properties:<data store properties> -connection:<connection string> [-quiet] [-test]
 
 Notes:
 
+This is for rdbms-based providers only. For flat-file providers, use the CreateFile command
+
 The -properties parameter is a the same format as the connection string
 eg. For OSGeo.MySQL: -properties:DataStore=mydatastore
-
-The -connection parameter is only required for rdbms-based providers. Usually rdbms-based 
-providers require a DataStore parameter as part of the connection. This is not required
-in this case.
 
 RegisterProvider
 ----------------
@@ -165,6 +166,17 @@ Valid file extensions include:
 	- sdf (OSGeo.SDF)
 	- sqlite (OSGeo.SQLite)
 	- db (OSGeo.SQLite)
+	
+RunTask
+-------
+
+Description: Executes a pre-defined task definition
+
+Usage: FdoUtil.exe -cmd:RunTask -task:<path to task definition>
+
+Notes: The task definition must be a valid Bulk Copy or Join definition. Bulk Copy tasks must have a .BulkCopyDefinition extension and Join tasks must have a .JoinDefinition extensions.
+
+RunTask will make no attempts to validate the connections defined within these tasks.
 
 ======= FdoInfo.exe command description ======= [B2]
 

@@ -1,3 +1,28 @@
+v0.7.7
+------
+
+- Enhancements:
+	- Re-implemented pre-0.6 missing features
+		- When bulk copying from a source connection to a target connection and the target connection has no schemas defined, assumes all classes within are to be copied.
+		- RunTask command for FdoUtil.exe
+	- Support for Association and Object Properties in the Schema Editor
+	- You can now run non-SELECT SQL queries in the Data Query View
+	- Features that failed to be processed in an ETL task are now properly logged with exception details and a textual dump of that feature.
+	- Custom drag and drop handler support. The following files can be dragged and dropped into FDO Toolbox
+		- SDF, SHP and SQLite files
+		- Feature Schema files
+		- Saved Connection files
+		- Bulk Copy Definitions
+
+- Other:
+	- Copy Spatial Context fixes for SQL Server 2008
+	- Updated FDO 3.4 distribution. This should include an updated OGR provider with an important refcount fix.
+	- Bulk copy fixes:
+		- Now properly supports multi-class bulk copy
+		- Can bulk copy computed expression properties
+	- Invalid spatial context associations will be handled gracefully when a feature schema is loaded and applied (either set to the first spatial context or empty if no spatial contexts found)
+	- Obfuscate protected properties in the connection tooltips. However this only obfuscates properties that FDO deems as protected. It will not obfuscate a password in a ODBC "ConnectinString" property for example.	
+
 v0.7.5
 ------
 

@@ -63,6 +63,7 @@ The valid list of commands for ``FdoUtil.exe`` include:
  * ``RegisterProvider``
  * ``UnregisterProvider``
  * ``BulkCopy``
+ * ``RunTask``
 
 Each command for ``FdoUtil.exe`` is described in further detail below:
 
@@ -112,7 +113,7 @@ Description: Creates a new flat-file data source with the option of applying a s
 
 Usage::
 
- FdoUtil.exe -cmd:MakeSdf -path:<path to sdf file> [-schema:<path to schema file>] [-quiet]
+ FdoUtil.exe -cmd:CreateFile -path:<path to sdf file> [-schema:<path to schema file>] [-quiet]
 
 Notes: 
 
@@ -129,6 +130,8 @@ Usage::
  FdoUtil.exe -cmd:CreateDataStore -provider:<provider> -properties:<data store properties> [-connection:<connection string>] [-quiet] [-test]
 
 Notes:
+
+This command is exclusively for creating data stores in RDBMS-based providers. Use the `CreateFile` command if working with flat-file providers
 
 The ``-properties`` parameter is a the same format as the connection string 
 
@@ -174,6 +177,18 @@ Valid file extensions include:
  * sdf (OSGeo.SDF)
  * sqlite (OSGeo.SQLite)
  * db (OSGeo.SQLite)
+ 
+**RunTask**
+
+Description: Executes a pre-defined task definition
+
+Usage:: 
+
+ FdoUtil.exe -cmd:RunTask -task:<path to task definition>
+
+Notes: The task definition must be a valid Bulk Copy or Join definition. Bulk Copy tasks must have a ``.BulkCopyDefinition`` extension and Join tasks must have a ``.JoinDefinition`` extensions.
+
+``RunTask`` will make no attempts to validate the connections defined within these tasks.
 
 .. index::
    single: Command Line Utilities; FdoInfo.exe
@@ -364,7 +379,19 @@ Error Codes
         /// </summary>
         E_FAIL_LOAD_QUERY_RESULTS = 13,
         /// <summary>
+        /// The task definition being attempted to load is not a recognised format
+        /// </summary>
+        E_FAIL_UNRECOGNISED_TASK_FORMAT = 14,
+        /// <summary>
+        /// Bulk Copy ran with errors logged
+        /// </summary>
+        E_FAIL_BULK_COPY_WITH_ERRORS = 15,
+        /// <summary>
+        /// Join operation ran with errors logged
+        /// </summary>
+        E_FAIL_JOIN_WITH_ERRORS = 16,
+        /// <summary>
         /// Unknown failure
         /// </summary>
-        E_FAIL_UNKNOWN = 14
+        E_FAIL_UNKNOWN
     }
