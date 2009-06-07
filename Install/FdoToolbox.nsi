@@ -39,7 +39,7 @@ SetCompressor /SOLID /FINAL lzma
 
 !define SLN_DIR ".."
 !define SLN_THIRDPARTY "${SLN_DIR}\Thirdparty"
-!define RELEASE_VERSION "0.7.5"
+!define RELEASE_VERSION "0.7.7"
 
 # Installer vars
 !if ${SLN_CONFIG} == "Release"
