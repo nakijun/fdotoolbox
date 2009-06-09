@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="BulkCopy" type="FdoBulkCopyTaskDefinition" />
+    <xs:complexType name="FdoBulkCopyTaskDefinition">
+        <xs:sequence>
+            <xs:element name="Source" type="FdoCopySource" minOccurs="1" maxOccurs="1" />
+            <xs:element name="Target" type="FdoCopyTarget" minOccurs="1" maxOccurs="1" />
+            <xs:element name="ClassMappings" type="FdoClassMappingCollection" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+    <xs:complexType name="FdoCopySource">
+        <xs:sequence>
+            <xs:element name="Provider" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="ConnectionString" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="Schema" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="SpatialContextList" type="FdoSpatialContextList" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FdoSpatialContextList">
+        <xs:sequence>
+            <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FdoCopyTarget">
+        <xs:sequence>
+            <xs:element name="Provider" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="ConnectionString" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="Schema" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="BatchSize" type="xs:int" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FdoClassMappingCollection">
+        <xs:sequence>
+            <xs:element name="Mapping" type="FdoClassMapping" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FdoClassMapping">
+        <xs:sequence>
+            <xs:element name="DeleteTarget" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+            <xs:element name="SourceClass" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="TargetClass" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="Filter" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="Properties" type="FdoPropertyMappingCollection" minOccurs="1" maxOccurs="1" />
+            <xs:element name="Expressions" type="FdoExpressionMappingCollection" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FdoPropertyMappingCollection">
+        <xs:sequence>
+            <xs:element name="PropertyMapping" type="FdoPropertyMapping" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FdoPropertyMapping">
+        <xs:sequence>
+            <xs:element name="SourceProperty" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="TargetProperty" type="xs:string" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FdoExpressionMappingCollection">
+        <xs:sequence>
+            <xs:element name="ExpressionMapping" type="FdoExpressionMapping" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FdoExpressionMapping">
+        <xs:sequence>
+            <xs:element name="SourceExpression" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="SourceAlias" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="TargetProperty" type="xs:string" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
