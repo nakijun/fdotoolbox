@@ -169,6 +169,9 @@
   <data name="database_connect" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\database_connect.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="database_connection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\database_connect1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="database_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\database_edit.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -183,6 +186,9 @@
   </data>
   <data name="feature_class" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\feature_class.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="file_connection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\file_connection.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\folder.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -234,6 +240,9 @@
   </data>
   <data name="plugin_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\plugin_delete.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="server_connection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\server_connect.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="shape_handles" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\shape_handles.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

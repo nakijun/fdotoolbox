@@ -65,6 +65,18 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
+        /// Gets the type of the data store.
+        /// </summary>
+        /// <value>The type of the data store.</value>
+        public ProviderDatastoreType DataStoreType
+        {
+            get
+            {
+                return _Connection.ConnectionInfo.ProviderDatastoreType;
+            }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FdoConnection"/> class.
         /// </summary>
         /// <param name="provider">The provider name.</param>

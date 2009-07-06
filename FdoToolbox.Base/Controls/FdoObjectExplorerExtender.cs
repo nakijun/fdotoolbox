@@ -30,6 +30,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands;
 using FdoToolbox.Base.Commands;
 using System.Collections;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -47,6 +48,10 @@ namespace FdoToolbox.Base.Controls
         private const string IMG_RASTER_PROPERTY = "image";
         private const string IMG_OBJECT_PROPERTY = "package";
         private const string IMG_ASSOC_PROPERTY = "table_relationship";
+
+        private const string IMG_DB_CONNECTION = "database_connection";
+        private const string IMG_SERVER_CONNECTION = "server_connection";
+        private const string IMG_FILE_CONNECTION = "file_connection";
 
         private const string NODE_CONNECTION = "NODE_CONNECTION";
         private const string NODE_SCHEMA = "NODE_SCHEMA";
@@ -80,6 +85,10 @@ namespace FdoToolbox.Base.Controls
             _explorer.RegisterImage(IMG_RASTER_PROPERTY);
             _explorer.RegisterImage(IMG_SCHEMA);
 
+            _explorer.RegisterImage(IMG_DB_CONNECTION);
+            _explorer.RegisterImage(IMG_SERVER_CONNECTION);
+            _explorer.RegisterImage(IMG_FILE_CONNECTION);
+
             _explorer.RegisterRootNode(RootNodeName, "FDO Data Sources", "database_connect", "/ObjectExplorer/ContextMenus/FdoConnections");
             _explorer.RegisterContextMenu(NODE_CONNECTION, PATH_SELECTED_CONNECTION);
             _explorer.RegisterContextMenu(NODE_SCHEMA, PATH_SELECTED_SCHEMA);
@@ -94,7 +103,25 @@ namespace FdoToolbox.Base.Controls
             string name = e.Data;
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
-            node.ImageKey = node.SelectedImageKey = IMG_CONNECTION;
+
+            FdoConnection conn = _connMgr.GetConnection(name);
+            ProviderDatastoreType dtype = conn.DataStoreType;
+            switch (dtype)
+            {
+                case ProviderDatastoreType.ProviderDatastoreType_DatabaseServer:
+                    node.ImageKey = node.SelectedImageKey = IMG_DB_CONNECTION;
+                    break;
+                case ProviderDatastoreType.ProviderDatastoreType_File:
+                    node.ImageKey = node.SelectedImageKey = IMG_FILE_CONNECTION;
+                    break;
+                case ProviderDatastoreType.ProviderDatastoreType_Unknown:
+                    node.ImageKey = node.SelectedImageKey = IMG_CONNECTION;
+                    break;
+                case ProviderDatastoreType.ProviderDatastoreType_WebServer:
+                    node.ImageKey = node.SelectedImageKey = IMG_SERVER_CONNECTION;
+                    break;
+            }
+
             node.ContextMenuStrip = _explorer.GetContextMenu(NODE_CONNECTION);
 
             GetSchemaNodes(node);
@@ -119,7 +146,25 @@ namespace FdoToolbox.Base.Controls
             string name = e.Data;
             TreeNode node = new TreeNode();
             node.Name = node.Text = name;
-            node.ImageKey = node.SelectedImageKey = IMG_CONNECTION;
+
+            FdoConnection conn = _connMgr.GetConnection(name);
+            ProviderDatastoreType dtype = conn.DataStoreType;
+            switch (dtype)
+            {
+                case ProviderDatastoreType.ProviderDatastoreType_DatabaseServer:
+                    node.ImageKey = node.SelectedImageKey = IMG_DB_CONNECTION;
+                    break;
+                case ProviderDatastoreType.ProviderDatastoreType_File:
+                    node.ImageKey = node.SelectedImageKey = IMG_FILE_CONNECTION;
+                    break;
+                case ProviderDatastoreType.ProviderDatastoreType_Unknown:
+                    node.ImageKey = node.SelectedImageKey = IMG_CONNECTION;
+                    break;
+                case ProviderDatastoreType.ProviderDatastoreType_WebServer:
+                    node.ImageKey = node.SelectedImageKey = IMG_SERVER_CONNECTION;
+                    break;
+            }
+            
             node.ContextMenuStrip = _explorer.GetContextMenu(NODE_CONNECTION);
 
             GetSchemaNodes(node);
@@ -166,10 +211,12 @@ namespace FdoToolbox.Base.Controls
                         ctxStrings.Add("- " + sci.Name);
                 }
                 connNode.ToolTipText = string.Format(
-                    "Provider: {0}\nConnection String: {1}\nSpatial Contexts:\n{2}",
+                    "Provider: {0}{4}Type: {1}{4}Connection String: {2}{4}Spatial Contexts:{4}{3}",
                     conn.Provider,
+                    conn.DataStoreType,
                     conn.SafeConnectionString,
-                    ctxStrings.Count > 0 ? string.Join("\n", ctxStrings.ToArray()) : "none");
+                    ctxStrings.Count > 0 ? string.Join("\n", ctxStrings.ToArray()) : "none",
+                    Environment.NewLine);
             }
         }
 
