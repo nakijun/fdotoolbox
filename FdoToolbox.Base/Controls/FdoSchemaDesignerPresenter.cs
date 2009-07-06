@@ -475,10 +475,6 @@ namespace FdoToolbox.Base.Controls
                         throw new NotSupportedException(ResourceService.GetStringFormatted("ERR_SCHEMA_CANNOT_BE_APPLIED", incSchema.ToString()));
                 }
             }
-            else 
-            { 
-                //
-            }
 
             //Check zero-length strings/blobs/clobs
             foreach (ClassDefinition cd in _schema.Classes)
@@ -486,6 +482,10 @@ namespace FdoToolbox.Base.Controls
                 List<string> zeroLengthProps = new List<string>();
                 foreach (PropertyDefinition pd in cd.Properties)
                 {
+                    //Ignore deleted elements
+                    if (pd.ElementState == SchemaElementState.SchemaElementState_Deleted)
+                        continue;
+
                     if (pd.PropertyType == PropertyType.PropertyType_DataProperty)
                     {
                         DataPropertyDefinition dp = (DataPropertyDefinition)pd;

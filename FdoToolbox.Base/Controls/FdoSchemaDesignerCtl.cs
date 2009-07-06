@@ -29,6 +29,7 @@ using System.Windows.Forms;
 using ICSharpCode.Core;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Base.Services;
+using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -267,7 +268,7 @@ namespace FdoToolbox.Base.Controls
                 }
                 catch (Exception ex)
                 {
-                    this.ShowError(ex);
+                    WrappedMessageBox.ShowMessage("Error", ex.ToString());
                 }
             }
         }
