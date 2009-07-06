@@ -39,6 +39,7 @@ namespace FdoToolbox.Base.Controls
 
         private const string IMG_CONNECTION = "database_connect";
         private const string IMG_SCHEMA = "chart_organisation";
+        private const string IMG_FEATURE_CLASS = "feature_class";
         private const string IMG_CLASS = "database_table";
         private const string IMG_DATA_PROPERTY = "table";
         private const string IMG_ID_PROPERTY = "key";
@@ -69,6 +70,7 @@ namespace FdoToolbox.Base.Controls
             _connMgr.ConnectionRefreshed += new ConnectionEventHandler(OnConnectionRefreshed);
 
             _explorer.RegisterImage(IMG_ASSOC_PROPERTY);
+            _explorer.RegisterImage(IMG_FEATURE_CLASS);
             _explorer.RegisterImage(IMG_CLASS);
             _explorer.RegisterImage(IMG_CONNECTION);
             _explorer.RegisterImage(IMG_DATA_PROPERTY);
@@ -178,7 +180,7 @@ namespace FdoToolbox.Base.Controls
                 TreeNode classNode = new TreeNode();
                 classNode.Name = classNode.Text = classDef.Name;
                 classNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_CLASS);
-                classNode.ImageKey = classNode.SelectedImageKey = IMG_CLASS;
+                classNode.ImageKey = classNode.SelectedImageKey = (classDef.ClassType == ClassType.ClassType_FeatureClass ? IMG_FEATURE_CLASS : IMG_CLASS);
                 classNode.ToolTipText = string.Format("Type: {0}\nIsAbstract: {1}\nIsComputed: {2}\nBase Class: {3}\nUnique Constraints: {4}", 
                     classDef.ClassType,
                     classDef.IsAbstract,

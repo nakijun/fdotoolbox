@@ -418,6 +418,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FdoToolbox.Base.addin" />
+    <None Include="Resources\feature_class.png" />
     <None Include="cscatalog.sqlite">
     </None>
     <None Include="Resources\wrench.ico" />
