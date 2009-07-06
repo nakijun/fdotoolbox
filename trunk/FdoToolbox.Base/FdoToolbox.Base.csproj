@@ -418,6 +418,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FdoToolbox.Base.addin" />
+    <None Include="Resources\file_connection.png" />
+    <None Include="Resources\database_connect1.png" />
+    <None Include="Resources\server_connect.png" />
     <None Include="Resources\feature_class.png" />
     <None Include="cscatalog.sqlite">
     </None>

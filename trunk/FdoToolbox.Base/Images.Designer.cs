@@ -179,6 +179,13 @@ namespace FdoToolbox.Base {
             }
         }
         
+        internal static System.Drawing.Bitmap database_connection {
+            get {
+                object obj = ResourceManager.GetObject("database_connection", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap database_edit {
             get {
                 object obj = ResourceManager.GetObject("database_edit", resourceCulture);
@@ -210,6 +217,13 @@ namespace FdoToolbox.Base {
         internal static System.Drawing.Bitmap feature_class {
             get {
                 object obj = ResourceManager.GetObject("feature_class", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap file_connection {
+            get {
+                object obj = ResourceManager.GetObject("file_connection", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -329,6 +343,13 @@ namespace FdoToolbox.Base {
         internal static System.Drawing.Bitmap plugin_delete {
             get {
                 object obj = ResourceManager.GetObject("plugin_delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap server_connection {
+            get {
+                object obj = ResourceManager.GetObject("server_connection", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
