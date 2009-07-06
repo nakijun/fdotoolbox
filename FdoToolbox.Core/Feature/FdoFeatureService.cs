@@ -1195,6 +1195,9 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public bool SupportsBatchInsertion()
         {
+            return _conn.CommandCapabilities.SupportsParameters();
+
+            /*
             //This bombs on PostGIS, must be something to do with the refcounting.
             bool supported = false;
             using (IInsert insert = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert)
@@ -1202,6 +1205,7 @@ namespace FdoToolbox.Core.Feature
                 supported = (insert.BatchParameterValues != null);
             }
             return supported;
+             */
         }
 
         /// <summary>

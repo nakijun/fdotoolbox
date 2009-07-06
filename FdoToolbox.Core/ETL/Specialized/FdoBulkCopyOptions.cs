@@ -28,6 +28,7 @@ using System.Collections.Specialized;
 namespace FdoToolbox.Core.ETL.Specialized
 {
     using Feature;
+    using OSGeo.FDO.Schema;
 
     /// <summary>
     /// Options for <see cref="FdoBulkCopy"/>
@@ -135,11 +136,28 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <summary>
         /// If true, the mappings are ignored and the full source schema
         /// will be applied to the target. Is only true if the target
-        /// schema is undefined
+        /// schema is undefined or the target schema is empty
         /// </summary>
         public bool ApplySchemaToTarget
         {
-            get { return string.IsNullOrEmpty(this.TargetSchema); }
+            get { return string.IsNullOrEmpty(this.TargetSchema) || EmptyTargetSchema(this.TargetSchema); }
+        }
+
+        private bool EmptyTargetSchema(string schemaName)
+        {
+            bool empty = false;
+            using (FdoFeatureService service = this.TargetConnection.CreateFeatureService())
+            {
+                FeatureSchema schema = service.GetSchemaByName(this.TargetSchema);
+                if (schema != null)
+                {
+                    using (schema)
+                    {
+                        empty = schema.Classes.Count == 0;
+                    }
+                }
+            }
+            return empty;
         }
 
         /// <summary>
