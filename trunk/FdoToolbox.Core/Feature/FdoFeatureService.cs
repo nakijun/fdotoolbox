@@ -1567,6 +1567,10 @@ namespace FdoToolbox.Core.Feature
             ISchemaCapabilities capabilities = _conn.SchemaCapabilities;
             foreach (ClassDefinition classDef in schema.Classes)
             {
+                //Ignore deleted classes
+                if (classDef.ElementState == SchemaElementState.SchemaElementState_Deleted)
+                    continue;
+
                 string className = classDef.Name;
                 ClassType ctype = classDef.ClassType;
                 IncompatibleClass cls = null;
@@ -1587,6 +1591,10 @@ namespace FdoToolbox.Core.Feature
                 }
                 foreach (PropertyDefinition propDef in classDef.Properties)
                 {
+                    //Ignore deleted properties
+                    if (propDef.ElementState == SchemaElementState.SchemaElementState_Deleted)
+                        continue;
+
                     string propName = propDef.Name;
                     DataPropertyDefinition dataDef = propDef as DataPropertyDefinition;
                     //AssociationPropertyDefinition assocDef = propDef as AssociationPropertyDefinition;
