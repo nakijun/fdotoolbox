@@ -137,7 +137,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             }
         }
 
-        protected void FirePropertyChanged(string property)
+        internal void FirePropertyChanged(string property)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
@@ -203,6 +203,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                         }
                     }
                     value = dpdc;
+                    design.FirePropertyChanged("IdentityProperties");
                 }
                 else
                 {

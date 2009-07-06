@@ -107,6 +107,23 @@ namespace FdoToolbox.Base.Controls
             classNode.Expand();
         }
 
+        public void SetPropertyImage(string className, string propName, string imageKey)
+        {
+            TreeNode schemaNode = schemaTree.Nodes[0];
+            if (schemaNode == null)
+                return;
+
+            TreeNode classNode = schemaNode.Nodes[className];
+            if (classNode == null)
+                return;
+
+            TreeNode propNode = classNode.Nodes[propName];
+            if (propNode == null)
+                return;
+
+            propNode.ImageKey = imageKey;
+        }
+
         public string SelectedSchema
         {
             get 
@@ -285,7 +302,7 @@ namespace FdoToolbox.Base.Controls
                 }
                 catch (Exception ex)
                 {
-                    this.ShowError(ex);
+                    WrappedMessageBox.ShowMessage("Error", ex.ToString());
                 }
             }
         }
@@ -300,7 +317,7 @@ namespace FdoToolbox.Base.Controls
             }
             catch (Exception ex)
             {
-                this.ShowError(ex);
+                WrappedMessageBox.ShowMessage("Error", ex.ToString());
             }
         }
 

@@ -40,6 +40,8 @@ namespace FdoToolbox.Base.Controls
         void AddClassNode(string name, string imageKey);
         void AddPropertyNode(string className, string propName, string imageKey);
 
+        void SetPropertyImage(string className, string propName, string imageKey);
+
         void RemoveClassNode(string className);
         void RemovePropertyNode(string className, string propName);
 
@@ -70,6 +72,7 @@ namespace FdoToolbox.Base.Controls
         private FeatureSchema _schema;
 
         public const string RES_SCHEMA = "chart_organisation";
+        public const string RES_FEATURE_CLASS = "feature_class";
         public const string RES_CLASS = "database_table";
         public const string RES_GEOM = "shape_handles";
         public const string RES_ID = "key";
@@ -112,13 +115,20 @@ namespace FdoToolbox.Base.Controls
         {
             foreach (ClassDefinition cls in _schema.Classes)
             {
-                _view.AddClassNode(cls.Name, RES_CLASS);
+                if (cls.ClassType == ClassType.ClassType_FeatureClass)
+                    _view.AddClassNode(cls.Name, RES_FEATURE_CLASS);
+                else
+                    _view.AddClassNode(cls.Name, RES_CLASS);
                 foreach (PropertyDefinition pd in cls.Properties)
                 {
                     switch (pd.PropertyType)
                     {
                         case PropertyType.PropertyType_DataProperty:
-                            _view.AddPropertyNode(cls.Name, pd.Name, RES_DATA_PROPERTY);
+                            DataPropertyDefinition dp = pd as DataPropertyDefinition;
+                            if (cls.IdentityProperties.Contains(dp))
+                                _view.AddPropertyNode(cls.Name, pd.Name, RES_ID);
+                            else
+                                _view.AddPropertyNode(cls.Name, pd.Name, RES_DATA_PROPERTY);
                             break;
                         case PropertyType.PropertyType_AssociationProperty:
                             _view.AddPropertyNode(cls.Name, pd.Name, RES_ASSOC);
@@ -187,6 +197,7 @@ namespace FdoToolbox.Base.Controls
         private void ImageInit()
         {
             _view.AddImage(RES_SCHEMA, ResourceService.GetBitmap(RES_SCHEMA));
+            _view.AddImage(RES_FEATURE_CLASS, ResourceService.GetBitmap(RES_FEATURE_CLASS));
             _view.AddImage(RES_CLASS, ResourceService.GetBitmap(RES_CLASS));
             _view.AddImage(RES_GEOM, ResourceService.GetBitmap(RES_GEOM));
             _view.AddImage(RES_ID, ResourceService.GetBitmap(RES_ID));
@@ -218,11 +229,32 @@ namespace FdoToolbox.Base.Controls
                 ClassDefinitionDesign c = GetClassDesigner(cls);
                 c.PropertyChanged += delegate(object sender, Comp.PropertyChangedEventArgs e)
                 {
-                    if(e.PropertyName == "Name")
+                    if (e.PropertyName == "Name")
                         _view.SelectedName = c.Name;
+                    else if (e.PropertyName == "IdentityProperties")
+                        UpdatePropertyIcons(_view.SelectedClass);
                     CheckDirtyState();
                 };
                 _view.SelectedObject = c;
+            }
+        }
+
+        private void UpdatePropertyIcons(string clsName)
+        {
+            ClassDefinition cls = GetClass(_view.SelectedClass);
+            if (cls != null)
+            {
+                foreach (PropertyDefinition pd in cls.Properties)
+                {
+                    DataPropertyDefinition dp = pd as DataPropertyDefinition;
+                    if (dp != null)
+                    {
+                        if (cls.IdentityProperties.Contains(dp))
+                            _view.SetPropertyImage(clsName, pd.Name, RES_ID);
+                        else
+                            _view.SetPropertyImage(clsName, pd.Name, RES_DATA_PROPERTY);
+                    }
+                }
             }
         }
 
@@ -363,7 +395,7 @@ namespace FdoToolbox.Base.Controls
             }
             FeatureClass cls = new FeatureClass(name, "");
             _schema.Classes.Add(cls);
-            _view.AddClassNode(cls.Name, RES_CLASS);
+            _view.AddClassNode(cls.Name, RES_FEATURE_CLASS);
             CheckDirtyState();
         }
 
