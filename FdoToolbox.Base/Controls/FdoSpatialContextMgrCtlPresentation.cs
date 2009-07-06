@@ -68,9 +68,15 @@ namespace FdoToolbox.Base.Controls
         {
             int [] cmds = _conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList);
             bool canDelete = (Array.IndexOf<int>(cmds, (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) >= 0);
-            bool canCreate = (Array.IndexOf<int>(cmds, (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0)
-                            && _conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value;
-            bool canEdit = _view.SpatialContexts.Count > 0;
+            bool canCreate = (Array.IndexOf<int>(cmds, (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
+            bool canEdit = _view.SpatialContexts.Count > 0 && (Array.IndexOf<int>(cmds, (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
+
+            if (canCreate)
+            {
+                //One spatial context exists, and this doesn't support multiple spatial contexts
+                if (_view.SpatialContexts.Count > 0 && !_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value)
+                    canCreate = false;
+            }
 
             _view.CreateEnabled = canCreate;
             _view.DeleteEnabled = canDelete;
@@ -83,13 +89,6 @@ namespace FdoToolbox.Base.Controls
             {
                 _view.SpatialContexts = new BindingList<SpatialContextInfo>(service.GetSpatialContexts());
             }
-        }
-
-        public void SpatialContextSelected()
-        {
-            SpatialContextInfo sci = _view.SelectedSpatialContext;
-            _view.DeleteEnabled = (sci != null);
-            _view.EditEnabled = (sci != null);
         }
 
         public void AddSpatialContext(SpatialContextInfo sci)
