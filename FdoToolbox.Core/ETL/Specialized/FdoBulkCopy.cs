@@ -164,7 +164,8 @@ namespace FdoToolbox.Core.ETL.Specialized
                 }
             }
 
-            if (_options.ApplySchemaToTarget)
+            //HACK: Express bulk copy can create an undefined source schema
+            if (_options.ApplySchemaToTarget && _options.SourceSchema != null)
             {
                 SendMessage("Applying source schema to target (this may take a while)");
                 FeatureSchema targetSchema = CreateTargetSchema(_options.SourceSchema);
