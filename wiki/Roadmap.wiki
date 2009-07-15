@@ -1,25 +1,17 @@
 #summary Planned features for upcoming releases
 
-=== 0.7.7 ===
-
- * Run saved ETL tasks from the command-line
- * ~~Save data preview query results to other flat-file sources~~
- * ~~Express support for SQLite provider~~
- * ~~Additional Property support~~
-      * ~~Object Properties~~
-      * ~~Association Properties~~
+=== 0.7.9 ===
+ * Proper ArcSDE connection support
+ * Express support for additional OGR formats
+ * Bulk Copy Data Value Conversion support
 
 === 0.8 - 0.9 ===
-
- * x64 compatibility
- * Express support for additional OGR formats
  * Raster Provider support
  * User Documentation
  * Localization
  * Modularised ETL task definition
  * Additional Property support
       * Raster Properties
-
 
 === Future ===
 
