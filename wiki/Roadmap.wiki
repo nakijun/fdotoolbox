@@ -1,7 +1,7 @@
 #summary Planned features for upcoming releases
 
 === 0.7.9 ===
- * Proper ArcSDE connection support
+ * ~~Proper ArcSDE connection support~~
  * Express support for additional OGR formats
  * Bulk Copy Data Value Conversion support
 
