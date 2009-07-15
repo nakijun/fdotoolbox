@@ -120,7 +120,9 @@ namespace FdoToolbox.Core.Feature
                     try
                     {
                         ep.Values = dict.EnumeratePropertyValues(n);
-                        ep.RequiresConnection = false;
+                        //A bit of a hack, but if a property is enumerable, and we get nothing
+                        //then we assume a connection must be established first.
+                        ep.RequiresConnection = (ep.Values.Length == 0); 
                     }
                     catch
                     {
