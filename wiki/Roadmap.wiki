@@ -1,11 +1,12 @@
 #summary Planned features for upcoming releases
 
-=== 0.7.9 ===
+=== 0.8 ===
  * ~~Proper ArcSDE connection support~~
  * Express support for additional OGR formats
  * Bulk Copy Data Value Conversion support
+ * Expression Editor Intellisense
 
-=== 0.8 - 0.9 ===
+=== 0.8.x - 0.9 ===
  * Raster Provider support
  * User Documentation
  * Localization
