@@ -2,11 +2,11 @@
 
 === 0.8 ===
  * ~~Proper ArcSDE connection support~~
- * Express support for additional OGR formats
- * Bulk Copy Data Value Conversion support
- * Expression Editor Intellisense
+ * ~~Expression Editor Intellisense~~
 
 === 0.8.x - 0.9 ===
+ * Bulk Copy Data Value Conversion support
+ * Express support for additional OGR formats
  * Raster Provider support
  * User Documentation
  * Localization
