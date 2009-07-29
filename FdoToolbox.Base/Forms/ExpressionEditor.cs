@@ -42,6 +42,45 @@ namespace FdoToolbox.Base.Forms
         Normal
     }
 
+    /*
+     * Intellisense overview:
+     * 
+     * The intellisense of this expression editor consists of the following parts:
+     *  - An ImageListBox which is filled with auto-complete suggestions
+     *  - A System.Windows.Forms.ToolTip which is shown when an auto-complete choice is highlighted (but not selected)
+     * 
+     * In order to invoke intellisense, we listen for the KeyUp and KeyDown events
+     * on the textbox to determine what actions to take. Some actions include:
+     * 
+     * Key Up:
+     *  - Comma: Show auto-complete with all suggestions
+     *  - Quotes (Single or Double): Insert an extra quote of that type
+     *  - Up/Down: Move the auto-complete selection up/down one item if the auto-complete box is visible.
+     *  - Backspace: Invoke auto-complete with suggestions if there is a context buffer, otherwise hide auto-complete.
+     *  - Alt + Right: Invoke auto-complete with all suggestions
+     *  - Alphanumeric (no modifiers): Invoke auto-complete with suggestions
+     * 
+     * Key Down:
+     *  - Escape: Hide auto-complete
+     *  - Enter: Hide auto-complete
+     * 
+     * As part of the loading process, a full list of auto-complete items (functions/properties) is constructed (sorted by name)
+     * Everytime intellisense is invoked, this list is queried for possible suggestions.
+     * 
+     * In order to determine what items to suggest, the editor builds a context buffer from the current position of the caret
+     * in the textbox. The context buffer algorithm is as follows:
+     * 
+     *  1 - Start from caret position
+     *  2 - Can we move back one char?
+     *    2.1 - Get this char.
+     *    2.2 - If alpha numeric, goto 2.
+     *  3 - Get the string that represents the uninterrupted alphanumeric string sequence that ends at the caret position
+     *  4 - Get the list of completable items that starts with this alphanumeric string
+     *  5 - Add these items to the auto-complete box.
+     *  6 - Show the auto-complete box
+     */
+
+
     public partial class ExpressionEditor : Form
     {
         private SortedList<string, AutoCompleteItem> _autoCompleteItems = new SortedList<string, AutoCompleteItem>();
@@ -54,6 +93,9 @@ namespace FdoToolbox.Base.Forms
             Function = 1,
         }
 
+        /// <summary>
+        /// Base auto-complete item
+        /// </summary>
         abstract class AutoCompleteItem
         {
             public abstract AutoCompleteItemType Type { get; }
@@ -65,6 +107,9 @@ namespace FdoToolbox.Base.Forms
             public abstract string AutoCompleteText { get; }
         }
 
+        /// <summary>
+        /// Property auto-complete item
+        /// </summary>
         class PropertyItem : AutoCompleteItem
         {
             private PropertyDefinition _propDef;
@@ -114,6 +159,9 @@ namespace FdoToolbox.Base.Forms
             }
         }
 
+        /// <summary>
+        /// Function auto-complete item
+        /// </summary>
         class FunctionItem : AutoCompleteItem
         {
             private FunctionDefinition _func;
@@ -808,7 +856,18 @@ namespace FdoToolbox.Base.Forms
             {
                 string context;
                 char? c = GetContextBuffer(out context);
-                Complete(context);
+                if (!string.IsNullOrEmpty(context))
+                {
+                    Complete(context);
+                }
+                else
+                {
+                    if (_autoBox.Visible)
+                    {
+                        _autoBox.Hide();
+                        _autoCompleteTooltip.Hide(this);
+                    }
+                }
             }
             else if (e.Modifiers == Keys.Alt && e.KeyCode == Keys.Right)
             {
@@ -818,13 +877,16 @@ namespace FdoToolbox.Base.Forms
             }
             else
             {
-                bool alpha = (code >= Keys.A && code <= Keys.Z);
-                bool numeric = (code >= Keys.D0 && code <= Keys.D9) || (code >= Keys.NumPad0 && code <= Keys.NumPad9);
-                if (alpha || numeric)
+                if (e.Modifiers == Keys.None)
                 {
-                    string context;
-                    char? c = GetContextBuffer(out context);
-                    Complete(context);
+                    bool alpha = (code >= Keys.A && code <= Keys.Z);
+                    bool numeric = (code >= Keys.D0 && code <= Keys.D9) || (code >= Keys.NumPad0 && code <= Keys.NumPad9);
+                    if (alpha || numeric)
+                    {
+                        string context;
+                        char? c = GetContextBuffer(out context);
+                        Complete(context);
+                    }
                 }
             }
         }
