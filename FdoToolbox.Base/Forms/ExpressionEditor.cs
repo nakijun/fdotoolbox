@@ -838,6 +838,10 @@ namespace FdoToolbox.Base.Forms
                     InsertText("'");
                     
             }
+            else if (code == Keys.D9 && e.Modifiers == Keys.Shift) // (
+            {
+                InsertText(")");
+            }
             else if (code == Keys.Up || code == Keys.Down)
             {
                 if (_autoBox.Visible)
@@ -1108,12 +1112,8 @@ namespace FdoToolbox.Base.Forms
                 if (caretPos > 0)
                 {
                     res = txtExpression.Text[caretPos];
-                    buffer = txtExpression.Text.Substring(caretPos + 1, currentPos - caretPos - 1);
                 }
-                else 
-                {
-                    buffer = txtExpression.Text.Substring(caretPos, currentPos - caretPos);
-                }
+                buffer = txtExpression.Text.Substring(caretPos + 1, currentPos - caretPos - 1);
             }
             return res;
         }
