@@ -1,3 +1,24 @@
+v0.8.0
+------
+
+- Enhancements:
+	- Object Explorer is populated using enhanced IDescribeSchema where possible. This means faster performance for providers that support it (eg. Oracle).
+	- However, the ODBC provider has some issues with enhanced IDescribeSchema (see FDO trac #552). So a new preference is available to specify which providers should not use enhanced IDescribeSchema. By default, the ODBC provider is checked.
+	- Expression Editor intellisense.
+		- Auto-complete text:
+			- single-quote
+			- double-quote
+			- parentheses
+		- Auto-complete functions:
+			- Shows Function signatures
+			- Shows Function descriptions
+			- Shows Function Argument descriptions
+		- Auto-complete class properties:
+			- Shows description and data type
+
+- Fixes:
+	- Proper ArcSDE provider support
+
 v0.7.8
 ------
 
