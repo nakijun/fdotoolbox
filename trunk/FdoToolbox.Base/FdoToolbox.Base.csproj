@@ -241,6 +241,12 @@
     </Compile>
     <Compile Include="Controls\FdoUnregProviderCtlPresentation.cs">
     </Compile>
+    <Compile Include="Controls\ProviderPreferencesCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProviderPreferencesCtl.Designer.cs">
+      <DependentUpon>ProviderPreferencesCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SchemaDesigner\AssociationPropertyDefinitionDesign.cs" />
     <Compile Include="Controls\SchemaDesigner\ClassDesign.cs" />
     <Compile Include="Controls\SchemaDesigner\ClassDefinitionDesign.cs" />
@@ -564,6 +570,10 @@
     <EmbeddedResource Include="Controls\FdoUnregProviderCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoUnregProviderCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProviderPreferencesCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ProviderPreferencesCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SchemaDesigner\GeometryTypeCtl.resx">
       <SubType>Designer</SubType>
