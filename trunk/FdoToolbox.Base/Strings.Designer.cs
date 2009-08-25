@@ -1157,6 +1157,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading....
+        /// </summary>
+        internal static string TEXT_LOADING {
+            get {
+                return ResourceManager.GetString("TEXT_LOADING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bulk Delete.
         /// </summary>
         internal static string TITLE_BULK_DELETE {
@@ -1567,6 +1576,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_VALIDATE_EXPRESSION {
             get {
                 return ResourceManager.GetString("TITLE_VALIDATE_EXPRESSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click to expand.
+        /// </summary>
+        internal static string TT_EXPAND {
+            get {
+                return ResourceManager.GetString("TT_EXPAND", resourceCulture);
             }
         }
         

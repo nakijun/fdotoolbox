@@ -35,6 +35,7 @@ namespace FdoToolbox.Base.Controls
         TreeNode GetRootNode(string name);
         ContextMenuStrip GetContextMenu(string nodeType);
 
-        event EventHandler AfterSelection;
+        event TreeViewEventHandler AfterExpansion;
+        event TreeViewEventHandler AfterSelection;
     }
 }

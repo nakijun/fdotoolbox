@@ -31,6 +31,7 @@ using OSGeo.FDO.Commands;
 using FdoToolbox.Base.Commands;
 using System.Collections;
 using OSGeo.FDO.Connections;
+using System.Diagnostics;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -61,6 +62,11 @@ namespace FdoToolbox.Base.Controls
         const string PATH_SELECTED_CONNECTION = "/ObjectExplorer/ContextMenus/SelectedConnection";
         const string PATH_SELECTED_SCHEMA = "/ObjectExplorer/ContextMenus/SelectedSchema";
         const string PATH_SELECTED_CLASS = "/ObjectExplorer/ContextMenus/SelectedClass";
+
+        const int NODE_LEVEL_CONNECTION = 1;
+        const int NODE_LEVEL_SCHEMA = 2;
+        const int NODE_LEVEL_CLASS = 3;
+        const int NODE_LEVEL_PROPERTY = 4;
 
         private IObjectExplorer _explorer;
         private FdoConnectionManager _connMgr;
@@ -93,7 +99,90 @@ namespace FdoToolbox.Base.Controls
             _explorer.RegisterContextMenu(NODE_CONNECTION, PATH_SELECTED_CONNECTION);
             _explorer.RegisterContextMenu(NODE_SCHEMA, PATH_SELECTED_SCHEMA);
             _explorer.RegisterContextMenu(NODE_CLASS, PATH_SELECTED_CLASS);
+
+            _explorer.AfterExpansion += new TreeViewEventHandler(OnAfterNodeExpansion);
             //_explorer.RegisterContextMenu(NODE_PROPERTY, "/ObjectExplorer/ContextMenus/SelectedProperty");
+        }
+
+        class TreeNodeScopedTextUpdater : IDisposable
+        {
+            private TreeNode _node;
+            private string _origText;
+
+            public TreeNodeScopedTextUpdater(TreeNode node, string text)
+            {
+                _node = node;
+                _origText = node.Text;
+                _node.Text = text;
+            }
+
+            public void Dispose()
+            {
+                _node.Text = _origText;
+            }
+        }
+
+        void OnAfterNodeExpansion(object sender, TreeViewEventArgs e)
+        {
+            if (e.Action == TreeViewAction.Expand)
+            {
+                TreeNode node = e.Node;
+                TreeNode root = _explorer.GetRootNode(RootNodeName);
+                //Is a FDO data source node
+                if (root.Nodes.Find(node.Name, true).Length == 1)
+                {
+                    //Find the connection node
+                    TreeNode connNode = node;
+                    while(connNode.Level > 1)
+                    {
+                        connNode = connNode.Parent;
+                    }
+                    string connName = connNode.Name;
+
+                    switch (node.Level)
+                    {
+                        case NODE_LEVEL_SCHEMA: //Schema Node
+                            {
+                                bool isPartial = Convert.ToBoolean(node.Tag);
+                                if (isPartial)
+                                {
+                                    Debug.Assert(node.Nodes.Count == 1); //Has a dummy node
+                                    string schemaName = node.Name;
+                                    FdoConnection conn = _connMgr.GetConnection(connName);
+                                    using (FdoFeatureService svc = conn.CreateFeatureService())
+                                    {
+                                        Debug.Assert(svc.SupportsPartialSchemaDiscovery());
+                                        List<string> classNames = svc.GetClassNames(schemaName);
+                                        GetClassNodesPartial(classNames, node);
+                                        node.Tag = false; //This node is no longer partial
+                                        node.Expand();
+                                    }
+                                }
+                            }
+                            break;
+                        case NODE_LEVEL_CLASS: //Class Node
+                            {
+                                bool isPartial = Convert.ToBoolean(node.Tag);
+                                if (isPartial)
+                                {
+                                    Debug.Assert(node.Nodes.Count == 1); //Has a dummy node
+                                    string schemaName = node.Parent.Name;
+                                    FdoConnection conn = _connMgr.GetConnection(connName);
+                                    using (FdoFeatureService svc = conn.CreateFeatureService())
+                                    {
+                                        Debug.Assert(svc.SupportsPartialSchemaDiscovery());
+                                        ClassDefinition cd = svc.GetClassByName(schemaName, node.Name);
+                                        if (cd != null)
+                                        {
+                                            UpdateClassNode(node, cd);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
         }
 
         void OnConnectionRefreshed(object sender, FdoToolbox.Core.EventArgs<string> e)
@@ -124,7 +213,7 @@ namespace FdoToolbox.Base.Controls
 
             node.ContextMenuStrip = _explorer.GetContextMenu(NODE_CONNECTION);
 
-            GetSchemaNodes(node);
+            CreateSchemaNodes(node);
             root.Nodes.Add(node);
             node.Expand();
             root.Expand();
@@ -167,14 +256,14 @@ namespace FdoToolbox.Base.Controls
             
             node.ContextMenuStrip = _explorer.GetContextMenu(NODE_CONNECTION);
 
-            GetSchemaNodes(node);
+            CreateSchemaNodes(node);
             TreeNode root = _explorer.GetRootNode(RootNodeName);
             root.Nodes.Add(node);
             node.Expand();
             root.Expand();
         }
 
-        void GetSchemaNodes(TreeNode connNode)
+        void CreateSchemaNodes(TreeNode connNode)
         {
             FdoConnection conn = _connMgr.GetConnection(connNode.Name);
             if (conn != null)
@@ -182,19 +271,39 @@ namespace FdoToolbox.Base.Controls
                 SetConnectionToolTip(connNode, conn);
                 using (FdoFeatureService service = conn.CreateFeatureService())
                 {
-                    FeatureSchemaCollection schemas = service.DescribeSchema();
-                    foreach (FeatureSchema schema in schemas)
+                    if (service.SupportsPartialSchemaDiscovery())
                     {
-                        TreeNode schemaNode = new TreeNode();
-                        schemaNode.Name = schemaNode.Text = schema.Name;
-                        schemaNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_SCHEMA);
-                        schemaNode.ImageKey = schemaNode.SelectedImageKey = IMG_SCHEMA;
-                        GetClassNodes(schema, schemaNode);
-                        connNode.Nodes.Add(schemaNode);
-                        schemaNode.Expand();
+                        List<string> schemaNames = service.GetSchemaNames();
+                        foreach (string name in schemaNames)
+                        {
+                            TreeNode schemaNode = CreateSchemaNode(name, true);
+                            connNode.Nodes.Add(schemaNode);
+                            schemaNode.Nodes.Add(ResourceService.GetString("TEXT_LOADING"));
+                        }
+                    }
+                    else
+                    {
+                        FeatureSchemaCollection schemas = service.DescribeSchema();
+                        foreach (FeatureSchema schema in schemas)
+                        {
+                            TreeNode schemaNode = CreateSchemaNode(schema.Name, false);
+                            GetClassNodesFull(schema, schemaNode);
+                            connNode.Nodes.Add(schemaNode);
+                            schemaNode.Expand();
+                        }
                     }
                 }
             }
+        }
+
+        private TreeNode CreateSchemaNode(string name, bool partial)
+        {
+            TreeNode schemaNode = new TreeNode();
+            schemaNode.Name = schemaNode.Text = name;
+            schemaNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_SCHEMA);
+            schemaNode.ImageKey = schemaNode.SelectedImageKey = IMG_SCHEMA;
+            schemaNode.Tag = partial;
+            return schemaNode;
         }
 
         private static void SetConnectionToolTip(TreeNode connNode, FdoConnection conn)
@@ -220,23 +329,64 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        void GetClassNodes(FeatureSchema schema, TreeNode schemaNode)
+        void GetClassNodesPartial(List<string> clsNames, TreeNode schemaNode)
+        {
+            schemaNode.Nodes.Clear();
+            foreach (string clsName in clsNames)
+            {
+                TreeNode classNode = new TreeNode();
+                classNode.Name = classNode.Text = clsName;
+                classNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_CLASS);
+                classNode.ImageKey = classNode.SelectedImageKey = IMG_FEATURE_CLASS;
+                classNode.Tag = true; //Is partial
+                classNode.Nodes.Add(ResourceService.GetString("TEXT_LOADING"));
+                schemaNode.Nodes.Add(classNode);
+            }
+        }
+
+        void GetClassNodesFull(FeatureSchema schema, TreeNode schemaNode)
         {
             foreach (ClassDefinition classDef in schema.Classes)
             {
-                TreeNode classNode = new TreeNode();
-                classNode.Name = classNode.Text = classDef.Name;
-                classNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_CLASS);
-                classNode.ImageKey = classNode.SelectedImageKey = (classDef.ClassType == ClassType.ClassType_FeatureClass ? IMG_FEATURE_CLASS : IMG_CLASS);
-                classNode.ToolTipText = string.Format("Type: {0}\nIsAbstract: {1}\nIsComputed: {2}\nBase Class: {3}\nUnique Constraints: {4}", 
-                    classDef.ClassType,
-                    classDef.IsAbstract,
-                    classDef.IsComputed,
-                    classDef.BaseClass != null ? classDef.BaseClass.Name : "(none)",
-                    GetUniqueConstraintString(classDef.UniqueConstraints));
-                GetPropertyNodes(classDef, classNode);
+                TreeNode classNode = CreateClassNode(classDef);
                 schemaNode.Nodes.Add(classNode);
             }
+        }
+
+        private void UpdateClassNode(TreeNode classNode, ClassDefinition classDef)
+        {
+            if (classNode.Level != NODE_LEVEL_CLASS)
+                return;
+
+            classNode.Nodes.Clear();
+            classNode.Name = classNode.Text = classDef.Name;
+            classNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_CLASS);
+            classNode.ImageKey = classNode.SelectedImageKey = (classDef.ClassType == ClassType.ClassType_FeatureClass ? IMG_FEATURE_CLASS : IMG_CLASS);
+            classNode.ToolTipText = string.Format("Type: {0}\nIsAbstract: {1}\nIsComputed: {2}\nBase Class: {3}\nUnique Constraints: {4}",
+                classDef.ClassType,
+                classDef.IsAbstract,
+                classDef.IsComputed,
+                classDef.BaseClass != null ? classDef.BaseClass.Name : "(none)",
+                GetUniqueConstraintString(classDef.UniqueConstraints));
+            classNode.Tag = false; //Is not partial
+            CreatePropertyNodes(classDef, classNode);
+        }
+
+        private TreeNode CreateClassNode(ClassDefinition classDef)
+        {
+            TreeNode classNode = new TreeNode();
+            classNode.Name = classNode.Text = classDef.Name;
+            classNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_CLASS);
+            classNode.ImageKey = classNode.SelectedImageKey = (classDef.ClassType == ClassType.ClassType_FeatureClass ? IMG_FEATURE_CLASS : IMG_CLASS);
+            classNode.ToolTipText = string.Format("Type: {0}\nIsAbstract: {1}\nIsComputed: {2}\nBase Class: {3}\nUnique Constraints: {4}",
+                classDef.ClassType,
+                classDef.IsAbstract,
+                classDef.IsComputed,
+                classDef.BaseClass != null ? classDef.BaseClass.Name : "(none)",
+                GetUniqueConstraintString(classDef.UniqueConstraints));
+            classNode.Tag = false; //Is not partial
+            CreatePropertyNodes(classDef, classNode);
+            return classNode;
         }
 
         private static string GetUniqueConstraintString(UniqueConstraintCollection constraints)
@@ -259,7 +409,7 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        void GetPropertyNodes(ClassDefinition classDef, TreeNode classNode)
+        void CreatePropertyNodes(ClassDefinition classDef, TreeNode classNode)
         {
             foreach (PropertyDefinition propDef in classDef.Properties)
             {
