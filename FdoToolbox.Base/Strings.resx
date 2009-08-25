@@ -514,6 +514,9 @@
   <data name="QUESTION_UNSAVED_CHANGES" xml:space="preserve">
     <value>You have unsaved changes. Save now?</value>
   </data>
+  <data name="TEXT_LOADING" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
   <data name="TITLE_BULK_DELETE" xml:space="preserve">
     <value>Bulk Delete</value>
   </data>
@@ -651,6 +654,9 @@
   </data>
   <data name="TITLE_VALIDATE_EXPRESSION" xml:space="preserve">
     <value>Validate Expression</value>
+  </data>
+  <data name="TT_EXPAND" xml:space="preserve">
+    <value>Click to expand</value>
   </data>
   <data name="UI_CONSOLE" xml:space="preserve">
     <value>Application Console</value>

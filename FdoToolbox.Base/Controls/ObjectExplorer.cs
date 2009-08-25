@@ -52,7 +52,7 @@ namespace FdoToolbox.Base.Controls
         private void InitTreeView()
         {
             objTreeView = new TreeView();
-            objTreeView.ShowLines = false;
+            objTreeView.ShowLines = true;
             objTreeView.ShowNodeToolTips = true;
             objTreeView.ShowPlusMinus = true;
             objTreeView.ShowRootLines = true;
@@ -67,11 +67,17 @@ namespace FdoToolbox.Base.Controls
                 }
             };
             objTreeView.AfterSelect += new TreeViewEventHandler(OnAfterSelect);
+            objTreeView.AfterExpand += new TreeViewEventHandler(OnAfterExpand);
+        }
+
+        void OnAfterExpand(object sender, TreeViewEventArgs e)
+        {
+            AfterExpansion(this, e);   
         }
 
         void OnAfterSelect(object sender, TreeViewEventArgs e)
         {
-            AfterSelection(this, EventArgs.Empty);
+            AfterSelection(this, e);
         }
 
         public override bool CanClose
@@ -135,6 +141,8 @@ namespace FdoToolbox.Base.Controls
             return null;
         }
 
-        public event EventHandler AfterSelection = delegate { };
+        public event TreeViewEventHandler AfterExpansion = delegate { };
+
+        public event TreeViewEventHandler AfterSelection = delegate { };
     }
 }

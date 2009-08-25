@@ -272,6 +272,23 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
+        /// If true, will use full schema discovery for IDescribeSchema, even if the underlying
+        /// provider supports enhanced IDescribeSchema
+        /// </summary>
+        private bool _forceFullSchemaDiscovery = false;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoFeatureService"/> class.
+        /// </summary>
+        /// <param name="conn">The connection.</param>
+        /// <param name="forceFullSchemaDiscovery">if set to <c>true</c> [forces full schema discovery].</param>
+        public FdoFeatureService(IConnection conn, bool forceFullSchemaDiscovery)
+            : this(conn)
+        {
+            _forceFullSchemaDiscovery = forceFullSchemaDiscovery;
+        }
+
+        /// <summary>
         /// Finalizer
         /// </summary>
         ~FdoFeatureService()
@@ -913,16 +930,6 @@ namespace FdoToolbox.Core.Feature
             if (string.IsNullOrEmpty(className))
                 return null;
 
-            FeatureSchema schema = GetSchemaByName(schemaName);
-            if (schema != null)
-            {
-                foreach (ClassDefinition classDef in schema.Classes)
-                {
-                    if (classDef.Name == className)
-                        return classDef;
-                }
-            }
-            /*
             if (SupportsPartialSchemaDiscovery())
             {
                 ClassDefinition classDef = null;
@@ -946,7 +953,7 @@ namespace FdoToolbox.Core.Feature
                             return classDef;
                     }
                 }
-            }*/
+            }
             return null;
         }
 
@@ -2266,8 +2273,10 @@ namespace FdoToolbox.Core.Feature
         public bool SupportsPartialSchemaDiscovery()
         {
             int[] cmds = this.Connection.CommandCapabilities.Commands;
-            return (Array.IndexOf<int>(cmds, (int)CommandType.CommandType_GetClassNames) >= 0
-                 && Array.IndexOf<int>(cmds, (int)CommandType.CommandType_GetSchemaNames) >= 0);
+            bool supportedCmds = (Array.IndexOf<int>(cmds, (int)CommandType.CommandType_GetClassNames) >= 0
+                               && Array.IndexOf<int>(cmds, (int)CommandType.CommandType_GetSchemaNames) >= 0);
+
+            return supportedCmds && !_forceFullSchemaDiscovery;
         }
 
         /// <summary>
