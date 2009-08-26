@@ -1,9 +1,13 @@
 #summary Frequently Asked Questions
 #labels Featured
 
+=== Q: What version of FDO does FDO Toolbox use? ===
+
+A: 3.4.0. FDO Toolbox v0.6.0 and older releases use FDO 3.3.x
+
 === Q: How do I supply the ConnectionString parameter for the ODBC Provider? ===
 
-A: You must surround the value in double quotes.
+A: You must surround the value in double quotes. Alternatively, use the specialised ODBC connection dialog.
 
 === Q: Where are my preferences stored at? ===
 
@@ -17,23 +21,17 @@ A: As of version 0.5.8, you will get a detailed explanation of why the source sc
 
 A: When connecting to Oracle, leave the OracleSchema and KingFdoClass properties blank.
 
-=== Q: Select Aggregates do not work in the Data Preview (using OSGeo.KingOracle) ===
-
-~~A: The Data Preview's UI (and many others) are driven by the connection's capabilities, thus preventing you from doing illegal/unsupported actions. Basically [http://trac.osgeo.org/fdo/ticket/376 the provider is falsely reporting that Select Aggregates is supported, when it actually isn't]~~
-
-A: A newer release of KingOracle is available [http://www.sl-king.com/fdooracle here] that supports SelectAggregates. Note that because there is no provider targeting FDO 3.4, this provider will not work in the trunk builds of FDO Toolbox and can only be used in v0.6.0 and older releases.
-
 === Q: Does FDO Toolbox support creating Value Constraints for Data Properties? ===
 
 A: Yes
 
 === Q: Does FDO Toolbox support Association Properties? ===
 
-A: [http://code.google.com/p/fdotoolbox/issues/detail?id=126 A ticket] has been created for this issue.
+A: Yes
 
 === Q: Does FDO Toolbox support Object Properties? ===
 
-A: [http://code.google.com/p/fdotoolbox/issues/detail?id=125 A ticket] has been created for this issue.
+A: Yes
 
 === Q: Does FDO Toolbox support Raster Properties? ===
 
@@ -47,29 +45,21 @@ A: Not at this point in time
 
 A: Not at this point in time
 
-=== Q: What is the difference between Lite and Full releases? ===
-
-A: Lite releases do not include the FDO binaries, you will need the [http://fdo.osgeo.org FDO binaries]. You may be prompted for the directory containing the FDO binaries, this is a one-off thing. 
-
-=== Q: What is the release cycle for Lite and Full releases? === 
-
-~~A: Every release will have a Lite version. Only major point releases (0.4, 0.5, ...) will have Full releases or when a newer version of FDO is released.~~
-
-A: As of 0.7 all new releases will be full releases bundled with the most recent weekly build of FDO 3.4.0.
-
 === Q: Can I run FDO Toolbox in Linux (via Mono)? ===
 
-A: No, as the FDO managed wrapper libraries are mixed-mode assemblies and Mono will most likely [http://www.jprl.com/Blog/archive/development/mono/2008/Jan-27.html never support the capability]. However certain parts of FDO Toolbox (such as command-line utilities) are on the roadmap to be ported to linux.
-
-=== Q: Does FDO Toolbox work with FDO 3.4.0 weekly builds? ===
-
-~~A: Ad-hoc testing (ie. Overwriting the FDO binaries with v3.4 ones) suggests that it does work. However it is recommended to only use the supported version of FDO (as of the most recent release, is v3.3.1)~~
-
-A: Yes, as of 0.7, FDO Toolbox will be built against FDO 3.4 binaries. It will no longer be compatible with FDO 3.3.x as it will be using newer APIs introduced in 3.4
+A: No, as the FDO managed wrapper libraries are mixed-mode assemblies and Mono will most likely [http://www.jprl.com/Blog/archive/development/mono/2008/Jan-27.html never support the capability]. However certain parts of FDO Toolbox (such as command-line utilities) are on the roadmap to be ported to linux. To get a full Linux port of FDO Toolbox requires a rewrite of the application (at worst), or a rethinking of how the FDO managed API is created (at best).
 
 === Q: I get crashes on the Map Data Preview for some data sources ===
 
 A: FDO stores geometries as FGF (FDO Geometry Format) which is a superset of WKB, the SharpMap rendering library used currently only supports rendering WKB geometries. Thus it will break down on incompatible/unsupported geometries.
+
+=== Q: Where can I get add-ins for FDO Toolbox? ===
+
+A: [http://fdotoolbox-addins.googlecode.com The add-in project page]. Unfortunatelty it is quite empty at the moment.
+
+=== Q: I have an idea for a new feature ===
+
+A: File an enhacement issue.
 
 === Q: Are the APIs stable enough to develop extension modules against? ===
 
