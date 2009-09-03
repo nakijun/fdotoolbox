@@ -73,6 +73,47 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
+        /// Gets the CLR value.
+        /// </summary>
+        /// <param name="val">The val.</param>
+        /// <returns></returns>
+        public static object GetClrValue(DataValue val)
+        {
+            if (val == null || val.IsNull())
+                return null;
+
+            switch (val.DataType)
+            {
+                case DataType.DataType_BLOB:
+                    return ((BLOBValue)val).Data;
+                case DataType.DataType_Boolean:
+                    return ((BooleanValue)val).Boolean;
+                case DataType.DataType_Byte:
+                    return ((ByteValue)val).Byte;
+                case DataType.DataType_CLOB:
+                    return ((CLOBValue)val).Data;
+                case DataType.DataType_DateTime:
+                    return ((DateTimeValue)val).DateTime;
+                case DataType.DataType_Decimal:
+                    return ((DecimalValue)val).Decimal;
+                case DataType.DataType_Double:
+                    return ((DoubleValue)val).Double;
+                case DataType.DataType_Int16:
+                    return ((Int16Value)val).Int16;
+                case DataType.DataType_Int32:
+                    return ((Int32Value)val).Int32;
+                case DataType.DataType_Int64:
+                    return ((Int64Value)val).Int64;
+                case DataType.DataType_Single:
+                    return ((SingleValue)val).Single;
+                case DataType.DataType_String:
+                    return ((StringValue)val).String;
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
         /// Gets a FDO literal value type from a CLR type
         /// </summary>
         /// <param name="value"></param>

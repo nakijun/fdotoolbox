@@ -104,6 +104,7 @@
     <Compile Include="ETL\ObjectArrayKeys.cs" />
     <Compile Include="ETL\Operations\FdoBatchedOutputOperation.cs" />
     <Compile Include="ETL\Operations\FdoBranchingOperation.cs" />
+    <Compile Include="ETL\Operations\FdoDataValueConversionOperation.cs" />
     <Compile Include="ETL\Operations\FdoFeatureTableInputOperation.cs" />
     <Compile Include="ETL\Operations\FdoFilteredOperation.cs" />
     <Compile Include="ETL\Operations\FdoInputOperation.cs" />
