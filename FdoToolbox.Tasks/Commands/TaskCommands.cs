@@ -88,8 +88,8 @@ namespace FdoToolbox.Tasks.Commands
                 if (bcp != null)
                 {
                     FdoBulkCopyOptions opts = bcp.Options;
-                    using (FdoFeatureService srcService = opts.SourceConnection.CreateFeatureService())
-                    using (FdoFeatureService destService = opts.TargetConnection.CreateFeatureService())
+                    using (FdoFeatureService srcService = FdoConnectionUtil.CreateFeatureService(opts.SourceConnection))
+                    using (FdoFeatureService destService = FdoConnectionUtil.CreateFeatureService(opts.TargetConnection))
                     {
                         FeatureSchema srcSchema = srcService.GetSchemaByName(opts.SourceSchema);
                         IncompatibleSchema incSchema = null;

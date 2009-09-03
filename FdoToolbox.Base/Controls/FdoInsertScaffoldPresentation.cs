@@ -59,7 +59,7 @@ namespace FdoToolbox.Base.Controls
             _view.InitializeGrid();
             _view.UseTransactionEnabled = (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsTransactions).Value);
 
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 ClassDefinition cd = service.GetClassByName(_className);
                 if (cd != null)
@@ -88,7 +88,7 @@ namespace FdoToolbox.Base.Controls
 
         internal void Insert()
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 service.InsertFeature(_className, _view.GetValues(), _view.UseTransaction);
             }

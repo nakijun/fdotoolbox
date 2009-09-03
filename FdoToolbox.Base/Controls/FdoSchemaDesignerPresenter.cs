@@ -99,7 +99,7 @@ namespace FdoToolbox.Base.Controls
             _view = view;
             ImageInit();
             _conn = conn;
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 _schema = service.GetSchemaByName(schemaName);
                 if (_schema == null)
@@ -500,7 +500,7 @@ namespace FdoToolbox.Base.Controls
         {
             if (_conn != null)
             {
-                using (FdoFeatureService service = _conn.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
                 {
                     IncompatibleSchema incSchema;
                     if (!service.CanApplySchema(_schema, out incSchema))
@@ -543,7 +543,7 @@ namespace FdoToolbox.Base.Controls
             {
                 FdoConnection conn = ExpressUtility.CreateFlatFileConnection(sdfFile);
                 conn.Open();
-                using (FdoFeatureService service = conn.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                 {
                     service.ApplySchema(_schema);
                 }
@@ -561,7 +561,7 @@ namespace FdoToolbox.Base.Controls
             if (_conn != null)
             {
                 ValidateSchema();
-                using (FdoFeatureService service = _conn.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
                 {
                     service.ApplySchema(_schema);
                 }

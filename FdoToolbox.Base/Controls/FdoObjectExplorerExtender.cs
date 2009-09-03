@@ -122,28 +122,6 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        /// <summary>
-        /// If true, the connection will use partial schema discovery
-        /// </summary>
-        /// <param name="conn">The connection.</param>
-        /// <returns></returns>
-        static bool ShouldForceFullSchemaDiscovery(FdoConnection conn)
-        {
-            string[] providers = Preferences.ExcludePartialSchemaProviders;
-            
-            if (providers.Length == 0) //Nothing to ignore
-                return false;
-
-            string prvName = conn.Provider;
-            foreach (string prv in providers)
-            {
-                if (prvName == prv) //Is in ignore list, 
-                    return true;
-            }
-
-            return false; //Not in ignore list
-        }
-
         void OnAfterNodeExpansion(object sender, TreeViewEventArgs e)
         {
             if (e.Action == TreeViewAction.Expand)
@@ -172,7 +150,7 @@ namespace FdoToolbox.Base.Controls
                                     string schemaName = node.Name;
                                     FdoConnection conn = _connMgr.GetConnection(connName);
                                     
-                                    using (FdoFeatureService svc = conn.CreateFeatureService())
+                                    using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(conn))
                                     {
                                         Debug.Assert(svc.SupportsPartialSchemaDiscovery());
                                         List<string> classNames = svc.GetClassNames(schemaName);
@@ -191,7 +169,7 @@ namespace FdoToolbox.Base.Controls
                                     Debug.Assert(node.Nodes.Count == 1); //Has a dummy node
                                     string schemaName = node.Parent.Name;
                                     FdoConnection conn = _connMgr.GetConnection(connName);
-                                    using (FdoFeatureService svc = conn.CreateFeatureService())
+                                    using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(conn))
                                     {
                                         Debug.Assert(svc.SupportsPartialSchemaDiscovery());
                                         ClassDefinition cd = svc.GetClassByName(schemaName, node.Name);
@@ -292,8 +270,7 @@ namespace FdoToolbox.Base.Controls
             if (conn != null)
             {
                 SetConnectionToolTip(connNode, conn);
-                bool force = ShouldForceFullSchemaDiscovery(conn);
-                using (FdoFeatureService service = conn.CreateFeatureService(force))
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                 {
                     if (service.SupportsPartialSchemaDiscovery())
                     {
@@ -332,7 +309,7 @@ namespace FdoToolbox.Base.Controls
 
         private static void SetConnectionToolTip(TreeNode connNode, FdoConnection conn)
         {
-            using (FdoFeatureService service = conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
             {
                 List<string> ctxStrings = new List<string>();
                 ICollection<SpatialContextInfo> contexts = service.GetSpatialContexts();

@@ -85,7 +85,7 @@ namespace FdoToolbox.Base.Controls
 
         public void GetSpatialContexts()
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 _view.SpatialContexts = new BindingList<SpatialContextInfo>(service.GetSpatialContexts());
             }
@@ -93,7 +93,7 @@ namespace FdoToolbox.Base.Controls
 
         public void AddSpatialContext(SpatialContextInfo sci)
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 service.CreateSpatialContext(sci, false);
             }
@@ -101,7 +101,7 @@ namespace FdoToolbox.Base.Controls
 
         public void UpdateSpatialContext(SpatialContextInfo sci)
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 service.CreateSpatialContext(sci, true);
             }
@@ -109,7 +109,7 @@ namespace FdoToolbox.Base.Controls
 
         public void DeleteSpatialContext(SpatialContextInfo sci)
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 service.DestroySpatialContext(sci);
             }

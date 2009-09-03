@@ -260,7 +260,7 @@ namespace FdoToolbox.Tasks.Controls
         {
             _view.RemoveAllMappings();
             FdoConnection targetConn = GetTargetConnection();
-            using (FdoFeatureService service = targetConn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(targetConn))
             {
                 List<string> classes = service.GetClassNames(_view.SelectedTargetSchema);
                 _view.MappableClasses = classes;
@@ -312,7 +312,7 @@ namespace FdoToolbox.Tasks.Controls
             _view.MapClass(srcClass, targetClass);
             _classMappings[srcClass] = targetClass;
             FdoConnection conn = GetTargetConnection();
-            using (FdoFeatureService service = conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
             {
                 ClassDefinition cd = service.GetClassByName(_view.SelectedTargetSchema, targetClass);
                 if (cd != null)

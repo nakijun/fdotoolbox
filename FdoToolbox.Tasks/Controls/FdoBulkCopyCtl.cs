@@ -577,7 +577,7 @@ namespace FdoToolbox.Tasks.Controls
                 TreeNode classNode = exprNode.Parent.Parent;
                 ExpressionMappingInfo map = (ExpressionMappingInfo)exprNode.Tag;
                 FdoConnection conn = _presenter.GetSourceConnection();
-                using (FdoFeatureService service = conn.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                 {
                     ClassDefinition cd = service.GetClassByName(this.SelectedSourceSchema, classNode.Name);
                     if (cd != null)
@@ -605,7 +605,7 @@ namespace FdoToolbox.Tasks.Controls
             TreeNode exprNode = treeMappings.SelectedNode;
             TreeNode classNode = exprNode.Parent;
             FdoConnection conn = _presenter.GetSourceConnection();
-            using (FdoFeatureService service = conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
             {
                 ClassDefinition cd = service.GetClassByName(this.SelectedSourceSchema, classNode.Name);
                 if (cd != null)
@@ -689,7 +689,7 @@ namespace FdoToolbox.Tasks.Controls
             TreeNode filterNode = treeMappings.SelectedNode;
             TreeNode classNode = filterNode.Parent.Parent;
             FdoConnection conn = _presenter.GetSourceConnection();
-            using (FdoFeatureService service = conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
             {
                 ClassDefinition cd = service.GetClassByName(this.SelectedSourceSchema, classNode.Name);
                 if (cd != null)
@@ -707,7 +707,7 @@ namespace FdoToolbox.Tasks.Controls
         {
             TreeNode delNode = treeMappings.SelectedNode;
             FdoConnection conn = _presenter.GetTargetConnection();
-            using (FdoFeatureService service = conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
             {
                 if (service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Delete))
                 {

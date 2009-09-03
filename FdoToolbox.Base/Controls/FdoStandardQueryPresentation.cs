@@ -65,7 +65,7 @@ namespace FdoToolbox.Base.Controls
         {
             _view = view;
             _conn = conn;
-            _service = _conn.CreateFeatureService();
+            _service = FdoConnectionUtil.CreateFeatureService(_conn);
             _view.OrderingEnabled = false;
         }
 
