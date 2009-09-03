@@ -29,6 +29,7 @@ namespace FdoToolbox.Base.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExpressionEditor));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnFunctions = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnConditions = new System.Windows.Forms.ToolStripDropDownButton();
@@ -36,6 +37,7 @@ namespace FdoToolbox.Base.Forms
             this.btnSpatial = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnValidate = new System.Windows.Forms.ToolStripButton();
+            this.btnGetValues = new System.Windows.Forms.ToolStripButton();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.ctxInsert = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -49,12 +51,24 @@ namespace FdoToolbox.Base.Forms
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.exprPanel = new System.Windows.Forms.Panel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.txtExpression = new System.Windows.Forms.RichTextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.btnHide = new System.Windows.Forms.Button();
+            this.btnFetch = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lstValues = new System.Windows.Forms.ListBox();
+            this.cmbProperty = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this._autoCompleteTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.lblValueCount = new System.Windows.Forms.Label();
             this.toolStrip1.SuspendLayout();
             this.ctxInsert.SuspendLayout();
             this.panel1.SuspendLayout();
             this.exprPanel.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -65,7 +79,8 @@ namespace FdoToolbox.Base.Forms
             this.btnDistance,
             this.btnSpatial,
             this.toolStripSeparator1,
-            this.btnValidate});
+            this.btnValidate,
+            this.btnGetValues});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(637, 25);
@@ -117,6 +132,15 @@ namespace FdoToolbox.Base.Forms
             this.btnValidate.Size = new System.Drawing.Size(65, 22);
             this.btnValidate.Text = "Validate";
             this.btnValidate.Click += new System.EventHandler(this.btnValidate_Click);
+            // 
+            // btnGetValues
+            // 
+            this.btnGetValues.Image = ((System.Drawing.Image)(resources.GetObject("btnGetValues.Image")));
+            this.btnGetValues.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGetValues.Name = "btnGetValues";
+            this.btnGetValues.Size = new System.Drawing.Size(78, 22);
+            this.btnGetValues.Text = "Get Values";
+            this.btnGetValues.Click += new System.EventHandler(this.btnGetValues_Click);
             // 
             // btnOK
             // 
@@ -226,12 +250,36 @@ namespace FdoToolbox.Base.Forms
             // 
             // exprPanel
             // 
-            this.exprPanel.Controls.Add(this.txtExpression);
+            this.exprPanel.Controls.Add(this.splitContainer1);
             this.exprPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.exprPanel.Location = new System.Drawing.Point(0, 25);
             this.exprPanel.Name = "exprPanel";
             this.exprPanel.Size = new System.Drawing.Size(637, 246);
             this.exprPanel.TabIndex = 4;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.txtExpression);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.lblValueCount);
+            this.splitContainer1.Panel2.Controls.Add(this.label4);
+            this.splitContainer1.Panel2.Controls.Add(this.btnHide);
+            this.splitContainer1.Panel2.Controls.Add(this.btnFetch);
+            this.splitContainer1.Panel2.Controls.Add(this.label3);
+            this.splitContainer1.Panel2.Controls.Add(this.lstValues);
+            this.splitContainer1.Panel2.Controls.Add(this.cmbProperty);
+            this.splitContainer1.Panel2.Controls.Add(this.label2);
+            this.splitContainer1.Size = new System.Drawing.Size(637, 246);
+            this.splitContainer1.SplitterDistance = 437;
+            this.splitContainer1.TabIndex = 6;
             // 
             // txtExpression
             // 
@@ -239,28 +287,116 @@ namespace FdoToolbox.Base.Forms
             this.txtExpression.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtExpression.Location = new System.Drawing.Point(0, 0);
             this.txtExpression.Name = "txtExpression";
-            this.txtExpression.Size = new System.Drawing.Size(637, 246);
+            this.txtExpression.Size = new System.Drawing.Size(437, 246);
             this.txtExpression.TabIndex = 5;
             this.txtExpression.Text = "";
             this.txtExpression.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtExpression_KeyDown);
             this.txtExpression.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtExpression_KeyUp);
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.Location = new System.Drawing.Point(16, 197);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(167, 46);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Double click a value to insert that value at the current text position";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnHide
+            // 
+            this.btnHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnHide.Location = new System.Drawing.Point(108, 171);
+            this.btnHide.Name = "btnHide";
+            this.btnHide.Size = new System.Drawing.Size(75, 23);
+            this.btnHide.TabIndex = 5;
+            this.btnHide.Text = "Hide";
+            this.btnHide.UseVisualStyleBackColor = true;
+            this.btnHide.Click += new System.EventHandler(this.btnHide_Click);
+            // 
+            // btnFetch
+            // 
+            this.btnFetch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFetch.Location = new System.Drawing.Point(26, 171);
+            this.btnFetch.Name = "btnFetch";
+            this.btnFetch.Size = new System.Drawing.Size(75, 23);
+            this.btnFetch.TabIndex = 4;
+            this.btnFetch.Text = "Fetch";
+            this.btnFetch.UseVisualStyleBackColor = true;
+            this.btnFetch.Click += new System.EventHandler(this.btnFetch_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(13, 44);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Values";
+            // 
+            // lstValues
+            // 
+            this.lstValues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstValues.FormattingEnabled = true;
+            this.lstValues.Location = new System.Drawing.Point(16, 70);
+            this.lstValues.Name = "lstValues";
+            this.lstValues.Size = new System.Drawing.Size(168, 95);
+            this.lstValues.TabIndex = 2;
+            this.lstValues.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstValues_MouseDoubleClick);
+            // 
+            // cmbProperty
+            // 
+            this.cmbProperty.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbProperty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbProperty.FormattingEnabled = true;
+            this.cmbProperty.Location = new System.Drawing.Point(16, 20);
+            this.cmbProperty.Name = "cmbProperty";
+            this.cmbProperty.Size = new System.Drawing.Size(169, 21);
+            this.cmbProperty.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(77, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Property Name";
+            // 
+            // lblValueCount
+            // 
+            this.lblValueCount.AutoSize = true;
+            this.lblValueCount.Location = new System.Drawing.Point(55, 44);
+            this.lblValueCount.Name = "lblValueCount";
+            this.lblValueCount.Size = new System.Drawing.Size(0, 13);
+            this.lblValueCount.TabIndex = 7;
             // 
             // ExpressionEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(637, 320);
+            this.ControlBox = false;
             this.Controls.Add(this.exprPanel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
             this.Name = "ExpressionEditor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Expression Editor";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ctxInsert.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.exprPanel.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,5 +426,15 @@ namespace FdoToolbox.Base.Forms
         private System.Windows.Forms.Panel exprPanel;
         private System.Windows.Forms.RichTextBox txtExpression;
         private System.Windows.Forms.ToolTip _autoCompleteTooltip;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ToolStripButton btnGetValues;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnHide;
+        private System.Windows.Forms.Button btnFetch;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ListBox lstValues;
+        private System.Windows.Forms.ComboBox cmbProperty;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblValueCount;
     }
 }
