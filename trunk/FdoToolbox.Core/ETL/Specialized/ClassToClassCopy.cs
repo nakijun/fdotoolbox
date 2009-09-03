@@ -99,6 +99,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             FdoBulkCopyOptions bcpOptions = _copt.Parent;
             IFdoOperation input = new FdoInputOperation(bcpOptions.SourceConnection, CreateSourceQuery(_copt));
             IFdoOperation output = null;
+            IFdoOperation convert = null;
             NameValueCollection propertyMappings = new NameValueCollection();
             if (_copt.SourcePropertyNames.Length > 0)
             {
@@ -147,10 +148,16 @@ namespace FdoToolbox.Core.ETL.Specialized
                 }
             }
 
+            bool nullOnFailure = true;
+            bool truncate = true;
+            List<DataTypeMapping> mappings = new List<DataTypeMapping>();
+            convert = new FdoDataValueConversionOperation(mappings, nullOnFailure, truncate);
+
             string sourceClass = _copt.SourceClassName;
             string targetClass = _copt.TargetClassName;
 
             Register(input);
+            Register(convert);
             Register(output);
         }
 

@@ -30,7 +30,7 @@ namespace FdoToolbox.Core.Feature
     /// Defines a mapping of a property in a source class to a property
     /// in a target class.
     /// </summary>
-    internal class DataTypeMapping
+    public class DataTypeMapping
     {
         private string _SourceProperty;
 
@@ -76,7 +76,7 @@ namespace FdoToolbox.Core.Feature
             set { _TargetDataType = value; }
         }
 
-        internal DataTypeMapping(string srcName, string targetName, DataType srcType, DataType targetType)
+        public DataTypeMapping(string srcName, string targetName, DataType srcType, DataType targetType)
         {
             this.SourceProperty = srcName;
             this.TargetProperty = targetName;
@@ -84,7 +84,7 @@ namespace FdoToolbox.Core.Feature
             this.TargetDataType = targetType;
         }
 
-        internal DataTypeMapping(DataPropertyDefinition srcProp, DataPropertyDefinition targetProp)
+        public DataTypeMapping(DataPropertyDefinition srcProp, DataPropertyDefinition targetProp)
             : this(srcProp.Name, targetProp.Name, srcProp.DataType, targetProp.DataType)
         { }
     }
