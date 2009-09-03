@@ -90,7 +90,7 @@ namespace FdoToolbox.Base.Controls
             _timer = new Timer();
             _view = view;
             _connection = conn;
-            _service = conn.CreateFeatureService();
+            _service = FdoConnectionUtil.CreateFeatureService(conn);
             _queryViews = new Dictionary<QueryMode, IQuerySubView>();
             _queryWorker = new BackgroundWorker();
             _queryWorker.WorkerReportsProgress = true;
@@ -163,7 +163,7 @@ namespace FdoToolbox.Base.Controls
         void DoWork(object sender, DoWorkEventArgs e)
         {
             IFdoReader reader = null;
-            using (FdoFeatureService service = _connection.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_connection))
             {
                 try
                 {
@@ -290,7 +290,7 @@ namespace FdoToolbox.Base.Controls
             {
                 if (_service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select))
                 {
-                    using (FdoFeatureService service = _connection.CreateFeatureService())
+                    using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_connection))
                     {
                         ClassDefinition classDef = service.GetClassByName(initSchema, initClass);
                         if (!ExpressUtility.HasRaster(classDef))
@@ -481,7 +481,7 @@ namespace FdoToolbox.Base.Controls
                     _view.ShowError("Unable to generate an update filter. Possibly this result set has no unique identifiers or this result set was produced from a SQL query");
                     return;
                 }
-                using (FdoFeatureService service = _connection.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_connection))
                 {
                     //Update is based on a very simple premise, the filter should produce the
                     //same number of affected results when selecting and updating.
@@ -510,7 +510,7 @@ namespace FdoToolbox.Base.Controls
                 _view.ShowError("Unable to generate a delete filter. Possibly this result set has no unique identifiers or this result set was produced from a SQL query");
                 return;
             }
-            using (FdoFeatureService service = _connection.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_connection))
             {
                 //Deleting is based on a very simple premise, the filter should produce the
                 //same number of affected results when selecting and deleting.

@@ -75,7 +75,7 @@ namespace FdoToolbox.Base.Forms
 
         public void ComputeExtents(IEnumerable<ClassDefinition> classes)
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 IEnvelope env = service.ComputeEnvelope(classes);
                 if (env != null)
@@ -110,7 +110,7 @@ namespace FdoToolbox.Base.Forms
             _view.Description = sci.Description;
             if (!string.IsNullOrEmpty(sci.ExtentGeometryText))
             {
-                using (FdoFeatureService service = _conn.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
                 {
                     using (IGeometry geom = service.GeometryFactory.CreateGeometry(sci.ExtentGeometryText))
                     {

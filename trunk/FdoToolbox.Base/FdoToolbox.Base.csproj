@@ -302,6 +302,7 @@
       <DependentUpon>ViewContent.cs</DependentUpon>
     </Compile>
     <Compile Include="EventWatcher.cs" />
+    <Compile Include="FdoConnectionUtil.cs" />
     <Compile Include="Forms\CoordinateSystemDialog.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -63,7 +63,7 @@ namespace FdoToolbox.Express.Controls
                 if (FileService.FileExists(_view.FeatureSchemaDefinition))
                 {
                     conn.Open();
-                    using (FdoFeatureService service = conn.CreateFeatureService())
+                    using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                     {
                         service.LoadSchemasFromXml(_view.FeatureSchemaDefinition);
                     }

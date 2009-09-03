@@ -148,7 +148,7 @@ namespace FdoToolbox.Base.Commands
                 TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
                 FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(connNode.Name);
-                using (FdoFeatureService service = conn.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                 {
                     FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
                     schemas.ReadXml(path);
@@ -205,7 +205,7 @@ namespace FdoToolbox.Base.Commands
                     TreeNode connNode = node;
                     FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                     FdoConnection conn = mgr.GetConnection(connNode.Name);
-                    using (FdoFeatureService service = conn.CreateFeatureService())
+                    using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                     {
                         service.WriteSchemaToXml(path);
                         Log.InfoFormatted(Res.GetString("LOG_SCHEMA_SAVED"), path);
@@ -217,7 +217,7 @@ namespace FdoToolbox.Base.Commands
                     TreeNode connNode = node.Parent;
                     FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                     FdoConnection conn = mgr.GetConnection(connNode.Name);
-                    using (FdoFeatureService service = conn.CreateFeatureService())
+                    using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                     {
                         service.WriteSchemaToXml(schemaNode.Name, path);
                         Log.InfoFormatted(Res.GetString("LOG_SCHEMA_SAVED_2"), connNode.Name, path);
@@ -236,7 +236,7 @@ namespace FdoToolbox.Base.Commands
             {
                 FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(schemaNode.Parent.Name);
-                using (FdoFeatureService service = conn.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                 {
                     try
                     {
@@ -319,7 +319,7 @@ namespace FdoToolbox.Base.Commands
                 {
                     FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                     FdoConnection conn = mgr.GetConnection(node.Parent.Parent.Name);
-                    using (FdoFeatureService service = conn.CreateFeatureService())
+                    using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                     {
                         string sName = node.Parent.Name;
                         string cName = node.Name;
@@ -355,7 +355,7 @@ namespace FdoToolbox.Base.Commands
                 {
                     FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                     FdoConnection conn = mgr.GetConnection(node.Parent.Name);
-                    using (FdoFeatureService service = conn.CreateFeatureService())
+                    using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                     {
                         string sName = node.Name;
                         FeatureSchema fs = service.GetSchemaByName(sName);

@@ -429,7 +429,7 @@ namespace FdoToolbox.Base.Controls
         {
             if (_classDef == null)
             {
-                using (FdoFeatureService service = _conn.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
                 {
                     _classDef = service.GetClassByName(this.ClassName);
                 }

@@ -64,7 +64,7 @@ namespace FdoToolbox.Base.Controls
 
         private void GetDataStores()
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 ReadOnlyCollection<DataStoreInfo> dstores = service.ListDataStores(true);
                 _view.DataStores = dstores;
@@ -84,7 +84,7 @@ namespace FdoToolbox.Base.Controls
 
         public void DestroyDataStore(NameValueCollection props)
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 using (IDestroyDataStore destroy = service.CreateCommand<IDestroyDataStore>(CommandType.CommandType_DestroyDataStore))
                 {
@@ -99,7 +99,7 @@ namespace FdoToolbox.Base.Controls
 
         public void CreateDataStore(NameValueCollection props)
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 using (ICreateDataStore create = service.CreateCommand<ICreateDataStore>(CommandType.CommandType_CreateDataStore))
                 {

@@ -61,7 +61,7 @@ namespace FdoToolbox.Express.Controls
             _view.TargetConnectionNames = names;
             FdoConnection conn = _connMgr.GetConnection(_view.SourceConnectionName);
 
-            using (FdoFeatureService service = conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
             {
                 ICollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
                 List<string> scn = new List<string>();
@@ -95,7 +95,7 @@ namespace FdoToolbox.Express.Controls
             FdoConnection srcConn = _connMgr.GetConnection(_view.SourceConnectionName);
             FdoConnection targetConn = _connMgr.GetConnection(_view.SelectedTargetConnectionName);
 
-            using (FdoFeatureService service = srcConn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(srcConn))
             {
                 foreach (string ctxName in _view.SpatialContexts)
                 {

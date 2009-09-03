@@ -70,7 +70,7 @@ namespace FdoToolbox.Express.Controls
                 {
                     FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SHP", Path.GetDirectoryName(_view.ShpFile));
                     conn.Open();
-                    using (FdoFeatureService service = conn.CreateFeatureService())
+                    using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                     {
                         service.LoadSchemasFromXml(_view.FeatureSchemaDefinition);
                     }

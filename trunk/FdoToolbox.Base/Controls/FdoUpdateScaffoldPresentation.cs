@@ -67,7 +67,7 @@ namespace FdoToolbox.Base.Controls
             _view.InitializeGrid();
             _view.UseTransactionEnabled = (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsTransactions).Value);
 
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 ClassDefinition cd = service.GetClassByName(_className);
                 if (cd != null)
@@ -96,7 +96,7 @@ namespace FdoToolbox.Base.Controls
 
         internal void Update()
         {
-            using (FdoFeatureService service = _conn.CreateFeatureService())
+            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {
                 int updated = service.UpdateFeatures(_className, _view.GetValues(), _filter, _view.UseTransaction);
                 if (updated > 0)

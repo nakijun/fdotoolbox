@@ -45,13 +45,13 @@ namespace FdoToolbox.Express.Commands
                 TreeNode schemaNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
                 FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(schemaNode.Parent.Name);
-                using (FdoFeatureService service = conn.CreateFeatureService())
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
                 {
                     if (ExpressUtility.CreateFlatFileDataSource("OSGeo.SDF", path))
                     {
                         FdoConnection conn2 = ExpressUtility.CreateFlatFileConnection("OSGeo.SDF", path);
                         conn2.Open();
-                        using (FdoFeatureService service2 = conn2.CreateFeatureService())
+                        using (FdoFeatureService service2 = FdoConnectionUtil.CreateFeatureService(conn2))
                         {
                             OSGeo.FDO.Schema.FeatureSchema schema = service.GetSchemaByName(schemaNode.Name);
                             service2.ApplySchema(FdoFeatureService.CloneSchema(schema));
