@@ -46,6 +46,47 @@ namespace FdoToolbox.Core.Utility
         private FdoGeometryUtil() { }
 
         /// <summary>
+        /// Gets the geometric types.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static GeometricType[] GetGeometricTypes(int value)
+        {
+            if (value == (int)GeometricType.GeometricType_All)
+            {
+                return (GeometricType[])Enum.GetValues(typeof(GeometricType));
+            }
+            else
+            {
+                List<GeometricType> gts = new List<GeometricType>();
+                GeometricType[] gtypes = (GeometricType[])Enum.GetValues(typeof(GeometricType));
+                foreach (GeometricType gtype in gtypes)
+                {
+                    if ((value & (int)gtype) == (int)gtype)
+                        gts.Add(gtype);
+                }
+                return gts.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Gets the geometry types.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static GeometryType[] GetGeometryTypes(int value)
+        {
+            List<GeometryType> gts = new List<GeometryType>();
+            GeometryType[] gtypes = (GeometryType[])Enum.GetValues(typeof(GeometryType));
+            foreach (GeometryType gtype in gtypes)
+            {
+                if ((value & (int)gtype) == (int)gtype)
+                    gts.Add(gtype);
+            }
+            return gts.ToArray();
+        }
+
+        /// <summary>
         /// Converts a FGF binary to a WKB binary
         /// </summary>
         /// <param name="fgf"></param>

@@ -100,6 +100,10 @@ namespace FdoToolbox.Core.Feature
         /// <summary>
         /// The property has default values which are not supported
         /// </summary>
-        UnsupportedDefaultValues
+        UnsupportedDefaultValues,
+        /// <summary>
+        /// The property is a string/BLOB/CLOB and it has a length of 0
+        /// </summary>
+        ZeroLengthProperty
     }
 }

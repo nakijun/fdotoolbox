@@ -1464,6 +1464,16 @@ namespace FdoToolbox.Core.Feature
                             dp.ValueConstraint = null;
                         }
                         break;
+                    case IncompatiblePropertyReason.ZeroLengthProperty:
+                        {
+                            //Set length to maximum supported value or 255 if provider returns a nonsensical value
+                            ISchemaCapabilities caps = this.Connection.SchemaCapabilities;
+                            long length = caps.get_MaximumDataValueLength(dp.DataType);
+                            if (length <= 0)
+                                length = 255;
+                            dp.Length = (int)length;
+                        }
+                        break;
                 }
             }
         }
@@ -1524,7 +1534,11 @@ namespace FdoToolbox.Core.Feature
                     }
                     break;
                 case DataType.DataType_Double:
-                    throw new FeatureServiceException(Res.GetString("ERR_CANNOT_PROMOTE_DOUBLE"));
+                    {
+                        if (Array.IndexOf<DataType>(dataTypes, DataType.DataType_String) >= 0)
+                            dt = DataType.DataType_String;
+                    }
+                    break;
                 case DataType.DataType_Int16:
                     {
                         if (Array.IndexOf<DataType>(dataTypes, DataType.DataType_Int32) >= 0)
@@ -1736,6 +1750,17 @@ namespace FdoToolbox.Core.Feature
                             string propReason = "Unsupported data type: " + dataDef.DataType;
 
                             AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedDataType);
+                        }
+                    }
+
+                    if (dataDef != null && dataDef.Length == 0)
+                    {
+                        if (dataDef.DataType == DataType.DataType_String || dataDef.DataType == DataType.DataType_BLOB || dataDef.DataType == DataType.DataType_CLOB)
+                        {
+                            string classReason = "Class has a string/BLOB/CLOB property of zero-length";
+                            string propReason = "Zero-length property";
+
+                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.ZeroLengthProperty);
                         }
                     }
                 }

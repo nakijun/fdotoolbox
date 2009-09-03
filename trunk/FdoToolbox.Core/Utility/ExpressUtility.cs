@@ -393,6 +393,36 @@ namespace FdoToolbox.Core.Utility
                     string shpdir = Directory.Exists(targetPath) ? targetPath : Path.GetDirectoryName(targetPath);
                     source = CreateFlatFileConnection(sourceFile);
                     target = new FdoConnection("OSGeo.SHP", "DefaultFileLocation=" + shpdir);
+
+                    source.Open();
+
+                    //Verify source has only classes with single geometry storage and only one geometry
+                    using (FdoFeatureService svc = source.CreateFeatureService(true))
+                    {
+                        using (FeatureSchemaCollection schemas = svc.DescribeSchema())
+                        {
+                            foreach (FeatureSchema sch in schemas)
+                            {
+                                foreach (ClassDefinition cd in sch.Classes)
+                                {
+                                    int geomProps = 0;
+                                    foreach (PropertyDefinition pd in cd.Properties)
+                                    {
+                                        if (pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                                        {
+                                            GeometricPropertyDefinition gp = pd as GeometricPropertyDefinition;
+                                            GeometricType[] types = FdoGeometryUtil.GetGeometricTypes(gp.GeometryTypes);
+                                            if (types.Length != 1 || (types.Length == 1 && types[0] == GeometricType.GeometricType_All))
+                                                throw new FdoETLException(string.Format("Source file cannot be copied to a SHP file. {0}:{1}.{2} has more than one geometry storage type", sch.Name, cd.Name, pd.Name));
+                                            geomProps++;
+                                        }
+                                    }
+                                    if (geomProps > 1)
+                                        throw new FdoETLException("Source file cannot be copied to a SHP file. One or more feature classes have more than one geometry property");
+                                }
+                            }
+                        }
+                    }
                 }
                 else
                 {
@@ -402,8 +432,12 @@ namespace FdoToolbox.Core.Utility
                     target = CreateFlatFileConnection(targetPath);
                 }
 
-                source.Open();
-                target.Open();
+                //Source and target connections may have been opened before this point
+                if (source.State == FdoConnectionState.Closed)
+                    source.Open();
+
+                if (target.State == FdoConnectionState.Closed)
+                    target.Open();
 
                 options = new FdoBulkCopyOptions(source, target, true);
 
@@ -452,7 +486,7 @@ namespace FdoToolbox.Core.Utility
                 }
 
             }
-            catch (OSGeo.FDO.Common.Exception ex)
+            catch (Exception ex)
             {
                 if (source != null)
                     source.Dispose();
