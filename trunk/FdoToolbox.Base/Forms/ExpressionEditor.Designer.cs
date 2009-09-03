@@ -29,7 +29,6 @@ namespace FdoToolbox.Base.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExpressionEditor));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnFunctions = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnConditions = new System.Windows.Forms.ToolStripDropDownButton();
@@ -135,7 +134,7 @@ namespace FdoToolbox.Base.Forms
             // 
             // btnGetValues
             // 
-            this.btnGetValues.Image = ((System.Drawing.Image)(resources.GetObject("btnGetValues.Image")));
+            this.btnGetValues.Image = global::FdoToolbox.Base.Images.application_go;
             this.btnGetValues.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnGetValues.Name = "btnGetValues";
             this.btnGetValues.Size = new System.Drawing.Size(78, 22);
