@@ -32,6 +32,7 @@ using OSGeo.FDO.Connections.Capabilities;
 using OSGeo.FDO.Filter;
 using ICSharpCode.Core;
 using OSGeo.FDO.Expression;
+using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Base.Forms
 {
@@ -347,6 +348,7 @@ namespace FdoToolbox.Base.Forms
                 LoadDistanceOperations(distanceOps);
                 LoadSpatialOperations(spatialOps);
                 ApplyView();
+                splitContainer1.Panel2Collapsed = true;
             }
             txtExpression.Focus();
             txtExpression.SelectionStart = 0;
@@ -572,10 +574,10 @@ namespace FdoToolbox.Base.Forms
 
         private void LoadProperties()
         {
+            List<string> dataProps = new List<string>();
             foreach (PropertyDefinition propDef in _ClassDef.Properties)
             {
                 _autoCompleteItems[propDef.Name] = new PropertyItem(propDef);
-
                 ToolStripMenuItem item = new ToolStripMenuItem();
                 item.Text = item.Name = propDef.Name;
                 switch (propDef.PropertyType)
@@ -588,6 +590,7 @@ namespace FdoToolbox.Base.Forms
                             DataPropertyDefinition dataDef = (DataPropertyDefinition)propDef;
                             item.Image = ResourceService.GetBitmap("table");
                             item.ToolTipText = string.Format("Data Type: {0}\nLength: {1}", dataDef.DataType, dataDef.Length);
+                            dataProps.Add(propDef.Name);
                         }
                         break;
                     case PropertyType.PropertyType_GeometricProperty:
@@ -603,6 +606,7 @@ namespace FdoToolbox.Base.Forms
                 item.Click += new EventHandler(property_Click);
                 insertPropertyToolStripMenuItem.DropDown.Items.Add(item);
             }
+            cmbProperty.DataSource = dataProps;
         }
 
         private void LoadFunctionDefinitions(FunctionDefinitionCollection funcs)
@@ -1116,6 +1120,108 @@ namespace FdoToolbox.Base.Forms
                 buffer = txtExpression.Text.Substring(caretPos + 1, currentPos - caretPos - 1);
             }
             return res;
+        }
+
+        private void btnGetValues_Click(object sender, EventArgs e)
+        {
+            if (splitContainer1.Panel2Collapsed)
+                splitContainer1.Panel2Collapsed = false;
+        }
+
+        private void btnHide_Click(object sender, EventArgs e)
+        {
+            splitContainer1.Panel2Collapsed = true;
+        }
+
+        private void btnFetch_Click(object sender, EventArgs e)
+        {
+            if (cmbProperty.SelectedItem != null)
+            {
+                string prop = cmbProperty.SelectedItem.ToString();
+
+                //Try in order of support
+                //
+                // 1 - ISelectAggregate w/ distinct = true
+                // 2 - "SELECT DISTINCT [property] FROM [table]"
+                // 3 - Brute force. Prompt user for confirmation first
+
+                using (new TempCursor(Cursors.WaitCursor))
+                {
+                    using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(_conn))
+                    {
+                        if (svc.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
+                        {
+                            //SortedList not only allows us to hackishly get set-like qualities, but we get sorting for free.
+                            SortedList<string, string> values = new SortedList<string, string>();
+                            FeatureAggregateOptions opts = new FeatureAggregateOptions(_ClassDef.Name);
+                            opts.AddFeatureProperty(prop);
+                            opts.Distinct = true;
+                            using (IFdoReader reader = svc.SelectAggregates(opts))
+                            {
+                                while (reader.ReadNext())
+                                {
+                                    if (!reader.IsNull(prop))
+                                    {
+                                        values.Add(reader[prop].ToString(), string.Empty);
+                                    }
+                                }
+                            }
+                            lstValues.DataSource = new List<string>(values.Keys);
+                            lblValueCount.Text = "(" + values.Keys.Count + ")";
+                        }
+                        else if (svc.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SQLCommand))
+                        {
+                            string sql = string.Format("SELECT DISTINCT {0} FROM {1} ORDER BY {0}", prop, _ClassDef.Name);
+                            List<string> values = new List<string>();
+                            using (IFdoReader reader = svc.ExecuteSQLQuery(sql))
+                            {
+                                while (reader.ReadNext())
+                                {
+                                    if (!reader.IsNull(prop))
+                                    {
+                                        values.Add(reader[prop].ToString());
+                                    }
+                                }
+                            }
+                            lstValues.DataSource = values;
+                            lblValueCount.Text = "(" + values.Count + ")";
+                        }
+                        else
+                        {
+                            if (MessageService.AskQuestion("About to fetch distinct values by brute force. Continue?", "Get Values"))
+                            {
+                                //SortedList not only allows us to hackishly get set-like qualities, but we get sorting for free.
+                                SortedList<string, string> values = new SortedList<string, string>();
+
+                                FeatureQueryOptions query = new FeatureQueryOptions(_ClassDef.Name);
+                                query.AddFeatureProperty(prop);
+
+                                using (IFdoReader reader = svc.SelectFeatures(query))
+                                {
+                                    while (reader.ReadNext())
+                                    {
+                                        if (!reader.IsNull(prop))
+                                        {
+                                            values.Add(reader[prop].ToString(), string.Empty);
+                                        }
+                                    }
+                                }
+
+                                lstValues.DataSource = new List<string>(values.Keys);
+                                lblValueCount.Text = "(" + values.Keys.Count + ")";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void lstValues_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (lstValues.SelectedItem != null)
+            {
+                InsertText(lstValues.SelectedItem.ToString());
+            }
         }
     }
 }
