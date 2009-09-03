@@ -1102,10 +1102,10 @@ namespace FdoToolbox.Base.Forms
                 char c = txtExpression.Text[caretPos];
                 while(Char.IsLetterOrDigit(c))
                 {
-                    if (caretPos == 0)
+                    caretPos--;
+                    if (caretPos < 0)
                         break;
 
-                    caretPos--;
                     c = txtExpression.Text[caretPos];
                 }
 
