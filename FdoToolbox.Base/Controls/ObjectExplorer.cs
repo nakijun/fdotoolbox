@@ -59,6 +59,8 @@ namespace FdoToolbox.Base.Controls
             objTreeView.ImageList = imgList;
             objTreeView.Dock = DockStyle.Fill;
             objTreeView.AllowDrop = true;
+            objTreeView.DragDrop += new DragEventHandler(FileDragAndDropHandler.OnDragDrop);
+            objTreeView.DragEnter += new DragEventHandler(FileDragAndDropHandler.OnDragEnter);
             objTreeView.MouseDown += delegate(object sender, MouseEventArgs e)
             {
                 if (e.Button == MouseButtons.Right)
