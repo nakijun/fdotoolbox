@@ -52,6 +52,7 @@ namespace FdoToolbox.Base.Controls
                 connMgr.ConnectionRemoved += new ConnectionEventHandler(OnConnectionRemoved);
                 connMgr.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
             }
+            this.AllowDrop = false;
         }
 
         protected virtual void OnConnectionRenamed(object sender, ConnectionRenameEventArgs e) { }

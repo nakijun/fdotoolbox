@@ -126,58 +126,9 @@ namespace FdoToolbox.Base
             
             // Use the Idle event to update the status of menu and toolbar items.
             Application.Idle += OnApplicationIdle;
-
-            this.AllowDrop = true;
-            this.DragDrop += new DragEventHandler(OnDragDrop);
-            this.DragEnter += new DragEventHandler(OnDragEnter);
         }
 
-        void OnDragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-                if (a != null && a.Length > 0)
-                {
-                    e.Effect = DragDropEffects.Copy;
-                }
-                else
-                    e.Effect = DragDropEffects.None;
-            }
-            else
-                e.Effect = DragDropEffects.None;
-        }
-
-        void OnDragDrop(object sender, DragEventArgs e)
-        {
-            Array a = e.Data.GetData(DataFormats.FileDrop) as Array;
-            if (a != null && a.Length > 0)
-            {
-                IDragDropHandlerService handlerSvc = ServiceManager.Instance.GetService<IDragDropHandlerService>();
-                for (int i = 0; i < a.Length; i++)
-                {
-                    string file = a.GetValue(i).ToString();
-
-                    IList<IDragDropHandler> handlers = handlerSvc.GetHandlersForFile(file);
-
-                    if (handlers.Count == 0)
-                        continue;
-
-                    if (handlers.Count == 1)
-                    {
-                        using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
-                        {
-                            handlers[0].HandleDrop(file);
-                        }
-                    }
-
-                    if (handlers.Count > 1)
-                    {
-                        //Resolve which handler to use
-                    }
-                }
-            }
-        }
+        
 
         private Dictionary<string, ToolStrip> _toolstrips;
         private Dictionary<string, WorkbenchRegion> _toolstripRegions;

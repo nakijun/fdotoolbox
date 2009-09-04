@@ -310,6 +310,7 @@
     </Compile>
     <Compile Include="EventWatcher.cs" />
     <Compile Include="FdoConnectionUtil.cs" />
+    <Compile Include="FileDragAndDropHandler.cs" />
     <Compile Include="Forms\CoordinateSystemDialog.cs">
       <SubType>Form</SubType>
     </Compile>
