@@ -238,6 +238,9 @@
   <data name="CMD_UnregProvider" xml:space="preserve">
     <value>Unregister Provider</value>
   </data>
+  <data name="CMD_ViewCapabilites" xml:space="preserve">
+    <value>View Capabilities</value>
+  </data>
   <data name="ERR_FAIL_ALTER_SCHEMA" xml:space="preserve">
     <value>Alter schema failed</value>
   </data>
@@ -525,6 +528,9 @@
   </data>
   <data name="TITLE_BULK_UPDATE_FEATURE" xml:space="preserve">
     <value>Bulk Update Features</value>
+  </data>
+  <data name="TITLE_CAPABILITIES" xml:space="preserve">
+    <value>Capabilities</value>
   </data>
   <data name="TITLE_COMPUTE_EXTENTS" xml:space="preserve">
     <value>Compute Extents</value>
