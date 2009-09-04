@@ -61,5 +61,10 @@ namespace FdoToolbox.Base.Controls
         }
 
         public event MapPreviewStateEventHandler MapPreviewStateChanged = delegate { };
+
+        public void SetRestrictions(FdoToolbox.Core.Feature.ICapability cap)
+        {
+            
+        }
     }
 }

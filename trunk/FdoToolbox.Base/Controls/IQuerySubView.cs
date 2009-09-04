@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -32,6 +33,7 @@ namespace FdoToolbox.Base.Controls
     public interface IQuerySubView : ISubView
     {
         void FireMapPreviewStateChanged(bool enabled);
+        void SetRestrictions(ICapability cap);
         event MapPreviewStateEventHandler MapPreviewStateChanged;
     }
 

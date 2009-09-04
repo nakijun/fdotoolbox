@@ -1149,7 +1149,8 @@ namespace FdoToolbox.Base.Forms
                 {
                     using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(_conn))
                     {
-                        if (svc.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates))
+                        bool supportsDistinct = _conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSelectDistinct);
+                        if (svc.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates) && supportsDistinct)
                         {
                             //SortedList not only allows us to hackishly get set-like qualities, but we get sorting for free.
                             SortedList<string, string> values = new SortedList<string, string>();

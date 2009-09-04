@@ -345,18 +345,18 @@ namespace FdoToolbox.Base.Controls
         {
             get
             {
-                return tabControl1.TabPages.Contains(TAB_ORDERING);
+                return tabQueryOptions.TabPages.Contains(TAB_ORDERING);
             }
             set
             {
                 if (value)
                 {
-                    if (!tabControl1.TabPages.Contains(TAB_ORDERING))
-                        tabControl1.TabPages.Add(TAB_ORDERING);
+                    if (!tabQueryOptions.TabPages.Contains(TAB_ORDERING))
+                        tabQueryOptions.TabPages.Add(TAB_ORDERING);
                 }
                 else
                 {
-                    tabControl1.TabPages.Remove(TAB_ORDERING);
+                    tabQueryOptions.TabPages.Remove(TAB_ORDERING);
                 }
             }
         }
@@ -367,5 +367,11 @@ namespace FdoToolbox.Base.Controls
         }
 
         public event MapPreviewStateEventHandler MapPreviewStateChanged = delegate { };
+
+        public void SetRestrictions(ICapability cap)
+        {
+            if (!cap.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSelectOrdering))
+                tabQueryOptions.TabPages.Remove(TAB_ORDERING);
+        }
     }
 }
