@@ -53,9 +53,9 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                 }
                 else
                 {
-                    bool supportsList = conn.Capability.GetBooleanCapability(FdoToolbox.Core.Feature.CapabilityType.FdoCapabilityType_SupportsValueConstraintsList).Value;
-                    bool supportsRange = conn.Capability.GetBooleanCapability(FdoToolbox.Core.Feature.CapabilityType.FdoCapabilityType_SupportsInclusiveValueRangeConstraints).Value ||
-                        conn.Capability.GetBooleanCapability(FdoToolbox.Core.Feature.CapabilityType.FdoCapabilityType_SupportsExclusiveValueRangeConstraints).Value;
+                    bool supportsList = conn.Capability.GetBooleanCapability(FdoToolbox.Core.Feature.CapabilityType.FdoCapabilityType_SupportsValueConstraintsList);
+                    bool supportsRange = conn.Capability.GetBooleanCapability(FdoToolbox.Core.Feature.CapabilityType.FdoCapabilityType_SupportsInclusiveValueRangeConstraints) ||
+                        conn.Capability.GetBooleanCapability(FdoToolbox.Core.Feature.CapabilityType.FdoCapabilityType_SupportsExclusiveValueRangeConstraints);
 
                     if (supportsList || supportsRange)
                     {

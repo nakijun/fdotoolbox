@@ -47,7 +47,7 @@ namespace FdoToolbox.Base.Controls
             _className = className;
             _view.ClassName = className;
             _view.Title = ICSharpCode.Core.ResourceService.GetString("TITLE_BULK_DELETE");
-            _view.TransactionEnabled = (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsTransactions).Value);
+            _view.TransactionEnabled = (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsTransactions));
         }
 
         internal void Cancel()

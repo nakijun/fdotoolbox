@@ -65,7 +65,7 @@ namespace FdoToolbox.Base.Controls
         public void Init()
         {
             _view.InitializeGrid();
-            _view.UseTransactionEnabled = (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsTransactions).Value);
+            _view.UseTransactionEnabled = (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsTransactions));
 
             using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
             {

@@ -74,7 +74,7 @@ namespace FdoToolbox.Base.Controls
             if (canCreate)
             {
                 //One spatial context exists, and this doesn't support multiple spatial contexts
-                if (_view.SpatialContexts.Count > 0 && !_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value)
+                if (_view.SpatialContexts.Count > 0 && !_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts))
                     canCreate = false;
             }
 

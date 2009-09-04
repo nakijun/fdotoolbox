@@ -77,7 +77,7 @@ namespace FdoToolbox.Express.Controls
         {
             string name = _view.SelectedTargetConnectionName;
             FdoConnection conn = _connMgr.GetConnection(name);
-            bool supportsMultiSc = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value;
+            bool supportsMultiSc = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts);
             if (!supportsMultiSc)
             {
                 _view.OverwriteEnabled = false;

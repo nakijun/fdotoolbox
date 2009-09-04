@@ -43,19 +43,19 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="cap">The cap.</param>
         /// <returns></returns>
-        bool? GetBooleanCapability(CapabilityType cap);
+        bool GetBooleanCapability(CapabilityType cap);
         /// <summary>
         /// Gets the int32 capability.
         /// </summary>
         /// <param name="cap">The cap.</param>
         /// <returns></returns>
-        int? GetInt32Capability(CapabilityType cap);
+        int GetInt32Capability(CapabilityType cap);
         /// <summary>
         /// Gets the int64 capability.
         /// </summary>
         /// <param name="cap">The cap.</param>
         /// <returns></returns>
-        long? GetInt64Capability(CapabilityType cap);
+        long GetInt64Capability(CapabilityType cap);
         /// <summary>
         /// Gets the string capability.
         /// </summary>
@@ -136,7 +136,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="cap">The cap.</param>
         /// <returns></returns>
-        public bool? GetBooleanCapability(CapabilityType cap)
+        public bool GetBooleanCapability(CapabilityType cap)
         {
             switch (cap)
             {
@@ -221,7 +221,7 @@ namespace FdoToolbox.Core.Feature
                 //case CapabilityType.FdoCapabilityType_SupportsWritableIdentityProperties:
                 //case CapabilityType.FdoCapabilityType_SupportsWrite:
                 default:
-                    return null;
+                    throw new ArgumentException(cap.ToString());
             }
         }
 
@@ -230,7 +230,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="cap">The cap.</param>
         /// <returns></returns>
-        public int? GetInt32Capability(CapabilityType cap)
+        public int GetInt32Capability(CapabilityType cap)
         {
             switch (cap)
             {
@@ -251,7 +251,7 @@ namespace FdoToolbox.Core.Feature
                 case CapabilityType.FdoCapabilityType_Dimensionalities:
                     return geomCaps.Dimensionalities;
                 default:
-                    return null;
+                    throw new ArgumentException(cap.ToString());
             }
         }
 
@@ -260,7 +260,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="cap">The cap.</param>
         /// <returns></returns>
-        public long? GetInt64Capability(CapabilityType cap)
+        public long GetInt64Capability(CapabilityType cap)
         {
             switch (cap)
             {
@@ -308,7 +308,7 @@ namespace FdoToolbox.Core.Feature
                     return geomCaps.Dimensionalities;
 
                 default:
-                    return null;
+                    throw new ArgumentException(cap.ToString());
             }
         }
 

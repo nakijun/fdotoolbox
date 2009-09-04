@@ -420,7 +420,7 @@ namespace FdoToolbox.Tasks.Controls
                     List<string> ctxNames = _view.SourceSpatialContexts;
                     if (ctxNames.Count > 1)
                     {
-                        if (!target.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts).Value)
+                        if (!target.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts))
                         {
                             errors.Add(ResourceService.GetString("ERR_UNSUPPORTED_COPY_MULTIPLE_SPATIAL_CONTEXTS"));
                         }

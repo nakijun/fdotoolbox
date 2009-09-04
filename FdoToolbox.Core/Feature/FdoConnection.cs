@@ -367,7 +367,7 @@ namespace FdoToolbox.Core.Feature
         public void SetConfiguration(string file)
         {
             CapabilityType cap = CapabilityType.FdoCapabilityType_SupportsConfiguration;
-            if (!this.Capability.GetBooleanCapability(cap).Value)
+            if (!this.Capability.GetBooleanCapability(cap))
                 throw new InvalidOperationException(ResourceUtil.GetStringFormatted("ERR_UNSUPPORTED_CAPABILITY", cap));
             IoFileStream confStream = new IoFileStream(file, "r");
             _Connection.Configuration = confStream;
