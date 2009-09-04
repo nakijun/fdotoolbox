@@ -526,4 +526,18 @@ namespace FdoToolbox.Base.Commands
             }
         }
     }
+
+    public class ViewCapabilitiesCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            TreeNode node = wb.ObjectExplorer.GetSelectedNode();
+            if (node.Level == 1)
+            {
+                FdoCapabilityViewer viewer = new FdoCapabilityViewer(node.Name);
+                wb.ShowContent(viewer, ViewRegion.Document);
+            }
+        }
+    }
 }

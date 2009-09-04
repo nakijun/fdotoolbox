@@ -539,7 +539,7 @@ namespace FdoToolbox.Core.Feature
                     return connCaps.ThreadCapability;
 
                 default:
-                    return null;
+                    throw new ArgumentException(cap.ToString());
             }
         }
 
@@ -575,8 +575,8 @@ namespace FdoToolbox.Core.Feature
                     return typeof(Array);
                 case CapabilityType.FdoCapabilityType_ConditionTypes:
                     return typeof(Array);
-                case CapabilityType.FdoCapabilityType_CSSupportsArcs:
-                    return typeof(bool);
+                //case CapabilityType.FdoCapabilityType_CSSupportsArcs:
+                //    return typeof(bool);
                 case CapabilityType.FdoCapabilityType_DataTypes:
                     return typeof(Array);
                 case CapabilityType.FdoCapabilityType_Dimensionalities:
@@ -584,7 +584,7 @@ namespace FdoToolbox.Core.Feature
                 case CapabilityType.FdoCapabilityType_DistanceOperations:
                     return typeof(Array);
                 case CapabilityType.FdoCapabilityType_ExpressionFunctions:
-                    return typeof(Array);
+                    return typeof(FunctionDefinitionCollection);
                 case CapabilityType.FdoCapabilityType_ExpressionTypes:
                     return typeof(Array);
                 case CapabilityType.FdoCapabilityType_GeometryComponentTypes:
@@ -645,8 +645,8 @@ namespace FdoToolbox.Core.Feature
                     return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsAutoIdGeneration:
                     return typeof(bool);
-                case CapabilityType.FdoCapabilityType_SupportsCalculatedProperties:
-                    return typeof(bool);
+                //case CapabilityType.FdoCapabilityType_SupportsCalculatedProperties:
+                //    return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsCommandTimeout:
                     return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsCompositeId:
@@ -659,8 +659,8 @@ namespace FdoToolbox.Core.Feature
                     return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsCSysWKTFromCSysName:
                     return typeof(bool);
-                case CapabilityType.FdoCapabilityType_SupportsDataModel:
-                    return typeof(bool);
+                //case CapabilityType.FdoCapabilityType_SupportsDataModel:
+                //    return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsDataStoreScopeUniqueIdGeneration:
                     return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsDefaultValue:
@@ -669,8 +669,8 @@ namespace FdoToolbox.Core.Feature
                     return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsFlush:
                     return typeof(bool);
-                case CapabilityType.FdoCapabilityType_SupportsGeodesicDistance:
-                    return typeof(bool);
+                //case CapabilityType.FdoCapabilityType_SupportsGeodesicDistance:
+                //    return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsInclusiveValueRangeConstraints:
                     return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsInheritance:
@@ -683,12 +683,12 @@ namespace FdoToolbox.Core.Feature
                     return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts:
                     return typeof(bool);
-                case CapabilityType.FdoCapabilityType_SupportsMultiUserWrite:
-                    return typeof(bool);
+                //case CapabilityType.FdoCapabilityType_SupportsMultiUserWrite:
+                //    return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsNetworkModel:
                     return typeof(bool);
-                case CapabilityType.FdoCapabilityType_SupportsNonLiteralGeometricOperations:
-                    return typeof(bool);
+                //case CapabilityType.FdoCapabilityType_SupportsNonLiteralGeometricOperations:
+                //    return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsNullValueConstraints:
                     return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsObjectProperties:
@@ -723,10 +723,10 @@ namespace FdoToolbox.Core.Feature
                     return typeof(bool);
                 case CapabilityType.FdoCapabilityType_SupportsValueConstraintsList:
                     return typeof(bool);
-                case CapabilityType.FdoCapabilityType_SupportsWritableIdentityProperties:
-                    return typeof(bool);
-                case CapabilityType.FdoCapabilityType_SupportsWrite:
-                    return typeof(bool);
+                //case CapabilityType.FdoCapabilityType_SupportsWritableIdentityProperties:
+                //    return typeof(bool);
+                //case CapabilityType.FdoCapabilityType_SupportsWrite:
+                //    return typeof(bool);
                 case CapabilityType.FdoCapabilityType_ThreadCapability:
                     return typeof(int);
                 default:

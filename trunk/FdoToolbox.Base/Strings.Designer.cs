@@ -428,6 +428,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View Capabilities.
+        /// </summary>
+        internal static string CMD_ViewCapabilites {
+            get {
+                return ResourceManager.GetString("CMD_ViewCapabilites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Alter schema failed.
         /// </summary>
         internal static string ERR_FAIL_ALTER_SCHEMA {
@@ -1189,6 +1198,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_BULK_UPDATE_FEATURE {
             get {
                 return ResourceManager.GetString("TITLE_BULK_UPDATE_FEATURE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capabilities.
+        /// </summary>
+        internal static string TITLE_CAPABILITIES {
+            get {
+                return ResourceManager.GetString("TITLE_CAPABILITIES", resourceCulture);
             }
         }
         

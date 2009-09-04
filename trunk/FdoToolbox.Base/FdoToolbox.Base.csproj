@@ -114,6 +114,13 @@
       <DependentUpon>FdoBulkDeleteCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FdoBulkDeleteCtlPresentation.cs" />
+    <Compile Include="Controls\FdoCapabilityViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoCapabilityViewer.Designer.cs">
+      <DependentUpon>FdoCapabilityViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FdoCapabilityViewerPresentation.cs" />
     <Compile Include="Controls\FdoUpdateScaffoldPresentation.cs" />
     <Compile Include="Controls\FdoUpdateScaffold.cs">
       <SubType>UserControl</SubType>
@@ -507,6 +514,10 @@
     <EmbeddedResource Include="Controls\FdoBulkDeleteCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoBulkDeleteCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoCapabilityViewer.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FdoCapabilityViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoUpdateScaffold.resx">
       <DependentUpon>FdoUpdateScaffold.cs</DependentUpon>
