@@ -228,7 +228,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                 ClassDefinitionDesign cd = (ClassDefinitionDesign)context.Instance;
                 ClassDefinition cls = cd.ClassDefinition;
                 FdoConnection conn = cd.Connection;
-                if (conn != null && !conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsUniqueValueConstraints).Value)
+                if (conn != null && !conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsUniqueValueConstraints))
                 {
                     ICSharpCode.Core.MessageService.ShowError("Unique constraints not supported");
                     return value;

@@ -44,8 +44,8 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         public ValueConstraintDialog(FdoConnection conn)
         {
             InitializeComponent();
-            bool supportsList = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsValueConstraintsList).Value;
-            bool supportsRange = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsExclusiveValueRangeConstraints).Value;
+            bool supportsList = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsValueConstraintsList);
+            bool supportsRange = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsExclusiveValueRangeConstraints);
 
             if (supportsList)
                 cmbConstraintType.Items.Add(PropertyValueConstraintType.PropertyValueConstraintType_List);

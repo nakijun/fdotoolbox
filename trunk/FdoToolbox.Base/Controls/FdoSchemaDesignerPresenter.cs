@@ -172,9 +172,9 @@ namespace FdoToolbox.Base.Controls
                 List<PropertyType> ptypes = new List<PropertyType>();
                 ptypes.Add(PropertyType.PropertyType_DataProperty);
                 ptypes.Add(PropertyType.PropertyType_GeometricProperty);
-                if (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsAssociationProperties).Value)
+                if (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsAssociationProperties))
                     ptypes.Add(PropertyType.PropertyType_AssociationProperty);
-                if (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsObjectProperties).Value)
+                if (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsObjectProperties))
                     ptypes.Add(PropertyType.PropertyType_ObjectProperty);
 
                 _view.SupportedPropertyTypes = ptypes.ToArray();
