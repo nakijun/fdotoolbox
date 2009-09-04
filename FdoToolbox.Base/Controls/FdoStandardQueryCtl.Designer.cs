@@ -44,7 +44,7 @@ namespace FdoToolbox.Base.Controls
             this.unSelectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label6 = new System.Windows.Forms.Label();
             this.numLimit = new System.Windows.Forms.NumericUpDown();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabQueryOptions = new System.Windows.Forms.TabControl();
             this.TAB_PROPERTIES = new System.Windows.Forms.TabPage();
             this.btnSelectNone = new System.Windows.Forms.Button();
             this.btnSelectAll = new System.Windows.Forms.Button();
@@ -61,7 +61,7 @@ namespace FdoToolbox.Base.Controls
             this.lstOrderableProperties = new System.Windows.Forms.ListBox();
             this.ctxProperties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numLimit)).BeginInit();
-            this.tabControl1.SuspendLayout();
+            this.tabQueryOptions.SuspendLayout();
             this.TAB_PROPERTIES.SuspendLayout();
             this.TAB_COMPUTED.SuspendLayout();
             this.TAB_ORDERING.SuspendLayout();
@@ -208,19 +208,19 @@ namespace FdoToolbox.Base.Controls
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tabQueryOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabControl1.Controls.Add(this.TAB_PROPERTIES);
-            this.tabControl1.Controls.Add(this.TAB_COMPUTED);
-            this.tabControl1.Controls.Add(this.TAB_ORDERING);
-            this.tabControl1.Location = new System.Drawing.Point(274, 13);
-            this.tabControl1.Multiline = true;
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.ShowToolTips = true;
-            this.tabControl1.Size = new System.Drawing.Size(346, 172);
-            this.tabControl1.TabIndex = 17;
+            this.tabQueryOptions.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabQueryOptions.Controls.Add(this.TAB_PROPERTIES);
+            this.tabQueryOptions.Controls.Add(this.TAB_COMPUTED);
+            this.tabQueryOptions.Controls.Add(this.TAB_ORDERING);
+            this.tabQueryOptions.Location = new System.Drawing.Point(274, 13);
+            this.tabQueryOptions.Multiline = true;
+            this.tabQueryOptions.Name = "tabControl1";
+            this.tabQueryOptions.SelectedIndex = 0;
+            this.tabQueryOptions.ShowToolTips = true;
+            this.tabQueryOptions.Size = new System.Drawing.Size(346, 172);
+            this.tabQueryOptions.TabIndex = 17;
             // 
             // TAB_PROPERTIES
             // 
@@ -380,7 +380,7 @@ namespace FdoToolbox.Base.Controls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabQueryOptions);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.cmbClass);
@@ -393,7 +393,7 @@ namespace FdoToolbox.Base.Controls
             this.Size = new System.Drawing.Size(634, 205);
             this.ctxProperties.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numLimit)).EndInit();
-            this.tabControl1.ResumeLayout(false);
+            this.tabQueryOptions.ResumeLayout(false);
             this.TAB_PROPERTIES.ResumeLayout(false);
             this.TAB_COMPUTED.ResumeLayout(false);
             this.TAB_COMPUTED.PerformLayout();
@@ -421,7 +421,7 @@ namespace FdoToolbox.Base.Controls
         protected System.Windows.Forms.CheckedListBox chkProperties;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numLimit;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabQueryOptions;
         private System.Windows.Forms.TabPage TAB_COMPUTED;
         private System.Windows.Forms.TabPage TAB_ORDERING;
         private System.Windows.Forms.TabPage TAB_PROPERTIES;

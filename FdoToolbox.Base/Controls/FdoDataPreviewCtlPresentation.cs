@@ -327,6 +327,7 @@ namespace FdoToolbox.Base.Controls
             foreach (IQuerySubView qv in _queryViews.Values)
             {
                 qv.MapPreviewStateChanged += new MapPreviewStateEventHandler(OnMapPreviewStateChanged);
+                qv.SetRestrictions(_connection.Capability);
             }
             _view.QueryModes = modes;
 
