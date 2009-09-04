@@ -81,6 +81,12 @@ namespace FdoToolbox.Core.Feature
         /// <param name="value">The value to check for</param>
         /// <returns>True of the value exists; false otherwise</returns>
         bool HasArrayCapability(CapabilityType capabilityType, int value);
+        /// <summary>
+        /// Gets the CLR data type of the given capability value
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>The CLR data type, returns null if the data type is not known for this capability</returns>
+        Type GetCapabilityValueType(CapabilityType type);
     }
 
     /// <summary>
@@ -552,6 +558,180 @@ namespace FdoToolbox.Core.Feature
             if (values != null)
                 return Array.IndexOf<int>(values, value) >= 0;
             return false;
+        }
+
+        /// <summary>
+        /// Gets the CLR data type of the given capability value
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>The CLR data type, returns null if the data type is not known for this capability</returns>
+        public Type GetCapabilityValueType(CapabilityType type)
+        {
+            switch (type)
+            {
+                case CapabilityType.FdoCapabilityType_ClassTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_CommandList:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_ConditionTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_CSSupportsArcs:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_DataTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_Dimensionalities:
+                    return typeof(int);
+                case CapabilityType.FdoCapabilityType_DistanceOperations:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_ExpressionFunctions:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_ExpressionTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_GeometryComponentTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_GeometryTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_LockTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_BLOB:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_Boolean:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_Byte:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_CLOB:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_DateTime:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_Decimal:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_Double:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_Int16:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_Int32:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_Int64:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_Single:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDataValueLength_String:
+                    return typeof(long);
+                case CapabilityType.FdoCapabilityType_MaximumDecimalPrecision:
+                    return typeof(int);
+                case CapabilityType.FdoCapabilityType_MaximumDecimalScale:
+                    return typeof(int);
+                case CapabilityType.FdoCapabilityType_NameSizeLimit_Class:
+                    return typeof(int);
+                case CapabilityType.FdoCapabilityType_NameSizeLimit_Datastore:
+                    return typeof(int);
+                case CapabilityType.FdoCapabilityType_NameSizeLimit_Description:
+                    return typeof(int);
+                case CapabilityType.FdoCapabilityType_NameSizeLimit_Property:
+                    return typeof(int);
+                case CapabilityType.FdoCapabilityType_NameSizeLimit_Schema:
+                    return typeof(int);
+                case CapabilityType.FdoCapabilityType_ReservedCharactersForName:
+                    return typeof(string);
+                case CapabilityType.FdoCapabilityType_SpatialContextTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_SpatialOperations:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_SupportedAutoGeneratedTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_SupportedIdentityPropertyTypes:
+                    return typeof(Array);
+                case CapabilityType.FdoCapabilityType_SupportsAssociationProperties:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsAutoIdGeneration:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsCalculatedProperties:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsCommandTimeout:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsCompositeId:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsCompositeUniqueValueConstraints:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsConfiguration:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsConnectionTimeout:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsCSysWKTFromCSysName:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsDataModel:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsDataStoreScopeUniqueIdGeneration:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsDefaultValue:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsExclusiveValueRangeConstraints:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsFlush:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsGeodesicDistance:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsInclusiveValueRangeConstraints:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsInheritance:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsLocking:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsLongTransactions:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsMultipleSchemas:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsMultiUserWrite:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsNetworkModel:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsNonLiteralGeometricOperations:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsNullValueConstraints:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsObjectProperties:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsParameters:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsRaster:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsSchemaModification:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsSchemaOverrides:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsSelectDistinct:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsSelectExpressions:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsSelectFunctions:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsSelectGrouping:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsSelectOrdering:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsSQL:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsStitching:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsSubsampling:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsTransactions:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsUniqueValueConstraints:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsValueConstraintsList:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsWritableIdentityProperties:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_SupportsWrite:
+                    return typeof(bool);
+                case CapabilityType.FdoCapabilityType_ThreadCapability:
+                    return typeof(int);
+                default:
+                    return null;
+            }
         }
     }
 }
