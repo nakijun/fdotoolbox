@@ -33,6 +33,7 @@ namespace FdoToolbox.Base.Controls
         bool SelectChecked { set; }
         bool PanChecked { set; }
         string StatusText { set; }
+        object SelectedFeatureData { set; }
     }
 
     public class FdoMapPreviewPresenter
@@ -45,6 +46,7 @@ namespace FdoToolbox.Base.Controls
             _view = view;
             _mapImage = mimg;
             _mapImage.MouseMove += new MapImage.MouseEventHandler(MapMouseMove);
+            _mapImage.MapQueried += new MapImage.MapQueryHandler(OnMapQueried);
 
             switch (_mapImage.ActiveTool)
             {
@@ -61,6 +63,11 @@ namespace FdoToolbox.Base.Controls
                     _view.ZoomOutChecked = true;
                     break;
             }
+        }
+
+        void OnMapQueried(SharpMap.Data.FeatureDataTable data)
+        {
+            _view.SelectedFeatureData = (data.Count > 0) ? data : null;
         }
 
         void MapMouseMove(SharpMap.Geometries.Point WorldPos, System.Windows.Forms.MouseEventArgs ImagePos)

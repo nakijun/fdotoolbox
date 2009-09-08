@@ -31,11 +31,15 @@ using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.Feature
 {
+    using RTree;
+
     /// <summary>
     /// A FDO-friendly DataTable
     /// </summary>
     public class FdoFeatureTable : DataTable, IEnumerable
     {
+        private RTree<FdoFeature> _tree;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FdoFeatureTable"/> class.
         /// </summary>
@@ -43,6 +47,16 @@ namespace FdoToolbox.Core.Feature
             : base()
         {
             this.InitClass();
+            _tree = new RTree<FdoFeature>();
+        }
+
+        /// <summary>
+        /// Gets the bounding box of this feature table
+        /// </summary>
+        /// <value>The bounding box.</value>
+        public Rectangle BoundingBox
+        {
+            get { return _tree.getBounds(); }
         }
 
         /// <summary>
@@ -147,6 +161,17 @@ namespace FdoToolbox.Core.Feature
         public void AddRow(FdoFeature feature)
         {
             base.Rows.Add(feature);
+            _tree.Add(feature.BoundingBox, feature);
+        }
+
+        /// <summary>
+        /// Returns a list of features that intersect with the specified rectangle.
+        /// </summary>
+        /// <param name="r">The intersection rectangle.</param>
+        /// <returns></returns>
+        public FdoFeature[] Intersects(Rectangle r)
+        {
+            return _tree.Intersects(r).ToArray();
         }
 
         /// <summary>
@@ -243,6 +268,7 @@ namespace FdoToolbox.Core.Feature
         public void RemoveRow(FdoFeature row)
         {
             base.Rows.Remove(row);
+            _tree.Delete(row.BoundingBox, row);
         }
 
         /// <summary>

@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using OSGeo.FDO.Geometry;
+using FdoToolbox.Core.Feature.RTree;
 
 namespace FdoToolbox.Core.Feature
 {
@@ -42,6 +43,54 @@ namespace FdoToolbox.Core.Feature
         public new FdoFeatureTable Table
         {
             get { return base.Table as FdoFeatureTable; }
+        }
+
+        /// <summary>
+        /// Gets the geometry field.
+        /// </summary>
+        /// <value>The geometry field.</value>
+        internal string GeometryField
+        {
+            get { return this.Table.GeometryColumn; }
+        }
+
+        /// <summary>
+        /// Gets the designated geometry.
+        /// </summary>
+        /// <value>The designated geometry.</value>
+        public FdoGeometry DesignatedGeometry
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(this.GeometryField))
+                {
+                    return this[this.GeometryField] as FdoGeometry;
+                }
+                return null;
+            }
+        }
+
+        private Rectangle _bbox;
+
+        /// <summary>
+        /// Gets the bounding box of this feature. 
+        /// </summary>
+        /// <value>The bounding box. If there is no designated geometry column then null is returned</value>
+        internal Rectangle BoundingBox
+        {
+            get
+            {
+                if (_bbox == null)
+                {
+                    IGeometry geom = this[this.GeometryField] as IGeometry;
+                    if (geom != null)
+                    {
+                        IEnvelope env = geom.Envelope;
+                        _bbox = new Rectangle((float)env.MinX, (float)env.MinY, (float)env.MaxX, (float)env.MaxY, (float)env.MinZ, (float)env.MaxZ);
+                    }
+                }
+                return _bbox;
+            }
         }
 
         /// <summary>

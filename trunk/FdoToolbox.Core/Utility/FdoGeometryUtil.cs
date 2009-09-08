@@ -39,9 +39,9 @@ namespace FdoToolbox.Core.Utility
     /// </summary>
     public sealed class FdoGeometryUtil
     {
-        const int FDO_DIM_XY = 0;
-        const int FDO_DIM_Z = 1;
-        const int FDO_DIM_M = 2;
+        public const int FDO_DIM_XY = 0;
+        public const int FDO_DIM_Z = 1;
+        public const int FDO_DIM_M = 2;
 
         private FdoGeometryUtil() { }
 
