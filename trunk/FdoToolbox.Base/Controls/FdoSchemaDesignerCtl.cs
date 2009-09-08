@@ -273,6 +273,12 @@ namespace FdoToolbox.Base.Controls
             set { btnApply.Enabled = value; }
         }
 
+        public bool FixEnabled
+        {
+            get { return btnFix.Enabled; }
+            set { btnFix.Enabled = value; }
+        }
+
         private void saveToXMLToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string xmlFile = FileService.SaveFile(ResourceService.GetString("TITLE_SAVE_SCHEMA"), ResourceService.GetString("FILTER_SCHEMA_FILE"));
@@ -377,6 +383,11 @@ namespace FdoToolbox.Base.Controls
         public void LoadSchema(string file)
         {
             _presenter.Load(file);
+        }
+
+        private void btnFix_Click(object sender, EventArgs e)
+        {
+            _presenter.FixSchema();
         }
     }
 }

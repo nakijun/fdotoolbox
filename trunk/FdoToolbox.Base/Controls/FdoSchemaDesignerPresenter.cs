@@ -58,6 +58,7 @@ namespace FdoToolbox.Base.Controls
         PropertyType[] SupportedPropertyTypes { set; }
 
         bool ApplyEnabled { set; }
+        bool FixEnabled { set; }
 
         event EventHandler SchemaApplied;
 
@@ -162,11 +163,13 @@ namespace FdoToolbox.Base.Controls
             //Standalone
             if (_conn == null)
             {
+                _view.FixEnabled = false;
                 _view.SupportedClassTypes = (ClassType[])Enum.GetValues(typeof(ClassType));
                 _view.SupportedPropertyTypes = (PropertyType[])Enum.GetValues(typeof(PropertyType));
             }
             else //Contextual
             {
+                _view.FixEnabled = true;
                 _view.SupportedClassTypes = (ClassType[])_conn.Capability.GetObjectCapability(CapabilityType.FdoCapabilityType_ClassTypes);
 
                 List<PropertyType> ptypes = new List<PropertyType>();
@@ -553,7 +556,62 @@ namespace FdoToolbox.Base.Controls
         public void SaveSchemaToXml(string xmlFile)
         {
             ValidateSchema();
-            _schema.WriteXml(xmlFile);
+            if (_conn != null) 
+            {
+                //We're contextual, so we need to force a model sync (ie. Apply Schema) first
+                //to purge this schema of deleted elements, otherwise they will be written to
+                //the xml file
+                if (_schema.ElementState != SchemaElementState.SchemaElementState_Unchanged)
+                {
+                    //Can't continue if user doesn't apply schema first
+                    if (!_view.Confirm("Apply Schema", "You have unsaved changes. To save this schema, you must first apply it to the current connetion. Continue?"))
+                        return;
+
+                    try
+                    {
+                        ApplySchema();
+                        _schema.WriteXml(xmlFile);
+                    }
+                    catch (Exception ex)
+                    {
+                        _view.ShowError(ex);
+                    }
+                }
+                else //No changes, just write the thing
+                {
+                    _schema.WriteXml(xmlFile);
+                }
+            }
+            else //standalone
+            {
+                //If modified, force a model update first before writing
+                if(_schema.ElementState != SchemaElementState.SchemaElementState_Unchanged)
+                    _schema.AcceptChanges();
+
+                _schema.WriteXml(xmlFile);
+            }
+        }
+
+        public void FixSchema()
+        {
+            if (_conn != null)
+            {
+                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
+                {
+                    IncompatibleSchema incSchema;
+                    if (!service.CanApplySchema(_schema, out incSchema))
+                    {
+                        _schema = service.AlterSchema(_schema, incSchema);
+                        SetSchemaNode();
+                        FillTree();
+                        _view.ShowMessage("Fix Incompatibilities", "Schema Incompatibilities fixed. Please review this schema again before applying.");
+                    }
+                    else
+                    {
+                        _view.ShowMessage("Fix Incompatibilities", "No incompatibilities found");
+                    }
+                }
+            }
         }
 
         public void ApplySchema()
