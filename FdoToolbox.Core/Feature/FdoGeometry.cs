@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Geometry;
 using OSGeo.FDO.Spatial;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.Feature
 {
@@ -111,6 +112,46 @@ namespace FdoToolbox.Core.Feature
         {
             //This is the whole reason for having a decorator. When in a DataTable, the native IGeometry's ToString() shows nothing, when it should be really showing the FGF text
             return _geom.Text;
+        }
+
+        /// <summary>
+        /// Determines whether this instance contains the specified envelope
+        /// </summary>
+        /// <param name="env">The envelope</param>
+        /// <returns>
+        /// 	<c>true</c> if this instance contains the specified envelope; otherwise, <c>false</c>.
+        /// </returns>
+        public bool Contains(IEnvelope env)
+        {
+            int dim = FdoGeometryUtil.FDO_DIM_XY;
+            FdoGeometryFactory fact = FdoGeometryFactory.Instance;
+            ILinearRing extRing = fact.CreateLinearRing(dim, 4, new double[] {
+                env.MinX, env.MinY,
+                env.MinX, env.MaxY,
+                env.MaxX, env.MaxY,
+                env.MaxX, env.MinY
+            });
+            IPolygon poly = fact.CreatePolygon(extRing, new LinearRingCollection());
+            bool contains = SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Contains, poly);
+            extRing.Dispose();
+            poly.Dispose();
+            return contains;
+        }
+
+        /// <summary>
+        /// Determines whether this instance contains the specified point
+        /// </summary>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <returns>
+        /// 	<c>true</c> if this instance contains the specified point
+        /// </returns>
+        public bool Contains(double x, double y)
+        {
+            IPoint pt = FdoGeometryFactory.Instance.CreatePoint(FdoGeometryUtil.FDO_DIM_XY, new double[] { x, y });
+            bool contains = SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Contains, pt);
+            pt.Dispose();
+            return contains;
         }
 
         /// <summary>

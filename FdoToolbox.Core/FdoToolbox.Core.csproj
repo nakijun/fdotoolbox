@@ -168,6 +168,10 @@
     <Compile Include="Feature\IncompatibleClassReason.cs" />
     <Compile Include="Feature\IncompatibleProperty.cs" />
     <Compile Include="Feature\IncompatibleSchema.cs" />
+    <Compile Include="Feature\RTree\Node.cs" />
+    <Compile Include="Feature\RTree\Point.cs" />
+    <Compile Include="Feature\RTree\Rectangle.cs" />
+    <Compile Include="Feature\RTree\RTree.cs" />
     <Compile Include="Feature\SpatialContextInfo.cs" />
     <Compile Include="Feature\ValueConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

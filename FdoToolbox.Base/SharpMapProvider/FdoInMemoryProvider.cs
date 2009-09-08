@@ -27,6 +27,9 @@ using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Geometry;
 using SharpMap.Converters.WellKnownBinary;
 using FdoToolbox.Core;
+using SharpMap.Data;
+using FdoToolbox.Core.Feature.RTree;
+using System.Data;
 
 namespace FdoToolbox.Base.SharpMapProvider
 {
@@ -47,20 +50,16 @@ namespace FdoToolbox.Base.SharpMapProvider
 
         public List<SharpMap.Geometries.Geometry> GetGeometriesInView(SharpMap.Geometries.BoundingBox bbox)
         {
-            FdoGeometryFactory fact = FdoGeometryFactory.Instance;
-
             if (_data == null || _data.Rows.Count == 0 || string.IsNullOrEmpty(_data.GeometryColumn))
                 return new List<SharpMap.Geometries.Geometry>();
 
             List<SharpMap.Geometries.Geometry> geoms = new List<SharpMap.Geometries.Geometry>();
-            foreach (FdoFeature feat in _data.Rows)
+            FdoFeature[] matches = _data.Intersects(Converter.RectFromBoundingBox(bbox));
+            foreach (FdoFeature feat in matches)
             {
                 try
                 {
-                    //Get the WKB form of the geometry
-                    FdoGeometry geom = (FdoGeometry)feat[_data.GeometryColumn];
-                    byte[] wkb = fact.GetWkb(geom.InternalInstance);
-                    geoms.Add(GeometryFromWKB.Parse(wkb));
+                    geoms.Add(Converter.FromFdoGeometry(feat.DesignatedGeometry));
                 }
                 catch { }
             }
@@ -79,12 +78,41 @@ namespace FdoToolbox.Base.SharpMapProvider
 
         public void ExecuteIntersectionQuery(SharpMap.Geometries.Geometry geom, SharpMap.Data.FeatureDataSet ds)
         {
-            throw new Exception("The method or operation is not implemented.");
+            ExecuteIntersectionQuery(geom.GetBoundingBox(), ds);
         }
 
         public void ExecuteIntersectionQuery(SharpMap.Geometries.BoundingBox box, SharpMap.Data.FeatureDataSet ds)
         {
-            throw new Exception("The method or operation is not implemented.");
+            Rectangle r = new Rectangle((float)box.Left, (float)box.Bottom, (float)box.Right, (float)box.Top, (float)0.0, (float)0.0);
+            FdoFeature[] matches = _data.Intersects(r);
+
+            FeatureDataTable table = new FeatureDataTable();
+            foreach (DataColumn col in _data.Columns)
+            {
+                table.Columns.Add(col.ColumnName, col.DataType, col.Expression);
+            }
+            
+            foreach (FdoFeature feat in matches)
+            {
+                FdoGeometry geom = feat.DesignatedGeometry;
+                if (geom != null)
+                {
+                    FeatureDataRow row = table.NewRow();
+                    foreach (DataColumn col in _data.Columns)
+                    {
+                        if (col.ColumnName == _data.GeometryColumn)
+                        {
+                            row.Geometry = Converter.FromFdoGeometry(geom);
+                        }
+                        else
+                        {
+                            row[col.ColumnName] = feat[col.ColumnName];
+                        }
+                    }
+                    table.AddRow(row);
+                }
+            }
+            ds.Tables.Add(table);
         }
 
         public int GetFeatureCount()

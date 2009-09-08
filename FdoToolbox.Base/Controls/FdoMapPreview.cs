@@ -42,7 +42,6 @@ namespace FdoToolbox.Base.Controls
         private FdoMapPreviewPresenter _presenter;
         private MapImage img;
 
-
         public FdoMapPreview()
         {
             InitializeComponent();
@@ -66,6 +65,7 @@ namespace FdoToolbox.Base.Controls
                     VectorLayer layer = new VectorLayer("Preview", _provider);
                     layer.Style.Fill = Brushes.Transparent;
                     layer.Style.EnableOutline = true;
+                    layer.Theme = new RandomizedTheme();
                     img.Map.Layers.Add(layer);
                 }
             }
@@ -114,6 +114,20 @@ namespace FdoToolbox.Base.Controls
         public string StatusText
         {
             set { lblStatus.Text = value; }
+        }
+
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            _presenter.Select();
+        }
+
+        public object SelectedFeatureData
+        {
+            set 
+            {
+                grdFeatures.DataSource = value;
+                splitContainer1.Panel2Collapsed = (value == null);
+            }
         }
     }
 }
