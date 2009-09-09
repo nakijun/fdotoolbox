@@ -161,7 +161,8 @@ namespace FdoToolbox.Core.Feature
         public void AddRow(FdoFeature feature)
         {
             base.Rows.Add(feature);
-            _tree.Add(feature.BoundingBox, feature);
+            if(feature.BoundingBox != null)
+                _tree.Add(feature.BoundingBox, feature);
         }
 
         /// <summary>
@@ -172,6 +173,27 @@ namespace FdoToolbox.Core.Feature
         public FdoFeature[] Intersects(Rectangle r)
         {
             return _tree.Intersects(r).ToArray();
+        }
+
+        /// <summary>
+        /// Returns a list of features that contains the specified rectangle.
+        /// </summary>
+        /// <param name="r">The r.</param>
+        /// <returns></returns>
+        public FdoFeature[] Contains(Rectangle r)
+        {
+            return _tree.Contains(r).ToArray();
+        }
+
+        /// <summary>
+        /// Returns a list of features near the specified point
+        /// </summary>
+        /// <param name="pt">The point.</param>
+        /// <param name="distance">The distance.</param>
+        /// <returns></returns>
+        public FdoFeature[] GetFeaturesNear(Point pt, float distance)
+        {
+            return _tree.Nearest(pt, distance).ToArray();
         }
 
         /// <summary>
@@ -268,7 +290,8 @@ namespace FdoToolbox.Core.Feature
         public void RemoveRow(FdoFeature row)
         {
             base.Rows.Remove(row);
-            _tree.Delete(row.BoundingBox, row);
+            if(row.BoundingBox != null)
+                _tree.Delete(row.BoundingBox, row);
         }
 
         /// <summary>
@@ -319,6 +342,7 @@ namespace FdoToolbox.Core.Feature
         public string GeometryColumn
         {
             get { return _geometryColumn; }
+            set { _geometryColumn = value; }
         }
 
         /// <summary>

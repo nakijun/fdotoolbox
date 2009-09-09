@@ -123,18 +123,12 @@ namespace FdoToolbox.Core.Feature
         /// </returns>
         public bool Contains(IEnvelope env)
         {
-            int dim = FdoGeometryUtil.FDO_DIM_XY;
+            string wkt = string.Format("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))", env.MinX, env.MinY, env.MaxX, env.MaxY);
+
             FdoGeometryFactory fact = FdoGeometryFactory.Instance;
-            ILinearRing extRing = fact.CreateLinearRing(dim, 4, new double[] {
-                env.MinX, env.MinY,
-                env.MinX, env.MaxY,
-                env.MaxX, env.MaxY,
-                env.MaxX, env.MinY
-            });
-            IPolygon poly = fact.CreatePolygon(extRing, new LinearRingCollection());
-            bool contains = SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Contains, poly);
-            extRing.Dispose();
-            poly.Dispose();
+            IGeometry geom = fact.CreateGeometry(wkt);
+            bool contains = SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Contains, geom);
+            geom.Dispose();
             return contains;
         }
 

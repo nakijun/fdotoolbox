@@ -82,11 +82,14 @@ namespace FdoToolbox.Core.Feature
             {
                 if (_bbox == null)
                 {
-                    IGeometry geom = this[this.GeometryField] as IGeometry;
-                    if (geom != null)
+                    if (!string.IsNullOrEmpty(this.GeometryField))
                     {
-                        IEnvelope env = geom.Envelope;
-                        _bbox = new Rectangle((float)env.MinX, (float)env.MinY, (float)env.MaxX, (float)env.MaxY, (float)env.MinZ, (float)env.MaxZ);
+                        IGeometry geom = this[this.GeometryField] as IGeometry;
+                        if (geom != null)
+                        {
+                            IEnvelope env = geom.Envelope;
+                            _bbox = new Rectangle((float)env.MinX, (float)env.MinY, (float)env.MaxX, (float)env.MaxY, (float)env.MinZ, (float)env.MaxZ);
+                        }
                     }
                 }
                 return _bbox;
