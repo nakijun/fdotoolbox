@@ -1,15 +1,16 @@
 #summary Planned features for upcoming releases
 
-=== 0.8.1 ===
+=== 0.8.2 ===
  * Bulk Copy Data Value Conversion support
+ * Express support for additional OGR formats
 
 === 0.8.x - 0.9 ===
- * Express support for additional OGR formats
+
  * Raster preview support
  * Raster Provider support
  * User Documentation
  * Localization
- * Modularised ETL task definition
+ * Generic ETL task definitions
  * Additional Property support
       * Raster Properties
 
@@ -20,5 +21,4 @@
  * Visual ETL pipeline editor
  * FDO Connection configuration support
  * Schema Mapping support
- * Coordinate System Re-Projection via Proj/CSMap
  * LINQ to FDO
