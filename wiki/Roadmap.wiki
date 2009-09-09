@@ -7,6 +7,7 @@
 === 0.8.x - 0.9 ===
 
  * Raster preview support
+ * Geometry WKT visualizer
  * Raster Provider support
  * User Documentation
  * Localization
