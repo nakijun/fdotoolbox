@@ -44,6 +44,19 @@ namespace FdoToolbox.Base.SharpMapProvider
         }
 
         /// <summary>
+        /// Creates the polygon from an envelope.
+        /// </summary>
+        /// <param name="env">The envelope.</param>
+        /// <returns></returns>
+        public static Fdo.IPolygon CreatePolygonFromEnvelope(Fdo.IEnvelope env)
+        {
+            string wkt = string.Format("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))", env.MinX, env.MinY, env.MaxX, env.MaxY);
+            FdoGeometryFactory fact = FdoGeometryFactory.Instance;
+            Fdo.IGeometry geom = fact.CreateGeometry(wkt);
+            return (Fdo.IPolygon)geom;
+        }
+
+        /// <summary>
         /// Converts an FDO Geometry to a SharpMap geometry
         /// </summary>
         /// <param name="geom">The FDO geometry</param>

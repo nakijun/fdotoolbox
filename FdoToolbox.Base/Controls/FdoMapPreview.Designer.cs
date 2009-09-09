@@ -131,7 +131,7 @@ namespace FdoToolbox.Base.Controls
             this.mapContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapContentPanel.Location = new System.Drawing.Point(0, 0);
             this.mapContentPanel.Name = "mapContentPanel";
-            this.mapContentPanel.Size = new System.Drawing.Size(755, 346);
+            this.mapContentPanel.Size = new System.Drawing.Size(755, 445);
             this.mapContentPanel.TabIndex = 2;
             // 
             // splitContainer1
@@ -148,6 +148,7 @@ namespace FdoToolbox.Base.Controls
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.grdFeatures);
+            this.splitContainer1.Panel2Collapsed = true;
             this.splitContainer1.Size = new System.Drawing.Size(755, 445);
             this.splitContainer1.SplitterDistance = 346;
             this.splitContainer1.TabIndex = 3;
