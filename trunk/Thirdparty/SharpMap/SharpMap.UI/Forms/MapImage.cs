@@ -377,10 +377,19 @@ namespace SharpMap.Forms
 							if (_Map.Layers[_queryLayerIndex].GetType() == typeof(SharpMap.Layers.VectorLayer))
 							{
 								SharpMap.Layers.VectorLayer layer = _Map.Layers[_queryLayerIndex] as SharpMap.Layers.VectorLayer;
-								SharpMap.Geometries.BoundingBox bbox = this._Map.ImageToWorld(new System.Drawing.Point(e.X, e.Y)).GetBoundingBox().Grow(_Map.PixelSize * 5);
 								SharpMap.Data.FeatureDataSet ds = new SharpMap.Data.FeatureDataSet();
 								layer.DataSource.Open();
-								layer.DataSource.ExecuteIntersectionQuery(bbox, ds);
+                                double? tolerance = layer.DataSource.GetXYTolerance();
+                                if (tolerance.HasValue && tolerance.Value > 0.0)
+                                {
+                                    SharpMap.Geometries.BoundingBox bbox = this._Map.ImageToWorld(new System.Drawing.Point(e.X, e.Y)).GetBoundingBox().Grow(tolerance.Value);
+                                    layer.DataSource.ExecuteIntersectionQuery(bbox, ds);
+                                }
+                                else
+                                {
+                                    SharpMap.Geometries.BoundingBox bbox = this._Map.ImageToWorld(new System.Drawing.Point(e.X, e.Y)).GetBoundingBox().Grow(_Map.PixelSize * 5);
+                                    layer.DataSource.ExecuteIntersectionQuery(bbox, ds);
+                                }
 								layer.DataSource.Close();
 								if (ds.Tables.Count > 0)
 									if(MapQueried!=null) MapQueried(ds.Tables[0]);

@@ -29,7 +29,7 @@ using System.Windows.Forms;
 using FdoToolbox.Base.Services;
 using ICSharpCode.Core;
 
-namespace FdoToolbox.Base.Controls
+namespace FdoToolbox.Base.Controls.PreferenceSheets
 {
     /// <summary>
     /// User Interface for FDO Toolbox's preferences
@@ -39,8 +39,7 @@ namespace FdoToolbox.Base.Controls
         public BasePreferencesCtl()
         {
             InitializeComponent();
-            numLimit.Minimum = decimal.MinValue;
-            numLimit.Maximum = decimal.MaxValue;
+            
         }
 
         private void BasePreferencesCtl_Load(object sender, EventArgs e)
@@ -49,7 +48,6 @@ namespace FdoToolbox.Base.Controls
             txtLogPath.Text = Preferences.LogPath;
             txtSession.Text = Preferences.SessionDirectory;
             txtWorking.Text = Preferences.WorkingDirectory;
-            numLimit.Value = Convert.ToDecimal(Preferences.DataPreviewWarningLimit);
         }
 
         private void btnFdo_Click(object sender, EventArgs e)
@@ -101,7 +99,6 @@ namespace FdoToolbox.Base.Controls
 
         public void ApplyChanges()
         {
-            Preferences.DataPreviewWarningLimit = Convert.ToInt32(numLimit.Value);
             Preferences.FdoPath = txtFdoPath.Text;
             Preferences.LogPath = txtLogPath.Text;
             Preferences.SessionDirectory = txtSession.Text;

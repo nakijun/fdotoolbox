@@ -87,10 +87,10 @@
     <Compile Include="Commands\TextEditorCommands.cs" />
     <Compile Include="Commands\ToolCommands.cs" />
     <Compile Include="Conditions\CommandSupportConditionEvaluator.cs" />
-    <Compile Include="Controls\BasePreferencesCtl.cs">
+    <Compile Include="Controls\PreferenceSheets\BasePreferencesCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\BasePreferencesCtl.Designer.cs">
+    <Compile Include="Controls\PreferenceSheets\BasePreferencesCtl.Designer.cs">
       <DependentUpon>BasePreferencesCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\CoordSysCatalog.cs">
@@ -248,10 +248,16 @@
     </Compile>
     <Compile Include="Controls\FdoUnregProviderCtlPresentation.cs">
     </Compile>
-    <Compile Include="Controls\ProviderPreferencesCtl.cs">
+    <Compile Include="Controls\PreferenceSheets\DataPreviewPreferencesCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\ProviderPreferencesCtl.Designer.cs">
+    <Compile Include="Controls\PreferenceSheets\DataPreviewPreferencesCtl.Designer.cs">
+      <DependentUpon>DataPreviewPreferencesCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PreferenceSheets\ProviderPreferencesCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PreferenceSheets\ProviderPreferencesCtl.Designer.cs">
       <DependentUpon>ProviderPreferencesCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SchemaDesigner\AssociationPropertyDefinitionDesign.cs" />
@@ -438,6 +444,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FdoToolbox.Base.addin" />
+    <None Include="Resources\map_edit.png" />
     <None Include="Resources\file_connection.png" />
     <None Include="Resources\database_connect1.png" />
     <None Include="Resources\server_connect.png" />
@@ -498,7 +505,7 @@
     <None Include="Resources\accept.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\BasePreferencesCtl.resx">
+    <EmbeddedResource Include="Controls\PreferenceSheets\BasePreferencesCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BasePreferencesCtl.cs</DependentUpon>
     </EmbeddedResource>
@@ -586,7 +593,11 @@
       <SubType>Designer</SubType>
       <DependentUpon>FdoUnregProviderCtl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProviderPreferencesCtl.resx">
+    <EmbeddedResource Include="Controls\PreferenceSheets\DataPreviewPreferencesCtl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DataPreviewPreferencesCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PreferenceSheets\ProviderPreferencesCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ProviderPreferencesCtl.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,4 +1,4 @@
-namespace FdoToolbox.Base.Controls
+namespace FdoToolbox.Base.Controls.PreferenceSheets
 {
     partial class BasePreferencesCtl
     {
@@ -32,17 +32,14 @@ namespace FdoToolbox.Base.Controls
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.txtSession = new System.Windows.Forms.TextBox();
             this.txtWorking = new System.Windows.Forms.TextBox();
             this.txtLogPath = new System.Windows.Forms.TextBox();
             this.txtFdoPath = new System.Windows.Forms.TextBox();
-            this.numLimit = new System.Windows.Forms.NumericUpDown();
             this.btnSession = new System.Windows.Forms.Button();
             this.btnWorking = new System.Windows.Forms.Button();
             this.btnLog = new System.Windows.Forms.Button();
             this.btnFdo = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.numLimit)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -81,15 +78,6 @@ namespace FdoToolbox.Base.Controls
             this.label4.TabIndex = 3;
             this.label4.Text = "FDO Library Path";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 140);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(138, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Data Preview Warning Limit";
-            // 
             // txtSession
             // 
             this.txtSession.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -125,13 +113,6 @@ namespace FdoToolbox.Base.Controls
             this.txtFdoPath.Name = "txtFdoPath";
             this.txtFdoPath.Size = new System.Drawing.Size(297, 20);
             this.txtFdoPath.TabIndex = 8;
-            // 
-            // numLimit
-            // 
-            this.numLimit.Location = new System.Drawing.Point(163, 138);
-            this.numLimit.Name = "numLimit";
-            this.numLimit.Size = new System.Drawing.Size(120, 20);
-            this.numLimit.TabIndex = 9;
             // 
             // btnSession
             // 
@@ -185,12 +166,10 @@ namespace FdoToolbox.Base.Controls
             this.Controls.Add(this.btnLog);
             this.Controls.Add(this.btnWorking);
             this.Controls.Add(this.btnSession);
-            this.Controls.Add(this.numLimit);
             this.Controls.Add(this.txtFdoPath);
             this.Controls.Add(this.txtLogPath);
             this.Controls.Add(this.txtWorking);
             this.Controls.Add(this.txtSession);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -198,7 +177,6 @@ namespace FdoToolbox.Base.Controls
             this.Name = "BasePreferencesCtl";
             this.Size = new System.Drawing.Size(511, 186);
             this.Load += new System.EventHandler(this.BasePreferencesCtl_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.numLimit)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -210,12 +188,10 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtSession;
         private System.Windows.Forms.TextBox txtWorking;
         private System.Windows.Forms.TextBox txtLogPath;
         private System.Windows.Forms.TextBox txtFdoPath;
-        private System.Windows.Forms.NumericUpDown numLimit;
         private System.Windows.Forms.Button btnSession;
         private System.Windows.Forms.Button btnWorking;
         private System.Windows.Forms.Button btnLog;

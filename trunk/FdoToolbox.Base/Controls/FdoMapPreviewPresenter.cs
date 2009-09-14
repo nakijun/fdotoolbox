@@ -138,5 +138,10 @@ namespace FdoToolbox.Base.Controls
                 _mapImage.Refresh();
             }
         }
+
+        public void ClearSelection()
+        {
+            _view.SelectedFeatureData = null;
+        }
     }
 }

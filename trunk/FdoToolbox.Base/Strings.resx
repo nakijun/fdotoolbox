@@ -601,6 +601,9 @@
   <data name="TITLE_PREFERENCES" xml:space="preserve">
     <value>Preferences</value>
   </data>
+  <data name="TITLE_PREFS_DATA_PREVIEW" xml:space="preserve">
+    <value>Data Preview</value>
+  </data>
   <data name="TITLE_PREFS_GENERAL" xml:space="preserve">
     <value>General</value>
   </data>

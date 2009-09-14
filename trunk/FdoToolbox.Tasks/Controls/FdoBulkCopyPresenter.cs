@@ -32,6 +32,8 @@ using FdoToolbox.Core;
 using FdoToolbox.Tasks.Services;
 using FdoToolbox.Base.Services;
 using ICSharpCode.Core;
+using OSGeo.FDO.Expression;
+using OSGeo.FDO.Connections.Capabilities;
 
 namespace FdoToolbox.Tasks.Controls
 {
@@ -75,6 +77,8 @@ namespace FdoToolbox.Tasks.Controls
         void SetMappableProperties(string className, List<string> properties);
 
         void RemoveAllMappings();
+
+        string GetSourceExpression(string className, string alias);
 
         void AddExpression(string className, string alias, string expr);
         void EditExpression(string className, string alias, string expr);
@@ -267,18 +271,109 @@ namespace FdoToolbox.Tasks.Controls
             }
         }
 
+        private DataType? GetPropertyDataType(FdoConnection conn, string className, string propertyName)
+        {
+            using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(conn))
+            {
+                ClassDefinition cd = svc.GetClassByName(className);
+                if (cd != null)
+                {
+                    PropertyDefinition pd = cd.Properties[propertyName];
+                    if (pd.PropertyType == PropertyType.PropertyType_DataProperty)
+                    {
+                        return (pd as DataPropertyDefinition).DataType;
+                    }
+                }
+            }
+            return null;
+        }
+
         public void MapProperty(string srcClassName, string srcProperty, string destClassName, string destProperty)
         {
-            //TODO: Throw if not mappable
-            _view.MapClassProperty(srcClassName, srcProperty, destProperty);
-            _propertyMappings[srcClassName][srcProperty] = destProperty;
+            //Throw if not mappable
+            DataType? srcDt = GetPropertyDataType(GetSourceConnection(), destClassName, destProperty);
+            DataType? dstDt = GetPropertyDataType(GetTargetConnection(), destClassName, destProperty);
+
+            if (srcDt.HasValue && dstDt.HasValue)
+            {
+                if (!ValueConverter.IsConvertible(srcDt.Value, dstDt.Value))
+                    throw new MappingException("Unable to map {0} to {1}. {2} is not convertible to {3}");
+
+                _view.MapClassProperty(srcClassName, srcProperty, destProperty);
+                _propertyMappings[srcClassName][srcProperty] = destProperty;
+
+                if (srcDt.Value != dstDt.Value)
+                {
+                    //Add data type conversion rule
+                }
+            }
         }
 
         public void MapExpression(string srcClassName, string srcAlias, string destClassName, string destProperty)
         {
-            //TODO: Throw if not mappable
-            _view.MapExpression(srcClassName, srcAlias, destProperty);
-            _expressionMappings[srcClassName][srcAlias] = destProperty;
+            //Throw if not mappable
+            DataType? srcDt = ParseSourceExpression(srcClassName, srcAlias);
+            DataType? dstDt = GetPropertyDataType(GetTargetConnection(), destClassName, destProperty);
+            if (srcDt.HasValue && dstDt.HasValue)
+            {
+                if (!ValueConverter.IsConvertible(srcDt.Value, dstDt.Value))
+                    throw new MappingException("Unable to map source expression to {0}. Source expression evaluates to {1}, which is not convertible to {2}");
+
+                _view.MapExpression(srcClassName, srcAlias, destProperty);
+                _expressionMappings[srcClassName][srcAlias] = destProperty;
+
+                if (srcDt.Value != dstDt.Value)
+                {
+                    //Add data type conversion rule
+                }
+            }
+        }
+
+        private DataType? ParseSourceExpression(string srcClassName, string srcAlias)
+        {
+            string exprStr = _view.GetSourceExpression(srcClassName, srcAlias);
+            if (!string.IsNullOrEmpty(exprStr))
+            {
+                Expression expr = Expression.Parse(exprStr);
+                if (expr.GetType() == typeof(Function))
+                {
+                    Function func = expr as Function;
+                    //Look-up its name in the capabilities
+                    return GetFunctionReturnType(func.Name);
+                }
+                else if (expr.GetType() == typeof(BinaryExpression))
+                {
+                    return DataType.DataType_Boolean;
+                }
+                else if (expr.GetType() == typeof(UnaryExpression))
+                {
+                    return null;
+                }
+                else if (expr.GetType() == typeof(Identifier))
+                {
+                    return null; //TODO: use the data type of the referenced property
+                }
+                else if (expr.GetType() == typeof(DataValue))
+                {
+                    DataValue dv = (DataValue)expr;
+                    return dv.DataType;
+                }
+            }
+            return null;
+        }
+
+        private DataType? GetFunctionReturnType(string name)
+        {
+            FdoConnection conn = GetSourceConnection();
+            FunctionDefinitionCollection funcs = (FunctionDefinitionCollection)conn.Capability.GetObjectCapability(CapabilityType.FdoCapabilityType_ExpressionFunctions);
+            foreach(FunctionDefinition fd in funcs)
+            {
+                if (fd.Name == name && fd.ReturnPropertyType == PropertyType.PropertyType_DataProperty)
+                {
+                    return fd.ReturnType;
+                }
+            }
+            return null;
         }
 
         public void UnmapClass(string srcClass)

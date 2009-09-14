@@ -1,4 +1,4 @@
-namespace FdoToolbox.Base.Controls
+namespace FdoToolbox.Base.Controls.PreferenceSheets
 {
     partial class ProviderPreferencesCtl
     {

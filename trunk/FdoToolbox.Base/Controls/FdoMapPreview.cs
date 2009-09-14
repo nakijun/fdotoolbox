@@ -65,7 +65,8 @@ namespace FdoToolbox.Base.Controls
                     VectorLayer layer = new VectorLayer("Preview", _provider);
                     layer.Style.Fill = Brushes.Transparent;
                     layer.Style.EnableOutline = true;
-                    layer.Theme = new RandomizedTheme();
+                    if (Preferences.DataPreviewRandomColors)
+                        layer.Theme = new RandomizedTheme();
                     img.Map.Layers.Add(layer);
                 }
             }
@@ -127,7 +128,13 @@ namespace FdoToolbox.Base.Controls
             {
                 grdFeatures.DataSource = value;
                 splitContainer1.Panel2Collapsed = (value == null);
+                lblCount.Text = grdFeatures.Rows.Count + " features selected";
             }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            _presenter.ClearSelection();
         }
     }
 }
