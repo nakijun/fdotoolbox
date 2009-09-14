@@ -1,11 +1,12 @@
 #summary Planned features for upcoming releases
 
 === 0.8.2 ===
- * Bulk Copy Data Value Conversion support
  * Express support for additional OGR formats
 
 === 0.8.x - 0.9 ===
 
+ * Bulk Copy Data Value Conversion support
+ * [http://code.google.com/p/fdotoolbox/issues/detail?id=221 Enhanced Bulk Copy]
  * Raster preview support
  * Geometry WKT visualizer
  * Raster Provider support
