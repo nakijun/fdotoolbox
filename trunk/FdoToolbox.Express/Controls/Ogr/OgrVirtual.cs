@@ -19,33 +19,46 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.ComponentModel;
 using System.Windows.Forms.Design;
 using System.Drawing.Design;
+using System.ComponentModel;
 
 namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OgrCsvEditor : FileNameEditor
+    public class OgrVirtualEditor : FileNameEditor
     {
         protected override void InitializeDialog(System.Windows.Forms.OpenFileDialog openFileDialog)
         {
-            openFileDialog.Filter = "Comma Separated Values (*.csv)|*.csv";
+            openFileDialog.Filter = "OGR Virtual Data Source (*.xml)|*.xml";
         }
     }
-
-    public class OgrCsv : BaseOgrConnectionBuilder
+    public class OgrVirtual : BaseOgrConnectionBuilder
     {
-        [Description("The path to the CSV file")]
-        [DisplayName("CSV Path")]
-        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+        public OgrVirtual() { base.ReadOnly = true; }
+
+        [Description("The path to the OGR Virtual Data Source specification")]
+        [DisplayName("Virtual Data Source path")]
+        [Editor(typeof(OgrVirtualEditor), typeof(UITypeEditor))]
         public override string DataSource
         {
             get { return base.DataSource; }
             set { base.DataSource = value; }
+        }
+
+        [ReadOnly(true)]
+        public override bool ReadOnly
+        {
+            get
+            {
+                return base.ReadOnly;
+            }
+            set
+            {
+                base.ReadOnly = value;
+            }
         }
     }
 }

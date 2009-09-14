@@ -29,22 +29,23 @@ using System.Windows.Forms.Design;
 
 namespace FdoToolbox.Express.Controls.Ogr
 {
+    public class OgrEsriPgbEditor : FileNameEditor
+    {
+        protected override void InitializeDialog(System.Windows.Forms.OpenFileDialog openFileDialog)
+        {
+            openFileDialog.Filter = "ESRI Personal Geodatabase (*.mdb)|*.mdb";
+        }
+    }
+
     public class OgrEsriPgb : BaseOgrConnectionBuilder
     {
-        private string _MdbPath;
-
         [Description("The path to the ESRI Personal Geodatabase")]
         [DisplayName("ESRI PGB Path")]
-        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
-        public string MdbPath
+        [Editor(typeof(OgrEsriPgbEditor), typeof(UITypeEditor))]
+        public override string DataSource
         {
-            get { return _MdbPath; }
-            set { _MdbPath = value; }
-        }
-	
-        public override string ToConnectionString()
-        {
-            return string.Format("DataSource={0};ReadOnly={1}", this.MdbPath, this.ReadOnly.ToString().ToUpper());
+            get { return base.DataSource; }
+            set { base.DataSource = value; }
         }
     }
 }

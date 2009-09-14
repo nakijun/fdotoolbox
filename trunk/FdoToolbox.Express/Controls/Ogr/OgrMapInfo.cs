@@ -33,23 +33,21 @@ namespace FdoToolbox.Express.Controls.Ogr
     {
         public OgrMapInfo() { base.ReadOnly = true; }
 
-        private string _Directory;
-
-        [Description("The path to the directory containing the MapInfo files")]
+        [Description("The path to the directory containing the MapInfo files. This directory must only contain MapInfo files!")]
         [DisplayName("MapInfo directory")]
         [Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
-        public string Directory
+        public override string DataSource
         {
-            get { return _Directory; }
-            set { _Directory = value; }
+            get { return base.DataSource; }
+            set { base.DataSource = value; }
         }
 
         public override string ToConnectionString()
         {
-            if(this.Directory.EndsWith("\\"))
-                return string.Format("DataSource={0};ReadOnly={1}", this.Directory.Substring(0, this.Directory.Length - 1), this.ReadOnly.ToString().ToUpper());
+            if (this.DataSource.EndsWith("\\"))
+                return string.Format("DataSource={0};ReadOnly={1}", this.DataSource.Substring(0, this.DataSource.Length - 1), this.ReadOnly.ToString().ToUpper());
             else
-                return string.Format("DataSource={0};ReadOnly={1}", this.Directory, this.ReadOnly.ToString().ToUpper());
+                return string.Format("DataSource={0};ReadOnly={1}", this.DataSource, this.ReadOnly.ToString().ToUpper());
         }
     }
 }

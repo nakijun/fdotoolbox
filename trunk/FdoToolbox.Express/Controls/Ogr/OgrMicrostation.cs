@@ -19,7 +19,6 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,19 +28,19 @@ using System.Drawing.Design;
 
 namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OgrCsvEditor : FileNameEditor
+    public class OgrMicrostationEditor : FileNameEditor
     {
         protected override void InitializeDialog(System.Windows.Forms.OpenFileDialog openFileDialog)
         {
-            openFileDialog.Filter = "Comma Separated Values (*.csv)|*.csv";
+            openFileDialog.Filter = "Microstation V7 files (*.dgn)|*.dgn";
         }
     }
 
-    public class OgrCsv : BaseOgrConnectionBuilder
+    public class OgrMicrostation : BaseOgrConnectionBuilder
     {
-        [Description("The path to the CSV file")]
-        [DisplayName("CSV Path")]
-        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+        [Description("The path to the Microstation V7 or earlier drawing")]
+        [DisplayName("DGN path")]
+        [Editor(typeof(OgrMicrostationEditor), typeof(UITypeEditor))]
         public override string DataSource
         {
             get { return base.DataSource; }

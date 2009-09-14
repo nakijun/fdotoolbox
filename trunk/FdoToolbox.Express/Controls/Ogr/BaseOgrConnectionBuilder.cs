@@ -29,17 +29,28 @@ namespace FdoToolbox.Express.Controls.Ogr
 {
     public abstract class BaseOgrConnectionBuilder : IOgrConnectionBuilder
     {
+        private string _DataSource;
+
+        public virtual string DataSource
+        {
+            get { return _DataSource; }
+            set { _DataSource = value; }
+        }
+	
         private bool _ReadOnly;
 
         [Description("Open connection as read-only")]
         [DisplayName("Read Only")]
-        [DefaultValue(false)]
-        public bool ReadOnly
+        [DefaultValue(true)]
+        public virtual bool ReadOnly
         {
             get { return _ReadOnly; }
             set { _ReadOnly = value; }
         }
 
-        public abstract string ToConnectionString();
+        public virtual string ToConnectionString()
+        {
+            return string.Format("DataSource={0};ReadOnly={1}", this.DataSource, this.ReadOnly.ToString().ToUpper());
+        }
     }
 }

@@ -29,13 +29,21 @@ namespace FdoToolbox.Express.Controls.Ogr
     public enum OgrType
     {
         /// <summary>
+        /// Generic interface
+        /// </summary>
+        Generic,
+        /// <summary>
+        /// OGR Virtual Driver
+        /// </summary>
+        Virtual,
+        /// <summary>
         /// MapInfo
         /// </summary>
         MapInfo,
         ///// <summary>
         ///// ESRI Shape File
         ///// </summary>
-        //ShapeFile,
+        ShapeFile,
         ///// <summary>
         ///// Geography Markup Language
         ///// </summary>
@@ -47,7 +55,7 @@ namespace FdoToolbox.Express.Controls.Ogr
         ///// <summary>
         ///// S-57
         ///// </summary>
-        //S57,
+        S57,
         /// <summary>
         /// Comma Separated values
         /// </summary>
@@ -55,14 +63,22 @@ namespace FdoToolbox.Express.Controls.Ogr
         ///// <summary>
         ///// Microstation DGN
         ///// </summary>
-        //DGN,
+        DGN,
         ///// <summary>
         ///// GeoJSON
         ///// </summary>
-        //GeoJSON,
+        GeoJSON,
         /// <summary>
         /// ESRI Personal Geodatabase
         /// </summary>
-        EsriPGB
+        EsriPGB,
+        /// <summary>
+        /// ESRI ArcInfo Coverage (*.e00)
+        /// </summary>
+        ArcCoverage,
+        /// <summary>
+        /// Atlas BNA
+        /// </summary>
+        AtlasBna
     }
 }
