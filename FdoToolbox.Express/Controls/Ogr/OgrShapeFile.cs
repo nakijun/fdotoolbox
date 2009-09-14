@@ -19,33 +19,47 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.ComponentModel;
 using System.Windows.Forms.Design;
+using System.ComponentModel;
 using System.Drawing.Design;
 
 namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OgrCsvEditor : FileNameEditor
+    public class OgrShapeFileEditor : FileNameEditor
     {
         protected override void InitializeDialog(System.Windows.Forms.OpenFileDialog openFileDialog)
         {
-            openFileDialog.Filter = "Comma Separated Values (*.csv)|*.csv";
+            openFileDialog.Filter = "ESRI Shape File (*.shp)|*.shp";
         }
     }
 
-    public class OgrCsv : BaseOgrConnectionBuilder
+    public class OgrShapeFile : BaseOgrConnectionBuilder
     {
-        [Description("The path to the CSV file")]
-        [DisplayName("CSV Path")]
-        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+        public OgrShapeFile() { base.ReadOnly = true; }
+
+        [Description("The path to the ESRI Shape File")]
+        [DisplayName("Shape File Path")]
+        [Editor(typeof(OgrShapeFileEditor), typeof(UITypeEditor))]
         public override string DataSource
         {
             get { return base.DataSource; }
             set { base.DataSource = value; }
+        }
+
+        [ReadOnly(true)]
+        public override bool ReadOnly
+        {
+            get
+            {
+                return base.ReadOnly;
+            }
+            set
+            {
+                base.ReadOnly = value;
+            }
         }
     }
 }

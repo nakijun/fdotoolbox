@@ -19,29 +19,28 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.ComponentModel;
 using System.Windows.Forms.Design;
 using System.Drawing.Design;
+using System.ComponentModel;
 
 namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OgrCsvEditor : FileNameEditor
+    public class OgrAtlasBnaEditor : FileNameEditor
     {
         protected override void InitializeDialog(System.Windows.Forms.OpenFileDialog openFileDialog)
         {
-            openFileDialog.Filter = "Comma Separated Values (*.csv)|*.csv";
+            openFileDialog.Filter = "Atlas BNA (*.bna)|*.bna";
         }
     }
 
-    public class OgrCsv : BaseOgrConnectionBuilder
+    public class OgrAtlasBna : BaseOgrConnectionBuilder
     {
-        [Description("The path to the CSV file")]
-        [DisplayName("CSV Path")]
-        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+        [Description("The path to the Atlas BNA file")]
+        [DisplayName("Atlas BNA file path")]
+        [Editor(typeof(OgrAtlasBnaEditor), typeof(UITypeEditor))]
         public override string DataSource
         {
             get { return base.DataSource; }

@@ -19,29 +19,17 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
-using System.Windows.Forms.Design;
-using System.Drawing.Design;
 
 namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OgrCsvEditor : FileNameEditor
+    public class OgrGeoJson : BaseOgrConnectionBuilder
     {
-        protected override void InitializeDialog(System.Windows.Forms.OpenFileDialog openFileDialog)
-        {
-            openFileDialog.Filter = "Comma Separated Values (*.csv)|*.csv";
-        }
-    }
-
-    public class OgrCsv : BaseOgrConnectionBuilder
-    {
-        [Description("The path to the CSV file")]
-        [DisplayName("CSV Path")]
-        [Editor(typeof(FileNameEditor), typeof(UITypeEditor))]
+        [Description("The URL to the GeoJSON data source")]
+        [DisplayName("GeoJSON URL")]
         public override string DataSource
         {
             get { return base.DataSource; }

@@ -51,9 +51,19 @@ namespace FdoToolbox.Express.Controls
         {
             _view = view;
             _builders = new Dictionary<OgrType, IOgrConnectionBuilder>();
-            _builders.Add(OgrType.MapInfo, new OgrMapInfo());
-            _builders.Add(OgrType.EsriPGB, new OgrEsriPgb());
+
+            _builders.Add(OgrType.Generic, new OgrGeneric());
+
+            _builders.Add(OgrType.ArcCoverage, new OgrArcCoverage());
+            _builders.Add(OgrType.AtlasBna, new OgrAtlasBna());
             _builders.Add(OgrType.CSV, new OgrCsv());
+            _builders.Add(OgrType.DGN, new OgrMicrostation());
+            _builders.Add(OgrType.EsriPGB, new OgrEsriPgb());
+            _builders.Add(OgrType.GeoJSON, new OgrGeoJson());
+            _builders.Add(OgrType.MapInfo, new OgrMapInfo());
+            _builders.Add(OgrType.S57, new OgrS57());
+            _builders.Add(OgrType.ShapeFile, new OgrShapeFile());
+            _builders.Add(OgrType.Virtual, new OgrVirtual());
         }
 
         public void Init()
