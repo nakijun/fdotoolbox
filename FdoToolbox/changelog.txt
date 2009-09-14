@@ -1,3 +1,27 @@
+v0.8.2
+------
+
+- Enhancements:
+    - Additional OGR connection builders for: ESRI Shape Files, ESRI ArcCoverage, Microstation DGN V7, GeoJSON, S-57, Atlas BNA, OGR Virtual Dirver and Generic Interface.
+	- Data Preview now renders features with random colors, making some datasets much easier to look at. Added a new preference which allows random theming to be enabled/disabled.
+	- Can view attributes of selected features in Data Preview (Map Mode).
+	- Add a new connection capability viewer. Available on the context menu of a selected connection in the Object Explorer.
+	- Expression Editor enhanced to allow fetching of distinct values
+	- New button in Schema Designer (contextual mode) allowing the user to fix any incompatiblities in the current schema.
+
+- Fixes:
+	- Fix ODBC bad class name crash workaround when using Data Preview, even when OSGeo.ODBC is specified in the preferences.
+	- Fix double properties not being promoted to string properties during schema alteration.
+	- Fix zero-length properties not being detected and fixed during schema alteration.
+	- Fix some Schema Designer defects with deleting elements.
+	- Add more capability checks when selecting features. This is most evident in the Data Preview and Expression Editor where certain elements would be disabled as a result.
+	
+- Other:
+	- R-Tree spatial indexing for FdoFeatureTable
+	- Changed the file drag/drop zone to be just the Object Explorer.
+	- Express Bulk Copy performs extra checks (geometry storage) when the target is a SHP file.
+	- API changes to ICapability (to ensure querying of capability types with the correct type), and to support the new capability viewer.
+	
 v0.8.0
 ------
 
