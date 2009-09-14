@@ -2,6 +2,7 @@
 
 === 0.8.2 ===
  * Express support for additional OGR formats
+ * Data Preview: Ability to sub-select map query results.
 
 === 0.8.x - 0.9 ===
 
