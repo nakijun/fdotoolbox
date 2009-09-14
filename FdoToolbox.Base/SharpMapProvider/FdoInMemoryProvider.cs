@@ -91,25 +91,31 @@ namespace FdoToolbox.Base.SharpMapProvider
             {
                 table.Columns.Add(col.ColumnName, col.DataType, col.Expression);
             }
-            
+
+            //Filter the initial result set by inverting the operands. This weeds out non-matches on point intersection tests.
+            IEnvelope env = Converter.EnvelopeFromBoundingBox(box);
+            FdoGeometry poly = new FdoGeometry(Converter.CreatePolygonFromEnvelope(env));
             foreach (FdoFeature feat in matches)
             {
                 FdoGeometry geom = feat.DesignatedGeometry;
                 if (geom != null)
                 {
-                    FeatureDataRow row = table.NewRow();
-                    foreach (DataColumn col in _data.Columns)
+                    if (geom.Contains(env) || geom.Intersects(poly))
                     {
-                        if (col.ColumnName == _data.GeometryColumn)
+                        FeatureDataRow row = table.NewRow();
+                        foreach (DataColumn col in _data.Columns)
                         {
-                            row.Geometry = Converter.FromFdoGeometry(geom);
+                            if (col.ColumnName == _data.GeometryColumn)
+                            {
+                                row.Geometry = Converter.FromFdoGeometry(geom);
+                            }
+                            else
+                            {
+                                row[col.ColumnName] = feat[col.ColumnName];
+                            }
                         }
-                        else
-                        {
-                            row[col.ColumnName] = feat[col.ColumnName];
-                        }
+                        table.AddRow(row);
                     }
-                    table.AddRow(row);
                 }
             }
             ds.Tables.Add(table);
@@ -201,6 +207,15 @@ namespace FdoToolbox.Base.SharpMapProvider
         public void Dispose()
         {
             throw new Exception("The method or operation is not implemented.");
+        }
+
+        public double? GetXYTolerance()
+        {
+            SpatialContextInfo ctx = _data.ActiveSpatialContext;
+            if (ctx != null)
+                return ctx.XYTolerance;
+
+            return null;
         }
     }
 }

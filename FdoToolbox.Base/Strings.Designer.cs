@@ -1418,6 +1418,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data Preview.
+        /// </summary>
+        internal static string TITLE_PREFS_DATA_PREVIEW {
+            get {
+                return ResourceManager.GetString("TITLE_PREFS_DATA_PREVIEW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         internal static string TITLE_PREFS_GENERAL {

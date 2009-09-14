@@ -32,8 +32,11 @@ namespace FdoToolbox.Base.Controls
             this.btnZoomIn = new System.Windows.Forms.ToolStripButton();
             this.btnZoomOut = new System.Windows.Forms.ToolStripButton();
             this.btnPan = new System.Windows.Forms.ToolStripButton();
-            this.btnSelect = new System.Windows.Forms.ToolStripButton();
             this.btnZoomExtents = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnSelect = new System.Windows.Forms.ToolStripButton();
+            this.btnClear = new System.Windows.Forms.ToolStripButton();
+            this.lblCount = new System.Windows.Forms.ToolStripLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.mapContentPanel = new System.Windows.Forms.Panel();
@@ -53,8 +56,11 @@ namespace FdoToolbox.Base.Controls
             this.btnZoomIn,
             this.btnZoomOut,
             this.btnPan,
+            this.btnZoomExtents,
+            this.toolStripSeparator1,
             this.btnSelect,
-            this.btnZoomExtents});
+            this.btnClear,
+            this.lblCount});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(755, 25);
@@ -91,6 +97,21 @@ namespace FdoToolbox.Base.Controls
             this.btnPan.Text = "Pan";
             this.btnPan.Click += new System.EventHandler(this.btnPan_Click);
             // 
+            // btnZoomExtents
+            // 
+            this.btnZoomExtents.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnZoomExtents.Image = global::FdoToolbox.Base.Images.icon_fitwindow;
+            this.btnZoomExtents.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnZoomExtents.Name = "btnZoomExtents";
+            this.btnZoomExtents.Size = new System.Drawing.Size(23, 22);
+            this.btnZoomExtents.Text = "Zoom Extents";
+            this.btnZoomExtents.Click += new System.EventHandler(this.btnZoomExtents_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // btnSelect
             // 
             this.btnSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -101,15 +122,21 @@ namespace FdoToolbox.Base.Controls
             this.btnSelect.Text = "Query";
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
             // 
-            // btnZoomExtents
+            // btnClear
             // 
-            this.btnZoomExtents.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnZoomExtents.Image = global::FdoToolbox.Base.Images.icon_fitwindow;
-            this.btnZoomExtents.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnZoomExtents.Name = "btnZoomExtents";
-            this.btnZoomExtents.Size = new System.Drawing.Size(23, 22);
-            this.btnZoomExtents.Text = "Zoom Extents";
-            this.btnZoomExtents.Click += new System.EventHandler(this.btnZoomExtents_Click);
+            this.btnClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnClear.Image = global::FdoToolbox.Base.Images.map_edit;
+            this.btnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(23, 22);
+            this.btnClear.Text = "Clear Selection";
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // lblCount
+            // 
+            this.lblCount.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(0, 22);
             // 
             // statusStrip1
             // 
@@ -162,7 +189,7 @@ namespace FdoToolbox.Base.Controls
             this.grdFeatures.Location = new System.Drawing.Point(0, 0);
             this.grdFeatures.Name = "grdFeatures";
             this.grdFeatures.ReadOnly = true;
-            this.grdFeatures.Size = new System.Drawing.Size(755, 95);
+            this.grdFeatures.Size = new System.Drawing.Size(150, 46);
             this.grdFeatures.TabIndex = 0;
             // 
             // FdoMapPreview
@@ -200,5 +227,8 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.ToolStripButton btnZoomExtents;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView grdFeatures;
+        private System.Windows.Forms.ToolStripButton btnClear;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripLabel lblCount;
     }
 }

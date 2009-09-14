@@ -29,7 +29,7 @@ using System.Windows.Forms;
 using FdoToolbox.Core.Feature;
 using OSGeo.FDO.ClientServices;
 
-namespace FdoToolbox.Base.Controls
+namespace FdoToolbox.Base.Controls.PreferenceSheets
 {
     public partial class ProviderPreferencesCtl : UserControl, IPreferenceSheet
     {

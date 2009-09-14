@@ -25,6 +25,8 @@ using System.Text;
 using SharpMap.Rendering.Thematics;
 using SharpMap.Styles;
 using System.Drawing;
+using SharpMap.Data;
+using SharpMap.Geometries;
 
 namespace FdoToolbox.Base.SharpMapProvider
 {
@@ -32,10 +34,16 @@ namespace FdoToolbox.Base.SharpMapProvider
     {
         private Random rand = new Random();
 
-        public SharpMap.Styles.IStyle GetStyle(SharpMap.Data.FeatureDataRow attribute)
+        private Dictionary<Geometry, Brush> _brushes = new Dictionary<Geometry, Brush>(); 
+
+        public SharpMap.Styles.IStyle GetStyle(FeatureDataRow attribute)
         {
             VectorStyle vs = new VectorStyle();
-            vs.Fill = new SolidBrush(Color.FromArgb(rand.Next(255), rand.Next(255), rand.Next(255)));
+
+            if (!_brushes.ContainsKey(attribute.Geometry))
+                _brushes[attribute.Geometry] = new SolidBrush(Color.FromArgb(rand.Next(255), rand.Next(255), rand.Next(255)));
+
+            vs.Fill = _brushes[attribute.Geometry];
             vs.Outline = new Pen(Color.Black);
             vs.EnableOutline = true;
             return vs;

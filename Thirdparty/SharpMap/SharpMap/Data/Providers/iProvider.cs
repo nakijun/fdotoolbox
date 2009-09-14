@@ -50,7 +50,13 @@ namespace SharpMap.Data.Providers
 		/// <param name="oid">Object ID</param>
 		/// <returns>geometry</returns>
 		SharpMap.Geometries.Geometry GetGeometryByID(uint oid);
-			
+
+        /// <summary>
+        /// Returns the XY coordinate tolerance used for point intersection tests.
+        /// </summary>
+        /// <returns></returns>
+        double? GetXYTolerance();
+
 		/// <summary>
 		/// Returns the data associated with all the geometries that are intersected by 'geom'
 		/// </summary>

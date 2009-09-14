@@ -45,6 +45,7 @@ namespace FdoToolbox.Base
         public static readonly string PREF_SESSION_DIR = "SessionDirectory";
         public static readonly string PREF_LOG_PATH = "LogPath";
         public static readonly string PREF_EXCLUDE_PARTIAL_SCHEMA = "ProvidersExcludePartialSchema";
+        public static readonly string PREF_DATA_PREVIEW_RANDOM_COLORS = "DataPreviewRandomColors";
 
         static Properties properties;
 
@@ -124,6 +125,23 @@ namespace FdoToolbox.Base
             set 
             { 
                 properties.Set<string>(PREF_EXCLUDE_PARTIAL_SCHEMA, string.Join(";", value)); 
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use a randomly generated color theme for map previews.
+        /// 
+        /// If false, map preview will use a monochromatic theme.
+        /// </summary>
+        public static bool DataPreviewRandomColors
+        {
+            get
+            {
+                return properties.Get<bool>(PREF_DATA_PREVIEW_RANDOM_COLORS, true);
+            }
+            set
+            {
+                properties.Set<bool>(PREF_DATA_PREVIEW_RANDOM_COLORS, value);
             }
         }
     }

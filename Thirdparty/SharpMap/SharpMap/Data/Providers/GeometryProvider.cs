@@ -282,5 +282,11 @@ namespace SharpMap.Data.Providers
 		}
 
 		#endregion
-	}
+
+
+        public double? GetXYTolerance()
+        {
+            return null;
+        }
+    }
 }

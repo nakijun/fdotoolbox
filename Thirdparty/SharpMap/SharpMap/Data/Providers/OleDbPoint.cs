@@ -451,5 +451,10 @@ namespace SharpMap.Data.Providers
 			Dispose();
 		}
 		#endregion
-	}
+
+        public double? GetXYTolerance()
+        {
+            return null;
+        }
+    }
 }

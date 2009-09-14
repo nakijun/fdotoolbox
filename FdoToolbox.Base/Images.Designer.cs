@@ -298,6 +298,13 @@ namespace FdoToolbox.Base {
             }
         }
         
+        internal static System.Drawing.Bitmap map_edit {
+            get {
+                object obj = ResourceManager.GetObject("map_edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap package {
             get {
                 object obj = ResourceManager.GetObject("package", resourceCulture);

@@ -537,6 +537,21 @@ namespace FdoToolbox.Tasks.Controls
             }
         }
 
+        public string GetSourceExpression(string className, string alias)
+        {
+            TreeNode classNode = ClassesNode.Nodes[className];
+            if (classNode != null)
+            {
+                TreeNode exprNode = classNode.Nodes[PREFIX_CLASS_EXPRESSION].Nodes[alias];
+                if (exprNode.Tag != null)
+                {
+                    ExpressionMappingInfo map = (ExpressionMappingInfo)exprNode.Tag;
+                    return map.Expression;
+                }
+            }
+            return string.Empty;
+        }
+
         public void MapExpression(string className, string alias, string targetProp)
         {
             TreeNode classNode = ClassesNode.Nodes[className];

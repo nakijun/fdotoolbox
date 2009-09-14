@@ -617,5 +617,10 @@ namespace SharpMap.Data.Providers
 					throw (new NotSupportedException("Unsupported datatype '" + t.Name + "' found in datasource"));
 			}
 		}
-	}
+
+        public double? GetXYTolerance()
+        {
+            return null;
+        }
+    }
 }
