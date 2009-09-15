@@ -1,0 +1,13 @@
+This application uses the following thirdparty libraries and resources:
+
+- SharpDevelop Core (c) ic#code (http://www.icsharpcode.com/OpenSource/SD/Default.aspx)
+- Feature Data Objects (c) Autodesk/OSGeo (http://fdo.osgeo.org)
+- DockPanel Suite (c) Weifen Luo (http://sourceforge.net/projects/dockpanelsuite)
+- famfamfam silk icon set (c) Mark James (http://www.famfamfam.com/lab/icons/silk/)
+- ADO.NET 2.0 SQLite Data Provider (c) Robert Simpson (http://sqlite.phxsoftware.com)
+- Iesi.Collections (c) Jason Smith
+- SharpMap 0.9 (c) Morten Nielsen (http://www.codeplex.com/SharpMap)
+
+FdoToolbox Core ETL framework is based on Rhino ETL (c) Oren Eini / Ayende Rahien (http://www.ayende.com)
+
+This application is licensed under the GNU Lesser General Public Licence (see http://www.gnu.org/licenses/lgpl.html) see license.txt for more/additional licensing information.
