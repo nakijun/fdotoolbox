@@ -25,6 +25,7 @@ using System.Text;
 using FdoToolbox.Base.Services;
 using ICSharpCode.Core;
 using FdoToolbox.Core;
+using FdoToolbox.Base.Scripting;
 
 namespace FdoToolbox.Base
 {
@@ -55,6 +56,11 @@ namespace FdoToolbox.Base
             {
                 LoggingService.InfoFormatted("Connection {0} refreshed", e.Data);
             };
+        }
+
+        public static void OnScriptLoaded(CompiledScript script)
+        {
+            LoggingService.Info("Loaded: " + script.Path);
         }
     }
 }

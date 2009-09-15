@@ -410,6 +410,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Script Manager.
+        /// </summary>
+        internal static string CMD_ScriptManager {
+            get {
+                return ResourceManager.GetString("CMD_ScriptManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text Editor.
         /// </summary>
         internal static string CMD_TextEditor {

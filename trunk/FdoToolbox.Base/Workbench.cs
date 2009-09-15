@@ -87,6 +87,7 @@ namespace FdoToolbox.Base
             contentPanel.Dock = DockStyle.Fill;
             contentPanel.DockLeftPortion = 200;
             contentPanel.DockBottomPortion = 150;
+            contentPanel.DockRightPortion = 200;
             
             menu = new MenuStrip();
             MenuService.AddItemsToMenu(menu.Items, this, "/Workbench/MainMenu");

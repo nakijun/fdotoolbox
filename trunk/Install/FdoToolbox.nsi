@@ -39,7 +39,7 @@ SetCompressor /SOLID /FINAL lzma
 
 !define SLN_DIR ".."
 !define SLN_THIRDPARTY "${SLN_DIR}\Thirdparty"
-!define RELEASE_VERSION "0.8.0"
+!define RELEASE_VERSION "0.8.5"
 
 # Installer vars
 !if ${SLN_CONFIG} == "Release"
@@ -143,7 +143,6 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.exe.config"
 	
 	# libraries
-	
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Base.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.Core.dll"
@@ -154,6 +153,12 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.UI.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\System.Data.SQLite.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\WeifenLuo.WinFormsUI.Docking.dll"
+	
+	# Scripting
+	File "${INST_OUTPUT_FDOTOOLBOX}\IronPython.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\Microsoft.Scripting.Core.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\Microsoft.Scripting.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\Microsoft.Scripting.ExtensionAttribute.dll"
 	
 	# main executables
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoUtil.exe"
