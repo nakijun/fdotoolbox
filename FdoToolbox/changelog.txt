@@ -14,6 +14,7 @@ v0.8.2
 	- Fix double properties not being promoted to string properties during schema alteration.
 	- Fix zero-length properties not being detected and fixed during schema alteration.
 	- Fix some Schema Designer defects with deleting elements.
+	- Prevent illegal mapping of properties in bulk copy (eg. Data to Geometry)
 	- Add more capability checks when selecting features. This is most evident in the Data Preview and Expression Editor where certain elements would be disabled as a result.
 	
 - Other:
