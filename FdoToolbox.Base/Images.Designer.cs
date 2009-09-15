@@ -354,6 +354,13 @@ namespace FdoToolbox.Base {
             }
         }
         
+        internal static System.Drawing.Bitmap script {
+            get {
+                object obj = ResourceManager.GetObject("script", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap server_connection {
             get {
                 object obj = ResourceManager.GetObject("server_connection", resourceCulture);

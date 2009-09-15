@@ -1,0 +1,121 @@
+#region LGPL Header
+// Copyright (C) 2009, Jackie Ng
+// http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
+// 
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+// 
+//
+// See license.txt for more/additional licensing information
+#endregion
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using FdoToolbox.Base.Controls;
+using FdoToolbox.Base.Services;
+using System.IO;
+using ICSharpCode.Core;
+
+namespace FdoToolbox.Base.Scripting
+{
+    public partial class ScriptManager : ViewContent
+    {
+        public ScriptManager()
+        {
+            InitializeComponent();
+            this.Title = ResourceService.GetString("CMD_ScriptManager");
+        }
+
+        public override bool CanClose
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            InitScriptItems();
+            ScriptingEngine.Instance.ScriptLoaded += new ScriptLoadedEventHandler(OnScriptLoaded);
+            base.OnLoad(e);
+        }
+
+        void OnScriptLoaded(CompiledScript script)
+        {
+            AddScriptItem(script.Path);
+        }
+
+        private void AddScriptItem(string path)
+        {
+            TreeNode node = new TreeNode();
+            node.Text = Path.GetFileName(path);
+            node.Tag = path;
+            treeScripts.Nodes.Add(node);
+        }
+
+        private void InitScriptItems()
+        {
+            ICollection<string> scriptPaths = ScriptingEngine.Instance.LoadedScripts;
+            foreach (string scr in scriptPaths)
+            {
+                AddScriptItem(scr);
+            }
+        }
+
+        public string SelectedScript
+        {
+            get
+            {
+                if (treeScripts.SelectedNode != null) 
+                {
+                    return treeScripts.SelectedNode.Tag.ToString();
+                }
+                return string.Empty;
+            }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            string file = FileService.OpenFile("Load Script", "IronPython Scripts (*.py)|*.py");
+            if (!string.IsNullOrEmpty(file))
+            {
+                ScriptingEngine.Instance.LoadScript(file);
+            }
+        }
+
+        private void treeScripts_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            btnRun.Enabled = (treeScripts.SelectedNode != null);
+        }
+
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            string script = this.SelectedScript;
+            if (!string.IsNullOrEmpty(script))
+            {
+                ScriptingEngine.Instance.InvokeLoadedScript(script);
+            }
+        }
+    }
+}

@@ -44,9 +44,21 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IronPython, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\IronPython\IronPython.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Thirdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\IronPython\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Core, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Thirdparty\IronPython\Microsoft.Scripting.Core.dll</HintPath>
     </Reference>
     <Reference Include="OSGeo.FDO, Version=3.3.8085.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -387,6 +399,13 @@
     <Compile Include="ISubView.cs" />
     <Compile Include="NameValuePair.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="Scripting\ScriptingEngine.cs" />
+    <Compile Include="Scripting\ScriptManager.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scripting\ScriptManager.Designer.cs">
+      <DependentUpon>ScriptManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\DragDropHandlerService.cs" />
     <Compile Include="Services\DragDropHandlers\ConnectionFileHandler.cs" />
     <Compile Include="Services\DragDropHandlers\IDragDropHandler.cs" />
@@ -444,6 +463,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FdoToolbox.Base.addin" />
+    <None Include="Resources\script.png" />
     <None Include="Resources\map_edit.png" />
     <None Include="Resources\file_connection.png" />
     <None Include="Resources\database_connect1.png" />
@@ -669,6 +689,10 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Images.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scripting\ScriptManager.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ScriptManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Strings.resx">
       <SubType>Designer</SubType>

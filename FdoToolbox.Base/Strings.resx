@@ -232,6 +232,9 @@
   <data name="CMD_SchemaEditor" xml:space="preserve">
     <value>Standalone Schema Editor</value>
   </data>
+  <data name="CMD_ScriptManager" xml:space="preserve">
+    <value>Script Manager</value>
+  </data>
   <data name="CMD_TextEditor" xml:space="preserve">
     <value>Text Editor</value>
   </data>

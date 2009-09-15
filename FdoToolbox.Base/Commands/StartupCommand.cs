@@ -32,6 +32,7 @@ using Msg = ICSharpCode.Core.MessageService;
 using FdoToolbox.Core;
 using FdoToolbox.Base.Controls;
 using FdoToolbox.Base.Services.DragDropHandlers;
+using FdoToolbox.Base.Scripting;
 
 namespace FdoToolbox.Base.Commands
 {
@@ -72,6 +73,13 @@ namespace FdoToolbox.Base.Commands
                         handlerSvc.RegisterHandler(h);
                     }
                 }
+
+                //Init the scripting engine
+                ScriptingEngine engine = ScriptingEngine.Instance;
+                ScriptManager mgr = new ScriptManager();
+                wb.ShowContent(mgr, ViewRegion.Right);
+
+                engine.ScriptLoaded += new ScriptLoadedEventHandler(EventWatcher.OnScriptLoaded);
 
                 wb.FormClosing += delegate
                 {
