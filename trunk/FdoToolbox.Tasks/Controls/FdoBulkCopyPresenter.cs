@@ -271,7 +271,7 @@ namespace FdoToolbox.Tasks.Controls
             }
         }
 
-        private DataType? GetPropertyDataType(FdoConnection conn, string className, string propertyName)
+        private FdoPropertyType? GetPropertyType(FdoConnection conn, string className, string propertyName)
         {
             using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(conn))
             {
@@ -279,9 +279,48 @@ namespace FdoToolbox.Tasks.Controls
                 if (cd != null)
                 {
                     PropertyDefinition pd = cd.Properties[propertyName];
-                    if (pd.PropertyType == PropertyType.PropertyType_DataProperty)
+                    switch (pd.PropertyType)
                     {
-                        return (pd as DataPropertyDefinition).DataType;
+                        case PropertyType.PropertyType_AssociationProperty:
+                            return FdoPropertyType.Association;
+                        case PropertyType.PropertyType_DataProperty:
+                            {
+                                DataPropertyDefinition dp = pd as DataPropertyDefinition;
+                                switch (dp.DataType)
+                                {
+                                    case DataType.DataType_BLOB:
+                                        return FdoPropertyType.BLOB;
+                                    case DataType.DataType_Boolean:
+                                        return FdoPropertyType.Boolean;
+                                    case DataType.DataType_Byte:
+                                        return FdoPropertyType.Byte;
+                                    case DataType.DataType_CLOB:
+                                        return FdoPropertyType.CLOB;
+                                    case DataType.DataType_DateTime:
+                                        return FdoPropertyType.DateTime;
+                                    case DataType.DataType_Decimal:
+                                        return FdoPropertyType.Decimal;
+                                    case DataType.DataType_Double:
+                                        return FdoPropertyType.Double;
+                                    case DataType.DataType_Int16:
+                                        return FdoPropertyType.Int16;
+                                    case DataType.DataType_Int32:
+                                        return FdoPropertyType.Int32;
+                                    case DataType.DataType_Int64:
+                                        return FdoPropertyType.Int64;
+                                    case DataType.DataType_Single:
+                                        return FdoPropertyType.Single;
+                                    case DataType.DataType_String:
+                                        return FdoPropertyType.String;
+                                }
+                                return null;
+                            }
+                        case PropertyType.PropertyType_GeometricProperty:
+                            return FdoPropertyType.Geometry;
+                        case PropertyType.PropertyType_ObjectProperty:
+                            return FdoPropertyType.Object;
+                        case PropertyType.PropertyType_RasterProperty:
+                            return FdoPropertyType.Raster;
                     }
                 }
             }
@@ -291,42 +330,82 @@ namespace FdoToolbox.Tasks.Controls
         public void MapProperty(string srcClassName, string srcProperty, string destClassName, string destProperty)
         {
             //Throw if not mappable
-            DataType? srcDt = GetPropertyDataType(GetSourceConnection(), destClassName, destProperty);
-            DataType? dstDt = GetPropertyDataType(GetTargetConnection(), destClassName, destProperty);
+            FdoPropertyType? srcPt = GetPropertyType(GetSourceConnection(), srcClassName, srcProperty);
+            FdoPropertyType? dstPt = GetPropertyType(GetTargetConnection(), destClassName, destProperty);
 
-            if (srcDt.HasValue && dstDt.HasValue)
+            if (srcPt.HasValue && dstPt.HasValue)
             {
-                if (!ValueConverter.IsConvertible(srcDt.Value, dstDt.Value))
-                    throw new MappingException("Unable to map {0} to {1}. {2} is not convertible to {3}");
+                FdoPropertyType srcType = srcPt.Value;
+                FdoPropertyType dstType = dstPt.Value;
 
+                switch (srcType)
+                {
+                    case FdoPropertyType.Association:
+                        {
+                            if (dstType != FdoPropertyType.Association)
+                                throw new MappingException(string.Format("Unable to map {0} to {1}. They are different property types", srcProperty, destProperty));
+                        }
+                        break;
+                    case FdoPropertyType.Geometry:
+                        {
+                            if (dstType != FdoPropertyType.Geometry)
+                                throw new MappingException(string.Format("Unable to map {0} to {1}. They are different property types", srcProperty, destProperty));
+                        }
+                        break;
+                    case FdoPropertyType.Object:
+                        {
+                            if (dstType != FdoPropertyType.Object)
+                                throw new MappingException(string.Format("Unable to map {0} to {1}. They are different property types", srcProperty, destProperty));
+                        }
+                        break;
+                    case FdoPropertyType.Raster:
+                        {
+                            if (dstType != FdoPropertyType.Raster)
+                                throw new MappingException(string.Format("Unable to map {0} to {1}. They are different property types", srcProperty, destProperty));
+                        }
+                        break;
+                    default: //Data
+                        {
+                            DataType? sdt = ValueConverter.GetDataType(srcType);
+                            DataType? ddt = ValueConverter.GetDataType(dstType);
+                            if (!ddt.HasValue)
+                                throw new MappingException(string.Format("Unable to map {0} to {1}. They are different property types", srcProperty, destProperty));
+
+                            if (!ValueConverter.IsConvertible(sdt.Value, ddt.Value))
+                                throw new MappingException(string.Format("Unable to map {0} to {1}. {2} is not convertible to {3}", srcProperty, destProperty, sdt.Value.ToString(), ddt.Value.ToString()));
+
+                            if (sdt.Value != ddt.Value)
+                            {
+                                //Add data type conversion rule
+                            }
+                        }
+                        break;
+                }
                 _view.MapClassProperty(srcClassName, srcProperty, destProperty);
                 _propertyMappings[srcClassName][srcProperty] = destProperty;
-
-                if (srcDt.Value != dstDt.Value)
-                {
-                    //Add data type conversion rule
-                }
             }
         }
 
         public void MapExpression(string srcClassName, string srcAlias, string destClassName, string destProperty)
         {
-            //Throw if not mappable
-            DataType? srcDt = ParseSourceExpression(srcClassName, srcAlias);
-            DataType? dstDt = GetPropertyDataType(GetTargetConnection(), destClassName, destProperty);
-            if (srcDt.HasValue && dstDt.HasValue)
-            {
-                if (!ValueConverter.IsConvertible(srcDt.Value, dstDt.Value))
-                    throw new MappingException("Unable to map source expression to {0}. Source expression evaluates to {1}, which is not convertible to {2}");
+            _view.MapExpression(srcClassName, srcAlias, destProperty);
+            _expressionMappings[srcClassName][srcAlias] = destProperty;
 
-                _view.MapExpression(srcClassName, srcAlias, destProperty);
-                _expressionMappings[srcClassName][srcAlias] = destProperty;
+            ////Throw if not mappable
+            //DataType? srcDt = ParseSourceExpression(srcClassName, srcAlias);
+            //DataType? dstDt = GetPropertyType(GetTargetConnection(), destClassName, destProperty);
+            //if (srcDt.HasValue && dstDt.HasValue)
+            //{
+            //    if (!ValueConverter.IsConvertible(srcDt.Value, dstDt.Value))
+            //        throw new MappingException("Unable to map source expression to {0}. Source expression evaluates to {1}, which is not convertible to {2}");
 
-                if (srcDt.Value != dstDt.Value)
-                {
-                    //Add data type conversion rule
-                }
-            }
+                
+
+            //    if (srcDt.Value != dstDt.Value)
+            //    {
+            //        //Add data type conversion rule
+            //    }
+            //}
         }
 
         private DataType? ParseSourceExpression(string srcClassName, string srcAlias)
