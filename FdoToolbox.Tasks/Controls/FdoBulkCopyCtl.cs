@@ -450,7 +450,7 @@ namespace FdoToolbox.Tasks.Controls
                             }
                             catch (MappingException ex)
                             {
-                                this.ShowError(ex);
+                                this.ShowError(ex.Message);
                             }
                         });
                     mapExpressionItem.DropDown.Items.Add(

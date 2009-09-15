@@ -92,30 +92,33 @@ namespace FdoToolbox.Tasks.Commands
                     using (FdoFeatureService destService = FdoConnectionUtil.CreateFeatureService(opts.TargetConnection))
                     {
                         FeatureSchema srcSchema = srcService.GetSchemaByName(opts.SourceSchema);
-                        IncompatibleSchema incSchema = null;
-                        if (!destService.CanApplySchema(srcSchema, out incSchema))
+                        if (opts.ApplySchemaToTarget && srcSchema != null)
                         {
-                            bool attemptAlter = WrappedMessageBox.Confirm("Incompatible Schema", "The source schema has incompatible elements:\n\n" + incSchema.ToString() + "\nThe source schema will be altered to be compatible with the target connection. Proceed?", MessageBoxText.YesNo);
-                            if (attemptAlter)
+                            IncompatibleSchema incSchema = null;
+                            if (!destService.CanApplySchema(srcSchema, out incSchema))
                             {
-                                try
+                                bool attemptAlter = WrappedMessageBox.Confirm("Incompatible Schema", "The source schema has incompatible elements:\n\n" + incSchema.ToString() + "\nThe source schema will be altered to be compatible with the target connection. Proceed?", MessageBoxText.YesNo);
+                                if (attemptAlter)
                                 {
-                                    FeatureSchema alteredSchema = destService.AlterSchema(srcSchema, incSchema);
-                                    if (alteredSchema != null)
+                                    try
                                     {
-                                        opts.AlterSchema = true;
+                                        FeatureSchema alteredSchema = destService.AlterSchema(srcSchema, incSchema);
+                                        if (alteredSchema != null)
+                                        {
+                                            opts.AlterSchema = true;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageService.ShowError(ex);
+                                        LoggingService.Error("Alter schema error", ex);
+                                        e.Cancel = true;
                                     }
                                 }
-                                catch (Exception ex)
+                                else
                                 {
-                                    MessageService.ShowError(ex);
-                                    LoggingService.Error("Alter schema error", ex);
                                     e.Cancel = true;
                                 }
-                            }
-                            else
-                            {
-                                e.Cancel = true;
                             }
                         }
                     }

@@ -114,6 +114,80 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
+        /// Gets the data type
+        /// </summary>
+        /// <param name="pt">The <see cref="FdoPropertyType"/></param>
+        /// <returns></returns>
+        public static DataType? GetDataType(FdoPropertyType pt)
+        {
+            switch (pt)
+            {
+                case FdoPropertyType.BLOB:
+                    return DataType.DataType_BLOB;
+                case FdoPropertyType.Boolean:
+                    return DataType.DataType_Boolean;
+                case FdoPropertyType.Byte:
+                    return DataType.DataType_Byte;
+                case FdoPropertyType.CLOB:
+                    return DataType.DataType_CLOB;
+                case FdoPropertyType.DateTime:
+                    return DataType.DataType_DateTime;
+                case FdoPropertyType.Decimal:
+                    return DataType.DataType_Decimal;
+                case FdoPropertyType.Double:
+                    return DataType.DataType_Double;
+                case FdoPropertyType.Int16:
+                    return DataType.DataType_Int16;
+                case FdoPropertyType.Int32:
+                    return DataType.DataType_Int32;
+                case FdoPropertyType.Int64:
+                    return DataType.DataType_Int64;
+                case FdoPropertyType.Single:
+                    return DataType.DataType_Single;
+                case FdoPropertyType.String:
+                    return DataType.DataType_String;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the property type
+        /// </summary>
+        /// <param name="dt">The data type</param>
+        /// <returns></returns>
+        public static FdoPropertyType GetPropertyType(DataType dt)
+        {
+            switch (dt)
+            {
+                case DataType.DataType_BLOB:
+                    return FdoPropertyType.BLOB;
+                case DataType.DataType_Boolean:
+                    return FdoPropertyType.Boolean;
+                case DataType.DataType_Byte:
+                    return FdoPropertyType.Byte;
+                case DataType.DataType_CLOB:
+                    return FdoPropertyType.CLOB;
+                case DataType.DataType_DateTime:
+                    return FdoPropertyType.DateTime;
+                case DataType.DataType_Decimal:
+                    return FdoPropertyType.Decimal;
+                case DataType.DataType_Double:
+                    return FdoPropertyType.Double;
+                case DataType.DataType_Int16:
+                    return FdoPropertyType.Int16;
+                case DataType.DataType_Int32:
+                    return FdoPropertyType.Int32;
+                case DataType.DataType_Int64:
+                    return FdoPropertyType.Int64;
+                case DataType.DataType_Single:
+                    return FdoPropertyType.Single;
+                case DataType.DataType_String:
+                    return FdoPropertyType.String;
+            }
+            throw new ArgumentException("dt");
+        }
+
+        /// <summary>
         /// Gets a FDO literal value type from a CLR type
         /// </summary>
         /// <param name="value"></param>
