@@ -33,6 +33,8 @@ namespace FdoToolbox.Base.Scripting
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnOpen = new System.Windows.Forms.ToolStripButton();
+            this.btnUnload = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnRun = new System.Windows.Forms.ToolStripButton();
             this.treeScripts = new System.Windows.Forms.TreeView();
             this.toolStrip1.SuspendLayout();
@@ -48,6 +50,8 @@ namespace FdoToolbox.Base.Scripting
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnOpen,
+            this.btnUnload,
+            this.toolStripSeparator1,
             this.btnRun});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -63,6 +67,22 @@ namespace FdoToolbox.Base.Scripting
             this.btnOpen.Size = new System.Drawing.Size(50, 22);
             this.btnOpen.Text = "Load";
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
+            // btnUnload
+            // 
+            this.btnUnload.Enabled = false;
+            this.btnUnload.Image = global::FdoToolbox.Base.Images.cross;
+            this.btnUnload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnUnload.Name = "btnUnload";
+            this.btnUnload.Size = new System.Drawing.Size(60, 22);
+            this.btnUnload.Text = "Unload";
+            this.btnUnload.Visible = false;
+            this.btnUnload.Click += new System.EventHandler(this.btnUnload_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // btnRun
             // 
@@ -107,5 +127,7 @@ namespace FdoToolbox.Base.Scripting
         private System.Windows.Forms.ToolStripButton btnOpen;
         private System.Windows.Forms.ToolStripButton btnRun;
         private System.Windows.Forms.TreeView treeScripts;
+        private System.Windows.Forms.ToolStripButton btnUnload;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }

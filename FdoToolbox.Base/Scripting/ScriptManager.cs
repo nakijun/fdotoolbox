@@ -31,6 +31,8 @@ using FdoToolbox.Base.Services;
 using System.IO;
 using ICSharpCode.Core;
 
+// TODO: Load scripts in own AppDomain, so they can be un-loaded
+
 namespace FdoToolbox.Base.Scripting
 {
     public partial class ScriptManager : ViewContent
@@ -52,21 +54,29 @@ namespace FdoToolbox.Base.Scripting
         protected override void OnLoad(EventArgs e)
         {
             InitScriptItems();
-            ScriptingEngine.Instance.ScriptLoaded += new ScriptLoadedEventHandler(OnScriptLoaded);
+            ScriptingEngine.Instance.ScriptLoaded += new ScriptEventHandler(OnScriptLoaded);
             base.OnLoad(e);
         }
 
-        void OnScriptLoaded(CompiledScript script)
+        void OnScriptLoaded(ApplicationScript script)
         {
             AddScriptItem(script.Path);
+        }
+
+        void OnScriptUnloaded(ApplicationScript script)
+        {
+            treeScripts.Nodes.RemoveByKey(script.Path);
+            UpdateButtonStates();
         }
 
         private void AddScriptItem(string path)
         {
             TreeNode node = new TreeNode();
+            node.Name = path;
             node.Text = Path.GetFileName(path);
             node.Tag = path;
             treeScripts.Nodes.Add(node);
+            UpdateButtonStates();
         }
 
         private void InitScriptItems()
@@ -106,7 +116,12 @@ namespace FdoToolbox.Base.Scripting
 
         private void treeScripts_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            btnRun.Enabled = (treeScripts.SelectedNode != null);
+            UpdateButtonStates();
+        }
+
+        private void UpdateButtonStates()
+        {
+            btnUnload.Enabled = btnRun.Enabled = (treeScripts.SelectedNode != null);
         }
 
         private void btnRun_Click(object sender, EventArgs e)
@@ -115,6 +130,15 @@ namespace FdoToolbox.Base.Scripting
             if (!string.IsNullOrEmpty(script))
             {
                 ScriptingEngine.Instance.InvokeLoadedScript(script);
+            }
+        }
+
+        private void btnUnload_Click(object sender, EventArgs e)
+        {
+            string script = this.SelectedScript;
+            if (!string.IsNullOrEmpty(script))
+            {
+                ScriptingEngine.Instance.UnloadScript(script);
             }
         }
     }

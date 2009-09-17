@@ -30,24 +30,20 @@ using System.IO;
 using ICSharpCode.Core;
 using IronPython.Runtime.Types;
 using FdoToolbox.Base.Services;
+using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Scripting
 {
-    public class ScriptGlobals
-    {
-        public const string WORKBENCH = "Workbench";
-        public const string CONN_MANAGER = "ConnManager";
-        public const string FILESERVICE = "FileService";
-        public const string MSGSERVICE = "MsgService";
-    }
-
-    public delegate void ScriptLoadedEventHandler(CompiledScript script);
-
+    public delegate void ScriptEventHandler(ApplicationScript script);
+    
     public class ScriptingEngine
     {
-        private ScriptEngine _engine;
+        public const string STARTUP_SCRIPT = "startup.py";
 
-        public event ScriptLoadedEventHandler ScriptLoaded;
+        private ScriptEngine _engine;
+        private ScriptScope _scope;
+
+        public event ScriptEventHandler ScriptLoaded;
 
         private static ScriptingEngine _instance;
 
@@ -66,35 +62,31 @@ namespace FdoToolbox.Base.Scripting
         private ScriptingEngine()
         {
             _engine = Python.CreateEngine();
-            
+            _scope = _engine.CreateScope();
+            HostApplication.InitializeScriptScope(_scope);
             //mscorlib
             _engine.Runtime.LoadAssembly(typeof(string).Assembly);
             //System
             _engine.Runtime.LoadAssembly(typeof(Uri).Assembly);
             //System.Windows.Forms
             _engine.Runtime.LoadAssembly(typeof(Form).Assembly);
-        }
-
-        private ScriptScope CreateScope()
-        {
-            ScriptScope scope = _engine.CreateScope();
-            //Setup common globals
-            scope.SetVariable(ScriptGlobals.WORKBENCH, Workbench.Instance);
-            scope.SetVariable(ScriptGlobals.FILESERVICE, DynamicHelpers.GetPythonTypeFromType(typeof(FileService)));
-            scope.SetVariable(ScriptGlobals.MSGSERVICE, DynamicHelpers.GetPythonTypeFromType(typeof(MessageService)));
-            scope.SetVariable(ScriptGlobals.CONN_MANAGER, ServiceManager.Instance.GetService<FdoConnectionManager>());
-            
-            return scope;
+            //FdoToolbox.Core
+            _engine.Runtime.LoadAssembly(typeof(FdoFeatureService).Assembly);
+            //OSGeo.FDO
+            _engine.Runtime.LoadAssembly(typeof(OSGeo.FDO.IConnectionManager).Assembly);
+            //OSGeo.FDO.Common
+            _engine.Runtime.LoadAssembly(typeof(OSGeo.FDO.Common.Exception).Assembly);
+            //OSGeo.FDO.Geometry
+            _engine.Runtime.LoadAssembly(typeof(OSGeo.FDO.Geometry.FgfGeometryFactory).Assembly);
         }
 
         public void ExecuteStatements(string script)
         {
             ScriptSource src = _engine.CreateScriptSourceFromString(script, SourceCodeKind.Statements);
-            ScriptScope scope = CreateScope();
-            src.Execute(scope);
+            src.Execute(_scope);
         }
 
-        private Dictionary<string, CompiledScript> loadedScripts = new Dictionary<string, CompiledScript>();
+        private Dictionary<string, ApplicationScript> loadedScripts = new Dictionary<string, ApplicationScript>();
 
         public ICollection<string> LoadedScripts
         {
@@ -104,6 +96,10 @@ namespace FdoToolbox.Base.Scripting
             }
         }
 
+        /// <summary>
+        /// Invokes the loaded script
+        /// </summary>
+        /// <param name="key">The key.</param>
         public void InvokeLoadedScript(string key)
         {
             if (loadedScripts.ContainsKey(key))
@@ -112,6 +108,32 @@ namespace FdoToolbox.Base.Scripting
             }
         }
 
+        /// <summary>
+        /// Runs the script.
+        /// </summary>
+        /// <param name="scriptPath">The script path.</param>
+        public void RunScript(string scriptPath)
+        {
+            try
+            {
+                ScriptSource src = _engine.CreateScriptSourceFromFile(scriptPath);
+                CompiledCode code = src.Compile();
+                code.Execute(_scope);
+            }
+            catch (SyntaxErrorException ex)
+            {
+                ExceptionOperations eo = _engine.GetService<ExceptionOperations>();
+                string error = eo.FormatException(ex);
+                string msg = "Syntax error in \"{0}\"";
+                msg = string.Format(msg, Path.GetFileName(scriptPath));
+                MessageService.ShowError(msg);
+            }
+        }
+
+        /// <summary>
+        /// Loads the script
+        /// </summary>
+        /// <param name="scriptPath">The script path.</param>
         public void LoadScript(string scriptPath)
         {
             if (!loadedScripts.ContainsKey(scriptPath))
@@ -120,11 +142,10 @@ namespace FdoToolbox.Base.Scripting
                 {
                     ScriptSource src = _engine.CreateScriptSourceFromFile(scriptPath);
                     CompiledCode code = src.Compile();
-                    ScriptScope scope = CreateScope();
-                    CompiledScript cpy = new CompiledScript(scriptPath, code, scope);
+                    ApplicationScript cpy = new ApplicationScript(scriptPath, code, _scope);
                     loadedScripts.Add(scriptPath, cpy);
 
-                    ScriptLoadedEventHandler handler = this.ScriptLoaded;
+                    ScriptEventHandler handler = this.ScriptLoaded;
                     if (handler != null)
                         handler(cpy);
                 }
@@ -138,41 +159,57 @@ namespace FdoToolbox.Base.Scripting
                 }
             }
         }
+
+        /// <summary>
+        /// Unloads the script.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        public void UnloadScript(string script)
+        {
+            if (loadedScripts.ContainsKey(script))
+            {
+                ApplicationScript cpy = loadedScripts[script];
+                loadedScripts.Remove(script);
+            }
+        }
     }
 
-    public class CompiledScript
+    /// <summary>
+    /// Represents a piece of executable script code. 
+    /// </summary>
+    public class ApplicationScript
     {
+        private CompiledCode _code;
+        private ScriptScope _scope;
+
         private string _Path;
 
+        /// <summary>
+        /// Gets the path of the script
+        /// </summary>
+        /// <value>The path.</value>
         public string Path
         {
             get { return _Path; }
         }
 
-        private CompiledCode _Code;
-
-        public CompiledCode Code
-        {
-            get { return _Code; }
-        }
-
-        private ScriptScope _Scope;
-
-        public ScriptScope Scope
-        {
-            get { return _Scope; }
-        }
-
-        public CompiledScript(string path, CompiledCode code, ScriptScope scope)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApplicationScript"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        internal ApplicationScript(string path, CompiledCode code, ScriptScope scope)
         {
             _Path = path;
-            _Code = code;
-            _Scope = scope;
+            _code = code;
+            _scope = scope;
         }
 
+        /// <summary>
+        /// Runs this instance.
+        /// </summary>
         public void Run()
         {
-            _Code.Execute(_Scope);
+            _code.Execute(_scope);
         }
     }
 }

@@ -109,6 +109,7 @@ namespace FdoToolbox.Base.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(292, 266);
+            this.ControlBox = false;
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lstClasses);
@@ -118,7 +119,7 @@ namespace FdoToolbox.Base.Forms
             this.Controls.Add(this.lblMessage);
             this.Name = "FdoMultiClassPicker";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "FdoMultiClassPicker";
+            this.Text = "Select Classes";
             this.ResumeLayout(false);
             this.PerformLayout();
 
