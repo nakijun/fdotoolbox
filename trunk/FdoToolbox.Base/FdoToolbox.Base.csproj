@@ -329,6 +329,12 @@
     <Compile Include="EventWatcher.cs" />
     <Compile Include="FdoConnectionUtil.cs" />
     <Compile Include="FileDragAndDropHandler.cs" />
+    <Compile Include="Forms\ConnectionPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConnectionPicker.Designer.cs">
+      <DependentUpon>ConnectionPicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CoordinateSystemDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -399,6 +405,7 @@
     <Compile Include="ISubView.cs" />
     <Compile Include="NameValuePair.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="Scripting\HostApplication.cs" />
     <Compile Include="Scripting\ScriptingEngine.cs" />
     <Compile Include="Scripting\ScriptManager.cs">
       <SubType>UserControl</SubType>
@@ -644,6 +651,10 @@
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConnectionPicker.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ConnectionPicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CoordinateSystemDialog.resx">
       <DependentUpon>CoordinateSystemDialog.cs</DependentUpon>

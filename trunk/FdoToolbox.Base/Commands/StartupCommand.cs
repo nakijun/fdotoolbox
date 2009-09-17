@@ -33,6 +33,8 @@ using FdoToolbox.Core;
 using FdoToolbox.Base.Controls;
 using FdoToolbox.Base.Services.DragDropHandlers;
 using FdoToolbox.Base.Scripting;
+using System.IO;
+using System.Windows.Forms;
 
 namespace FdoToolbox.Base.Commands
 {
@@ -79,7 +81,10 @@ namespace FdoToolbox.Base.Commands
                 ScriptManager mgr = new ScriptManager();
                 wb.ShowContent(mgr, ViewRegion.Right);
 
-                engine.ScriptLoaded += new ScriptLoadedEventHandler(EventWatcher.OnScriptLoaded);
+                string startup = Path.Combine(Application.StartupPath, "Scripts\\" + ScriptingEngine.STARTUP_SCRIPT);
+
+                engine.ScriptLoaded += new ScriptEventHandler(EventWatcher.OnScriptLoaded);
+                engine.RunScript(startup);
 
                 wb.FormClosing += delegate
                 {

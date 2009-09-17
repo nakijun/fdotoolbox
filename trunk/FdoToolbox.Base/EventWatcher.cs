@@ -58,7 +58,7 @@ namespace FdoToolbox.Base
             };
         }
 
-        public static void OnScriptLoaded(CompiledScript script)
+        public static void OnScriptLoaded(ApplicationScript script)
         {
             LoggingService.Info("Loaded: " + script.Path);
         }

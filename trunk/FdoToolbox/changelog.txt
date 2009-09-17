@@ -1,3 +1,11 @@
+v0.8.5
+------
+- Enhancements:
+	- Embedded IronPython (2.0.2) scripting engine. You can now drive FDO Toolbox through python scripts.
+		- New Script Manager panel allows you to load/run python scripts
+		- Exposed a simple application object model (HostApplication) for consuming scripts.
+		- New Connection Picker dialog for selecting open FDO connections. This is the first of many script helper UI classes.
+
 v0.8.2
 ------
 
