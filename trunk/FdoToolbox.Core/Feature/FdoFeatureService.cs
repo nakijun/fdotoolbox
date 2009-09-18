@@ -2038,7 +2038,7 @@ namespace FdoToolbox.Core.Feature
             if (!SupportsCommand(CommandType.CommandType_Delete))
                 throw new FeatureServiceException(Res.GetStringFormatted("ERR_UNSUPPORTED_CMD", CommandType.CommandType_Delete));
 
-            bool useTrans = (useTransaction && this.Connection.ConnectionCapabilities.SupportsConfiguration());
+            bool useTrans = (useTransaction && this.Connection.ConnectionCapabilities.SupportsTransactions());
 
             int deleted = 0;
 
