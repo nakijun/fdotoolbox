@@ -31,6 +31,7 @@ using System.IO;
 using FdoToolbox.Base.Forms;
 using Microsoft.Scripting.Hosting;
 using IronPython.Runtime.Types;
+using System.Windows.Forms;
 
 namespace FdoToolbox.Base.Scripting
 {
@@ -64,6 +65,16 @@ namespace FdoToolbox.Base.Scripting
         public static FdoConnectionManager ConnectionManager
         {
             get { return ServiceManager.Instance.GetService<FdoConnectionManager>(); }
+        }
+
+        /// <summary>
+        /// Shows the message in a simple dialog box
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <param name="message">The message.</param>
+        public static void ShowMessage(string title, string message)
+        {
+            MessageService.ShowMessage(message, title);
         }
 
         /// <summary>
