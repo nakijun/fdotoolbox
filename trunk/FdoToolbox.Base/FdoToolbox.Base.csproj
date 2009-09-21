@@ -389,6 +389,12 @@
     <Compile Include="Forms\PendingParameterDialog.Designer.cs">
       <DependentUpon>PendingParameterDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProgressDialog.Designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SchemaInfoDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -687,6 +693,10 @@
     <EmbeddedResource Include="Forms\PendingParameterDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PendingParameterDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProgressDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SchemaInfoDialog.resx">
       <SubType>Designer</SubType>
