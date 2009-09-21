@@ -126,8 +126,8 @@ namespace FdoToolbox.Base.Scripting
             {
                 ExceptionOperations eo = _engine.GetService<ExceptionOperations>();
                 string error = eo.FormatException(ex);
-                string msg = "Syntax error in \"{0}\"";
-                msg = string.Format(msg, Path.GetFileName(scriptPath));
+                string msg = "Syntax error in \"{0}\"{1}Details:{1}{2}";
+                msg = string.Format(msg, Path.GetFileName(scriptPath), Environment.NewLine, error);
                 MessageService.ShowError(msg);
             }
         }
