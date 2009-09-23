@@ -610,6 +610,9 @@
   <data name="TITLE_PREFS_GENERAL" xml:space="preserve">
     <value>General</value>
   </data>
+  <data name="TITLE_PREFS_SCRIPT" xml:space="preserve">
+    <value>Script Engine</value>
+  </data>
   <data name="TITLE_REGISTER_PROVIDER" xml:space="preserve">
     <value>Register Provider</value>
   </data>

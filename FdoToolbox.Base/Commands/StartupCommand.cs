@@ -82,8 +82,10 @@ namespace FdoToolbox.Base.Commands
                 wb.ShowContent(mgr, ViewRegion.Right);
 
                 string startup = Path.Combine(Application.StartupPath, "Scripts\\" + ScriptingEngine.STARTUP_SCRIPT);
-
+                
                 engine.ScriptLoaded += new ScriptEventHandler(EventWatcher.OnScriptLoaded);
+                
+                //Run startup script
                 engine.RunScript(startup);
 
                 wb.FormClosing += delegate

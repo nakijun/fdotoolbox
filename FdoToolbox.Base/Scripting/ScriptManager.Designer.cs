@@ -36,6 +36,7 @@ namespace FdoToolbox.Base.Scripting
             this.btnUnload = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnRun = new System.Windows.Forms.ToolStripButton();
+            this.btnReload = new System.Windows.Forms.ToolStripButton();
             this.treeScripts = new System.Windows.Forms.TreeView();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -52,7 +53,8 @@ namespace FdoToolbox.Base.Scripting
             this.btnOpen,
             this.btnUnload,
             this.toolStripSeparator1,
-            this.btnRun});
+            this.btnRun,
+            this.btnReload});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(198, 25);
@@ -94,6 +96,16 @@ namespace FdoToolbox.Base.Scripting
             this.btnRun.Text = "Run";
             this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
             // 
+            // btnReload
+            // 
+            this.btnReload.Enabled = false;
+            this.btnReload.Image = global::FdoToolbox.Base.Images.page_refresh;
+            this.btnReload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnReload.Name = "btnReload";
+            this.btnReload.Size = new System.Drawing.Size(60, 20);
+            this.btnReload.Text = "Reload";
+            this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
+            // 
             // treeScripts
             // 
             this.treeScripts.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -129,5 +141,6 @@ namespace FdoToolbox.Base.Scripting
         private System.Windows.Forms.TreeView treeScripts;
         private System.Windows.Forms.ToolStripButton btnUnload;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton btnReload;
     }
 }

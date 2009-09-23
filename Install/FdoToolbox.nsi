@@ -156,6 +156,7 @@ Section
 	
 	# Scripting
 	File "${INST_OUTPUT_FDOTOOLBOX}\IronPython.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\IronPython.Modules.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\Microsoft.Scripting.Core.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\Microsoft.Scripting.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\Microsoft.Scripting.ExtensionAttribute.dll"
