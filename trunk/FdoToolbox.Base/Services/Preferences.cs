@@ -46,6 +46,8 @@ namespace FdoToolbox.Base
         public static readonly string PREF_LOG_PATH = "LogPath";
         public static readonly string PREF_EXCLUDE_PARTIAL_SCHEMA = "ProvidersExcludePartialSchema";
         public static readonly string PREF_DATA_PREVIEW_RANDOM_COLORS = "DataPreviewRandomColors";
+        public static readonly string PREF_SCRIPT_MODULE_PATHS = "ScriptModulePaths";
+        public static readonly string PREF_SCRIPT_DEBUG = "ScriptDebug";
 
         static Properties properties;
 
@@ -142,6 +144,38 @@ namespace FdoToolbox.Base
             set
             {
                 properties.Set<bool>(PREF_DATA_PREVIEW_RANDOM_COLORS, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to enable debugging in the script engine
+        /// </summary>
+        /// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
+        public static bool ScriptDebug
+        {
+            get
+            {
+                return properties.Get<bool>(PREF_SCRIPT_DEBUG, false);
+            }
+            set
+            {
+                properties.Set<bool>(PREF_SCRIPT_DEBUG, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the list of script engine module paths.
+        /// </summary>
+        /// <value>The list of script engine module paths.</value>
+        public static string[] ScriptModulePaths
+        {
+            get
+            {
+                return properties.Get<string>(PREF_SCRIPT_MODULE_PATHS, string.Empty).Split(';');
+            }
+            set
+            {
+                properties.Set<string>(PREF_SCRIPT_MODULE_PATHS, string.Join(";", value));
             }
         }
     }

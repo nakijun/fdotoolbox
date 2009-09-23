@@ -61,9 +61,25 @@ namespace FdoToolbox.Base.Scripting
 
         private ScriptingEngine()
         {
-            _engine = Python.CreateEngine();
+            if (Preferences.ScriptDebug)
+            {
+                Dictionary<string, object> options = new Dictionary<string, object>();
+                options["Debug"] = true;
+                _engine = Python.CreateEngine(options);
+            }
+            else
+            {
+                _engine = Python.CreateEngine();
+            }
+
             _scope = _engine.CreateScope();
             HostApplication.InitializeScriptScope(_scope);
+
+            List<string> paths = new List<string>();
+            paths.Add(Path.Combine(Application.StartupPath, "Scripts"));
+            paths.AddRange(Preferences.ScriptModulePaths);
+            _engine.SetSearchPaths(paths);
+            
             //mscorlib
             _engine.Runtime.LoadAssembly(typeof(string).Assembly);
             //System
@@ -150,6 +166,32 @@ namespace FdoToolbox.Base.Scripting
                     ScriptEventHandler handler = this.ScriptLoaded;
                     if (handler != null)
                         handler(cpy);
+                }
+                catch (SyntaxErrorException ex)
+                {
+                    ExceptionOperations eo = _engine.GetService<ExceptionOperations>();
+                    string error = eo.FormatException(ex);
+                    string msg = "Syntax error in \"{0}\"{1}Details:{1}{2}";
+                    msg = string.Format(msg, Path.GetFileName(scriptPath), Environment.NewLine, error);
+                    MessageService.ShowError(msg);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Recompiles the script. Call this if the referenced script has changed since it was loade
+        /// </summary>
+        /// <param name="scriptPath">The script path.</param>
+        public void RecompileScript(string scriptPath)
+        {
+            if (loadedScripts.ContainsKey(scriptPath))
+            {
+                try
+                {
+                    ScriptSource src = _engine.CreateScriptSourceFromFile(scriptPath);
+                    CompiledCode code = src.Compile();
+                    ApplicationScript cpy = new ApplicationScript(scriptPath, code, _scope);
+                    loadedScripts[scriptPath] = cpy;
                 }
                 catch (SyntaxErrorException ex)
                 {

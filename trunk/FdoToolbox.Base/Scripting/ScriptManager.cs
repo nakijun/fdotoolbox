@@ -121,7 +121,7 @@ namespace FdoToolbox.Base.Scripting
 
         private void UpdateButtonStates()
         {
-            btnUnload.Enabled = btnRun.Enabled = (treeScripts.SelectedNode != null);
+            btnUnload.Enabled = btnRun.Enabled = btnReload.Enabled = (treeScripts.SelectedNode != null);
         }
 
         private void btnRun_Click(object sender, EventArgs e)
@@ -139,6 +139,16 @@ namespace FdoToolbox.Base.Scripting
             if (!string.IsNullOrEmpty(script))
             {
                 ScriptingEngine.Instance.UnloadScript(script);
+            }
+        }
+
+        private void btnReload_Click(object sender, EventArgs e)
+        {
+            string script = this.SelectedScript;
+            if (!string.IsNullOrEmpty(script))
+            {
+                ScriptingEngine.Instance.RecompileScript(script);
+                LoggingService.Info("Script re-loaded: " + script);
             }
         }
     }
