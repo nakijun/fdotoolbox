@@ -1,0 +1,442 @@
+#summary Generic FDO ETL Framework enhancement plan
+
+== Introduction ==
+
+The current ETL framework is very modular and flexible, but there is a glaring shortcoming in that defining ETL processes is currently an imperative process:
+
+  * There is no declarative way to create a generic ETL process.
+  * There is no declarative way to specify a series of operations for an ETL process.
+  * There is no declarative way to specify the initial parameters of an ETL operation.
+
+finally:
+
+  * There is no way to define/edit such a process through a GUI-based editor.
+
+The following proposed additions to the Generic FDO ETL Framework will allow for the following:
+
+  * Defining an ETL process pipline in a generic fashion
+  * A GUI-based generic ETL process editor
+
+Through this approach, there is no need to have multiple specialized editors as we currently have for bulk copies and joins, though for maintaining compatibility, these will remain
+
+=== ETL Process ===
+
+An ETL process is a series of `IFdoOperation` instances. An ETL process contains at least one `IFdoOperation`. An ETL process will be extended to support shared property values 
+
+{{{
+
+public class EtlProcess 
+{
+	...
+	void SetSharedProperty(string name, string value);
+	string GetSharedProperty(string name);
+	...
+}
+
+}}}
+
+Through initialization, execution to post-execution child operations can access any shared properties.
+
+=== ETL Task ===
+
+An ETL task is a series of `EtlProcess` instances. An ETL task contains at least one `EtlProcess` instance
+
+The proposed interface for EtlTask is:
+
+{{{
+
+public class EtlTask : IEtlExecutable, IDisposable
+{
+	//Registers a new process 
+	public void RegisterProcess(EtlProcess proc);
+
+	//Executes the instance
+	public void Execute();
+
+	//Returns all errors thrown during the operation
+	public IEnumerable<Exception> GetAllErrors();
+
+	//Raised when the process is broadcasting a message
+	public event MessageEventHandler ProcessMessage;
+
+	//Raised when execution has commenced
+	public event EventHandler ProcessStarted;
+
+	//Raised when execution has completed
+	public event EventHandler ProcessCompleted;
+
+	//Dispose this instance
+	public void Dispose();
+}
+
+}}}
+
+This initial version will not support multi-threaded execution of multiple `EtlProcess` instances. `EtlProcess` instances are executed in sequence.
+
+=== IEtlExecutable ===
+
+An `IEtlExecutable` interface is the interface shared between `EtlProcess` and `EtlTask`, the proposed interface is:
+
+{{{
+
+public interface IEtlExecutable
+{
+	//Executes the instance
+	void Execute();
+
+	//Returns all errors thrown during the operation
+	IEnumerable<Exception> GetAllErrors();
+
+	//Raised when the process is broadcasting a message
+	event MessageEventHandler ProcessMessage;
+
+	//Raised when execution has commenced
+	event EventHandler ProcessStarted;
+
+	//Raised when execution has completed
+	event EventHandler ProcessCompleted;
+}
+
+}}}
+
+=== Bulk Copy ===
+
+The `FdoBulkCopy` will now inherit from `EtlTask`, as a specialized form.
+The same applies to `FdoJoin`
+
+=== Serialization ===
+
+`IFdoOperation` instances will now have a defined format for serialization.
+
+{{{
+
+<xs:complexType name="FdoOperation">
+	<xs:sequence>
+		<xs:element name="Parameter" type="FdoOperationParameter" minOccurs="0" maxOccurs="unbounded" />
+	<xs:sequence>
+	<xs:attribute name="name" type="xs:string" use="required" />
+	<xs:attribute name="type" type="xs:string" use="required" />
+</xs:complexType>
+<xs:complexType name="FdoOperationParameter">
+	<xs:attribute name="name" type="xs:string" use="required" />
+	<xs:attribute name="value" type="xs:string" use="required" />
+</xs:complexType>
+
+}}}
+
+The `IFdoOperation` interface will now inherit from an additional interface `ISerializableOperation`
+
+{{{
+
+public interface ISerializableOperation
+{
+	void SetParameter(string name, string value);
+	string GetParameter(string name);
+	IEnumerable<string> GetParameterNames();
+	string DescribeParameter(string name);
+        void ApplyParameters();
+        bool IsRequiredParameter(string name);
+        bool IsSerializable { get; }
+}
+
+}}}
+
+This new interface imposes the following restrictions on implementers: They must provide a public parameterless constructor
+
+By specifying these definitions we now have a clear format for the serialization of any ETL process or task using the following schema.
+
+{{{
+
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="EtlTask" type="EtlTaskDefinition" />
+	<xs:complexType name="EtlTaskDefinition">
+		<xs:sequence>
+			<xs:element name="Connections" type="FdoConnectionCollection" minOccurs="1" maxOccurs="1" />
+			<xs:element name="Processes" type="EtlProcessCollection" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FdoConnectionCollection">
+		<xs:sequence>
+			<xs:element name="FdoConnection" type="FdoConnection" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FdoConnection">	
+		<xs:sequence>
+			<xs:element name="Provider" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="ConnectionString" type="xs:string" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="EtlProcessCollection">
+		<xs:sequence>
+			<xs:element name="OnBeforeExecute" type="EtlProcess" minOccurs="0" maxOccurs="1" />
+			<xs:element name="Process" type="EtlProcess" minOccurs="1" maxOccurs="unbounded" />
+			<xs:element name="OnAfterExecute" type="EtlProcess" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EtlProcess">
+		<xs:sequence>
+			<xs:element name="Operation" type="FdoOperation" minOccurs="1" maxOccurs="unbounded" />
+			<xs:element name="SharedParameters" type="FdoSharedParameterCollection" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="FdoSharedParameterCollection">	
+		<xs:sequence>
+			<xs:element name="Parameter" type="FdoOperationParameter" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FdoOperation">
+		<xs:sequence>
+			<xs:element name="Parameter" type="FdoOperationParameter" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="type" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:complexType name="FdoOperationParameter">
+		<xs:sequence>	
+			<xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element name="Value" type="xs:string" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
+
+}}}
+
+A bulk copy task for example could be described as follows:
+
+{{{
+
+<EtlTaskDefinition>
+	<Connections>
+		<FdoConnection name="SHP1">
+			<Provider>OSGeo.SHP</Provider>
+			<ConnectionString>DefaultFileLocation=C:\Temp</ConnectionString>
+		</FdoConnection>
+		<FdoConnection name="SDF1">
+			<Provider>OSGeo.SDF</Provider>
+			<ConnectionString>File=C:\MySdf\Test.sdf</ConnectionString>
+		</FdoConnection>
+	</Connections>
+	<Processes>
+		<Process name="ParcelsToParcels">
+			<Operation type="FdoToolbox.Core.ETL.Operations.FdoInputOperation">
+				<Parameter>
+					<Name>CONNECTION_NAME</Name>
+					<Value>SHP1</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURESCHEMA</Name>
+					<Value>Default</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURECLASS</Name>
+					<Value>Parcels</Value>
+				</Parameter>
+				<Parameter>
+					<Name>PROPERTIES</Name>
+					<Value>ID;NAME;OWNER;Geometry</Value>
+				</Parameter>
+				<Parameter>
+					<Name>EXPRESSIONS</Name>
+					<Value>EXP_GEOM_X:X(Geometry);EXP_GEOM_Y:Y(Geometry);EXP_GEOM_AREA:Area2D(Geometry)</Value>
+				</Parameter>
+			</Operation>
+			<Operation type="FdoToolbox.Core.ETL.Operations.FdoOutputOperation">
+				<Parameter>
+					<Name>CONNECTION_NAME</Name>
+					<Value>SDF1</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURESCHEMA</Name>
+					<Value>Default</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURECLASS</Name>
+					<Value>Parcels</Value>
+				</Parameter>
+				<Parameter>
+					<Name>PROPERTYMAP</Name>
+					<Value>ID:ID;NAME:RNAME;OWNER:ROWNER;EXP_GEOM_X:GEOM_X;EXP_GEOM_Y:GEOM_Y;EXP_GEOM_AREA:GEOM_AREA;Geometry:Geom</Value>
+				</Parameter>
+			</Operation>
+		</Process>
+		<Process name="TreesToTrees">
+			<Operation type="FdoToolbox.Core.ETL.Operations.FdoInputOperation">
+				<Parameter>
+					<Name>CONNECTION_NAME</Name>
+					<Value>SHP1</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURESCHEMA</Name>
+					<Value>Default</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURECLASS</Name>
+					<Value>Trees</Value>
+				</Parameter>
+				<Parameter>
+					<Name>PROPERTIES</Name>
+					<Value>ID;NAME;URL;Geometry</Value>
+				</Parameter>
+			</Operation>
+			<Operation type="FdoToolbox.Core.ETL.Operations.FdoOutputOperation">
+				<Parameter>
+					<Name>CONNECTION_NAME</Name>
+					<Value>SDF1</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURESCHEMA</Name>
+					<Value>Default</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURECLASS</Name>
+					<Value>Trees</Value>
+				</Parameter>
+				<Parameter>
+					<Name>PROPERTYMAP</Name>
+					<Value>ID:ID;NAME:NAME;URL:URL;Geometry:Geom</Value>
+				</Parameter>
+			</Operation>
+		</Process>
+	</Processes>
+</EtlTaskDefinition>
+
+}}}
+
+If the target schema in the above example does not exist, previous bulk copies would've failed at this point. 
+
+The new generic task definition allows you to execute operations before the main processes are invoked, such as creating a data store and applying a schema.
+
+{{{
+
+<EtlTaskDefinition>
+	<Connections>
+		<FdoConnection name="SHP1">
+			<Provider>OSGeo.SHP</Provider>
+			<ConnectionString>DefaultFileLocation=C:\Temp</ConnectionString>
+		</FdoConnection>
+		<FdoConnection name="SDF1">
+			<Provider>OSGeo.SDF</Provider>
+			<ConnectionString>File=C:\MySdf\Test.sdf</ConnectionString>
+		</FdoConnection>
+	</Connections>
+	<Processes>
+		<OnBeforeExecute>
+			<Operation type="FdoToolbox.Core.ETL.Operations.CreateDataStoreOperation">	
+				<Parameter>
+					<Name>Provider</Provider>
+					<Value>OSGeo.SDF</Value>
+				</Parameter>
+				<Parameter>
+					<Name>CONNECTIONSTRING</Name>
+					<Value>File=C:\MySdf\Test.sdf</Value>
+				</Parameter>
+				<Parameter>
+					<Name>DATASTOREPROPERTIES</Name>
+					<Value>File=C:\MySdf\Test.sdf</Value>
+				</Parameter>
+			</Operation>
+			<Operation type="FdoToolbox.Core.ETL.Operations.ApplySchemaOperation">
+				<Parameter>
+					<Name>SOURCE_CONNECTION_PROVIDER</Name>
+					<Value>OSGeo.SHP</Value>
+				</Parameter>
+				<Parameter>
+					<Name>SOURCE_CONNECTION_STRING</Name>
+					<Value>DefaultFileLocation=C:\Temp</Value>
+				</Parameter>
+				<Parameter>
+					<Name>SOURE_SCHEMA</Name>
+					<Value>Default</Value>
+				</Parameter>
+				<Parameter>
+					<Name>SOURCE_CLASSES</Name>
+					<Value>Parcels,Trees</Value>
+				</Parameter>
+			</Operation>
+		</OnBeforeExecute>
+		<Process name="ParcelsToParcels">
+			<Operation type="FdoToolbox.Core.ETL.Operations.FdoInputOperation">
+				<Parameter>
+					<Name>CONNECTION_NAME</Name>
+					<Value>SHP1</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURESCHEMA</Name>
+					<Value>Default</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURECLASS</Name>
+					<Value>Parcels</Value>
+				</Parameter>
+				<Parameter>
+					<Name>PROPERTIES</Name>
+					<Value>ID;NAME;OWNER;Geometry</Value>
+				</Parameter>
+				<Parameter>
+					<Name>EXPRESSIONS</Name>
+					<Value>EXP_GEOM_X:X(Geometry);EXP_GEOM_Y:Y(Geometry);EXP_GEOM_AREA:Area2D(Geometry)</Value>
+				</Parameter>
+			</Operation>
+			<Operation type="FdoToolbox.Core.ETL.Operations.FdoOutputOperation">
+				<Parameter>
+					<Name>CONNECTION_NAME</Name>
+					<Value>SDF1</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURESCHEMA</Name>
+					<Value>Default</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURECLASS</Name>
+					<Value>Parcels</Value>
+				</Parameter>
+				<Parameter>
+					<Name>PROPERTYMAP</Name>
+					<Value>ID:ID;NAME:RNAME;OWNER:ROWNER;EXP_GEOM_X:GEOM_X;EXP_GEOM_Y:GEOM_Y;EXP_GEOM_AREA:GEOM_AREA;Geometry:Geom</Value>
+				</Parameter>
+			</Operation>
+		</Process>
+		<Process name="TreesToTrees">
+			<Operation type="FdoToolbox.Core.ETL.Operations.FdoInputOperation">
+				<Parameter>
+					<Name>CONNECTION_NAME</Name>
+					<Value>SHP1</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURESCHEMA</Name>
+					<Value>Default</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURECLASS</Name>
+					<Value>Trees</Value>
+				</Parameter>
+				<Parameter>
+					<Name>PROPERTIES</Name>
+					<Value>ID;NAME;URL;Geometry</Value>
+				</Parameter>
+			</Operation>
+			<Operation type="FdoToolbox.Core.ETL.Operations.FdoOutputOperation">
+				<Parameter>
+					<Name>CONNECTION_NAME</Name>
+					<Value>SDF1</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURESCHEMA</Name>
+					<Value>Default</Value>
+				</Parameter>
+				<Parameter>
+					<Name>FEATURECLASS</Name>
+					<Value>Trees</Value>
+				</Parameter>
+				<Parameter>
+					<Name>PROPERTYMAP</Name>
+					<Value>ID:ID;NAME:NAME;URL:URL;Geometry:Geom</Value>
+				</Parameter>
+			</Operation>
+		</Process>
+	</Processes>
+</EtlTaskDefinition>
+
+}}}
