@@ -12,7 +12,6 @@
  * Raster Provider support
  * User Documentation
  * Localization
- * Generic ETL task definitions
  * Additional Property support
       * Raster Properties
 
@@ -21,7 +20,6 @@
  * Dynamic Language Runtime (DLR) scripting
  * FGF geometry (non-WKB) rendering support for Data Preview
  * Support for creating join tasks on Spatial Predicates
- * Visual ETL pipeline editor
  * FDO Connection configuration support
  * Schema Mapping support
  * LINQ to FDO
