@@ -33,11 +33,11 @@ namespace FdoToolbox.Base.Services
     /// </summary>
     /// <remarks>
     /// This class is designed to be used from within an add-in context. Do not 
-    /// use <see cref="FdoAssemblyResolver"/> from within an add-in context. Only 
-    /// use <see cref="FdoAssemblyResolver"/> when using the Core API from a standalone 
+    /// use <see cref="FdoToolbox.Core.FdoAssemblyResolver"/> from within an add-in context. Only 
+    /// use <see cref="FdoToolbox.Core.FdoAssemblyResolver"/> when using the Core API from a standalone 
     /// context (outside of FDO Toolbox)
     /// </remarks>
-    public sealed class AddInAssemblyResolver
+    internal sealed class AddInAssemblyResolver
     {
         static AddInAssemblyResolver()
         {

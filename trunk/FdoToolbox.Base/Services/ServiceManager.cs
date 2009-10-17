@@ -36,6 +36,10 @@ namespace FdoToolbox.Base.Services
         private List<IService> _services = new List<IService>();
         private Dictionary<Type, IService> _serviceDict = new Dictionary<Type, IService>();
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <value>The instance.</value>
         public static ServiceManager Instance
         {
             get
@@ -49,6 +53,9 @@ namespace FdoToolbox.Base.Services
             }
         }
 
+        /// <summary>
+        /// Occurs when [service manager initialized].
+        /// </summary>
         public static event EventHandler ServiceManagerInitialized = delegate { };
 
         private ServiceManager() { InitializeServicesSubsystem("/FdoToolbox/Services"); }
@@ -85,11 +92,19 @@ namespace FdoToolbox.Base.Services
             }
         }
 
+        /// <summary>
+        /// Adds the service.
+        /// </summary>
+        /// <param name="service">The service.</param>
         protected void AddService(IService service)
         {
             _services.Add(service);
         }
 
+        /// <summary>
+        /// Adds the services.
+        /// </summary>
+        /// <param name="services">The services.</param>
         protected void AddServices(IEnumerable<IService> services)
         {
             _services.AddRange(services);
@@ -98,7 +113,7 @@ namespace FdoToolbox.Base.Services
         /// <summary>
         /// Requests a specific service. May return null if service is not found
         /// </summary>
-        /// <param name="serviceType"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T GetService<T>() where T : class, IService
         {

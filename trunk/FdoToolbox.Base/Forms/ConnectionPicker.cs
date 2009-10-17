@@ -30,6 +30,9 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Forms
 {
+    /// <summary>
+    /// A dialog to select an open connection
+    /// </summary>
     public partial class ConnectionPicker : Form
     {
         internal ConnectionPicker()
@@ -37,6 +40,10 @@ namespace FdoToolbox.Base.Forms
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.Form.Load"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
             FdoConnectionManager connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
@@ -49,6 +56,10 @@ namespace FdoToolbox.Base.Forms
             btnOK.Enabled = (lstConnections.SelectedIndex >= 0);
         }
 
+        /// <summary>
+        /// Gets the name of the connection.
+        /// </summary>
+        /// <returns></returns>
         public static string GetConnectionName()
         {
             ConnectionPicker dlg = new ConnectionPicker();

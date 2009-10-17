@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,7 +37,7 @@ namespace FdoToolbox.Base.SharpMapProvider
     /// <summary>
     /// An in-memory data provider for SharpMap
     /// </summary>
-    public class FdoInMemoryProvider : IProvider
+    internal class FdoInMemoryProvider : IProvider
     {
         private FdoFeatureTable _data;
 

@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,7 +31,7 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoCreateDataStoreView : IViewContent
+    internal interface IFdoCreateDataStoreView : IViewContent
     {
         IList<FdoProviderInfo> ProviderList { set; }
         FdoProviderInfo SelectedProvider { get; }
@@ -52,7 +53,7 @@ namespace FdoToolbox.Base.Controls
         void AddEnumerableDataStoreProperty(string name, string defaultValue, string[] values);
     }
 
-    public class FdoCreateDataStorePresenter
+    internal class FdoCreateDataStorePresenter
     {
         public readonly IFdoCreateDataStoreView _view;
         private readonly IFdoConnectionManager _manager;

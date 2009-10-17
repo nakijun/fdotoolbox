@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,7 +33,7 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
-    public partial class UniqueConstraintDialog : Form
+    internal partial class UniqueConstraintDialog : Form
     {
         private List<UniqueConstraintInfo> _constraints = new List<UniqueConstraintInfo>();
         private BindingSource bs = new BindingSource();

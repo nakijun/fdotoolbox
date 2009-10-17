@@ -30,12 +30,20 @@ using SharpMap.Geometries;
 
 namespace FdoToolbox.Base.SharpMapProvider
 {
+    /// <summary>
+    /// Represents a randmoized map theme
+    /// </summary>
     public class RandomizedTheme : ITheme
     {
         private Random rand = new Random();
 
-        private Dictionary<Geometry, Brush> _brushes = new Dictionary<Geometry, Brush>(); 
+        private Dictionary<Geometry, Brush> _brushes = new Dictionary<Geometry, Brush>();
 
+        /// <summary>
+        /// Returns the style based on a feature
+        /// </summary>
+        /// <param name="attribute">Attribute to calculate color from</param>
+        /// <returns>Color</returns>
         public SharpMap.Styles.IStyle GetStyle(FeatureDataRow attribute)
         {
             VectorStyle vs = new VectorStyle();

@@ -27,7 +27,7 @@ using FdoToolbox.Core.CoordinateSystems;
 
 namespace FdoToolbox.Base.Forms
 {
-    public interface ICoordinateSystemBrowserView
+    internal interface ICoordinateSystemBrowserView
     {
         BindingList<CoordinateSystemDefinition> CoordinateSystems { set; }
         CoordinateSystemDefinition SelectedCS { get; }
@@ -35,7 +35,7 @@ namespace FdoToolbox.Base.Forms
         bool OkEnabled { set; }
     }
 
-    public class CoordinateSystemBrowserDialogPresenter
+    internal class CoordinateSystemBrowserDialogPresenter
     {
         private readonly ICoordinateSystemBrowserView _view;
         private ICoordinateSystemCatalog _catalog;

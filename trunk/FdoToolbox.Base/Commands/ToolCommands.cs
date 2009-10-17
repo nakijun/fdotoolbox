@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +28,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Base.Commands
 {
-    public class CoordSysCatalogCommand : AbstractMenuCommand
+    internal class CoordSysCatalogCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -40,7 +41,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class SchemaEditorCommand : AbstractMenuCommand
+    internal class SchemaEditorCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -53,7 +54,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class PreferencesCommand : AbstractMenuCommand
+    internal class PreferencesCommand : AbstractMenuCommand
     {
         public override void Run()
         {

@@ -35,7 +35,7 @@ using FdoToolbox.Core.Connections;
 
 namespace FdoToolbox.Base.Forms
 {
-    public partial class DictionaryDialog : Form
+    internal partial class DictionaryDialog : Form
     {
         internal DictionaryDialog()
         {

@@ -19,21 +19,21 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using Prop = ICSharpCode.Core.PropertyService;
 using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IPreferencesView : IViewContent
+    internal interface IPreferencesView : IViewContent
     {
         IList<IPreferenceSheet> Sheets { get; set; }
     }
 
-    public class PreferencesCtlPresenter
+    internal class PreferencesCtlPresenter
     {
         private readonly IPreferencesView _view;
 

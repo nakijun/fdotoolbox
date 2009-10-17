@@ -35,14 +35,24 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Scripting
 {
+    /// <summary>
+    /// The application script manager view
+    /// </summary>
     public partial class ScriptManager : ViewContent
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptManager"/> class.
+        /// </summary>
         public ScriptManager()
         {
             InitializeComponent();
             this.Title = ResourceService.GetString("CMD_ScriptManager");
         }
 
+        /// <summary>
+        /// Detrmines if this view can be closed
+        /// </summary>
+        /// <value></value>
         public override bool CanClose
         {
             get
@@ -51,6 +61,10 @@ namespace FdoToolbox.Base.Scripting
             }
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.UserControl.Load"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
             InitScriptItems();
@@ -88,6 +102,10 @@ namespace FdoToolbox.Base.Scripting
             }
         }
 
+        /// <summary>
+        /// Gets the selected script.
+        /// </summary>
+        /// <value>The selected script.</value>
         public string SelectedScript
         {
             get

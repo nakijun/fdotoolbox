@@ -26,12 +26,32 @@ using System.Runtime.Serialization;
 
 namespace FdoToolbox.Base
 {
+    /// <summary>
+    /// Represents a class of errors that can occur when creating FDO connections
+    /// </summary>
     [Serializable]
     public class FdoConnectionException : Exception
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoConnectionException"/> class.
+        /// </summary>
+        /// <param name="serInfo">The ser info.</param>
+        /// <param name="ctx">The CTX.</param>
         protected FdoConnectionException(SerializationInfo serInfo, StreamingContext ctx) : base(serInfo, ctx) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoConnectionException"/> class.
+        /// </summary>
         public FdoConnectionException() : base() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoConnectionException"/> class.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
         public FdoConnectionException(string msg) : base(msg) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoConnectionException"/> class.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        /// <param name="inner">The inner.</param>
         public FdoConnectionException(string msg, Exception inner) : base(msg, inner) { }
     }
 }

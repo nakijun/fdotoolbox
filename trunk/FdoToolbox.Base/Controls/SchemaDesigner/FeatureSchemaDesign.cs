@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +28,7 @@ using System.ComponentModel;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
-    public class FeatureSchemaDesign : INotifyPropertyChanged
+    internal class FeatureSchemaDesign : INotifyPropertyChanged
     {
         private FeatureSchema _schema;
 

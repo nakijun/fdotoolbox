@@ -29,13 +29,23 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Base.Forms
 {
+    /// <summary>
+    /// A message box with support for large bodies of text
+    /// </summary>
     public partial class WrappedMessageBox : Form
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WrappedMessageBox"/> class.
+        /// </summary>
         public WrappedMessageBox()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Gets or sets the message.
+        /// </summary>
+        /// <value>The message.</value>
         public string Message
         {
             get { return textBox1.Text; }
@@ -46,6 +56,11 @@ namespace FdoToolbox.Base.Forms
             }
         }
 
+        /// <summary>
+        /// Shows the message.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <param name="message">The message.</param>
         public static void ShowMessage(string title, string message)
         {
             WrappedMessageBox msg = new WrappedMessageBox();
@@ -60,6 +75,13 @@ namespace FdoToolbox.Base.Forms
             msg.ShowDialog();
         }
 
+        /// <summary>
+        /// Confirms the specified title.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="text">The text.</param>
+        /// <returns></returns>
         public static bool Confirm(string title, string message, MessageBoxText text)
         {
             WrappedMessageBox msg = new WrappedMessageBox();
@@ -87,9 +109,18 @@ namespace FdoToolbox.Base.Forms
         }
     }
 
+    /// <summary>
+    /// Determines the button format of the <see cref="WrappedMessageBox"/>
+    /// </summary>
     public enum MessageBoxText
     {
+        /// <summary>
+        /// Buttons will be yes/no
+        /// </summary>
         YesNo,
+        /// <summary>
+        /// Buttons will be ok/cancel
+        /// </summary>
         OkCancel
     }
 }

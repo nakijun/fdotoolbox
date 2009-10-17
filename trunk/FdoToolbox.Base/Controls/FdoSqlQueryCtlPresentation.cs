@@ -19,13 +19,14 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoSqlQueryView : IQuerySubView
+    internal interface IFdoSqlQueryView : IQuerySubView
     {
         string SQLString { get; }
     }

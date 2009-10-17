@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,6 +41,9 @@ namespace FdoToolbox.Base.Controls
     {
         private FdoConnectCtlPresenter _presenter;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoConnectCtl"/> class.
+        /// </summary>
         public FdoConnectCtl()
         {
             InitializeComponent();
@@ -48,6 +52,10 @@ namespace FdoToolbox.Base.Controls
             _presenter = new FdoConnectCtlPresenter(this, ServiceManager.Instance.GetService<FdoConnectionManager>());
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.UserControl.Load"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
             _presenter.GetProviderList();
@@ -72,16 +80,28 @@ namespace FdoToolbox.Base.Controls
             grdProperties.Columns.Add(colValue);
         }
 
+        /// <summary>
+        /// Gets the name of the connection.
+        /// </summary>
+        /// <value>The name of the connection.</value>
         public string ConnectionName
         {
             get { return txtConnectionName.Text; }
         }
 
+        /// <summary>
+        /// Gets the selected provider.
+        /// </summary>
+        /// <value>The selected provider.</value>
         public FdoToolbox.Core.Feature.FdoProviderInfo SelectedProvider
         {
             get { return cmbProvider.SelectedItem as FdoProviderInfo; }
         }
 
+        /// <summary>
+        /// Gets the connect properties.
+        /// </summary>
+        /// <value>The connect properties.</value>
         public System.Collections.Specialized.NameValueCollection ConnectProperties
         {
             get 
@@ -100,12 +120,20 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Flags the name error.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
         public void FlagNameError(string msg)
         {
             errorProvider1.Clear();
             errorProvider1.SetError(txtConnectionName, msg);
         }
 
+        /// <summary>
+        /// Sets the provider list.
+        /// </summary>
+        /// <value>The provider list.</value>
         public IList<FdoProviderInfo> ProviderList
         {
             set 
@@ -115,11 +143,20 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Resets the grid.
+        /// </summary>
         public void ResetGrid()
         {
             grdProperties.Rows.Clear();
         }
 
+        /// <summary>
+        /// Adds the enumerable property.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <param name="values">The values.</param>
         public void AddEnumerableProperty(string name, string defaultValue, string[] values)
         {
             DataGridViewRow row = new DataGridViewRow();
@@ -167,6 +204,10 @@ namespace FdoToolbox.Base.Controls
             base.Close();
         }
 
+        /// <summary>
+        /// Adds the property.
+        /// </summary>
+        /// <param name="p">The p.</param>
         public void AddProperty(FdoToolbox.Core.Connections.DictionaryProperty p)
         {
             DataGridViewRow row = new DataGridViewRow();
@@ -231,6 +272,10 @@ namespace FdoToolbox.Base.Controls
         }
 
 
+        /// <summary>
+        /// Sets a value indicating whether [config enabled].
+        /// </summary>
+        /// <value><c>true</c> if [config enabled]; otherwise, <c>false</c>.</value>
         public bool ConfigEnabled
         {
             set 
@@ -239,6 +284,10 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Gets the config file.
+        /// </summary>
+        /// <value>The config file.</value>
         public string ConfigFile
         {
             get { return txtConfiguration.Text; }
@@ -249,6 +298,10 @@ namespace FdoToolbox.Base.Controls
             txtConfiguration.Text = FileService.OpenFile(ResourceService.GetString("TITLE_LOAD_CONFIGURATION"), ResourceService.GetString("FILTER_XML_FILES"));
         }
 
+        /// <summary>
+        /// Flags the config error.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
         public void FlagConfigError(string msg)
         {
             errorProvider1.SetError(txtConfiguration, msg);

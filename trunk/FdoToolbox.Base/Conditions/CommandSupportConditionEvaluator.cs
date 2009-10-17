@@ -34,7 +34,7 @@ namespace FdoToolbox.Base.Conditions
     /// <summary>
     /// A condition evaluator that allows commands to be enabled/disabled based on FDO command support.
     /// </summary>
-    public class CommandSupportConditionEvaluator : IConditionEvaluator
+    internal class CommandSupportConditionEvaluator : IConditionEvaluator
     {
         private IFdoConnectionManager connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
 

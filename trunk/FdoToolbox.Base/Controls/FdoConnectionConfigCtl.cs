@@ -29,7 +29,7 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoConnectionConfigCtl : UserControl
+    internal partial class FdoConnectionConfigCtl : UserControl
     {
         public FdoConnectionConfigCtl()
         {

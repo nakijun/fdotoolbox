@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,15 +30,22 @@ using OSGeo.FDO.Connections.Capabilities;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoCapabilityView : IViewContent
+    internal interface IFdoCapabilityView : IViewContent
     {
         CapabilityEntry[] Capabilities { set; }
     }
 
+    /// <summary>
+    /// Represents a FDO capability item
+    /// </summary>
     public class CapabilityEntry
     {
         private string _Name;
 
+        /// <summary>
+        /// Gets or sets the name of the capability
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get { return _Name; }
@@ -46,6 +54,10 @@ namespace FdoToolbox.Base.Controls
 
         private string _Type;
 
+        /// <summary>
+        /// Gets or sets the type of the capability
+        /// </summary>
+        /// <value>The type.</value>
         public string Type
         {
             get { return _Type; }
@@ -54,6 +66,10 @@ namespace FdoToolbox.Base.Controls
 
         private string _Value;
 
+        /// <summary>
+        /// Gets or sets the value of the capability
+        /// </summary>
+        /// <value>The value.</value>
         public string Value
         {
             get { return _Value; }
@@ -61,7 +77,7 @@ namespace FdoToolbox.Base.Controls
         }
     }
 
-    public class FdoCapabilityViewerPresenter
+    internal class FdoCapabilityViewerPresenter
     {
         private readonly IFdoCapabilityView _view;
         private readonly string _connName;

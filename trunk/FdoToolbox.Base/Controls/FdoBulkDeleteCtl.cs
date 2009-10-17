@@ -31,7 +31,7 @@ using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoBulkDeleteCtl : ViewContent, IFdoBulkDeleteView
+    internal partial class FdoBulkDeleteCtl : ViewContent, IFdoBulkDeleteView
     {
         private FdoBulkDeleteCtlPresenter _presenter;
         private FdoConnection _conn;

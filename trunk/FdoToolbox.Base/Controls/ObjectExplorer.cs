@@ -39,6 +39,9 @@ namespace FdoToolbox.Base.Controls
         private TreeView objTreeView;
         private ImageList imgList;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObjectExplorer"/> class.
+        /// </summary>
         public ObjectExplorer()
         {
             imgList = new ImageList();
@@ -82,6 +85,10 @@ namespace FdoToolbox.Base.Controls
             AfterSelection(this, e);
         }
 
+        /// <summary>
+        /// Detrmines if this view can be closed
+        /// </summary>
+        /// <value></value>
         public override bool CanClose
         {
             get
@@ -90,11 +97,19 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// The title of the view
+        /// </summary>
+        /// <value></value>
         public override string Title
         {
             get { return ResourceService.GetString("UI_OBJECT_EXPLORER"); }
         }
 
+        /// <summary>
+        /// Registers an image resource in the Object Explorer
+        /// </summary>
+        /// <param name="imgResource">The img resource.</param>
         public void RegisterImage(string imgResource)
         {
             if (!imgList.Images.ContainsKey(imgResource))
@@ -103,6 +118,11 @@ namespace FdoToolbox.Base.Controls
 
         private Dictionary<string, ContextMenuStrip> _ContextMenus = new Dictionary<string, ContextMenuStrip>();
 
+        /// <summary>
+        /// Registers a context menu in the Object Explorer
+        /// </summary>
+        /// <param name="nodeType">Type of the node.</param>
+        /// <param name="addInTreePath">The add in tree path.</param>
         public void RegisterContextMenu(string nodeType, string addInTreePath)
         {
             if(_ContextMenus.ContainsKey(nodeType))
@@ -111,11 +131,22 @@ namespace FdoToolbox.Base.Controls
             _ContextMenus[nodeType] = MenuService.CreateContextMenu(this, addInTreePath);
         }
 
+        /// <summary>
+        /// Gets the selected node in the Object Explorer
+        /// </summary>
+        /// <returns></returns>
         public TreeNode GetSelectedNode()
         {
             return objTreeView.SelectedNode;
         }
 
+        /// <summary>
+        /// Registers the root node in the Object Explorer
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="imgResource">The img resource.</param>
+        /// <param name="addInTreePath">The add in tree path.</param>
         public void RegisterRootNode(string name, string text, string imgResource, string addInTreePath)
         {
             if (!imgList.Images.ContainsKey(imgResource))
@@ -131,11 +162,21 @@ namespace FdoToolbox.Base.Controls
             objTreeView.Nodes.Add(node);
         }
 
+        /// <summary>
+        /// Gets the root node in the Object Explorer
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public TreeNode GetRootNode(string name)
         {
             return objTreeView.Nodes[name];
         }
 
+        /// <summary>
+        /// Gets the context menu.
+        /// </summary>
+        /// <param name="nodeType">Type of the node.</param>
+        /// <returns></returns>
         public ContextMenuStrip GetContextMenu(string nodeType)
         {
             if (_ContextMenus.ContainsKey(nodeType))
@@ -143,8 +184,14 @@ namespace FdoToolbox.Base.Controls
             return null;
         }
 
+        /// <summary>
+        /// Occurs when a node has expanded in the Object Explorer
+        /// </summary>
         public event TreeViewEventHandler AfterExpansion = delegate { };
 
+        /// <summary>
+        /// Occurs when a node has been selected in the Object Explorer
+        /// </summary>
         public event TreeViewEventHandler AfterSelection = delegate { };
     }
 }

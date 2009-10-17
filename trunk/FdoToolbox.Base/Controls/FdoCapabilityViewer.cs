@@ -30,6 +30,9 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// A control that can display the capabilities of a given connection
+    /// </summary>
     public partial class FdoCapabilityViewer : ViewContent, IFdoCapabilityView
     {
         private FdoCapabilityViewerPresenter _presenter;
@@ -40,12 +43,20 @@ namespace FdoToolbox.Base.Controls
             grdCaps.AutoGenerateColumns = false;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoCapabilityViewer"/> class.
+        /// </summary>
+        /// <param name="connName">Name of the conn.</param>
         public FdoCapabilityViewer(string connName)
             : this()
         {
             _presenter = new FdoCapabilityViewerPresenter(this, connName);
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.UserControl.Load"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
             if (_presenter != null)
@@ -53,6 +64,10 @@ namespace FdoToolbox.Base.Controls
             base.OnLoad(e);
         }
 
+        /// <summary>
+        /// Sets the capabilities.
+        /// </summary>
+        /// <value>The capabilities.</value>
         public CapabilityEntry[] Capabilities
         {
             set { grdCaps.DataSource = value; }

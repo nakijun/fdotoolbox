@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,7 +27,7 @@ using SharpMap.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoMapView
+    internal interface IFdoMapView
     {
         bool ZoomInChecked { set; }
         bool ZoomOutChecked { set; }
@@ -36,7 +37,7 @@ namespace FdoToolbox.Base.Controls
         object SelectedFeatureData { set; }
     }
 
-    public class FdoMapPreviewPresenter
+    internal class FdoMapPreviewPresenter
     {
         private readonly IFdoMapView _view;
         private readonly MapImage _mapImage;

@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,7 +32,10 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Forms
 {
-    public partial class CoordinateSystemDialog : Form
+    /// <summary>
+    /// A coordinate system data entry dialog
+    /// </summary>
+    internal partial class CoordinateSystemDialog : Form
     {
         private readonly CoordSysCatalog catalog;
 

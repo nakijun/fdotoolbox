@@ -30,7 +30,7 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Base.Forms
 {
-    public interface IFdoSpatialContextDialogView
+    internal interface IFdoSpatialContextDialogView
     {
         string ContextName { get; set;}
         string Description { get; set; }
@@ -52,7 +52,7 @@ namespace FdoToolbox.Base.Forms
         string UpperRightY { get; set; }
     }
 
-    public class FdoSpatialContextDialogPresenter
+    internal class FdoSpatialContextDialogPresenter
     {
         private readonly IFdoSpatialContextDialogView _view;
         private FdoConnection _conn;

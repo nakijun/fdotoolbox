@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Base.Commands
 {
-    public class ExitCommand : AbstractMenuCommand
+    internal class ExitCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -40,7 +41,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class ConnectCommand : AbstractMenuCommand
+    internal class ConnectCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -53,7 +54,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class CreateDataStoreCommand : AbstractMenuCommand
+    internal class CreateDataStoreCommand : AbstractMenuCommand
     {
         public override void Run()
         {

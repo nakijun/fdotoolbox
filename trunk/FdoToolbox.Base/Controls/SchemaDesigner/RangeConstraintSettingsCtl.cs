@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,7 +31,7 @@ using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
-    public partial class RangeConstraintSettingsCtl : UserControl
+    internal partial class RangeConstraintSettingsCtl : UserControl
     {
         public RangeConstraintSettingsCtl()
         {

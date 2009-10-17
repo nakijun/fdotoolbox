@@ -34,19 +34,32 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Scripting
 {
+    /// <summary>
+    /// Represents a method that performs an action on an application script
+    /// </summary>
     public delegate void ScriptEventHandler(ApplicationScript script);
-    
+
+    /// <summary>
+    /// Application script engine
+    /// </summary>
     public class ScriptingEngine
     {
-        public const string STARTUP_SCRIPT = "startup.py";
+        internal const string STARTUP_SCRIPT = "startup.py";
 
         private ScriptEngine _engine;
         private ScriptScope _scope;
 
+        /// <summary>
+        /// Occurs when [script loaded].
+        /// </summary>
         public event ScriptEventHandler ScriptLoaded;
 
         private static ScriptingEngine _instance;
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <value>The instance.</value>
         public static ScriptingEngine Instance
         {
             get
@@ -98,6 +111,10 @@ namespace FdoToolbox.Base.Scripting
             _engine.Runtime.LoadAssembly(typeof(OSGeo.FDO.Geometry.FgfGeometryFactory).Assembly);
         }
 
+        /// <summary>
+        /// Executes the statements.
+        /// </summary>
+        /// <param name="script">The script.</param>
         public void ExecuteStatements(string script)
         {
             ScriptSource src = _engine.CreateScriptSourceFromString(script, SourceCodeKind.Statements);
@@ -106,6 +123,10 @@ namespace FdoToolbox.Base.Scripting
 
         private Dictionary<string, ApplicationScript> loadedScripts = new Dictionary<string, ApplicationScript>();
 
+        /// <summary>
+        /// Gets the loaded scripts.
+        /// </summary>
+        /// <value>The loaded scripts.</value>
         public ICollection<string> LoadedScripts
         {
             get
@@ -241,6 +262,8 @@ namespace FdoToolbox.Base.Scripting
         /// Initializes a new instance of the <see cref="ApplicationScript"/> class.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="code">The code.</param>
+        /// <param name="scope">The scope.</param>
         internal ApplicationScript(string path, CompiledCode code, ScriptScope scope)
         {
             _Path = path;

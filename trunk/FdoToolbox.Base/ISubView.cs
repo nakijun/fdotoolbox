@@ -26,6 +26,9 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Base
 {
+    /// <summary>
+    /// A control sub view
+    /// </summary>
     public interface ISubView
     {
         /// <summary>

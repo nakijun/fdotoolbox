@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,7 +40,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// The application console
     /// </summary>
-    public partial class ConsolePane : ViewContent, IViewContent, IConsole
+    internal partial class ConsolePane : ViewContent, IViewContent, IConsole
     {
         private ToolStrip toolStrip1;
         private RichTextBox txtConsole;

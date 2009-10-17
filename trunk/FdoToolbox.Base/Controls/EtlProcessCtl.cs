@@ -45,6 +45,10 @@ namespace FdoToolbox.Base.Controls
 
         private EtlBackgroundRunner _runner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EtlProcessCtl"/> class.
+        /// </summary>
+        /// <param name="proc">The proc.</param>
         public EtlProcessCtl(IFdoSpecializedEtlProcess proc)
             : this()
         {
@@ -72,12 +76,20 @@ namespace FdoToolbox.Base.Controls
             txtOutput.ScrollToCaret();
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.UserControl.Load"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
             bgEtlProc.RunWorkerAsync();
             base.OnLoad(e);
         }
 
+        /// <summary>
+        /// The title of the view
+        /// </summary>
+        /// <value></value>
         public override string Title
         {
             get { return ResourceService.GetString("TITLE_ETL_PROCESS"); }

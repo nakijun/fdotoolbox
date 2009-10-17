@@ -34,8 +34,11 @@ namespace FdoToolbox.Base.Controls.PreferenceSheets
     /// <summary>
     /// User Interface for FDO Toolbox's preferences
     /// </summary>
-    public partial class BasePreferencesCtl : UserControl, IPreferenceSheet
+    internal partial class BasePreferencesCtl : UserControl, IPreferenceSheet
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasePreferencesCtl"/> class.
+        /// </summary>
         public BasePreferencesCtl()
         {
             InitializeComponent();
@@ -86,16 +89,27 @@ namespace FdoToolbox.Base.Controls.PreferenceSheets
         }
 
 
+        /// <summary>
+        /// Gets the content control.
+        /// </summary>
+        /// <value>The content control.</value>
         public Control ContentControl
         {
             get { return this; }
         }
 
+        /// <summary>
+        /// Gets the title.
+        /// </summary>
+        /// <value>The title.</value>
         public string Title
         {
             get { return ResourceService.GetString("TITLE_PREFS_GENERAL"); }
         }
 
+        /// <summary>
+        /// Applies the changes.
+        /// </summary>
         public void ApplyChanges()
         {
             Preferences.FdoPath = txtFdoPath.Text;

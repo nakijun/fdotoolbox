@@ -34,7 +34,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A user interface to allow for registration of new FDO providers
     /// </summary>
-    public partial class FdoRegProviderCtl : ViewContent, IFdoRegProviderView
+    internal partial class FdoRegProviderCtl : ViewContent, IFdoRegProviderView
     {
         private FdoRegProviderPresentation _presenter;
 

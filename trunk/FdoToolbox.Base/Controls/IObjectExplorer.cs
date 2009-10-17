@@ -26,16 +26,55 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// Defines an abstract interface to the Object Explorer
+    /// </summary>
     public interface IObjectExplorer : IViewContent
     {
+        /// <summary>
+        /// Registers the root node in the Object Explorer
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="imgResource">The img resource.</param>
+        /// <param name="addInTreePath">The add in tree path.</param>
         void RegisterRootNode(string name, string text, string imgResource, string addInTreePath);
+        /// <summary>
+        /// Registers an image resource in the Object Explorer
+        /// </summary>
+        /// <param name="imgResource">The img resource.</param>
         void RegisterImage(string imgResource);
+        /// <summary>
+        /// Registers a context menu in the Object Explorer
+        /// </summary>
+        /// <param name="nodeType">Type of the node.</param>
+        /// <param name="addInTreePath">The add in tree path.</param>
         void RegisterContextMenu(string nodeType, string addInTreePath);
+        /// <summary>
+        /// Gets the selected node in the Object Explorer
+        /// </summary>
+        /// <returns></returns>
         TreeNode GetSelectedNode();
+        /// <summary>
+        /// Gets the root node in the Object Explorer
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         TreeNode GetRootNode(string name);
+        /// <summary>
+        /// Gets the context menu.
+        /// </summary>
+        /// <param name="nodeType">Type of the node.</param>
+        /// <returns></returns>
         ContextMenuStrip GetContextMenu(string nodeType);
 
+        /// <summary>
+        /// Occurs when a node has expanded in the Object Explorer
+        /// </summary>
         event TreeViewEventHandler AfterExpansion;
+        /// <summary>
+        /// Occurs when a node has been selected in the Object Explorer
+        /// </summary>
         event TreeViewEventHandler AfterSelection;
     }
 }

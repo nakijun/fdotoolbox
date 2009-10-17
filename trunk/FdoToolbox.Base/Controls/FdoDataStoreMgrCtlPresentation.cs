@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,7 +33,7 @@ using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoDataStoreMgrView
+    internal interface IFdoDataStoreMgrView
     {
         bool AddEnabled { set; }
         bool DestroyEnabled { set; }
@@ -40,7 +41,7 @@ namespace FdoToolbox.Base.Controls
         string Message { set; }
     }
 
-    public class FdoDataStoreMgrPresenter
+    internal class FdoDataStoreMgrPresenter
     {
         private readonly IFdoDataStoreMgrView _view;
         private FdoConnection _conn;

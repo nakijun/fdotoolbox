@@ -1,4 +1,3 @@
-using System;
 #region LGPL Header
 // Copyright (C) 2009, Jackie Ng
 // http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
@@ -21,6 +20,7 @@ using System;
 // See license.txt for more/additional licensing information
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Base.Controls;
@@ -38,11 +38,20 @@ namespace FdoToolbox.Base.Services
         private bool _init = false;
         private List<IConnectionDependentView> _tabs;
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is initialized.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool IsInitialized
         {
             get { return _init; }
         }
 
+        /// <summary>
+        /// Initializes the service.
+        /// </summary>
         public void InitializeService()
         {
             _tabs = new List<IConnectionDependentView>();
@@ -81,22 +90,35 @@ namespace FdoToolbox.Base.Services
             }
         }
 
+        /// <summary>
+        /// Unloads the service.
+        /// </summary>
         public void UnloadService()
         {
             _tabs.Clear();
             Unload(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Loads any persisted objects from the session directory
+        /// </summary>
         public void Load()
         {
             
         }
 
+        /// <summary>
+        /// Persists any managed objects to the session directory
+        /// </summary>
         public void Save()
         {
             
         }
 
+        /// <summary>
+        /// Registers the specified view.
+        /// </summary>
+        /// <param name="view">The view.</param>
         public void Register(IConnectionDependentView view)
         {
             _tabs.Add(view);
@@ -108,8 +130,14 @@ namespace FdoToolbox.Base.Services
             };
         }
 
+        /// <summary>
+        /// Occurs when the service is initialized
+        /// </summary>
         public event EventHandler Initialize = delegate { };
 
+        /// <summary>
+        /// Occurs when the service is unloaded
+        /// </summary>
         public event EventHandler Unload = delegate { };
     }
 }

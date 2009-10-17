@@ -36,10 +36,22 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Base.Forms
 {
+    /// <summary>
+    /// Defines the mode the expression editor dialog should function in
+    /// </summary>
     public enum ExpressionMode
     {
+        /// <summary>
+        /// Editor is for editing filter expressions
+        /// </summary>
         Filter,
+        /// <summary>
+        /// Editor is for editing aggregate expressions
+        /// </summary>
         Aggregate,
+        /// <summary>
+        /// Editor is for editing any expressions
+        /// </summary>
         Normal
     }
 
@@ -82,6 +94,9 @@ namespace FdoToolbox.Base.Forms
      */
 
 
+    /// <summary>
+    /// The expression editor dialog
+    /// </summary>
     public partial class ExpressionEditor : Form
     {
         private SortedList<string, AutoCompleteItem> _autoCompleteItems = new SortedList<string, AutoCompleteItem>();
@@ -322,7 +337,13 @@ namespace FdoToolbox.Base.Forms
             txtExpression.Controls.Add(_autoBox);
         }
 
-        public ExpressionEditor(FdoConnection conn, ClassDefinition classDef, ExpressionMode mode)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExpressionEditor"/> class.
+        /// </summary>
+        /// <param name="conn">The conn.</param>
+        /// <param name="classDef">The class def.</param>
+        /// <param name="mode">The mode.</param>
+        internal ExpressionEditor(FdoConnection conn, ClassDefinition classDef, ExpressionMode mode)
             : this()
         {
             _conn = conn;
@@ -332,6 +353,10 @@ namespace FdoToolbox.Base.Forms
 
         private Dictionary<FunctionCategoryType, ToolStripMenuItem> _FunctionMenuItems;
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.Form.Load"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
             if (_conn != null)
@@ -726,6 +751,14 @@ namespace FdoToolbox.Base.Forms
             }
         }
 
+        /// <summary>
+        /// Edits the expression.
+        /// </summary>
+        /// <param name="conn">The conn.</param>
+        /// <param name="classDef">The class def.</param>
+        /// <param name="expr">The expr.</param>
+        /// <param name="mode">The mode.</param>
+        /// <returns></returns>
         public static string EditExpression(FdoConnection conn, ClassDefinition classDef, string expr, ExpressionMode mode)
         {
             ExpressionEditor dlg = new ExpressionEditor(conn, classDef, mode);
@@ -737,6 +770,13 @@ namespace FdoToolbox.Base.Forms
             return null;
         }
 
+        /// <summary>
+        /// Creates a new expression.
+        /// </summary>
+        /// <param name="conn">The conn.</param>
+        /// <param name="classDef">The class def.</param>
+        /// <param name="mode">The mode.</param>
+        /// <returns></returns>
         public static string NewExpression(FdoConnection conn, ClassDefinition classDef, ExpressionMode mode)
         {
             ExpressionEditor dlg = new ExpressionEditor(conn, classDef, mode);

@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,7 @@ using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoBulkUpdateView : IViewContent
+    internal interface IFdoBulkUpdateView : IViewContent
     {
         string ClassName { set; get; }
         bool UseTransaction { set; get; }
@@ -40,7 +41,7 @@ namespace FdoToolbox.Base.Controls
         Dictionary<string, ValueExpression> GetValues();
     }
 
-    public class FdoBulkUpdatePresenter
+    internal class FdoBulkUpdatePresenter
     {
         private readonly IFdoBulkUpdateView _view;
         private readonly FdoConnection _conn;

@@ -32,6 +32,10 @@ namespace FdoToolbox.Base
     {
         private string _Name;
 
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name
         {
             get { return _Name; }
@@ -40,12 +44,21 @@ namespace FdoToolbox.Base
 
         private string _Value;
 
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>The value.</value>
         public string Value
         {
             get { return _Value; }
             set { _Value = value; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NameValuePair"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
         public NameValuePair(string name, string value)
         {
             this.Name = name;

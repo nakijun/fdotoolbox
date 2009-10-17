@@ -28,7 +28,7 @@ using System.Diagnostics;
 
 namespace FdoToolbox.Base.Commands
 {
-    public class AboutCommand : AbstractMenuCommand
+    internal class AboutCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -36,7 +36,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class HelpCommand : AbstractMenuCommand
+    internal class HelpCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -44,7 +44,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class ApiHelpCommand : AbstractMenuCommand
+    internal class ApiHelpCommand : AbstractMenuCommand
     {
         public override void Run()
         {

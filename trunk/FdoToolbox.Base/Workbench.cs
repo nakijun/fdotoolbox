@@ -31,10 +31,17 @@ using FdoToolbox.Base.Services.DragDropHandlers;
 
 namespace FdoToolbox.Base
 {
+    /// <summary>
+    /// Represents the main application window
+    /// </summary>
     public sealed class Workbench : Form
     {
         static Workbench instance;
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <value>The instance.</value>
         public static Workbench Instance
         {
             get
@@ -43,10 +50,16 @@ namespace FdoToolbox.Base
             }
         }
 
+        /// <summary>
+        /// Occurs when [workbench initialized].
+        /// </summary>
         public static event EventHandler WorkbenchInitialized = delegate { };
 
         private static bool _init = false;
 
+        /// <summary>
+        /// Initializes the workbench.
+        /// </summary>
         public static void InitializeWorkbench()
         {
             if (!_init)
@@ -69,8 +82,16 @@ namespace FdoToolbox.Base
 
         ContextMenuStrip ctxToolbar;
 
+        /// <summary>
+        /// Gets the console.
+        /// </summary>
+        /// <value>The console.</value>
         public IConsole Console { get { return appConsole; } }
 
+        /// <summary>
+        /// Gets the object explorer.
+        /// </summary>
+        /// <value>The object explorer.</value>
         public IObjectExplorer ObjectExplorer { get { return objExplorer; } }
 
         private Workbench()
@@ -78,7 +99,7 @@ namespace FdoToolbox.Base
             InitializeComponent();
 
             _toolstrips = new Dictionary<string, ToolStrip>();
-            _toolstripRegions = new Dictionary<string, WorkbenchRegion>();
+            _toolstripRegions = new Dictionary<string, ToolbarRegion>();
 
             this.Icon = ResourceService.GetIcon("FdoToolbox");
 
@@ -105,7 +126,7 @@ namespace FdoToolbox.Base
             toolStripContainer.RightToolStripPanel.ContextMenuStrip = ctxToolbar;
 
             toolbar = ToolbarService.CreateToolStrip(this, "/Workbench/Toolbar");
-            AddToolbar("Base", toolbar, WorkbenchRegion.Top, false);
+            AddToolbar("Base", toolbar, ToolbarRegion.Top, false);
 
             status = new StatusStrip();
             statusLabel = new ToolStripStatusLabel();
@@ -132,9 +153,16 @@ namespace FdoToolbox.Base
         
 
         private Dictionary<string, ToolStrip> _toolstrips;
-        private Dictionary<string, WorkbenchRegion> _toolstripRegions;
+        private Dictionary<string, ToolbarRegion> _toolstripRegions;
 
-        public void AddToolbar(string name, ToolStrip toolbar, WorkbenchRegion region, bool canToggleVisibility)
+        /// <summary>
+        /// Adds the toolbar.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="toolbar">The toolbar.</param>
+        /// <param name="region">The region.</param>
+        /// <param name="canToggleVisibility">if set to <c>true</c> [can toggle visibility].</param>
+        public void AddToolbar(string name, ToolStrip toolbar, ToolbarRegion region, bool canToggleVisibility)
         {
             _toolstrips.Add(name, toolbar);
             _toolstripRegions.Add(name, region);
@@ -155,41 +183,46 @@ namespace FdoToolbox.Base
 
             switch (region)
             {
-                case WorkbenchRegion.Top:
+                case ToolbarRegion.Top:
                     toolStripContainer.TopToolStripPanel.Controls.Add(toolbar);
                     break;
-                case WorkbenchRegion.Bottom:
+                case ToolbarRegion.Bottom:
                     toolStripContainer.BottomToolStripPanel.Controls.Add(toolbar);
                     break;
-                case WorkbenchRegion.Left:
+                case ToolbarRegion.Left:
                     toolStripContainer.LeftToolStripPanel.Controls.Add(toolbar);
                     break;
-                case WorkbenchRegion.Right:
+                case ToolbarRegion.Right:
                     toolStripContainer.RightToolStripPanel.Controls.Add(toolbar);
                     break;
             }
         }
 
+        /// <summary>
+        /// Sets the toolbar visibility.
+        /// </summary>
+        /// <param name="toolbarName">Name of the toolbar.</param>
+        /// <param name="visible">if set to <c>true</c> [visible].</param>
         public void SetToolbarVisibility(string toolbarName, bool visible)
         {
             ToolStrip strip = GetToolbar(toolbarName);
             if (strip != null)
             {
-                WorkbenchRegion region = _toolstripRegions[toolbarName];
+                ToolbarRegion region = _toolstripRegions[toolbarName];
                 if (visible)
                 {
                     switch (region)
                     {
-                        case WorkbenchRegion.Bottom:
+                        case ToolbarRegion.Bottom:
                             toolStripContainer.BottomToolStripPanel.Controls.Add(strip);
                             break;
-                        case WorkbenchRegion.Left:
+                        case ToolbarRegion.Left:
                             toolStripContainer.LeftToolStripPanel.Controls.Add(strip);
                             break;
-                        case WorkbenchRegion.Right:
+                        case ToolbarRegion.Right:
                             toolStripContainer.RightToolStripPanel.Controls.Add(strip);
                             break;
-                        case WorkbenchRegion.Top:
+                        case ToolbarRegion.Top:
                             toolStripContainer.TopToolStripPanel.Controls.Add(strip);
                             break;
                     }
@@ -198,16 +231,16 @@ namespace FdoToolbox.Base
                 {
                     switch (region)
                     {
-                        case WorkbenchRegion.Bottom:
+                        case ToolbarRegion.Bottom:
                             toolStripContainer.BottomToolStripPanel.Controls.Remove(strip);
                             break;
-                        case WorkbenchRegion.Left:
+                        case ToolbarRegion.Left:
                             toolStripContainer.LeftToolStripPanel.Controls.Remove(strip);
                             break;
-                        case WorkbenchRegion.Right:
+                        case ToolbarRegion.Right:
                             toolStripContainer.RightToolStripPanel.Controls.Remove(strip);
                             break;
-                        case WorkbenchRegion.Top:
+                        case ToolbarRegion.Top:
                             toolStripContainer.TopToolStripPanel.Controls.Remove(strip);
                             break;
                     }
@@ -215,6 +248,11 @@ namespace FdoToolbox.Base
             }
         }
 
+        /// <summary>
+        /// Gets the toolbar.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         public ToolStrip GetToolbar(string name)
         {
             if(_toolstrips.ContainsKey(name))
@@ -222,21 +260,38 @@ namespace FdoToolbox.Base
             return null;
         }
 
+        /// <summary>
+        /// Gets the toolbar names.
+        /// </summary>
+        /// <value>The toolbar names.</value>
         public ICollection<string> ToolbarNames
         {
             get { return _toolstrips.Keys; }
         }
 
+        /// <summary>
+        /// Sets the status label.
+        /// </summary>
+        /// <param name="text">The text.</param>
         public void SetStatusLabel(string text)
         {
             statusLabel.Text = text;
         }
 
+        /// <summary>
+        /// Sets the title.
+        /// </summary>
+        /// <param name="title">The title.</param>
         public void SetTitle(string title)
         {
             this.Text = title;
         }
 
+        /// <summary>
+        /// Shows the content.
+        /// </summary>
+        /// <param name="vc">The vc.</param>
+        /// <param name="region">The region.</param>
         public void ShowContent(IViewContent vc, ViewRegion region)
         {
             TabManager tm = ServiceManager.Instance.GetService<TabManager>();
@@ -352,6 +407,9 @@ namespace FdoToolbox.Base
             this.Invoke(del);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="m"></param>
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == NativeMethods.WM_SHOWME)
@@ -371,11 +429,26 @@ namespace FdoToolbox.Base
         }
     }
 
-    public enum WorkbenchRegion
+    /// <summary>
+    /// Defines the valid regions a toolbar can reside on a workbench
+    /// </summary>
+    public enum ToolbarRegion
     {
+        /// <summary>
+        /// On the top
+        /// </summary>
         Top,
+        /// <summary>
+        /// On the left
+        /// </summary>
         Left,
+        /// <summary>
+        /// On the right
+        /// </summary>
         Right,
+        /// <summary>
+        /// On the bottom
+        /// </summary>
         Bottom
     }
 }

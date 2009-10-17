@@ -38,12 +38,33 @@ namespace FdoToolbox.Base.Forms
     /// </summary>
     public partial class ProgressDialog : Form
     {
+        /// <summary>
+        /// Represents a method that sets the title
+        /// </summary>
         public delegate void SetTitleCallback(string text);
+        /// <summary>
+        /// Represents a method that sets the message
+        /// </summary>
         public delegate void SetMessageCallback(string text);
+        /// <summary>
+        /// Represents a method that sets the value
+        /// </summary>
         public delegate void SetValueCallback(int value);
+        /// <summary>
+        /// Represents a method that sets the maximum value
+        /// </summary>
         public delegate void SetMaxCallback(int max);
+        /// <summary>
+        /// Represents a method that is called when cancelled
+        /// </summary>
         public delegate void CancelEventHandler();
+        /// <summary>
+        /// Represents a method that is called when stopped
+        /// </summary>
         public delegate void StopCallback();
+        /// <summary>
+        /// Occurs when [cancel event].
+        /// </summary>
         public static event CancelEventHandler CancelEvent;
 
         private static ProgressDialog instance;

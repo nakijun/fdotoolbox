@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,7 +31,7 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls.PreferenceSheets
 {
-    public partial class ScriptPreferencesCtl : UserControl, IPreferenceSheet
+    internal partial class ScriptPreferencesCtl : UserControl, IPreferenceSheet
     {
         public ScriptPreferencesCtl()
         {

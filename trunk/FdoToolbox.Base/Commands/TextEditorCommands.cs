@@ -27,7 +27,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Base.Commands
 {
-    public class TextEditorCommand : AbstractMenuCommand
+    internal class TextEditorCommand : AbstractMenuCommand
     {
         public override void Run()
         {

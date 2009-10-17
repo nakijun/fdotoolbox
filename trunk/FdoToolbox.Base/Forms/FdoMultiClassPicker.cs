@@ -30,7 +30,7 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Forms
 {
-    public partial class FdoMultiClassPicker : Form, IFdoMultiClassPickerView
+    internal partial class FdoMultiClassPicker : Form, IFdoMultiClassPickerView
     {
         private FdoMultiClassPickerPresenter _presenter;
         private OSGeo.FDO.Schema.FeatureSchemaCollection _schemas;

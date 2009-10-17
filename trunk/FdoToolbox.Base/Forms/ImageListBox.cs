@@ -32,7 +32,7 @@ using System.Drawing;
 namespace FdoToolbox.Base.Forms
 {
     // ImageListBoxItem class 
-    public class ImageListBoxItem
+    internal class ImageListBoxItem
     {
         private string _myText;
         private int _myImageIndex;
@@ -71,7 +71,7 @@ namespace FdoToolbox.Base.Forms
     }//End of ImageListBoxItem class
 
     // ImageListBox class 
-    public class ImageListBox : ListBox
+    internal class ImageListBox : ListBox
     {
         private ImageList _myImageList;
         public ImageList ImageList

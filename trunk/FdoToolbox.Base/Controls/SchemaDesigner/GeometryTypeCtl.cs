@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,7 +32,7 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
-    public partial class GeometryTypeCtl : CheckedListBox
+    internal partial class GeometryTypeCtl : CheckedListBox
     {
         public GeometryTypeCtl()
         {

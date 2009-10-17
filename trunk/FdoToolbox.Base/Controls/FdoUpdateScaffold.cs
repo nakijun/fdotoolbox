@@ -33,7 +33,7 @@ using FdoToolbox.Core;
 
 namespace FdoToolbox.Base.Controls
 {
-    public partial class FdoUpdateScaffold : ViewContent, IFdoUpdateView
+    internal partial class FdoUpdateScaffold : ViewContent, IFdoUpdateView
     {
         private FdoUpdateScaffoldPresenter _presenter;
         private List<int> _modifiedRowIndices = new List<int>();

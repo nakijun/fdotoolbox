@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,57 +34,153 @@ using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoSchemaDesignerView : IViewContent
+    /// <summary>
+    /// Abstract view
+    /// </summary>
+    internal interface IFdoSchemaDesignerView : IViewContent
     {
+        /// <summary>
+        /// Adds the image.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="bmp">The BMP.</param>
         void AddImage(string name, Bitmap bmp);
+        /// <summary>
+        /// Sets the schema node.
+        /// </summary>
+        /// <param name="name">The name.</param>
         void SetSchemaNode(string name);
+        /// <summary>
+        /// Adds the class node.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="imageKey">The image key.</param>
         void AddClassNode(string name, string imageKey);
+        /// <summary>
+        /// Adds the property node.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
+        /// <param name="propName">Name of the prop.</param>
+        /// <param name="imageKey">The image key.</param>
         void AddPropertyNode(string className, string propName, string imageKey);
 
+        /// <summary>
+        /// Sets the property image.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
+        /// <param name="propName">Name of the prop.</param>
+        /// <param name="imageKey">The image key.</param>
         void SetPropertyImage(string className, string propName, string imageKey);
 
+        /// <summary>
+        /// Removes the class node.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
         void RemoveClassNode(string className);
+        /// <summary>
+        /// Removes the property node.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
+        /// <param name="propName">Name of the prop.</param>
         void RemovePropertyNode(string className, string propName);
 
+        /// <summary>
+        /// Gets the selected schema.
+        /// </summary>
+        /// <value>The selected schema.</value>
         string SelectedSchema { get; }
+        /// <summary>
+        /// Gets the selected class.
+        /// </summary>
+        /// <value>The selected class.</value>
         string SelectedClass { get; }
+        /// <summary>
+        /// Gets the selected property.
+        /// </summary>
+        /// <value>The selected property.</value>
         string SelectedProperty { get; }
 
+        /// <summary>
+        /// Loads the schema.
+        /// </summary>
+        /// <param name="file">The file.</param>
         void LoadSchema(string file);
+        /// <summary>
+        /// Refreshes the tree.
+        /// </summary>
         void RefreshTree();
+        /// <summary>
+        /// Sets the name of the selected.
+        /// </summary>
+        /// <value>The name of the selected.</value>
         string SelectedName { set; }
+        /// <summary>
+        /// Sets the selected object.
+        /// </summary>
+        /// <value>The selected object.</value>
         object SelectedObject { set; }
 
+        /// <summary>
+        /// Sets the supported class types.
+        /// </summary>
+        /// <value>The supported class types.</value>
         ClassType[] SupportedClassTypes { set; }
+        /// <summary>
+        /// Sets the supported property types.
+        /// </summary>
+        /// <value>The supported property types.</value>
         PropertyType[] SupportedPropertyTypes { set; }
 
+        /// <summary>
+        /// Sets a value indicating whether the apply schema function is enabled
+        /// </summary>
+        /// <value><c>true</c> if [enabled]; otherwise, <c>false</c>.</value>
         bool ApplyEnabled { set; }
+        /// <summary>
+        /// Sets a value indicating whether the function to fix incompatibilities is enabled
+        /// </summary>
+        /// <value><c>true</c> if [enabled]; otherwise, <c>false</c>.</value>
         bool FixEnabled { set; }
 
+        /// <summary>
+        /// Occurs when [schema applied].
+        /// </summary>
         event EventHandler SchemaApplied;
 
+        /// <summary>
+        /// Sets a value indicating whether [load enabled].
+        /// </summary>
+        /// <value><c>true</c> if [load enabled]; otherwise, <c>false</c>.</value>
         bool LoadEnabled { set; }
     }
 
-    public class FdoSchemaDesignerPresenter
+    /// <summary>
+    /// Handles presentation logic
+    /// </summary>
+    internal class FdoSchemaDesignerPresenter
     {
         private readonly IFdoSchemaDesignerView _view;
         private FdoConnection _conn;
 
         private FeatureSchema _schema;
 
-        public const string RES_SCHEMA = "chart_organisation";
-        public const string RES_FEATURE_CLASS = "feature_class";
-        public const string RES_CLASS = "database_table";
-        public const string RES_GEOM = "shape_handles";
-        public const string RES_ID = "key";
-        public const string RES_DATA_PROPERTY = "table";
-        public const string RES_RASTER = "image";
-        public const string RES_OBJECT = "package";
-        public const string RES_ASSOC = "table_relationship";
+        internal const string RES_SCHEMA = "chart_organisation";
+        internal const string RES_FEATURE_CLASS = "feature_class";
+        internal const string RES_CLASS = "database_table";
+        internal const string RES_GEOM = "shape_handles";
+        internal const string RES_ID = "key";
+        internal const string RES_DATA_PROPERTY = "table";
+        internal const string RES_RASTER = "image";
+        internal const string RES_OBJECT = "package";
+        internal const string RES_ASSOC = "table_relationship";
 
         private int counter = 0;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoSchemaDesignerPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="conn">The conn.</param>
         public FdoSchemaDesignerPresenter(IFdoSchemaDesignerView view, FdoConnection conn)
         {
             _view = view;
@@ -95,6 +192,12 @@ namespace FdoToolbox.Base.Controls
             _view.LoadEnabled = true;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoSchemaDesignerPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="conn">The conn.</param>
+        /// <param name="schemaName">Name of the schema.</param>
         public FdoSchemaDesignerPresenter(IFdoSchemaDesignerView view, FdoConnection conn, string schemaName)
         {
             _view = view;
@@ -148,6 +251,10 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoSchemaDesignerPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The view.</param>
         public FdoSchemaDesignerPresenter(IFdoSchemaDesignerView view)
         {
             _view = view;
@@ -210,6 +317,9 @@ namespace FdoToolbox.Base.Controls
             _view.AddImage(RES_ASSOC, ResourceService.GetBitmap(RES_ASSOC));
         }
 
+        /// <summary>
+        /// Called when a schema is selected
+        /// </summary>
         public void SchemaSelected()
         {
             if (_schema != null)
@@ -224,6 +334,9 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Called when a class is selected
+        /// </summary>
         public void ClassSelected()
         {
             ClassDefinition cls = GetClass(_view.SelectedClass);
@@ -274,6 +387,13 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance [can add association property]
+        /// </summary>
+        /// <param name="reason">The reason.</param>
+        /// <returns>
+        /// 	<c>true</c> if this instance [can add association property]; otherwise, <c>false</c>.
+        /// </returns>
         public bool CanAddAssociationProperty(ref string reason)
         {
             //The only requirement is that another class definition exists in the schema
@@ -288,6 +408,13 @@ namespace FdoToolbox.Base.Controls
             return false;
         }
 
+        /// <summary>
+        /// Determines whether this instance [can add object property]
+        /// </summary>
+        /// <param name="reason">The reason.</param>
+        /// <returns>
+        /// 	<c>true</c> if this instance [can add object property]; otherwise, <c>false</c>.
+        /// </returns>
         public bool CanAddObjectProperty(ref string reason)
         {
             //The only requirement is that another class definition exists in the schema
@@ -304,6 +431,9 @@ namespace FdoToolbox.Base.Controls
 
         const int DEFAULT_PROPERTY_LENGTH = 255;
 
+        /// <summary>
+        /// Called when a property is selected
+        /// </summary>
         public void PropertySelected()
         {
             PropertyDefinition prop = GetProperty(_view.SelectedClass, _view.SelectedProperty);
@@ -376,6 +506,9 @@ namespace FdoToolbox.Base.Controls
             return null;
         }
 
+        /// <summary>
+        /// Adds a new class.
+        /// </summary>
         public void AddClass()
         {
             string name = "Class" + counter++;
@@ -389,6 +522,9 @@ namespace FdoToolbox.Base.Controls
             CheckDirtyState();
         }
 
+        /// <summary>
+        /// Adds a new feature class.
+        /// </summary>
         public void AddFeatureClass()
         {
             string name = "Class" + counter++;
@@ -402,6 +538,9 @@ namespace FdoToolbox.Base.Controls
             CheckDirtyState();
         }
 
+        /// <summary>
+        /// Adds a new data property.
+        /// </summary>
         public void AddDataProperty()
         {
             ClassDefinition cls = GetClass(_view.SelectedClass);
@@ -422,6 +561,9 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Adds a new geometric property.
+        /// </summary>
         public void AddGeometricProperty()
         {
             ClassDefinition cls = GetClass(_view.SelectedClass);
@@ -439,6 +581,9 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Adds a new assocation property.
+        /// </summary>
         public void AddAssocationProperty()
         {
             //Only add association property if there is at least one other class definition in the current schema
@@ -467,6 +612,9 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Adds a new object property.
+        /// </summary>
         public void AddObjectProperty()
         {
             //Only add object property if there is at least one other class definition in the current schema
@@ -538,6 +686,10 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Saves the schema to SDF.
+        /// </summary>
+        /// <param name="sdfFile">The SDF file.</param>
         public void SaveSchemaToSdf(string sdfFile)
         {
             ValidateSchema();
@@ -553,6 +705,10 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Saves the schema to XML.
+        /// </summary>
+        /// <param name="xmlFile">The XML file.</param>
         public void SaveSchemaToXml(string xmlFile)
         {
             ValidateSchema();
@@ -592,6 +748,9 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Fixes the schema.
+        /// </summary>
         public void FixSchema()
         {
             if (_conn != null)
@@ -614,6 +773,9 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Applies the schema.
+        /// </summary>
         public void ApplySchema()
         {
             if (_conn != null)
@@ -627,6 +789,9 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Removes the property.
+        /// </summary>
         public void RemoveProperty()
         {
             string className = _view.SelectedClass;
@@ -644,6 +809,9 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        /// <summary>
+        /// Removes the class.
+        /// </summary>
         public void RemoveClass()
         {
             string className = _view.SelectedClass;
@@ -656,11 +824,10 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        public void ValidateProperty(object obj, string name, object value)
-        {
-            
-        }
-
+        /// <summary>
+        /// Loads the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
         public void Load(string file)
         {
             FeatureSchemaCollection fsc = new FeatureSchemaCollection(null);
