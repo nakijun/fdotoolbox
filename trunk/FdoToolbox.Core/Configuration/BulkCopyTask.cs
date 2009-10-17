@@ -23,48 +23,35 @@ namespace FdoToolbox.Core.Configuration {
     [System.Xml.Serialization.XmlRootAttribute("BulkCopy", Namespace="", IsNullable=false)]
     public partial class FdoBulkCopyTaskDefinition : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private FdoCopySource sourceField;
+        private FdoConnectionEntryElement[] connectionsField;
         
-        private FdoCopyTarget targetField;
-        
-        private FdoClassMapping[] classMappingsField;
+        private FdoCopyTaskElement[] copyTasksField;
         
         private string nameField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public FdoCopySource Source {
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Connection", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public FdoConnectionEntryElement[] Connections {
             get {
-                return this.sourceField;
+                return this.connectionsField;
             }
             set {
-                this.sourceField = value;
-                this.RaisePropertyChanged("Source");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public FdoCopyTarget Target {
-            get {
-                return this.targetField;
-            }
-            set {
-                this.targetField = value;
-                this.RaisePropertyChanged("Target");
+                this.connectionsField = value;
+                this.RaisePropertyChanged("Connections");
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Mapping", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public FdoClassMapping[] ClassMappings {
+        [System.Xml.Serialization.XmlArrayItemAttribute("CopyTask", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public FdoCopyTaskElement[] CopyTasks {
             get {
-                return this.classMappingsField;
+                return this.copyTasksField;
             }
             set {
-                this.classMappingsField = value;
-                this.RaisePropertyChanged("ClassMappings");
+                this.copyTasksField = value;
+                this.RaisePropertyChanged("CopyTasks");
             }
         }
         
@@ -95,27 +82,13 @@ namespace FdoToolbox.Core.Configuration {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class FdoCopySource : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private string providerField;
+    public partial class FdoConnectionEntryElement : object, System.ComponentModel.INotifyPropertyChanged {
         
         private string connectionStringField;
         
-        private string schemaField;
+        private string nameField;
         
-        private string[] spatialContextListField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Provider {
-            get {
-                return this.providerField;
-            }
-            set {
-                this.providerField = value;
-                this.RaisePropertyChanged("Provider");
-            }
-        }
+        private string providerField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -130,27 +103,26 @@ namespace FdoToolbox.Core.Configuration {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Schema {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string name {
             get {
-                return this.schemaField;
+                return this.nameField;
             }
             set {
-                this.schemaField = value;
-                this.RaisePropertyChanged("Schema");
+                this.nameField = value;
+                this.RaisePropertyChanged("name");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Name", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public string[] SpatialContextList {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string provider {
             get {
-                return this.spatialContextListField;
+                return this.providerField;
             }
             set {
-                this.spatialContextListField = value;
-                this.RaisePropertyChanged("SpatialContextList");
+                this.providerField = value;
+                this.RaisePropertyChanged("provider");
             }
         }
         
@@ -169,47 +141,82 @@ namespace FdoToolbox.Core.Configuration {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class FdoExpressionMapping : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class FdoExpressionMappingElement : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string sourceExpressionField;
+        private string expressionField;
         
-        private string sourceAliasField;
+        private string aliasField;
         
-        private string targetPropertyField;
+        private string targetField;
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SourceExpression {
-            get {
-                return this.sourceExpressionField;
-            }
-            set {
-                this.sourceExpressionField = value;
-                this.RaisePropertyChanged("SourceExpression");
-            }
+        private bool nullOnFailedConversionField;
+        
+        private bool truncateField;
+        
+        public FdoExpressionMappingElement() {
+            this.nullOnFailedConversionField = true;
+            this.truncateField = true;
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SourceAlias {
+        public string Expression {
             get {
-                return this.sourceAliasField;
+                return this.expressionField;
             }
             set {
-                this.sourceAliasField = value;
-                this.RaisePropertyChanged("SourceAlias");
+                this.expressionField = value;
+                this.RaisePropertyChanged("Expression");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string TargetProperty {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string alias {
             get {
-                return this.targetPropertyField;
+                return this.aliasField;
             }
             set {
-                this.targetPropertyField = value;
-                this.RaisePropertyChanged("TargetProperty");
+                this.aliasField = value;
+                this.RaisePropertyChanged("alias");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string target {
+            get {
+                return this.targetField;
+            }
+            set {
+                this.targetField = value;
+                this.RaisePropertyChanged("target");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool nullOnFailedConversion {
+            get {
+                return this.nullOnFailedConversionField;
+            }
+            set {
+                this.nullOnFailedConversionField = value;
+                this.RaisePropertyChanged("nullOnFailedConversion");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool truncate {
+            get {
+                return this.truncateField;
+            }
+            set {
+                this.truncateField = value;
+                this.RaisePropertyChanged("truncate");
             }
         }
         
@@ -228,33 +235,68 @@ namespace FdoToolbox.Core.Configuration {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class FdoPropertyMapping : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class FdoPropertyMappingElement : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string sourcePropertyField;
+        private string sourceField;
         
-        private string targetPropertyField;
+        private string targetField;
+        
+        private bool nullOnFailedConversionField;
+        
+        private bool truncateField;
+        
+        public FdoPropertyMappingElement() {
+            this.nullOnFailedConversionField = true;
+            this.truncateField = true;
+        }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SourceProperty {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string source {
             get {
-                return this.sourcePropertyField;
+                return this.sourceField;
             }
             set {
-                this.sourcePropertyField = value;
-                this.RaisePropertyChanged("SourceProperty");
+                this.sourceField = value;
+                this.RaisePropertyChanged("source");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string TargetProperty {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string target {
             get {
-                return this.targetPropertyField;
+                return this.targetField;
             }
             set {
-                this.targetPropertyField = value;
-                this.RaisePropertyChanged("TargetProperty");
+                this.targetField = value;
+                this.RaisePropertyChanged("target");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool nullOnFailedConversion {
+            get {
+                return this.nullOnFailedConversionField;
+            }
+            set {
+                this.nullOnFailedConversionField = value;
+                this.RaisePropertyChanged("nullOnFailedConversion");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(true)]
+        public bool truncate {
+            get {
+                return this.truncateField;
+            }
+            set {
+                this.truncateField = value;
+                this.RaisePropertyChanged("truncate");
             }
         }
         
@@ -273,19 +315,13 @@ namespace FdoToolbox.Core.Configuration {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class FdoClassMapping : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class FdoCopyOptionsElement : object, System.ComponentModel.INotifyPropertyChanged {
         
         private bool deleteTargetField;
         
-        private string sourceClassField;
-        
-        private string targetClassField;
-        
         private string filterField;
         
-        private FdoPropertyMapping[] propertiesField;
-        
-        private FdoExpressionMapping[] expressionsField;
+        private string batchSizeField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
@@ -296,30 +332,6 @@ namespace FdoToolbox.Core.Configuration {
             set {
                 this.deleteTargetField = value;
                 this.RaisePropertyChanged("DeleteTarget");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string SourceClass {
-            get {
-                return this.sourceClassField;
-            }
-            set {
-                this.sourceClassField = value;
-                this.RaisePropertyChanged("SourceClass");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string TargetClass {
-            get {
-                return this.targetClassField;
-            }
-            set {
-                this.targetClassField = value;
-                this.RaisePropertyChanged("TargetClass");
             }
         }
         
@@ -336,28 +348,14 @@ namespace FdoToolbox.Core.Configuration {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("PropertyMapping", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public FdoPropertyMapping[] Properties {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer")]
+        public string BatchSize {
             get {
-                return this.propertiesField;
+                return this.batchSizeField;
             }
             set {
-                this.propertiesField = value;
-                this.RaisePropertyChanged("Properties");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ExpressionMapping", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
-        public FdoExpressionMapping[] Expressions {
-            get {
-                return this.expressionsField;
-            }
-            set {
-                this.expressionsField = value;
-                this.RaisePropertyChanged("Expressions");
+                this.batchSizeField = value;
+                this.RaisePropertyChanged("BatchSize");
             }
         }
         
@@ -376,75 +374,209 @@ namespace FdoToolbox.Core.Configuration {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class FdoCopyTarget : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class FdoCopyTargetElement : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string providerField;
-        
-        private string connectionStringField;
+        private string connectionField;
         
         private string schemaField;
         
-        private int batchSizeField;
-        
-        private bool batchSizeFieldSpecified;
+        private string classField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Provider {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string connection {
             get {
-                return this.providerField;
+                return this.connectionField;
             }
             set {
-                this.providerField = value;
-                this.RaisePropertyChanged("Provider");
+                this.connectionField = value;
+                this.RaisePropertyChanged("connection");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string ConnectionString {
-            get {
-                return this.connectionStringField;
-            }
-            set {
-                this.connectionStringField = value;
-                this.RaisePropertyChanged("ConnectionString");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public string Schema {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string schema {
             get {
                 return this.schemaField;
             }
             set {
                 this.schemaField = value;
-                this.RaisePropertyChanged("Schema");
+                this.RaisePropertyChanged("schema");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string @class {
+            get {
+                return this.classField;
+            }
+            set {
+                this.classField = value;
+                this.RaisePropertyChanged("class");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class FdoCopySourceElement : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private string connectionField;
+        
+        private string schemaField;
+        
+        private string classField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string connection {
+            get {
+                return this.connectionField;
+            }
+            set {
+                this.connectionField = value;
+                this.RaisePropertyChanged("connection");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string schema {
+            get {
+                return this.schemaField;
+            }
+            set {
+                this.schemaField = value;
+                this.RaisePropertyChanged("schema");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string @class {
+            get {
+                return this.classField;
+            }
+            set {
+                this.classField = value;
+                this.RaisePropertyChanged("class");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class FdoCopyTaskElement : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private FdoCopySourceElement sourceField;
+        
+        private FdoCopyTargetElement targetField;
+        
+        private FdoCopyOptionsElement optionsField;
+        
+        private FdoPropertyMappingElement[] propertyMappingsField;
+        
+        private FdoExpressionMappingElement[] expressionMappingsField;
+        
+        private string nameField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public FdoCopySourceElement Source {
+            get {
+                return this.sourceField;
+            }
+            set {
+                this.sourceField = value;
+                this.RaisePropertyChanged("Source");
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public int BatchSize {
+        public FdoCopyTargetElement Target {
             get {
-                return this.batchSizeField;
+                return this.targetField;
             }
             set {
-                this.batchSizeField = value;
-                this.RaisePropertyChanged("BatchSize");
+                this.targetField = value;
+                this.RaisePropertyChanged("Target");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool BatchSizeSpecified {
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public FdoCopyOptionsElement Options {
             get {
-                return this.batchSizeFieldSpecified;
+                return this.optionsField;
             }
             set {
-                this.batchSizeFieldSpecified = value;
-                this.RaisePropertyChanged("BatchSizeSpecified");
+                this.optionsField = value;
+                this.RaisePropertyChanged("Options");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("PropertyMapping", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public FdoPropertyMappingElement[] PropertyMappings {
+            get {
+                return this.propertyMappingsField;
+            }
+            set {
+                this.propertyMappingsField = value;
+                this.RaisePropertyChanged("PropertyMappings");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("ExpressionMapping", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        public FdoExpressionMappingElement[] ExpressionMappings {
+            get {
+                return this.expressionMappingsField;
+            }
+            set {
+                this.expressionMappingsField = value;
+                this.RaisePropertyChanged("ExpressionMappings");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+                this.RaisePropertyChanged("name");
             }
         }
         

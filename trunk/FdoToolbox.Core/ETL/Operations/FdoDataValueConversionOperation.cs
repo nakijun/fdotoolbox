@@ -24,20 +24,21 @@ using System.Collections.Generic;
 using System.Text;
 using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Expression;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
     public class FdoDataValueConversionOperation : FdoOperationBase
     {
-        private List<DataTypeMapping> _mappings;
-        private bool _nullOnFailedConversion;
-        private bool _truncate;
+        private Dictionary<string, FdoDataPropertyConversionRule> _rules;
 
-        public FdoDataValueConversionOperation(List<DataTypeMapping> mapping, bool nullOnFailedConversion, bool truncate)
+        public FdoDataValueConversionOperation(IEnumerable<FdoDataPropertyConversionRule> rules)
         {
-            _mappings = mapping;
-            _nullOnFailedConversion = nullOnFailedConversion;
-            _truncate = truncate;
+            _rules = new Dictionary<string, FdoDataPropertyConversionRule>();
+            foreach (FdoDataPropertyConversionRule rule in rules)
+            {
+                _rules[rule.SourceProperty] = rule;
+            }
         }
 
         public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
@@ -50,15 +51,16 @@ namespace FdoToolbox.Core.ETL.Operations
 
         private FdoRow ConvertValues(FdoRow row)
         {
-            foreach (DataTypeMapping mp in _mappings)
+            foreach(string propertyName in _rules.Keys)
             {
-                if (row[mp.SourceProperty] != null)
+                if (row[propertyName] != null)
                 {
-                    LiteralValue old = ValueConverter.GetConvertedValue(row[mp.SourceProperty]);
+                    FdoDataPropertyConversionRule rule = _rules[propertyName];
+                    LiteralValue old = ValueConverter.GetConvertedValue(row[propertyName]);
                     if (old.LiteralValueType == LiteralValueType.LiteralValueType_Data)
                     {
-                        DataValue converted = ValueConverter.ConvertDataValue((DataValue)old, mp.TargetDataType, _nullOnFailedConversion, _truncate);
-                        row[mp.SourceProperty] = ValueConverter.GetClrValue(converted);
+                        DataValue converted = ValueConverter.ConvertDataValue((DataValue)old, rule.TargetDataType, rule.NullOnFailure, rule.Truncate);
+                        row[propertyName] = ValueConverter.GetClrValue(converted);
                     }
                 }
             }

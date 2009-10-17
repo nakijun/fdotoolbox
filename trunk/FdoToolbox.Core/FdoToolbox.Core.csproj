@@ -104,7 +104,9 @@
     <Compile Include="ETL\ObjectArrayKeys.cs" />
     <Compile Include="ETL\Operations\FdoBatchedOutputOperation.cs" />
     <Compile Include="ETL\Operations\FdoBranchingOperation.cs" />
+    <Compile Include="ETL\Operations\FdoCopySpatialContextOperation.cs" />
     <Compile Include="ETL\Operations\FdoDataValueConversionOperation.cs" />
+    <Compile Include="ETL\Operations\FdoDeleteOperation.cs" />
     <Compile Include="ETL\Operations\FdoFeatureTableInputOperation.cs" />
     <Compile Include="ETL\Operations\FdoFilteredOperation.cs" />
     <Compile Include="ETL\Operations\FdoInputOperation.cs" />
@@ -124,10 +126,11 @@
     <Compile Include="ETL\Pipelines\SingleThreadedPipelineExecuter.cs" />
     <Compile Include="ETL\Pipelines\ThreadPoolPipelineExecuter.cs" />
     <Compile Include="ETL\QuackingDictionary.cs" />
-    <Compile Include="ETL\Specialized\ClassToClassCopy.cs" />
     <Compile Include="ETL\Specialized\FdoBulkCopy.cs" />
     <Compile Include="ETL\Specialized\FdoBulkCopyOptions.cs" />
     <Compile Include="ETL\Specialized\FdoClassCopyOptions.cs" />
+    <Compile Include="ETL\Specialized\FdoClassToClassCopyProcess.cs" />
+    <Compile Include="ETL\Specialized\FdoDataPropertyConversionRule.cs" />
     <Compile Include="ETL\Specialized\FdoJoin.cs" />
     <Compile Include="ETL\Specialized\FdoJoinOptions.cs" />
     <Compile Include="ETL\Specialized\FdoSpecializedEtlProcess.cs" />
@@ -144,7 +147,6 @@
     <Compile Include="Feature\ComputedProperty.cs" />
     <Compile Include="Feature\DataStoreInfo.cs" />
     <Compile Include="Feature\DataTypeComparer.cs" />
-    <Compile Include="Feature\DataTypeMapping.cs" />
     <Compile Include="Feature\FdoConnection.cs" />
     <Compile Include="Feature\FdoDataReader.cs" />
     <Compile Include="Feature\FdoFeature.cs" />
@@ -181,6 +183,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utility\ExpressionUtility.cs" />
     <Compile Include="Utility\ExpressUtility.cs" />
     <Compile Include="Utility\FdoGeometryUtil.cs" />
     <Compile Include="Utility\WKTParser.cs" />
@@ -202,6 +205,9 @@
     <None Include="Schemas\SpatialConnection.xsd">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

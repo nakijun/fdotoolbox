@@ -1,24 +1,3 @@
-#region LGPL Header
-// Copyright (C) 2009, Jackie Ng
-// http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
-// 
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-// 
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-// 
-//
-// See license.txt for more/additional licensing information
-#endregion
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,781 +5,380 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using FdoToolbox.Base;
-using ICSharpCode.Core;
 using FdoToolbox.Base.Services;
-using FdoToolbox.Base.Forms;
 using FdoToolbox.Core.Feature;
-using OSGeo.FDO.Schema;
-using FdoToolbox.Core;
-using FdoToolbox.Tasks.Services;
+using FdoToolbox.Tasks.Controls.BulkCopy;
 using FdoToolbox.Base.Controls;
+using FdoToolbox.Base;
+using OSGeo.FDO.Schema;
+using System.Diagnostics;
 using FdoToolbox.Core.ETL.Specialized;
+using ICSharpCode.Core;
+using FdoToolbox.Base.Forms;
+using FdoToolbox.Core.Configuration;
+using System.Collections.Specialized;
+using FdoToolbox.Tasks.Services;
 
 namespace FdoToolbox.Tasks.Controls
 {
-    public partial class FdoBulkCopyCtl : ViewContent, IConnectionDependentView, IFdoBulkCopyView, IEtlProcessEditor
+    public partial class FdoBulkCopyCtl : ViewContent
     {
-        private FdoBulkCopyPresenter _presenter;
-
-        private FdoBulkCopy _initOptions;
+        private FdoConnectionManager _connMgr;
 
         public FdoBulkCopyCtl()
         {
             InitializeComponent();
-            ServiceManager sm = ServiceManager.Instance;
-            _presenter = new FdoBulkCopyPresenter(this, 
-                sm.GetService<IFdoConnectionManager>(),
-                sm.GetService<TaskManager>());
+            _connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
         }
 
-        public FdoBulkCopyCtl(string taskName, FdoBulkCopy copy)
+        public FdoBulkCopyCtl(string name, FdoBulkCopy task)
             : this()
         {
-            _initOptions = copy;
-            txtName.Text = taskName;
-            txtName.ReadOnly = true; //This is edit mode, so the task name can't be changed
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            if (_initOptions == null)
-                _presenter.Init();
-            else
-                _presenter.Init(_initOptions);
-            base.OnLoad(e);
+            Load(task.Options, name);
+            txtName.ReadOnly = true;
+            btnSave.Enabled = true;
         }
 
         public override string Title
         {
-            get { return ResourceService.GetString("TITLE_BULK_COPY_SETTINGS"); }
-        }
-
-        public string TaskName
-        {
             get
             {
-                return txtName.Text;
-            }
-            set
-            {
-                txtName.Text = value;
+                return ResourceService.GetString("TITLE_BULK_COPY_SETTINGS") + ": " + txtName.Text; 
             }
         }
 
-        public List<string> SourceConnections
+        protected override void OnLoad(EventArgs e)
         {
-            set { cmbSrcConnection.DataSource = value; }
+            PopulateConnections();
+            base.OnLoad(e);
         }
 
-        public List<string> TargetConnections
+        private void PopulateConnections()
         {
-            set { cmbTargetConnection.DataSource = value; }
-        }
-
-        public List<string> SourceSchemas
-        {
-            set { cmbSrcSchema.DataSource = value; }
-        }
-
-        public List<string> TargetSchemas
-        {
-            set { cmbTargetSchema.DataSource = value; }
-        }
-
-        public string SelectedSourceConnection
-        {
-            get
+            foreach (string name in _connMgr.GetConnectionNames())
             {
-                return cmbSrcConnection.SelectedItem as string;
-            }
-            set
-            {
-                cmbSrcConnection.SelectedItem = value;
-                cmbSrcConnection_SelectionChangeCommitted(this, EventArgs.Empty);
-            }
-        }
-
-        public string SelectedTargetConnection
-        {
-            get
-            {
-                return cmbTargetConnection.SelectedItem as string;
-            }
-            set
-            {
-                cmbTargetConnection.SelectedItem = value;
-                cmbTargetConnection_SelectionChangeCommitted(this, EventArgs.Empty);
-            }
-        }
-
-        public string SelectedSourceSchema
-        {
-            get
-            {
-                return cmbSrcSchema.SelectedItem as string;
-            }
-            set
-            {
-                cmbSrcSchema.SelectedItem = value;
-                cmbSrcSchema_SelectionChangeCommitted(this, EventArgs.Empty);
-            }
-        }
-
-        public string SelectedTargetSchema
-        {
-            get
-            {
-                return cmbTargetSchema.SelectedItem as string;
-            }
-            set
-            {
-                cmbTargetSchema.SelectedItem = value;
-                cmbTargetSchema_SelectionChangeCommitted(this, EventArgs.Empty);
-            }
-        }
-
-        public List<string> SourceSpatialContexts
-        {
-            set 
-            {
-                chkListSpatialContexts.Items.Clear();
-                foreach (string str in value)
+                string connName = name; //Can't bind to iter variable
+                btnAddConnection.DropDown.Items.Add(connName, null, delegate(object sender, EventArgs e)
                 {
-                    chkListSpatialContexts.Items.Add(str, false);
-                }
-            }
-            get
-            {
-                List<string> ctxNames = new List<string>();
-                foreach (object obj in chkListSpatialContexts.CheckedItems)
-                {
-                    ctxNames.Add(obj.ToString());
-                }
-                return ctxNames;
-            }
-        }
-
-        public string SpatialFilter
-        {
-            get { return txtSpatialFilter.Text; }
-        }
-
-        public int BatchInsertSize
-        {
-            get
-            {
-                return Convert.ToInt32(numBatchSize.Value);
-            }
-            set
-            {
-                numBatchSize.Value = Convert.ToDecimal(value);
-            }
-        }
-
-        public bool BatchEnabled
-        {
-            set 
-            {
-                if (!value)
-                    numBatchSize.Value = 0;
-                numBatchSize.Enabled = value; 
-            }
-        }
-
-        public bool CopySpatialContexts
-        {
-            get
-            {
-                return chkCopySpatialContexts.Checked;
-            }
-            set
-            {
-                chkCopySpatialContexts.Checked = value;
-                chkListSpatialContexts.Enabled = value;
-                if (!value)
-                {
-                    foreach (int idx in chkListSpatialContexts.CheckedIndices)
-                    {
-                        chkListSpatialContexts.SetItemChecked(idx, false);
-                    }
-                }
-            }
-        }
-
-        public void ClearMappings()
-        {
-            ClassesNode.Nodes.Clear();
-        }
-
-        public void RemoveAllMappings()
-        {
-            //Null the tag property of every class and property node
-            foreach (TreeNode classNode in ClassesNode.Nodes)
-            {
-                _presenter.UnmapClass(classNode.Name);
-            }
-        }
-
-        private TreeNode ClassesNode
-        {
-            get
-            {
-                return treeMappings.Nodes[0];
-            }
-        }
-
-        public void AddClass(string className)
-        {
-            TreeNode classNode = new TreeNode();
-            classNode.Name = className;
-            classNode.Text = className + " (Unmapped)";
-            classNode.ContextMenuStrip = ctxSelectedClass;
-            classNode.Nodes.Add(PREFIX_CLASS_OPTIONS, ResourceService.GetString("NODE_OPTIONS"));
-            classNode.Nodes.Add(PREFIX_CLASS_PROPERTIES, ResourceService.GetString("NODE_PROPERTIES"));
-            TreeNode exprNode = new TreeNode();
-            exprNode.Text = ResourceService.GetString("NODE_EXPRESSION");
-            exprNode.Name = PREFIX_CLASS_EXPRESSION;
-            exprNode.ContextMenuStrip = ctxExpressions;
-            classNode.Nodes.Add(exprNode);
-            ClassesNode.Nodes.Add(classNode);
-            treeMappings.ExpandAll();
-        }
-
-        private const string PREFIX_CLASS_OPTIONS = "CLASS_OPTIONS";
-        private const string PREFIX_CLASS_PROPERTIES = "CLASS_PROPERTIES";
-        private const string PREFIX_CLASS_EXPRESSION = "CLASS_EXPRESSION";
-
-        public void AddClassSourceFilterOption(string className)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                TreeNode filterNode = new TreeNode();
-                filterNode.Name = filterNode.Text = ResourceService.GetString("LBL_SOURCE_FILTER");
-                filterNode.ContextMenuStrip = ctxFilter;
-                classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes.Add(filterNode);
-            }
-        }
-
-        public void AddClassDeleteOption(string className)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                TreeNode deleteNode = new TreeNode();
-                deleteNode.Name = deleteNode.Text = ResourceService.GetString("LBL_DELETE_TARGET");
-                deleteNode.ContextMenuStrip = ctxDelete;
-                classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes.Add(deleteNode);
-            }
-        }
-
-        public void SetSourceFilter(string className, string value)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                TreeNode filterNode = classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes[ResourceService.GetString("LBL_SOURCE_FILTER")];
-                if (filterNode != null)
-                {
-                    filterNode.Tag = value;
-                    if (!string.IsNullOrEmpty(value))
-                    {
-                        filterNode.Text = filterNode.Name + " (set)";
-                        filterNode.ToolTipText = value;
-                    }
-                    else 
-                    {
-                        filterNode.Text = filterNode.Name;
-                        filterNode.ToolTipText = string.Empty;
-                    }
-                }
-            }
-        }
-
-        public void SetClassDelete(string className, bool value)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                TreeNode deleteNode = classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes[ResourceService.GetString("LBL_DELETE_TARGET")];
-                if (deleteNode != null)
-                {
-                    deleteNode.Tag = value;
-                    deleteNode.Text = deleteNode.Name + " (" + value + ")";
-                }
-            }
-        }
-
-        public void AddClassProperty(string className, string propName, string imgKey)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                TreeNode propertyNode = new TreeNode();
-                propertyNode.Name = propName;
-                propertyNode.Text = propName + " (Unmapped)";
-                propertyNode.ImageKey = propertyNode.SelectedImageKey = imgKey;
-                classNode.Nodes[PREFIX_CLASS_PROPERTIES].Nodes.Add(propertyNode);
-                treeMappings.ExpandAll();
-            }
-        }
-
-        public void MapClassProperty(string className, string propName, string targetProp)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                TreeNode propertyNode = classNode.Nodes[PREFIX_CLASS_PROPERTIES].Nodes[propName];
-                if (propertyNode != null)
-                {
-                    SetPropertyNode(propertyNode, targetProp);
-                }
-            }
-        }
-
-        private static void SetPropertyNode(TreeNode propertyNode, string targetProp)
-        {
-            propertyNode.Tag = targetProp;
-            if (targetProp != null)
-                propertyNode.Text = propertyNode.Name + " => " + targetProp;
-            else
-                propertyNode.Text = propertyNode.Name + " (Unmapped)";
-        }
-
-        public void MapClass(string className, string targetClass)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                classNode.Tag = targetClass;
-                if (targetClass != null)
-                {
-                    classNode.Text = className + " => " + targetClass;
-                }
-                else
-                {
-                    classNode.Text = className + " (Unmapped)";
-                    //Un-map the properties
-                    foreach (TreeNode propNode in classNode.Nodes[PREFIX_CLASS_PROPERTIES].Nodes)
-                    {
-                        _presenter.UnmapProperty(className, propNode.Name);
-                    }
-                }
-            }
-        }
-
-        public List<string> MappableClasses
-        {
-            set 
-            {
-                ctxSelectedClass.Items.Clear();
-                foreach (string cls in value)
-                {
-                    ToolStripMenuItem item = new ToolStripMenuItem();
-                    item.Text = "Map to: " + cls;
-                    item.Click += OnMapClass;
-                    item.Tag = cls;
-
-                    ctxSelectedClass.Items.Add(item);
-                }
-            }
-        }
-
-        private void OnMapClass(object sender, EventArgs e)
-        {
-            try
-            {
-                ToolStripMenuItem ctx = (ToolStripMenuItem)sender;
-                _presenter.MapClass(treeMappings.SelectedNode.Name, ctx.Tag.ToString());
-            }
-            catch (MappingException ex)
-            {
-                this.ShowError(ex);
-            }
-        }
-
-        public void SetMappableProperties(string className, List<string> properties)
-        {
-            if (properties == null || properties.Count == 0)
-                return;
-
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                mapExpressionItem.DropDown.Items.Clear();
-                ContextMenuStrip ctxProperties = new ContextMenuStrip();
-                ctxProperties.Items.Add("Remove Mapping", ResourceService.GetBitmap("cross"), delegate
-                {
-                    SetPropertyNode(treeMappings.SelectedNode, null);
+                    AddParticipatingConnection(connName);
                 });
-                ctxProperties.Items.Add(new ToolStripSeparator());
-                foreach (string p in properties)
-                {
-                    string prop = p;
-                    ctxProperties.Items.Add(
-                        "Map property to: " + prop,
-                        ResourceService.GetBitmap("table"),
-                        delegate(object sender, EventArgs e)
-                        {
-                            try
-                            {
-                                string sp = treeMappings.SelectedNode.Name;
-                                _presenter.MapProperty(className, sp, classNode.Tag.ToString(), prop);
-                            }
-                            catch (MappingException ex)
-                            {
-                                this.ShowError(ex.Message);
-                            }
-                        });
-                    mapExpressionItem.DropDown.Items.Add(
-                        prop,
-                        ResourceService.GetBitmap("table"),
-                        delegate(object sender, EventArgs e)
-                        {
-                            try
-                            {
-                                string alias = treeMappings.SelectedNode.Name;
-                                ExpressionMappingInfo map = (ExpressionMappingInfo)treeMappings.SelectedNode.Tag;
-                                _presenter.MapExpression(className, alias, classNode.Tag.ToString(), prop);
-                            }
-                            catch (MappingException ex)
-                            {
-                                this.ShowError(ex);
-                            }
-                        });
-                }
-                foreach (TreeNode propNode in classNode.Nodes[PREFIX_CLASS_PROPERTIES].Nodes)
-                {
-                    propNode.ContextMenuStrip = ctxProperties;
-                }
             }
         }
 
-        private void cmbSrcConnection_SelectionChangeCommitted(object sender, EventArgs e)
+        private void AddParticipatingConnection(string name)
         {
-            _presenter.SourceConnectionChanged();
+            FdoConnection conn = _connMgr.GetConnection(name);
+            grdConnections.Rows.Add(name, conn.Provider, conn.SafeConnectionString);
         }
 
-        private void cmbSrcSchema_SelectionChangeCommitted(object sender, EventArgs e)
+        private CopyTaskNodeDecorator AddNewTask(TreeNode root, string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass, string taskName)
         {
-            _presenter.SourceSchemaChanged();
+            return new CopyTaskNodeDecorator(root, srcConnName, srcSchema, srcClass, dstConnName, dstSchema, dstClass, taskName);
         }
 
-        private void cmbTargetConnection_SelectionChangeCommitted(object sender, EventArgs e)
+        private string[] GetAvailableConnectionNames()
         {
-            _presenter.TargetConnectionChanged();
-        }
-
-        private void cmbTargetSchema_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            _presenter.TargetSchemaChanged();
-        }
-
-        public void AddExpression(string className, string alias, string expr)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
+            List<string> values = new List<string>();
+            foreach (DataGridViewRow row in grdConnections.Rows)
             {
-                TreeNode exprNode = new TreeNode();
-                exprNode.Text = alias;
-                exprNode.ToolTipText = "Expression: " + expr;
-                exprNode.Name = alias;
-                ExpressionMappingInfo map = new ExpressionMappingInfo();
-                map.Expression = expr;
-                exprNode.Tag = map;
-                exprNode.ContextMenuStrip = ctxSelectedExpression;
-                classNode.Nodes[PREFIX_CLASS_EXPRESSION].Nodes.Add(exprNode);
-                treeMappings.ExpandAll();
+                values.Add(row.Cells[0].Value.ToString());
             }
+            return values.ToArray();
         }
 
-        public void EditExpression(string className, string alias, string expr)
+        private SortedList<int, CopyTaskNodeDecorator> _tasks = new SortedList<int, CopyTaskNodeDecorator>();
+
+        private void btnAddTask_Click(object sender, EventArgs e)
         {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
+            if (GetAvailableConnectionNames().Length == 0)
             {
-                TreeNode exprNode = classNode.Nodes[PREFIX_CLASS_EXPRESSION].Nodes[alias];
-                if (exprNode.Tag != null)
-                {
-                    ((ExpressionMappingInfo)exprNode.Tag).Expression = expr;
-                }
+                MessageService.ShowMessage("Add some participating connections first", "No connections");
+                return;
             }
-        }
-
-        public void RemoveExpression(string className, string alias)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
+            NewTaskDialog dlg = new NewTaskDialog(GetAvailableConnectionNames());
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
-                classNode.Nodes[PREFIX_CLASS_EXPRESSION].Nodes.RemoveByKey(alias);
+                TreeNode root = mTreeView.Nodes[0];
+                CopyTaskNodeDecorator task = AddNewTask(
+                                               root,
+                                               dlg.SourceConnectionName,
+                                               dlg.SourceSchema,
+                                               dlg.SourceClass,
+                                               dlg.TargetConnectionName,
+                                               dlg.TargetSchema,
+                                               dlg.TargetClass,
+                                               dlg.TaskName);
+
+                _tasks[task.DecoratedNode.Index] = task;
+                root.Expand();
+
+                btnSave.Enabled = (root.Nodes.Count > 0);
             }
         }
 
-        public string GetSourceExpression(string className, string alias)
+        const int NODE_LEVEL_TASK = 1;
+
+        private void mTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
+            switch (e.Node.Level)
             {
-                TreeNode exprNode = classNode.Nodes[PREFIX_CLASS_EXPRESSION].Nodes[alias];
-                if (exprNode.Tag != null)
-                {
-                    ExpressionMappingInfo map = (ExpressionMappingInfo)exprNode.Tag;
-                    return map.Expression;
-                }
-            }
-            return string.Empty;
-        }
-
-        public void MapExpression(string className, string alias, string targetProp)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                TreeNode exprNode = classNode.Nodes[PREFIX_CLASS_EXPRESSION].Nodes[alias];
-                if (exprNode.Tag != null)
-                {
-                    ExpressionMappingInfo map = (ExpressionMappingInfo)exprNode.Tag;
-                    map.TargetProperty = targetProp;
-                    if (targetProp != null)
-                        exprNode.Text = exprNode.Name + " => " + targetProp;
-                    else
-                        exprNode.Text = exprNode.Name;
-                }
+                case NODE_LEVEL_TASK:
+                    btnRemoveTask.Enabled = true;
+                    break;
+                default:
+                    btnRemoveTask.Enabled = false;
+                    break;
             }
         }
 
-        private TreeNode UnmapExpressionNode()
+        private void btnRemoveTask_Click(object sender, EventArgs e)
         {
-            TreeNode exprNode = treeMappings.SelectedNode;
-            TreeNode classNode = exprNode.Parent.Parent;
-            _presenter.UnmapExpression(classNode.Name, exprNode.Name);
-            return exprNode;
+            TreeNode node = mTreeView.SelectedNode;
+            if (node.Level == NODE_LEVEL_TASK)
+                mTreeView.Nodes.Remove(node);
         }
 
-        private void removeExpressionItem_Click(object sender, EventArgs e)
-        {
-            TreeNode exprNode = UnmapExpressionNode();
-            treeMappings.Nodes.Remove(exprNode);
-        }
-
-        private void editExpressionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeNode exprNode = treeMappings.SelectedNode;
-            if (exprNode.Tag != null)
-            {
-                TreeNode classNode = exprNode.Parent.Parent;
-                ExpressionMappingInfo map = (ExpressionMappingInfo)exprNode.Tag;
-                FdoConnection conn = _presenter.GetSourceConnection();
-                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
-                {
-                    ClassDefinition cd = service.GetClassByName(this.SelectedSourceSchema, classNode.Name);
-                    if (cd != null)
-                    {
-                        string expr = ExpressionEditor.EditExpression(conn, cd, map.Expression, ExpressionMode.Normal);
-                        if (expr != null)
-                        {
-                            map.Expression = expr;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void treeMappings_MouseDown(object sender, MouseEventArgs e)
+        //Right-click TreeView hack
+        private void mTreeView_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                treeMappings.SelectedNode = treeMappings.GetNodeAt(e.X, e.Y);
+                mTreeView.SelectedNode = mTreeView.GetNodeAt(e.X, e.Y);
             }
         }
 
-        private void addComputedExpressionToolStripMenuItem_Click(object sender, EventArgs e)
+        public bool IsNew
         {
-            TreeNode exprNode = treeMappings.SelectedNode;
-            TreeNode classNode = exprNode.Parent;
-            FdoConnection conn = _presenter.GetSourceConnection();
-            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
-            {
-                ClassDefinition cd = service.GetClassByName(this.SelectedSourceSchema, classNode.Name);
-                if (cd != null)
-                {
-                    string expr = ExpressionEditor.NewExpression(conn, cd, ExpressionMode.Normal);
-                    if (expr != null)
-                    {
-                        string alias = MessageService.ShowInputBox("Expression Alias", "Enter the alias for this expression", "MyExpression");
-                        while (exprNode.Nodes[alias] != null)
-                        {
-                            alias = MessageService.ShowInputBox("Expression Alias", "Enter the alias for this expression", alias);
-                        }
-                        AddExpression(classNode.Name, alias, expr);
-                    }
-                }
-            }
-        }
-
-        private void chkCopySpatialContexts_CheckedChanged(object sender, EventArgs e)
-        {
-            _presenter.CopySpatialContextChanged();
-        }
-
-        private void removeMappingToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UnmapExpressionNode();
+            get { return !txtName.ReadOnly; }
+            set { txtName.ReadOnly = !value; }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            try
+            if (mTreeView.Nodes[0].Nodes.Count == 0)
             {
-                _presenter.SaveTask();
-                base.Close();
+                MessageService.ShowMessage("Please define at least one copy task");
+                return;
             }
-            catch (TaskValidationException ex)
+
+            if (string.IsNullOrEmpty(txtName.Text))
             {
-                WrappedMessageBox.ShowMessage("Error", string.Format("The following errors were found: {0}{1}Please correct", Environment.NewLine + Environment.NewLine, string.Join(Environment.NewLine, ex.Errors) + Environment.NewLine + Environment.NewLine));
+                MessageService.ShowMessage("Please specify a name for this task");
+                return;
             }
-        }
 
+            TaskManager tmgr = ServiceManager.Instance.GetService<TaskManager>();
 
-        public bool GetClassDeleteOption(string className)
-        {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
+            if (IsNew && tmgr.GetTask(txtName.Text) != null)
             {
-                TreeNode deleteNode = classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes[1];
-                if (deleteNode.Tag != null)
+                MessageService.ShowMessage("A task named " + txtName.Text + " already exists. Please specify a name for this task");
+                return;
+            }
+
+            TaskLoader loader = new TaskLoader();
+            if (IsNew)
+            {   
+                string name = string.Empty;
+                FdoBulkCopyOptions opts = loader.BulkCopyFromXml(Save(), ref name, false);
+                FdoBulkCopy bcp = new FdoBulkCopy(opts);
+                tmgr.AddTask(name, bcp);
+                this.Close();
+            }
+            else
+            {
+                FdoBulkCopy bcp = tmgr.GetTask(txtName.Text) as FdoBulkCopy;
+                if (bcp == null)
                 {
-                    return (bool)deleteNode.Tag;
+                    MessageService.ShowMessage("This named task is not a bulk copy task or could not find the named task to update");
+                    return;
                 }
+                string name = string.Empty;
+                FdoBulkCopyOptions opts = loader.BulkCopyFromXml(Save(), ref name, false);
+                Debug.Assert(name == txtName.Text); //unchanged
+
+                //Update options
+                bcp.Options = opts;
+                MessageService.ShowMessage("Saved");
+                this.Close();
             }
-            return false;
         }
 
-        public string GetClassFilterOption(string className)
+        private FdoBulkCopyTaskDefinition Save()
         {
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
+            FdoBulkCopyTaskDefinition def = new FdoBulkCopyTaskDefinition();
+            def.name = txtName.Text;
+            List<FdoConnectionEntryElement> conns = new List<FdoConnectionEntryElement>();
+            foreach (DataGridViewRow row in grdConnections.Rows)
             {
-                TreeNode filterNode = classNode.Nodes[PREFIX_CLASS_OPTIONS].Nodes[0];
-                if (filterNode.Tag != null)
+                FdoConnectionEntryElement entry = new FdoConnectionEntryElement();
+                entry.name = row.Cells[0].Value.ToString();
+                entry.provider = row.Cells[1].Value.ToString();
+                entry.ConnectionString = row.Cells[2].Value.ToString();
+                conns.Add(entry);
+            }
+            List<FdoCopyTaskElement> tasks = new List<FdoCopyTaskElement>();
+            foreach (CopyTaskNodeDecorator dec in _tasks.Values)
+            {
+                FdoCopyTaskElement task = new FdoCopyTaskElement();
+                task.name = dec.Name;
+                task.Source = new FdoCopySourceElement();
+                task.Target = new FdoCopyTargetElement();
+                task.Options = new FdoCopyOptionsElement();
+                List<FdoPropertyMappingElement> pmaps = new List<FdoPropertyMappingElement>();
+                List<FdoExpressionMappingElement> emaps = new List<FdoExpressionMappingElement>();
+                
+                //Source
+                task.Source.@class = dec.SourceClassName;
+                task.Source.connection = dec.SourceConnectionName;
+                task.Source.schema = dec.SourceSchemaName;
+
+                //Target
+                task.Target.@class = dec.TargetClassName;
+                task.Target.connection = dec.TargetConnectionName;
+                task.Target.schema = dec.TargetSchemaName;
+
+                //Options
+                task.Options.BatchSize = dec.Options.BatchSize.ToString();
+                task.Options.DeleteTarget = dec.Options.Delete;
+                task.Options.Filter = dec.Options.SourceFilter;
+
+                //Property Mappings
+                NameValueCollection mappings = dec.PropertyMappings.GetPropertyMappings();
+                foreach (string srcProp in mappings.Keys)
                 {
-                    return filterNode.Tag.ToString();
+                    string dstProp = mappings[srcProp];
+                    FdoPropertyMappingElement p = new FdoPropertyMappingElement();
+                    p.source = srcProp;
+                    p.target = dstProp;
+
+                    PropertyConversionNodeDecorator conv = dec.PropertyMappings.GetConversionRule(p.source);
+                    p.nullOnFailedConversion = conv.NullOnFailedConversion;
+                    p.truncate = conv.Truncate;
+
+                    pmaps.Add(p);
                 }
-            }
-            return null;
-        }
 
-        private void clearFilterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeNode filterNode = treeMappings.SelectedNode;
-            filterNode.Tag = null;
-            filterNode.ToolTipText = null;
-            filterNode.Text = ResourceService.GetString("LBL_SOURCE_FILTER");
-        }
-
-        private void setFilterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeNode filterNode = treeMappings.SelectedNode;
-            TreeNode classNode = filterNode.Parent.Parent;
-            FdoConnection conn = _presenter.GetSourceConnection();
-            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
-            {
-                ClassDefinition cd = service.GetClassByName(this.SelectedSourceSchema, classNode.Name);
-                if (cd != null)
+                foreach (string alias in dec.ExpressionMappings.GetAliases())
                 {
-                    string expr = ExpressionEditor.NewExpression(conn, cd, ExpressionMode.Filter);
-                    if (!string.IsNullOrEmpty(expr))
+                    FdoExpressionMappingElement e = new FdoExpressionMappingElement();
+                    e.alias = alias;
+                    ExpressionMappingInfo exMap = dec.ExpressionMappings.GetMapping(alias);
+                    e.Expression = exMap.Expression;
+                    e.target = exMap.TargetProperty;
+
+                    PropertyConversionNodeDecorator conv = dec.ExpressionMappings.GetConversionRule(e.alias);
+                    e.nullOnFailedConversion = conv.NullOnFailedConversion;
+                    e.truncate = conv.Truncate;
+
+                    emaps.Add(e);
+                }
+
+                task.PropertyMappings = pmaps.ToArray();
+                task.ExpressionMappings = emaps.ToArray();
+
+                tasks.Add(task);
+            }
+            def.Connections = conns.ToArray();
+            def.CopyTasks = tasks.ToArray();
+            return def;
+        }
+
+        private void Load(FdoBulkCopyOptions def, string name)
+        {
+            txtName.Text = name;
+
+            grdConnections.Rows.Clear();
+
+            foreach (string connName in def.ConnectionNames)
+            {
+                FdoConnection conn = _connMgr.GetConnection(connName);
+                grdConnections.Rows.Add(connName, conn.Provider, conn.ConnectionString);
+            }
+
+            TreeNode root = mTreeView.Nodes[0];
+            foreach (FdoClassCopyOptions task in def.ClassCopyOptions)
+            {
+                //Init w/ defaults
+                CopyTaskNodeDecorator dec = AddNewTask(
+                                               root,
+                                               task.SourceConnectionName,
+                                               task.SourceSchema,
+                                               task.SourceClassName,
+                                               task.TargetConnectionName,
+                                               task.TargetSchema,
+                                               task.TargetClassName,
+                                               task.Name);
+
+                _tasks[dec.DecoratedNode.Index] = dec;
+                root.Expand();
+
+                btnSave.Enabled = (root.Nodes.Count > 0);
+
+                //Options
+                dec.Options.BatchSize = task.BatchSize;
+                dec.Options.Delete = task.DeleteTarget;
+                dec.Options.SourceFilter = task.SourceFilter;
+
+                //Property Mappings
+                foreach (string srcProp in task.SourcePropertyNames)
+                {
+                    string dstProp = task.GetTargetProperty(srcProp);
+
+                    dec.PropertyMappings.MapProperty(srcProp, dstProp);
+
+                    FdoDataPropertyConversionRule rule = task.GetDataConversionRule(srcProp);
+                    PropertyConversionNodeDecorator cd = dec.PropertyMappings.GetConversionRule(srcProp);
+                    if (rule != null)
                     {
-                        SetSourceFilter(cd.Name, expr);
+                        cd.NullOnFailedConversion = rule.NullOnFailure;
+                        cd.Truncate = rule.Truncate;
+                    }
+                }
+
+                //Expression Mappings
+                foreach (string alias in task.SourceAliases)
+                {
+                    string expr = task.GetExpression(alias);
+                    string dstProp = task.GetTargetPropertyForAlias(alias);
+
+                    dec.ExpressionMappings.AddExpression(alias, expr);
+                    dec.ExpressionMappings.MapExpression(alias, dstProp);
+
+                    FdoDataPropertyConversionRule rule = task.GetDataConversionRule(alias);
+                    PropertyConversionNodeDecorator cd = dec.ExpressionMappings.GetConversionRule(alias);
+
+                    if (rule != null)
+                    {
+                        cd.NullOnFailedConversion = rule.NullOnFailure;
+                        cd.Truncate = rule.Truncate;
                     }
                 }
             }
         }
+    }
+    
+    internal class ExpressionMappingInfo
+    {
+    	public string Expression;
+    	public string TargetProperty;
+    }
+    
+    [global::System.Serializable]
+    public class MappingException : Exception
+    {
+        //
+        // For guidelines regarding the creation of new exception types, see
+        //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconerrorraisinghandlingguidelines.asp
+        // and
+        //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
+        //
 
-        private void deleteTrueToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeNode delNode = treeMappings.SelectedNode;
-            FdoConnection conn = _presenter.GetTargetConnection();
-            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
-            {
-                if (service.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_Delete))
-                {
-                    SetClassDelete(delNode.Parent.Parent.Name, true);
-                }
-                else
-                {
-                    this.ShowMessage(null, ResourceService.GetString("MSG_DELETE_UNSUPPORTED"));
-                    SetClassDelete(delNode.Parent.Parent.Name, false);
-                }
-            }
-        }
-
-        private void deleteFalseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeNode delNode = treeMappings.SelectedNode;
-            delNode.Tag = false;
-            delNode.Text = delNode.Name + " (" + delNode.Tag + ")";
-        }
-
-
-        public System.Collections.Specialized.NameValueCollection GetExpressions(string className)
-        {
-            System.Collections.Specialized.NameValueCollection exprs = new System.Collections.Specialized.NameValueCollection();
-            TreeNode classNode = ClassesNode.Nodes[className];
-            if (classNode != null)
-            {
-                foreach (TreeNode exprNode in classNode.Nodes[PREFIX_CLASS_EXPRESSION].Nodes)
-                {
-                    if (exprNode.Tag != null)
-                    {
-                        ExpressionMappingInfo map = (ExpressionMappingInfo)exprNode.Tag;
-                        exprs.Add(exprNode.Name, map.Expression);
-                    }
-                }
-            }
-            return exprs;
-        }
-
-        public void LoadSettings(FdoToolbox.Core.ETL.EtlProcess proc)
-        {
-            _presenter.LoadFrom((FdoToolbox.Core.ETL.Specialized.FdoBulkCopy)proc);
-        }
-
-        public void ApplySettings()
-        {
-            _presenter.ApplySettings();
-        }
-
-        public bool DependsOnConnection(FdoConnection conn)
-        {
-            IFdoConnectionManager connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
-            FdoConnection src = connMgr.GetConnection(this.SelectedSourceConnection);
-            FdoConnection dest = connMgr.GetConnection(this.SelectedSourceConnection);
-
-            return conn == src || conn == dest;
-        }
-
-
-        public void CheckSpatialContext(string context, bool state)
-        {
-            int idx = chkListSpatialContexts.Items.IndexOf(context);
-            if (idx >= 0)
-                chkListSpatialContexts.SetItemChecked(idx, state);
-        }
-
-
-        public bool CanDefineMappings
-        {
-            set 
-            {
-                cmbTargetSchema.Enabled = value;
-                ctxSelectedClass.Enabled = value;
-                ctxDelete.Enabled = value;
-                ctxExpressions.Enabled = value;
-                ctxFilter.Enabled = value;
-                ctxSelectedExpression.Enabled = value;
-            }
-        }
+        public MappingException() { }
+        public MappingException(string message) : base(message) { }
+        public MappingException(string message, Exception inner) : base(message, inner) { }
+        protected MappingException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) { }
     }
 }
