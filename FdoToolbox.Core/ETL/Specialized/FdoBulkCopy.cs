@@ -22,40 +22,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using FdoToolbox.Core.ETL.Operations;
+using FdoToolbox.Core.Feature;
+using FdoToolbox.Core.Configuration;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
-    using Operations;
-    using FdoToolbox.Core.Feature;
-    using OSGeo.FDO.Commands.Feature;
-    using FdoToolbox.Core.ETL.Pipelines;
-    using FdoToolbox.Core.Configuration;
-    using System.Xml.Serialization;
-    using System.IO;
-    using System.Collections.Specialized;
-    using FdoToolbox.Core.ETL.Overrides;
-    using OSGeo.FDO.Schema;
-
-    /*
-        FdoBulkCopy is a special class. 
-
-        It was originally designed as a specialized EtlProcess that chains a series of FdoInputOperation 
-        and FdoOutputOperation objects together in the same pipeline. It turns out that this doesn't quite
-        work because FdoOutputOperation is designed to be used as the LAST operation in a pipeline, and throwing
-        down variable-sized enumerables can cause premature termination. Chaining operations after the FdoOutputOperation 
-        (such as new Fdo[Input/Output]Operation pairs, as the old implenentation does) does not quite work.
-
-        As a result, multi-class bulk copies do not work. So significant behind-the-scenes work had to be done.
-
-        Each Fdo[Input/Output]Operation pair is now encapsulated as a ClassToClassCopy sub-process, and
-        the FdoBulkCopy is a collection of these sub-processes. However, in order to maintain an identical interface,
-        most of the inherited methods had to be re-implemented. 
-     */
-
-    /// <summary>
-    /// A specialized form of <see cref="EtlProcess"/> that copies
-    /// a series of feature classes from one source to another
-    /// </summary>
     public class FdoBulkCopy : FdoSpecializedEtlProcess
     {
         private int _ReportFrequency = 50;
@@ -116,17 +90,6 @@ namespace FdoToolbox.Core.ETL.Specialized
         private List<EtlProcess> subProcesses = new List<EtlProcess>();
         private Dictionary<string, List<Exception>> subProcessErrors = new Dictionary<string, List<Exception>>();
 
-        /// <summary>
-        /// Registers the class copy process
-        /// </summary>
-        /// <param name="copts">The class copy options.</param>
-        protected void RegisterClassCopy(FdoClassCopyOptions copts)
-        {
-            ClassToClassCopy proc = new ClassToClassCopy(copts);
-            proc.ReportFrequency = this.ReportFrequency;
-            subProcesses.Add(proc);
-        }
-
         private bool execute = true;
 
         /// <summary>
@@ -143,117 +106,12 @@ namespace FdoToolbox.Core.ETL.Specialized
                 return;
             }
 
-            //Copy Spatial Contexts
-            IList<SpatialContextInfo> contexts = _options.SourceSpatialContexts;
-            if (contexts.Count > 0)
-            {   
-                using (FdoFeatureService targetService = _options.TargetConnection.CreateFeatureService())
-                {
-                    if (_options.BatchSize > 0 && !targetService.SupportsBatchInsertion())
-                    {
-                        SendMessage("Batch insert not supported. Using regular inserts");
-                        _options.BatchSize = 0;
-                    }
-
-                    if (contexts.Count > 0)
-                    {
-                        SendMessage("Copying Spatial Contexts");
-                        ICopySpatialContext copy = CopySpatialContextOverrideFactory.GetCopySpatialContextOverride(_options.TargetConnection);
-                        copy.Execute(contexts, _options.TargetConnection, true);
-                    }
-                }
-            }
-
-            //HACK: Express bulk copy can create an undefined source schema
-            if (_options.ApplySchemaToTarget && _options.SourceSchema != null)
+            foreach (FdoClassCopyOptions copt in Options.ClassCopyOptions)
             {
-                SendMessage("Applying source schema to target (this may take a while)");
-                FeatureSchema targetSchema = CreateTargetSchema(_options.SourceSchema);
-                using (FdoFeatureService destService = _options.TargetConnection.CreateFeatureService())
-                {
-                    if (_options.AlterSchema)
-                    {
-                        SendMessage("Altering schema to be compatible with target connection");
-
-                        IncompatibleSchema incSchema = null;
-                        if (!destService.CanApplySchema(targetSchema, out incSchema))
-                        {
-                            targetSchema = destService.AlterSchema(targetSchema, incSchema);
-                            SendMessage("Schema altered");
-                        }
-                        else
-                        {
-                            SendMessage("No alterations required");
-                        }
-                    }
-
-                    //Check that each feature class in the source schema has an identity property
-                    //If none exist, create one
-                    foreach (ClassDefinition classDef in targetSchema.Classes)
-                    {
-                        if (classDef.IdentityProperties.Count == 0)
-                        {
-                            int [] autoDataTypes = _options.TargetConnection.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_SupportedAutoGeneratedTypes);
-
-                            if (autoDataTypes == null || autoDataTypes.Length == 0)
-                                throw new FdoETLException("Class " + classDef.Name + " has no identity properties. An auto-generated ID could not be created as it was not supported");
-
-                            SendMessage("Class " + classDef.Name + " has no identity properties. Making one for it");
-                            DataPropertyDefinition dataDef = new DataPropertyDefinition("AutoID", "Auto-generated ID");
-                            dataDef.IsAutoGenerated = true;
-                            //Get the highest available auto-generated type. 
-                            DataType[] dtypes = (DataType[])_options.TargetConnection.Capability.GetObjectCapability(CapabilityType.FdoCapabilityType_SupportedAutoGeneratedTypes);
-                            DataType[] autoTypes = new DataType[dtypes.Length];
-                            Array.Copy(dtypes, autoTypes, dtypes.Length);
-                            Array.Sort<DataType>(autoTypes, new DataTypeComparer());
-                            dataDef.DataType = autoTypes[autoTypes.Length - 1];
-
-                            classDef.Properties.Add(dataDef);
-                            classDef.IdentityProperties.Add(dataDef);
-                        }
-                        SendMessage("Creating class copy option for " + classDef.Name);
-                        FdoClassCopyOptions copt = new FdoClassCopyOptions(classDef.Name, classDef.Name);
-                        foreach (PropertyDefinition pd in classDef.Properties)
-                        {
-                            switch (pd.PropertyType)
-                            {
-                                case PropertyType.PropertyType_DataProperty:
-                                    if (!(pd as DataPropertyDefinition).ReadOnly)
-                                    {
-                                        copt.AddPropertyMapping(pd.Name, pd.Name);
-                                    }
-                                    break;
-                                case PropertyType.PropertyType_GeometricProperty:
-                                    copt.AddPropertyMapping(pd.Name, pd.Name);
-                                    break;
-                            }
-                        }
-                        _options.AddClassCopyOption(copt);
-                    }
-                    destService.ApplySchema(targetSchema);
-                    _options.TargetSchema = targetSchema.Name;
-                    SendMessage("Target schema applied");
-                }
+                FdoClassToClassCopyProcess proc = new FdoClassToClassCopyProcess(copt);
+                proc.ReportFrequency = this.ReportFrequency;
+                subProcesses.Add(proc);
             }
-            //Set class copy tasks
-            foreach (FdoClassCopyOptions copt in _options.ClassCopyOptions)
-            {
-                RegisterClassCopy(copt);
-            }
-        }
-
-        private FeatureSchema CreateTargetSchema(string sourceSchemaName)
-        {
-            SendMessage("Cloning source schema for target");
-            using (FdoFeatureService srcService = _options.SourceConnection.CreateFeatureService())
-            {
-                FeatureSchema fs = srcService.GetSchemaByName(sourceSchemaName);
-                if (fs != null)
-                {
-                    return FdoFeatureService.CloneSchema(fs);
-                }
-            }
-            throw new FdoETLException("Could not find source schema to clone: " + sourceSchemaName);
         }
 
         /// <summary>
@@ -317,63 +175,32 @@ namespace FdoToolbox.Core.ETL.Specialized
             FdoBulkCopyTaskDefinition def = new FdoBulkCopyTaskDefinition();
             def.name = name;
 
-            def.Source = new FdoCopySource();
-            def.Target = new FdoCopyTarget();
-            
-            def.Source.ConnectionString = _options.SourceConnection.ConnectionString;
-            def.Source.Provider = _options.SourceConnection.Provider;
-            def.Source.Schema = _options.SourceSchema;
-            List<string> contexts = new List<string>();
-            foreach (SpatialContextInfo c in _options.SourceSpatialContexts)
+            List<FdoConnectionEntryElement> connList = new List<FdoConnectionEntryElement>();
+            List<FdoCopyTaskElement> copyTasks = new List<FdoCopyTaskElement>();
+
+            foreach (string connName in _options.ConnectionNames)
             {
-                contexts.Add(c.Name);
+                FdoConnection conn = _options.GetConnection(connName);
+                FdoConnectionEntryElement entry = new FdoConnectionEntryElement();
+                entry.name = connName;
+                entry.provider = conn.Provider;
+                entry.ConnectionString = conn.ConnectionString;
+
+                connList.Add(entry);
             }
-            def.Source.SpatialContextList = contexts.ToArray();
-            
-            def.Target.ConnectionString = _options.TargetConnection.ConnectionString;
-            def.Target.Provider = _options.TargetConnection.Provider;
-            def.Target.Schema = _options.TargetSchema;
 
-            if(_options.BatchSize > 0)
-                def.Target.BatchSize = _options.BatchSize;
-
-            List<FdoClassMapping> mappings = new List<FdoClassMapping>();
             foreach (FdoClassCopyOptions copt in _options.ClassCopyOptions)
             {
-                FdoClassMapping map = new FdoClassMapping();
-                map.DeleteTarget = copt.DeleteTarget;
-                List<FdoExpressionMapping> exprs = new List<FdoExpressionMapping>();
-                foreach (string key in copt.SourceAliases)
-                {
-                    FdoExpressionMapping e = new FdoExpressionMapping();
-                    e.SourceExpression = copt.GetExpression(key);
-                    e.SourceAlias = key;
-                    e.TargetProperty = copt.GetTargetPropertyForAlias(key);
-                    exprs.Add(e);
-                }
-                map.Expressions = exprs.ToArray();
-                map.Filter = copt.SourceFilter;
-                List<FdoPropertyMapping> props = new List<FdoPropertyMapping>();
-                foreach (string key in copt.SourcePropertyNames)
-                {
-                    FdoPropertyMapping p = new FdoPropertyMapping();
-                    p.SourceProperty = key;
-                    p.TargetProperty = copt.GetTargetProperty(key);
-                    props.Add(p);
-                }
-                map.Properties = props.ToArray();
-                map.SourceClass = copt.SourceClassName;
-                map.TargetClass = copt.TargetClassName;
-
-                mappings.Add(map);
+                copyTasks.Add(copt.ToElement());
             }
 
-            def.ClassMappings = mappings.ToArray();
+            def.Connections = connList.ToArray();
+            def.CopyTasks = copyTasks.ToArray();
 
-            XmlSerializer serializer = new XmlSerializer(typeof(FdoBulkCopyTaskDefinition));
             using (StreamWriter writer = new StreamWriter(file, false))
             {
-                serializer.Serialize(writer, def);
+                XmlSerializer ser = new XmlSerializer(typeof(FdoBulkCopyTaskDefinition));
+                ser.Serialize(writer, def);
             }
         }
 
@@ -408,6 +235,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             return ResourceUtil.GetString("DESC_BULK_COPY_DEFINITION");
         }
 
+
         /// <summary>
         /// Gets all errors that occured during the execution of this process
         /// </summary>
@@ -422,5 +250,6 @@ namespace FdoToolbox.Core.ETL.Specialized
                 }
             }
         }
+
     }
 }

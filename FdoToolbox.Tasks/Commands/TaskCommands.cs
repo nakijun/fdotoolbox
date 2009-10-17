@@ -77,54 +77,54 @@ namespace FdoToolbox.Tasks.Commands
 
         private void OnBeforeExecuteBulkCopy(object sender, CancelEventArgs e)
         {
-            
-            Workbench wb = Workbench.Instance;
-            MethodInvoker invoker = new MethodInvoker(delegate
-            {
-                TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
-                string name = wb.ObjectExplorer.GetSelectedNode().Name;
-                EtlProcess proc = mgr.GetTask(name);
-                FdoBulkCopy bcp = proc as FdoBulkCopy;
-                if (bcp != null)
-                {
-                    FdoBulkCopyOptions opts = bcp.Options;
-                    using (FdoFeatureService srcService = FdoConnectionUtil.CreateFeatureService(opts.SourceConnection))
-                    using (FdoFeatureService destService = FdoConnectionUtil.CreateFeatureService(opts.TargetConnection))
-                    {
-                        FeatureSchema srcSchema = srcService.GetSchemaByName(opts.SourceSchema);
-                        if (opts.ApplySchemaToTarget && srcSchema != null)
-                        {
-                            IncompatibleSchema incSchema = null;
-                            if (!destService.CanApplySchema(srcSchema, out incSchema))
-                            {
-                                bool attemptAlter = WrappedMessageBox.Confirm("Incompatible Schema", "The source schema has incompatible elements:\n\n" + incSchema.ToString() + "\nThe source schema will be altered to be compatible with the target connection. Proceed?", MessageBoxText.YesNo);
-                                if (attemptAlter)
-                                {
-                                    try
-                                    {
-                                        FeatureSchema alteredSchema = destService.AlterSchema(srcSchema, incSchema);
-                                        if (alteredSchema != null)
-                                        {
-                                            opts.AlterSchema = true;
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageService.ShowError(ex);
-                                        LoggingService.Error("Alter schema error", ex);
-                                        e.Cancel = true;
-                                    }
-                                }
-                                else
-                                {
-                                    e.Cancel = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            wb.Invoke(invoker);
+
+            //    Workbench wb = Workbench.Instance;
+            //    MethodInvoker invoker = new MethodInvoker(delegate
+            //    {
+            //        TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
+            //        string name = wb.ObjectExplorer.GetSelectedNode().Name;
+            //        EtlProcess proc = mgr.GetTask(name);
+            //        FdoBulkCopy bcp = proc as FdoBulkCopy;
+            //        if (bcp != null)
+            //        {
+            //            FdoBulkCopyOptions opts = bcp.Options;
+            //            using (FdoFeatureService srcService = FdoConnectionUtil.CreateFeatureService(opts.SourceConnection))
+            //            using (FdoFeatureService destService = FdoConnectionUtil.CreateFeatureService(opts.TargetConnection))
+            //            {
+            //                FeatureSchema srcSchema = srcService.GetSchemaByName(opts.SourceSchema);
+            //                if (opts.ApplySchemaToTarget && srcSchema != null)
+            //                {
+            //                    IncompatibleSchema incSchema = null;
+            //                    if (!destService.CanApplySchema(srcSchema, out incSchema))
+            //                    {
+            //                        bool attemptAlter = WrappedMessageBox.Confirm("Incompatible Schema", "The source schema has incompatible elements:\n\n" + incSchema.ToString() + "\nThe source schema will be altered to be compatible with the target connection. Proceed?", MessageBoxText.YesNo);
+            //                        if (attemptAlter)
+            //                        {
+            //                            try
+            //                            {
+            //                                FeatureSchema alteredSchema = destService.AlterSchema(srcSchema, incSchema);
+            //                                if (alteredSchema != null)
+            //                                {
+            //                                    opts.AlterSchema = true;
+            //                                }
+            //                            }
+            //                            catch (Exception ex)
+            //                            {
+            //                                MessageService.ShowError(ex);
+            //                                LoggingService.Error("Alter schema error", ex);
+            //                                e.Cancel = true;
+            //                            }
+            //                        }
+            //                        else
+            //                        {
+            //                            e.Cancel = true;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    });
+            //    wb.Invoke(invoker);
         }
     }
 

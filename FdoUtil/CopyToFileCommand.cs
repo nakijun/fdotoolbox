@@ -75,59 +75,65 @@ namespace FdoUtil
                 srcConn.Open();
                 destConn.Open();
 
-                FdoBulkCopyOptions options = new FdoBulkCopyOptions(srcConn, destConn);
-                using (FdoFeatureService srcService = srcConn.CreateFeatureService())
-                using (FdoFeatureService destService = destConn.CreateFeatureService())
-                {
-                    //See if spatial context needs to be copied
-                    if (!string.IsNullOrEmpty(_srcSpatialContext))
-                    {
-                        Console.WriteLine("Copying spatial context");
-                        SpatialContextInfo srcCtx = srcService.GetSpatialContext(_srcSpatialContext);
-                        if (srcCtx != null)
-                        {
-                            options.AddSourceSpatialContext(srcCtx);
-                        }
-                    }
-                    FeatureSchema srcSchema = null;
-                    //See if partial class list is needed
-                    if (_srcClasses.Count > 0)
-                    {
-                        srcSchema = srcService.PartialDescribeSchema(_srcSchema, _srcClasses);
-                    }
-                    else //Full copy
-                    {
-                        srcSchema = srcService.GetSchemaByName(_srcSchema);
-                    }
+                throw new NotImplementedException();
 
-                    IncompatibleSchema incSchema;
-                    if (destService.CanApplySchema(srcSchema, out incSchema))
-                    {
-                        Console.WriteLine("Applying source schema to target");
-                        destService.ApplySchema(srcSchema);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Applying modified source schema to target");
-                        FeatureSchema fixedSchema = destService.AlterSchema(srcSchema, incSchema);
-                        destService.ApplySchema(fixedSchema);
-                    }
+                //Dictionary<string, FdoConnection> connections = new Dictionary<string, FdoConnection>();
+                //connections["SOURCE"] = srcConn;
+                //connections["TARGET"] = destConn;
 
-                    //Now set class copy options
-                    foreach (ClassDefinition cd in srcSchema.Classes)
-                    {
-                        FdoClassCopyOptions copt = new FdoClassCopyOptions(cd.Name, cd.Name);
-                        options.AddClassCopyOption(copt);
-                    }
+                //FdoBulkCopyOptions options = new FdoBulkCopyOptions(connections);
+                //using (FdoFeatureService srcService = srcConn.CreateFeatureService())
+                //using (FdoFeatureService destService = destConn.CreateFeatureService())
+                //{
+                //    //See if spatial context needs to be copied
+                //    if (!string.IsNullOrEmpty(_srcSpatialContext))
+                //    {
+                //        Console.WriteLine("Copying spatial context");
+                //        SpatialContextInfo srcCtx = srcService.GetSpatialContext(_srcSpatialContext);
+                //        if (srcCtx != null)
+                //        {
+                //            options.AddSourceSpatialContext(srcCtx);
+                //        }
+                //    }
+                //    FeatureSchema srcSchema = null;
+                //    //See if partial class list is needed
+                //    if (_srcClasses.Count > 0)
+                //    {
+                //        srcSchema = srcService.PartialDescribeSchema(_srcSchema, _srcClasses);
+                //    }
+                //    else //Full copy
+                //    {
+                //        srcSchema = srcService.GetSchemaByName(_srcSchema);
+                //    }
+
+                //    IncompatibleSchema incSchema;
+                //    if (destService.CanApplySchema(srcSchema, out incSchema))
+                //    {
+                //        Console.WriteLine("Applying source schema to target");
+                //        destService.ApplySchema(srcSchema);
+                //    }
+                //    else
+                //    {
+                //        Console.WriteLine("Applying modified source schema to target");
+                //        FeatureSchema fixedSchema = destService.AlterSchema(srcSchema, incSchema);
+                //        destService.ApplySchema(fixedSchema);
+                //    }
+
+                //    //Now set class copy options
+                //    foreach (ClassDefinition cd in srcSchema.Classes)
+                //    {
+                //        FdoClassCopyOptions copt = new FdoClassCopyOptions(cd.Name, cd.Name);
+                //        options.AddClassCopyOption(copt);
+                //    }
 
 
-                    FdoBulkCopy copy = new FdoBulkCopy(options);
-                    copy.ProcessMessage += new MessageEventHandler(OnMessage);
-                    copy.ProcessCompleted += new EventHandler(OnCompleted);
-                    Console.WriteLine("Executing bulk copy");
-                    copy.Execute();
-                    retCode = CommandStatus.E_OK;
-                }
+                //    FdoBulkCopy copy = new FdoBulkCopy(options);
+                //    copy.ProcessMessage += new MessageEventHandler(OnMessage);
+                //    copy.ProcessCompleted += new EventHandler(OnCompleted);
+                //    Console.WriteLine("Executing bulk copy");
+                //    copy.Execute();
+                //    retCode = CommandStatus.E_OK;
+                //}
             }
             catch (Exception ex)
             {

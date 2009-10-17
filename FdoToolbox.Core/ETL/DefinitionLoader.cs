@@ -68,7 +68,7 @@ namespace FdoToolbox.Core.ETL
         }
 
         /// <summary>
-        /// Loads join options from xml
+        /// Loads join options from deserialized xml
         /// </summary>
         /// <param name="def">The deserialized definition.</param>
         /// <param name="name">The name.</param>
@@ -76,51 +76,20 @@ namespace FdoToolbox.Core.ETL
         /// <returns></returns>
         public FdoBulkCopyOptions BulkCopyFromXml(FdoBulkCopyTaskDefinition def, ref string name, bool owner)
         {
-            FdoBulkCopyOptions opt = new FdoBulkCopyOptions(
-                CreateConnection(def.Source.Provider, def.Source.ConnectionString),
-                CreateConnection(def.Target.Provider, def.Target.ConnectionString), owner);
-
             name = def.name;
-
-            opt.SourceSchema = def.Source.Schema;
-            opt.TargetSchema = def.Target.Schema;
-
-            foreach (FdoClassMapping mapping in def.ClassMappings)
-            {   
-                FdoClassCopyOptions copt = new FdoClassCopyOptions(mapping.SourceClass, mapping.TargetClass);
-                foreach (FdoPropertyMapping pmap in mapping.Properties)
-                {
-                    copt.AddPropertyMapping(pmap.SourceProperty, pmap.TargetProperty);
-                }
-                foreach (FdoExpressionMapping emap in mapping.Expressions)
-                {
-                    string alias = emap.SourceAlias;
-                    string expr = emap.SourceExpression;
-                    string targetProp = emap.TargetProperty;
-                    copt.AddSourceExpression(alias, expr, targetProp);
-                }
-                copt.DeleteTarget = mapping.DeleteTarget;
-                copt.SourceFilter = mapping.Filter;
-                opt.AddClassCopyOption(copt);
-            }
-
-            if (def.Source.SpatialContextList.Length > 0)
+            Dictionary<string, FdoConnection> connections = new Dictionary<string, FdoConnection>();
+            foreach (FdoConnectionEntryElement entry in def.Connections)
             {
-                using (FdoFeatureService service = opt.SourceConnection.CreateFeatureService())
-                {
-                    foreach (string str in def.Source.SpatialContextList)
-                    {
-                        SpatialContextInfo ctx = service.GetSpatialContext(str);
-                        if(ctx != null)
-                            opt.AddSourceSpatialContext(ctx);
-                    }
-                }
+                FdoConnection conn = CreateConnection(entry.provider, entry.ConnectionString);
+                connections[entry.name] = conn;
             }
-
-            if (def.Target.BatchSizeSpecified)
-                opt.BatchSize = def.Target.BatchSize;
-
-            return opt;
+            FdoBulkCopyOptions opts = new FdoBulkCopyOptions(connections, owner);
+            foreach (FdoCopyTaskElement task in def.CopyTasks)
+            {
+                FdoClassCopyOptions copt = FdoClassCopyOptions.FromElement(task, def.Connections);
+                opts.AddClassCopyOption(copt);
+            }
+            return opts;
         }
 
         /// <summary>

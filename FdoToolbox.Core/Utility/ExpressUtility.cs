@@ -439,7 +439,14 @@ namespace FdoToolbox.Core.Utility
                 if (target.State == FdoConnectionState.Closed)
                     target.Open();
 
-                options = new FdoBulkCopyOptions(source, target, true);
+                string srcName = "SOURCE";
+                string dstName = "TARGET";
+
+                Dictionary<string, FdoConnection> connections = new Dictionary<string, FdoConnection>();
+                connections.Add(srcName, source);
+                connections.Add(dstName, target);
+
+                options = new FdoBulkCopyOptions(connections, true);
 
                 if (copySpatialContexts)
                 {
@@ -455,10 +462,14 @@ namespace FdoToolbox.Core.Utility
                     //Clone and apply to target
                     FeatureSchema targetSchema = FdoFeatureService.CloneSchema(fs);
                     IncompatibleSchema incSchema;
+                    string sourceSchemaName = fs.Name;
+                    string targetSchemaName = string.Empty;
+
                     bool canApply = destService.CanApplySchema(targetSchema, out incSchema);
                     if (canApply)
                     {
                         destService.ApplySchema(targetSchema);
+                        targetSchemaName = targetSchema.Name;
                     }
                     else
                     {
@@ -466,6 +477,7 @@ namespace FdoToolbox.Core.Utility
                         {
                             FeatureSchema fixedSchema = destService.AlterSchema(targetSchema, incSchema);
                             destService.ApplySchema(fixedSchema);
+                            targetSchemaName = fixedSchema.Name;
                         }
                         else
                         {
@@ -476,15 +488,15 @@ namespace FdoToolbox.Core.Utility
                     //Copy all classes
                     foreach (ClassDefinition cd in fs.Classes)
                     {
-                        FdoClassCopyOptions copt = new FdoClassCopyOptions(cd.Name, cd.Name);
+                        FdoClassCopyOptions copt = new FdoClassCopyOptions(srcName, dstName, sourceSchemaName, cd.Name, targetSchemaName, cd.Name);
+                        copt.Name = "Copy source to target [" + cd.Name + "]";
                         options.AddClassCopyOption(copt);
+
+                        //Flick on batch support if we can
+                        if (destService.SupportsBatchInsertion())
+                            copt.BatchSize = 300; //Madness? THIS IS SPARTA!
                     }
-
-                    //Flick on batch support if we can
-                    if (destService.SupportsBatchInsertion())
-                        options.BatchSize = 300; //Madness? THIS IS SPARTA!
                 }
-
             }
             catch (Exception ex)
             {

@@ -1204,17 +1204,16 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public bool SupportsBatchInsertion()
         {
-            return _conn.CommandCapabilities.SupportsParameters();
+            //HACK: This bombs on PostGIS, must be something to do with the refcounting.
+            if (_conn.ConnectionInfo.ProviderName.Contains("PostGIS"))
+                return false;
 
-            /*
-            //This bombs on PostGIS, must be something to do with the refcounting.
             bool supported = false;
             using (IInsert insert = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert) as IInsert)
             {
                 supported = (insert.BatchParameterValues != null);
             }
             return supported;
-             */
         }
 
         /// <summary>
