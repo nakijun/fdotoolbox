@@ -38,7 +38,7 @@ namespace FdoToolbox.Base.Controls
     /// certain elements of this view are disabled based on the capabilities of the underlying connection. In standalone mode,
     /// no view elements are disabled.
     /// </summary>
-    public partial class FdoSchemaDesignerCtl : ViewContent, IFdoSchemaDesignerView, IConnectionDependentView
+    internal partial class FdoSchemaDesignerCtl : ViewContent, IFdoSchemaDesignerView, IConnectionDependentView
     {
         private FdoSchemaDesignerPresenter _presenter;
 

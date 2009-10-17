@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,24 +29,65 @@ using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// Abstract view
+    /// </summary>
     public interface IFdoInsertView : IViewContent
     {
+        /// <summary>
+        /// Gets or sets the name of the class.
+        /// </summary>
+        /// <value>The name of the class.</value>
         string ClassName { set; get; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [use transaction].
+        /// </summary>
+        /// <value><c>true</c> if [use transaction]; otherwise, <c>false</c>.</value>
         bool UseTransaction { set; get; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [use transaction enabled].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [use transaction enabled]; otherwise, <c>false</c>.
+        /// </value>
         bool UseTransactionEnabled { set; get; }
+        /// <summary>
+        /// Initializes the grid.
+        /// </summary>
         void InitializeGrid();
+        /// <summary>
+        /// Adds the data property.
+        /// </summary>
+        /// <param name="dp">The dp.</param>
         void AddDataProperty(DataPropertyDefinition dp);
+        /// <summary>
+        /// Adds the geometric property.
+        /// </summary>
+        /// <param name="gp">The gp.</param>
         void AddGeometricProperty(GeometricPropertyDefinition gp);
 
+        /// <summary>
+        /// Gets the values.
+        /// </summary>
+        /// <returns></returns>
         Dictionary<string, ValueExpression> GetValues();
     }
 
+    /// <summary>
+    /// Handles presentation logic
+    /// </summary>
     public class FdoInsertScaffoldPresenter
     {
         private readonly IFdoInsertView _view;
         private readonly FdoConnection _conn;
         private readonly string _className;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoInsertScaffoldPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="conn">The conn.</param>
+        /// <param name="className">Name of the class.</param>
         public FdoInsertScaffoldPresenter(IFdoInsertView view, FdoConnection conn, string className)
         {
             _view = view;
@@ -54,6 +96,9 @@ namespace FdoToolbox.Base.Controls
             _view.Title = ICSharpCode.Core.ResourceService.GetString("TITLE_INSERT_FEATURE");
         }
 
+        /// <summary>
+        /// Inits this instance.
+        /// </summary>
         public void Init()
         {
             _view.InitializeGrid();

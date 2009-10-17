@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,13 +32,23 @@ using OSGeo.FDO.ClientServices;
 
 namespace FdoToolbox.Base.Controls.PreferenceSheets
 {
+    /// <summary>
+    /// FDO Provider preferences control
+    /// </summary>
     public partial class ProviderPreferencesCtl : UserControl, IPreferenceSheet
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProviderPreferencesCtl"/> class.
+        /// </summary>
         public ProviderPreferencesCtl()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.UserControl.Load"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnLoad(EventArgs e)
         {
             string[] ignore = Preferences.ExcludePartialSchemaProviders;
@@ -57,16 +68,27 @@ namespace FdoToolbox.Base.Controls.PreferenceSheets
             base.OnLoad(e);
         }
 
+        /// <summary>
+        /// Gets the title.
+        /// </summary>
+        /// <value>The title.</value>
         public string Title
         {
             get { return "Providers"; }
         }
 
+        /// <summary>
+        /// Gets the content control.
+        /// </summary>
+        /// <value>The content control.</value>
         public Control ContentControl
         {
             get { return this; }
         }
 
+        /// <summary>
+        /// Applies the changes.
+        /// </summary>
         public void ApplyChanges()
         {
             List<string> providers = new List<string>();

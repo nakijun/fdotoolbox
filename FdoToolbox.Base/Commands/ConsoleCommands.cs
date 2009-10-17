@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +28,7 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Base.Commands
 {
-    public class SaveConsoleLogCommand : AbstractMenuCommand
+    internal class SaveConsoleLogCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -44,7 +45,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class ClearConsoleCommand : AbstractMenuCommand
+    internal class ClearConsoleCommand : AbstractMenuCommand
     {
         public override void Run()
         {

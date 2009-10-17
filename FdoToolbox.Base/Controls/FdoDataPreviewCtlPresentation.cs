@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -38,7 +39,7 @@ using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Base.Controls
 {
-    public enum QueryMode
+    internal enum QueryMode
     {
         Standard,
         ExtendedSelect,
@@ -46,7 +47,7 @@ namespace FdoToolbox.Base.Controls
         SQL
     }
 
-    public interface IFdoDataPreviewView : IViewContent
+    internal interface IFdoDataPreviewView : IViewContent
     {
         List<QueryMode> QueryModes { set; }
         QueryMode SelectedQueryMode { get; }
@@ -71,7 +72,7 @@ namespace FdoToolbox.Base.Controls
         void SetBusyCursor(bool busy);
     }
 
-    public class FdoDataPreviewPresenter
+    internal class FdoDataPreviewPresenter
     {
         private readonly IFdoDataPreviewView _view;
         private FdoConnection _connection;

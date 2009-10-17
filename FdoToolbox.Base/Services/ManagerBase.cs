@@ -32,8 +32,14 @@ namespace FdoToolbox.Base.Services
     /// <typeparam name="T"></typeparam>
     public abstract class ManagerBase<T> where T : class
     {
+        /// <summary>
+        /// The internal dictionary of managed objects
+        /// </summary>
         protected Dictionary<string, T> _dict;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManagerBase&lt;T&gt;"/> class.
+        /// </summary>
         protected ManagerBase()
         {
             _dict = new Dictionary<string, T>();
@@ -154,33 +160,70 @@ namespace FdoToolbox.Base.Services
         public event ManagerObjectRenamedEventHandler ObjectRenamed = delegate { };
     }
 
+    /// <summary>
+    /// Represents a method that is called before an object is to be renamed
+    /// </summary>
     public delegate void ManagerObjectBeforeRemoveEventHandler(object sender, ManagerObjectBeforeRemoveEventArgs e);
+    /// <summary>
+    /// Represents a method that is called when an action has been performed on an object
+    /// </summary>
     public delegate void ManagerObjectEventHandler(object sender, EventArgs<string> e);
+    /// <summary>
+    /// Represents a method that is called when an object has been renamed
+    /// </summary>
     public delegate void ManagerObjectRenamedEventHandler(object sender, ManagerObjectRenameArgs e);
 
+    /// <summary>
+    /// An event object passed when a managed object is renamed
+    /// </summary>
     public class ManagerObjectBeforeRemoveEventArgs
     {
+        /// <summary>
+        /// The name of the object
+        /// </summary>
         public readonly string Name;
 
         private bool _Cancel;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="ManagerObjectBeforeRemoveEventArgs"/> is cancel.
+        /// </summary>
+        /// <value><c>true</c> if cancel; otherwise, <c>false</c>.</value>
         public bool Cancel
         {
             get { return _Cancel; }
             set { _Cancel = value; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManagerObjectBeforeRemoveEventArgs"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
         public ManagerObjectBeforeRemoveEventArgs(string name)
         {
             this.Name = name;
         }
     }
 
+    /// <summary>
+    /// An event object passed when a managed object is renamed
+    /// </summary>
     public class ManagerObjectRenameArgs
     {
+        /// <summary>
+        /// The old name of the object
+        /// </summary>
         public readonly string OldName;
+        /// <summary>
+        /// The new name of the object
+        /// </summary>
         public readonly string NewName;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManagerObjectRenameArgs"/> class.
+        /// </summary>
+        /// <param name="oldName">The old name.</param>
+        /// <param name="newName">The new name.</param>
         public ManagerObjectRenameArgs(string oldName, string newName)
         {
             this.OldName = oldName;

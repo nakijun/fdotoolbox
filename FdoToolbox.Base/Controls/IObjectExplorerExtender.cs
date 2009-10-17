@@ -31,6 +31,10 @@ namespace FdoToolbox.Base.Controls
     /// </summary>
     public interface IObjectExplorerExtender
     {
+        /// <summary>
+        /// Extends the Object Explorer instance
+        /// </summary>
+        /// <param name="explorer">The Object Explorer instance.</param>
         void Decorate(IObjectExplorer explorer);
     }
 }

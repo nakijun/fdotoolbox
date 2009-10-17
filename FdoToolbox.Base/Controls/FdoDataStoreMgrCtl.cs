@@ -36,7 +36,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A view that allows for the management of FDO data stores. This is mainly used in a RDBMS context
     /// </summary>
-    public partial class FdoDataStoreMgrCtl : ViewContent, IFdoDataStoreMgrView, IViewContent, IConnectionDependentView
+    internal partial class FdoDataStoreMgrCtl : ViewContent, IFdoDataStoreMgrView, IViewContent, IConnectionDependentView
     {
         private FdoDataStoreMgrPresenter _presenter;
 

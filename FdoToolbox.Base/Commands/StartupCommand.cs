@@ -26,7 +26,6 @@ using ICSharpCode.Core;
 using System.Resources;
 using System.Reflection;
 using FdoToolbox.Base.Services;
-
 using Res = ICSharpCode.Core.ResourceService;
 using Msg = ICSharpCode.Core.MessageService;
 using FdoToolbox.Core;
@@ -38,8 +37,14 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Base.Commands
 {
+    /// <summary>
+    /// The application startup command
+    /// </summary>
     public class StartupCommand : AbstractCommand
     {
+        /// <summary>
+        /// Invokes the command.
+        /// </summary>
         public override void Run()
         {
             EventWatcher.Initialize();

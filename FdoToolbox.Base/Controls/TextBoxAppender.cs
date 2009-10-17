@@ -35,7 +35,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A text box appender for log4net
     /// </summary>
-    public class TextBoxAppender : AppenderSkeleton
+    internal class TextBoxAppender : AppenderSkeleton
     {
         private RichTextBox _TextBox;
         private StringBuilder _buffer;

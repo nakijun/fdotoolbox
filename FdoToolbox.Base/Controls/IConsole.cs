@@ -30,7 +30,14 @@ namespace FdoToolbox.Base.Controls
     /// </summary>
     public interface IConsole
     {
+        /// <summary>
+        /// Gets the content of the text.
+        /// </summary>
+        /// <value>The content of the text.</value>
         string TextContent { get; }
+        /// <summary>
+        /// Clears this instance.
+        /// </summary>
         void Clear();
     }
 }

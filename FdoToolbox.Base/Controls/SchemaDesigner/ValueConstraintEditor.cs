@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,7 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
-    public class ValueConstraintEditor : UITypeEditor
+    internal class ValueConstraintEditor : UITypeEditor
     {
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
         {

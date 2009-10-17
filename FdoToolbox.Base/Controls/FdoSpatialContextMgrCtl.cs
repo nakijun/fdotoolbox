@@ -35,7 +35,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A view to allow for the management of Spatial Contexts
     /// </summary>
-    public partial class FdoSpatialContextMgrCtl : ViewContent, IFdoSpatialContextMgrView, IViewContent, IConnectionDependentView
+    internal partial class FdoSpatialContextMgrCtl : ViewContent, IFdoSpatialContextMgrView, IViewContent, IConnectionDependentView
     {
         private FdoSpatialContextMgrPresenter _presenter;
 

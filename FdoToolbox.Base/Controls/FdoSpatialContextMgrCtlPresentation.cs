@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,7 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoSpatialContextMgrView
+    internal interface IFdoSpatialContextMgrView
     {
         IList<SpatialContextInfo> SpatialContexts { set; get; }
 
@@ -41,7 +42,7 @@ namespace FdoToolbox.Base.Controls
         bool DeleteEnabled { set; }
     }
 
-    public class FdoSpatialContextMgrPresenter
+    internal class FdoSpatialContextMgrPresenter
     {
         private readonly IFdoSpatialContextMgrView _view;
         private FdoConnection _conn;

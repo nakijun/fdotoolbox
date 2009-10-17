@@ -36,7 +36,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A view that allows the query and preview of FDO feature data
     /// </summary>
-    public partial class FdoDataPreviewCtl : ViewContent, IFdoDataPreviewView, IConnectionDependentView
+    internal partial class FdoDataPreviewCtl : ViewContent, IFdoDataPreviewView, IConnectionDependentView
     {
         private FdoDataPreviewPresenter _presenter;
 

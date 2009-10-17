@@ -34,7 +34,7 @@ namespace FdoToolbox.Base.Controls
     /// A container of <see cref="IPreferenceSheet"/> instances. Each instance is contained
     /// in a tab.
     /// </summary>
-    public partial class PreferencesCtl : ViewContent, IPreferencesView
+    internal partial class PreferencesCtl : ViewContent, IPreferencesView
     {
         private PreferencesCtlPresenter _presenter;
 

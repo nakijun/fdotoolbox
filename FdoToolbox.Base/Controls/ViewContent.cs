@@ -19,7 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-
+#pragma warning disable 1591
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,6 +39,9 @@ namespace FdoToolbox.Base.Controls
     {
         private IFdoConnectionManager connMgr;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewContent"/> class.
+        /// </summary>
         public ViewContent()
         {
             InitializeComponent();
@@ -74,43 +77,77 @@ namespace FdoToolbox.Base.Controls
             connMgr.ConnectionRenamed -= OnConnectionRenamed;
         }
 
+        /// <summary>
+        /// Detrmines if this view can be closed
+        /// </summary>
+        /// <value></value>
         public virtual bool CanClose
         {
             get { return true; }
         }
 
+        /// <summary>
+        /// Closes the view. This raises the <see cref="ViewContentClosing"/> event
+        /// </summary>
         public void Close()
         {
             ViewContentClosing(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Fired when the view has been closed internally
+        /// </summary>
         public event EventHandler ViewContentClosing;
 
         private string _title;
 
+        /// <summary>
+        /// The title of the view
+        /// </summary>
+        /// <value></value>
         public virtual string Title
         {
             get { return _title; }
             set { _title = value; TitleChanged(this, EventArgs.Empty); }
         }
 
+        /// <summary>
+        /// Fires when the title has been changed
+        /// </summary>
         public event EventHandler TitleChanged = delegate { };
 
+        /// <summary>
+        /// The underlying control
+        /// </summary>
+        /// <value></value>
         public Control ContentControl
         {
             get { return this; }
         }
 
+        /// <summary>
+        /// Displays an exception message
+        /// </summary>
+        /// <param name="ex">The exception object</param>
         public void ShowError(Exception ex)
         {
             MessageService.ShowError(ex);
         }
 
+        /// <summary>
+        /// Displays an error message
+        /// </summary>
+        /// <param name="message">The message</param>
         public void ShowError(string message)
         {
             MessageService.ShowError(message);
         }
 
+        /// <summary>
+        /// Displays an alert message
+        /// </summary>
+        /// <param name="title">The title of this message</param>
+        /// <param name="message">The message</param>
         public void ShowMessage(string title, string message)
         {
             if (!string.IsNullOrEmpty(title))
@@ -119,6 +156,12 @@ namespace FdoToolbox.Base.Controls
                 MessageService.ShowMessage(message);
         }
 
+        /// <summary>
+        /// Make a request for confirmation
+        /// </summary>
+        /// <param name="title">The title of the confirmation message</param>
+        /// <param name="message">The message</param>
+        /// <returns>true if confirmed, false otherwise</returns>
         public bool Confirm(string title, string message)
         {
             if (!string.IsNullOrEmpty(title))
@@ -127,6 +170,13 @@ namespace FdoToolbox.Base.Controls
                 return MessageService.AskQuestion(message);
         }
 
+        /// <summary>
+        /// Make a request for confirmation
+        /// </summary>
+        /// <param name="title">The title of the confirmation message</param>
+        /// <param name="format">The message template</param>
+        /// <param name="args">The template values</param>
+        /// <returns>true if confirmed, false otherwise</returns>
         public bool ConfirmFormatted(string title, string format, params string[] args)
         {
             if (!string.IsNullOrEmpty(title))

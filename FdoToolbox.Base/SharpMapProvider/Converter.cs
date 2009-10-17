@@ -31,6 +31,9 @@ using Fdo = OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Base.SharpMapProvider
 {
+    /// <summary>
+    /// Utility class to perform common conversion operations
+    /// </summary>
     public sealed class Converter
     {
         /// <summary>

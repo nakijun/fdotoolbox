@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,12 +31,12 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A <see cref="FdoDataPreviewCtl"/> sub view interface
     /// </summary>
-    public interface IQuerySubView : ISubView
+    internal interface IQuerySubView : ISubView
     {
         void FireMapPreviewStateChanged(bool enabled);
         void SetRestrictions(ICapability cap);
         event MapPreviewStateEventHandler MapPreviewStateChanged;
     }
 
-    public delegate void MapPreviewStateEventHandler(object sender, bool enabled);
+    internal delegate void MapPreviewStateEventHandler(object sender, bool enabled);
 }

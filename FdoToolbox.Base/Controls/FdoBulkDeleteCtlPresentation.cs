@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,7 +27,7 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoBulkDeleteView : IViewContent
+    internal interface IFdoBulkDeleteView : IViewContent
     {
         string ClassName { get; set; }
         string Filter { get; set; }
@@ -34,7 +35,7 @@ namespace FdoToolbox.Base.Controls
         bool TransactionEnabled { get; set; }
     }
 
-    public class FdoBulkDeleteCtlPresenter
+    internal class FdoBulkDeleteCtlPresenter
     {
         private readonly IFdoBulkDeleteView _view;
         private readonly FdoConnection _conn;

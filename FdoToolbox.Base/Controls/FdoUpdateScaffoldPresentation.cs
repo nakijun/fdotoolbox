@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,7 +30,7 @@ using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoUpdateView : IViewContent
+    internal interface IFdoUpdateView : IViewContent
     {
         string ClassName { set; get; }
         string UpdateFilter { set; get; }
@@ -43,7 +44,7 @@ namespace FdoToolbox.Base.Controls
         Dictionary<string, ValueExpression> GetValues();
     }
 
-    public class FdoUpdateScaffoldPresenter
+    internal class FdoUpdateScaffoldPresenter
     {
         private readonly IFdoUpdateView _view;
         private readonly FdoConnection _conn;

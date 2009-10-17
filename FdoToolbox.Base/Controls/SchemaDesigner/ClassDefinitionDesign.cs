@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,29 +33,49 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
-    public abstract class ClassDefinitionDesign : INotifyPropertyChanged
+    /// <summary>
+    /// Designer object for FDO class definitions
+    /// </summary>
+    internal abstract class ClassDefinitionDesign : INotifyPropertyChanged
     {
         private OSGeo.FDO.Schema.ClassDefinition _classDef;
         private FdoConnection _conn;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClassDefinitionDesign"/> class.
+        /// </summary>
+        /// <param name="cd">The cd.</param>
+        /// <param name="conn">The conn.</param>
         public ClassDefinitionDesign(OSGeo.FDO.Schema.ClassDefinition cd, FdoConnection conn)
         {
             _classDef = cd;
             _conn = conn;
         }
 
+        /// <summary>
+        /// Gets the connection.
+        /// </summary>
+        /// <value>The connection.</value>
         [Browsable(false)]
         public FdoConnection Connection
         {
             get { return _conn; }
         }
-        
+
+        /// <summary>
+        /// Gets the class definition.
+        /// </summary>
+        /// <value>The class definition.</value>
         [Browsable(false)]
         public OSGeo.FDO.Schema.ClassDefinition ClassDefinition
         {
             get { return _classDef; }
         }
 
+        /// <summary>
+        /// Gets or sets the base class.
+        /// </summary>
+        /// <value>The base class.</value>
         [Browsable(false)]
         public OSGeo.FDO.Schema.ClassDefinition BaseClass
         {
@@ -66,12 +87,20 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             }
         }
 
+        /// <summary>
+        /// Gets the type of the class.
+        /// </summary>
+        /// <value>The type of the class.</value>
         [Description("The type of class")]
         public ClassType ClassType
         {
             get { return _classDef.ClassType; }
         }
 
+        /// <summary>
+        /// Gets or sets the identity properties.
+        /// </summary>
+        /// <value>The identity properties.</value>
         [Description("The identity properties of this class")]
         [Editor(typeof(ClassIdentityPropertyLookupEditor), typeof(UITypeEditor))]
         public DataPropertyDefinitionCollection IdentityProperties 
@@ -88,6 +117,12 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is abstract.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is abstract; otherwise, <c>false</c>.
+        /// </value>
         [Description("Indicates whether this class is abstract")]
         public bool IsAbstract
         {
@@ -99,6 +134,12 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is computed.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is computed; otherwise, <c>false</c>.
+        /// </value>
         [Description("Indicates whether this class is computed")]
         public bool IsComputed
         {
@@ -110,6 +151,10 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             }
         }
 
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         [Description("The name of this class")]
         public string Name
         {
@@ -121,6 +166,10 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             }
         }
 
+        /// <summary>
+        /// Gets or sets the unique constraints.
+        /// </summary>
+        /// <value>The unique constraints.</value>
         [Description("The unique constraints of this class")]
         [Editor(typeof(ClassUniqueConstraintEditor), typeof(UITypeEditor))]
         public UniqueConstraintCollection UniqueConstraints
@@ -142,11 +191,26 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             PropertyChanged(this, new PropertyChangedEventArgs(property));
         }
 
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
     }
 
-    public class ClassIdentityPropertyLookupEditor : UITypeEditor
+    /// <summary>
+    /// Designer object for edition class identity properties
+    /// </summary>
+    internal class ClassIdentityPropertyLookupEditor : UITypeEditor
     {
+        /// <summary>
+        /// Edits the specified object's value using the editor style indicated by the <see cref="M:System.Drawing.Design.UITypeEditor.GetEditStyle"/> method.
+        /// </summary>
+        /// <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"/> that can be used to gain additional context information.</param>
+        /// <param name="provider">An <see cref="T:System.IServiceProvider"/> that this editor can use to obtain services.</param>
+        /// <param name="value">The object to edit.</param>
+        /// <returns>
+        /// The new value of the object. If the value of the object has not changed, this should return the same object it was passed.
+        /// </returns>
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider != null)

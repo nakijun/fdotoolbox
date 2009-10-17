@@ -55,7 +55,6 @@ namespace FdoToolbox.Base
         /// <summary>
         /// Displays an exception message
         /// </summary>
-        /// <param name="title">The title of this message</param>
         /// <param name="ex">The exception object</param>
         void ShowError(Exception ex);
         /// <summary>

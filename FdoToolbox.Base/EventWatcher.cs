@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,7 +33,7 @@ namespace FdoToolbox.Base
     /// <summary>
     /// Helper class to log common events to the console
     /// </summary>
-    public sealed class EventWatcher
+    internal sealed class EventWatcher
     {
         public static void Initialize()
         {

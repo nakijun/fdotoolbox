@@ -33,7 +33,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A <see cref="FdoDataPreviewCtl"/> sub-view for raw SQL queries
     /// </summary>
-    public partial class FdoSqlQueryCtl : UserControl, IFdoSqlQueryView
+    internal partial class FdoSqlQueryCtl : UserControl, IFdoSqlQueryView
     {
         private TextEditorControl _editor;
 

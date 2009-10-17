@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -38,6 +39,10 @@ namespace FdoToolbox.Base.Controls
     {
         private IFdoSpecializedEtlProcess _proc;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EtlBackgroundRunner"/> class.
+        /// </summary>
+        /// <param name="proc">The proc.</param>
         public EtlBackgroundRunner(IFdoSpecializedEtlProcess proc)
         {
             _proc = proc;
@@ -53,12 +58,19 @@ namespace FdoToolbox.Base.Controls
 
         private Thread _execThread;
 
+        /// <summary>
+        /// Gets or sets the executing thread.
+        /// </summary>
+        /// <value>The executing thread.</value>
         public Thread ExecutingThread
         {
             get { return _execThread; }
             private set { _execThread = value; }
         }
 
+        /// <summary>
+        /// Runs this instance.
+        /// </summary>
         public void Run()
         {
             this.ExecutingThread = Thread.CurrentThread;

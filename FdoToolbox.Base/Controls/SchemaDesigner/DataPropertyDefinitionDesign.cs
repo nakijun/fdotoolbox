@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +32,7 @@ using System.Windows.Forms.Design;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
-    public class DataPropertyDefinitionDesign : PropertyDefinitionDesign
+    internal class DataPropertyDefinitionDesign : PropertyDefinitionDesign
     {
         private OSGeo.FDO.Schema.DataPropertyDefinition _dataDef;
         

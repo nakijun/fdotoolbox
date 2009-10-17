@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,7 +36,7 @@ using System.Diagnostics;
 
 namespace FdoToolbox.Base.Controls
 {
-    public class FdoObjectExplorerExtender : IObjectExplorerExtender
+    internal class FdoObjectExplorerExtender : IObjectExplorerExtender
     {
         public const string RootNodeName = "NODE_FDO";
 

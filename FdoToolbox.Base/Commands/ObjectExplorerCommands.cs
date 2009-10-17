@@ -38,7 +38,7 @@ using FdoToolbox.Core;
 
 namespace FdoToolbox.Base.Commands
 {
-    public class RemoveAllConnectionsCommand : AbstractMenuCommand
+    internal class RemoveAllConnectionsCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -47,7 +47,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class RefreshConnectionCommand : AbstractMenuCommand
+    internal class RefreshConnectionCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -60,7 +60,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class RemoveConnectionCommand : AbstractMenuCommand
+    internal class RemoveConnectionCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -70,7 +70,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class RenameConnectionCommand : AbstractMenuCommand
+    internal class RenameConnectionCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -92,7 +92,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class SaveConnectionCommand : AbstractMenuCommand
+    internal class SaveConnectionCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -108,7 +108,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class LoadConnectionCommand : AbstractMenuCommand
+    internal class LoadConnectionCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -138,7 +138,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class LoadSchemaCommand : AbstractMenuCommand
+    internal class LoadSchemaCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -192,7 +192,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class SaveSchemaCommand : AbstractMenuCommand
+    internal class SaveSchemaCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -226,8 +226,8 @@ namespace FdoToolbox.Base.Commands
             }
         }
     }
-    
-    public class DeleteSchemaCommand : AbstractMenuCommand
+
+    internal class DeleteSchemaCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -254,7 +254,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class DataPreviewCommand : AbstractMenuCommand
+    internal class DataPreviewCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -279,7 +279,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class EditSchemaCommand : AbstractMenuCommand
+    internal class EditSchemaCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -307,7 +307,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class EditClassAttributesCommand : AbstractMenuCommand
+    internal class EditClassAttributesCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -343,7 +343,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class EditSchemaAttributesCommand : AbstractMenuCommand
+    internal class EditSchemaAttributesCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -378,7 +378,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class ManageSpatialContextsCommand : AbstractMenuCommand
+    internal class ManageSpatialContextsCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -399,7 +399,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class ManageDataStoresCommand : AbstractMenuCommand
+    internal class ManageDataStoresCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -420,7 +420,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class CreateSchemaCommand : AbstractMenuCommand
+    internal class CreateSchemaCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -446,7 +446,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class ConfigureConnectionCommand : AbstractMenuCommand
+    internal class ConfigureConnectionCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -468,7 +468,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class InsertFeatureCommand : AbstractMenuCommand
+    internal class InsertFeatureCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -485,7 +485,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class BulkDeleteCommand : AbstractMenuCommand
+    internal class BulkDeleteCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -506,7 +506,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class BulkUpdateCommand : AbstractMenuCommand
+    internal class BulkUpdateCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -527,7 +527,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class ViewCapabilitiesCommand : AbstractMenuCommand
+    internal class ViewCapabilitiesCommand : AbstractMenuCommand
     {
         public override void Run()
         {

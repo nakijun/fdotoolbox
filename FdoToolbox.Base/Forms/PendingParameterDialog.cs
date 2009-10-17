@@ -32,7 +32,7 @@ using System.Collections.Specialized;
 
 namespace FdoToolbox.Base.Forms
 {
-    public partial class PendingParameterDialog : Form
+    internal partial class PendingParameterDialog : Form
     {
         public PendingParameterDialog()
         {

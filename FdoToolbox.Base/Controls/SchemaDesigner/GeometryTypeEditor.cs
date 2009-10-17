@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +28,7 @@ using System.Windows.Forms.Design;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
-    public class GeometryTypeEditor : UITypeEditor
+    internal class GeometryTypeEditor : UITypeEditor
     {
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
         {

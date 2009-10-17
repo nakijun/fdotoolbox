@@ -26,10 +26,24 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Base.Controls
 {
+    /// <summary>
+    /// Defines an abstract interface for exposing application preferences
+    /// </summary>
     public interface IPreferenceSheet
     {
+        /// <summary>
+        /// Gets the title.
+        /// </summary>
+        /// <value>The title.</value>
         string Title { get; }
+        /// <summary>
+        /// Gets the content control.
+        /// </summary>
+        /// <value>The content control.</value>
         Control ContentControl { get; }
+        /// <summary>
+        /// Applies the changes.
+        /// </summary>
         void ApplyChanges();
     }
 }

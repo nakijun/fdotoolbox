@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +28,7 @@ using System.ComponentModel;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface ICoordSysCatalogView
+    internal interface ICoordSysCatalogView
     {
         BindingList<CoordinateSystemDefinition> CoordSysDefinitions { set; }
 
@@ -37,7 +38,7 @@ namespace FdoToolbox.Base.Controls
         bool DeleteEnabled { set; }
     }
 
-    public class CoordSysCatalogPresenter
+    internal class CoordSysCatalogPresenter
     {
         private readonly ICoordSysCatalogView _view;
         private FdoToolbox.Base.Services.CoordSysCatalog _catalog;

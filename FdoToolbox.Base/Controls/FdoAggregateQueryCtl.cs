@@ -34,7 +34,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A <see cref="FdoDataPreviewCtl"/> sub-view for Select Aggregate queries
     /// </summary>
-    public partial class FdoAggregateQueryCtl : UserControl, IFdoAggregateQueryView
+    internal partial class FdoAggregateQueryCtl : UserControl, IFdoAggregateQueryView
     {
         private FdoAggregateQueryPresenter _presenter;
 

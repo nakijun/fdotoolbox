@@ -26,7 +26,7 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Base.Forms
 {
-    public interface IFdoMultiClassPickerView
+    internal interface IFdoMultiClassPickerView
     {
         FeatureSchemaCollection SchemaList { set; }
         FeatureSchema SelectedSchema { get; }
@@ -38,7 +38,7 @@ namespace FdoToolbox.Base.Forms
         string Message { set; }
     }
 
-    public class FdoMultiClassPickerPresenter
+    internal class FdoMultiClassPickerPresenter
     {
         private readonly IFdoMultiClassPickerView _view;
 

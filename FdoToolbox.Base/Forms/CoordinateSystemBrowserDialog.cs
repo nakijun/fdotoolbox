@@ -31,7 +31,7 @@ using FdoToolbox.Core.CoordinateSystems;
 
 namespace FdoToolbox.Base.Forms
 {
-    public partial class CoordinateSystemBrowserDialog : Form, ICoordinateSystemBrowserView
+    internal partial class CoordinateSystemBrowserDialog : Form, ICoordinateSystemBrowserView
     {
         private CoordinateSystemBrowserDialogPresenter _presenter;
 

@@ -27,7 +27,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Base.Commands
 {
-    public class RegisterProviderCommand : AbstractMenuCommand
+    internal class RegisterProviderCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -40,7 +40,7 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    public class UnregisterProviderCommand : AbstractMenuCommand
+    internal class UnregisterProviderCommand : AbstractMenuCommand
     {
         public override void Run()
         {

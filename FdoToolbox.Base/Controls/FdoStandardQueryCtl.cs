@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,7 +35,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A <see cref="FdoDataPreviewCtl"/> sub-view for standard FDO queries
     /// </summary>
-    public partial class FdoStandardQueryCtl : UserControl, IFdoStandardQueryView
+    internal partial class FdoStandardQueryCtl : UserControl, IFdoStandardQueryView
     {
         private FdoStandardQueryPresenter _presenter;
 

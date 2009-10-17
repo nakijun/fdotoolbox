@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,7 +37,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// Generic Connect View
     /// </summary>
-    public interface IFdoConnectView : IViewContent
+    internal interface IFdoConnectView : IViewContent
     {
         string ConnectionName { get; }
         IList<FdoProviderInfo> ProviderList { set; }
@@ -58,7 +59,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// Generic Connect presenter
     /// </summary>
-    public class FdoConnectCtlPresenter
+    internal class FdoConnectCtlPresenter
     {
         private readonly IFdoConnectView _view;
         private readonly IFdoConnectionManager _manager;

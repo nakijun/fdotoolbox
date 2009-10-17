@@ -32,11 +32,18 @@ namespace FdoToolbox.Base.Controls
     /// </summary>
     public class TempCursor : IDisposable
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TempCursor"/> class.
+        /// </summary>
+        /// <param name="cr">The cr.</param>
         public TempCursor(Cursor cr)
         {
             Cursor.Current = cr;
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             Cursor.Current = Cursors.Default;

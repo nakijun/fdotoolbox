@@ -31,7 +31,7 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Forms
 {
-    public partial class FdoSpatialContextBrowserDlg : Form
+    internal partial class FdoSpatialContextBrowserDlg : Form
     {
         private FdoSpatialContextBrowserDlg()
         {

@@ -118,19 +118,36 @@ namespace FdoToolbox.Base.Services
         /// </summary>
         /// <param name="conn">The connection.</param>
         /// <returns></returns>
-        string GetName(FdoConnection fdoConnection);
+        string GetName(FdoConnection conn);
     }
 
+    /// <summary>
+    /// A response to a connection rename attempt
+    /// </summary>
     public class ConnectionRenameResult
     {
+        /// <summary>
+        /// Determines if the connection can be renamed
+        /// </summary>
         public readonly bool CanRename;
+        /// <summary>
+        /// The reason a connection cannot be renamed if <see cref="CanRename"/> is false
+        /// </summary>
         public readonly string Reason;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionRenameResult"/> class.
+        /// </summary>
         public ConnectionRenameResult()
         {
             this.CanRename = true;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionRenameResult"/> class.
+        /// </summary>
+        /// <param name="result">if set to <c>true</c>, specifies that the connection can be renamed.</param>
+        /// <param name="reason">The reason.</param>
         public ConnectionRenameResult(bool result, string reason)
         {
             this.CanRename = result;
@@ -138,14 +155,30 @@ namespace FdoToolbox.Base.Services
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public delegate void ConnectionEventHandler(object sender, EventArgs<string> e);
+    /// <summary>
+    /// 
+    /// </summary>
     public delegate void ConnectionRenamedEventHandler(object sender, ConnectionRenameEventArgs e);
+    /// <summary>
+    /// 
+    /// </summary>
     public delegate void ConnectionBeforeRemoveHandler(object sender, ConnectionBeforeRemoveEventArgs e);
 
+    /// <summary>
+    /// An event argument object passed when a connection is renamed
+    /// </summary>
     public class ConnectionRenameEventArgs : EventArgs
     {
         private readonly string _OldName;
 
+        /// <summary>
+        /// Gets the old connection name.
+        /// </summary>
+        /// <value>The old connection name.</value>
         public string OldName
         {
             get { return _OldName; }
@@ -153,11 +186,20 @@ namespace FdoToolbox.Base.Services
 
         private readonly string _NewName;
 
+        /// <summary>
+        /// Gets the new connection name.
+        /// </summary>
+        /// <value>The new connection name.</value>
         public string NewName
         {
             get { return _NewName; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionRenameEventArgs"/> class.
+        /// </summary>
+        /// <param name="oldName">The old name.</param>
+        /// <param name="newName">The new name.</param>
         public ConnectionRenameEventArgs(string oldName, string newName)
         {
             _OldName = oldName;
@@ -165,15 +207,26 @@ namespace FdoToolbox.Base.Services
         }
     }
 
+    /// <summary>
+    /// An event argument object passed when a connection is about to be renamed
+    /// </summary>
     public class ConnectionBeforeRemoveEventArgs : CancelEventArgs
     {
         private readonly string _ConnectionName;
 
+        /// <summary>
+        /// Gets the name of the connection to be renamed
+        /// </summary>
+        /// <value>The name of the connection.</value>
         public string ConnectionName
         {
             get { return _ConnectionName; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionBeforeRemoveEventArgs"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
         public ConnectionBeforeRemoveEventArgs(string name)
         {
             _ConnectionName = name;

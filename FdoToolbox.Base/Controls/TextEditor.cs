@@ -36,6 +36,9 @@ namespace FdoToolbox.Base.Controls
         ToolStrip toolstrip;
         TextEditorControl editor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextEditor"/> class.
+        /// </summary>
         public TextEditor()
         {
             InitializeComponent();
@@ -53,16 +56,28 @@ namespace FdoToolbox.Base.Controls
             
         }
 
+        /// <summary>
+        /// The title of the view
+        /// </summary>
+        /// <value></value>
         public override string Title
         {
             get { return ResourceService.GetString("TITLE_TEXT_EDITOR"); }
         }
 
+        /// <summary>
+        /// Saves this instance.
+        /// </summary>
+        /// <returns></returns>
         public bool Save()
         {
             return true;
         }
 
+        /// <summary>
+        /// Saves as.
+        /// </summary>
+        /// <returns></returns>
         public bool SaveAs()
         {
             return true;

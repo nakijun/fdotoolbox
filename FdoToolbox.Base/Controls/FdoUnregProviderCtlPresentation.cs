@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,14 +27,14 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoUnregProviderView
+    internal interface IFdoUnregProviderView
     {
         IList<FdoProviderInfo> ProviderList { set; }
         IList<string> SelectedProviders { get; }
         bool UnregEnabled { set; }
     }
 
-    public class FdoUnregProviderPresenter
+    internal class FdoUnregProviderPresenter
     {
         private readonly IFdoUnregProviderView _view;
 

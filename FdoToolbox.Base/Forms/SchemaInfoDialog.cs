@@ -30,7 +30,7 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Base.Forms
 {
-    public partial class SchemaInfoDialog : Form
+    internal partial class SchemaInfoDialog : Form
     {
         public SchemaInfoDialog()
         {

@@ -41,6 +41,9 @@ namespace FdoToolbox.Base.Services
 
         private string _ConnectionString;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CoordSysCatalog"/> class.
+        /// </summary>
         public CoordSysCatalog()
         {
             dbpath = Path.Combine(FileUtility.ApplicationRootPath, DB_FILE);
@@ -182,11 +185,20 @@ namespace FdoToolbox.Base.Services
 
         private bool _init = false;
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is initialized.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool IsInitialized
         {
             get { return _init; }
         }
 
+        /// <summary>
+        /// Initializes the service.
+        /// </summary>
         public void InitializeService()
         {
             LoggingService.Info("Initialized Coordinate System Catalog Service");
@@ -194,21 +206,36 @@ namespace FdoToolbox.Base.Services
             Initialize(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Unloads the service.
+        /// </summary>
         public void UnloadService()
         {
             Unload(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Occurs when the service is initialized
+        /// </summary>
         public event EventHandler Initialize = delegate { };
 
+        /// <summary>
+        /// Occurs when the service is unloaded
+        /// </summary>
         public event EventHandler Unload = delegate { };
 
 
+        /// <summary>
+        /// Loads any persisted objects from the session directory
+        /// </summary>
         public void Load()
         {
             
         }
 
+        /// <summary>
+        /// Persists any managed objects to the session directory
+        /// </summary>
         public void Save()
         {
             

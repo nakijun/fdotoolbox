@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,7 +27,7 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoRegProviderView
+    internal interface IFdoRegProviderView
     {
         string ProviderName { get; }
         string DisplayName { get; }
@@ -37,7 +38,7 @@ namespace FdoToolbox.Base.Controls
         bool IsManaged { get; }
     }
 
-    public class FdoRegProviderPresentation
+    internal class FdoRegProviderPresentation
     {
         private readonly IFdoRegProviderView _view;
 

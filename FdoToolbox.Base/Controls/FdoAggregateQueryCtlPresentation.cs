@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +28,7 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Base.Controls
 {
-    public interface IFdoAggregateQueryView : IQuerySubView
+    internal interface IFdoAggregateQueryView : IQuerySubView
     {
         FeatureSchemaCollection SchemaList { set; }
         ClassCollection ClassList { set; }
@@ -63,7 +64,7 @@ namespace FdoToolbox.Base.Controls
         bool OrderingEnabled { get; set; }
     }
 
-    public class FdoAggregateQueryPresenter
+    internal class FdoAggregateQueryPresenter
     {
         private readonly IFdoAggregateQueryView _view;
         private FdoConnection _conn;

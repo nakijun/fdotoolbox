@@ -29,7 +29,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Base
 {
-    public sealed class FileDragAndDropHandler
+    internal sealed class FileDragAndDropHandler
     {
         internal static void OnDragEnter(object sender, DragEventArgs e)
         {

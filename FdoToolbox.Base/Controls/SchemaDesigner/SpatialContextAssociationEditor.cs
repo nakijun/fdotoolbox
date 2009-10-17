@@ -19,6 +19,7 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,7 @@ using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.Base.Controls.SchemaDesigner
 {
-    public class SpatialContextAssociationEditor : UITypeEditor
+    internal class SpatialContextAssociationEditor : UITypeEditor
     {
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
         {

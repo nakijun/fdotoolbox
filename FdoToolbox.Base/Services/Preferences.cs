@@ -37,17 +37,17 @@ namespace FdoToolbox.Base
         /// </summary>
         public static readonly string GroupName = "Base.AddIn.Options";
 
-        
 
-        public static readonly string PREF_FDO_PATH = "FdoPath";
-        public static readonly string PREF_WORKING_DIR = "WorkingDirectory";
-        public static readonly string PREF_WARN_DATASET = "DataPreviewWarnLimit";
-        public static readonly string PREF_SESSION_DIR = "SessionDirectory";
-        public static readonly string PREF_LOG_PATH = "LogPath";
-        public static readonly string PREF_EXCLUDE_PARTIAL_SCHEMA = "ProvidersExcludePartialSchema";
-        public static readonly string PREF_DATA_PREVIEW_RANDOM_COLORS = "DataPreviewRandomColors";
-        public static readonly string PREF_SCRIPT_MODULE_PATHS = "ScriptModulePaths";
-        public static readonly string PREF_SCRIPT_DEBUG = "ScriptDebug";
+
+        internal static readonly string PREF_FDO_PATH = "FdoPath";
+        internal static readonly string PREF_WORKING_DIR = "WorkingDirectory";
+        internal static readonly string PREF_WARN_DATASET = "DataPreviewWarnLimit";
+        internal static readonly string PREF_SESSION_DIR = "SessionDirectory";
+        internal static readonly string PREF_LOG_PATH = "LogPath";
+        internal static readonly string PREF_EXCLUDE_PARTIAL_SCHEMA = "ProvidersExcludePartialSchema";
+        internal static readonly string PREF_DATA_PREVIEW_RANDOM_COLORS = "DataPreviewRandomColors";
+        internal static readonly string PREF_SCRIPT_MODULE_PATHS = "ScriptModulePaths";
+        internal static readonly string PREF_SCRIPT_DEBUG = "ScriptDebug";
 
         static Properties properties;
 
@@ -61,6 +61,9 @@ namespace FdoToolbox.Base
             get { return properties; }
         }
 
+        /// <summary>
+        /// Occurs when [property changed].
+        /// </summary>
         public static event PropertyChangedEventHandler PropertyChanged
         {
             add { properties.PropertyChanged += value; }
