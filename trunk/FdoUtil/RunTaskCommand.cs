@@ -42,69 +42,65 @@ namespace FdoUtil
         public override int Execute()
         {
             CommandStatus retCode;
-            throw new NotImplementedException();
-
-            //DefinitionLoader loader = new DefinitionLoader();
-            //string name = null;
-            //if (TaskDefinitionHelper.IsBulkCopy(_file))
-            //{
-            //    using (FdoBulkCopyOptions opts = loader.BulkCopyFromXml(_file, ref name, true))
-            //    {
-            //        opts.SourceConnection.Open();
-            //        opts.TargetConnection.Open();
-            //        FdoBulkCopy copy = new FdoBulkCopy(opts);
-            //        copy.ProcessMessage += delegate(object sender, MessageEventArgs e)
-            //        {
-            //            Console.WriteLine(e.Message);
-            //        };
-            //        copy.ProcessAborted += delegate(object sender, EventArgs e)
-            //        {
-            //            Console.WriteLine("Bulk Copy Aborted");
-            //        };
-            //        copy.ProcessCompleted += delegate(object sender, EventArgs e)
-            //        {
-            //            Console.WriteLine("Bulk Copy Completed");
-            //        };
-            //        copy.Execute();
-            //        List<Exception> errors = new List<Exception>(copy.GetAllErrors());
-            //        if (errors.Count > 0)
-            //        {
-            //            string file = "bcp-error-" + DateTime.Now.ToShortTimeString() + ".log";
-            //            LogErrors(errors, file);
-            //            Console.WriteLine("Errors were encountered during bulk copy.");
-            //            retCode = CommandStatus.E_FAIL_BULK_COPY_WITH_ERRORS;
-            //        }
-            //        else { retCode = CommandStatus.E_OK; }
-            //    }
-            //}
-            //else if (TaskDefinitionHelper.IsJoin(_file))
-            //{
-            //    using (FdoJoinOptions opts = loader.JoinFromXml(_file, ref name, true))
-            //    {
-            //        opts.Left.Connection.Open();
-            //        opts.Right.Connection.Open();
-            //        opts.Target.Connection.Open();
-            //        FdoJoin join = new FdoJoin(opts);
-            //        join.ProcessMessage += delegate(object sender, MessageEventArgs e)
-            //        {
-            //            Console.WriteLine(e.Message);
-            //        };
-            //        join.Execute();
-            //        List<Exception> errors = new List<Exception>(join.GetAllErrors());
-            //        if (errors.Count > 0)
-            //        {
-            //            string file = "join-error-" + DateTime.Now.ToShortTimeString() + ".log";
-            //            LogErrors(errors, file);
-            //            Console.WriteLine("Errors were encountered during join operation");
-            //            retCode = CommandStatus.E_FAIL_JOIN_WITH_ERRORS;
-            //        }
-            //        else { retCode = CommandStatus.E_OK; }
-            //    }
-            //}
-            //else
-            //{
-            //    retCode = CommandStatus.E_FAIL_UNRECOGNISED_TASK_FORMAT;
-            //}
+            DefinitionLoader loader = new DefinitionLoader();
+            string name = null;
+            if (TaskDefinitionHelper.IsBulkCopy(_file))
+            {
+                using (FdoBulkCopyOptions opts = loader.BulkCopyFromXml(_file, ref name, true))
+                {
+                    FdoBulkCopy copy = new FdoBulkCopy(opts);
+                    copy.ProcessMessage += delegate(object sender, MessageEventArgs e)
+                    {
+                        Console.WriteLine(e.Message);
+                    };
+                    copy.ProcessAborted += delegate(object sender, EventArgs e)
+                    {
+                        Console.WriteLine("Bulk Copy Aborted");
+                    };
+                    copy.ProcessCompleted += delegate(object sender, EventArgs e)
+                    {
+                        Console.WriteLine("Bulk Copy Completed");
+                    };
+                    copy.Execute();
+                    List<Exception> errors = new List<Exception>(copy.GetAllErrors());
+                    if (errors.Count > 0)
+                    {
+                        string file = "bcp-error-" + DateTime.Now.ToShortTimeString() + ".log";
+                        LogErrors(errors, file);
+                        Console.WriteLine("Errors were encountered during bulk copy.");
+                        retCode = CommandStatus.E_FAIL_BULK_COPY_WITH_ERRORS;
+                    }
+                    else { retCode = CommandStatus.E_OK; }
+                }
+            }
+            else if (TaskDefinitionHelper.IsJoin(_file))
+            {
+                using (FdoJoinOptions opts = loader.JoinFromXml(_file, ref name, true))
+                {
+                    opts.Left.Connection.Open();
+                    opts.Right.Connection.Open();
+                    opts.Target.Connection.Open();
+                    FdoJoin join = new FdoJoin(opts);
+                    join.ProcessMessage += delegate(object sender, MessageEventArgs e)
+                    {
+                        Console.WriteLine(e.Message);
+                    };
+                    join.Execute();
+                    List<Exception> errors = new List<Exception>(join.GetAllErrors());
+                    if (errors.Count > 0)
+                    {
+                        string file = "join-error-" + DateTime.Now.ToShortTimeString() + ".log";
+                        LogErrors(errors, file);
+                        Console.WriteLine("Errors were encountered during join operation");
+                        retCode = CommandStatus.E_FAIL_JOIN_WITH_ERRORS;
+                    }
+                    else { retCode = CommandStatus.E_OK; }
+                }
+            }
+            else
+            {
+                retCode = CommandStatus.E_FAIL_UNRECOGNISED_TASK_FORMAT;
+            }
 
             return (int)retCode;
         }
