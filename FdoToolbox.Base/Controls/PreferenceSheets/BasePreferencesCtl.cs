@@ -47,7 +47,6 @@ namespace FdoToolbox.Base.Controls.PreferenceSheets
             txtLogPath.Text = Preferences.LogPath;
             txtSession.Text = Preferences.SessionDirectory;
             txtWorking.Text = Preferences.WorkingDirectory;
-            chkWarnNetFx.Checked = Preferences.WarnNetFx20SP1;
         }
 
         private void btnFdo_Click(object sender, EventArgs e)
@@ -103,7 +102,6 @@ namespace FdoToolbox.Base.Controls.PreferenceSheets
             Preferences.LogPath = txtLogPath.Text;
             Preferences.SessionDirectory = txtSession.Text;
             Preferences.WorkingDirectory = txtWorking.Text;
-            Preferences.WarnNetFx20SP1 = chkWarnNetFx.Checked;
         }
     }
 }
