@@ -17,7 +17,6 @@
 !include "FileFunc.nsh"
 
 !include "WordFunc.nsh"
-!insertmacro VersionCompare
 !include "LogicLib.nsh"
 
 ;-------------------------------
@@ -128,6 +127,7 @@ Section
 	File /r "${INST_OUTPUT_FDOTOOLBOX}\FDO"
 	File /r "${INST_OUTPUT_FDOTOOLBOX}\AddIns"
 	File /r "${INST_OUTPUT_FDOTOOLBOX}\Schemas"
+	File /r "${INST_OUTPUT_FDOTOOLBOX}\Scripts"
 	
 	# docs
 	File "${INST_OUTPUT_FDOTOOLBOX}\${HELP_USER}"
@@ -219,37 +219,17 @@ Function .onInit
 	!insertmacro MUI_LANGDLL_DISPLAY
   
 	; Check .NET version
-	Call GetDotNETVersion
-	Pop $0
+	ReadRegDWORD $0 HKLM 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727' Version
 	
-	${If} $0 == "not found"
-	    MessageBox MB_OK|MB_ICONINFORMATION "${INST_PRODUCT} requires that the .net Framework 2.0 or above is installed. Please download and install the .net Framework 2.0 or above before installing ${INST_PRODUCT}."
+	; SP1 or higher is enough
+	${If} $0 == '2.1.21022' 
+	${OrIf} $0 == '2.2.30729'
+	${Else}
+		MessageBox MB_OK|MB_ICONINFORMATION "${INST_PRODUCT} requires that the .net Framework 2.0 SP1 or above is installed. Please download and install the .net Framework 2.0 SP1 or above before installing ${INST_PRODUCT}."
 	    Quit
 	${EndIf}
-	
-	StrCpy $0 $0 "" 1 # skip "v"
-	
-	${VersionCompare} $0 "2.0" $1
-	${If} $1 == 2
-	    MessageBox MB_OK|MB_ICONINFORMATION "${INST_PRODUCT} requires that the .net Framework 2.0 or above is installed. Please download and install the .net Framework 2.0 or above before installing ${INST_PRODUCT}."
-	    Quit
-	${EndIf}
-	; Check VC++ 2008
-	
 FunctionEnd
 
 Function LaunchLink
 	ExecShell "" "$INSTDIR\${EXE_FDOTOOLBOX}"
-FunctionEnd
-
-Function GetDotNETVersion
-    Push $0
-    Push $1
-
-    System::Call "mscoree::GetCORVersion(w .r0, i ${NSIS_MAX_STRLEN}, *i) i .r1"
-    StrCmp $1 "error" 0 +2
-    StrCpy $0 "not found"
-
-    Pop $1
-    Exch $0
 FunctionEnd

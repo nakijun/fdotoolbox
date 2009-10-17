@@ -5,6 +5,14 @@ v0.8.5
 		- New Script Manager panel allows you to load/run python scripts
 		- Exposed a simple application object model (HostApplication) for consuming scripts.
 		- New Connection Picker dialog for selecting open FDO connections. This is the first of many script helper UI classes.
+	- Revamped bulk copy
+		- Can now copy between more than 2 connections
+		- Added data conversion options
+		- New User Interface
+		- Illegal property/expression mappings are now prevented. (eg. Data Property to Geometry)
+
+- Other:
+	- Upgraded requirement to .net Framework 2.0 SP1
 
 v0.8.2
 ------
