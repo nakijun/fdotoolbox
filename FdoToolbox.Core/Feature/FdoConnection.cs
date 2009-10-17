@@ -245,6 +245,9 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public FdoFeatureService CreateFeatureService()
         {
+            if (this.State == FdoConnectionState.Closed)
+                this.Open();
+
             return new FdoFeatureService(this.InternalConnection);
         }
 
@@ -255,6 +258,9 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public FdoFeatureService CreateFeatureService(bool forceFullSchemaDiscovery)
         {
+            if (this.State == FdoConnectionState.Closed)
+                this.Open();
+
             return new FdoFeatureService(this.InternalConnection, forceFullSchemaDiscovery);
         }
 

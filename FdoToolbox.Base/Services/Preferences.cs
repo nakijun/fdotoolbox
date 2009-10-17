@@ -48,6 +48,7 @@ namespace FdoToolbox.Base
         public static readonly string PREF_DATA_PREVIEW_RANDOM_COLORS = "DataPreviewRandomColors";
         public static readonly string PREF_SCRIPT_MODULE_PATHS = "ScriptModulePaths";
         public static readonly string PREF_SCRIPT_DEBUG = "ScriptDebug";
+        public static readonly string PREF_WARN_NETFX20SP1 = "WarnNetFx20SP1";
 
         static Properties properties;
 
@@ -65,6 +66,12 @@ namespace FdoToolbox.Base
         {
             add { properties.PropertyChanged += value; }
             remove { properties.PropertyChanged -= value; }
+        }
+
+        public static bool WarnNetFx20SP1
+        {
+            get { return properties.Get<bool>(PREF_WARN_NETFX20SP1, true); }
+            set { properties.Set(PREF_WARN_NETFX20SP1, value); }
         }
 
         /// <summary>

@@ -40,6 +40,7 @@ namespace FdoToolbox.Base.Controls.PreferenceSheets
             this.btnWorking = new System.Windows.Forms.Button();
             this.btnLog = new System.Windows.Forms.Button();
             this.btnFdo = new System.Windows.Forms.Button();
+            this.chkWarnNetFx = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -158,10 +159,21 @@ namespace FdoToolbox.Base.Controls.PreferenceSheets
             this.btnFdo.UseVisualStyleBackColor = true;
             this.btnFdo.Click += new System.EventHandler(this.btnFdo_Click);
             // 
+            // chkWarnNetFx
+            // 
+            this.chkWarnNetFx.AutoSize = true;
+            this.chkWarnNetFx.Location = new System.Drawing.Point(163, 145);
+            this.chkWarnNetFx.Name = "chkWarnNetFx";
+            this.chkWarnNetFx.Size = new System.Drawing.Size(337, 17);
+            this.chkWarnNetFx.TabIndex = 14;
+            this.chkWarnNetFx.Text = "Show warning on startup if .net Framework 2.0 SP1 is not installed";
+            this.chkWarnNetFx.UseVisualStyleBackColor = true;
+            // 
             // BasePreferencesCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkWarnNetFx);
             this.Controls.Add(this.btnFdo);
             this.Controls.Add(this.btnLog);
             this.Controls.Add(this.btnWorking);
@@ -196,5 +208,6 @@ namespace FdoToolbox.Base.Controls.PreferenceSheets
         private System.Windows.Forms.Button btnWorking;
         private System.Windows.Forms.Button btnLog;
         private System.Windows.Forms.Button btnFdo;
+        private System.Windows.Forms.CheckBox chkWarnNetFx;
     }
 }
