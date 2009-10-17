@@ -111,25 +111,6 @@ namespace FdoToolbox
                 // "/Workspace/Autostart"
                 coreStartup.RunInitialization();
 
-                // Check that we're running .net Framework 2.0 SP1, this is the minimum version
-                // required by IronPython. If we have 3.5 or 3.5 SP1, this is already installed
-                try
-                {
-                    // Here's a new API introduced in SP1
-                    System.ComponentModel.INotifyPropertyChanging n = null;
-                }
-                catch (Exception)
-                {
-                    if (Preferences.WarnNetFx20SP1)
-                    {
-                        MessageService.ShowWarning("You do not have the .net Framework 2.0 SP1 installed. The scripting component requires SP1 to be installed");
-                    }
-                    else 
-                    {
-                        LoggingService.Warn("The .net Framework 2.0 SP1 is not installed. The scripting component requires SP1 to be installed"); 
-                    }
-                }
-
                 LoggingService.Info("Initializing Workbench...");
                 // Workbench is our class from the base project, this method creates an instance
                 // of the main form.
