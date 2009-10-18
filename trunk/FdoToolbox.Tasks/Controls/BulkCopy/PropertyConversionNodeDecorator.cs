@@ -43,7 +43,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             _propertyNode.Nodes.Add("Truncate value");
 
             this.NullOnFailedConversion = true;
-            this.Truncate = true;
+            this.Truncate = false;
         }
 
         public bool NullOnFailedConversion

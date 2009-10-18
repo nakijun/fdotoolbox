@@ -33,7 +33,14 @@ See license.txt for more/additional licensing information
 #
 # Author: Jackie Ng (jumpinjackie@gmail.com)
 
-def Run():
-	App.ShowMessage("Not Implemented", "Sorry. This isn't implemented yet");
+import themedialog
+from themedialog import ThemeOptionsDialog
 
+def Run():
+	try:
+		diag = ThemeOptionsDialog(App.ConnectionManager)
+		diag.ShowDialog()
+	except Exception, ex:
+		App.ShowMessage("Error", ex.ToString())
+		
 Run()
