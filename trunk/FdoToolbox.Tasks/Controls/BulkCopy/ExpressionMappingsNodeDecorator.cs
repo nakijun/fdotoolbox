@@ -136,12 +136,35 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
 
         private void OnRenameAlias(object sender, EventArgs e)
         {
-            
+            TreeNode exprNode = _treeView.SelectedNode;
+            string alias = exprNode.Name;
+            string newAlias = string.Empty;
+            do
+            {
+                newAlias = MessageService.ShowInputBox("New Alias", "Enter the new alias", alias);
+                if(newAlias == null) //null = cancel
+                    return;
+            }
+            while (_node.Nodes[newAlias] != null);
+            exprNode.Name = newAlias;
+            exprNode.Text = newAlias;
         }
 
         private void OnEditExpression(object sender, EventArgs e)
         {
+            TreeNode exprNode = _treeView.SelectedNode;
+            Debug.Assert(exprNode.Tag != null);
 
+            ExpressionMappingInfo expr = exprNode.Tag as ExpressionMappingInfo;
+            if (expr != null)
+            {
+                string newExpr = ExpressionEditor.EditExpression(Parent.GetSourceConnection(), Parent.SourceClass, expr.Expression, ExpressionMode.Normal);
+                if (newExpr != null) //null = cancel
+                {
+                    exprNode.ToolTipText = "Expression: " + newExpr;
+                    expr.Expression = newExpr;
+                }
+            }
         }
 
         private void OnMapExpression(object sender, EventArgs e)
@@ -187,6 +210,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                 _node.Nodes.Add(exprNode);
                 _node.Expand();
                 _conv[exprNode.Name] = new PropertyConversionNodeDecorator(exprNode);
+                exprNode.ExpandAll();
             }
         }
 

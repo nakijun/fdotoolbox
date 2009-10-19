@@ -115,7 +115,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                 if (op is FdoOutputOperation)
                 {
                     string className = (op as FdoOutputOperation).ClassName;
-                    SendMessageFormatted("[Conversion => {0}]: {1} features written", className, op.Statistics.OutputtedRows);
+                    SendMessageFormatted("[Conversion => {0}]: {1} features processed", className, op.Statistics.OutputtedRows);
                 }
             }
         }
@@ -129,7 +129,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             if (op is FdoOutputOperation)
             {
                 string className = (op as FdoOutputOperation).ClassName;
-                SendMessageFormatted("[Conversion => {0}]: {1} features written in {2}", className, op.Statistics.OutputtedRows, op.Statistics.Duration.ToString());
+                SendMessageFormatted("[Conversion => {0}]: {1} features processed in {2}", className, op.Statistics.OutputtedRows, op.Statistics.Duration.ToString());
             }
         }
 

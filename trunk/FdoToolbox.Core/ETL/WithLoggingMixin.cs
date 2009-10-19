@@ -60,10 +60,6 @@ namespace FdoToolbox.Core.ETL
             else
                 errorMessage = message.ToString();
             errors.Add(new FdoETLException(errorMessage, exception));
-            if (log.IsErrorEnabled)
-            {
-                log.Logger.Log(GetType(), Level.Error, message, exception);
-            }
         }
 
         /// <summary>
