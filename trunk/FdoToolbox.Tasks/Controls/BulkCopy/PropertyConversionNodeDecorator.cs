@@ -29,6 +29,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
     public class PropertyConversionNodeDecorator
     {
         public TreeNode _propertyNode;
+        private ContextMenuStrip _ctxNull;
+        private ContextMenuStrip _ctxTruncate;
 
         public PropertyConversionNodeDecorator(TreeNode propertyNode)
         {
@@ -39,11 +41,22 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
 
         private void Init()
         {
+            _ctxNull = new ContextMenuStrip();
+            _ctxTruncate = new ContextMenuStrip();
+
             _propertyNode.Nodes.Add("Set to NULL on failed conversion");
             _propertyNode.Nodes.Add("Truncate value");
 
             this.NullOnFailedConversion = true;
             this.Truncate = false;
+
+            _ctxNull.Items.Add("True", null, delegate { this.NullOnFailedConversion = true; });
+            _ctxNull.Items.Add("False", null, delegate { this.NullOnFailedConversion = false; });
+            _ctxTruncate.Items.Add("True", null, delegate { this.Truncate = true; });
+            _ctxTruncate.Items.Add("False", null, delegate { this.Truncate = false; });
+
+            _propertyNode.Nodes[0].ContextMenuStrip = _ctxNull;
+            _propertyNode.Nodes[1].ContextMenuStrip = _ctxTruncate;
         }
 
         public bool NullOnFailedConversion
