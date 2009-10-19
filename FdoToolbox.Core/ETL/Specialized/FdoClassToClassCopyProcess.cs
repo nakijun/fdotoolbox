@@ -165,7 +165,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                 if (op is FdoOutputOperation)
                 {
                     string className = (op as FdoOutputOperation).ClassName;
-                    SendMessageFormatted("[{0}]: {1} features written", this.Name, op.Statistics.OutputtedRows);
+                    SendMessageFormatted("[{0}]: {1} features processed", this.Name, op.Statistics.OutputtedRows);
                 }
             }
         }

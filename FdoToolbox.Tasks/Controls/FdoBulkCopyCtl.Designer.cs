@@ -30,7 +30,7 @@ namespace FdoToolbox.Tasks.Controls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FdoBulkCopyCtl));
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Copy Tasks");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Copy Tasks");
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -43,6 +43,7 @@ namespace FdoToolbox.Tasks.Controls
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.mTreeView = new System.Windows.Forms.TreeView();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.btnAddTask = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -50,7 +51,6 @@ namespace FdoToolbox.Tasks.Controls
             this.btnSave = new System.Windows.Forms.Button();
             this.ctxSelectedTask = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mTreeView = new System.Windows.Forms.TreeView();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdConnections)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -178,6 +178,21 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Classes To Copy";
             // 
+            // mTreeView
+            // 
+            this.mTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mTreeView.Location = new System.Drawing.Point(3, 41);
+            this.mTreeView.Name = "mTreeView";
+            treeNode1.Name = "NODE_TASKS";
+            treeNode1.Text = "Copy Tasks";
+            this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1});
+            this.mTreeView.ShowNodeToolTips = true;
+            this.mTreeView.Size = new System.Drawing.Size(560, 246);
+            this.mTreeView.TabIndex = 2;
+            this.mTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.mTreeView_AfterSelect);
+            this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mTreeView_MouseDown);
+            // 
             // toolStrip2
             // 
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -239,20 +254,6 @@ namespace FdoToolbox.Tasks.Controls
             this.removeToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.btnRemoveTask_Click);
-            // 
-            // mTreeView
-            // 
-            this.mTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mTreeView.Location = new System.Drawing.Point(3, 41);
-            this.mTreeView.Name = "mTreeView";
-            treeNode3.Name = "NODE_TASKS";
-            treeNode3.Text = "Copy Tasks";
-            this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3});
-            this.mTreeView.Size = new System.Drawing.Size(560, 246);
-            this.mTreeView.TabIndex = 2;
-            this.mTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.mTreeView_AfterSelect);
-            this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mTreeView_MouseDown);
             // 
             // FdoBulkCopyCtl
             // 
