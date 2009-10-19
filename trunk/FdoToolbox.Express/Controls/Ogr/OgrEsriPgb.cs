@@ -26,14 +26,67 @@ using System.Text;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
+using System.Windows.Forms;
+using FdoToolbox.Core.Feature;
+using FdoToolbox.Core.Connections;
 
 namespace FdoToolbox.Express.Controls.Ogr
 {
-    public class OgrEsriPgbEditor : FileNameEditor
+    public class OgrEsriPgbEditor : UITypeEditor
     {
-        protected override void InitializeDialog(System.Windows.Forms.OpenFileDialog openFileDialog)
+        private ListBox box = new ListBox();
+
+        private IWindowsFormsEditorService editorService;
+
+        public OgrEsriPgbEditor()
         {
-            openFileDialog.Filter = "ESRI Personal Geodatabase (*.mdb)|*.mdb";
+            box.SelectedIndexChanged += new EventHandler(OnSelectedIndexChanged);
+
+            //Since ESRI PGB is basically a ODBC DSN, we get a free builder by just using
+            //the DataSourceName property from the ODBC FDO Provider
+            IList<DictionaryProperty> props = FdoFeatureService.GetConnectProperties("OSGeo.ODBC");
+            EnumerableDictionaryProperty dataSource = null;
+
+            foreach (DictionaryProperty dp in props)
+            {
+                if (dp.Enumerable && dp.Name == "DataSourceName")
+                {
+                    dataSource = (EnumerableDictionaryProperty)dp;
+                }
+            }
+
+            if (dataSource != null)
+            {
+                box.SelectionMode = SelectionMode.One;
+                box.DataSource = dataSource.Values;
+            }
+        }
+
+        void OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            editorService.CloseDropDown();
+        }
+
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider != null)
+            {
+                if (editorService == null)
+                    editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+
+                editorService.DropDownControl(box);
+
+                if (box.SelectedItem != null)
+                {
+                    return box.SelectedItem;
+                }
+            }
+            return base.EditValue(context, provider, value);
+        }
+
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.DropDown;
         }
     }
 
@@ -44,7 +97,7 @@ namespace FdoToolbox.Express.Controls.Ogr
         [Editor(typeof(OgrEsriPgbEditor), typeof(UITypeEditor))]
         public override string DataSource
         {
-            get { return base.DataSource; }
+            get { return "PGeo:" + base.DataSource; }
             set { base.DataSource = value; }
         }
     }
