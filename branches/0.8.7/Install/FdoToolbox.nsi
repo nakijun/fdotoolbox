@@ -139,6 +139,7 @@ Section
 	# data/config files
 	File "${INST_OUTPUT_FDOTOOLBOX}\cscatalog.sqlite"
 	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.Core.xml"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Base.XML"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.XML"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.exe.config"
 	
@@ -155,6 +156,8 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\WeifenLuo.WinFormsUI.Docking.dll"
 	
 	# Scripting
+	File "${INST_OUTPUT_FDOTOOLBOX}\ipy.exe"
+	File "${INST_OUTPUT_FDOTOOLBOX}\ipyw.exe"
 	File "${INST_OUTPUT_FDOTOOLBOX}\IronPython.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\IronPython.Modules.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\Microsoft.Scripting.Core.dll"

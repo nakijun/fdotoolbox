@@ -7,6 +7,8 @@ This application uses the following thirdparty libraries and resources:
 - ADO.NET 2.0 SQLite Data Provider (c) Robert Simpson (http://sqlite.phxsoftware.com)
 - Iesi.Collections (c) Jason Smith
 - SharpMap 0.9 (c) Morten Nielsen (http://www.codeplex.com/SharpMap)
+- C# Spatial Index R-Tree (c) Infomatiq Limited, Aled Morris (http://sourceforge.net/projects/cspatialindexrt)
+- IronPython (c) Microsoft (http://www.codeplex.com/ironpython)
 
 FdoToolbox Core ETL framework is based on Rhino ETL (c) Oren Eini / Ayende Rahien (http://www.ayende.com)
 
