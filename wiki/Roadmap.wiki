@@ -1,10 +1,5 @@
 #summary Planned features for upcoming releases
 
-=== 0.8.5 ===
- * Bulk Copy Data Value Conversion support
- * [http://code.google.com/p/fdotoolbox/issues/detail?id=221 Enhanced Bulk Copy]
- * IronPython Scripting
-
 === 0.8.x - 0.9 ===
  * Raster preview support
  * Geometry WKT visualizer
