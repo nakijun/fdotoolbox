@@ -1,4 +1,4 @@
-v0.8.5
+v0.8.7
 ------
 - Enhancements:
 	- Embedded IronPython (2.0.2) scripting engine. You can now drive FDO Toolbox through python scripts.
@@ -10,9 +10,14 @@ v0.8.5
 		- Added data conversion options
 		- New User Interface
 		- Illegal property/expression mappings are now prevented. (eg. Data Property to Geometry)
+	- Bundled gdal16.dll from GDAL binary distribution. This given more capabilities for the OGR provider.
+
+- Fixes:
+	- Fix ESRI Personal Geodatabase OGR connection builder
+	- If there are errors while running an ETL operation, the Application Console will no longer be flooded with redundant messages.
 
 - Other:
-	- Upgraded requirement to .net Framework 2.0 SP1
+	- Upgraded requirement to .net Framework 2.0 SP1. If you have .net Framework 3.5 or 3.5 SP1, you already meet this requirement.
 
 v0.8.2
 ------
