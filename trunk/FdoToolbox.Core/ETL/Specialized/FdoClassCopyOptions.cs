@@ -373,6 +373,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                 //
                 foreach (FdoExpressionMappingElement exprMap in el.ExpressionMappings)
                 {
+                    if (string.IsNullOrEmpty(exprMap.target))
+                        continue;
+
                     opts.AddSourceExpression(exprMap.alias, exprMap.Expression, exprMap.target);
 
                     FdoPropertyType? pt = ExpressionUtility.ParseExpressionType(exprMap.Expression, sourceConn);
