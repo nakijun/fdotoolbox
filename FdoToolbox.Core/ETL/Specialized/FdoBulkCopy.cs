@@ -97,6 +97,8 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// </summary>
         protected override void Initialize()
         {
+            Reset();
+            
             System.ComponentModel.CancelEventArgs ce = new System.ComponentModel.CancelEventArgs(false);
             this.BeforeExecute(this, ce);
             if (ce.Cancel)
@@ -112,6 +114,13 @@ namespace FdoToolbox.Core.ETL.Specialized
                 proc.ReportFrequency = this.ReportFrequency;
                 subProcesses.Add(proc);
             }
+        }
+
+        private void Reset()
+        {
+            ClearErrors();
+            subProcesses.Clear();
+            subProcessErrors.Clear();
         }
 
         /// <summary>

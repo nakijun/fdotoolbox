@@ -42,9 +42,16 @@ namespace FdoToolbox.Core.ETL
         /// Creates the connection.
         /// </summary>
         /// <param name="provider">The provider.</param>
-        /// <param name="connStr">The conn STR.</param>
+        /// <param name="connStr">The connection string.</param>
+        /// <param name="name">The name that will be assigned to the connection.</param>
         /// <returns></returns>
-        protected abstract FdoConnection CreateConnection(string provider, string connStr);
+        protected abstract FdoConnection CreateConnection(string provider, string connStr, ref string name);
+
+        /// <summary>
+        /// Prepares the specified bulk copy definition (freshly deserialized) before the loading process begins
+        /// </summary>
+        /// <param name="def">The bulk copy definition.</param>
+        protected abstract void Prepare(FdoBulkCopyTaskDefinition def);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseDefinitionLoader"/> class.
@@ -68,7 +75,7 @@ namespace FdoToolbox.Core.ETL
         }
 
         /// <summary>
-        /// Loads join options from deserialized xml
+        /// Loads bulk copy options from deserialized xml
         /// </summary>
         /// <param name="def">The deserialized definition.</param>
         /// <param name="name">The name.</param>
@@ -76,13 +83,29 @@ namespace FdoToolbox.Core.ETL
         /// <returns></returns>
         public FdoBulkCopyOptions BulkCopyFromXml(FdoBulkCopyTaskDefinition def, ref string name, bool owner)
         {
+            Prepare(def);
+
             name = def.name;
             Dictionary<string, FdoConnection> connections = new Dictionary<string, FdoConnection>();
+            Dictionary<string, string> changeConnNames = new Dictionary<string, string>();
+
             foreach (FdoConnectionEntryElement entry in def.Connections)
             {
-                FdoConnection conn = CreateConnection(entry.provider, entry.ConnectionString);
-                connections[entry.name] = conn;
+                string connName = entry.name;
+                FdoConnection conn = CreateConnection(entry.provider, entry.ConnectionString, ref connName);
+                connections[connName] = conn;
+
+                if (connName != entry.name)
+                {
+                    changeConnNames[entry.name] = connName;
+                }
             }
+            
+            foreach (string oldName in changeConnNames.Keys)
+            {
+                def.UpdateConnectionReferences(oldName, changeConnNames[oldName]);
+            }
+
             FdoBulkCopyOptions opts = new FdoBulkCopyOptions(connections, owner);
             foreach (FdoCopyTaskElement task in def.CopyTasks)
             {
@@ -128,9 +151,10 @@ namespace FdoToolbox.Core.ETL
             {
                 opts.JoinPairs.Add(key.left, key.right);
             }
+            string dummy = string.Empty;
             opts.JoinType = (FdoJoinType)Enum.Parse(typeof(FdoJoinType), def.JoinSettings.JoinType.ToString());
             opts.SetLeft(
-                CreateConnection(def.Left.Provider, def.Left.ConnectionString),
+                CreateConnection(def.Left.Provider, def.Left.ConnectionString, ref dummy),
                 def.Left.FeatureSchema,
                 def.Left.Class);
             foreach (string p in def.Left.PropertyList)
@@ -138,7 +162,7 @@ namespace FdoToolbox.Core.ETL
                 opts.AddLeftProperty(p);
             }
             opts.SetRight(
-                CreateConnection(def.Right.Provider, def.Right.ConnectionString),
+                CreateConnection(def.Right.Provider, def.Right.ConnectionString, ref dummy),
                 def.Right.FeatureSchema,
                 def.Right.Class);
             foreach (string p in def.Right.PropertyList)
@@ -147,7 +171,7 @@ namespace FdoToolbox.Core.ETL
             }
 
             opts.SetTarget(
-                CreateConnection(def.Target.Provider, def.Target.ConnectionString),
+                CreateConnection(def.Target.Provider, def.Target.ConnectionString, ref dummy),
                 def.Target.FeatureSchema,
                 def.Target.Class);
 
@@ -220,6 +244,8 @@ namespace FdoToolbox.Core.ETL
         }
     }
 
+    public delegate string ConnectionNameGenerationCallback(int seed);
+
     /// <summary>
     /// Helper class for Task Definition serialization
     /// </summary>
@@ -288,9 +314,19 @@ namespace FdoToolbox.Core.ETL
         /// <param name="provider">The provider.</param>
         /// <param name="connStr">The conn STR.</param>
         /// <returns></returns>
-        protected override FdoConnection CreateConnection(string provider, string connStr)
+        protected override FdoConnection CreateConnection(string provider, string connStr, ref string name)
         {
+            name = string.Empty;
             return new FdoConnection(provider, connStr);
+        }
+
+        /// <summary>
+        /// Prepares the specified bulk copy definition (freshly deserialized) before the loading process begins
+        /// </summary>
+        /// <param name="def">The bulk copy definition.</param>
+        protected override void Prepare(FdoBulkCopyTaskDefinition def)
+        {
+            
         }
     }
 }

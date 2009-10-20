@@ -124,5 +124,7 @@ namespace FdoToolbox.Core.ETL
         {
             get { return errors.ToArray(); }
         }
+
+        protected void ClearErrors() { errors.Clear(); }
     }
 }

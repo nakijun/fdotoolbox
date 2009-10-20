@@ -27,25 +27,96 @@ using FdoToolbox.Base;
 using FdoToolbox.Base.Services;
 using FdoToolbox.Core.Feature;
 using ICSharpCode.Core;
+using FdoToolbox.Core.Configuration;
 
 namespace FdoToolbox.Tasks.Services
 {
     public class TaskLoader : BaseDefinitionLoader
     {
-        protected override FdoConnection CreateConnection(string provider, string connStr)
+        /// <summary>
+        /// Creates the connection.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="connStr">The connection string.</param>
+        /// <param name="name">The name that will be assigned to the connection.</param>
+        /// <returns></returns>
+        protected override FdoConnection CreateConnection(string provider, string connStr, ref string name)
         {
-            //Try to find matching open connection first
             IFdoConnectionManager connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
-
-            FdoConnection conn = connMgr.GetConnection(provider, connStr);
-            if (conn == null)
+            //Try to find by name first
+            FdoConnection conn = null;
+            conn = connMgr.GetConnection(name);
+            //Named connection matches all the details
+            if (conn != null)
             {
-                LoggingService.Info(ResourceService.GetString("INFO_REFERENCED_CONNECTION_NOT_FOUND"));
-                conn = new FdoConnection(provider, connStr);
-                string name = ServiceManager.Instance.GetService<NamingService>().GetDefaultConnectionName(provider);
-                connMgr.AddConnection(name, conn);
+                if (conn.Provider == provider && conn.ConnectionString == connStr)
+                    return conn;
             }
+
+            //Then to find matching open connection
+            foreach (string connName in connMgr.GetConnectionNames())
+            {
+                FdoConnection c = connMgr.GetConnection(connName);
+                if (c.Provider == provider && c.ConnectionString == connStr)
+                {
+                    name = connName;
+                    return c;
+                }
+            }
+
+            //Make a new connection
+            LoggingService.Info(ResourceService.GetString("INFO_REFERENCED_CONNECTION_NOT_FOUND"));
+            conn = new FdoConnection(provider, connStr);
+            connMgr.AddConnection(name, conn);
             return conn;
+        }
+
+        /// <summary>
+        /// Prepares the specified bulk copy definition (freshly deserialized) before the loading process begins
+        /// </summary>
+        /// <param name="def">The bulk copy definition.</param>
+        protected override void Prepare(FdoToolbox.Core.Configuration.FdoBulkCopyTaskDefinition def)
+        {
+            /* There is subtle precondition that would've resulted in all connection references being named to a
+             * single reference, thus invalidating the whole task when loaded.
+             * 
+             * If the task definition has any connection names to an *already* loaded connection, a rename operation
+             * could overwrite a previous rename operation. Consider:
+             * 
+             * Connection A) SDF_Desktop
+             * Connection B) SDFConnection0
+             * 
+             * Loaded Connections:
+             * - SDFConnection0
+             * - SDFConnection1
+             * 
+             * If during loading, SDF_Desktop matches to SDFConnection0, and SDFConnection0 matches to SDFConnection1 the rename operations
+             * would then be:
+             * 
+             * 1) Rename SDF_Desktop to SDFConnection0
+             * 2) Rename SDF_Connection0 to SDFConnection1
+             * 
+             * As a result, all referenced connections will eventually be renamed to SDFConnection1, which is not what we want.
+             * 
+             * The solution bere is to "fix" the definition by renaming the named connections to something we know is not already a loaded
+             * connection. This is done regardless to ensure consistent behaviour. Thsi method performs this solution.
+             */
+
+            string prefix = "Connection";
+            int counter = 0;
+            FdoConnectionManager connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+
+            foreach (FdoConnectionEntryElement el in def.Connections)
+            {
+                string name = prefix + counter;
+                while (connMgr.GetConnection(name) != null)
+                {
+                    counter++;
+                    name = prefix + counter;
+                }
+                def.UpdateConnectionReferences(el.name, name);
+                counter++;
+            }
         }
     }
 }
