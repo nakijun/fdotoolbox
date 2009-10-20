@@ -18,7 +18,7 @@ namespace FdoToolbox.Core.Configuration {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
     [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    //[System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("BulkCopy", Namespace="", IsNullable=false)]
     public partial class FdoBulkCopyTaskDefinition : object, System.ComponentModel.INotifyPropertyChanged {
