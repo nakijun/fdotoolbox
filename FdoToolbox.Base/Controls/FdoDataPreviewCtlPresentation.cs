@@ -103,10 +103,10 @@ namespace FdoToolbox.Base.Controls
             _view.ElapsedMessage = string.Empty;
             _view.CancelEnabled = false;
             _view.ExecuteEnabled = true;
-
-            insertSupported = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Insert) >= 0);
-            updateSupported = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Update) >= 0);
-            deleteSupported = (Array.IndexOf<int>(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), (int)OSGeo.FDO.Commands.CommandType.CommandType_Delete) >= 0);
+            
+            insertSupported = (Array.IndexOf(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), OSGeo.FDO.Commands.CommandType.CommandType_Insert) >= 0);
+            updateSupported = (Array.IndexOf(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), OSGeo.FDO.Commands.CommandType.CommandType_Update) >= 0);
+            deleteSupported = (Array.IndexOf(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), OSGeo.FDO.Commands.CommandType.CommandType_Delete) >= 0);
 
             _view.DeleteEnabled = deleteSupported;
             _view.UpdateEnabled = updateSupported;

@@ -19,10 +19,18 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-//when making releases, change the * to the SVN revision number
-//of the WC used to produce the release.
-[assembly: AssemblyVersion("0.8.7.997")]
+namespace FdoToolbox.Core.Feature
+{
+    /// <summary>
+    /// An abstract interface that provides a translation of a feature class name to its underlying database 
+    /// table name. This only affects RDBMS providers
+    /// </summary>
+    public interface ITableNameOverride
+    {
+        string GetTableName(string fullName);
+    }
+}

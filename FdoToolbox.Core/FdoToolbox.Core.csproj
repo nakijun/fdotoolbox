@@ -166,11 +166,14 @@
     <Compile Include="Feature\FdoSqlReader.cs" />
     <Compile Include="Feature\FeatureQueryOptions.cs" />
     <Compile Include="Feature\FdoFeatureService.cs" />
+    <Compile Include="Feature\ITableNameOverride.cs" />
     <Compile Include="Feature\IFdoReader.cs" />
     <Compile Include="Feature\IncompatibleClass.cs" />
     <Compile Include="Feature\IncompatibleClassReason.cs" />
     <Compile Include="Feature\IncompatibleProperty.cs" />
     <Compile Include="Feature\IncompatibleSchema.cs" />
+    <Compile Include="Feature\Overrides\OracleTableNameOverride.cs" />
+    <Compile Include="Feature\Overrides\TableNameOverrideFactory.cs" />
     <Compile Include="Feature\RTree\Node.cs" />
     <Compile Include="Feature\RTree\Point.cs" />
     <Compile Include="Feature\RTree\Rectangle.cs" />
