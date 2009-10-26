@@ -222,12 +222,10 @@ Function .onInit
 	!insertmacro MUI_LANGDLL_DISPLAY
   
 	; Check .NET version
-	ReadRegDWORD $0 HKLM 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727' Version
+	ReadRegDWORD $0 HKLM 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v2.0.50727' SP
 	
-	; SP1 or higher is enough
-	${If} $0 == '2.1.21022' 
-	${OrIf} $0 == '2.2.30729'
-	${Else}
+	; SP level of 1 or higher is enough
+	${If} $0 < 1
 		MessageBox MB_OK|MB_ICONINFORMATION "${INST_PRODUCT} requires that the .net Framework 2.0 SP1 or above is installed. Please download and install the .net Framework 2.0 SP1 or above before installing ${INST_PRODUCT}."
 	    Quit
 	${EndIf}
