@@ -18,7 +18,8 @@ create a new connection. You can click :guilabel:`Test` beforehand to ensure the
 
 When the connection is created, a new connection object is visible in the **Object Explorer**
 
-The Express Add-In offers specialized methods of creating connections to particular data sources, see :ref:`connect-express`
+The Express Add-In offers specialized methods of creating connections to particular data sources. It is recommended to use the Express method since the Generic option serves as a 
+fallback method for providers without a specialized connection method see :ref:`connect-express`
 
 .. index::
    single: Connections; Save connection

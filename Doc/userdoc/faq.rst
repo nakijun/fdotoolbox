@@ -37,5 +37,5 @@ Not at this point in time
 **I get random crashes when using the Generic connection dialog**
 
 Some providers have buggy reference counting which the managed API does not know about. The best way to 
-avoid this is to use the specialized method in the Express Add-In. The Generic Dialog should only be used 
-if there is no Express method of connecting to your desired data source.
+avoid this is to use the specialized method in the Express Add-In. The Generic Dialog is designed as a fallback mechanism and 
+should only be used if there is no Express method of connecting to your desired data source.
