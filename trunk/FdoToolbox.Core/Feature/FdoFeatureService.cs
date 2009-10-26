@@ -44,6 +44,7 @@ using OSGeo.FDO.ClientServices;
 using FdoToolbox.Core.Connections;
 
 using Res = FdoToolbox.Core.ResourceUtil;
+using FdoToolbox.Core.Feature.Overrides;
 
 namespace FdoToolbox.Core.Feature
 {
@@ -660,6 +661,18 @@ namespace FdoToolbox.Core.Feature
             return true;
         }
 
+        private bool SupportsFunction(string name)
+        {
+            foreach (FunctionDefinition funcDef in this.Connection.ExpressionCapabilities.Functions)
+            {
+                if (funcDef.Name.ToUpper() == name.ToUpper())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Gets the number of features in a given class definition. If the class definition is a raster
         /// feature class, it will always return 0. This does not do counting by brute force if other
@@ -678,28 +691,16 @@ namespace FdoToolbox.Core.Feature
 
             string className = classDef.Name;
             string property = "FEATURECOUNT";
-            if (SupportsCommand(CommandType.CommandType_SQLCommand))
-            {
-                using (ISQLCommand cmd = CreateCommand<ISQLCommand>(CommandType.CommandType_SQLCommand))
-                {
-                    string sql = string.Empty;
-                    sql = string.Format("SELECT COUNT(*) AS {0} FROM {1}", property, className);
-                    if (!string.IsNullOrEmpty(filter))
-                        sql += " WHERE " + filter;
 
-                    cmd.SQLStatement = sql;
+            /* Try getting feature count by using these methods (in order of support):
+             * 
+             * - ISelectAggregate w/ count() expression function
+             * - Raw SQL: SELECT COUNT(*) FROM [table name]
+             * - IExtendedSelect's Count property
+             * - Brute force (only if specified)
+             */
 
-                    using (ISQLDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.ReadNext())
-                        {
-                            count = reader.GetInt64(property);
-                        }
-                        reader.Close();
-                    }
-                }
-            }
-            else if (SupportsCommand(CommandType.CommandType_SelectAggregates) && classDef.IdentityProperties.Count > 0)
+            if (SupportsCommand(CommandType.CommandType_SelectAggregates) && classDef.IdentityProperties.Count > 0 && SupportsFunction("COUNT"))
             {
                 using (ISelectAggregates select = CreateCommand<ISelectAggregates>(CommandType.CommandType_SelectAggregates))
                 {
@@ -724,12 +725,50 @@ namespace FdoToolbox.Core.Feature
                                 case DataType.DataType_Int64:
                                     count = reader.GetInt64(property);
                                     break;
+                                case DataType.DataType_Double:
+                                    count = Convert.ToInt64(reader.GetDouble(property));
+                                    break;
+                                case DataType.DataType_Single:
+                                    count = Convert.ToInt64(reader.GetSingle(property));
+                                    break;
+                                case DataType.DataType_Decimal:
+                                    count = Convert.ToInt64(reader.GetDouble(property));
+                                    break;
                             }
                         }
                         reader.Close();
                     }
                 }
             }
+            else if (SupportsCommand(CommandType.CommandType_SQLCommand))
+            {
+                using (ISQLCommand cmd = CreateCommand<ISQLCommand>(CommandType.CommandType_SQLCommand))
+                {
+                    string sql = string.Empty;
+
+                    //Perhaps the feature class name as given by the provider, does not match the underlying database
+                    //table name. So see if there's an override that provides the proper name.
+                    string table = className;
+                    ITableNameOverride ov = TableNameOverrideFactory.GetTableNameOverride(this.Connection.ConnectionInfo.ProviderName);
+                    if (ov != null)
+                        table = ov.GetTableName(className);
+
+                    sql = string.Format("SELECT COUNT(*) AS {0} FROM {1}", property, table);
+                    if (!string.IsNullOrEmpty(filter))
+                        sql += " WHERE " + filter;
+
+                    cmd.SQLStatement = sql;
+
+                    using (ISQLDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.ReadNext())
+                        {
+                            count = reader.GetInt64(property);
+                        }
+                        reader.Close();
+                    }
+                }
+            } 
             else if (SupportsCommand(CommandType.CommandType_ExtendedSelect))
             {
                 using (IExtendedSelect select = CreateCommand<IExtendedSelect>(CommandType.CommandType_ExtendedSelect))

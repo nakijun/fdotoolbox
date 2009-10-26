@@ -30,6 +30,7 @@ using OSGeo.FDO.Common;
 using OSGeo.FDO.Commands.Locking;
 using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Connections.Capabilities;
+using OSGeo.FDO.Commands;
 
 namespace FdoToolbox.Core.Feature
 {
@@ -67,7 +68,7 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="cap">The cap.</param>
         /// <returns></returns>
-        int[] GetArrayCapability(CapabilityType cap);
+        Array GetArrayCapability(CapabilityType cap);
         /// <summary>
         /// Gets the object capability.
         /// </summary>
@@ -80,7 +81,7 @@ namespace FdoToolbox.Core.Feature
         /// <param name="capabilityType">The capability (must be an array capability)</param>
         /// <param name="value">The value to check for</param>
         /// <returns>True of the value exists; false otherwise</returns>
-        bool HasArrayCapability(CapabilityType capabilityType, int value);
+        bool HasArrayCapability(CapabilityType capabilityType, object value);
         /// <summary>
         /// Gets the CLR data type of the given capability value
         /// </summary>
@@ -339,36 +340,48 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="cap">The cap.</param>
         /// <returns></returns>
-        public int[] GetArrayCapability(CapabilityType cap)
+        public Array GetArrayCapability(CapabilityType cap)
         {
             switch (cap)
             {
                 case CapabilityType.FdoCapabilityType_ClassTypes:
-                    return Array.ConvertAll<ClassType, int>(schemaCaps.ClassTypes, delegate(ClassType ct) { return (int)ct; });
+                    //return Array.ConvertAll<ClassType, int>(schemaCaps.ClassTypes, delegate(ClassType ct) { return (int)ct; });
+                    return schemaCaps.ClassTypes;
                 case CapabilityType.FdoCapabilityType_CommandList:
-                    return commandCaps.Commands;
+                    return Array.ConvertAll<int, CommandType>(commandCaps.Commands, delegate(int cmd) { return (CommandType)cmd; });
                 case CapabilityType.FdoCapabilityType_ConditionTypes:
-                    return Array.ConvertAll<ConditionType, int>(filterCaps.ConditionTypes, delegate(ConditionType ct) { return (int)ct; });
+                    //return Array.ConvertAll<ConditionType, int>(filterCaps.ConditionTypes, delegate(ConditionType ct) { return (int)ct; });
+                    return filterCaps.ConditionTypes;
                 case CapabilityType.FdoCapabilityType_DataTypes:
-                    return Array.ConvertAll<DataType, int>(schemaCaps.DataTypes, delegate(DataType dt) { return (int)dt; });
+                    //return Array.ConvertAll<DataType, int>(schemaCaps.DataTypes, delegate(DataType dt) { return (int)dt; });
+                    return schemaCaps.DataTypes;
                 case CapabilityType.FdoCapabilityType_DistanceOperations:
-                    return Array.ConvertAll<DistanceOperations, int>(filterCaps.DistanceOperations, delegate(DistanceOperations d) { return (int)d; });
+                    //return Array.ConvertAll<DistanceOperations, int>(filterCaps.DistanceOperations, delegate(DistanceOperations d) { return (int)d; });
+                    return filterCaps.DistanceOperations;
                 case CapabilityType.FdoCapabilityType_ExpressionTypes:
-                    return Array.ConvertAll<ExpressionType, int>(exprCaps.ExpressionTypes, delegate(ExpressionType e) { return (int)e; });
+                    //return Array.ConvertAll<ExpressionType, int>(exprCaps.ExpressionTypes, delegate(ExpressionType e) { return (int)e; });
+                    return exprCaps.ExpressionTypes;
                 case CapabilityType.FdoCapabilityType_GeometryComponentTypes:
-                    return Array.ConvertAll<GeometryComponentType, int>(geomCaps.GeometryComponentTypes, delegate(GeometryComponentType g) { return (int)g; });
+                    //return Array.ConvertAll<GeometryComponentType, int>(geomCaps.GeometryComponentTypes, delegate(GeometryComponentType g) { return (int)g; });
+                    return geomCaps.GeometryComponentTypes;
                 case CapabilityType.FdoCapabilityType_GeometryTypes:
-                    return Array.ConvertAll<GeometryType, int>(geomCaps.GeometryTypes, delegate(GeometryType g) { return (int)g; });
+                    //return Array.ConvertAll<GeometryType, int>(geomCaps.GeometryTypes, delegate(GeometryType g) { return (int)g; });
+                    return geomCaps.GeometryTypes;
                 case CapabilityType.FdoCapabilityType_LockTypes:
-                    return Array.ConvertAll<LockType, int>(connCaps.LockTypes, delegate(LockType l) { return (int)l; });
+                    //return Array.ConvertAll<LockType, int>(connCaps.LockTypes, delegate(LockType l) { return (int)l; });
+                    return connCaps.LockTypes;
                 case CapabilityType.FdoCapabilityType_SpatialContextTypes:
-                    return Array.ConvertAll<SpatialContextExtentType, int>(connCaps.SpatialContextTypes, delegate(SpatialContextExtentType s) { return (int)s; });
+                    //return Array.ConvertAll<SpatialContextExtentType, int>(connCaps.SpatialContextTypes, delegate(SpatialContextExtentType s) { return (int)s; });
+                    return connCaps.SpatialContextTypes;
                 case CapabilityType.FdoCapabilityType_SpatialOperations:
-                    return Array.ConvertAll<SpatialOperations, int>(filterCaps.SpatialOperations, delegate(SpatialOperations s) { return (int)s; });
+                    //return Array.ConvertAll<SpatialOperations, int>(filterCaps.SpatialOperations, delegate(SpatialOperations s) { return (int)s; });
+                    return filterCaps.SpatialOperations;
                 case CapabilityType.FdoCapabilityType_SupportedAutoGeneratedTypes:
-                    return Array.ConvertAll<DataType, int>(schemaCaps.SupportedAutoGeneratedTypes, delegate(DataType dt) { return (int)dt; });
+                    //return Array.ConvertAll<DataType, int>(schemaCaps.SupportedAutoGeneratedTypes, delegate(DataType dt) { return (int)dt; });
+                    return schemaCaps.SupportedAutoGeneratedTypes;
                 case CapabilityType.FdoCapabilityType_SupportedIdentityPropertyTypes:
-                    return Array.ConvertAll<DataType, int>(schemaCaps.SupportedIdentityPropertyTypes, delegate(DataType dt) { return (int)dt; }); 
+                    //return Array.ConvertAll<DataType, int>(schemaCaps.SupportedIdentityPropertyTypes, delegate(DataType dt) { return (int)dt; }); 
+                    return schemaCaps.SupportedIdentityPropertyTypes;
                 default:
                     return null;
             }
@@ -516,7 +529,7 @@ namespace FdoToolbox.Core.Feature
                 case CapabilityType.FdoCapabilityType_ClassTypes:
                     return schemaCaps.ClassTypes;
                 case CapabilityType.FdoCapabilityType_CommandList:
-                    return commandCaps.Commands;
+                    return Array.ConvertAll<int, CommandType>(commandCaps.Commands, delegate(int i) { return (CommandType)i; });
                 case CapabilityType.FdoCapabilityType_ConditionTypes:
                     return filterCaps.ConditionTypes;
                 case CapabilityType.FdoCapabilityType_DataTypes:
@@ -552,11 +565,11 @@ namespace FdoToolbox.Core.Feature
         /// <returns>
         /// True of the value exists; false otherwise
         /// </returns>
-        public bool HasArrayCapability(CapabilityType capabilityType, int value)
+        public bool HasArrayCapability(CapabilityType capabilityType, object value)
         {
-            int [] values = this.GetArrayCapability(capabilityType);
+            Array values = this.GetArrayCapability(capabilityType);
             if (values != null)
-                return Array.IndexOf<int>(values, value) >= 0;
+                return Array.IndexOf(values, value) >= 0;
             return false;
         }
 

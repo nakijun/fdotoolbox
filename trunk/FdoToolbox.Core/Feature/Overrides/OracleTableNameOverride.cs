@@ -19,10 +19,31 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-//when making releases, change the * to the SVN revision number
-//of the WC used to produce the release.
-[assembly: AssemblyVersion("0.8.7.997")]
+namespace FdoToolbox.Core.Feature.Overrides
+{
+    /// <summary>
+    /// Table name override for King.Oracle
+    /// 
+    /// King.Oracle interprets class names as [user]~[table]~[geometry column], this override extracts the
+    /// [table] component
+    /// </summary>
+    public class OracleTableNameOverride : ITableNameOverride
+    {
+        /// <summary>
+        /// Gets the name of the table.
+        /// </summary>
+        /// <param name="fullName">The full name.</param>
+        /// <returns></returns>
+        public string GetTableName(string fullName)
+        {
+            string[] tokens = fullName.Split('~');
+            if (tokens.Length == 3)
+                return tokens[1];
+            return fullName;
+        }
+    }
+}

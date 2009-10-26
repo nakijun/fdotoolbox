@@ -67,10 +67,10 @@ namespace FdoToolbox.Base.Controls
 
         private void ToggleUI()
         {
-            int [] cmds = _conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList);
-            bool canDelete = (Array.IndexOf<int>(cmds, (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) >= 0);
-            bool canCreate = (Array.IndexOf<int>(cmds, (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
-            bool canEdit = _view.SpatialContexts.Count > 0 && (Array.IndexOf<int>(cmds, (int)OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
+            Array cmds = _conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList);
+            bool canDelete = (Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) >= 0);
+            bool canCreate = (Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
+            bool canEdit = _view.SpatialContexts.Count > 0 && (Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
 
             if (canCreate)
             {
