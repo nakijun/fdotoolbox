@@ -1,3 +1,11 @@
+v0.8.8
+------
+
+- Fixes:
+	- Improve the .net Framework detection routine in the NSIS installer
+	- Oracle provider fixes for Data Query
+	- Add missing GDAL dlls as a result of bundling the offical gdal16.dll
+
 v0.8.7
 ------
 - Enhancements:
