@@ -35,9 +35,6 @@ namespace FdoToolbox.Tasks.Controls
             this.txtName = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.grdConnections = new System.Windows.Forms.DataGridView();
-            this.COL_NAME = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.COL_PROVIDER = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.COL_CONNSTR = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnAddConnection = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -51,6 +48,10 @@ namespace FdoToolbox.Tasks.Controls
             this.btnSave = new System.Windows.Forms.Button();
             this.ctxSelectedTask = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.COL_NAME = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.COL_PROVIDER = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.COL_CONNSTR = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.COL_CONNSTR_ACTUAL = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdConnections)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -99,7 +100,8 @@ namespace FdoToolbox.Tasks.Controls
             this.grdConnections.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.COL_NAME,
             this.COL_PROVIDER,
-            this.COL_CONNSTR});
+            this.COL_CONNSTR,
+            this.COL_CONNSTR_ACTUAL});
             this.grdConnections.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grdConnections.Location = new System.Drawing.Point(3, 41);
             this.grdConnections.Name = "grdConnections";
@@ -107,25 +109,6 @@ namespace FdoToolbox.Tasks.Controls
             this.grdConnections.RowHeadersVisible = false;
             this.grdConnections.Size = new System.Drawing.Size(560, 63);
             this.grdConnections.TabIndex = 1;
-            // 
-            // COL_NAME
-            // 
-            this.COL_NAME.HeaderText = "Name";
-            this.COL_NAME.Name = "COL_NAME";
-            this.COL_NAME.ReadOnly = true;
-            // 
-            // COL_PROVIDER
-            // 
-            this.COL_PROVIDER.HeaderText = "Provider";
-            this.COL_PROVIDER.Name = "COL_PROVIDER";
-            this.COL_PROVIDER.ReadOnly = true;
-            // 
-            // COL_CONNSTR
-            // 
-            this.COL_CONNSTR.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.COL_CONNSTR.HeaderText = "Connection String";
-            this.COL_CONNSTR.Name = "COL_CONNSTR";
-            this.COL_CONNSTR.ReadOnly = true;
             // 
             // toolStrip1
             // 
@@ -255,6 +238,32 @@ namespace FdoToolbox.Tasks.Controls
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.btnRemoveTask_Click);
             // 
+            // COL_NAME
+            // 
+            this.COL_NAME.HeaderText = "Name";
+            this.COL_NAME.Name = "COL_NAME";
+            this.COL_NAME.ReadOnly = true;
+            // 
+            // COL_PROVIDER
+            // 
+            this.COL_PROVIDER.HeaderText = "Provider";
+            this.COL_PROVIDER.Name = "COL_PROVIDER";
+            this.COL_PROVIDER.ReadOnly = true;
+            // 
+            // COL_CONNSTR
+            // 
+            this.COL_CONNSTR.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.COL_CONNSTR.HeaderText = "Connection String";
+            this.COL_CONNSTR.Name = "COL_CONNSTR";
+            this.COL_CONNSTR.ReadOnly = true;
+            // 
+            // COL_CONNSTR_ACTUAL
+            // 
+            this.COL_CONNSTR_ACTUAL.HeaderText = "Real Connection String";
+            this.COL_CONNSTR_ACTUAL.Name = "COL_CONNSTR_ACTUAL";
+            this.COL_CONNSTR_ACTUAL.ReadOnly = true;
+            this.COL_CONNSTR_ACTUAL.Visible = false;
+            // 
             // FdoBulkCopyCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -297,11 +306,12 @@ namespace FdoToolbox.Tasks.Controls
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnRemoveTask;
-        private System.Windows.Forms.DataGridViewTextBoxColumn COL_NAME;
-        private System.Windows.Forms.DataGridViewTextBoxColumn COL_PROVIDER;
-        private System.Windows.Forms.DataGridViewTextBoxColumn COL_CONNSTR;
         private System.Windows.Forms.ContextMenuStrip ctxSelectedTask;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
         private System.Windows.Forms.TreeView mTreeView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn COL_NAME;
+        private System.Windows.Forms.DataGridViewTextBoxColumn COL_PROVIDER;
+        private System.Windows.Forms.DataGridViewTextBoxColumn COL_CONNSTR;
+        private System.Windows.Forms.DataGridViewTextBoxColumn COL_CONNSTR_ACTUAL;
     }
 }

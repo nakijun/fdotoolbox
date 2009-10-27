@@ -68,7 +68,7 @@ namespace FdoToolbox.Tasks.Controls
         private void AddParticipatingConnection(string name)
         {
             FdoConnection conn = _connMgr.GetConnection(name);
-            grdConnections.Rows.Add(name, conn.Provider, conn.SafeConnectionString);
+            grdConnections.Rows.Add(name, conn.Provider, conn.SafeConnectionString, conn.ConnectionString);
         }
 
         private CopyTaskNodeDecorator AddNewTask(TreeNode root, string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass, string taskName)
@@ -213,7 +213,7 @@ namespace FdoToolbox.Tasks.Controls
                 FdoConnectionEntryElement entry = new FdoConnectionEntryElement();
                 entry.name = row.Cells[0].Value.ToString();
                 entry.provider = row.Cells[1].Value.ToString();
-                entry.ConnectionString = row.Cells[2].Value.ToString();
+                entry.ConnectionString = row.Cells[3].Value.ToString();
                 conns.Add(entry);
             }
             List<FdoCopyTaskElement> tasks = new List<FdoCopyTaskElement>();
@@ -291,8 +291,7 @@ namespace FdoToolbox.Tasks.Controls
 
             foreach (string connName in def.ConnectionNames)
             {
-                FdoConnection conn = _connMgr.GetConnection(connName);
-                grdConnections.Rows.Add(connName, conn.Provider, conn.ConnectionString);
+                this.AddParticipatingConnection(connName);
             }
 
             TreeNode root = mTreeView.Nodes[0];

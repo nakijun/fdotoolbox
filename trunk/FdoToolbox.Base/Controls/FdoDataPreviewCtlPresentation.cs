@@ -355,7 +355,6 @@ namespace FdoToolbox.Base.Controls
 
         public void ExecuteQuery()
         {
-            _view.SetBusyCursor(true);
             object query = null;
             switch (_view.SelectedQueryMode)
             {
@@ -402,6 +401,8 @@ namespace FdoToolbox.Base.Controls
                 _view.StatusMessage = "Executing Query";
                 _view.ElapsedMessage = "00:00:00";
                 _queryStart = DateTime.Now;
+
+                _view.SetBusyCursor(true);
                 _queryWorker.RunWorkerAsync(query);
             }
         }
