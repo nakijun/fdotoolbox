@@ -20,16 +20,15 @@
 namespace FdoToolbox.Core.Feature.RTree
 {
 
+    // Currently hardcoded to 3 dimensions, but could be extended.
+    // author  aled@sourceforge.net
+    // version 1.0b2p1
+     
     /// <summary>
-    /// Currently hardcoded to 3 dimensions, but could be extended.
-    /// author  aled@sourceforge.net
-    /// version 1.0b2p1
+    /// Point class
     /// </summary>
     public class Point
     {
-      
-      
-      
         /// <summary>
         /// Number of dimensions in a point. In theory this
         /// could be exended to three or more dimensions.

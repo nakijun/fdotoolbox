@@ -30,6 +30,10 @@ namespace FdoToolbox.Core.Feature.RTree
      * @author  aled@sourceforge.net
      * @version 1.0b2p1
      */
+
+    /// <summary>
+    /// Rectangle class
+    /// </summary>
     public class Rectangle
     {
         /**
