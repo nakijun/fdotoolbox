@@ -28,7 +28,7 @@ namespace FdoToolbox.Core.Feature.RTree
      * @author aled@sourceforge.net
      * @version 1.0b2p1
      */
-    public class Node<T>
+    internal class Node<T>
     {
         internal int nodeId = 0;
         internal Rectangle mbr = null;

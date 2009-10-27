@@ -49,7 +49,7 @@ namespace FdoToolbox.Core.Feature.RTree
     /// Ported to C# By Dror Gluska, April 9th, 2009
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class RTree<T>
+    internal class RTree<T>
     {
         //private ILog log = null;
         //private ILog deleteLog = null;
