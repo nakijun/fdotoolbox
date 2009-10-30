@@ -1264,5 +1264,14 @@ namespace FdoToolbox.Base.Forms
                 InsertText(lstValues.SelectedItem.ToString());
             }
         }
+
+        private void usingGeometryVisualizerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GeometryVisualizer vis = new GeometryVisualizer();
+            if (vis.ShowDialog() == DialogResult.OK)
+            {
+                InsertText(vis.GeometryText);
+            }
+        }
     }
 }

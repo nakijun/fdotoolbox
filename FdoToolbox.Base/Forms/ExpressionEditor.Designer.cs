@@ -52,6 +52,7 @@ namespace FdoToolbox.Base.Forms
             this.exprPanel = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.txtExpression = new System.Windows.Forms.RichTextBox();
+            this.lblValueCount = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.btnHide = new System.Windows.Forms.Button();
             this.btnFetch = new System.Windows.Forms.Button();
@@ -60,7 +61,8 @@ namespace FdoToolbox.Base.Forms
             this.cmbProperty = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this._autoCompleteTooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.lblValueCount = new System.Windows.Forms.Label();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.usingGeometryVisualizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.ctxInsert.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -170,7 +172,7 @@ namespace FdoToolbox.Base.Forms
             this.insertPropertyToolStripMenuItem,
             this.insertGeometryToolStripMenuItem});
             this.ctxInsert.Name = "ctxInsert";
-            this.ctxInsert.Size = new System.Drawing.Size(154, 48);
+            this.ctxInsert.Size = new System.Drawing.Size(154, 70);
             // 
             // insertPropertyToolStripMenuItem
             // 
@@ -182,6 +184,8 @@ namespace FdoToolbox.Base.Forms
             // insertGeometryToolStripMenuItem
             // 
             this.insertGeometryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.usingGeometryVisualizerToolStripMenuItem,
+            this.toolStripSeparator2,
             this.pointToolStripMenuItem,
             this.lineStringToolStripMenuItem,
             this.polygonToolStripMenuItem,
@@ -282,6 +286,7 @@ namespace FdoToolbox.Base.Forms
             // 
             // txtExpression
             // 
+            this.txtExpression.ContextMenuStrip = this.ctxInsert;
             this.txtExpression.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtExpression.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtExpression.Location = new System.Drawing.Point(0, 0);
@@ -291,6 +296,14 @@ namespace FdoToolbox.Base.Forms
             this.txtExpression.Text = "";
             this.txtExpression.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtExpression_KeyDown);
             this.txtExpression.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtExpression_KeyUp);
+            // 
+            // lblValueCount
+            // 
+            this.lblValueCount.AutoSize = true;
+            this.lblValueCount.Location = new System.Drawing.Point(55, 44);
+            this.lblValueCount.Name = "lblValueCount";
+            this.lblValueCount.Size = new System.Drawing.Size(0, 13);
+            this.lblValueCount.TabIndex = 7;
             // 
             // label4
             // 
@@ -366,13 +379,17 @@ namespace FdoToolbox.Base.Forms
             this.label2.TabIndex = 0;
             this.label2.Text = "Property Name";
             // 
-            // lblValueCount
+            // toolStripSeparator2
             // 
-            this.lblValueCount.AutoSize = true;
-            this.lblValueCount.Location = new System.Drawing.Point(55, 44);
-            this.lblValueCount.Name = "lblValueCount";
-            this.lblValueCount.Size = new System.Drawing.Size(0, 13);
-            this.lblValueCount.TabIndex = 7;
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(194, 6);
+            // 
+            // usingGeometryVisualizerToolStripMenuItem
+            // 
+            this.usingGeometryVisualizerToolStripMenuItem.Name = "usingGeometryVisualizerToolStripMenuItem";
+            this.usingGeometryVisualizerToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.usingGeometryVisualizerToolStripMenuItem.Text = "Using Geometry Visualizer";
+            this.usingGeometryVisualizerToolStripMenuItem.Click += new System.EventHandler(this.usingGeometryVisualizerToolStripMenuItem_Click);
             // 
             // ExpressionEditor
             // 
@@ -435,5 +452,7 @@ namespace FdoToolbox.Base.Forms
         private System.Windows.Forms.ComboBox cmbProperty;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblValueCount;
+        private System.Windows.Forms.ToolStripMenuItem usingGeometryVisualizerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }

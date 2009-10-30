@@ -391,6 +391,12 @@
       <DependentUpon>FdoSpatialContextDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FdoSpatialContextDialogPresenter.cs" />
+    <Compile Include="Forms\GeometryVisualizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GeometryVisualizer.Designer.cs">
+      <DependentUpon>GeometryVisualizer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ImageListBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -705,6 +711,10 @@
     <EmbeddedResource Include="Forms\FdoSpatialContextDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoSpatialContextDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GeometryVisualizer.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>GeometryVisualizer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PendingParameterDialog.resx">
       <SubType>Designer</SubType>
