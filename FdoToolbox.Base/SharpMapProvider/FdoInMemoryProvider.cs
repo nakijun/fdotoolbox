@@ -40,8 +40,9 @@ namespace FdoToolbox.Base.SharpMapProvider
     internal class FdoInMemoryProvider : IProvider
     {
         private FdoFeatureTable _data;
+        private FgfGeometryFactory _geomFactory;
 
-        public FdoInMemoryProvider() { }
+        public FdoInMemoryProvider() { _geomFactory = new FgfGeometryFactory(); }
 
         public FdoFeatureTable DataSource
         {
@@ -60,7 +61,7 @@ namespace FdoToolbox.Base.SharpMapProvider
             {
                 try
                 {
-                    geoms.Add(Converter.FromFdoGeometry(feat.DesignatedGeometry));
+                    geoms.Add(Converter.FromFdoGeometry(feat.DesignatedGeometry, _geomFactory));
                 }
                 catch { }
             }
@@ -108,7 +109,7 @@ namespace FdoToolbox.Base.SharpMapProvider
                         {
                             if (col.ColumnName == _data.GeometryColumn)
                             {
-                                row.Geometry = Converter.FromFdoGeometry(geom);
+                                row.Geometry = Converter.FromFdoGeometry(geom, _geomFactory);
                             }
                             else
                             {
@@ -207,7 +208,7 @@ namespace FdoToolbox.Base.SharpMapProvider
 
         public void Dispose()
         {
-            throw new Exception("The method or operation is not implemented.");
+            _geomFactory.Dispose();
         }
 
         public double? GetXYTolerance()

@@ -28,6 +28,7 @@ using SharpMap.Converters.WellKnownBinary;
 using FdoToolbox.Core.Feature.RTree;
 using Sm = SharpMap.Geometries;
 using Fdo = OSGeo.FDO.Geometry;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Base.SharpMapProvider
 {
@@ -64,11 +65,23 @@ namespace FdoToolbox.Base.SharpMapProvider
         /// </summary>
         /// <param name="geom">The FDO geometry</param>
         /// <returns></returns>
-        public static Sm.Geometry FromFdoGeometry(FdoGeometry geom)
+        public static Sm.Geometry FromFdoGeometry(FdoGeometry geom, OSGeo.FDO.Geometry.FgfGeometryFactory geomFactory)
         {
-            //Get the WKB form of the geometry
-            byte[] wkb = FdoGeometryFactory.Instance.GetWkb(geom.InternalInstance);
-            return GeometryFromWKB.Parse(wkb);
+            if (FdoGeometryUtil.Is2D(geom.InternalInstance))
+            {
+                //Get the WKB form of the geometry
+                byte[] wkb = FdoGeometryFactory.Instance.GetWkb(geom.InternalInstance);
+                return GeometryFromWKB.Parse(wkb);
+            }
+            else
+            {
+                using (OSGeo.FDO.Geometry.IGeometry flattened = FdoGeometryUtil.Flatten(geom.InternalInstance, geomFactory))
+                {
+                    //Get the WKB form of the geometry
+                    byte[] wkb = FdoGeometryFactory.Instance.GetWkb(flattened);
+                    return GeometryFromWKB.Parse(wkb);
+                }
+            }
         }
 
         /// <summary>

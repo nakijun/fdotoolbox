@@ -664,5 +664,243 @@ namespace FdoToolbox.Core.Utility
             }
             return fgf;
         }
+
+        /// <summary>
+        /// Determines if this geometry is 2 dimensional (ie. It has no Z or M components)
+        /// </summary>
+        /// <param name="geom">The geometry</param>
+        /// <returns></returns>
+        public static bool Is2D(IGeometry geom)
+        {
+            return (((geom.Dimensionality & FDO_DIM_M) == 0) && ((geom.Dimensionality & FDO_DIM_Z) == 0));
+        }
+
+        /// <summary>
+        /// Flattens the specified geometry by stripping out the Z and M components of all ordinates
+        /// within the geometry.
+        /// </summary>
+        /// <param name="geom">The geom.</param>
+        /// <param name="factory">The factory.</param>
+        /// <returns></returns>
+        public static IGeometry Flatten(IGeometry geom, FgfGeometryFactory factory)
+        {
+            int dim = geom.Dimensionality;
+
+            //Has no Z or M ordinates, so return geometry as is.
+            if (Is2D(geom))
+                return geom;
+
+            switch (geom.DerivedType)
+            {
+                case OSGeo.FDO.Common.GeometryType.GeometryType_CurvePolygon:
+                    return FlattenCurvePolygon((ICurvePolygon)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_CurveString:
+                    return FlattenCurveString((ICurveString)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_LineString:
+                    return FlattenLineString((ILineString)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_MultiCurvePolygon:
+                    return FlattenMultiCurvePolygon((IMultiCurvePolygon)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_MultiCurveString:
+                    return FlattenMultiCurveString((IMultiCurveString)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_MultiGeometry:
+                    return FlattenMultiGeometry((IMultiGeometry)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_MultiLineString:
+                    return FlattenMultiLineString((IMultiLineString)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_MultiPoint:
+                    return FlattenMultiPoint((IMultiPoint)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_MultiPolygon:
+                    return FlattenMultiPolygon((IMultiPolygon)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_Point:
+                    return FlattenPoint((IPoint)geom, factory);
+                case OSGeo.FDO.Common.GeometryType.GeometryType_Polygon:
+                    return FlattenPolygon((IPolygon)geom, factory);
+            }
+            return null;
+        }
+
+        private static ILinearRing FlattenLinearRing(ILinearRing ring, FgfGeometryFactory factory)
+        {
+            //Copy exterior ring
+            double[] flatRingPoints = new double[ring.Count * 2];
+            int i = 0;
+            foreach (IDirectPosition pos in ring.Positions)
+            {
+                flatRingPoints[i] = pos.X;
+                flatRingPoints[i + 1] = pos.Y;
+                i += 2;
+            }
+
+            ILinearRing flatRing = factory.CreateLinearRing(FDO_DIM_XY, flatRingPoints.Length, flatRingPoints);
+            return flatRing;
+        }
+
+        private static IPolygon FlattenPolygon(IPolygon polygon, FgfGeometryFactory factory)
+        {
+            ILinearRing extRing = FlattenLinearRing(polygon.ExteriorRing, factory);   
+
+            //Copy interior rings
+            LinearRingCollection intRings = new LinearRingCollection();
+            for (int j = 0; j < polygon.InteriorRingCount; j++)
+            {
+                ILinearRing ring = polygon.GetInteriorRing(j);
+                intRings.Add(FlattenLinearRing(ring, factory));
+            }
+
+            IPolygon flatPolygon = factory.CreatePolygon(extRing, intRings);
+            return flatPolygon;
+        }
+
+        private static IPoint FlattenPoint(IPoint point, FgfGeometryFactory factory)
+        {
+            return factory.CreatePoint(FDO_DIM_XY, new double[] { point.Position.X, point.Position.Y });
+        }
+
+        private static IMultiPolygon FlattenMultiPolygon(IMultiPolygon mpoly, FgfGeometryFactory factory)
+        {
+            PolygonCollection polys = new PolygonCollection();
+            for (int i = 0; i < mpoly.Count; i++)
+            {
+                polys.Add(FlattenPolygon(mpoly.get_Item(i), factory));
+            }
+            return factory.CreateMultiPolygon(polys);
+        }
+
+        private static IMultiPoint FlattenMultiPoint(IMultiPoint mpoint, FgfGeometryFactory factory)
+        {
+            PointCollection points = new PointCollection();
+            for (int i = 0; i < mpoint.Count; i++)
+            {
+                points.Add(FlattenPoint(mpoint.get_Item(i), factory));
+            }
+            return factory.CreateMultiPoint(points);
+        }
+
+        private static IMultiLineString FlattenMultiLineString(IMultiLineString mlString, FgfGeometryFactory factory)
+        {
+            LineStringCollection lineStrings = new LineStringCollection();
+            for (int i = 0; i < mlString.Count; i++)
+            {
+                lineStrings.Add(FlattenLineString(mlString.get_Item(i), factory));
+            }
+            return factory.CreateMultiLineString(lineStrings);
+        }
+
+        private static IMultiGeometry FlattenMultiGeometry(IMultiGeometry mgeom, FgfGeometryFactory factory)
+        {
+            GeometryCollection geometries = new GeometryCollection();
+            for (int i = 0; i < mgeom.Count; i++)
+            {
+                geometries.Add(Flatten(mgeom.get_Item(i), factory));
+            }
+            return factory.CreateMultiGeometry(geometries);
+        }
+
+        private static IMultiCurveString FlattenMultiCurveString(IMultiCurveString mcString, FgfGeometryFactory factory)
+        {
+            CurveStringCollection curveStrings = new CurveStringCollection();
+            for (int i = 0; i < mcString.Count; i++)
+            {
+                curveStrings.Add(FlattenCurveString(mcString.get_Item(i), factory));
+            }
+            return factory.CreateMultiCurveString(curveStrings);
+        }
+
+        private static IMultiCurvePolygon FlattenMultiCurvePolygon(IMultiCurvePolygon mcPolygon, FgfGeometryFactory factory)
+        {
+            CurvePolygonCollection curvePolygons = new CurvePolygonCollection();
+            for (int i = 0; i < mcPolygon.Count; i++)
+            {
+                curvePolygons.Add(FlattenCurvePolygon(mcPolygon.get_Item(i), factory));
+            }
+            return factory.CreateMultiCurvePolygon(curvePolygons);
+        }
+
+        private static ILineString FlattenLineString(ILineString lineStr, FgfGeometryFactory factory)
+        {
+            double[] lineStrOrdinates = new double[lineStr.Count * 2];
+            int i = 0;
+            foreach (IDirectPosition pos in lineStr.Positions)
+            {
+                lineStrOrdinates[i] = pos.X;
+                lineStrOrdinates[i + 1] = pos.Y;
+                i += 2;
+            }
+
+            return factory.CreateLineString(FDO_DIM_XY, lineStrOrdinates.Length, lineStrOrdinates);
+        }
+
+        private static ICurveString FlattenCurveString(ICurveString curveStr, FgfGeometryFactory factory)
+        {
+            CurveSegmentCollection curveSegs = new CurveSegmentCollection();
+            for (int i = 0; i < curveStr.Count; i++)
+            {
+                curveSegs.Add(FlattenCurveSegment(curveStr.get_Item(i), factory));
+            }
+            return factory.CreateCurveString(curveSegs);
+        }
+
+        private static ICurveSegmentAbstract FlattenCurveSegment(ICurveSegmentAbstract curveSegment, FgfGeometryFactory factory)
+        {
+            switch (curveSegment.DerivedType)
+            {
+                case OSGeo.FDO.Common.GeometryComponentType.GeometryComponentType_CircularArcSegment:
+                    return FlattenCircularArcSegment((ICircularArcSegment)curveSegment, factory);
+                case OSGeo.FDO.Common.GeometryComponentType.GeometryComponentType_LinearRing:
+                    throw new NotSupportedException("Unable to flatten this segment type");
+                case OSGeo.FDO.Common.GeometryComponentType.GeometryComponentType_LineStringSegment:
+                    return FlattenLineStringSegment((ILineStringSegment)curveSegment, factory);
+                case OSGeo.FDO.Common.GeometryComponentType.GeometryComponentType_Ring:
+                    throw new NotSupportedException("Unable to flatten this segment type");
+            }
+            throw new ArgumentException("Unknown curve segment type");
+        }
+
+        private static IDirectPosition FlattenPosition(IDirectPosition pos, FgfGeometryFactory factory)
+        {
+            return factory.CreatePositionXY(pos.X, pos.Y);
+        }
+
+        private static ICircularArcSegment FlattenCircularArcSegment(ICircularArcSegment circularArc, FgfGeometryFactory factory)
+        {
+            return factory.CreateCircularArcSegment(
+                FlattenPosition(circularArc.StartPosition, factory),
+                FlattenPosition(circularArc.MidPoint, factory),
+                FlattenPosition(circularArc.EndPosition, factory));
+        }
+
+        private static ILineStringSegment FlattenLineStringSegment(ILineStringSegment lineStrSegment, FgfGeometryFactory factory)
+        {
+            double[] positions = new double[lineStrSegment.Count * 2];
+            int j = 0;
+            for (int i = 0; i < lineStrSegment.Count; i++)
+            {
+                IDirectPosition pos = lineStrSegment.get_Item(i);
+                positions[j] = pos.X;
+                positions[j+1] = pos.Y;
+                j += 2;
+            }
+            return factory.CreateLineStringSegment(FDO_DIM_XY, positions.Length, positions);
+        }
+
+        private static IRing FlattenRing(IRing ring, FgfGeometryFactory factory)
+        {
+            CurveSegmentCollection curves = new CurveSegmentCollection();
+            foreach (ICurveSegmentAbstract curve in ring.CurveSegments)
+            {
+                curves.Add(FlattenCurveSegment(curve, factory));
+            }
+            return factory.CreateRing(curves);
+        }
+
+        private static ICurvePolygon FlattenCurvePolygon(ICurvePolygon curvePolygon, FgfGeometryFactory factory)
+        {
+            IRing extRing = FlattenRing(curvePolygon.ExteriorRing, factory);
+            RingCollection intRings = new RingCollection();
+            for (int i = 0; i < curvePolygon.InteriorRingCount; i++)
+            {
+                intRings.Add(FlattenRing(curvePolygon.get_InteriorRing(i), factory));
+            }
+            return factory.CreateCurvePolygon(extRing, intRings);
+        }
     }
 }
