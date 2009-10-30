@@ -201,6 +201,8 @@ the FDO Toolbox **Delete Schema** command will be disabled if the underlying pro
 
 .. index::
    single: FDO Concepts; Spatial Context
+   
+.. _fdo-spatial-context:
 
 Spatial Contexts
 ----------------

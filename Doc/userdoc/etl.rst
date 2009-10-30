@@ -23,10 +23,12 @@ Then perform the following tasks:
 
  1. Add the connections that will be participating in this bulk copy operation
  2. Add any number of tasks. For each task.
-  2.1. Specify the [source feature class] and [target feature class]
-  2.2. Map the source properties to their target properties. Optionally configure the data conversion rules for this mapping
-  2.3. Optionally, define computed columns with FDO expressions and map them to any target property. Optionally configure the data conversion rules for this mapping.
-  2.4. Optionally, configure the options for this particular copy task.
+ 
+   2.1. Specify the `source feature class` and `target feature class`
+   2.2. Map the source properties to their target properties. Optionally configure the data conversion rules for this mapping
+   2.3. Optionally, define computed columns with FDO expressions and map them to any target property. Optionally configure the data conversion rules for this mapping.
+   2.4. Optionally, configure the options for this particular copy task.
+  
  3. Save the task
  
 Once saved, a new node will be visible under :guilabel:`Tasks` in the **Object Explorer**, you can right click that node to:
