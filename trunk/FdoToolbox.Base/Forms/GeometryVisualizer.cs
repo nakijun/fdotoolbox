@@ -27,6 +27,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using ICSharpCode.Core;
+using OSGeo.FDO.Geometry;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Base.Forms
 {
@@ -34,10 +36,12 @@ namespace FdoToolbox.Base.Forms
     {
         private SharpMap.Layers.VectorLayer _layer;
         private SharpMap.Forms.MapImage _mapCtl;
+        private FgfGeometryFactory _geomFactory;
 
         public GeometryVisualizer()
         {
             InitializeComponent();
+            _geomFactory = new FgfGeometryFactory();
             _layer = new SharpMap.Layers.VectorLayer("Preview");
             _mapCtl = new SharpMap.Forms.MapImage();
             _mapCtl.Map = new SharpMap.Map();
@@ -65,13 +69,29 @@ namespace FdoToolbox.Base.Forms
         {
             try
             {
-                SharpMap.Geometries.Geometry geom = SharpMap.Geometries.Geometry.GeomFromText(txtGeometry.Text);
-                _layer.DataSource = new SharpMap.Data.Providers.GeometryProvider(geom);
-                SharpMap.Geometries.BoundingBox bbox = _mapCtl.Map.GetExtents();
-                bbox = bbox.Grow(2.0, 2.0);
-                _mapCtl.Map.ZoomToBox(bbox);
-                _mapCtl.Refresh();
-                btnOK.Enabled = true;
+                using (IGeometry fgeom = _geomFactory.CreateGeometry(txtGeometry.Text))
+                {
+                    byte[] wkb = null;
+                    if (!FdoGeometryUtil.Is2D(fgeom))
+                    {
+                        using (IGeometry ffgeom = FdoGeometryUtil.Flatten(fgeom, _geomFactory))
+                        {
+                            wkb = _geomFactory.GetWkb(ffgeom);
+                        }
+                    }
+                    else
+                    {
+                        wkb = _geomFactory.GetWkb(fgeom);
+                    }
+
+                    SharpMap.Geometries.Geometry sgeom = SharpMap.Geometries.Geometry.GeomFromWKB(wkb);
+                    _layer.DataSource = new SharpMap.Data.Providers.GeometryProvider(sgeom);
+                    SharpMap.Geometries.BoundingBox bbox = _mapCtl.Map.GetExtents();
+                    bbox = bbox.Grow(2.0, 2.0);
+                    _mapCtl.Map.ZoomToBox(bbox);
+                    _mapCtl.Refresh();
+                    btnOK.Enabled = true;
+                }
             }
             catch (Exception)
             {
