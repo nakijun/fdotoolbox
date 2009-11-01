@@ -373,8 +373,9 @@ namespace FdoToolbox.Core.Utility
         /// </param>
         /// <param name="copySpatialContexts">If true, will also copy spatial contexts</param>
         /// <param name="fixIncompatibleSchema">If true, will try to fix the source schema to make it compatible with the target connection. If false, an exception will be thrown</param>
+        /// <param name="flattenGeometries">If true, will strip all Z and M coordinates from all geometries that are copied</param>
         /// <returns></returns>
-        public static FdoBulkCopy CreateBulkCopy(string sourceFile, string targetPath, bool copySpatialContexts, bool fixIncompatibleSchema)
+        public static FdoBulkCopy CreateBulkCopy(string sourceFile, string targetPath, bool copySpatialContexts, bool fixIncompatibleSchema, bool flattenGeometries)
         {
             FdoBulkCopyOptions options = null;
             FdoConnection source = null;
@@ -382,7 +383,6 @@ namespace FdoToolbox.Core.Utility
 
             try
             {
-
                 //Is a directory. Implies a SHP connection
                 if (IsShp(targetPath))
                 {
@@ -490,6 +490,7 @@ namespace FdoToolbox.Core.Utility
                     {
                         FdoClassCopyOptions copt = new FdoClassCopyOptions(srcName, dstName, sourceSchemaName, cd.Name, targetSchemaName, cd.Name);
                         copt.Name = "Copy source to target [" + cd.Name + "]";
+                        copt.FlattenGeometries = flattenGeometries;
                         options.AddClassCopyOption(copt);
 
                         //Flick on batch support if we can

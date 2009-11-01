@@ -42,10 +42,12 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         const string OPT_DEL_TARGET = "OPT_DEL_TARGET";
         const string OPT_CLS_FILTER = "OPT_CLS_FILTER";
         const string OPT_BATCH_SIZE = "OPT_BATCH_SIZE";
+        const string OPT_FLATTEN = "OPT_FLATTEN";
 
         private ContextMenuStrip ctxDeleteTarget;
         private ContextMenuStrip ctxSourceFilter;
         private ContextMenuStrip ctxBatchSize;
+        private ContextMenuStrip ctxFlatten;
 
         internal OptionsNodeDecorator(CopyTaskNodeDecorator parent, TreeNode optionsNode)
         {
@@ -66,12 +68,20 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             srcFilterNode.Name = OPT_CLS_FILTER;
             srcFilterNode.ContextMenuStrip = ctxSourceFilter;
 
+            //Options - Flatten Geometries
+            TreeNode flattenNode = new TreeNode("Flatten Geometries");
+            flattenNode.ToolTipText = "If true, will strip all Z and M coordinates from geometries being copied";
+            flattenNode.Name = OPT_FLATTEN;
+            flattenNode.ContextMenuStrip = ctxFlatten;
+
             _node.Nodes.Add(delTargetNode);
             _node.Nodes.Add(srcFilterNode);
+            _node.Nodes.Add(flattenNode);
 
             //Set default values to avoid any nasty surprises
             this.Delete = false;
             this.SourceFilter = string.Empty;
+            this.Flatten = false;
 
             //Test for batch support
             using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(Parent.GetTargetConnection()))
@@ -93,6 +103,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             ctxDeleteTarget = new ContextMenuStrip();
             ctxSourceFilter = new ContextMenuStrip();
             ctxBatchSize = new ContextMenuStrip();
+            ctxFlatten = new ContextMenuStrip();
 
             //Delete Target
             ctxDeleteTarget.Items.Add("True", null, delegate { this.Delete = true; });
@@ -109,6 +120,10 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             });
             ctxSourceFilter.Items.Add("Clear", null, delegate { this.SourceFilter = string.Empty; });
             
+            //Flatten Geometries
+            ctxFlatten.Items.Add("True", null, delegate { this.Flatten = true; });
+            ctxFlatten.Items.Add("False", null, delegate { this.Flatten = false; });
+
             //Batch Size
             ctxBatchSize.Items.Add("Set Size", null, delegate {
                 string result = MessageService.ShowInputBox("Batch Size", "Set batch size", this.BatchSize.ToString());
@@ -143,22 +158,32 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             }
         }
 
+        public bool Flatten
+        {
+            get { return Convert.ToBoolean(_node.Nodes[2].Tag); }
+            set
+            {
+                _node.Nodes[2].Tag = value;
+                _node.Nodes[2].Text = "Flatten Geometries: " + value;
+            }
+        }
+
         public int BatchSize
         {
             get
             {
-                if (_node.Nodes.Count == 3)
+                if (_node.Nodes.Count == 4)
                 {
-                    return Convert.ToInt32(_node.Nodes[2].Tag);
+                    return Convert.ToInt32(_node.Nodes[3].Tag);
                 }
                 return 0;
             }
             set 
             {
-                if (_node.Nodes.Count == 3)
+                if (_node.Nodes.Count == 4)
                 {
-                    _node.Nodes[2].Tag = value;
-                    _node.Nodes[2].Text = "Insert Batch Size: " + value;
+                    _node.Nodes[3].Tag = value;
+                    _node.Nodes[3].Text = "Insert Batch Size: " + value;
                 }
             }
         }

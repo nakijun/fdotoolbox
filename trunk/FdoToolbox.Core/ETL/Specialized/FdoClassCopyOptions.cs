@@ -213,6 +213,19 @@ namespace FdoToolbox.Core.ETL.Specialized
             set { _BatchSize = value; }
         }
 
+        private bool _FlattenGeometries;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to strip the Z and M components of all
+        /// geometries
+        /// </summary>
+        /// <value><c>true</c> if [flatten geometries]; otherwise, <c>false</c>.</value>
+        public bool FlattenGeometries
+        {
+            get { return _FlattenGeometries; }
+            set { _FlattenGeometries = value; }
+        }
+
         /// <summary>
         /// Adds the source expression.
         /// </summary>
@@ -316,6 +329,10 @@ namespace FdoToolbox.Core.ETL.Specialized
             FdoClassCopyOptions opts = new FdoClassCopyOptions(el.Source.connection, el.Target.connection, el.Source.schema, el.Source.@class, el.Target.schema, el.Target.@class);
             opts.DeleteTarget = el.Options.DeleteTarget;
             opts.SourceFilter = el.Options.Filter;
+            if (!el.Options.FlattenGeometriesSpecified)
+                opts.FlattenGeometries = false;
+            else
+                opts.FlattenGeometries = el.Options.FlattenGeometries;
             if (!string.IsNullOrEmpty(el.Options.BatchSize))
                 opts.BatchSize = Convert.ToInt32(el.Options.BatchSize);
             opts.Name = el.name;
