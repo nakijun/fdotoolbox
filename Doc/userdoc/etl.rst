@@ -66,6 +66,7 @@ is not enforced by the ETL framework, the first operation should be a `FdoInputO
  * `FdoDeleteOperation`
  * `FdoFeatureTableInputOperation`
  * `FdoFilteredOperation`
+ * `FdoFlattenGeometryOperation` 
  * `FdoInputOperation`
  * `FdoJoinOperation`
  * `FdoNestedLoopsJoinOperation`

@@ -429,6 +429,13 @@ namespace FdoToolbox.Core.ETL
                     return this[_DefaultGeometryProperty] as IGeometry;
                 return null;
             }
+            internal set
+            {
+                if (string.IsNullOrEmpty(_DefaultGeometryProperty))
+                    throw new InvalidOperationException("No default geometry property name defined");
+
+                this[_DefaultGeometryProperty] = value;
+            }
         }
 
         /// <summary>
