@@ -33,13 +33,14 @@ namespace FdoToolbox.Express.Controls
             this.txtSource = new System.Windows.Forms.TextBox();
             this.txtTarget = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnBrowseDir = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnOpen = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.chkCopySpatialContexts = new System.Windows.Forms.CheckBox();
             this.btnExecute = new System.Windows.Forms.Button();
-            this.btnBrowseDir = new System.Windows.Forms.Button();
             this.lblHint = new System.Windows.Forms.Label();
+            this.chkFlatten = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -98,6 +99,17 @@ namespace FdoToolbox.Express.Controls
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Source/Target";
             // 
+            // btnBrowseDir
+            // 
+            this.btnBrowseDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowseDir.Location = new System.Drawing.Point(473, 43);
+            this.btnBrowseDir.Name = "btnBrowseDir";
+            this.btnBrowseDir.Size = new System.Drawing.Size(32, 23);
+            this.btnBrowseDir.TabIndex = 6;
+            this.btnBrowseDir.Text = "D";
+            this.btnBrowseDir.UseVisualStyleBackColor = true;
+            this.btnBrowseDir.Click += new System.EventHandler(this.btnBrowseDir_Click);
+            // 
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -125,6 +137,7 @@ namespace FdoToolbox.Express.Controls
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.chkFlatten);
             this.groupBox2.Controls.Add(this.chkCopySpatialContexts);
             this.groupBox2.Location = new System.Drawing.Point(4, 90);
             this.groupBox2.Name = "groupBox2";
@@ -154,17 +167,6 @@ namespace FdoToolbox.Express.Controls
             this.btnExecute.UseVisualStyleBackColor = true;
             this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
             // 
-            // btnBrowseDir
-            // 
-            this.btnBrowseDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowseDir.Location = new System.Drawing.Point(473, 43);
-            this.btnBrowseDir.Name = "btnBrowseDir";
-            this.btnBrowseDir.Size = new System.Drawing.Size(32, 23);
-            this.btnBrowseDir.TabIndex = 6;
-            this.btnBrowseDir.Text = "D";
-            this.btnBrowseDir.UseVisualStyleBackColor = true;
-            this.btnBrowseDir.Click += new System.EventHandler(this.btnBrowseDir_Click);
-            // 
             // lblHint
             // 
             this.lblHint.AutoSize = true;
@@ -173,6 +175,18 @@ namespace FdoToolbox.Express.Controls
             this.lblHint.Size = new System.Drawing.Size(373, 13);
             this.lblHint.TabIndex = 7;
             this.lblHint.Text = "F - Choose File. D - Choose Directory. For SHP files, target must be a directory";
+            // 
+            // chkFlatten
+            // 
+            this.chkFlatten.AutoSize = true;
+            this.chkFlatten.Checked = true;
+            this.chkFlatten.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkFlatten.Location = new System.Drawing.Point(152, 28);
+            this.chkFlatten.Name = "chkFlatten";
+            this.chkFlatten.Size = new System.Drawing.Size(256, 17);
+            this.chkFlatten.TabIndex = 1;
+            this.chkFlatten.Text = "Flatten Geometries (strip all Z and M coordinates)";
+            this.chkFlatten.UseVisualStyleBackColor = true;
             // 
             // FileToFileCtl
             // 
@@ -207,5 +221,6 @@ namespace FdoToolbox.Express.Controls
         private System.Windows.Forms.Button btnExecute;
         private System.Windows.Forms.Button btnBrowseDir;
         private System.Windows.Forms.Label lblHint;
+        private System.Windows.Forms.CheckBox chkFlatten;
     }
 }

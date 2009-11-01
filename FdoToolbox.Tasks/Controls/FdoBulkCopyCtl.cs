@@ -239,6 +239,7 @@ namespace FdoToolbox.Tasks.Controls
 
                 //Options
                 task.Options.BatchSize = dec.Options.BatchSize.ToString();
+                task.Options.FlattenGeometries = dec.Options.Flatten;
                 task.Options.DeleteTarget = dec.Options.Delete;
                 task.Options.Filter = dec.Options.SourceFilter;
 
@@ -317,6 +318,7 @@ namespace FdoToolbox.Tasks.Controls
                 dec.Options.BatchSize = task.BatchSize;
                 dec.Options.Delete = task.DeleteTarget;
                 dec.Options.SourceFilter = task.SourceFilter;
+                dec.Options.Flatten = task.FlattenGeometries;
 
                 //Property Mappings
                 foreach (string srcProp in task.SourcePropertyNames)

@@ -18,7 +18,7 @@ namespace FdoToolbox.Core.Configuration {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "2.0.50727.42")]
     [System.SerializableAttribute()]
-    //[System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlRootAttribute("BulkCopy", Namespace="", IsNullable=false)]
     public partial class FdoBulkCopyTaskDefinition : object, System.ComponentModel.INotifyPropertyChanged {
@@ -321,6 +321,10 @@ namespace FdoToolbox.Core.Configuration {
         
         private string filterField;
         
+        private bool flattenGeometriesField;
+        
+        private bool flattenGeometriesFieldSpecified;
+        
         private string batchSizeField;
         
         /// <remarks/>
@@ -344,6 +348,30 @@ namespace FdoToolbox.Core.Configuration {
             set {
                 this.filterField = value;
                 this.RaisePropertyChanged("Filter");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        public bool FlattenGeometries {
+            get {
+                return this.flattenGeometriesField;
+            }
+            set {
+                this.flattenGeometriesField = value;
+                this.RaisePropertyChanged("FlattenGeometries");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool FlattenGeometriesSpecified {
+            get {
+                return this.flattenGeometriesFieldSpecified;
+            }
+            set {
+                this.flattenGeometriesFieldSpecified = value;
+                this.RaisePropertyChanged("FlattenGeometriesSpecified");
             }
         }
         

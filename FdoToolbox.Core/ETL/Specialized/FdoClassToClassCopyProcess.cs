@@ -150,6 +150,8 @@ namespace FdoToolbox.Core.ETL.Specialized
             Register(input);
             if(convert != null)
                 Register(convert);
+            if (Options.FlattenGeometries)
+                Register(new FdoFlattenGeometryOperation());
             Register(output);
         }
 

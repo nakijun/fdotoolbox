@@ -114,7 +114,7 @@ namespace FdoToolbox.Express.Controls
                     }
                 }
 
-                using (FdoBulkCopy bcp = ExpressUtility.CreateBulkCopy(source, target, chkCopySpatialContexts.Checked, true))
+                using (FdoBulkCopy bcp = ExpressUtility.CreateBulkCopy(source, target, chkCopySpatialContexts.Checked, true, chkFlatten.Checked))
                 {
                     EtlProcessCtl ctl = new EtlProcessCtl(bcp);
                     Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
