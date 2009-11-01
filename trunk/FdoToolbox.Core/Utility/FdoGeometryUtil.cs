@@ -679,9 +679,9 @@ namespace FdoToolbox.Core.Utility
         /// Flattens the specified geometry by stripping out the Z and M components of all ordinates
         /// within the geometry.
         /// </summary>
-        /// <param name="geom">The geom.</param>
-        /// <param name="factory">The factory.</param>
-        /// <returns></returns>
+        /// <param name="geom">The geometry to flatten</param>
+        /// <param name="factory">The geometry factory.</param>
+        /// <returns>The geometry with all Z and M ordinates stripped out. If the input geometry is already 2D, then it is returned as is.</returns>
         public static IGeometry Flatten(IGeometry geom, FgfGeometryFactory factory)
         {
             int dim = geom.Dimensionality;
@@ -846,11 +846,11 @@ namespace FdoToolbox.Core.Utility
                 case OSGeo.FDO.Common.GeometryComponentType.GeometryComponentType_CircularArcSegment:
                     return FlattenCircularArcSegment((ICircularArcSegment)curveSegment, factory);
                 case OSGeo.FDO.Common.GeometryComponentType.GeometryComponentType_LinearRing:
-                    throw new NotSupportedException("Unable to flatten this segment type");
+                    throw new NotSupportedException("Unable to flatten this segment type"); //Uh, ILinearRing doesn't inherit from ICurveSegmentAbstract 
                 case OSGeo.FDO.Common.GeometryComponentType.GeometryComponentType_LineStringSegment:
                     return FlattenLineStringSegment((ILineStringSegment)curveSegment, factory);
                 case OSGeo.FDO.Common.GeometryComponentType.GeometryComponentType_Ring:
-                    throw new NotSupportedException("Unable to flatten this segment type");
+                    throw new NotSupportedException("Unable to flatten this segment type"); //Uh, IRing doesn't inherit from ICurveSegmentAbstract 
             }
             throw new ArgumentException("Unknown curve segment type");
         }
