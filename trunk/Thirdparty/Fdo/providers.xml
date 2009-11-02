@@ -91,7 +91,7 @@
     <LibraryPath>.\PostGISProvider.dll</LibraryPath>
   </FeatureProvider>
   <FeatureProvider>
-    <Name>OSGeo.KingOracle.3.4</Name>
+    <Name>King.Oracle.3.4</Name>
     <DisplayName>OSGeo FDO Provider for Oracle</DisplayName>
     <Description>Read/write access to spatial and attribute data in an Oracle Spatial.</Description>
     <IsManaged>False</IsManaged>
