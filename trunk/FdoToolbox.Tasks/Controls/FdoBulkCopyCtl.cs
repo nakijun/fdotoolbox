@@ -240,6 +240,7 @@ namespace FdoToolbox.Tasks.Controls
                 //Options
                 task.Options.BatchSize = dec.Options.BatchSize.ToString();
                 task.Options.FlattenGeometries = dec.Options.Flatten;
+                task.Options.FlattenGeometriesSpecified = true;
                 task.Options.DeleteTarget = dec.Options.Delete;
                 task.Options.Filter = dec.Options.SourceFilter;
 

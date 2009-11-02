@@ -435,6 +435,8 @@ namespace FdoToolbox.Core.ETL.Specialized
             el.Options = new FdoCopyOptionsElement();
             el.Options.DeleteTarget = this.DeleteTarget;
             el.Options.Filter = this.SourceFilter;
+            el.Options.FlattenGeometries = this.FlattenGeometries;
+            el.Options.FlattenGeometriesSpecified = true;
             if (this.BatchSize > 0)
                 el.Options.BatchSize = this.BatchSize.ToString();
 
