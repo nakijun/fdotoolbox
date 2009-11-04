@@ -96,11 +96,31 @@ namespace FdoToolbox
                 LoggingService.Info("Checking FDO");
                 // Set FDO path
                 string fdoPath = Preferences.FdoPath;
+                bool abort = false;
                 if (!FdoAssemblyResolver.IsValidFdoPath(fdoPath))
                 {
                     fdoPath = Path.Combine(FileUtility.ApplicationRootPath, "FDO");
                     Preferences.FdoPath = fdoPath;
+
+                    while (!FdoAssemblyResolver.IsValidFdoPath(fdoPath) && !abort)
+                    {
+                        FolderBrowserDialog fb = new FolderBrowserDialog();
+                        fb.Description = "Select the directory that contains the FDO binaries";
+                        if (fb.ShowDialog() == DialogResult.Cancel)
+                        {
+                            abort = true;
+                        }
+                        else
+                        {
+                            fdoPath = fb.SelectedPath;
+                            Preferences.FdoPath = fdoPath;
+                        }
+                    }
                 }
+
+                if (abort)
+                    return;
+
                 AddInAssemblyResolver.RegisterLibraries(fdoPath, "OSGeo.FDO.dll", "OSGeo.FDO.Common.dll", "OSGeo.FDO.Geometry.dll", "OSGeo.FDO.Spatial.dll");
 
                 LoggingService.Info("FDO path set to: " + fdoPath);
