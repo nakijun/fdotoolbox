@@ -51,7 +51,9 @@ A: No, as the FDO managed wrapper libraries are mixed-mode assemblies and Mono w
 
 === Q: I get crashes on the Map Data Preview for some data sources ===
 
-A: FDO stores geometries as FGF (FDO Geometry Format) which is a superset of WKB, the SharpMap rendering library used currently only supports rendering WKB geometries. Thus it will break down on incompatible/unsupported geometries.
+~~A: FDO stores geometries as FGF (FDO Geometry Format) which is a superset of WKB, the SharpMap rendering library used currently only supports rendering WKB geometries. Thus it will break down on incompatible/unsupported geometries.~~
+
+A: The first release after 0.8.8 will have support for flattening geometries (stripping Z and M ordinates). The side-benefit of this is that we can now render FGF geometries that aren't downward compatible with WKB by stripping out the FGF-specific components (ie. the Z and/or M ordinates) making them WKB-compatible geometries. Long story short: You can now preview *all* data sources.
 
 === Q: Where can I get add-ins for FDO Toolbox? ===
 
