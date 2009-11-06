@@ -167,6 +167,21 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         }
 
         /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        [Description("The description of this class")]
+        public string Description
+        {
+            get { return _classDef.Description; }
+            set
+            {
+                _classDef.Description = value;
+                FirePropertyChanged("Description");
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the unique constraints.
         /// </summary>
         /// <value>The unique constraints.</value>
