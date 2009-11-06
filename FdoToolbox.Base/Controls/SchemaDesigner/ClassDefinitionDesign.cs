@@ -76,13 +76,24 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         /// Gets or sets the base class.
         /// </summary>
         /// <value>The base class.</value>
-        [Browsable(false)]
+        [Browsable(true)]
+        [Description("The base class definition which this class is derived from")]
+        [Editor(typeof(BaseClassBrowserEditor), typeof(UITypeEditor))]
         public OSGeo.FDO.Schema.ClassDefinition BaseClass
         {
             get { return _classDef.BaseClass; }
             set 
             { 
-                _classDef.BaseClass = value;
+                if (value != null)
+                {
+                    _classDef.BaseClass = value;
+                    _classDef.SetBaseProperties(value.Properties);
+                }
+                else
+                {
+                    _classDef.BaseClass = null;
+                    _classDef.SetBaseProperties(null);
+                }
                 FirePropertyChanged("BaseClass");
             }
         }
@@ -210,6 +221,56 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
+    }
+
+    internal class BaseClassBrowserEditor : UITypeEditor
+    {
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            if (provider != null)
+            {
+                ClassDefinitionDesign ad = (ClassDefinitionDesign)context.Instance;
+                ClassDefinition cd = ad.ClassDefinition;
+                if (cd != null)
+                {
+                    FeatureSchema schema = cd.Parent as FeatureSchema;
+                    if (schema != null)
+                    {
+                        ListBox lb = new ListBox();
+                        lb.SelectionMode = SelectionMode.One;
+
+                        foreach (ClassDefinition cls in schema.Classes)
+                        {
+                            if (cls.Name != cd.Name)
+                                lb.Items.Add(cls.Name);
+                        }
+
+                        IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+
+                        lb.SelectedIndexChanged += delegate
+                        {
+                            if (lb.SelectedItem != null)
+                                editorService.CloseDropDown();
+                        };
+
+                        editorService.DropDownControl(lb);
+
+                        if (lb.SelectedItem != null)
+                        {
+                            int idx = schema.Classes.IndexOf(lb.SelectedItem.ToString());
+                            if (idx >= 0)
+                                value = schema.Classes[idx];
+                        }
+                    }
+                }
+            }
+            return value;
+        }
+
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.DropDown;
+        }
     }
 
     /// <summary>
