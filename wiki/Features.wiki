@@ -16,6 +16,7 @@ See [[http://fdo.osgeo.org/OSFeatureMatrix.html FDO project page]] for a list of
  * Create and edit feature schemas ^1^
  * Create and edit feature classes and its properties ^1^
  * Create and edit spatial contexts ^1^
+ * Full CRUD (Create, Read, Update, Delete) support ^1^
 
 === Save/Load schema configurations ===
 
@@ -38,6 +39,8 @@ See [[http://fdo.osgeo.org/OSFeatureMatrix.html FDO project page]] for a list of
 
  * Copy any number of Feature Classes and its properties from one source to another ^1^
  * Save/Load bulk copy tasks.
+ * Convert properties of different types.
+ * Map FDO expressions to properties.
 
 == Spatial/Non-Spatial Data Integration ==
 
@@ -47,7 +50,9 @@ See [[http://fdo.osgeo.org/OSFeatureMatrix.html FDO project page]] for a list of
 
 All menus in FDO Toolbox are XML driven, you can edit these files to customise the user interface.
 
-FDO Toolbox can be extended through extension modules. With extension modules you can add new commands for custom functionality and include new menu entries to expose them in the user interface.
+FDO Toolbox can be extended through Add-Ins. With Add-Ins you can add new commands for custom functionality and include new menu entries to expose them in the user interface.
+
+FDO Toolbox also includes an IronPython scripting engine, allowing you to script/extend FDO Toolbox using Python.
 
 
 
