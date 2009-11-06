@@ -1,24 +1,18 @@
 #summary Quirks and Notes on various FDO providers
 #labels Featured
 
-=== OSGeo.SQLite ===
-
- * Do not use SQLite as an output format for bulk copy or saving of query results. This is due to assumptions made by the SQLite provider that our insert operations do not currently satisfy (see: http://trac.osgeo.org/fdo/ticket/454)
-
 === OSGeo.PostGIS ===
 
  * The provider is very unstable, any operations with a PostGIS connection may throw anything from win32 exceptions to System.AccessViolationException
-
- * Opening a bulk copy tab that involves a PostGIS connection may/will throw a System.AccessViolationException at OSGeo.FDO.Commands.BatchParameterValueCollection.ReleaseUnmanagedObject() (Edit: There may be some problems with reference counting that is causing these exceptions)
 
  * Changes made after applying a schema to a PostGIS connection are not visible until you remove and re-open the connection
 
 === OSGeo.OGR ===
 
- * Can get VC++ "pure virtual function calls" at random. This mostly happens in the generic connect dialog. If you are connecting to an OGR format via methods supported by the Express Module, you can safely bypass this error.
+ * Can get VC++ "pure virtual function calls" at random. This mostly happens in the generic connect dialog. If you are connecting to an OGR format via methods supported by the Express Module, you can safely bypass this problem.
 
  * Using FDO 3.4.0. There are still occasional instability with this provider.
 
-=== OSGeo.KingOracle ===
+=== OSGeo.KingOracle / King.Oracle ===
 
- * SelectAggregate commands do not work because either the provider does not support them or the provide is falsely advertising that it does support it. ([http://trac.osgeo.org/fdo/ticket/376 Trac ticket 376]) (Edit: A newer version of the KingOracle provider exists that supports SelectAggregate and has many performance improvements. However there is no release that targets FDO 3.4 meaning this provider can only be used with FDO Toolbox v0.6.0 and older) 
+ * The providers.xml entry is incorrect, since internally the provider is named King.Oracle. This will cause issues when saving/loading connections. Releases after 0.8.8 will have the proper provider name in providers.xml
