@@ -397,7 +397,7 @@ namespace FdoToolbox.Core.Utility
                     source.Open();
 
                     //Verify source has only classes with single geometry storage and only one geometry
-                    using (FdoFeatureService svc = source.CreateFeatureService(true))
+                    using (FdoFeatureService svc = source.CreateFeatureService())
                     {
                         using (FeatureSchemaCollection schemas = svc.DescribeSchema())
                         {

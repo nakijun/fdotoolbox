@@ -271,12 +271,6 @@
     <Compile Include="Controls\PreferenceSheets\DataPreviewPreferencesCtl.Designer.cs">
       <DependentUpon>DataPreviewPreferencesCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PreferenceSheets\ProviderPreferencesCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\PreferenceSheets\ProviderPreferencesCtl.Designer.cs">
-      <DependentUpon>ProviderPreferencesCtl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PreferenceSheets\ScriptPreferencesCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -338,7 +332,6 @@
       <DependentUpon>ViewContent.cs</DependentUpon>
     </Compile>
     <Compile Include="EventWatcher.cs" />
-    <Compile Include="FdoConnectionUtil.cs" />
     <Compile Include="FileDragAndDropHandler.cs" />
     <Compile Include="Forms\ConnectionPicker.cs">
       <SubType>Form</SubType>
@@ -647,10 +640,6 @@
     <EmbeddedResource Include="Controls\PreferenceSheets\DataPreviewPreferencesCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DataPreviewPreferencesCtl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\PreferenceSheets\ProviderPreferencesCtl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ProviderPreferencesCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PreferenceSheets\ScriptPreferencesCtl.resx">
       <SubType>Designer</SubType>

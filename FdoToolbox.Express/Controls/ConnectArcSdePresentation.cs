@@ -56,7 +56,7 @@ namespace FdoToolbox.Express.Controls
                 if (_conn.Open() != FdoConnectionState.Pending)
                 {
                     List<string> datstores = new List<string>();
-                    using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
+                    using (FdoFeatureService service = _conn.CreateFeatureService())
                     {
                         ICollection<DataStoreInfo> dstores = service.ListDataStores(false);
                         foreach (DataStoreInfo info in dstores)

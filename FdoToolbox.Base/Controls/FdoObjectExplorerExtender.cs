@@ -151,7 +151,7 @@ namespace FdoToolbox.Base.Controls
                                     string schemaName = node.Name;
                                     FdoConnection conn = _connMgr.GetConnection(connName);
                                     
-                                    using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(conn))
+                                    using (FdoFeatureService svc = conn.CreateFeatureService())
                                     {
                                         Debug.Assert(svc.SupportsPartialSchemaDiscovery());
                                         List<string> classNames = svc.GetClassNames(schemaName);
@@ -170,7 +170,7 @@ namespace FdoToolbox.Base.Controls
                                     Debug.Assert(node.Nodes.Count == 1); //Has a dummy node
                                     string schemaName = node.Parent.Name;
                                     FdoConnection conn = _connMgr.GetConnection(connName);
-                                    using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(conn))
+                                    using (FdoFeatureService svc = conn.CreateFeatureService())
                                     {
                                         Debug.Assert(svc.SupportsPartialSchemaDiscovery());
                                         ClassDefinition cd = svc.GetClassByName(schemaName, node.Name);
@@ -271,7 +271,7 @@ namespace FdoToolbox.Base.Controls
             if (conn != null)
             {
                 SetConnectionToolTip(connNode, conn);
-                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
+                using (FdoFeatureService service = conn.CreateFeatureService())
                 {
                     if (service.SupportsPartialSchemaDiscovery())
                     {
@@ -310,7 +310,7 @@ namespace FdoToolbox.Base.Controls
 
         private static void SetConnectionToolTip(TreeNode connNode, FdoConnection conn)
         {
-            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
+            using (FdoFeatureService service = conn.CreateFeatureService())
             {
                 List<string> ctxStrings = new List<string>();
                 ICollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
@@ -339,7 +339,7 @@ namespace FdoToolbox.Base.Controls
                 TreeNode classNode = new TreeNode();
                 classNode.Name = classNode.Text = clsName;
                 classNode.ContextMenuStrip = _explorer.GetContextMenu(NODE_CLASS);
-                classNode.ImageKey = classNode.SelectedImageKey = IMG_FEATURE_CLASS;
+                classNode.ImageKey = classNode.SelectedImageKey = IMG_CLASS;
                 classNode.Tag = true; //Is partial
                 classNode.Nodes.Add(ResourceService.GetString("TEXT_LOADING"));
                 schemaNode.Nodes.Add(classNode);

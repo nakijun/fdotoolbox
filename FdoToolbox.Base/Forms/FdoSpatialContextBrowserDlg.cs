@@ -43,7 +43,7 @@ namespace FdoToolbox.Base.Forms
         public FdoSpatialContextBrowserDlg(FdoConnection conn)
             : this()
         {
-            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
+            using (FdoFeatureService service = conn.CreateFeatureService())
             {
                 grdSpatialContexts.DataSource = service.GetSpatialContexts();
             }

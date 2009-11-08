@@ -1187,7 +1187,7 @@ namespace FdoToolbox.Base.Forms
 
                 using (new TempCursor(Cursors.WaitCursor))
                 {
-                    using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(_conn))
+                    using (FdoFeatureService svc = _conn.CreateFeatureService())
                     {
                         bool supportsDistinct = _conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSelectDistinct);
                         if (svc.SupportsCommand(OSGeo.FDO.Commands.CommandType.CommandType_SelectAggregates) && supportsDistinct)

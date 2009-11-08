@@ -86,8 +86,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             _srcConnName = srcConnName;
             _dstConnName = dstConnName;
 
-            using (FdoFeatureService srcSvc = FdoConnectionUtil.CreateFeatureService(GetSourceConnection()))
-            using (FdoFeatureService dstSvc = FdoConnectionUtil.CreateFeatureService(GetTargetConnection()))
+            using (FdoFeatureService srcSvc = GetSourceConnection().CreateFeatureService())
+            using (FdoFeatureService dstSvc = GetTargetConnection().CreateFeatureService())
             {
                 ClassDefinition sourceClass = srcSvc.GetClassByName(srcSchema, srcClass);
                 Debug.Assert(sourceClass != null);

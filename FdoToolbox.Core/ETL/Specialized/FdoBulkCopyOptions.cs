@@ -129,8 +129,8 @@ namespace FdoToolbox.Core.ETL.Specialized
                 if (dst == null)
                     throw new TaskValidationException("The specified target connection name does not exist");
 
-                using (FdoFeatureService srcSvc = src.CreateFeatureService(true))
-                using (FdoFeatureService dstSvc = dst.CreateFeatureService(true))
+                using (FdoFeatureService srcSvc = src.CreateFeatureService())
+                using (FdoFeatureService dstSvc = dst.CreateFeatureService())
                 {
                     ClassDefinition srcCls = srcSvc.GetClassByName(copt.SourceSchema, copt.SourceClassName);
                     ClassDefinition dstCls = dstSvc.GetClassByName(copt.TargetSchema, copt.TargetClassName);

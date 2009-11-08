@@ -112,7 +112,7 @@ namespace FdoToolbox.Base.Forms
         public static IList<OSGeo.FDO.Schema.ClassDefinition> GetClasses(string title, string message, FdoConnection conn)
         {
             OSGeo.FDO.Schema.FeatureSchemaCollection schemas = null;
-            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
+            using (FdoFeatureService service = conn.CreateFeatureService())
             {
                 schemas = service.DescribeSchema();
             }
