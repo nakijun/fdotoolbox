@@ -340,8 +340,8 @@ namespace FdoToolbox.Core.ETL.Specialized
             sourceConn.Open();
             targetConn.Open();
 
-            using (FdoFeatureService srcSvc = sourceConn.CreateFeatureService(true))
-            using (FdoFeatureService dstSvc = targetConn.CreateFeatureService(true))
+            using (FdoFeatureService srcSvc = sourceConn.CreateFeatureService())
+            using (FdoFeatureService dstSvc = targetConn.CreateFeatureService())
             {
                 ClassDefinition srcClass = srcSvc.GetClassByName(el.Source.@class);
                 ClassDefinition dstClass = dstSvc.GetClassByName(el.Target.@class);

@@ -60,7 +60,7 @@ namespace FdoToolbox.Base.Controls
         {
             if (_view.Confirm("Bulk Delete", "Bulk deletes can be very lengthy. Are you sure you want to do this?"))
             {
-                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
+                using (FdoFeatureService service = _conn.CreateFeatureService())
                 {
                     int deleted = service.DeleteFeatures(_className, _view.Filter.Trim(), _view.UseTransaction);
                     _view.ShowMessage(null, deleted + " feature(s) deleted");
@@ -71,7 +71,7 @@ namespace FdoToolbox.Base.Controls
 
         internal void Test()
         {
-            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
+            using (FdoFeatureService service = _conn.CreateFeatureService())
             {
                 long count = service.GetFeatureCount(_className, _view.Filter.Trim(), true);
                 _view.ShowMessage(null, count + " feature(s) would be deleted");

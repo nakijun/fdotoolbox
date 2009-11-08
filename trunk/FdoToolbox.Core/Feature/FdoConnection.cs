@@ -252,19 +252,6 @@ namespace FdoToolbox.Core.Feature
         }
 
         /// <summary>
-        /// Creates a new feature service bound to this connection
-        /// </summary>
-        /// <param name="forceFullSchemaDiscovery">if set to <c>true</c> disables the use of enhanced IDescribeSchema if the provider supports it</param>
-        /// <returns></returns>
-        public FdoFeatureService CreateFeatureService(bool forceFullSchemaDiscovery)
-        {
-            if (this.State == FdoConnectionState.Closed)
-                this.Open();
-
-            return new FdoFeatureService(this.InternalConnection, forceFullSchemaDiscovery);
-        }
-
-        /// <summary>
         /// Opens the underlying connection
         /// </summary>
         public FdoConnectionState Open()

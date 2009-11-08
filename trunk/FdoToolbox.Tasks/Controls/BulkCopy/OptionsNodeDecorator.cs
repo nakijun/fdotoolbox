@@ -84,7 +84,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             this.Flatten = false;
 
             //Test for batch support
-            using (FdoFeatureService svc = FdoConnectionUtil.CreateFeatureService(Parent.GetTargetConnection()))
+            using (FdoFeatureService svc = Parent.GetTargetConnection().CreateFeatureService())
             {
                 if (svc.SupportsBatchInsertion())
                 {

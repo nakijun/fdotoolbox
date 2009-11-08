@@ -80,13 +80,13 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         private FdoFeatureService CreateSourceService()
         {
             FdoConnection conn = _connMgr.GetConnection(cmbSrcConnection.SelectedItem.ToString());
-            return FdoConnectionUtil.CreateFeatureService(conn);
+            return conn.CreateFeatureService();
         }
 
         private FdoFeatureService CreateTargetService()
         {
             FdoConnection conn = _connMgr.GetConnection(cmbDstConnection.SelectedItem.ToString());
-            return FdoConnectionUtil.CreateFeatureService(conn);
+            return conn.CreateFeatureService();
         }
 
         private void cmbDstConnection_SelectionChangeCommitted(object sender, EventArgs e)

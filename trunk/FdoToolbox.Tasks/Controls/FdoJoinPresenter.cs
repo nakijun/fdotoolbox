@@ -242,7 +242,7 @@ namespace FdoToolbox.Tasks.Controls
             FdoConnection conn = GetConnection(type);
             if (conn != null)
             {
-                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
+                using (FdoFeatureService service = conn.CreateFeatureService())
                 {
                     switch (type)
                     {
@@ -272,7 +272,7 @@ namespace FdoToolbox.Tasks.Controls
             FdoConnection conn = GetConnection(type);
             if (conn != null)
             {
-                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
+                using (FdoFeatureService service = conn.CreateFeatureService())
                 {
                     switch (type)
                     {
@@ -299,7 +299,7 @@ namespace FdoToolbox.Tasks.Controls
             FdoConnection conn = GetConnection(type);
             if(conn != null)
             {
-                using(FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(conn))
+                using(FdoFeatureService service = conn.CreateFeatureService())
                 {
                     switch (type)
                     {

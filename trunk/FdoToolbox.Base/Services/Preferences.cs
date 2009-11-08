@@ -44,7 +44,6 @@ namespace FdoToolbox.Base
         internal static readonly string PREF_WARN_DATASET = "DataPreviewWarnLimit";
         internal static readonly string PREF_SESSION_DIR = "SessionDirectory";
         internal static readonly string PREF_LOG_PATH = "LogPath";
-        internal static readonly string PREF_EXCLUDE_PARTIAL_SCHEMA = "ProvidersExcludePartialSchema";
         internal static readonly string PREF_DATA_PREVIEW_RANDOM_COLORS = "DataPreviewRandomColors";
         internal static readonly string PREF_SCRIPT_MODULE_PATHS = "ScriptModulePaths";
         internal static readonly string PREF_SCRIPT_DEBUG = "ScriptDebug";
@@ -113,24 +112,6 @@ namespace FdoToolbox.Base
         {
             get { return properties.Get<int>(PREF_WARN_DATASET, 1500); }
             set { properties.Set<int>(PREF_WARN_DATASET, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the list of providers where enhanced IDescribeSchema will not be
-        /// used.
-        /// </summary>
-        /// <value>The exclude partial schema providers.</value>
-        public static string[] ExcludePartialSchemaProviders
-        {
-            get 
-            { 
-                string str = properties.Get<string>(PREF_EXCLUDE_PARTIAL_SCHEMA, "OSGeo.ODBC");
-                return str.Split(';');
-            }
-            set 
-            { 
-                properties.Set<string>(PREF_EXCLUDE_PARTIAL_SCHEMA, string.Join(";", value)); 
-            }
         }
 
         /// <summary>

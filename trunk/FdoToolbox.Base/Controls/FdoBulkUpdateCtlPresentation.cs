@@ -60,7 +60,7 @@ namespace FdoToolbox.Base.Controls
             _view.InitializeGrid();
             _view.UseTransactionEnabled = (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsTransactions));
 
-            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
+            using (FdoFeatureService service = _conn.CreateFeatureService())
             {
                 ClassDefinition cd = service.GetClassByName(_className);
                 if (cd != null)
@@ -91,7 +91,7 @@ namespace FdoToolbox.Base.Controls
         {
             if (_view.Confirm("Bulk Update", "Bulk updates can be very lengthy. Are you sure you want to do this?"))
             {
-                using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
+                using (FdoFeatureService service = _conn.CreateFeatureService())
                 {
                     int updated = service.UpdateFeatures(_className, _view.GetValues(), _view.Filter, _view.UseTransaction);
                     _view.ShowMessage(null, updated + " feature(s) updated");
@@ -102,7 +102,7 @@ namespace FdoToolbox.Base.Controls
 
         internal void TestUpdate()
         {
-            using (FdoFeatureService service = FdoConnectionUtil.CreateFeatureService(_conn))
+            using (FdoFeatureService service = _conn.CreateFeatureService())
             {
                 long count = service.GetFeatureCount(_className, _view.Filter, true);
                 _view.ShowMessage(null, count + " feature(s) would be updated");
