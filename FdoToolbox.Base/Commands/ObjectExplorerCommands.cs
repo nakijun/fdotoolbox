@@ -196,34 +196,53 @@ namespace FdoToolbox.Base.Commands
     {
         public override void Run()
         {
-            string path = FileService.SaveFile(Res.GetString("TITLE_SAVE_SCHEMA"), Res.GetString("FILTER_SCHEMA_FILE"));
-            if (!string.IsNullOrEmpty(path))
+            TreeNode node = Workbench.Instance.ObjectExplorer.GetSelectedNode();
+            if (node.Level == 2) //Schema
             {
-                TreeNode node = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-                if (node.Level == 1) //Connection
+                TreeNode schemaNode = node;
+                TreeNode connNode = node.Parent;
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                FdoConnection conn = mgr.GetConnection(connNode.Name);
+                using (FdoFeatureService service = conn.CreateFeatureService())
                 {
-                    TreeNode connNode = node;
-                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-                    FdoConnection conn = mgr.GetConnection(connNode.Name);
-                    using (FdoFeatureService service = conn.CreateFeatureService())
+                    FeatureSchema schema = service.GetSchemaByName(schemaNode.Name);
+                    if (schema != null)
                     {
-                        service.WriteSchemaToXml(path);
-                        Log.InfoFormatted(Res.GetString("LOG_SCHEMA_SAVED"), path);
-                    }
-                }
-                else if (node.Level == 2) //Schema
-                {
-                    TreeNode schemaNode = node;
-                    TreeNode connNode = node.Parent;
-                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-                    FdoConnection conn = mgr.GetConnection(connNode.Name);
-                    using (FdoFeatureService service = conn.CreateFeatureService())
-                    {
-                        service.WriteSchemaToXml(schemaNode.Name, path);
-                        Log.InfoFormatted(Res.GetString("LOG_SCHEMA_SAVED_2"), connNode.Name, path);
+                        PartialSchemaSaveDialog dialog = new PartialSchemaSaveDialog(schema);
+                        dialog.ShowDialog();
                     }
                 }
             }
+
+
+            //string path = FileService.SaveFile(Res.GetString("TITLE_SAVE_SCHEMA"), Res.GetString("FILTER_SCHEMA_FILE"));
+            //if (!string.IsNullOrEmpty(path))
+            //{
+            //    TreeNode node = Workbench.Instance.ObjectExplorer.GetSelectedNode();
+            //    if (node.Level == 1) //Connection
+            //    {
+            //        TreeNode connNode = node;
+            //        FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+            //        FdoConnection conn = mgr.GetConnection(connNode.Name);
+            //        using (FdoFeatureService service = conn.CreateFeatureService())
+            //        {
+            //            service.WriteSchemaToXml(path);
+            //            Log.InfoFormatted(Res.GetString("LOG_SCHEMA_SAVED"), path);
+            //        }
+            //    }
+            //    else if (node.Level == 2) //Schema
+            //    {
+            //        TreeNode schemaNode = node;
+            //        TreeNode connNode = node.Parent;
+            //        FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+            //        FdoConnection conn = mgr.GetConnection(connNode.Name);
+            //        using (FdoFeatureService service = conn.CreateFeatureService())
+            //        {
+            //            service.WriteSchemaToXml(schemaNode.Name, path);
+            //            Log.InfoFormatted(Res.GetString("LOG_SCHEMA_SAVED_2"), connNode.Name, path);
+            //        }
+            //    }
+            //}
         }
     }
 
