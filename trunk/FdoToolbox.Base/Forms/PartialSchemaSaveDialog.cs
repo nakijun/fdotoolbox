@@ -67,7 +67,12 @@ namespace FdoToolbox.Base.Forms
 
         private void InitTree()
         {
+            //Pre-sort
+            SortedList<string, ClassDefinition> sorted = new SortedList<string, ClassDefinition>();
             foreach (ClassDefinition cls in _schema.Classes)
+                sorted.Add(cls.Name, cls);
+
+            foreach (ClassDefinition cls in sorted.Values)
             {
                 TreeNode clsNode = new TreeNode();
                 clsNode.Name = cls.Name;
@@ -79,7 +84,12 @@ namespace FdoToolbox.Base.Forms
                 else
                     clsNode.ImageIndex = clsNode.SelectedImageIndex = IDX_CLASS;
 
+                //Pre-sort
+                SortedList<string, PropertyDefinition> psorted = new SortedList<string, PropertyDefinition>();
                 foreach (PropertyDefinition pd in cls.Properties)
+                    psorted.Add(pd.Name, pd);
+
+                foreach (PropertyDefinition pd in psorted.Values)
                 {
                     TreeNode propNode = new TreeNode();
                     propNode.Name = pd.Name;

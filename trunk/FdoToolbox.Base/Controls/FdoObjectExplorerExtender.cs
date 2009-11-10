@@ -276,6 +276,12 @@ namespace FdoToolbox.Base.Controls
                     if (service.SupportsPartialSchemaDiscovery())
                     {
                         List<string> schemaNames = service.GetSchemaNames();
+
+                        //Pre-sort
+                        SortedList<string, string> sorted = new SortedList<string, string>();
+                        foreach (string name in schemaNames)
+                            sorted.Add(name, name);
+
                         foreach (string name in schemaNames)
                         {
                             TreeNode schemaNode = CreateSchemaNode(name, true);
@@ -286,6 +292,12 @@ namespace FdoToolbox.Base.Controls
                     else
                     {
                         FeatureSchemaCollection schemas = service.DescribeSchema();
+
+                        //Pre-sort
+                        SortedList<string, FeatureSchema> sorted = new SortedList<string, FeatureSchema>();
+                        foreach (FeatureSchema schema in schemas)
+                            sorted.Add(schema.Name, schema);
+
                         foreach (FeatureSchema schema in schemas)
                         {
                             TreeNode schemaNode = CreateSchemaNode(schema.Name, false);
@@ -333,8 +345,13 @@ namespace FdoToolbox.Base.Controls
 
         void GetClassNodesPartial(List<string> clsNames, TreeNode schemaNode)
         {
+            //Pre-sort
+            SortedList<string, string> sorted = new SortedList<string, string>();
+            foreach (string str in clsNames)
+                sorted.Add(str, str);
+
             schemaNode.Nodes.Clear();
-            foreach (string clsName in clsNames)
+            foreach (string clsName in sorted.Values)
             {
                 TreeNode classNode = new TreeNode();
                 classNode.Name = classNode.Text = clsName;
@@ -348,7 +365,12 @@ namespace FdoToolbox.Base.Controls
 
         void GetClassNodesFull(FeatureSchema schema, TreeNode schemaNode)
         {
+            //Pre-sort
+            SortedList<string, ClassDefinition> sorted = new SortedList<string, ClassDefinition>();
             foreach (ClassDefinition classDef in schema.Classes)
+                sorted.Add(classDef.Name, classDef);
+
+            foreach (ClassDefinition classDef in sorted.Values)
             {
                 TreeNode classNode = CreateClassNode(classDef);
                 schemaNode.Nodes.Add(classNode);
@@ -413,7 +435,12 @@ namespace FdoToolbox.Base.Controls
 
         void CreatePropertyNodes(ClassDefinition classDef, TreeNode classNode)
         {
+            //Pre-sort
+            SortedList<string, PropertyDefinition> sorted = new SortedList<string, PropertyDefinition>();
             foreach (PropertyDefinition propDef in classDef.Properties)
+                sorted.Add(propDef.Name, propDef);
+
+            foreach (PropertyDefinition propDef in sorted.Values)
             {
                 TreeNode propertyNode = new TreeNode();
                 propertyNode.Name = propertyNode.Text = propDef.Name;
