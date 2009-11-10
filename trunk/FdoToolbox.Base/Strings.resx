@@ -226,9 +226,6 @@
   <data name="CMD_SaveSchema" xml:space="preserve">
     <value>Save Schema</value>
   </data>
-  <data name="CMD_SaveSchemaXml" xml:space="preserve">
-    <value>Save Schema as XML</value>
-  </data>
   <data name="CMD_SchemaEditor" xml:space="preserve">
     <value>Standalone Schema Editor</value>
   </data>

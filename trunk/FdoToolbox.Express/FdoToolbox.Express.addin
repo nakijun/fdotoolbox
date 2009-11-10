@@ -108,13 +108,6 @@
         
     </Path>
 
-    <Path name="/ObjectExplorer/ContextMenus/SelectedSchema/Save">
-        <MenuItem id="SaveSchemaSdf"
-                  label="${res:CMD_SaveSchemaSdf}"
-                  icon="disk"
-                  class="FdoToolbox.Express.Commands.SaveSchemaAsSdfCommand"></MenuItem>
-    </Path>
-
     <Path name="/ObjectExplorer/ContextMenus/SelectedConnection">
         <MenuItem id="CopySpatialContexts"
                   label="${res:CMD_CopySpatialContexts}"
