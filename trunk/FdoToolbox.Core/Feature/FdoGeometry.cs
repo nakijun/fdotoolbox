@@ -123,10 +123,8 @@ namespace FdoToolbox.Core.Feature
         /// </returns>
         public bool Contains(IEnvelope env)
         {
-            string wkt = string.Format("POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))", env.MinX, env.MinY, env.MaxX, env.MaxY);
-
             FdoGeometryFactory fact = FdoGeometryFactory.Instance;
-            IGeometry geom = fact.CreateGeometry(wkt);
+            IGeometry geom = fact.CreateGeometry(env);
             bool contains = SpatialUtility.Evaluate(this.InternalInstance, OSGeo.FDO.Filter.SpatialOperations.SpatialOperations_Contains, geom);
             geom.Dispose();
             return contains;
