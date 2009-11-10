@@ -1,10 +1,5 @@
 #summary Planned features for upcoming releases
 
-=== 0.9.0 ===
- * Geometry WKT visualizer
- * Geometry Flattening support
- * Support for partially saving feature schemas
-
 === 0.9.x ===
  * Theme dataset builder utility
  * Raster preview support
