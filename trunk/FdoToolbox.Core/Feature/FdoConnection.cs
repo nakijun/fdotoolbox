@@ -144,7 +144,7 @@ namespace FdoToolbox.Core.Feature
                 if (!string.IsNullOrEmpty(value))
                 {
                     //HACK: ODBC doesn't want to play nice
-                    if (this.Provider.StartsWith("OSGeo.ODBC"))
+                    if (this.Provider.StartsWith("OSGeo.ODBC") || this.Provider.StartsWith("OSGeo.SQLServerSpatial"))
                     {
                         _safeConnStr = value;
                         return;
@@ -156,6 +156,7 @@ namespace FdoToolbox.Core.Feature
                     foreach (string p in parameters)
                     {
                         string[] tokens = p.Split('=');
+                        
                         if (!dict.IsPropertyProtected(tokens[0]))
                         {
                             safeParams.Add(p);
