@@ -84,6 +84,37 @@ namespace FdoToolbox.Core.AppFramework
         }
 
         /// <summary>
+        /// Writes a warning message to the application console
+        /// </summary>
+        /// <param name="str">The message</param>
+        protected void WriteWarning(string str)
+        {
+            if (!IsSilent)
+            {
+                using (new TempConsoleColor(ConsoleColor.Yellow))
+                {
+                    Console.WriteLine(str);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Writes a warning message to the application console
+        /// </summary>
+        /// <param name="format">The format.</param>
+        /// <param name="args">The args.</param>
+        protected void WriteWarning(string format, params object[] args)
+        {
+            if (!IsSilent)
+            {
+                using (new TempConsoleColor(ConsoleColor.Yellow))
+                {
+                    Console.WriteLine(format, args);
+                }
+            }
+        }
+
+        /// <summary>
         /// Writes a newline-terminated line to the application console
         /// </summary>
         /// <param name="format"></param>
@@ -112,7 +143,12 @@ namespace FdoToolbox.Core.AppFramework
         protected void WriteException(Exception ex)
         {
             if (!IsSilent)
-                Console.Error.WriteLine(ex.ToString());
+            {
+                using (new TempConsoleColor(ConsoleColor.Red))
+                {
+                    Console.Error.WriteLine(ex.ToString());
+                }
+            }
         }
 
         /// <summary>
@@ -123,7 +159,12 @@ namespace FdoToolbox.Core.AppFramework
         protected void WriteError(string format, params object[] args)
         {
             if (!IsSilent)
-                Console.Error.WriteLine(format, args);
+            {
+                using (new TempConsoleColor(ConsoleColor.Red))
+                {
+                    Console.Error.WriteLine(format, args);
+                }
+            }
         }
 
         /// <summary>
@@ -133,7 +174,12 @@ namespace FdoToolbox.Core.AppFramework
         protected void WriteError(string str)
         {
             if (!IsSilent)
-                Console.Error.WriteLine(str);
+            {
+                using (new TempConsoleColor(ConsoleColor.Red))
+                {
+                    Console.Error.WriteLine(str);
+                }
+            }
         }
 
         /// <summary>

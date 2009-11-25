@@ -244,6 +244,9 @@ namespace FdoToolbox.Core.ETL
         }
     }
 
+    /// <summary>
+    /// Handler for generating connection names
+    /// </summary>
     public delegate string ConnectionNameGenerationCallback(int seed);
 
     /// <summary>
@@ -313,6 +316,7 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         /// <param name="provider">The provider.</param>
         /// <param name="connStr">The conn STR.</param>
+        /// <param name="name">The name that will be assigned to the connection.</param>
         /// <returns></returns>
         protected override FdoConnection CreateConnection(string provider, string connStr, ref string name)
         {

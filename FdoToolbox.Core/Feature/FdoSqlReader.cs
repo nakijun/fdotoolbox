@@ -54,6 +54,9 @@ namespace FdoToolbox.Core.Feature
         private string _defaultGeometryName;
         private Dictionary<string, FdoPropertyType> _ptypes;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoSqlReader"/> class.
+        /// </summary>
         protected FdoSqlReader() { }
 
         internal FdoSqlReader(ISQLDataReader reader)

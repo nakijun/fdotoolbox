@@ -31,6 +31,11 @@ namespace FdoToolbox.Core.Feature
     /// </summary>
     public interface ITableNameOverride
     {
+        /// <summary>
+        /// Gets the name of the table.
+        /// </summary>
+        /// <param name="fullName">The full name.</param>
+        /// <returns></returns>
         string GetTableName(string fullName);
     }
 }

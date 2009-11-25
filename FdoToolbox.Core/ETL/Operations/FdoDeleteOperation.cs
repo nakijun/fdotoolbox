@@ -27,6 +27,9 @@ using OSGeo.FDO.Commands.Feature;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
+    /// <summary>
+    /// A delete ETL operation
+    /// </summary>
     public class FdoDeleteOperation : FdoOperationBase
     {
         private FdoConnection _conn;
@@ -57,6 +60,11 @@ namespace FdoToolbox.Core.ETL.Operations
 
         private int counter = 0;
 
+        /// <summary>
+        /// Executes the operation
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <returns></returns>
         public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
         {
             if (counter < 1) //Shouldn't be reentrant, but just play it safe.

@@ -30,10 +30,16 @@ using System.Xml.Serialization;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
+    /// <summary>
+    /// A specialized ETL process that consists of one or more <see cref="FdoClassToClassCopyProcess"/> instances
+    /// </summary>
     public class FdoBulkCopy : FdoSpecializedEtlProcess
     {
         private int _ReportFrequency = 50;
 
+        /// <summary>
+        /// Occurs before execution takes place. Subscribers have an opportunity to abort the execution.
+        /// </summary>
         public event System.ComponentModel.CancelEventHandler BeforeExecute = delegate { };
 
         /// <summary>

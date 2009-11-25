@@ -100,8 +100,10 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <summary>
         /// Initializes a new instance of the <see cref="FdoDataPropertyConversionRule"/> class.
         /// </summary>
-        /// <param name="src">The SRC.</param>
-        /// <param name="dst">The DST.</param>
+        /// <param name="src">The source property</param>
+        /// <param name="dst">The target property</param>
+        /// <param name="srcDataType">The source data type</param>
+        /// <param name="targetDataType">The target data type</param>
         /// <param name="nullOnFailure">if set to <c>true</c> [null on failure].</param>
         /// <param name="truncate">if set to <c>true</c> [truncate].</param>
         public FdoDataPropertyConversionRule(string src, string dst, DataType srcDataType, DataType targetDataType, bool nullOnFailure, bool truncate)

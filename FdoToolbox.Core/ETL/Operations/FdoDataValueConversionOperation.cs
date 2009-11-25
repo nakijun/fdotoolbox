@@ -28,10 +28,17 @@ using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
+    /// <summary>
+    /// An ETL operation that converts FDO data values
+    /// </summary>
     public class FdoDataValueConversionOperation : FdoOperationBase
     {
         private Dictionary<string, FdoDataPropertyConversionRule> _rules;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoDataValueConversionOperation"/> class.
+        /// </summary>
+        /// <param name="rules">The rules.</param>
         public FdoDataValueConversionOperation(IEnumerable<FdoDataPropertyConversionRule> rules)
         {
             _rules = new Dictionary<string, FdoDataPropertyConversionRule>();
@@ -41,6 +48,11 @@ namespace FdoToolbox.Core.ETL.Operations
             }
         }
 
+        /// <summary>
+        /// Executes the operation
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <returns></returns>
         public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
         {
             foreach (FdoRow row in rows)

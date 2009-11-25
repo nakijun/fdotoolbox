@@ -85,6 +85,7 @@
     <Compile Include="AppFramework\ConsoleApplication.cs" />
     <Compile Include="AppFramework\ConsoleColorSwitcher.cs" />
     <Compile Include="AppFramework\ConsoleCommand.cs" />
+    <Compile Include="AppFramework\TempConsoleColor.cs" />
     <Compile Include="AppFramework\IConsoleCommand.cs" />
     <Compile Include="Configuration\BulkCopyTask.cs" />
     <Compile Include="Configuration\FdoBulkCopyTaskDefinition.cs" />

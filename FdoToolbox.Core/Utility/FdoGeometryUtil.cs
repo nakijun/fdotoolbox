@@ -39,8 +39,17 @@ namespace FdoToolbox.Core.Utility
     /// </summary>
     public sealed class FdoGeometryUtil
     {
+        /// <summary>
+        /// FDO bitmask value for X/Y dimensionality
+        /// </summary>
         public const int FDO_DIM_XY = 0;
+        /// <summary>
+        /// FDO bitmask value for Z dimensionality
+        /// </summary>
         public const int FDO_DIM_Z = 1;
+        /// <summary>
+        /// FDO bitmask value for M dimensionality
+        /// </summary>
         public const int FDO_DIM_M = 2;
 
         private FdoGeometryUtil() { }

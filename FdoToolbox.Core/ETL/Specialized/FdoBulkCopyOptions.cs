@@ -28,6 +28,9 @@ using FdoToolbox.Core.Configuration;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
+    /// <summary>
+    /// Defines the options for a <see cref="FdoBulkCopy"/> instance
+    /// </summary>
     public class FdoBulkCopyOptions : IDisposable
     {
         private Dictionary<string, FdoConnection> _connections;
@@ -48,10 +51,10 @@ namespace FdoToolbox.Core.ETL.Specialized
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FdoBulkCopyOptions"/> class.
-        /// 
         /// Used by ExpressUtility
         /// </summary>
         /// <param name="connections">The connections.</param>
+        /// <param name="owner">if set to <c>true</c>, this object owns the connections within and will dispose and cleanup these connections when done.</param>
         internal FdoBulkCopyOptions(Dictionary<string, FdoConnection> connections, bool owner)
         {
             _copyOptions = new List<FdoClassCopyOptions>();
