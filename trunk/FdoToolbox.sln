@@ -1,6 +1,16 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Thirdparty Sources", "Thirdparty Sources", "{7A40B29A-0ACD-4DA3-A0A6-52C1456B55BB}"
+	ProjectSection(FolderStartupServices) = postProject
+		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{41738CE5-A068-49D2-94D5-1CE6EB3C2683}"
+	ProjectSection(FolderStartupServices) = postProject
+		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Base", "FdoToolbox.Base\FdoToolbox.Base.csproj", "{9A3DA959-2B7E-4407-9DF8-DA56178D211A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Core", "FdoToolbox.Core\FdoToolbox.Core.csproj", "{6AAE821C-D27F-47D2-8F1B-D748AF145B0A}"
@@ -13,11 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.AddInManager", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Tasks", "FdoToolbox.Tasks\FdoToolbox.Tasks.csproj", "{0CE1A585-2239-4D1A-A596-8BC12B8F7875}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Thirdparty Sources", "Thirdparty Sources", "{7A40B29A-0ACD-4DA3-A0A6-52C1456B55BB}"
-	ProjectSection(FolderStartupServices) = postProject
-		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICSharpCode.Core", "Thirdparty\SharpDevelop\ICSharpCode.Core\ICSharpCode.Core.csproj", "{35CEF10F-2D4C-45F2-9DD1-161E0FEC583C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICSharpCode.TextEditor", "Thirdparty\SharpDevelop\ICSharpCode.TextEditor\Project\ICSharpCode.TextEditor.csproj", "{2D18BE89-D210-49EB-A9DD-2246FBB3DF6D}"
@@ -25,11 +30,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMap", "Thirdparty\SharpMap\SharpMap\SharpMap.csproj", "{C83777FC-AABB-47D9-911F-D76255D4D541}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMap.UI", "Thirdparty\SharpMap\SharpMap.UI\SharpMap.UI.csproj", "{DD1CC1DB-4BF9-4C88-A100-733D84795F3A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{41738CE5-A068-49D2-94D5-1CE6EB3C2683}"
-	ProjectSection(FolderStartupServices) = postProject
-		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Core.Tests", "FdoToolbox.Core.Tests\FdoToolbox.Core.Tests.csproj", "{A4AEC2DB-276F-4814-8D5D-E8101187E9D1}"
 EndProject
@@ -42,9 +42,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Raster", "FdoToolbox.Raster\FdoToolbox.Raster.csproj", "{C6D1F465-958B-4C6A-8514-1E413B81A18E}"
 EndProject
 Global
-	GlobalSection(TextTemplating) = postSolution
-		TextTemplating = 1
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -215,5 +212,8 @@ Global
 		{DD1CC1DB-4BF9-4C88-A100-733D84795F3A} = {7A40B29A-0ACD-4DA3-A0A6-52C1456B55BB}
 		{A4AEC2DB-276F-4814-8D5D-E8101187E9D1} = {41738CE5-A068-49D2-94D5-1CE6EB3C2683}
 		{5E033A7E-77C1-4877-A4E1-8F4164601481} = {41738CE5-A068-49D2-94D5-1CE6EB3C2683}
+	EndGlobalSection
+	GlobalSection(TextTemplating) = postSolution
+		TextTemplating = 1
 	EndGlobalSection
 EndGlobal

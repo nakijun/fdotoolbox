@@ -269,7 +269,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             {
                 DataPropertyDefinitionCollection dpcol = (DataPropertyDefinitionCollection)value;
                 AssociationPropertyDefinitionDesign ad = (AssociationPropertyDefinitionDesign)context.Instance;
-                ClassDefinition cd = ad.GetParent();
+                ClassDefinition cd = ad.AssociatedClass; //ad.GetParent();
                 if (cd != null)
                 {
                     CheckedListBox box = new CheckedListBox();
@@ -323,7 +323,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             {
                 DataPropertyDefinitionCollection dpcol = (DataPropertyDefinitionCollection)value;
                 AssociationPropertyDefinitionDesign ad = (AssociationPropertyDefinitionDesign)context.Instance;
-                ClassDefinition cd = ad.AssociatedClass;
+                ClassDefinition cd = (ClassDefinition)ad.GetParent(); //ad.AssociatedClass;
                 if (cd == null)
                 {
                     ICSharpCode.Core.MessageService.ShowError("Please specify the associated class");
@@ -332,9 +332,13 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                 else
                 {
                     CheckedListBox box = new CheckedListBox();
-                    foreach (DataPropertyDefinition dp in cd.IdentityProperties)
+                    foreach (PropertyDefinition prop in cd.Properties)
                     {
-                        box.Items.Add(dp.Name, dpcol.Contains(dp));
+                        if (prop.PropertyType == PropertyType.PropertyType_DataProperty)
+                        {
+                            DataPropertyDefinition dp = (DataPropertyDefinition)prop;
+                            box.Items.Add(dp.Name, dpcol.Contains(dp));
+                        }
                     }
 
                     IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));

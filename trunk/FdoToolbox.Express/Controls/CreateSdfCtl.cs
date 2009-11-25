@@ -99,6 +99,11 @@ namespace FdoToolbox.Express.Controls
             get { return chkConnect.Checked; }
         }
 
+        public bool FixIncompatibilities
+        {
+            get { return chkAlterSchema.Checked; }
+        }
+
         public bool ConnectionEnabled
         {
             set { txtConnectionName.Enabled = value; }

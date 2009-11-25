@@ -22,9 +22,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core.Feature;
@@ -55,11 +55,11 @@ namespace FdoToolbox.Base.Forms
         public PartialSchemaSaveDialog(FeatureSchema schema)
             : this()
         {
-            _schema = schema;
+            _schema = FdoFeatureService.CloneSchema(schema); //Operate on a clone
             InitTree();
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override void OnLoad(EventArgs e) 
         {
             btnSave.Enabled = CanSave();
             base.OnLoad(e);
@@ -149,9 +149,7 @@ namespace FdoToolbox.Base.Forms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            //Operate on a clone
-            FeatureSchema schema = FdoFeatureService.CloneSchema(_schema);
-
+            var schema = _schema;
             //Remove elements that have been unchecked. 
             foreach (TreeNode clsNode in treeSchema.Nodes)
             {
@@ -180,6 +178,14 @@ namespace FdoToolbox.Base.Forms
                                     {
                                         int idpdx = clsDef.IdentityProperties.IndexOf(propName);
                                         clsDef.IdentityProperties.RemoveAt(idpdx);
+                                    }
+                                    if (clsDef.ClassType == ClassType.ClassType_FeatureClass)
+                                    {
+                                        FeatureClass fc = (FeatureClass)clsDef;
+                                        if (fc.GeometryProperty.Name == propName)
+                                        {
+                                            fc.GeometryProperty = null;
+                                        }
                                     }
                                 }
                             }
@@ -273,6 +279,177 @@ namespace FdoToolbox.Base.Forms
             }
 
             btnSave.Enabled = CanSave();
+        }
+
+        const string MSG_ORPHANED_ASSOCIATIONS = "You are excluding a class or property that other association properties depend on. Excluding this element will remove these association properties (re-checking will not restore them!). Do you want to continue?";
+        const string MSG_ORPHANED_CONSTRAINTS = "You are excluding a property that other constraints depend on. Excluding this property will remove these affected constraints (re-checking will not restore them!). Do you want to continue?";
+        
+        private void treeSchema_BeforeCheck(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node.Checked)
+            {
+                if (e.Node.Level == 0) //Class
+                {
+                    //Check for associations
+                    string className = e.Node.Name;
+                    var affectedProperties = GetAffectedAssociationProperties(className);
+                    var affectedClasses = GetAffectedClasses(className);
+
+                    if (affectedProperties.Length > 0 || affectedClasses.Length > 0)
+                    {
+                        string msg = "You are un-checking a class that {0} association properties and {1} class definitions depend on. Un-checking this class will remove these association properties and make the affected class definition not derived from this class (re-checking will not restore these changes). Do you want to continue?";
+                        if (!MessageService.AskQuestion(MSG_ORPHANED_ASSOCIATIONS))
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+                        else
+                        {
+                            int removedProperties = 0;
+                            int alteredClasses = 0;
+
+                            if (affectedProperties.Length > 0)
+                                removedProperties = PurgeAffectedAssocationProperties(affectedProperties);
+                            if (affectedClasses.Length > 0)
+                                alteredClasses = DetachAffectedClasses(affectedClasses);
+                            MessageService.ShowMessage(removedProperties + " affected association properties removed and " + alteredClasses + " class definitions altered");
+                        }
+                    }
+                }
+                else if (e.Node.Level == 1) //Property
+                {
+                    string propName = e.Node.Name;
+                    string className = e.Node.Parent.Name;
+
+                    var affectedProperties = GetAffectedAssociationProperties(className);
+                    var affectedConstraints = GetAffectedConstraints(className, propName);
+                    
+                    if (affectedProperties.Length > 0 || affectedConstraints.Length > 0)
+                    {
+                        string msg = "You are un-checking a property that {0} association properties and {1} unique constraints depend on. By un-checking this property, these affected elements will be removed or modified (re-checking will not restore these changes. Do you want to continue?";
+                        msg = string.Format(msg, affectedProperties.Length, affectedConstraints.Length);
+                        if (!MessageService.AskQuestion(msg))
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+                        else
+                        {
+                            int removedProperties = 0;
+                            int removedConstraints = 0;
+
+                            if (affectedProperties.Length > 0)
+                                removedProperties = PurgeAffectedAssocationProperties(affectedProperties);
+
+                            if (affectedConstraints.Length > 0)
+                                removedConstraints = PurgeAffectedConstraints(className, affectedConstraints);
+                            MessageService.ShowMessage(removedProperties + " association properties and " + removedConstraints + " unique constraints removed");
+                        }
+                    }
+                    
+                }
+            }
+        }
+
+        private void RemoveNode(string className, string propertyName)
+        {
+            treeSchema.Nodes[className].Nodes.RemoveByKey(propertyName);
+        }
+
+        private int PurgeAffectedAssocationProperties(AssociationPropertyDefinition[] properties)
+        {
+            int removed = 0;
+            for (int i = 0; i < properties.Length; i++)
+            {
+                var ap = properties[i];
+                System.Diagnostics.Debug.Assert(ap.Parent != null);
+
+                var cls = (ClassDefinition)ap.Parent;
+                cls.Properties.Remove(ap);
+                RemoveNode(cls.Name, ap.Name); //Sync UI
+
+                removed++;
+            }
+            return removed;
+        }
+
+        private int PurgeAffectedConstraints(string className, UniqueConstraint[] constraints)
+        {
+            if (constraints == null || constraints.Count() == 0)
+                return 0;
+
+            int removed = 0;
+            var cls = _schema.Classes.Cast<ClassDefinition>().Where(c => c.Name == className).FirstOrDefault();
+            if (cls != null)
+            {
+                foreach (var uc in constraints)
+                {
+                    cls.UniqueConstraints.Remove(uc);
+                    removed++;
+                }
+            }
+            return removed;
+        }
+
+        private int DetachAffectedClasses(ClassDefinition[] classes)
+        {
+            int detached = 0;
+            //Make these class definitions the topmost classes in whatever inheritance hierarchy
+            for (int i = 0; i < classes.Length; i++)
+            {
+                var cls = classes[i];
+                if (cls.BaseClass == null)
+                    continue;
+
+                cls.BaseClass = null;
+                cls.SetBaseProperties(null);
+                //You're now top dog
+                cls.IsAbstract = false;
+                detached++;
+            }
+            return detached;
+        }
+
+        private UniqueConstraint[] GetAffectedConstraints(string className, string propName)
+        {
+            //Find all unique constraints that contain said property
+            var uniq = new List<UniqueConstraint>();
+            var cls = _schema.Classes.Cast<ClassDefinition>().Where(c => c.Name == className).FirstOrDefault();
+            if (cls != null)
+            {
+                var constraints = cls.UniqueConstraints.Cast<UniqueConstraint>().Where(uc =>
+                        uc.Properties.IndexOf(propName) >= 0);
+                uniq.AddRange(constraints);
+            }
+            return uniq.ToArray();
+        }
+
+        private ClassDefinition[] GetAffectedClasses(string className)
+        {
+            //If specified class is a base class, find affected derived classes
+            return _schema.Classes.Cast<ClassDefinition>().Where(c =>
+                c.BaseClass != null && c.BaseClass.Name == className).ToArray();
+        }
+
+        private AssociationPropertyDefinition[] GetAffectedAssociationProperties(string className)
+        {
+            // The miracle that is LINQ has allowed me to express in 10 lines of code what
+            // would've probably taken at least 100 lines in C# 2.0
+            //
+            // Basically we are accumulating all the association properties that contain the
+            // affected class definition using the Aggregate() extension method and returning
+            // the accumulated result.
+
+            var ap = new List<AssociationPropertyDefinition>();
+            var cls = _schema.Classes.Cast<ClassDefinition>().Aggregate((a, b) =>
+            {
+                ap.AddRange(b.Properties.Cast<PropertyDefinition>()
+                    .Where(p => p.PropertyType == PropertyType.PropertyType_AssociationProperty &&
+                            ((AssociationPropertyDefinition)p).AssociatedClass.Name == className)
+                    .Cast<AssociationPropertyDefinition>());
+                return b;
+            });
+            return ap.ToArray();
         }
 
         private void btnBrowseXml_Click(object sender, EventArgs e)

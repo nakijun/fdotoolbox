@@ -97,6 +97,7 @@ namespace FdoToolbox.Base.Forms
             this.treeSchema.Size = new System.Drawing.Size(512, 271);
             this.treeSchema.TabIndex = 0;
             this.treeSchema.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeSchema_AfterCheck);
+            this.treeSchema.BeforeCheck += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeSchema_BeforeCheck);
             // 
             // imageList1
             // 
@@ -207,6 +208,7 @@ namespace FdoToolbox.Base.Forms
             this.Controls.Add(this.rdFile);
             this.Controls.Add(this.rdXml);
             this.Name = "PartialSchemaSaveDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Save Schema";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);

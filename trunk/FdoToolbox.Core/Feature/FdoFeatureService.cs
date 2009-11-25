@@ -312,11 +312,31 @@ namespace FdoToolbox.Core.Feature
         /// <param name="xmlFile"></param>
         public void LoadSchemasFromXml(string xmlFile)
         {
+            LoadSchemasFromXml(xmlFile, true);
+        }
+
+        /// <summary>
+        /// Loads and applies a defined feature schema definition file into the
+        /// current connection
+        /// </summary>
+        /// <param name="xmlFile"></param>
+        /// <param name="fix">If true, will fix any incompatibilities before applying</param>
+        public void LoadSchemasFromXml(string xmlFile, bool fix)
+        {
             FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
             schemas.ReadXml(xmlFile);
             foreach (FeatureSchema fs in schemas)
             {
-                ApplySchema(fs);
+                IncompatibleSchema incSchema;
+                if (fix && !CanApplySchema(fs, out incSchema))
+                {
+                    var schema = AlterSchema(fs, incSchema);
+                    ApplySchema(schema);
+                }
+                else
+                {
+                    ApplySchema(fs);
+                }
             }
         }
 
@@ -1415,7 +1435,10 @@ namespace FdoToolbox.Core.Feature
                                 dp.DataType == DataType.DataType_CLOB ||
                                 dp.DataType == DataType.DataType_String)
                             {
-                                dp.Length = (int)this.Connection.SchemaCapabilities.get_MaximumDataValueLength(dp.DataType);
+                                long length = this.Connection.SchemaCapabilities.get_MaximumDataValueLength(dp.DataType);
+                                if (length <= 0)
+                                    length = 255;
+                                dp.Length = (int)length;
                             }
                             if (dp.DataType == DataType.DataType_Decimal)
                             {
@@ -2359,9 +2382,28 @@ namespace FdoToolbox.Core.Feature
         /// <param name="schemas"></param>
         public void ApplySchemas(FeatureSchemaCollection schemas)
         {
+            ApplySchemas(schemas, true);
+        }
+
+        /// <summary>
+        /// Applies the given feature schemas to the current connection
+        /// </summary>
+        /// <param name="schemas"></param>
+        /// <param name="fix"></param>
+        public void ApplySchemas(FeatureSchemaCollection schemas, bool fix)
+        {
             foreach (FeatureSchema s in schemas)
             {
-                this.ApplySchema(s);
+                IncompatibleSchema incSchema;
+                if (fix && !CanApplySchema(s, out incSchema))
+                {
+                    var schema = AlterSchema(s, incSchema);
+                    this.ApplySchema(schema);
+                }
+                else
+                {
+                    this.ApplySchema(s);
+                }
             }
         }
 
