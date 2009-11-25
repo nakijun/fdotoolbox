@@ -22,52 +22,33 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using FdoToolbox.Core.Utility;
-using OSGeo.FDO.Geometry;
 
-namespace FdoToolbox.Core.ETL.Operations
+namespace FdoToolbox.Core.AppFramework
 {
     /// <summary>
-    /// A pipeline operation that strips all Z and M ordinates from any
-    /// geometries that pass through it.
+    /// A helper class to set the text color of the console. All text written to the console 
+    /// will be of the specified color until this object is disposed of.
     /// </summary>
-    public class FdoFlattenGeometryOperation : FdoOperationBase
+    public class TempConsoleColor : IDisposable
     {
-        private FgfGeometryFactory _geomFactory = new FgfGeometryFactory();
+        private ConsoleColor _oldColor;
 
         /// <summary>
-        /// Executes the operation
+        /// Initializes a new instance of the <see cref="TempConsoleColor"/> class.
         /// </summary>
-        /// <param name="rows"></param>
-        /// <returns></returns>
-        public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
+        /// <param name="c">The c.</param>
+        public TempConsoleColor(ConsoleColor c)
         {
-            foreach (FdoRow row in rows)
-            {
-                yield return Flatten(row);
-            }
-        }
-
-        private FdoRow Flatten(FdoRow row)
-        {
-            //Already 2D? Move along!
-            if (FdoGeometryUtil.Is2D(row.Geometry))
-                return row;
-
-            row.Geometry = FdoGeometryUtil.Flatten(row.Geometry, _geomFactory);
-            return row;
+            _oldColor = Console.ForegroundColor;
+            Console.ForegroundColor = c;
         }
 
         /// <summary>
-        /// Dispose this object
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        /// <param name="disposing"></param>
-        protected override void Dispose(bool disposing)
+        public void Dispose()
         {
-            if (disposing)
-                _geomFactory.Dispose();
-
-            base.Dispose(disposing);
+            Console.ForegroundColor = _oldColor;
         }
     }
 }

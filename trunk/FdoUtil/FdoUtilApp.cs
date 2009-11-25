@@ -218,6 +218,7 @@ namespace FdoUtil
                         string srcSchema = GetArgument("-src_schema", args);
                         string classes = GetArgument("-src_classes", args);
                         string srcSpatialContext = GetArgument("-copy_srs", args);
+                        bool flatten = IsSwitchDefined("-flatten", args);
 
                         ThrowIfEmpty(srcProvider, "-src_provider");
                         ThrowIfEmpty(srcConnStr, "-src_conn");
@@ -240,7 +241,7 @@ namespace FdoUtil
                                 srcClasses.Add(classes);
                             }
                         }
-                        _Command = new CopyToFileCommand(srcProvider, srcConnStr, srcSchema, srcClasses, destFile, srcSpatialContext);
+                        _Command = new CopyToFileCommand(srcProvider, srcConnStr, srcSchema, srcClasses, destFile, srcSpatialContext, flatten);
                     }
                     break;
                 case "RunTask":

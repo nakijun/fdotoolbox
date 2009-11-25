@@ -30,6 +30,9 @@ using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
+    /// <summary>
+    /// Defines the options for a <see cref="FdoClassToClassCopyProcess"/> instance
+    /// </summary>
     public class FdoClassCopyOptions
     {
         private string _SourceConnectionName;
@@ -285,6 +288,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// <summary>
         /// Adds a data conversion rule.
         /// </summary>
+        /// <param name="name">The name.</param>
         /// <param name="rule">The rule.</param>
         public void AddDataConversionRule(string name, FdoDataPropertyConversionRule rule)
         {

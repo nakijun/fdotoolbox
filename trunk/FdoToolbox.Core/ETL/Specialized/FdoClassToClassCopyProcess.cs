@@ -28,6 +28,9 @@ using System.Collections.Specialized;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
+    /// <summary>
+    /// A specialized ETL process that copies data from one features class to another
+    /// </summary>
     public class FdoClassToClassCopyProcess : FdoSpecializedEtlProcess
     {
         private FdoClassCopyOptions _options;
@@ -64,11 +67,17 @@ namespace FdoToolbox.Core.ETL.Specialized
             this.Options = options;
         }
 
+        /// <summary>
+        /// Gets the name of this instance
+        /// </summary>
+        /// <value>The name.</value>
         public override string Name
         {
             get
             {
-                return this.Options.Name;
+                return string.IsNullOrEmpty(this.Options.Name) ?
+                    string.Format("Copy features from {0} to {1}", this.Options.SourceClassName, this.Options.TargetClassName) :
+                    this.Options.Name;
             }
         }
 

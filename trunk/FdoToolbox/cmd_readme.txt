@@ -158,9 +158,12 @@ BulkCopy
 
 Description: Copies data from an FDO data source to a flat-file FDO data source
 
-Usage: FdoUtil.exe -cmd:BulkCopy -src_provider:<provider name> -src_conn:<connection string> -dest_path:<path to file or directory> -src_schema:<source schema name> [-src_classes:<comma-separated list of class names>] [-copy_srs:<source spatial context name>] [-quiet]
+Usage: FdoUtil.exe -cmd:BulkCopy -src_provider:<provider name> -src_conn:<connection string> -dest_path:<path to file or directory> -src_schema:<source schema name> [-src_classes:<comma-separated list of class names>] [-copy_srs:<source spatial context name>] [-flatten] [-quiet]
 
-Notes: When -dest_path is a directory, it is assumed SHP is the output format, otherwise the output format is determined by file extension given
+Notes: 
+
+When -dest_path is a directory, it is assumed SHP is the output format, otherwise the output format is determined by file extension given
+If -flatten is defined, any geometries copied will have any Z and/or M coordinates stripped away.
 
 Valid file extensions include: 
 	- sdf (OSGeo.SDF)

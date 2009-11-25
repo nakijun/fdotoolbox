@@ -27,6 +27,9 @@ using FdoToolbox.Core.ETL.Overrides;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
+    /// <summary>
+    /// An ETL operation that copies spatial contexts from one data source to another
+    /// </summary>
     public class FdoCopySpatialContextOperation : FdoOperationBase
     {
         private FdoConnection _source;
@@ -34,6 +37,13 @@ namespace FdoToolbox.Core.ETL.Operations
         private string[] _scNames;
         private bool _overwrite;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FdoCopySpatialContextOperation"/> class.
+        /// </summary>
+        /// <param name="src">The source connection.</param>
+        /// <param name="dst">The target connection.</param>
+        /// <param name="sourceSpatialContextNames">The source spatial context names.</param>
+        /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
         public FdoCopySpatialContextOperation(FdoConnection src, FdoConnection dst, string[] sourceSpatialContextNames, bool overwrite)
         {
             _source = src;
@@ -44,6 +54,11 @@ namespace FdoToolbox.Core.ETL.Operations
 
         private int counter = 0;
 
+        /// <summary>
+        /// Executes the operation
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <returns></returns>
         public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
         {
             if (counter < 1)

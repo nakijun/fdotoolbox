@@ -499,7 +499,7 @@ namespace FdoToolbox.Core.Utility
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (source != null)
                     source.Dispose();

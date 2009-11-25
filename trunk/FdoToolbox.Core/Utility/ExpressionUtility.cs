@@ -47,7 +47,7 @@ namespace FdoToolbox.Core.Utility
             {
                 expr = Expression.Parse(exprStr);
             }
-            catch (OSGeo.FDO.Common.Exception ex)
+            catch (OSGeo.FDO.Common.Exception)
             {
                 return null;
             }
