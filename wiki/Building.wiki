@@ -1,5 +1,10 @@
 #summary How to build FdoToolbox from source
 #labels Featured
+
+== Important ==
+
+As of r1040, you will now need the .net Framework 3.5 or higher to build FDO Toolbox.
+
 == Check out source from SVN ==
 
 Follow the instructions in the "Source" tab of this project site.
