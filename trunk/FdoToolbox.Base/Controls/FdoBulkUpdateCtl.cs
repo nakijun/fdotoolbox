@@ -59,6 +59,18 @@ namespace FdoToolbox.Base.Controls
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="FdoBulkUpdateCtl"/> class.
+        /// </summary>
+        /// <param name="conn">The conn.</param>
+        /// <param name="className">Name of the class.</param>
+        /// <param name="initialFilter">The initial filter.</param>
+        public FdoBulkUpdateCtl(FdoConnection conn, string className, string initialFilter)
+            : this(conn, className)
+        {
+            this.Filter = initialFilter;
+        }
+
+        /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.UserControl.Load"/> event.
         /// </summary>
         /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>

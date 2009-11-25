@@ -49,20 +49,31 @@ namespace FdoToolbox.Base.Controls
             img.Map = new Map();
             img.Dock = DockStyle.Fill;
             mapContentPanel.Controls.Add(img);
-
             _presenter = new FdoMapPreviewPresenter(this, img);
         }
 
-        private FdoInMemoryProvider _provider = new FdoInMemoryProvider();
+        private FdoInMemoryProvider _provider;
+
+        public FdoInMemoryProvider Provider
+        {
+            get
+            {
+                if (_provider == null)
+                {
+                    _provider = new FdoInMemoryProvider();
+                }
+                return _provider;
+            }
+        }
 
         public FdoFeatureTable DataSource
         {
             set
             {
-                _provider.DataSource = value;
+                this.Provider.DataSource = value;
                 if (value != null && img.Map.Layers.Count == 0)
                 {
-                    VectorLayer layer = new VectorLayer("Preview", _provider);
+                    VectorLayer layer = new VectorLayer("Preview", this.Provider);
                     layer.Style.Fill = Brushes.Transparent;
                     layer.Style.EnableOutline = true;
                     if (Preferences.DataPreviewRandomColors)

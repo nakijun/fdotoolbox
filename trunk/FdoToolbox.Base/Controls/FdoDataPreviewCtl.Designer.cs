@@ -178,7 +178,7 @@ namespace FdoToolbox.Base.Controls
             // 
             this.sDFToolStripMenuItem.Image = global::FdoToolbox.Base.Images.database;
             this.sDFToolStripMenuItem.Name = "sDFToolStripMenuItem";
-            this.sDFToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.sDFToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.sDFToolStripMenuItem.Text = "SDF";
             this.sDFToolStripMenuItem.Click += new System.EventHandler(this.saveSdf_Click);
             // 
@@ -186,7 +186,7 @@ namespace FdoToolbox.Base.Controls
             // 
             this.sQLiteToolStripMenuItem.Image = global::FdoToolbox.Base.Images.database;
             this.sQLiteToolStripMenuItem.Name = "sQLiteToolStripMenuItem";
-            this.sQLiteToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.sQLiteToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
             this.sQLiteToolStripMenuItem.Text = "SQLite";
             this.sQLiteToolStripMenuItem.Click += new System.EventHandler(this.saveSQLite_Click);
             // 
@@ -258,22 +258,22 @@ namespace FdoToolbox.Base.Controls
             this.updateThisFeatureToolStripMenuItem,
             this.deleteThisFeatureToolStripMenuItem});
             this.ctxGridView.Name = "ctxGridView";
-            this.ctxGridView.Size = new System.Drawing.Size(182, 70);
+            this.ctxGridView.Size = new System.Drawing.Size(164, 70);
             // 
             // updateThisFeatureToolStripMenuItem
             // 
             this.updateThisFeatureToolStripMenuItem.Image = global::FdoToolbox.Base.Images.application_form_edit;
             this.updateThisFeatureToolStripMenuItem.Name = "updateThisFeatureToolStripMenuItem";
-            this.updateThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.updateThisFeatureToolStripMenuItem.Text = "Update this Feature";
+            this.updateThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.updateThisFeatureToolStripMenuItem.Text = "Update Feature(s)";
             this.updateThisFeatureToolStripMenuItem.Click += new System.EventHandler(this.updateThisFeatureToolStripMenuItem_Click);
             // 
             // deleteThisFeatureToolStripMenuItem
             // 
             this.deleteThisFeatureToolStripMenuItem.Image = global::FdoToolbox.Base.Images.cross;
             this.deleteThisFeatureToolStripMenuItem.Name = "deleteThisFeatureToolStripMenuItem";
-            this.deleteThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.deleteThisFeatureToolStripMenuItem.Text = "Delete this Feature";
+            this.deleteThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.deleteThisFeatureToolStripMenuItem.Text = "Delete Feature(s)";
             this.deleteThisFeatureToolStripMenuItem.Click += new System.EventHandler(this.deleteThisFeatureToolStripMenuItem_Click);
             // 
             // statusStrip1

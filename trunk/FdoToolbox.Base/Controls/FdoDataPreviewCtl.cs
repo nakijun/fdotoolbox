@@ -333,6 +333,18 @@ namespace FdoToolbox.Base.Controls
                     _presenter.DoDelete(feat);
                 }
             }
+            else if (grdResults.SelectedRows.Count > 1)
+            {
+                if (this.Confirm("Delete Feature", "Are you sure you want to delete these features?"))
+                {
+                    List<FdoFeature> features = new List<FdoFeature>();
+                    foreach (DataGridViewRow row in grdResults.SelectedRows)
+                    {
+                        features.Add((FdoFeature)(row.DataBoundItem as DataRowView).Row);
+                    }
+                    _presenter.DoDelete(features.ToArray());
+                }
+            }
         }
 
         private void updateThisFeatureToolStripMenuItem_Click(object sender, EventArgs e)
@@ -342,25 +354,36 @@ namespace FdoToolbox.Base.Controls
                 FdoFeature feat = (FdoFeature)((grdResults.SelectedRows[0].DataBoundItem as DataRowView).Row);
                 _presenter.DoUpdate(feat);
             }
+            else if (grdResults.SelectedRows.Count > 1)
+            {
+                List<FdoFeature> features = new List<FdoFeature>();
+                foreach (DataGridViewRow row in grdResults.SelectedRows)
+                {
+                    features.Add((FdoFeature)(row.DataBoundItem as DataRowView).Row);
+                }
+                string filter = _presenter.GenerateFilter(features.ToArray());
+                FdoBulkUpdateCtl ctl = new FdoBulkUpdateCtl(_presenter.Connection, _presenter.SelectedClassName, filter);
+                Workbench.Instance.ShowContent(ctl, ViewRegion.Dialog);
+            }
         }
 
         private void grdResults_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
-            {
-                System.Windows.Forms.DataGridView.HitTestInfo hit = grdResults.HitTest(e.X, e.Y);
-                if (hit.Type == DataGridViewHitTestType.Cell && hit.ColumnIndex >= 0 && hit.RowIndex >= 0)
-                {
-                    grdResults.ClearSelection();
-                    grdResults.Rows[hit.RowIndex].Selected = true;
-                }
-            }
+            //if (e.Button == MouseButtons.Right)
+            //{
+            //    System.Windows.Forms.DataGridView.HitTestInfo hit = grdResults.HitTest(e.X, e.Y);
+            //    if (hit.Type == DataGridViewHitTestType.Cell && hit.ColumnIndex >= 0 && hit.RowIndex >= 0)
+            //    {
+            //        grdResults.ClearSelection();
+            //        grdResults.Rows[hit.RowIndex].Selected = true;
+            //    }
+            //}
         }
 
         private void grdResults_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if(e.RowIndex >= 0 && e.ColumnIndex >= 0)
-                grdResults.CurrentCell = grdResults.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            //if(e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            //    grdResults.CurrentCell = grdResults.Rows[e.RowIndex].Cells[e.ColumnIndex];
         }
 
 
