@@ -673,6 +673,7 @@ namespace FdoToolbox.Core.Feature
                 return count;
 
             string className = classDef.Name;
+            string qualifiedName = classDef.QualifiedName;
             string property = "FEATURECOUNT";
 
             /* Try getting feature count by using these methods (in order of support):
@@ -687,10 +688,11 @@ namespace FdoToolbox.Core.Feature
             {
                 using (ISelectAggregates select = CreateCommand<ISelectAggregates>(CommandType.CommandType_SelectAggregates))
                 {
-                    select.SetFeatureClassName(className);
+                    select.SetFeatureClassName(qualifiedName);
                     if (!string.IsNullOrEmpty(filter))
                         select.SetFilter(filter);
-                    select.PropertyNames.Add(new ComputedIdentifier(property, Expression.Parse("COUNT(" + classDef.IdentityProperties[0].Name + ")")));
+                    //select.PropertyNames.Add(new ComputedIdentifier(property, Expression.Parse("COUNT(" + classDef.IdentityProperties[0].Name + ")")));
+                    select.PropertyNames.Add(new ComputedIdentifier(property, new Function("COUNT", new Expression[] { new Identifier(classDef.IdentityProperties[0].Name) })));
 
                     using (IDataReader reader = select.Execute())
                     {
@@ -756,7 +758,7 @@ namespace FdoToolbox.Core.Feature
             {
                 using (IExtendedSelect select = CreateCommand<IExtendedSelect>(CommandType.CommandType_ExtendedSelect))
                 {
-                    select.SetFeatureClassName(className);
+                    select.SetFeatureClassName(qualifiedName);
                     if (!string.IsNullOrEmpty(filter))
                         select.SetFilter(filter);
 
@@ -771,7 +773,7 @@ namespace FdoToolbox.Core.Feature
             {
                 using (ISelect select = CreateCommand<ISelect>(CommandType.CommandType_Select))
                 {
-                    select.SetFeatureClassName(className);
+                    select.SetFeatureClassName(qualifiedName);
                     if (!string.IsNullOrEmpty(filter))
                         select.SetFilter(filter);
                     using (IFeatureReader reader = select.Execute())

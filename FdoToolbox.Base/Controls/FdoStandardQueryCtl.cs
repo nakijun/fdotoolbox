@@ -228,7 +228,7 @@ namespace FdoToolbox.Base.Controls
         {
             get 
             {
-                FeatureQueryOptions options = new FeatureQueryOptions(this.SelectedClass.Name);
+                FeatureQueryOptions options = new FeatureQueryOptions(this.SelectedClass.QualifiedName);
                 if (!string.IsNullOrEmpty(txtFilter.Text))
                     options.Filter = txtFilter.Text;
 

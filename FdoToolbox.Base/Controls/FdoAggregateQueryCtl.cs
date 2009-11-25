@@ -254,7 +254,7 @@ namespace FdoToolbox.Base.Controls
         {
             get 
             {
-                FeatureAggregateOptions options = new FeatureAggregateOptions(this.SelectedClass.Name);
+                FeatureAggregateOptions options = new FeatureAggregateOptions(this.SelectedClass.QualifiedName);
                 if (!string.IsNullOrEmpty(txtFilter.Text))
                     options.Filter = txtFilter.Text;
 
