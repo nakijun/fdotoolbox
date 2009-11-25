@@ -1234,7 +1234,7 @@ namespace FdoToolbox.Base.Forms
                                 //SortedList not only allows us to hackishly get set-like qualities, but we get sorting for free.
                                 SortedList<string, string> values = new SortedList<string, string>();
 
-                                FeatureQueryOptions query = new FeatureQueryOptions(_ClassDef.Name);
+                                FeatureQueryOptions query = new FeatureQueryOptions(_ClassDef.QualifiedName);
                                 query.AddFeatureProperty(prop);
 
                                 using (IFdoReader reader = svc.SelectFeatures(query))
