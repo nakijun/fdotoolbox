@@ -269,18 +269,51 @@ namespace FdoToolbox.Base.Services
             string path = Preferences.SessionDirectory;
             if (System.IO.Directory.Exists(path))
             {
-                string [] files = System.IO.Directory.GetFiles(path, "*.conn");
-                foreach (string f in files)
+                try
                 {
-                    try
+                    string[] files = System.IO.Directory.GetFiles(path, "*.conn", System.IO.SearchOption.AllDirectories);
+                    SortedDictionary<string, FdoConnection> connections = new SortedDictionary<string, FdoConnection>();
+                    foreach (string f in files)
                     {
-                        string name = System.IO.Path.GetFileNameWithoutExtension(f);
-                        FdoConnection conn = FdoConnection.LoadFromFile(f);
-                        this.AddConnection(name, conn);
-                    }
-                    catch
-                    {
+                        try
+                        {
+                            string dir = System.IO.Path.GetDirectoryName(f);
+                            string name = string.Empty;
+                            if (dir != path)
+                            {
+                                System.Diagnostics.Debug.Assert(dir.Length > path.Length && dir.Contains(path)); //Directory is child of session dir
 
+                                string relDir = dir.Substring(path.Length + 1); //To remove the trailing slash
+                                if (!relDir.EndsWith("\\"))
+                                    relDir += "\\";
+
+                                name = relDir + System.IO.Path.GetFileNameWithoutExtension(f);
+                            }
+                            else
+                            {
+                                name = System.IO.Path.GetFileNameWithoutExtension(f);
+                            }
+                            FdoConnection conn = FdoConnection.LoadFromFile(f);
+                            connections.Add(name, conn);
+                        }
+                        catch(Exception ex)
+                        {
+                            LoggingService.Warn("Could not load " + f + ": " + ex.Message);
+                        }
+                    }
+
+                    foreach (string name in connections.Keys)
+                    {
+                        this.AddConnection(name, connections[name]);
+                    }
+                }
+                finally
+                {
+                    //After loading all connections, remove any directories in the session directory
+                    string[] directories = System.IO.Directory.GetDirectories(path);
+                    foreach (string dir in directories)
+                    {
+                        System.IO.Directory.Delete(dir, true);
                     }
                 }
             }
@@ -301,11 +334,21 @@ namespace FdoToolbox.Base.Services
                 {
                     System.IO.File.Delete(f);
                 }
+
+                string[] directories = System.IO.Directory.GetDirectories(path);
+                foreach (string dir in directories)
+                {
+                    System.IO.Directory.Delete(dir, true);
+                }
             }
 
             foreach (string key in _ConnectionDict.Keys)
             {
                 string file = System.IO.Path.Combine(path, key + ".conn");
+                string dir = System.IO.Path.GetDirectoryName(file);
+                if (!System.IO.Directory.Exists(dir))
+                    System.IO.Directory.CreateDirectory(dir);
+
                 FdoConnection conn = _ConnectionDict[key];
                 conn.Save(file);
             }
