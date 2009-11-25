@@ -25,7 +25,7 @@ SET FDOTOOLBOXRASTER=%CD%\FdoToolbox.Raster
 SET TESTMODULE=%CD%\TestModule
 SET MGMODULE=%CD%\MGModule
 
-SET PATH=%PATH%;%systemroot%\Microsoft.NET\Framework\v2.0.50727;%THIRDPARTY%\NDoc;%THIRDPARTY%\NSIS;%HTMLHELP%
+SET PATH=%PATH%;%systemroot%\Microsoft.NET\Framework\v3.5;%THIRDPARTY%\NDoc;%THIRDPARTY%\NSIS;%HTMLHELP%
 SET VERBOSITY=/v:q
 
 :study_params

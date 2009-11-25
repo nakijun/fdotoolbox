@@ -1,3 +1,17 @@
+v0.9.1
+------
+
+- Enhancements:
+	- Data Query: Support for deleting/updating multiple selected results in the results grid.
+	- A new parameter (-flatten) is available for the BulkCopy command in FdoUtil.exe
+	- Add "fix incompatibility" option to Create SDF express command.
+	
+- Fixes:
+	- Add checks for schema integrity (eg. invalid constraints) when performing a partial schema save.
+	- Fix BulkCopy command in FdoUtil.exe as a result of API changes.
+	- Support for connection names with slashes (\) in them. These connections are persisted as relative paths from the session directory.
+	- Data Query: All queries are now done using qualified class names. This should now work on data stores with multiple schemas each containing identically named feature classes.
+
 v0.9.0
 ------
 

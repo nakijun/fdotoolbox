@@ -39,6 +39,7 @@ namespace FdoToolbox.Express.Controls
             this.btnSchema = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.chkAlterSchema = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -152,10 +153,21 @@ namespace FdoToolbox.Express.Controls
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // chkAlterSchema
+            // 
+            this.chkAlterSchema.AutoSize = true;
+            this.chkAlterSchema.Location = new System.Drawing.Point(400, 81);
+            this.chkAlterSchema.Name = "chkAlterSchema";
+            this.chkAlterSchema.Size = new System.Drawing.Size(155, 17);
+            this.chkAlterSchema.TabIndex = 11;
+            this.chkAlterSchema.Text = "Fix schema incompatibilities";
+            this.chkAlterSchema.UseVisualStyleBackColor = true;
+            // 
             // CreateSdfCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkAlterSchema);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnSchema);
@@ -187,5 +199,6 @@ namespace FdoToolbox.Express.Controls
         private System.Windows.Forms.Button btnSchema;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.CheckBox chkAlterSchema;
     }
 }

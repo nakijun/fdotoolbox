@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>..\out\Release\</OutputPath>
     <DefineConstants>
@@ -12,7 +12,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D2A74ED5-440A-4276-99D0-8837CB924311}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -21,6 +21,11 @@
     <AssemblyName>FdoToolbox</AssemblyName>
     <ApplicationIcon>FdoToolbox.ico</ApplicationIcon>
     <SourceAnalysisOverrideSettingsFile>J:\Documents and Settings\Administrator\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,17 +69,20 @@
     </None>
     <None Include="..\FdoToolbox.Core\Schemas\BulkCopyTask.xsd">
       <Link>Schemas\BulkCopyTask.xsd</Link>
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\FdoToolbox.Core\Schemas\JoinTask.xsd">
       <Link>Schemas\JoinTask.xsd</Link>
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\FdoToolbox.Core\Schemas\SpatialConnection.xsd">
       <Link>Schemas\SpatialConnection.xsd</Link>
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
