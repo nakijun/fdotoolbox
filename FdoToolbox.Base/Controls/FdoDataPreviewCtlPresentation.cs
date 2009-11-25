@@ -86,6 +86,33 @@ namespace FdoToolbox.Base.Controls
         private bool updateSupported;
         private bool deleteSupported;
 
+        internal FdoConnection Connection
+        {
+            get { return _connection; }
+        }
+
+        internal string SelectedClassName
+        {
+            get
+            {
+                IFdoStandardQueryView qv = _view.QueryView as IFdoStandardQueryView;
+                if(qv == null)
+                    return string.Empty;
+                return qv.SelectedClass.Name;
+            }
+        }
+
+        internal string SelectedClassNameQualified
+        {
+            get
+            {
+                IFdoStandardQueryView qv = _view.QueryView as IFdoStandardQueryView;
+                if (qv == null)
+                    return string.Empty;
+                return qv.SelectedClass.QualifiedName;
+            }
+        }
+
         public FdoDataPreviewPresenter(IFdoDataPreviewView view, FdoConnection conn)
         {
             _timer = new Timer();
@@ -505,40 +532,86 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        internal void DoDelete(FdoFeature feat)
+        private void DeleteFeatures(FdoFeature feat)
         {
-            string filter = GenerateFilter(feat);
+            DeleteFeatures(feat.Table, new FdoFeature[] { feat });
+        }
+
+        private void DeleteFeatures(FdoFeatureTable table, FdoFeature[] features)
+        {
+            string filter = GenerateFilter(features);
             if (string.IsNullOrEmpty(filter))
             {
-                _view.ShowError("Unable to generate a delete filter. Possibly this result set has no unique identifiers or this result set was produced from a SQL query");
+                _view.ShowError("Unable to generate a delete filter. Possibly this result set has no unique identifiers or this result set was produced from a SQL query. If this result set is produced from a standard query, make sure that *ALL* identity properties are selected");
                 return;
             }
+
+            int expectedCount = features.Length;
             using (FdoFeatureService service = _connection.CreateFeatureService())
             {
                 //Deleting is based on a very simple premise, the filter should produce the
                 //same number of affected results when selecting and deleting.
                 //
-                //In our case, the filter should affect exactly one result when selecting and deleting.
-                long count = service.GetFeatureCount(feat.Table.TableName, filter, true);
-                if (1 == count)
+                //In our case, the filter should affect exactly the expected number of results when selecting and deleting.
+                long count = service.GetFeatureCount(table.TableName, filter, true);
+                if (expectedCount == count)
                 {
-                    int deleted = service.DeleteFeatures(feat.Table.TableName, filter, true);
-                    if (1 == deleted)
+                    int deleted = service.DeleteFeatures(table.TableName, filter, true);
+                    if (expectedCount == deleted)
                     {
-                        FdoFeatureTable table = feat.Table;
-                        table.Rows.Remove(feat);
+                        foreach (FdoFeature feat in features)
+                        {
+                            table.Rows.Remove(feat);
+                        }
                         _view.ShowMessage("Delete Feature", "Feature Deleted");
                     }
                 }
-                else if (count > 1)
+                else if (count > expectedCount)
                 {
-                    _view.ShowError("Delete operation would delete more than one feature");
+                    _view.ShowError("Delete operation would delete more than the expected number of features (" + expectedCount + ")");
                 }
                 else if (count == 0)
                 {
                     _view.ShowError("Delete operation would not delete any features");
                 }
             }
+        }
+
+        internal void DoDelete(FdoFeature[] features)
+        {
+            if (features == null || features.Length == 0)
+                return;
+
+            this.DeleteFeatures(features[0].Table, features);
+        }
+
+        internal void DoDelete(FdoFeature feat)
+        {
+            this.DeleteFeatures(feat);
+        }
+
+        internal string GenerateFilter(FdoFeature[] features)
+        {
+            if (features == null || features.Length == 0)
+                return null;
+
+            FdoFeatureTable table = features[0].Table;
+
+            //All features in array must originate from the same table
+            for (int i = 1; i < features.Length; i++)
+            {
+                if (features[i].Table != table)
+                    return null;
+            }
+
+            List<string> filter = new List<string>();
+
+            foreach (FdoFeature feat in features)
+            {
+                filter.Add(GenerateFilter(feat));
+            }
+
+            return string.Join(" OR ", filter.ToArray());
         }
 
         private string GenerateFilter(FdoFeature feat)
@@ -558,7 +631,7 @@ namespace FdoToolbox.Base.Controls
 
                     filters.Add(f);
                 }
-                return string.Join(" AND ", filters.ToArray());
+                return "(" + string.Join(" AND ", filters.ToArray()) + ")";
             }
             return null;
         }
