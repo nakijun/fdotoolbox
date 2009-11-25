@@ -402,7 +402,7 @@ namespace FdoToolbox.Base.Forms
                     continue;
 
                 cls.BaseClass = null;
-                cls.SetBaseProperties(null);
+                //cls.SetBaseProperties(null);
                 //You're now top dog
                 cls.IsAbstract = false;
                 detached++;
