@@ -36,6 +36,7 @@ namespace FdoToolbox.Express.Controls
         bool CreateConnection { get; }
         string ConnectionName { get; set; }
         bool ConnectionEnabled { set; }
+        bool FixIncompatibilities { get; }
     }
 
     public class CreateSqlitePresenter
@@ -65,7 +66,7 @@ namespace FdoToolbox.Express.Controls
                     conn.Open();
                     using (FdoFeatureService service = conn.CreateFeatureService())
                     {
-                        service.LoadSchemasFromXml(_view.FeatureSchemaDefinition);
+                        service.LoadSchemasFromXml(_view.FeatureSchemaDefinition, _view.FixIncompatibilities);
                     }
                 }
                 if (_view.CreateConnection)

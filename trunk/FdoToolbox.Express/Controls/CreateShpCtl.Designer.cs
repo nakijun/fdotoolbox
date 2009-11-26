@@ -39,6 +39,8 @@ namespace FdoToolbox.Express.Controls
             this.btnSchema = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.chkFixSchema = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -46,9 +48,9 @@ namespace FdoToolbox.Express.Controls
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 13);
+            this.label1.Size = new System.Drawing.Size(93, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "SHP File";
+            this.label1.Text = "SHP File Directory";
             // 
             // label2
             // 
@@ -152,10 +154,31 @@ namespace FdoToolbox.Express.Controls
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // chkFixSchema
+            // 
+            this.chkFixSchema.AutoSize = true;
+            this.chkFixSchema.Location = new System.Drawing.Point(401, 81);
+            this.chkFixSchema.Name = "chkFixSchema";
+            this.chkFixSchema.Size = new System.Drawing.Size(155, 17);
+            this.chkFixSchema.TabIndex = 11;
+            this.chkFixSchema.Text = "Fix schema incompatibilities";
+            this.chkFixSchema.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(15, 140);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(359, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "A SHP file is created for each feature class in the feature schema definition";
+            // 
             // CreateShpCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.chkFixSchema);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnSchema);
@@ -187,5 +210,7 @@ namespace FdoToolbox.Express.Controls
         private System.Windows.Forms.Button btnSchema;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.CheckBox chkFixSchema;
+        private System.Windows.Forms.Label label4;
     }
 }
