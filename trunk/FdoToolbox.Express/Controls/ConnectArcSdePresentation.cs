@@ -5,6 +5,7 @@ using FdoToolbox.Base.Services;
 using ICSharpCode.Core;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Base;
+using FdoToolbox.Core.Connections;
 
 namespace FdoToolbox.Express.Controls
 {
@@ -53,18 +54,10 @@ namespace FdoToolbox.Express.Controls
                     _conn.Close();
 
                 _conn.ConnectionString = string.Format("Server={0};Instance={1};Username={2};Password={3}", _view.Server, _view.Instance, _view.Username, _view.Password);
-                if (_conn.Open() != FdoConnectionState.Pending)
+                if (_conn.Open() == FdoConnectionState.Pending)
                 {
-                    List<string> datstores = new List<string>();
-                    using (FdoFeatureService service = _conn.CreateFeatureService())
-                    {
-                        ICollection<DataStoreInfo> dstores = service.ListDataStores(false);
-                        foreach (DataStoreInfo info in dstores)
-                        {
-                            datstores.Add(info.Name);
-                        }
-                    }
-                    SetDataStore(datstores.ToArray());
+                    EnumerableDictionaryProperty prop = (EnumerableDictionaryProperty)_conn.GetConnectTimeProperty("DataStore");
+                    SetDataStore(prop.Values);
                 }
             }
             catch (Exception ex)

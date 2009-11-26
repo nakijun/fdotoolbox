@@ -29,7 +29,10 @@ namespace FdoToolbox.Express.Controls
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            _presenter.PendingConnect();
+            using (new TempCursor(Cursors.WaitCursor))
+            {
+                _presenter.PendingConnect();
+            }
         }
 
         public string Server
