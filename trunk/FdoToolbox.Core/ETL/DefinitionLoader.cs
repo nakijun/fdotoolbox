@@ -70,7 +70,7 @@ namespace FdoToolbox.Core.ETL
             FdoBulkCopyTaskDefinition def = null;
             XmlSerializer ser = new XmlSerializer(typeof(FdoBulkCopyTaskDefinition));
             def = (FdoBulkCopyTaskDefinition)ser.Deserialize(new StreamReader(file));
-
+            
             return BulkCopyFromXml(def, ref name, owner);
         }
 
@@ -320,7 +320,6 @@ namespace FdoToolbox.Core.ETL
         /// <returns></returns>
         protected override FdoConnection CreateConnection(string provider, string connStr, ref string name)
         {
-            name = string.Empty;
             return new FdoConnection(provider, connStr);
         }
 
