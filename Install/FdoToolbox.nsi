@@ -38,7 +38,7 @@ SetCompressor /SOLID /FINAL lzma
 
 !define SLN_DIR ".."
 !define SLN_THIRDPARTY "${SLN_DIR}\Thirdparty"
-!define RELEASE_VERSION "0.9.0"
+!define RELEASE_VERSION "0.9.1"
 
 # Installer vars
 !if ${SLN_CONFIG} == "Release"
@@ -150,6 +150,7 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.TextEditor.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\Iesi.Collections.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\log4net.dll"
+	File "${INST_OUTPUT_FDOTOOLBOX}\LinqBridge.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.UI.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\System.Data.SQLite.dll"
