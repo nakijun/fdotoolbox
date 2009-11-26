@@ -154,7 +154,7 @@
     <value>Create SDF file</value>
   </data>
   <data name="CMD_CreateShp" xml:space="preserve">
-    <value>Create SHP file</value>
+    <value>Create SHP file(s)</value>
   </data>
   <data name="CMD_CreateSqlite" xml:space="preserve">
     <value>Create SQLite file</value>
@@ -193,7 +193,7 @@
     <value>SDF file created</value>
   </data>
   <data name="MSG_SHP_CREATED" xml:space="preserve">
-    <value>SHP file created</value>
+    <value>SHP file(s) created</value>
   </data>
   <data name="MSG_SPATIAL_CONTEXTS_COPIED" xml:space="preserve">
     <value>Spatial Contexts copied</value>
@@ -244,7 +244,7 @@
     <value>Create SDF file</value>
   </data>
   <data name="TITLE_CREATE_SHP" xml:space="preserve">
-    <value>Create SHP file</value>
+    <value>Create SHP file(s)</value>
   </data>
   <data name="TITLE_CREATE_SQLITE" xml:space="preserve">
     <value>Create SQLite file</value>

@@ -52,7 +52,7 @@ namespace FdoToolbox.Express.Controls
 
         private void btnSdf_Click(object sender, EventArgs e)
         {
-            txtShpFile.Text = FileService.SaveFile(ResourceService.GetString("TITLE_CREATE_SHP"), ResourceService.GetString("FILTER_SHP"));
+            txtShpFile.Text = FileService.GetDirectory(ResourceService.GetString("TITLE_CREATE_SHP"));
         }
 
         private void btnSchema_Click(object sender, EventArgs e)
@@ -84,7 +84,7 @@ namespace FdoToolbox.Express.Controls
             get { return ResourceService.GetString("TITLE_CREATE_SHP"); }
         }
 
-        public string ShpFile
+        public string ShpDirectory
         {
             get { return txtShpFile.Text; }
         }
@@ -102,6 +102,11 @@ namespace FdoToolbox.Express.Controls
         public bool ConnectionEnabled
         {
             set { txtConnectionName.Enabled = value; }
+        }
+
+        public bool FixIncompatibilities
+        {
+            get { return chkFixSchema.Checked; }
         }
 
         public string ConnectionName

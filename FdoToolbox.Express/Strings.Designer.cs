@@ -169,7 +169,7 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create SHP file.
+        ///   Looks up a localized string similar to Create SHP file(s).
         /// </summary>
         internal static string CMD_CreateShp {
             get {
@@ -286,7 +286,7 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SHP file created.
+        ///   Looks up a localized string similar to SHP file(s) created.
         /// </summary>
         internal static string MSG_SHP_CREATED {
             get {
@@ -439,7 +439,7 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create SHP file.
+        ///   Looks up a localized string similar to Create SHP file(s).
         /// </summary>
         internal static string TITLE_CREATE_SHP {
             get {

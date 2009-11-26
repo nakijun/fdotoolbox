@@ -104,6 +104,11 @@ namespace FdoToolbox.Express.Controls
             set { txtConnectionName.Enabled = value; }
         }
 
+        public bool FixIncompatibilities
+        {
+            get { return chkFixSchema.Checked; }
+        }
+
         public string ConnectionName
         {
             get { return txtConnectionName.Text; }

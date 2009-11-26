@@ -33,11 +33,12 @@ namespace FdoToolbox.Express.Controls
 {
     public interface ICreateShpView : IViewContent
     {
-        string ShpFile { get; }
+        string ShpDirectory { get; }
         string FeatureSchemaDefinition { get; }
         bool CreateConnection { get; }
         string ConnectionName { get; set; }
         bool ConnectionEnabled { set; }
+        bool FixIncompatibilities { get; }
     }
 
     public class CreateShpPresenter
@@ -68,16 +69,16 @@ namespace FdoToolbox.Express.Controls
             {
                 try
                 {
-                    FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SHP", Path.GetDirectoryName(_view.ShpFile));
+                    FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SHP", _view.ShpDirectory);
                     conn.Open();
                     using (FdoFeatureService service = conn.CreateFeatureService())
                     {
-                        service.LoadSchemasFromXml(_view.FeatureSchemaDefinition);
+                        service.LoadSchemasFromXml(_view.FeatureSchemaDefinition, _view.FixIncompatibilities);
                     }
                     conn.Dispose();
                     if (_view.CreateConnection)
                     {
-                        conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SHP", _view.ShpFile);
+                        conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SHP", _view.ShpDirectory);
                         conn.Open();
                         _connMgr.AddConnection(_view.ConnectionName, conn);
                     }
