@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<project SchemaVersion="2.0">
+    <assemblies>
+        <assembly location="..\out\Release\FdoToolbox.Core.dll" documentation="..\out\Release\FdoToolbox.Core.xml" />
+    </assemblies>
+    <referencePaths>
+        <referencePath path="..\Thirdparty\Fdo" />
+    </referencePaths>
+    <documenters>
+        <documenter name="MSDN-Help2">
+            <property name="PlugInNamespace" value="ms.vscc" />
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="Documentation" />
+            <property name="Title" value="An NDoc documented library" />
+        </documenter>
+        <documenter name="MSDN-CHM">
+            <property name="SdkLinksOnWeb" value="True" />
+            <property name="OutputDirectory" value=".\msdn-chm\" />
+            <property name="HtmlHelpName" value="FDO Toolbox Core API" />
+            <property name="Title" value="FDO Toolbox Core API" />
+            <property name="Version" value="1.0.0" />
+            <property name="DocumentProtected" value="False" />
+            <property name="AssemblyVersionInfo" value="AssemblyVersion" />
+            <property name="CopyrightText" value="GNU Lesser General Public License" />
+            <property name="FeedbackEmailAddress" value="jumpinjackie@gmail.com" />
+            <property name="CleanIntermediates" value="True" />
+        </documenter>
+        <documenter name="Intellisense">
+            <property name="OutputDirectory" value=".\intellisense\" />
+        </documenter>
+        <documenter name="MSDN-Web">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="Documentation" />
+            <property name="Title" value="An NDoc documented library" />
+        </documenter>
+    </documenters>
+</project>
