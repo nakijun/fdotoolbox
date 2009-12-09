@@ -10,9 +10,10 @@ v0.9.1
 - Fixes:
 	- Add checks for schema integrity (eg. invalid constraints) when performing a partial schema save.
 	- Fix BulkCopy command in FdoUtil.exe as a result of API changes.
+	- Fix RunTask command in FdoUtil.exe where there is a high probability of the wrong data source being deleted if the bulk copy definition has copy tasks where DeleteTarget = true
 	- Support for connection names with slashes (\) in them. These connections are persisted as relative paths from the session directory.
 	- Data Query: All queries are now done using qualified class names. This should now work on data stores with multiple schemas each containing identically named feature classes.
-	- Fix SQL Server saved connections not reloading.
+	- Fix SQL Server saved connections not reloading on next startup.
 
 - Other:
 	- Migrate project files to Visual Studio 2008 format. Still targeting .net Framework 2.0 SP1.
