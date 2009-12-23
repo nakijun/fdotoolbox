@@ -711,8 +711,15 @@ namespace FdoToolbox.Core.Feature
                     select.SetFeatureClassName(qualifiedName);
                     if (!string.IsNullOrEmpty(filter))
                         select.SetFilter(filter);
-                    
-                    select.PropertyNames.Add(new ComputedIdentifier(property, Expression.Parse("COUNT(" + classDef.IdentityProperties[0].Name + ")")));
+
+                    var funcArgs = new ExpressionCollection();
+                    var arg = new Identifier(classDef.IdentityProperties[0].Name);
+                    funcArgs.Add(arg);
+                    var func = new Function("Count", funcArgs);
+                    var computedId = new ComputedIdentifier(property, func);
+
+                    select.PropertyNames.Add(computedId);
+                    //select.PropertyNames.Add(new ComputedIdentifier(property, Expression.Parse("COUNT(" + classDef.IdentityProperties[0].Name + ")")));
 
                     using (IDataReader reader = select.Execute())
                     {
