@@ -406,15 +406,7 @@ namespace FdoToolbox.Base.Controls
             }
             if (query != null)
             {
-                long count = 0;
-                try
-                {
-                    count = GetFeatureCount();
-                }
-                catch (OSGeo.FDO.Common.Exception)
-                {
-                    count = 0;
-                }
+                long count = GetFeatureCount();
                 int limit = Preferences.DataPreviewWarningLimit;
 
                 if (_view.SelectedQueryMode == QueryMode.Standard)
