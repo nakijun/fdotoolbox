@@ -278,7 +278,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                     foreach (PropertyDefinition pd in cd.Properties)
                     {
                         DataPropertyDefinition dp = pd as DataPropertyDefinition;
-                        if(dp != null)
+                        if (dp != null)
                             box.Items.Add(dp.Name, dpcol.Contains(dp));
                     }
 
@@ -305,6 +305,11 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
                         dpcol.Clear();
                     }
                 }
+                else
+                {
+                    ICSharpCode.Core.MessageService.ShowError("Please specify the associated class");
+                    return value;
+                }
             }
             return value;
         }
@@ -323,7 +328,7 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             {
                 DataPropertyDefinitionCollection dpcol = (DataPropertyDefinitionCollection)value;
                 AssociationPropertyDefinitionDesign ad = (AssociationPropertyDefinitionDesign)context.Instance;
-                ClassDefinition cd = (ClassDefinition)ad.GetParent(); //ad.AssociatedClass;
+                ClassDefinition cd = ad.GetParent(); //ad.AssociatedClass;
                 if (cd == null)
                 {
                     ICSharpCode.Core.MessageService.ShowError("Please specify the associated class");
