@@ -711,8 +711,8 @@ namespace FdoToolbox.Core.Feature
                     select.SetFeatureClassName(qualifiedName);
                     if (!string.IsNullOrEmpty(filter))
                         select.SetFilter(filter);
-                    //select.PropertyNames.Add(new ComputedIdentifier(property, Expression.Parse("COUNT(" + classDef.IdentityProperties[0].Name + ")")));
-                    select.PropertyNames.Add(new ComputedIdentifier(property, new Function("COUNT", new Expression[] { new Identifier(classDef.IdentityProperties[0].Name) })));
+                    
+                    select.PropertyNames.Add(new ComputedIdentifier(property, Expression.Parse("COUNT(" + classDef.IdentityProperties[0].Name + ")")));
 
                     using (IDataReader reader = select.Execute())
                     {
@@ -768,7 +768,28 @@ namespace FdoToolbox.Core.Feature
                     {
                         if (reader.ReadNext())
                         {
-                            count = reader.GetInt64(property);
+                            DataType dt = reader.GetColumnType(property);
+                            switch (dt)
+                            {
+                                case DataType.DataType_Int16:
+                                    count = reader.GetInt16(property);
+                                    break;
+                                case DataType.DataType_Int32:
+                                    count = reader.GetInt32(property);
+                                    break;
+                                case DataType.DataType_Int64:
+                                    count = reader.GetInt64(property);
+                                    break;
+                                case DataType.DataType_Double:
+                                    count = Convert.ToInt64(reader.GetDouble(property));
+                                    break;
+                                case DataType.DataType_Single:
+                                    count = Convert.ToInt64(reader.GetSingle(property));
+                                    break;
+                                case DataType.DataType_Decimal:
+                                    count = Convert.ToInt64(reader.GetDouble(property));
+                                    break;
+                            }
                         }
                         reader.Close();
                     }
