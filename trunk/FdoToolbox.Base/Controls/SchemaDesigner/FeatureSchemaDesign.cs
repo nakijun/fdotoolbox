@@ -37,6 +37,11 @@ namespace FdoToolbox.Base.Controls.SchemaDesigner
             _schema = schema;
         }
 
+        internal FeatureSchema WrappedSchema
+        {
+            get { return _schema; }
+        }
+
         [Description("The name of the schema")]
         public string Name
         {

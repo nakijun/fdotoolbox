@@ -31,6 +31,7 @@ using ICSharpCode.Core;
 using Comp = System.ComponentModel;
 using System.Drawing;
 using FdoToolbox.Core.Utility;
+using System.Collections.Specialized;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -118,7 +119,7 @@ namespace FdoToolbox.Base.Controls
         /// Sets the selected object.
         /// </summary>
         /// <value>The selected object.</value>
-        object SelectedObject { set; }
+        object SelectedObject { set; get; }
 
         /// <summary>
         /// Sets the supported class types.
@@ -152,6 +153,18 @@ namespace FdoToolbox.Base.Controls
         /// </summary>
         /// <value><c>true</c> if [load enabled]; otherwise, <c>false</c>.</value>
         bool LoadEnabled { set; }
+
+        /// <summary>
+        /// Loads a collection of attributes into the attribute grid
+        /// </summary>
+        /// <param name="attributes"></param>
+        void LoadElementAttributes(NameValueCollection attributes);
+
+        /// <summary>
+        /// Gets the defined collection of attributes from the attribute grid
+        /// </summary>
+        /// <returns></returns>
+        NameValueCollection GetElementAttributes();
     }
 
     /// <summary>
@@ -317,6 +330,16 @@ namespace FdoToolbox.Base.Controls
             _view.AddImage(RES_ASSOC, ResourceService.GetBitmap(RES_ASSOC));
         }
 
+        static NameValueCollection GetAttributes(SchemaElement el)
+        {
+            var attributes = new NameValueCollection();
+            foreach (string name in el.Attributes.AttributeNames)
+            {
+                attributes.Add(name, el.Attributes.GetAttributeValue(name));
+            }
+            return attributes;
+        }
+
         /// <summary>
         /// Called when a schema is selected
         /// </summary>
@@ -331,6 +354,7 @@ namespace FdoToolbox.Base.Controls
                     _view.Title = ResourceService.GetString("TITLE_SCHEMA_DESIGNER") + " - " + f.Name;
                 };
                 _view.SelectedObject = f;
+                _view.LoadElementAttributes(GetAttributes(_schema));
             }
         }
 
@@ -352,6 +376,7 @@ namespace FdoToolbox.Base.Controls
                     CheckDirtyState();
                 };
                 _view.SelectedObject = c;
+                _view.LoadElementAttributes(GetAttributes(cls));
             }
         }
 
@@ -456,6 +481,7 @@ namespace FdoToolbox.Base.Controls
                     CheckDirtyState();
                 };
                 _view.SelectedObject = p;
+                _view.LoadElementAttributes(GetAttributes(prop));
             }
         }
 
@@ -642,9 +668,14 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        private void CheckDirtyState()
+        private void CheckDirtyState() { CheckDirtyState(false); }
+
+        private void CheckDirtyState(bool force)
         {
-            _view.ApplyEnabled = ((_schema.ElementState == SchemaElementState.SchemaElementState_Modified || _schema.ElementState == SchemaElementState.SchemaElementState_Added) && _conn != null);
+            if (!force)
+                _view.ApplyEnabled = ((_schema.ElementState == SchemaElementState.SchemaElementState_Modified || _schema.ElementState == SchemaElementState.SchemaElementState_Added) && _conn != null);
+            else
+                _view.ApplyEnabled = true;
         }
 
         private void ValidateSchema()
@@ -840,6 +871,70 @@ namespace FdoToolbox.Base.Controls
         internal bool MatchesConnection(FdoConnection conn)
         {
             return _conn == conn;
+        }
+
+        internal void SaveElementAttributes()
+        {
+            var attributes = _view.GetElementAttributes();
+            if (attributes.Count > 0)
+            {
+                var designer = _view.SelectedObject;
+                var type = designer.GetType();
+                if (typeof(ClassDefinitionDesign).IsAssignableFrom(type))
+                {
+                    var ent = ((ClassDefinitionDesign)designer).ClassDefinition;
+                    ent.Attributes.Clear();
+                    foreach (string key in attributes.Keys)
+                    {
+                        ent.Attributes.Add(key, attributes[key]);
+                    }
+                    CheckDirtyState(true);
+                }
+                else if (typeof(PropertyDefinitionDesign).IsAssignableFrom(type))
+                {
+                    var ent = ((PropertyDefinitionDesign)designer).WrappedPropertyDefinition;
+                    ent.Attributes.Clear();
+                    foreach (string key in attributes.Keys)
+                    {
+                        ent.Attributes.Add(key, attributes[key]);
+                    }
+                    CheckDirtyState(true);
+                }
+                else if (typeof(FeatureSchemaDesign).IsAssignableFrom(type))
+                {
+                    var ent = ((FeatureSchemaDesign)designer).WrappedSchema;
+                    ent.Attributes.Clear();
+                    foreach (string key in attributes.Keys)
+                    {
+                        ent.Attributes.Add(key, attributes[key]);
+                    }
+                    CheckDirtyState(true);
+                }
+            }
+        }
+
+        internal void AttributesCleared()
+        {
+            var designer = _view.SelectedObject;
+            var type = designer.GetType();
+            if (typeof(ClassDefinitionDesign).IsAssignableFrom(type))
+            {
+                var ent = ((ClassDefinitionDesign)designer).ClassDefinition;
+                ent.Attributes.Clear();
+                CheckDirtyState(true);
+            }
+            else if (typeof(PropertyDefinitionDesign).IsAssignableFrom(type))
+            {
+                var ent = ((PropertyDefinitionDesign)designer).WrappedPropertyDefinition;
+                ent.Attributes.Clear();
+                CheckDirtyState(true);
+            }
+            else if (typeof(FeatureSchemaDesign).IsAssignableFrom(type))
+            {
+                var ent = ((FeatureSchemaDesign)designer).WrappedSchema;
+                ent.Attributes.Clear();
+                CheckDirtyState(true);
+            }
         }
     }
 }
