@@ -31,6 +31,7 @@ namespace FdoToolbox.Base.Controls
             this.components = new System.ComponentModel.Container();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnApply = new System.Windows.Forms.ToolStripButton();
+            this.btnFix = new System.Windows.Forms.ToolStripButton();
             this.btnAdd = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnLoad = new System.Windows.Forms.ToolStripButton();
@@ -41,7 +42,14 @@ namespace FdoToolbox.Base.Controls
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.schemaTree = new System.Windows.Forms.TreeView();
             this.imgTree = new System.Windows.Forms.ImageList(this.components);
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.propGrid = new System.Windows.Forms.PropertyGrid();
+            this.lnkClear = new System.Windows.Forms.LinkLabel();
+            this.lnkApply = new System.Windows.Forms.LinkLabel();
+            this.grdAttributes = new System.Windows.Forms.DataGridView();
+            this.COL_NAME = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.COL_VALUE = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label1 = new System.Windows.Forms.Label();
             this.ctxProperty = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deletePropertyItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxClass = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -50,11 +58,14 @@ namespace FdoToolbox.Base.Controls
             this.deleteClassItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToNewSDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnFix = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdAttributes)).BeginInit();
             this.ctxProperty.SuspendLayout();
             this.ctxClass.SuspendLayout();
             this.SuspendLayout();
@@ -82,6 +93,15 @@ namespace FdoToolbox.Base.Controls
             this.btnApply.Size = new System.Drawing.Size(94, 22);
             this.btnApply.Text = "Apply Schema";
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // btnFix
+            // 
+            this.btnFix.Image = global::FdoToolbox.Base.Images.wrench_orange;
+            this.btnFix.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnFix.Name = "btnFix";
+            this.btnFix.Size = new System.Drawing.Size(120, 22);
+            this.btnFix.Text = "Fix Incompatibilities";
+            this.btnFix.Click += new System.EventHandler(this.btnFix_Click);
             // 
             // btnAdd
             // 
@@ -149,7 +169,7 @@ namespace FdoToolbox.Base.Controls
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.propGrid);
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Size = new System.Drawing.Size(678, 475);
             this.splitContainer1.SplitterDistance = 331;
             this.splitContainer1.TabIndex = 1;
@@ -173,13 +193,94 @@ namespace FdoToolbox.Base.Controls
             this.imgTree.ImageSize = new System.Drawing.Size(16, 16);
             this.imgTree.TransparentColor = System.Drawing.Color.Transparent;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.propGrid);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.lnkClear);
+            this.splitContainer2.Panel2.Controls.Add(this.lnkApply);
+            this.splitContainer2.Panel2.Controls.Add(this.grdAttributes);
+            this.splitContainer2.Panel2.Controls.Add(this.label1);
+            this.splitContainer2.Size = new System.Drawing.Size(343, 475);
+            this.splitContainer2.SplitterDistance = 321;
+            this.splitContainer2.TabIndex = 1;
+            // 
             // propGrid
             // 
             this.propGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propGrid.Location = new System.Drawing.Point(0, 0);
             this.propGrid.Name = "propGrid";
-            this.propGrid.Size = new System.Drawing.Size(343, 475);
+            this.propGrid.Size = new System.Drawing.Size(343, 321);
             this.propGrid.TabIndex = 0;
+            // 
+            // lnkClear
+            // 
+            this.lnkClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkClear.AutoSize = true;
+            this.lnkClear.Location = new System.Drawing.Point(300, 10);
+            this.lnkClear.Name = "lnkClear";
+            this.lnkClear.Size = new System.Drawing.Size(31, 13);
+            this.lnkClear.TabIndex = 3;
+            this.lnkClear.TabStop = true;
+            this.lnkClear.Text = "Clear";
+            this.lnkClear.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkClear_LinkClicked);
+            // 
+            // lnkApply
+            // 
+            this.lnkApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkApply.AutoSize = true;
+            this.lnkApply.Enabled = false;
+            this.lnkApply.Location = new System.Drawing.Point(262, 10);
+            this.lnkApply.Name = "lnkApply";
+            this.lnkApply.Size = new System.Drawing.Size(32, 13);
+            this.lnkApply.TabIndex = 2;
+            this.lnkApply.TabStop = true;
+            this.lnkApply.Text = "Save";
+            this.lnkApply.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkApply_LinkClicked);
+            // 
+            // grdAttributes
+            // 
+            this.grdAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.grdAttributes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdAttributes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.COL_NAME,
+            this.COL_VALUE});
+            this.grdAttributes.Location = new System.Drawing.Point(15, 36);
+            this.grdAttributes.Name = "grdAttributes";
+            this.grdAttributes.Size = new System.Drawing.Size(316, 98);
+            this.grdAttributes.TabIndex = 1;
+            this.grdAttributes.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdAttributes_CellValueChanged);
+            // 
+            // COL_NAME
+            // 
+            this.COL_NAME.HeaderText = "Name";
+            this.COL_NAME.Name = "COL_NAME";
+            // 
+            // COL_VALUE
+            // 
+            this.COL_VALUE.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.COL_VALUE.HeaderText = "Value";
+            this.COL_VALUE.Name = "COL_VALUE";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Attributes";
             // 
             // ctxProperty
             // 
@@ -236,15 +337,6 @@ namespace FdoToolbox.Base.Controls
             this.saveToNewSDFToolStripMenuItem.Text = "Save to new SDF";
             this.saveToNewSDFToolStripMenuItem.Click += new System.EventHandler(this.saveToNewSDFToolStripMenuItem_Click);
             // 
-            // btnFix
-            // 
-            this.btnFix.Image = global::FdoToolbox.Base.Images.wrench_orange;
-            this.btnFix.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnFix.Name = "btnFix";
-            this.btnFix.Size = new System.Drawing.Size(120, 22);
-            this.btnFix.Text = "Fix Incompatibilities";
-            this.btnFix.Click += new System.EventHandler(this.btnFix_Click);
-            // 
             // FdoSchemaDesignerCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -258,6 +350,11 @@ namespace FdoToolbox.Base.Controls
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
+            this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdAttributes)).EndInit();
             this.ctxProperty.ResumeLayout(false);
             this.ctxClass.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -289,6 +386,13 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.ToolStripButton btnLoad;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton btnFix;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.DataGridView grdAttributes;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel lnkClear;
+        private System.Windows.Forms.LinkLabel lnkApply;
+        private System.Windows.Forms.DataGridViewTextBoxColumn COL_NAME;
+        private System.Windows.Forms.DataGridViewTextBoxColumn COL_VALUE;
 
     }
 }

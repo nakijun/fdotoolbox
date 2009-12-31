@@ -26,6 +26,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Base.Forms;
@@ -321,7 +322,21 @@ namespace FdoToolbox.Base.Controls
             string expr = ExpressionEditor.NewExpression(_conn, this.SelectedClass, ExpressionMode.Normal);
             if (expr != null)
             {
-                string name = "Expr" + lstComputed.Items.Count;
+                string name = "";
+                //Test to see if it is a computed identiifer
+                using (var exp = OSGeo.FDO.Expression.Expression.Parse(expr))
+                {
+                    var comp = exp as OSGeo.FDO.Expression.ComputedIdentifier;
+                    if (comp != null)
+                    {
+                        name = GetExpressionAlias(comp.Name);
+                        expr = comp.Expression.ToString();
+                    }
+                    else
+                    {
+                        name = GetExpressionAlias("Expr0");
+                    }
+                }
                 lstComputed.Items.Add(new ListViewItem(new string[] { name, expr }));
             }
         }
@@ -329,12 +344,47 @@ namespace FdoToolbox.Base.Controls
         private void btnEditComputed_Click(object sender, EventArgs e)
         {
             ListViewItem item = lstComputed.SelectedItems[0];
-            string expr = item.SubItems[1].Text;
-            expr = ExpressionEditor.EditExpression(_conn, this.SelectedClass, expr, ExpressionMode.Normal);
-            if (expr != null)
+            string alias = item.SubItems[0].Text;
+            string exprText = "";
+            using(var expr = OSGeo.FDO.Expression.Expression.Parse(item.SubItems[1].Text))
             {
-                item.SubItems[1].Text = expr;
+                using (var comp = new OSGeo.FDO.Expression.ComputedIdentifier(alias, expr))
+                {
+                    exprText = comp.ToString();
+                }
             }
+            exprText = ExpressionEditor.EditExpression(_conn, this.SelectedClass, exprText, ExpressionMode.Normal);
+            if (exprText != null)
+            {
+                //Test to see if it is a computed identifier
+                using (var expr = OSGeo.FDO.Expression.Expression.Parse(exprText))
+                {
+                    var comp = expr as OSGeo.FDO.Expression.ComputedIdentifier;
+                    if (comp != null)
+                    {
+                        exprText = comp.Expression.ToString();
+                        alias = GetExpressionAlias(comp.Name);
+                    }
+                    else
+                    {
+                        alias = GetExpressionAlias("Expr0");
+                    }
+                }
+                item.SubItems[0].Text = alias;
+                item.SubItems[1].Text = exprText;
+            }
+        }
+
+        private string GetExpressionAlias(string alias)
+        {
+            //This may already exist, if so use default name
+            int count = 0;
+            while (lstComputed.Items.Cast<ListViewItem>().Where(x => x.SubItems[0].Text.ToUpper() == alias.ToUpper()).Any())
+            {
+                alias = "Expr" + count;
+                count++;
+            }
+            return alias;
         }
 
         private void lstComputed_SelectedIndexChanged(object sender, EventArgs e)

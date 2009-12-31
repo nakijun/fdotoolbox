@@ -1,3 +1,15 @@
+v0.9.2
+------
+
+- Other:
+	- Move schema/class/property attribute editing into the Schema Designer. The context menu commands are removed. Note that not all providers support custom attributes, and that
+	  there is no current way to detect if custom attributes are supported. For reference, the providers which are known to support custom attributes are: SQL Server and MySQL
+	- Data Preview: When adding computed properties, it will now be able to interpret (<expr> as <alias>) expressions and assign the correct alias. Editing a computed property will
+	  now show (<expr>) AS <alias> in the Expression Editor. If you omit the (AS <alias>) component of an expression it will use a system-generated one (previous behaviour)
+
+- Fixes:
+	- Data Preview now works properly in ArcSDE.
+
 v0.9.1
 ------
 

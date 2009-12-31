@@ -168,6 +168,7 @@ namespace FdoToolbox.Base.Controls
         public object SelectedObject
         {
             set { propGrid.SelectedObject = value; }
+            get { return propGrid.SelectedObject; }
         }
 
         public OSGeo.FDO.Schema.ClassType[] SupportedClassTypes
@@ -388,6 +389,51 @@ namespace FdoToolbox.Base.Controls
         private void btnFix_Click(object sender, EventArgs e)
         {
             _presenter.FixSchema();
+        }
+
+
+        public void LoadElementAttributes(System.Collections.Specialized.NameValueCollection attributes)
+        {
+            lnkApply.Enabled = false;
+            grdAttributes.Rows.Clear();
+            foreach (string key in attributes.Keys)
+            {
+                grdAttributes.Rows.Add(key, attributes[key]);
+            }
+        }
+
+        public System.Collections.Specialized.NameValueCollection GetElementAttributes()
+        {
+            var attributes = new System.Collections.Specialized.NameValueCollection();
+            foreach (DataGridViewRow row in grdAttributes.Rows)
+            {
+                try
+                {
+                    attributes.Add(row.Cells[0].Value.ToString(), row.Cells[1].Value.ToString());
+                }
+                catch { }
+            }
+            return attributes;
+        }
+
+        private void grdAttributes_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            lnkApply.Enabled = true;
+        }
+
+        private void lnkApply_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            _presenter.SaveElementAttributes();
+            lnkApply.Enabled = false;
+        }
+
+        private void lnkClear_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (grdAttributes.Rows.Count > 0)
+            {
+                grdAttributes.Rows.Clear();
+                _presenter.AttributesCleared();
+            }
         }
     }
 }
