@@ -2498,5 +2498,31 @@ namespace FdoToolbox.Core.Feature
             }
             return null;
         }
+
+        public PhysicalSchemaMappingCollection DescribeSchemaMapping(bool includeDefaults)
+        {
+            return DescribeSchemaMapping(null, includeDefaults);
+        }
+
+        public PhysicalSchemaMappingCollection DescribeSchemaMapping(string schemaName, bool includeDefaults)
+        {
+            var cmds = _conn.CommandCapabilities.Commands;
+            if (Array.IndexOf<int>(cmds, (int)CommandType.CommandType_DescribeSchemaMapping) >= 0)
+            {
+                using (var cmd = (IDescribeSchemaMapping)_conn.CreateCommand(CommandType.CommandType_DescribeSchemaMapping))
+                {
+                    if (!string.IsNullOrEmpty(schemaName))
+                        cmd.SchemaName = schemaName;
+
+                    cmd.IncludeDefaults = includeDefaults;
+
+                    return cmd.Execute();
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

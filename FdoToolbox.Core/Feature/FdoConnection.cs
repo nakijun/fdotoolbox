@@ -32,6 +32,7 @@ using System.IO;
 using Res = FdoToolbox.Core.ResourceUtil;
 using FdoToolbox.Core.Connections;
 using OSGeo.FDO.Common.Io;
+using OSGeo.FDO.Commands.Schema;
 
 namespace FdoToolbox.Core.Feature
 {
@@ -365,6 +366,15 @@ namespace FdoToolbox.Core.Feature
                 throw new InvalidOperationException(ResourceUtil.GetStringFormatted("ERR_UNSUPPORTED_CAPABILITY", cap));
             IoFileStream confStream = new IoFileStream(file, "r");
             _Connection.Configuration = confStream;
+        }
+
+        /// <summary>
+        /// Creates a blank physical schema mapping
+        /// </summary>
+        /// <returns></returns>
+        public PhysicalSchemaMapping CreateSchemaMapping()
+        {
+            return _Connection.CreateSchemaMapping();
         }
     }
 

@@ -121,7 +121,19 @@ namespace FdoToolbox
                 if (abort)
                     return;
 
-                AddInAssemblyResolver.RegisterLibraries(fdoPath, "OSGeo.FDO.dll", "OSGeo.FDO.Common.dll", "OSGeo.FDO.Geometry.dll", "OSGeo.FDO.Spatial.dll");
+                AddInAssemblyResolver.RegisterLibraries(
+                    fdoPath, 
+                    "OSGeo.FDO.dll", 
+                    "OSGeo.FDO.Common.dll", 
+                    "OSGeo.FDO.Geometry.dll", 
+                    "OSGeo.FDO.Spatial.dll",
+                    "OSGeo.FDO.Providers.MySQL.Overrides.dll",
+                    "OSGeo.FDO.Providers.ODBC.Overrides.dll",
+                    "OSGeo.FDO.Providers.Rdbms.dll",
+                    "OSGeo.FDO.Providers.Rdbms.Overrides.dll",
+                    "OSGeo.FDO.Providers.SHP.Overrides.dll",
+                    "OSGeo.FDO.Providers.SQLServerSpatial.Overrides.dll",
+                    "OSGeo.FDO.Providers.WMS.Overrides.dll");
 
                 LoggingService.Info("FDO path set to: " + fdoPath);
 

@@ -36,7 +36,7 @@ using System.Diagnostics;
 
 namespace FdoToolbox.Base.Controls
 {
-    internal class FdoObjectExplorerExtender : IObjectExplorerExtender
+    public class FdoObjectExplorerExtender : IObjectExplorerExtender
     {
         public const string RootNodeName = "NODE_FDO";
 
