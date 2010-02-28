@@ -322,5 +322,11 @@ namespace FdoToolbox.Core.Feature
         {
             return _classDefinition.Name;
         }
+
+
+        public IFeatureReader GetFeatureObject(int index)
+        {
+            return _internalReader.GetFeatureObject(index);
+        }
     }
 }
