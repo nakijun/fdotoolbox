@@ -769,7 +769,7 @@ namespace FdoToolbox.Core.Utility
             PolygonCollection polys = new PolygonCollection();
             for (int i = 0; i < mpoly.Count; i++)
             {
-                polys.Add(FlattenPolygon(mpoly.get_Item(i), factory));
+                polys.Add(FlattenPolygon(mpoly[i], factory));
             }
             return factory.CreateMultiPolygon(polys);
         }
@@ -779,7 +779,7 @@ namespace FdoToolbox.Core.Utility
             PointCollection points = new PointCollection();
             for (int i = 0; i < mpoint.Count; i++)
             {
-                points.Add(FlattenPoint(mpoint.get_Item(i), factory));
+                points.Add(FlattenPoint(mpoint[i], factory));
             }
             return factory.CreateMultiPoint(points);
         }
@@ -789,7 +789,7 @@ namespace FdoToolbox.Core.Utility
             LineStringCollection lineStrings = new LineStringCollection();
             for (int i = 0; i < mlString.Count; i++)
             {
-                lineStrings.Add(FlattenLineString(mlString.get_Item(i), factory));
+                lineStrings.Add(FlattenLineString(mlString[i], factory));
             }
             return factory.CreateMultiLineString(lineStrings);
         }
@@ -799,7 +799,7 @@ namespace FdoToolbox.Core.Utility
             GeometryCollection geometries = new GeometryCollection();
             for (int i = 0; i < mgeom.Count; i++)
             {
-                geometries.Add(Flatten(mgeom.get_Item(i), factory));
+                geometries.Add(Flatten(mgeom[i], factory));
             }
             return factory.CreateMultiGeometry(geometries);
         }
@@ -809,7 +809,7 @@ namespace FdoToolbox.Core.Utility
             CurveStringCollection curveStrings = new CurveStringCollection();
             for (int i = 0; i < mcString.Count; i++)
             {
-                curveStrings.Add(FlattenCurveString(mcString.get_Item(i), factory));
+                curveStrings.Add(FlattenCurveString(mcString[i], factory));
             }
             return factory.CreateMultiCurveString(curveStrings);
         }
@@ -819,7 +819,7 @@ namespace FdoToolbox.Core.Utility
             CurvePolygonCollection curvePolygons = new CurvePolygonCollection();
             for (int i = 0; i < mcPolygon.Count; i++)
             {
-                curvePolygons.Add(FlattenCurvePolygon(mcPolygon.get_Item(i), factory));
+                curvePolygons.Add(FlattenCurvePolygon(mcPolygon[i], factory));
             }
             return factory.CreateMultiCurvePolygon(curvePolygons);
         }
@@ -843,7 +843,7 @@ namespace FdoToolbox.Core.Utility
             CurveSegmentCollection curveSegs = new CurveSegmentCollection();
             for (int i = 0; i < curveStr.Count; i++)
             {
-                curveSegs.Add(FlattenCurveSegment(curveStr.get_Item(i), factory));
+                curveSegs.Add(FlattenCurveSegment(curveStr[i], factory));
             }
             return factory.CreateCurveString(curveSegs);
         }
@@ -883,7 +883,7 @@ namespace FdoToolbox.Core.Utility
             int j = 0;
             for (int i = 0; i < lineStrSegment.Count; i++)
             {
-                IDirectPosition pos = lineStrSegment.get_Item(i);
+                IDirectPosition pos = lineStrSegment[i];
                 positions[j] = pos.X;
                 positions[j+1] = pos.Y;
                 j += 2;

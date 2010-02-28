@@ -241,5 +241,16 @@ namespace FdoToolbox.Core.Feature
         {
             return string.Empty;
         }
+
+
+        public DataType GetDataType(int index)
+        {
+            return _internalReader.GetDataType(index);
+        }
+
+        public PropertyType GetPropertyType(int index)
+        {
+            return _internalReader.GetPropertyType(index);
+        }
     }
 }

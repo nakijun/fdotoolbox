@@ -487,7 +487,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual bool GetBoolean(int i)
         {
-            return _internalReader.GetBoolean(GetName(i));
+            return _internalReader.GetBoolean(i);
         }
 
         /// <summary>
@@ -500,7 +500,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual byte GetByte(int i)
         {
-            return _internalReader.GetByte(GetName(i));
+            return _internalReader.GetByte(i);
         }
 
         /// <summary>
@@ -582,7 +582,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual DateTime GetDateTime(int i)
         {
-            return _internalReader.GetDateTime(GetName(i));
+            return _internalReader.GetDateTime(i);
         }
 
         /// <summary>
@@ -595,7 +595,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual decimal GetDecimal(int i)
         {
-            return Convert.ToDecimal(_internalReader.GetDouble(GetName(i)));
+            return Convert.ToDecimal(_internalReader.GetDouble(i));
         }
 
         /// <summary>
@@ -608,7 +608,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual double GetDouble(int i)
         {
-            return _internalReader.GetDouble(GetName(i));
+            return _internalReader.GetDouble(i);
         }
 
         /// <summary>
@@ -621,7 +621,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual float GetFloat(int i)
         {
-            return _internalReader.GetSingle(GetName(i));
+            return _internalReader.GetSingle(i);
         }
 
         /// <summary>
@@ -645,7 +645,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual short GetInt16(int i)
         {
-            return _internalReader.GetInt16(GetName(i));
+            return _internalReader.GetInt16(i);
         }
 
         /// <summary>
@@ -658,7 +658,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual int GetInt32(int i)
         {
-            return _internalReader.GetInt32(GetName(i));
+            return _internalReader.GetInt32(i);
         }
 
         /// <summary>
@@ -671,7 +671,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual long GetInt64(int i)
         {
-            return _internalReader.GetInt64(GetName(i));
+            return _internalReader.GetInt64(i);
         }
 
         /// <summary>
@@ -695,7 +695,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual string GetString(int i)
         {
-            return _internalReader.GetString(GetName(i));
+            return _internalReader.GetString(i);
         }
 
         /// <summary>
@@ -764,7 +764,7 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public virtual bool IsDBNull(int i)
         {
-            return _internalReader.IsNull(GetName(i));
+            return _internalReader.IsNull(i);
         }
 
         /// <summary>
@@ -846,6 +846,47 @@ namespace FdoToolbox.Core.Feature
         public virtual string GetClassName()
         {
             return string.Empty;
+        }
+
+
+        public int GetColumnIndex(string name)
+        {
+            return _internalReader.GetColumnIndex(name);
+        }
+
+        public DataType GetColumnType(int index)
+        {
+            return _internalReader.GetColumnType(index);
+        }
+
+        public byte[] GetGeometry(int index)
+        {
+            return _internalReader.GetGeometry(index);
+        }
+
+        public OSGeo.FDO.Expression.LOBValue GetLOB(int index)
+        {
+            return _internalReader.GetLOB(index);
+        }
+
+        public OSGeo.FDO.Common.IStreamReader GetLOBStreamReader(int index)
+        {
+            return _internalReader.GetLOBStreamReader(index);
+        }
+
+        public PropertyType GetPropertyType(int index)
+        {
+            return _internalReader.GetPropertyType(index);
+        }
+
+        public float GetSingle(int index)
+        {
+            return _internalReader.GetSingle(index);
+        }
+
+        public bool IsNull(int index)
+        {
+            return _internalReader.IsNull(index);
         }
     }
 }

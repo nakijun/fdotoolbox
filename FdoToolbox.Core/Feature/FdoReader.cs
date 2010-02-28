@@ -721,5 +721,46 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <returns></returns>
         public abstract string GetClassName();
+
+
+        public byte[] GetGeometry(int index)
+        {
+            return _internalReader.GetGeometry(index);
+        }
+
+        public OSGeo.FDO.Expression.LOBValue GetLOB(int index)
+        {
+            return _internalReader.GetLOB(index);
+        }
+
+        public OSGeo.FDO.Common.IStreamReader GetLOBStreamReader(int index)
+        {
+            return _internalReader.GetLOBStreamReader(index);
+        }
+
+        public int GetPropertyIndex(string name)
+        {
+            return _internalReader.GetPropertyIndex(name);
+        }
+
+        public string GetPropertyName(int index)
+        {
+            return _internalReader.GetPropertyName(index);
+        }
+
+        public OSGeo.FDO.Raster.IRaster GetRaster(int index)
+        {
+            return _internalReader.GetRaster(index);
+        }
+
+        public float GetSingle(int index)
+        {
+            return _internalReader.GetSingle(index);
+        }
+
+        public bool IsNull(int index)
+        {
+            return _internalReader.IsNull(index);
+        }
     }
 }
