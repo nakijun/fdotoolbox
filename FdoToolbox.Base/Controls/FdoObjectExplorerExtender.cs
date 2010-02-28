@@ -140,48 +140,62 @@ namespace FdoToolbox.Base.Controls
                     }
                     string connName = connNode.Name;
 
-                    switch (node.Level)
+                    using (new TempCursor(Cursors.WaitCursor))
                     {
-                        case NODE_LEVEL_SCHEMA: //Schema Node
-                            {
-                                bool isPartial = Convert.ToBoolean(node.Tag);
-                                if (isPartial)
+                        switch (node.Level)
+                        {
+                            case NODE_LEVEL_CONNECTION: //Connection node
                                 {
-                                    Debug.Assert(node.Nodes.Count == 1); //Has a dummy node
-                                    string schemaName = node.Name;
-                                    FdoConnection conn = _connMgr.GetConnection(connName);
-                                    
-                                    using (FdoFeatureService svc = conn.CreateFeatureService())
+                                    if (!(bool)node.Tag) //Not loaded, load it now
                                     {
-                                        Debug.Assert(svc.SupportsPartialSchemaDiscovery());
-                                        List<string> classNames = svc.GetClassNames(schemaName);
-                                        GetClassNodesPartial(classNames, node);
-                                        node.Tag = false; //This node is no longer partial
-                                        node.Expand();
+                                        //Clear out dummy node
+                                        node.Nodes.Clear();
+                                        CreateSchemaNodes(node);
+                                        node.Tag = true; //Schema is loaded
                                     }
                                 }
-                            }
-                            break;
-                        case NODE_LEVEL_CLASS: //Class Node
-                            {
-                                bool isPartial = Convert.ToBoolean(node.Tag);
-                                if (isPartial)
+                                break;
+                            case NODE_LEVEL_SCHEMA: //Schema Node
                                 {
-                                    Debug.Assert(node.Nodes.Count == 1); //Has a dummy node
-                                    string schemaName = node.Parent.Name;
-                                    FdoConnection conn = _connMgr.GetConnection(connName);
-                                    using (FdoFeatureService svc = conn.CreateFeatureService())
+                                    bool isPartial = Convert.ToBoolean(node.Tag);
+                                    if (isPartial)
                                     {
-                                        Debug.Assert(svc.SupportsPartialSchemaDiscovery());
-                                        ClassDefinition cd = svc.GetClassByName(schemaName, node.Name);
-                                        if (cd != null)
+                                        Debug.Assert(node.Nodes.Count == 1); //Has a dummy node
+                                        string schemaName = node.Name;
+                                        FdoConnection conn = _connMgr.GetConnection(connName);
+
+                                        using (FdoFeatureService svc = conn.CreateFeatureService())
                                         {
-                                            UpdateClassNode(node, cd);
+                                            Debug.Assert(svc.SupportsPartialSchemaDiscovery());
+                                            List<string> classNames = svc.GetClassNames(schemaName);
+                                            GetClassNodesPartial(classNames, node);
+                                            node.Tag = false; //This node is no longer partial
+                                            node.Expand();
                                         }
                                     }
                                 }
-                            }
-                            break;
+                                break;
+                            case NODE_LEVEL_CLASS: //Class Node
+                                {
+                                    bool isPartial = Convert.ToBoolean(node.Tag);
+                                    if (isPartial)
+                                    {
+                                        Debug.Assert(node.Nodes.Count == 1); //Has a dummy node
+                                        string schemaName = node.Parent.Name;
+                                        FdoConnection conn = _connMgr.GetConnection(connName);
+                                        using (FdoFeatureService svc = conn.CreateFeatureService())
+                                        {
+                                            Debug.Assert(svc.SupportsPartialSchemaDiscovery());
+                                            ClassDefinition cd = svc.GetClassByName(schemaName, node.Name);
+                                            if (cd != null)
+                                            {
+                                                UpdateClassNode(node, cd);
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                        }
                     }
                 }
             }
@@ -216,6 +230,10 @@ namespace FdoToolbox.Base.Controls
             node.ContextMenuStrip = _explorer.GetContextMenu(NODE_CONNECTION);
 
             CreateSchemaNodes(node);
+            node.Tag = true; //Schema fully loaded
+
+            SetConnectionToolTip(node, conn);
+
             root.Nodes.Add(node);
             node.Expand();
             root.Expand();
@@ -258,10 +276,19 @@ namespace FdoToolbox.Base.Controls
             
             node.ContextMenuStrip = _explorer.GetContextMenu(NODE_CONNECTION);
 
-            CreateSchemaNodes(node);
+            //Don't Describe the schema now, do it when node is expanded for the first time
+            //use a boolean tag to indicate this state.
+
+            node.Tag = false; //Schema not loaded
+            //HACK: TreeNode requires at least one child node to display the expand icon
+            //so add a dummy node. When expanded, and describe schema executes for the first time, 
+            //the node will be gone anyway.
+            node.Nodes.Add(string.Empty);
+
+            SetConnectionToolTip(node, conn);
+
             TreeNode root = _explorer.GetRootNode(RootNodeName);
             root.Nodes.Add(node);
-            node.Expand();
             root.Expand();
         }
 
@@ -270,7 +297,6 @@ namespace FdoToolbox.Base.Controls
             FdoConnection conn = _connMgr.GetConnection(connNode.Name);
             if (conn != null)
             {
-                SetConnectionToolTip(connNode, conn);
                 using (FdoFeatureService service = conn.CreateFeatureService())
                 {
                     if (service.SupportsPartialSchemaDiscovery())
