@@ -1,3 +1,9 @@
+v0.9.3
+------
+
+- FDO updated to 3.5.0 RC1
+- Lazy load schema/class/property nodes. Describe schema won't execute until connection node is expanded for the first time.
+
 v0.9.2
 ------
 
