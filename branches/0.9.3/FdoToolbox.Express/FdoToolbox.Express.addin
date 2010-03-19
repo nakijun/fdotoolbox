@@ -1,0 +1,121 @@
+﻿<AddIn name="FDO Toolbox Express Add-In"
+       author="Jackie Ng"
+       url="http://fdotoolbox.googlecode.com"
+       description="Express AddIn of FDO Toolbox"
+       addInManagerHidden="false">
+
+    <Manifest>
+        <Identity name="FdoToolbox.Express" version="@FdoToolbox.Express.dll" />
+        <Dependency addin="FdoToolbox.Base" />
+    </Manifest>
+
+    <Runtime>
+        <Import assembly="FdoToolbox.Express.dll" />
+    </Runtime>
+
+    <Path name="/Workspace/FileFilter">
+        <FileFilter id="SDF" name="SDF Files" extensions="*.sdf" />
+        <FileFilter id="SHP" name="SHP Files" extensions="*.shp" />
+    </Path>
+
+    <!-- Drag and Drop handlers -->
+    <Path name="/FdoToolbox/DragDropHandlers">
+        <Class id="SdfHandler" class="FdoToolbox.Express.DragDropHandlers.SdfFileHandler" />
+        <Class id="ShpHandler" class="FdoToolbox.Express.DragDropHandlers.ShpFileHandler" />
+        <Class id="SltHandler" class="FdoToolbox.Express.DragDropHandlers.SQLiteFileHandler" />
+        <Class id="MdbHandler" class="FdoToolbox.Express.DragDropHandlers.MsAccessFileHandler" />
+    </Path>
+    
+    <!-- Main Menu definition -->
+    <Path name="/Workbench/MainMenu">
+        <MenuItem id="Express"
+                  label="Express"
+                  insertbefore="Help" 
+                  type="Menu">
+            <MenuItem id="ExpressConnect"
+                      label="Connect"
+                      icon="database_connect" 
+                      type="Menu">
+                <MenuItem id="ConnectSdf"
+                          label="${res:CMD_ConnectSdf}"
+                          class="FdoToolbox.Express.Commands.ConnectSdfCommand" />
+                <MenuItem id="ConnectSqlite"
+                          label="${res:CMD_ConnectSqlite}"
+                          class="FdoToolbox.Express.Commands.ConnectSqliteCommand" />
+                <MenuItem id="ConnectShp"
+                          label="${res:CMD_ConnectShp}"
+                          class="FdoToolbox.Express.Commands.ConnectShpCommand" />
+                <MenuItem id="ConnectShpDir"
+                          label="${res:CMD_ConnectShpDir}"
+                          class="FdoToolbox.Express.Commands.ConnectShpDirCommand" />
+                <MenuItem id="ConnectOdbc"
+                          label="${res:CMD_ConnectOdbc}"
+                          class="FdoToolbox.Express.Commands.ConnectOdbcCommand" />
+                <MenuItem id="ConnectOgr"
+                          label="${res:CMD_ConnectOgr}"
+                          class="FdoToolbox.Express.Commands.ConnectOgrCommand" />
+                <MenuItem id="ConnectArcSde"
+                          label="${res:CMD_ConnectArcSde}"
+                          class="FdoToolbox.Express.Commands.ConnectArcSdeCommand" />
+                <MenuItem id="ConnectPostGis"
+                          label="${res:CMD_ConnectPostGis}"
+                          class="FdoToolbox.Express.Commands.ConnectPostGisCommand" />
+                <MenuItem id="ConnectMySql"
+                          label="${res:CMD_ConnectMySql}"
+                          class="FdoToolbox.Express.Commands.ConnectMySqlCommand" />
+                <MenuItem id="ConnectSqlServer"
+                          label="${res:CMD_ConnectSqlServer}"
+                          class="FdoToolbox.Express.Commands.ConnectSqlServerCommand" />
+            </MenuItem>
+            <MenuItem id="ExpressCreate"
+                      label="Create"
+                      icon="database_add" 
+                      type="Menu">
+                <MenuItem id="CreateSdf"
+                          label="${res:CMD_CreateSdf}"
+                          class="FdoToolbox.Express.Commands.CreateSdfCommand" />
+                <MenuItem id="CreateShp"
+                          label="${res:CMD_CreateShp}"
+                          class="FdoToolbox.Express.Commands.CreateShpCommand" />
+                <MenuItem id="CreateSqlite"
+                          label="${res:CMD_CreateSqlite}"
+                          class="FdoToolbox.Express.Commands.CreateSqliteCommand" />
+            </MenuItem>
+            <MenuItem id="ExpressBulkCopy"
+                      label="${res:CMD_ExpressBcp}"
+                      icon="table_go"
+                      class="FdoToolbox.Express.Commands.ExpressBulkCopyCommand" />
+        </MenuItem>
+    </Path>
+
+    <!-- Auto-start commands -->
+    <Path name="/Workspace/Autostart">
+        <Class id="Startup" class="FdoToolbox.Express.Commands.StartupCommand" />
+    </Path>
+
+    <!-- Toolbar definition -->
+    <Path name="/Workbench/Toolbar/Create">
+        <Include id="CreateExpress" path="/Workbench/MainMenu/Express/ExpressCreate" />
+    </Path>
+    <Path name="/Workbench/Toolbar/Connect">
+        <Include id="ConnectExpress" path="/Workbench/MainMenu/Express/ExpressConnect" />
+    </Path>
+
+    <!-- Object Explorer toolbar definition -->
+    <Path name="/ObjectExplorer/Toolbar">
+        
+    </Path>
+
+    <Path name="/ObjectExplorer/ContextMenus/SelectedConnection">
+        <MenuItem id="CopySpatialContexts"
+                  label="${res:CMD_CopySpatialContexts}"
+                  insertbefore="ManageDataStores" 
+                  class="FdoToolbox.Express.Commands.CopySpatialContextsCommand" />
+    </Path>
+
+    <!-- Application Console toolbar definition -->
+    <Path name="/AppConsole/Toolbar">
+
+    </Path>
+
+</AddIn>
