@@ -2,8 +2,8 @@
 
 === 0.9.4 ===
 
-* 64-bit support
+ * 64-bit support
 
 === Post-1.0 ===
 
-* Support features of new versions of FDO as they are released.
+ * Support features of new versions of FDO as they are released.
