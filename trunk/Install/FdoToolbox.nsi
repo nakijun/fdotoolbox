@@ -34,7 +34,7 @@ SetCompressor /SOLID /FINAL lzma
 	!define SLN_CONFIG "Release" #"Debug"
 !endif
 
-!echo "Building installer in configuration: ${SLN_CONFIG}"
+!echo "Building installer in configuration: ${SLN_CONFIG} (${CPU})"
 
 !define SLN_DIR ".."
 !define SLN_THIRDPARTY "${SLN_DIR}\Thirdparty"
@@ -49,10 +49,10 @@ SetCompressor /SOLID /FINAL lzma
 !define PROJECT_URL "http://fdotoolbox.googlecode.com"
 !define INST_SRC "."
 !define INST_LICENSE "..\FdoToolbox\license.txt"
-!define INST_OUTPUT "FDOToolbox-${SLN_CONFIG}-${RELEASE_VERSION}-Setup.exe"
+!define INST_OUTPUT "FDOToolbox-${SLN_CONFIG}-${RELEASE_VERSION}-${CPU}-Setup.exe"
 
 # Project Output
-!define INST_OUTPUT_FDOTOOLBOX "${SLN_DIR}\out\${SLN_CONFIG}"
+!define INST_OUTPUT_FDOTOOLBOX "${SLN_DIR}\out\${CPU}\${SLN_CONFIG}"
 !define INST_OUTDIR "${SLN_DIR}\out"
 
 # Executables
@@ -71,7 +71,18 @@ Caption "${INST_PRODUCT}"
 OutFile "${INST_OUTDIR}\${INST_OUTPUT}"
 
 ; Default installation folder
+!if ${CPU} == "x64"
+InstallDir "$PROGRAMFILES64\${INST_PRODUCT}"
+!else
 InstallDir "$PROGRAMFILES\${INST_PRODUCT}"
+!endif
+
+; Registry
+!if ${CPU} == "x64"
+SetRegView 64
+!else
+SetRegView 32
+!endif
 
 !ifdef INST_LICENSE
 LicenseText "License"

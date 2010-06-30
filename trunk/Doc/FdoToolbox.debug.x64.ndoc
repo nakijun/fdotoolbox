@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <project SchemaVersion="2.0">
     <assemblies>
-        <assembly location="..\out\Debug\FdoToolbox.Core.dll" documentation="..\out\Debug\FdoToolbox.Core.xml" />
+        <assembly location="..\out\x64\Debug\FdoToolbox.Core.dll" documentation="..\out\x64\Debug\FdoToolbox.Core.xml" />
     </assemblies>
     <referencePaths>
-        <referencePath path="..\Thirdparty\Fdo" />
+        <referencePath path="..\Thirdparty\Fdo_x64" />
     </referencePaths>
     <documenters>
         <documenter name="MSDN-Help2">
