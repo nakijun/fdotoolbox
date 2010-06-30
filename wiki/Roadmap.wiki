@@ -6,4 +6,4 @@
 
 === Post-1.0 ===
 
- * Support features of new versions of FDO as they are released.
+ * Support features of new versions of FDO (3.6 onwards) as they are released.
