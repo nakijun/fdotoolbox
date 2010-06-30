@@ -1,21 +1,9 @@
 #summary Planned features for upcoming releases
 
-=== 0.9.x ===
- * Theme dataset builder utility
- * Raster preview support
- * Raster Provider support
- * User Documentation
- * Localization
- * Additional Property support
-      * Raster Properties
+=== 0.9.4 ===
+
+* 64-bit support
 
 === Post-1.0 ===
- * Migration to WPF/.net Framework 3.5
- * LINQ support
 
-=== Future ===
-
- * Dynamic Language Runtime (DLR) scripting
- * Support for creating join tasks on Spatial Predicates
- * FDO Connection configuration support
- * Schema Mapping support
+* Support features of new versions of FDO as they are released.
