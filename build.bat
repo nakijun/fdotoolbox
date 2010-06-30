@@ -2,9 +2,10 @@
 
 SET TYPEACTION=build
 SET TYPEBUILD=Release
+SET PLATFORM=x86
 
 SET HTMLHELP=C:\Program Files\HTML Help Workshop
-SET FDOTOOLBOX_OUTDIR=%CD%\out\%TYPEBUILD%
+SET FDOTOOLBOX_OUTDIR=%CD%\out\%PLATFORM%\%TYPEBUILD%
 SET DOCPATH=%CD%\Doc
 SET THIRDPARTY=%CD%\Thirdparty
 SET INSTALL=%CD%\Install
@@ -14,7 +15,7 @@ SET TESTAPP=%CD%\TestApp
 SET CORETESTLIBRARY=%CD%\FdoToolbox.Core.Tests
 SET BASETESTLIBRARY=%CD%\FdoToolbox.Base.Tests
 SET TESTDATA=%CD%\UnitTestData
-SET TESTPATH=%CD%\out\Test
+SET TESTPATH=%CD%\out\%PLATFORM%\Test
 SET FDOTOOLBOX=%CD%\FdoToolbox
 SET FDOTOOLBOXCORE=%CD%\FdoToolbox.Core
 SET FDOTOOLBOXBASE=%CD%\FdoToolbox.Base
@@ -40,11 +41,14 @@ if "%1"=="-config"  goto get_conf
 if "%1"=="-a"       goto get_action
 if "%1"=="-action"  goto get_action
 
+if "%1"=="-p"        goto get_platform
+if "%1"=="-platform" goto get_platform
+
 if "%1"=="-v"       goto get_verbose
-if "%1"=="-v"        goto get_verbose
+if "%1"=="-verbose" goto get_verbose
 
 if "%1"=="-t"       goto test
-if "%1"=="-test"     goto test
+if "%1"=="-test"    goto test
 
 goto custom_error
 
@@ -72,19 +76,28 @@ if "%2"=="build" goto next_param
 if "%2"=="clean" goto next_param
 goto custom_error
 
+:get_platform
+SET PLATFORM=%2
+SET TESTPATH=%CD%\out\%PLATFORM%\Test
+SET FDOTOOLBOX_OUTDIR=%CD%\out\%PLATFORM%\%TYPEBUILD%
+if "%2"=="x86" goto next_param
+if "%2"=="x64" goto next_param
+goto custom_error
+
 :start_build
 if "%TYPEACTION%"=="build" goto build
 if "%TYPEACTION%"=="clean" goto clean
 
 :build
 echo Configuration is: %TYPEBUILD%
+echo Platform is: %PLATFORM%
 
 echo Building FdoToolbox
-msbuild.exe /p:Configuration=%TYPEBUILD% %VERBOSITY% FdoToolbox.sln
+msbuild.exe /p:Configuration=%TYPEBUILD%;Platform=%PLATFORM% %VERBOSITY% FdoToolbox.sln
 
 echo Building API Documentation
 pushd %DOCPATH%
-NDocConsole.exe -documenter=MSDN-CHM -project=FdoToolbox.%TYPEBUILD%.ndoc
+NDocConsole.exe -documenter=MSDN-CHM -project=FdoToolbox.%TYPEBUILD%.%PLATFORM%.ndoc
 copy "msdn-chm\FDO Toolbox Core API.chm" %FDOTOOLBOX_OUTDIR%
 popd
 
@@ -97,14 +110,13 @@ hhc FDOToolbox.hhp
 copy FDOToolbox.chm %FDOTOOLBOX_OUTDIR%
 popd
 
-
-:copy_thirdparty
-IF NOT EXIST %FDOTOOLBOX_OUTDIR%\FDO xcopy /S /Y /I %THIRDPARTY%\Fdo\*.* %FDOTOOLBOX_OUTDIR%\FDO
+rem :copy_thirdparty
+rem IF NOT EXIST %FDOTOOLBOX_OUTDIR%\FDO xcopy /S /Y /I %THIRDPARTY%\Fdo\*.* %FDOTOOLBOX_OUTDIR%\FDO
 
 :create_installer
 echo Creating installer
 pushd %INSTALL%
-makensis /DSLN_CONFIG=%TYPEBUILD% FdoToolbox.nsi
+makensis /DSLN_CONFIG=%TYPEBUILD% /DCPU=%PLATFORM% FdoToolbox.nsi
 popd
 goto quit
 
@@ -161,10 +173,10 @@ goto quit
 
 :test
 echo Building unit tests
-msbuild.exe /nologo /p:Configuration=Debug %VERBOSITY% %CORETESTLIBRARY%\FdoToolbox.Core.Tests.csproj
-msbuild.exe /nologo /p:Configuration=Debug %VERBOSITY% %BASETESTLIBRARY%\FdoToolbox.Base.Tests.csproj
+msbuild.exe /nologo /p:Configuration=Debug;Platform=%PLATFORM% %VERBOSITY% %CORETESTLIBRARY%\FdoToolbox.Core.Tests.csproj
+msbuild.exe /nologo /p:Configuration=Debug;Platform=%PLATFORM% %VERBOSITY% %BASETESTLIBRARY%\FdoToolbox.Base.Tests.csproj
 xcopy /S /Y /I %TESTDATA%\*.* %TESTPATH%
-xcopy /S /Y /I %THIRDPARTY%\Fdo\*.* %TESTPATH%
+xcopy /S /Y /I %THIRDPARTY%\Fdo_%PLATFORM%\*.* %TESTPATH%
 xcopy /S /Y /I %THIRDPARTY%\NUnit\bin\*.* %TESTPATH%
 echo Running unit tests (Core)
 %TESTPATH%\nunit-console.exe /nologo /labels %TESTPATH%\FdoToolbox.Core.Tests.dll
@@ -180,11 +192,13 @@ echo ************************************************************************
 echo build.bat [-h]
 echo           [-t]
 echo           [-v]
+echo           [-p=CPU]
 echo           [-c=BuildType]
 echo           [-a=Action]
 echo Help:                  -h[elp]
 echo Test:                  -t[est]
 echo Verbose:               -v
+echo CPU:                   -p[latform]=x86(default),x64
 echo BuildType:             -c[onfig]=Release(default), Debug
 echo Action:                -a[ction]=build(default),
 echo                                  clean
