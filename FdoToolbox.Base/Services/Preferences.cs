@@ -92,7 +92,7 @@ namespace FdoToolbox.Base
         /// </summary>
         public static string LogPath
         {
-            get { return properties.Get<string>(PREF_LOG_PATH, Path.Combine(FileUtility.ApplicationRootPath, "Logs")); }
+            get { return properties.Get<string>(PREF_LOG_PATH, Path.Combine(PropertyService.ConfigDirectory, "Logs")); }
             set { properties.Set(PREF_LOG_PATH, value); }
         }
 
@@ -101,7 +101,7 @@ namespace FdoToolbox.Base
         /// </summary>
         public static string SessionDirectory
         {
-            get { return properties.Get<string>(PREF_SESSION_DIR, Path.Combine(FileUtility.ApplicationRootPath, "Session")); }
+            get { return properties.Get<string>(PREF_SESSION_DIR, Path.Combine(PropertyService.ConfigDirectory, "Session")); }
             set { properties.Set(PREF_SESSION_DIR, value); }
         }
 
