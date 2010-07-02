@@ -54,6 +54,11 @@ namespace FdoToolbox.Base.Controls
 
         public void Init()
         {
+            Refresh();
+        }
+
+        public void Refresh()
+        {
             _view.CoordSysDefinitions = _list = _catalog.GetAllProjections(); 
         }
 

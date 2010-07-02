@@ -37,6 +37,7 @@ namespace FdoToolbox.Base.Controls
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.grdCs = new System.Windows.Forms.DataGridView();
+            this.btnFind = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -58,6 +59,7 @@ namespace FdoToolbox.Base.Controls
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnFind);
             this.groupBox2.Controls.Add(this.btnResetFilter);
             this.groupBox2.Controls.Add(this.txtFilter);
             this.groupBox2.Location = new System.Drawing.Point(281, 3);
@@ -70,9 +72,9 @@ namespace FdoToolbox.Base.Controls
             // btnResetFilter
             // 
             this.btnResetFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetFilter.Location = new System.Drawing.Point(400, 19);
+            this.btnResetFilter.Location = new System.Drawing.Point(418, 19);
             this.btnResetFilter.Name = "btnResetFilter";
-            this.btnResetFilter.Size = new System.Drawing.Size(75, 23);
+            this.btnResetFilter.Size = new System.Drawing.Size(57, 23);
             this.btnResetFilter.TabIndex = 4;
             this.btnResetFilter.Text = "Reset";
             this.btnResetFilter.UseVisualStyleBackColor = true;
@@ -84,9 +86,8 @@ namespace FdoToolbox.Base.Controls
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFilter.Location = new System.Drawing.Point(18, 21);
             this.txtFilter.Name = "txtFilter";
-            this.txtFilter.Size = new System.Drawing.Size(378, 20);
+            this.txtFilter.Size = new System.Drawing.Size(333, 20);
             this.txtFilter.TabIndex = 3;
-            this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
             // 
             // groupBox1
             // 
@@ -143,6 +144,17 @@ namespace FdoToolbox.Base.Controls
             this.grdCs.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdCs_CellContentClick);
             this.grdCs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdCs_CellContentClick);
             // 
+            // btnFind
+            // 
+            this.btnFind.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFind.Location = new System.Drawing.Point(357, 19);
+            this.btnFind.Name = "btnFind";
+            this.btnFind.Size = new System.Drawing.Size(55, 23);
+            this.btnFind.TabIndex = 5;
+            this.btnFind.Text = "Find";
+            this.btnFind.UseVisualStyleBackColor = true;
+            this.btnFind.Click += new System.EventHandler(this.btnFind_Click);
+            // 
             // CoordSysCatalog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -171,5 +183,6 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnResetFilter;
+        private System.Windows.Forms.Button btnFind;
     }
 }

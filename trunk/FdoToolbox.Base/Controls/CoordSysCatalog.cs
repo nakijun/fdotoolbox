@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ICSharpCode.Core;
@@ -72,7 +73,8 @@ namespace FdoToolbox.Base.Controls
 
         private void btnResetFilter_Click(object sender, EventArgs e)
         {
-
+            txtFilter.Text = string.Empty;
+            _presenter.Refresh();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -90,9 +92,10 @@ namespace FdoToolbox.Base.Controls
             if (cs != null)
             {
                 string oldName = cs.Name;
-                if (CoordinateSystemDialog.EditCooridinateSystem(cs))
+                if (CoordinateSystemDialog.EditCoordinateSystem(cs))
                 {
                     _presenter.Update(oldName, cs);
+                    _presenter.Refresh();
                 }
             }
         }
@@ -106,16 +109,15 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
-        private void txtFilter_TextChanged(object sender, EventArgs e)
-        {
-            //_presenter.Filter(txtFilter.Text);
-        }
+        private BindingList<CoordinateSystemDefinition> _bs;
 
         public BindingList<CoordinateSystemDefinition> CoordSysDefinitions
         {
             set 
             {
-                grdCs.DataSource = value;
+                if (_bs == null)
+                    _bs = value;
+                grdCs.DataSource = _bs;
             }
         }
 
@@ -132,6 +134,11 @@ namespace FdoToolbox.Base.Controls
         private void grdCs_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             _presenter.CheckStatus();
+        }
+
+        private void btnFind_Click(object sender, EventArgs e)
+        {
+            grdCs.DataSource = _bs.Where(x => x.Name == txtFilter.Text).ToArray();
         }
     }
 }
