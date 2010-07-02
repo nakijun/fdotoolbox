@@ -26,7 +26,10 @@ using FdoToolbox.Core.CoordinateSystems;
 using System.ComponentModel;
 using System.IO;
 using ICSharpCode.Core;
-using System.Data.SQLite;
+using OSGeo.FDO.Connections;
+using OSGeo.FDO.ClientServices;
+using OSGeo.FDO.Commands.Feature;
+using OSGeo.FDO.Expression;
 
 namespace FdoToolbox.Base.Services
 {
@@ -47,10 +50,17 @@ namespace FdoToolbox.Base.Services
         public CoordSysCatalog()
         {
             dbpath = Path.Combine(FileUtility.ApplicationRootPath, DB_FILE);
-            _ConnectionString = string.Format("Data Source={0};Version=3;Compress=True;FailIfMissing=true", dbpath);
+            _ConnectionString = string.Format("File={0}", dbpath);
         }
 
         private BindingList<CoordinateSystemDefinition> _Projections;
+
+        private IConnection CreateSqliteConnection()
+        {
+            var conn = FeatureAccessManager.GetConnectionManager().CreateConnection("OSGeo.SQLite");
+            conn.ConnectionString = _ConnectionString;
+            return conn;
+        }
 
         /// <summary>
         /// Adds a new coordinate system to the database
@@ -58,15 +68,27 @@ namespace FdoToolbox.Base.Services
         /// <param name="cs"></param>
         public void AddProjection(CoordinateSystemDefinition cs)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(_ConnectionString))
+            using (var conn = CreateSqliteConnection())
             {
                 conn.Open();
-                using (SQLiteCommand cmd = new SQLiteCommand("INSERT INTO Projections(Name, Description, WKT) VALUES(@a, @b, @c)", conn))
+                using (IInsert cmd = (IInsert)conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Insert))
                 {
-                    cmd.Parameters.AddWithValue("@a", cs.Name);
-                    cmd.Parameters.AddWithValue("@b", cs.Description);
-                    cmd.Parameters.AddWithValue("@c", cs.Wkt);
-                    if (cmd.ExecuteNonQuery() == 1)
+                    cmd.SetFeatureClassName("Projections");
+                    cmd.PropertyValues.Add(new OSGeo.FDO.Commands.PropertyValue("Name", new StringValue(cs.Name)));
+                    cmd.PropertyValues.Add(new OSGeo.FDO.Commands.PropertyValue("Description", new StringValue(cs.Description)));
+                    cmd.PropertyValues.Add(new OSGeo.FDO.Commands.PropertyValue("WKT", new StringValue(cs.Wkt)));
+
+                    int affected = 0;
+                    using(var reader = cmd.Execute())
+                    {
+                        while(reader.ReadNext())
+                        {
+                            affected++;
+                        }
+                        reader.Close();
+                    }
+
+                    if (affected == 1)
                     {
                         _Projections.Add(cs);
                         LoggingService.InfoFormatted("Coordinate System {0} added to database", cs.Name);
@@ -84,16 +106,19 @@ namespace FdoToolbox.Base.Services
         /// <returns></returns>
         public bool UpdateProjection(CoordinateSystemDefinition cs, string oldName)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(_ConnectionString))
+            using (var conn = CreateSqliteConnection())
             {
                 conn.Open();
-                using (SQLiteCommand update = new SQLiteCommand("UPDATE Projections SET Name = @a, Description = @b, WKT = @c WHERE Name = @d", conn))
+                using(IUpdate update = (IUpdate)conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Update))
                 {
-                    update.Parameters.AddWithValue("@a", cs.Name);
-                    update.Parameters.AddWithValue("@b", cs.Description);
-                    update.Parameters.AddWithValue("@c", cs.Wkt);
-                    update.Parameters.AddWithValue("@d", oldName);
-                    if (update.ExecuteNonQuery() == 1)
+                    update.SetFeatureClassName("Projections");
+                    update.PropertyValues.Add(new OSGeo.FDO.Commands.PropertyValue("Name", new StringValue(cs.Name)));
+                    update.PropertyValues.Add(new OSGeo.FDO.Commands.PropertyValue("Description", new StringValue(cs.Description)));
+                    update.PropertyValues.Add(new OSGeo.FDO.Commands.PropertyValue("WKT", new StringValue(cs.Wkt)));
+
+                    update.SetFilter("Name = '" + oldName + "'");
+
+                    if (update.Execute() == 1)
                     {
                         LoggingService.InfoFormatted("Coordinate System {0} updated in database", oldName);
                         return true;
@@ -111,13 +136,14 @@ namespace FdoToolbox.Base.Services
         /// <returns></returns>
         public bool DeleteProjection(CoordinateSystemDefinition cs)
         {
-            using (SQLiteConnection conn = new SQLiteConnection(_ConnectionString))
+            using (var conn = CreateSqliteConnection())
             {
                 conn.Open();
-                using (SQLiteCommand delete = new SQLiteCommand("DELETE FROM Projections WHERE Name = @a", conn))
+                using (IDelete delete = (IDelete)conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Delete))
                 {
-                    delete.Parameters.AddWithValue("@a", cs.Name);
-                    if (delete.ExecuteNonQuery() == 1)
+                    delete.SetFeatureClassName("Projections");
+                    delete.SetFilter("Name = '" + cs.Name + "'");
+                    if (delete.Execute() == 1)
                     {
                         LoggingService.InfoFormatted("Coordinate System {0} deleted from database", cs.Name);
                         _Projections.Remove(cs);
@@ -139,24 +165,27 @@ namespace FdoToolbox.Base.Services
                 return _Projections;
 
             _Projections = new BindingList<CoordinateSystemDefinition>();
-            SQLiteConnection conn = new SQLiteConnection(_ConnectionString);
-            using (conn)
+            using (var conn = CreateSqliteConnection())
             {
                 LoggingService.InfoFormatted("Loading all Coordinate Systems from {0}", dbpath);
                 conn.Open();
                 string name = string.Empty;
                 string desc = string.Empty;
                 string wkt = string.Empty;
-                SQLiteCommand cmd = new SQLiteCommand("SELECT Name, Description, WKT FROM Projections", conn);
-                using (cmd)
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
+               
+                using (ISelect select = (ISelect)conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_Select))
                 {
-                    while (reader.Read())
+                    select.SetFeatureClassName("Projections");
+                    using (var reader = select.Execute())
                     {
-                        name = reader.GetString(reader.GetOrdinal("Name"));
-                        desc = reader.GetString(reader.GetOrdinal("Description"));
-                        wkt = reader.GetString(reader.GetOrdinal("WKT"));
-                        _Projections.Add(new CoordinateSystemDefinition(name, desc, wkt));
+                        while (reader.ReadNext())
+                        {
+                            name = reader.GetString("Name");
+                            desc = reader.GetString("Description");
+                            wkt = reader.GetString("WKT");
+                            _Projections.Add(new CoordinateSystemDefinition(name, desc, wkt));
+                        }
+                        reader.Close();
                     }
                 }
                 conn.Close();

@@ -63,18 +63,23 @@ namespace FdoToolbox.Base.Forms
                 errorProvider1.SetError(txtWKT, "Required");
                 return;
             }
-            if (catalog.ProjectionExists(txtName.Text))
+            if (!_editing)
             {
-                errorProvider1.SetError(txtName, "A coordinate system of that name already exists");
-                return;
+                if (catalog.ProjectionExists(txtName.Text))
+                {
+                    errorProvider1.SetError(txtName, "A coordinate system of that name already exists");
+                    return;
+                }
             }
-
             this.DialogResult = DialogResult.OK;
         }
+
+        private static bool _editing = false;
 
         public static CoordinateSystemDefinition NewCoordinateSystem()
         {
             CoordinateSystemDialog diag = new CoordinateSystemDialog();
+            _editing = false;
             if (diag.ShowDialog() == DialogResult.OK)
             {
                 return new CoordinateSystemDefinition(diag.txtName.Text, diag.txtDescription.Text, diag.txtWKT.Text);
@@ -82,10 +87,12 @@ namespace FdoToolbox.Base.Forms
             return null;
         }
 
-        public static bool EditCooridinateSystem(CoordinateSystemDefinition cs)
+        public static bool EditCoordinateSystem(CoordinateSystemDefinition cs)
         {
             CoordinateSystemDialog diag = new CoordinateSystemDialog();
+            _editing = true;
             diag.txtName.Text = cs.Name;
+            diag.txtName.Enabled = false;
             diag.txtDescription.Text = cs.Description;
             diag.txtWKT.Text = cs.Wkt;
             if (diag.ShowDialog() == DialogResult.OK)
