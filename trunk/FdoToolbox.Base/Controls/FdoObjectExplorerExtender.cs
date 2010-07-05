@@ -123,6 +123,20 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        private static bool IsChild(TreeNodeCollection nodes, TreeNode node, int maxLevel)
+        {
+            if (nodes.Contains(node))
+                return true;
+
+            foreach (TreeNode n in nodes)
+            {
+                if (n.Level < maxLevel && IsChild(n.Nodes, node, NODE_LEVEL_CLASS))
+                    return true;
+            }
+
+            return false;
+        }
+
         void OnAfterNodeExpansion(object sender, TreeViewEventArgs e)
         {
             if (e.Action == TreeViewAction.Expand)
@@ -130,7 +144,7 @@ namespace FdoToolbox.Base.Controls
                 TreeNode node = e.Node;
                 TreeNode root = _explorer.GetRootNode(RootNodeName);
                 //Is a FDO data source node
-                if (root.Nodes.Find(node.Name, true).Length == 1)
+                if (IsChild(root.Nodes, node, NODE_LEVEL_CLASS))
                 {
                     //Find the connection node
                     TreeNode connNode = node;
