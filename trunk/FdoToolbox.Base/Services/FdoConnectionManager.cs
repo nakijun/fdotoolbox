@@ -242,6 +242,11 @@ namespace FdoToolbox.Base.Services
             {
                 FdoConnection conn = this.GetConnection(name);
                 conn.Close();
+
+                //HACK: FDO #660 workaround
+                if (conn.Provider.ToUpper().StartsWith("OSGEO.POSTGRESQL"))
+                    conn.ConnectionString = conn.ConnectionString;
+
                 conn.Open();
 
                 /*
@@ -298,13 +303,20 @@ namespace FdoToolbox.Base.Services
                         }
                         catch(Exception ex)
                         {
-                            LoggingService.Warn("Could not load " + f + ": " + ex.Message);
+                            LoggingService.Warn("Could not create connection from " + f + ": " + ex.Message);
                         }
                     }
 
                     foreach (string name in connections.Keys)
                     {
-                        this.AddConnection(name, connections[name]);
+                        try
+                        {
+                            this.AddConnection(name, connections[name]);
+                        }
+                        catch (Exception ex)
+                        {
+                            LoggingService.Warn("Could not load connection " + name + ": " + ex.Message);
+                        }
                     }
                 }
                 finally
