@@ -49,13 +49,26 @@ SetCompressor /SOLID /FINAL lzma
 # Installer vars
 !if ${SLN_CONFIG} == "Release"
 	!define INST_PRODUCT "FDO Toolbox"
+	!define INST_PRODUCT_NAME "${INST_PRODUCT} ${RELEASE_VERSION} (${CPU})"
 !else
-	!define INST_PRODUCT "FDO Toolbox (Debug)"
+	!define INST_PRODUCT "FDO Toolbox"
+	!define INST_PRODUCT_NAME "${INST_PRODUCT} ${RELEASE_VERSION} (${CPU}, Debug)"
 !endif
+
 !define PROJECT_URL "http://fdotoolbox.googlecode.com"
 !define INST_SRC "."
 !define INST_LICENSE "..\FdoToolbox\license.txt"
 !define INST_OUTPUT "FDOToolbox-${SLN_CONFIG}-${RELEASE_VERSION}-${CPU}-Setup.exe"
+
+!if ${RELEASE_VERSION} != "Trunk"
+	VIProductVersion "${RELEASE_VERSION}"
+	VIAddVersionKey "ProductName" "${INST_PRODUCT_NAME}"
+	VIAddVersionKey "LegalCopyright" "© 2010 Jackie Ng"
+	VIAddVersionKey "FileDescription" "Installer package for FDO Toolbox"
+	VIAddVersionKey "FileVersion" "${RELEASE_VERSION}"
+!endif
+
+!define REG_KEY_UNINSTALL "Software\Microsoft\Windows\CurrentVersion\Uninstall\${INST_PRODUCT}"
 
 # Project Output
 !define INST_OUTPUT_FDOTOOLBOX "${SLN_DIR}\out\${CPU}\${SLN_CONFIG}"
@@ -73,7 +86,7 @@ SetCompressor /SOLID /FINAL lzma
 
 ; Name and file
 Name "${INST_PRODUCT}"
-Caption "${INST_PRODUCT}"
+Caption "${INST_PRODUCT_NAME} Setup"
 OutFile "${INST_OUTDIR}\${INST_OUTPUT}"
 
 ; Default installation folder
@@ -190,16 +203,16 @@ Section
 	WriteUninstaller "$INSTDIR\uninstall.exe"
 	
 	# create Add/Remove Programs entry
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${INST_PRODUCT}" \
-					 "DisplayName" "${INST_PRODUCT}"
+	WriteRegStr HKLM "${REG_KEY_UNINSTALL}" \
+					 "DisplayName" "${INST_PRODUCT_NAME}"
 
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${INST_PRODUCT}" \
+	WriteRegStr HKLM "${REG_KEY_UNINSTALL}" \
 					 "UninstallString" "$INSTDIR\uninstall.exe"
 	
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${INST_PRODUCT}" \
+	WriteRegStr HKLM "${REG_KEY_UNINSTALL}" \
 					 "URLInfoAbout" "${PROJECT_URL}"
 	
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${INST_PRODUCT}" \
+	WriteRegStr HKLM "${REG_KEY_UNINSTALL}" \
 					 "DisplayVersion" "${RELEASE_VERSION}"
 	
 	# TODO: Add more useful information to Add/Remove programs
@@ -226,7 +239,7 @@ Section "uninstall"
 	Delete "$DESKTOP\${LNK_FDOTOOLBOX}.lnk"
 	
 	# remove Add/Remove programs registry entry
-	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${INST_PRODUCT}"
+	DeleteRegKey HKLM "${REG_KEY_UNINSTALL}"
 	
 	# remove installation directory
 	RMDir /r "$INSTDIR"
@@ -249,5 +262,7 @@ Function .onInit
 FunctionEnd
 
 Function LaunchLink
+	; TODO: Needs to launch under standard user. If installer was run under UAC elevated privileges, it will run under the
+	; user who elevated these privileges.
 	ExecShell "" "$INSTDIR\${EXE_FDOTOOLBOX}"
 FunctionEnd
