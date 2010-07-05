@@ -1,3 +1,14 @@
+v0.9.4
+------
+
+- First release with full 64-bit binaries (no WoW32 emulation)
+
+Fixes:
+
+	- Safer default directories for Sessions and log files (to play nice with Windows UAC)
+	- Use SQLite FDO provider for managing user coordinate systems
+	- Fixes for the user coordinate system catalog UI.
+
 v0.9.3
 ------
 
