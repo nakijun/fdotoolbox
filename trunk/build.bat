@@ -82,7 +82,7 @@ goto next_param
 
 :get_conf
 SET TYPEBUILD=%2
-SET FDOTOOLBOX_OUTDIR=%CD%\out\%TYPEBUILD%
+SET FDOTOOLBOX_OUTDIR=%CD%\out\%PLATFORM%\%TYPEBUILD%
 if "%2"=="release" goto next_param
 if "%2"=="Release" goto next_param
 if "%2"=="debug" goto next_param
@@ -115,12 +115,16 @@ echo Release Version is: %RELEASE_VERSION%
 echo Building FdoToolbox
 msbuild.exe /p:Configuration=%TYPEBUILD%;Platform=%PLATFORM% %VERBOSITY% FdoToolbox.sln
 
+if exist "%FDOTOOLBOX_OUTDIR%\FDO Toolbox Core API.chm" goto build_user_doc
+
+:build_api_doc
 echo Building API Documentation
 pushd %DOCPATH%
 msbuild.exe /p:Configuration=%TYPEBUILD%;Platform=%PLATFORM% FdoToolboxCoreApi.%TYPEBUILD%.%PLATFORM%.shfbproj
 copy "Help\FDO Toolbox Core API.chm" %FDOTOOLBOX_OUTDIR%
 popd
 
+:build_user_doc
 echo Building User Documentation
 pushd %DOCPATH%\userdoc
 call make htmlhelp
