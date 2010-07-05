@@ -34,11 +34,17 @@ SetCompressor /SOLID /FINAL lzma
 	!define SLN_CONFIG "Release" #"Debug"
 !endif
 
+!ifndef CPU
+	!define CPU "x86"
+!endif
+
 !echo "Building installer in configuration: ${SLN_CONFIG} (${CPU})"
 
 !define SLN_DIR ".."
 !define SLN_THIRDPARTY "${SLN_DIR}\Thirdparty"
-!define RELEASE_VERSION "0.9.3"
+!ifndef RELEASE_VERSION
+	!define RELEASE_VERSION "Trunk"
+!endif
 
 # Installer vars
 !if ${SLN_CONFIG} == "Release"
@@ -75,13 +81,6 @@ OutFile "${INST_OUTDIR}\${INST_OUTPUT}"
 InstallDir "$PROGRAMFILES64\${INST_PRODUCT}"
 !else
 InstallDir "$PROGRAMFILES\${INST_PRODUCT}"
-!endif
-
-; Registry
-!if ${CPU} == "x64"
-SetRegView 64
-!else
-SetRegView 32
 !endif
 
 !ifdef INST_LICENSE
@@ -131,6 +130,13 @@ LicenseData "${INST_SRC}\${INST_LICENSE}"
 # default section
 Section 
 
+	; Registry
+	!if ${CPU} == "x64"
+	SetRegView 64
+	!else
+	SetRegView 32
+	!endif
+
 	# set installation dir
 	SetOutPath $INSTDIR
 	
@@ -164,7 +170,6 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\LinqBridge.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.UI.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\System.Data.SQLite.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\WeifenLuo.WinFormsUI.Docking.dll"
 	
 	# Scripting
