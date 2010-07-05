@@ -1,5 +1,15 @@
 @echo off
 
+rem Note: 
+rem 
+rem The following needs to be installed
+rem  - Microsoft .net Framework 3.5
+rem  - Microsoft HTML Workshop
+rem  - Sandcastle May 2008 release (http://sandcastle.codeplex.com)
+rem  - Sandcastle Help File Builder (http://shfb.codeplex.com)
+rem  - Python 2.x
+rem  - Sphinx (http://sphix.pocoo.org)
+
 SET TYPEACTION=build
 SET TYPEBUILD=Release
 SET PLATFORM=x86
@@ -27,6 +37,7 @@ SET FDOTOOLBOXEXPRESS=%CD%\FdoToolbox.Express
 SET FDOTOOLBOXRASTER=%CD%\FdoToolbox.Raster
 SET TESTMODULE=%CD%\TestModule
 SET MGMODULE=%CD%\MGModule
+SET RELEASE_VERSION=Trunk
 
 SET PATH=%PATH%;%systemroot%\Microsoft.NET\Framework\v3.5;%THIRDPARTY%\NDoc;%THIRDPARTY%\NSIS;%HTMLHELP%
 SET VERBOSITY=/v:q
@@ -46,6 +57,8 @@ if "%1"=="-action"  goto get_action
 if "%1"=="-p"        goto get_platform
 if "%1"=="-platform" goto get_platform
 
+if "%1"=="-version" goto get_version
+
 if "%1"=="-v"       goto get_verbose
 if "%1"=="-verbose" goto get_verbose
 
@@ -61,6 +74,10 @@ goto study_params
 
 :get_verbose
 SET VERBOSITY=/v:n
+goto next_param
+
+:get_version
+SET RELEASE_VERSION=%2
 goto next_param
 
 :get_conf
@@ -93,14 +110,15 @@ if "%TYPEACTION%"=="clean" goto clean
 :build
 echo Configuration is: %TYPEBUILD%
 echo Platform is: %PLATFORM%
+echo Release Version is: %RELEASE_VERSION%
 
 echo Building FdoToolbox
 msbuild.exe /p:Configuration=%TYPEBUILD%;Platform=%PLATFORM% %VERBOSITY% FdoToolbox.sln
 
 echo Building API Documentation
 pushd %DOCPATH%
-NDocConsole.exe -documenter=MSDN-CHM -project=FdoToolbox.%TYPEBUILD%.%PLATFORM%.ndoc
-copy "msdn-chm\FDO Toolbox Core API.chm" %FDOTOOLBOX_OUTDIR%
+msbuild.exe /p:Configuration=%TYPEBUILD%;Platform=%PLATFORM% FdoToolboxCoreApi.%TYPEBUILD%.%PLATFORM%.shfbproj
+copy "Help\FDO Toolbox Core API.chm" %FDOTOOLBOX_OUTDIR%
 popd
 
 echo Building User Documentation
@@ -118,7 +136,7 @@ rem IF NOT EXIST %FDOTOOLBOX_OUTDIR%\FDO xcopy /S /Y /I %THIRDPARTY%\Fdo\*.* %FD
 :create_installer
 echo Creating installer
 pushd %INSTALL%
-makensis /DSLN_CONFIG=%TYPEBUILD% /DCPU=%PLATFORM% FdoToolbox.nsi
+makensis /DSLN_CONFIG=%TYPEBUILD% /DCPU=%PLATFORM% /DRELEASE_VERSION=%RELEASE_VERSION% FdoToolbox.nsi
 popd
 goto quit
 
