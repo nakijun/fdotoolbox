@@ -11,9 +11,13 @@ Follow the instructions in the "Source" tab of this project site.
 
 == Requirements ==
 
-In order to build the API documentation, you will need to download and install the [http://www.microsoft.com/downloads/details.aspx?familyid=00535334-c8a6-452f-9aa0-d597d16580cc&displaylang=en HTML Help Workshop]
+In order to build the User and API documentation, you will need the following tools installed:
 
-In addition, to build the User documentation, you will need [http://www.python.org Python] and [http://sphinx.pocoo.org Sphinx] installed.
+ * [http://www.microsoft.com/downloads/details.aspx?familyid=00535334-c8a6-452f-9aa0-d597d16580cc&displaylang=en HTML Help Workshop]
+ * [http://www.python.org Python] 
+ * [http://sphinx.pocoo.org Sphinx]
+ * [http://sandcastle.codeplex.com Sandcastle May 2008 edition]
+ * [http://shfb.codeplex.com Sandcastle Help File Builder]
 
 == Building ==
 
