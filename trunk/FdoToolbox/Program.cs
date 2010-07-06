@@ -69,7 +69,11 @@ namespace FdoToolbox
                 // CoreStartup is a helper class making starting the Core easier.
                 // The parameter is used as the application name, e.g. for the default title of
                 // MessageService.ShowMessage() calls.
-                CoreStartup coreStartup = new CoreStartup("FDO Toolbox");
+#if X64
+                CoreStartup coreStartup = new CoreStartup("FDO Toolbox (x64)");
+#else
+                CoreStartup coreStartup = new CoreStartup("FDO Toolbox (x86)");
+#endif
                 // It is also used as default storage location for the application settings:
                 // "%Application Data%\%Application Name%", but you can override that by setting c.ConfigDirectory
 
