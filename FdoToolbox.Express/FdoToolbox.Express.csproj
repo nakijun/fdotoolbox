@@ -49,7 +49,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>..\out\x64\Release\AddIns\Express</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;X64</DefineConstants>
     <Optimize>true</Optimize>
     <FileAlignment>4096</FileAlignment>
     <DebugType>None</DebugType>
@@ -61,6 +61,7 @@
     <FileAlignment>4096</FileAlignment>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
+    <DefineConstants>X64</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition=" '$(Platform)' == 'x86' ">
     <Reference Include="OSGeo.FDO, Version=3.5.54.0, Culture=neutral, processorArchitecture=x86">
