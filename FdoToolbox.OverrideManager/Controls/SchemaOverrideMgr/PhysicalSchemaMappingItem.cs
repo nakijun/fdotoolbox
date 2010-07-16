@@ -25,6 +25,7 @@ using System.Linq;
 using System.Text;
 using OSGeo.FDO.Commands.Schema;
 using System.ComponentModel;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
 {
@@ -39,5 +40,31 @@ namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
         {
             get { return this.InternalValue; }
         }
+
+        public virtual PhysicalSchemaMapping CreateCopy()
+        {
+            using (var ms = new OSGeo.FDO.Common.Io.IoMemoryStream())
+            {
+                //Dump internal value to xml
+                using (var writer = new OSGeo.FDO.Common.Xml.XmlWriter(ms))
+                {
+                    this.InternalValue.WriteXml(writer, new OSGeo.FDO.Xml.XmlFlags());
+                }
+                ms.Reset();
+                //Load into fresh object
+                var sms = new OSGeo.FDO.Commands.Schema.PhysicalSchemaMappingCollection();
+                sms.ReadXml(ms);
+                return sms[0];
+            }
+        }
+
+        /*
+        /// <summary>
+        /// Creates a cloned copy of this mapping
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <returns></returns>
+        public abstract PhysicalSchemaMapping GetMapping(OSGeo.FDO.Connections.IConnection conn);
+         */
     }
 }
