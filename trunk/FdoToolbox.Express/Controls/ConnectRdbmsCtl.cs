@@ -138,5 +138,20 @@ namespace FdoToolbox.Express.Controls
                 txtConfigPath.Text = openFileDialog.FileName;
             }
         }
+
+        public bool ConfigEnabled
+        {
+            set 
+            {
+                btnBrowse.Enabled = value;
+                txtConfigPath.Enabled = value;
+                lblConfig.Enabled = value;
+            }
+        }
+
+        public string ConfigPath
+        {
+            get { return txtConfigPath.Text; }
+        }
     }
 }

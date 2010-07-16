@@ -31,6 +31,9 @@ namespace FdoToolbox.Express.Controls
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.txtConfigPath = new System.Windows.Forms.TextBox();
+            this.lblConfig = new System.Windows.Forms.Label();
             this.txtConnectionName = new System.Windows.Forms.TextBox();
             this.lblConnectionName = new System.Windows.Forms.Label();
             this.cmbDataStore = new System.Windows.Forms.ComboBox();
@@ -44,9 +47,6 @@ namespace FdoToolbox.Express.Controls
             this.lblPassword = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtConfigPath = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btnBrowse = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -81,7 +81,7 @@ namespace FdoToolbox.Express.Controls
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.btnBrowse);
             this.groupBox2.Controls.Add(this.txtConfigPath);
-            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.lblConfig);
             this.groupBox2.Controls.Add(this.txtConnectionName);
             this.groupBox2.Controls.Add(this.lblConnectionName);
             this.groupBox2.Controls.Add(this.cmbDataStore);
@@ -92,6 +92,35 @@ namespace FdoToolbox.Express.Controls
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Other options";
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowse.Location = new System.Drawing.Point(487, 68);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(28, 23);
+            this.btnBrowse.TabIndex = 6;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
+            // txtConfigPath
+            // 
+            this.txtConfigPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtConfigPath.Location = new System.Drawing.Point(140, 70);
+            this.txtConfigPath.Name = "txtConfigPath";
+            this.txtConfigPath.Size = new System.Drawing.Size(341, 20);
+            this.txtConfigPath.TabIndex = 5;
+            // 
+            // lblConfig
+            // 
+            this.lblConfig.AutoSize = true;
+            this.lblConfig.Location = new System.Drawing.Point(17, 73);
+            this.lblConfig.Name = "lblConfig";
+            this.lblConfig.Size = new System.Drawing.Size(114, 13);
+            this.lblConfig.TabIndex = 4;
+            this.lblConfig.Text = "Config Document Path";
             // 
             // txtConnectionName
             // 
@@ -225,35 +254,6 @@ namespace FdoToolbox.Express.Controls
             this.label1.TabIndex = 12;
             this.label1.Text = "* Indicates a datastore without FDO metadata";
             // 
-            // txtConfigPath
-            // 
-            this.txtConfigPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtConfigPath.Location = new System.Drawing.Point(140, 70);
-            this.txtConfigPath.Name = "txtConfigPath";
-            this.txtConfigPath.Size = new System.Drawing.Size(341, 20);
-            this.txtConfigPath.TabIndex = 5;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 73);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(114, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Config Document Path";
-            // 
-            // btnBrowse
-            // 
-            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.Location = new System.Drawing.Point(487, 68);
-            this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(28, 23);
-            this.btnBrowse.TabIndex = 6;
-            this.btnBrowse.Text = "...";
-            this.btnBrowse.UseVisualStyleBackColor = true;
-            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
-            // 
             // openFileDialog
             // 
             this.openFileDialog.Filter = "XML Files (*.xml)|*.xml";
@@ -298,7 +298,7 @@ namespace FdoToolbox.Express.Controls
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.TextBox txtConfigPath;
-        protected System.Windows.Forms.Label label2;
+        protected System.Windows.Forms.Label lblConfig;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
