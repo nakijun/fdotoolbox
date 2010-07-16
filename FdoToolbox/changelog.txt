@@ -9,6 +9,7 @@ v0.9.5
 - Fixes:
 	- Fix FdoFeatureService.ListDataStores not listing non-fdo datastores
 	- x64 fixes for express Access and Excel connection options.
+	- x64 fixes for drag/drop of access databases.
 
 v0.9.4
 ------
