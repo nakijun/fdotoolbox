@@ -151,6 +151,12 @@
     <Compile Include="Controls\ConnectPostGisCtl.Designer.cs">
       <DependentUpon>ConnectPostGisCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ConnectPostgresCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectPostgresCtl.Designer.cs">
+      <DependentUpon>ConnectPostgresCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ConnectRdbmsCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>

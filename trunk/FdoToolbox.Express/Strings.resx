@@ -130,7 +130,7 @@
     <value>Connect via OGR</value>
   </data>
   <data name="CMD_ConnectPostGis" xml:space="preserve">
-    <value>Connect to PostGIS</value>
+    <value>Connect to PostGIS (old provider)</value>
   </data>
   <data name="CMD_ConnectSdf" xml:space="preserve">
     <value>Connect to SDF</value>
@@ -266,5 +266,11 @@
   </data>
   <data name="TXT_OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="TITLE_CONNECT_POSTGRES" xml:space="preserve">
+    <value>Connect to PostgreSQL / PostGIS</value>
+  </data>
+  <data name="CMD_ConnectPostgres" xml:space="preserve">
+    <value>Connect to PostgreSQL / PostGIS</value>
   </data>
 </root>

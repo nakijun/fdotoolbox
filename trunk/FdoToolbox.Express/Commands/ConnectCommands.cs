@@ -197,6 +197,16 @@ namespace FdoToolbox.Express.Commands
         }
     }
 
+    public class ConnectPostgresCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            ConnectPostgresCtl ctl = new ConnectPostgresCtl();
+            Workbench wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
+
     public class ConnectSqlServerCommand : AbstractMenuCommand
     {
         public override void Run()

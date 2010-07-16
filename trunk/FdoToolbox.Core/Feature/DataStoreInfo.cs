@@ -58,10 +58,23 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="name"></param>
         /// <param name="description"></param>
-        public DataStoreInfo(string name, string description)
+        /// <param name="isFdoEnabled"></param>
+        public DataStoreInfo(string name, string description, bool isFdoEnabled)
         {
             this.Name = name;
             this.Description = description;
+            this.IsFdoEnabled = isFdoEnabled;
+        }
+
+        private bool _isFdoEnabled;
+
+        /// <summary>
+        /// Indicates whether this datastore is FDO enabled
+        /// </summary>
+        public bool IsFdoEnabled
+        {
+            get { return _isFdoEnabled; }
+            set { _isFdoEnabled = value; }
         }
 
         /// <summary>
@@ -72,6 +85,7 @@ namespace FdoToolbox.Core.Feature
         {
             this.Name = reader.GetName();
             this.Description = reader.GetDescription();
+            this.IsFdoEnabled = reader.GetIsFdoEnabled();
         }
     }
 }
