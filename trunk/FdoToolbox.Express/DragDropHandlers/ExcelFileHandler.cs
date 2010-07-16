@@ -1,5 +1,5 @@
-#region LGPL Header
-// Copyright (C) 2009, Jackie Ng
+﻿#region LGPL Header
+// Copyright (C) 2010, Jackie Ng
 // http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
 // 
 // This library is free software; you can redistribute it and/or
@@ -29,35 +29,20 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Express.DragDropHandlers
 {
-    /// <summary>
-    /// Drag and Drop handler for MS Access databases
-    /// </summary>
-    public class MsAccessFileHandler : IDragDropHandler
+    public class ExcelFileHandler : IDragDropHandler
     {
-        /// <summary>
-        /// Gets a description of the action this handler will take
-        /// </summary>
-        /// <value></value>
         public string HandlerAction
         {
-            get { return "Create new ODBC (Access) connection"; }
+            get { return "Create new ODBC (Excel) connection"; }
         }
 
-        string[] extensions = { ".mdb" };
+        string[] extensions = { ".xls" };
 
-        /// <summary>
-        /// Gets the file extension this handler can handle
-        /// </summary>
-        /// <value></value>
         public string[] FileExtensions
         {
             get { return extensions; }
         }
 
-        /// <summary>
-        /// Handles the file drop
-        /// </summary>
-        /// <param name="file">The file being dropped</param>
         public void HandleDrop(string file)
         {
             IFdoConnectionManager connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
@@ -66,9 +51,9 @@ namespace FdoToolbox.Express.DragDropHandlers
             try
             {
 #if X64
-                conn = new FdoConnection("OSGeo.ODBC", "ConnectionString=\"Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq="+file+"\"");
+                conn = new FdoConnection("OSGeo.ODBC", "ConnectionString=\"Driver={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};Dbq=" + file + "\"");
 #else
-                conn = new FdoConnection("OSGeo.ODBC", "ConnectionString=\"Driver={Microsoft Access Driver (*.mdb)};Dbq="+file+"\"");
+                conn = new FdoConnection("OSGeo.ODBC", "ConnectionString=\"Driver={Microsoft Excel Driver (*.xls)};DriverId=790;Dbq="+file+"\"");
 #endif
             }
             catch (Exception ex)
