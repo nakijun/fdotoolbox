@@ -1,3 +1,15 @@
+v0.9.5
+------
+
+- Enhancements:
+	- Full support for side-by-side installations of x86 and x64 versions.
+	- Express connect support for OSGeo.PostgreSQL provider
+	- Drag/Drop support for excel documents (*.xls)
+	
+- Fixes:
+	- Fix FdoFeatureService.ListDataStores not listing non-fdo datastores
+	- x64 fixes for express Access and Excel connection options.
+
 v0.9.4
 ------
 
