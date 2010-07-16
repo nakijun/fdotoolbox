@@ -130,5 +130,13 @@ namespace FdoToolbox.Express.Controls
         {
             get { return "DataStore"; }
         }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                txtConfigPath.Text = openFileDialog.FileName;
+            }
+        }
     }
 }

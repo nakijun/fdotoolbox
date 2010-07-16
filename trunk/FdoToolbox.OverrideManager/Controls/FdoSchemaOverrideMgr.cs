@@ -115,9 +115,12 @@ namespace FdoToolbox.OverrideManager.Controls
                 foreach (TreeNode node in treeMappings.Nodes)
                 {
                     var mapping = node.Tag as IPhysicalSchemaMapping;
+                   
                     if (mapping != null)
                     {
-                        schemas.Add(mapping.Mapping);
+                        var sm = mapping.CreateCopy();
+
+                        schemas.Add(sm);
                     }
                 }
                 schemas.WriteXml(diag.FileName);

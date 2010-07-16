@@ -40,6 +40,9 @@ namespace FdoToolbox.Express.Controls
 
         bool DataStoreEnabled { set; }
         bool SubmitEnabled { set; }
+        bool ConfigEnabled { set; }
+
+        string ConfigPath { get; }
 
         DataStoreInfo[] DataStores { set; }
         string SelectedDataStore { get; }
@@ -64,7 +67,7 @@ namespace FdoToolbox.Express.Controls
             _view = view;
             _connMgr = connMgr;
             _view.DataStoreEnabled = false;
-            _view.SubmitEnabled = false; 
+            _view.SubmitEnabled = false;
         }
 
         private void SetDataStore(DataStoreInfo[] values)

@@ -44,6 +44,10 @@ namespace FdoToolbox.Express.Controls
             this.lblPassword = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.txtConfigPath = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -51,7 +55,7 @@ namespace FdoToolbox.Express.Controls
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(479, 224);
+            this.btnCancel.Location = new System.Drawing.Point(479, 251);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 11;
@@ -62,7 +66,7 @@ namespace FdoToolbox.Express.Controls
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(398, 224);
+            this.btnOK.Location = new System.Drawing.Point(398, 251);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 10;
@@ -75,13 +79,16 @@ namespace FdoToolbox.Express.Controls
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnBrowse);
+            this.groupBox2.Controls.Add(this.txtConfigPath);
+            this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.txtConnectionName);
             this.groupBox2.Controls.Add(this.lblConnectionName);
             this.groupBox2.Controls.Add(this.cmbDataStore);
             this.groupBox2.Controls.Add(this.lblDataStore);
             this.groupBox2.Location = new System.Drawing.Point(3, 143);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(551, 75);
+            this.groupBox2.Size = new System.Drawing.Size(551, 102);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Other options";
@@ -90,15 +97,15 @@ namespace FdoToolbox.Express.Controls
             // 
             this.txtConnectionName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtConnectionName.Location = new System.Drawing.Point(126, 44);
+            this.txtConnectionName.Location = new System.Drawing.Point(140, 44);
             this.txtConnectionName.Name = "txtConnectionName";
-            this.txtConnectionName.Size = new System.Drawing.Size(389, 20);
+            this.txtConnectionName.Size = new System.Drawing.Size(375, 20);
             this.txtConnectionName.TabIndex = 3;
             // 
             // lblConnectionName
             // 
             this.lblConnectionName.AutoSize = true;
-            this.lblConnectionName.Location = new System.Drawing.Point(20, 47);
+            this.lblConnectionName.Location = new System.Drawing.Point(17, 47);
             this.lblConnectionName.Name = "lblConnectionName";
             this.lblConnectionName.Size = new System.Drawing.Size(92, 13);
             this.lblConnectionName.TabIndex = 2;
@@ -110,15 +117,15 @@ namespace FdoToolbox.Express.Controls
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbDataStore.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDataStore.FormattingEnabled = true;
-            this.cmbDataStore.Location = new System.Drawing.Point(126, 17);
+            this.cmbDataStore.Location = new System.Drawing.Point(140, 17);
             this.cmbDataStore.Name = "cmbDataStore";
-            this.cmbDataStore.Size = new System.Drawing.Size(389, 21);
+            this.cmbDataStore.Size = new System.Drawing.Size(375, 21);
             this.cmbDataStore.TabIndex = 1;
             // 
             // lblDataStore
             // 
             this.lblDataStore.AutoSize = true;
-            this.lblDataStore.Location = new System.Drawing.Point(20, 20);
+            this.lblDataStore.Location = new System.Drawing.Point(17, 20);
             this.lblDataStore.Name = "lblDataStore";
             this.lblDataStore.Size = new System.Drawing.Size(58, 13);
             this.lblDataStore.TabIndex = 0;
@@ -157,28 +164,28 @@ namespace FdoToolbox.Express.Controls
             // 
             this.txtPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPassword.Location = new System.Drawing.Point(126, 74);
+            this.txtPassword.Location = new System.Drawing.Point(140, 74);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(388, 20);
+            this.txtPassword.Size = new System.Drawing.Size(374, 20);
             this.txtPassword.TabIndex = 7;
             // 
             // txtUsername
             // 
             this.txtUsername.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUsername.Location = new System.Drawing.Point(126, 48);
+            this.txtUsername.Location = new System.Drawing.Point(140, 48);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(388, 20);
+            this.txtUsername.Size = new System.Drawing.Size(374, 20);
             this.txtUsername.TabIndex = 6;
             // 
             // txtService
             // 
             this.txtService.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtService.Location = new System.Drawing.Point(126, 22);
+            this.txtService.Location = new System.Drawing.Point(140, 22);
             this.txtService.Name = "txtService";
-            this.txtService.Size = new System.Drawing.Size(388, 20);
+            this.txtService.Size = new System.Drawing.Size(374, 20);
             this.txtService.TabIndex = 4;
             // 
             // lblService
@@ -210,12 +217,46 @@ namespace FdoToolbox.Express.Controls
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 229);
+            this.label1.Location = new System.Drawing.Point(23, 256);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(222, 13);
             this.label1.TabIndex = 12;
             this.label1.Text = "* Indicates a datastore without FDO metadata";
+            // 
+            // txtConfigPath
+            // 
+            this.txtConfigPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtConfigPath.Location = new System.Drawing.Point(140, 70);
+            this.txtConfigPath.Name = "txtConfigPath";
+            this.txtConfigPath.Size = new System.Drawing.Size(341, 20);
+            this.txtConfigPath.TabIndex = 5;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(17, 73);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(114, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Config Document Path";
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowse.Location = new System.Drawing.Point(487, 68);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(28, 23);
+            this.btnBrowse.TabIndex = 6;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "XML Files (*.xml)|*.xml";
             // 
             // ConnectRdbmsCtl
             // 
@@ -227,7 +268,7 @@ namespace FdoToolbox.Express.Controls
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "ConnectRdbmsCtl";
-            this.Size = new System.Drawing.Size(557, 250);
+            this.Size = new System.Drawing.Size(557, 277);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -255,5 +296,9 @@ namespace FdoToolbox.Express.Controls
         protected System.Windows.Forms.Label lblPassword;
         protected System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.TextBox txtConfigPath;
+        protected System.Windows.Forms.Label label2;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }

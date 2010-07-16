@@ -23,12 +23,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OSGeo.FDO.Commands.Schema;
+using OSGeo.FDO.Connections;
 
 namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
 {
     public interface IPhysicalSchemaMapping
     {
+        //PhysicalSchemaMapping GetMapping(IConnection conn);
         PhysicalSchemaMapping Mapping { get; }
         string Name { get; set; }
+
+        PhysicalSchemaMapping CreateCopy();
     }
 }
