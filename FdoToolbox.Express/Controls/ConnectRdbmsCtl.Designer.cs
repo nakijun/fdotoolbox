@@ -43,6 +43,7 @@ namespace FdoToolbox.Express.Controls
             this.lblService = new System.Windows.Forms.Label();
             this.lblPassword = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -207,10 +208,20 @@ namespace FdoToolbox.Express.Controls
             this.lblUsername.TabIndex = 2;
             this.lblUsername.Text = "Username";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(23, 229);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(222, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "* Indicates a datastore without FDO metadata";
+            // 
             // ConnectRdbmsCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.groupBox2);
@@ -222,6 +233,7 @@ namespace FdoToolbox.Express.Controls
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -242,5 +254,6 @@ namespace FdoToolbox.Express.Controls
         protected System.Windows.Forms.Label lblService;
         protected System.Windows.Forms.Label lblPassword;
         protected System.Windows.Forms.Label lblUsername;
+        private System.Windows.Forms.Label label1;
     }
 }

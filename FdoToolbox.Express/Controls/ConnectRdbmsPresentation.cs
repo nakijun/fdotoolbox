@@ -26,6 +26,9 @@ using FdoToolbox.Base;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Base.Services;
 using ICSharpCode.Core;
+using OSGeo.FDO.Commands;
+using OSGeo.FDO.Commands.DataStore;
+using FdoToolbox.Core.Connections;
 
 namespace FdoToolbox.Express.Controls
 {
@@ -38,7 +41,7 @@ namespace FdoToolbox.Express.Controls
         bool DataStoreEnabled { set; }
         bool SubmitEnabled { set; }
 
-        string[] DataStores { set; }
+        DataStoreInfo[] DataStores { set; }
         string SelectedDataStore { get; }
         string ConnectionName { get; }
 
@@ -64,7 +67,7 @@ namespace FdoToolbox.Express.Controls
             _view.SubmitEnabled = false; 
         }
 
-        private void SetDataStore(string[] values)
+        private void SetDataStore(DataStoreInfo[] values)
         {
             _view.DataStores = values;
             _view.DataStoreEnabled = values.Length > 0;
@@ -88,16 +91,36 @@ namespace FdoToolbox.Express.Controls
                 _conn.ConnectionString = string.Format("{0}={1};{2}={3};{4}={5}", _view.ServiceParameter, _view.Service, _view.UsernameParameter, _view.Username, _view.PasswordParameter, _view.Password);
                 if (_conn.Open() == FdoConnectionState.Pending)
                 {
-                    List<string> datstores = new List<string>();
-                    using (FdoFeatureService service = _conn.CreateFeatureService())
+                    List<DataStoreInfo> datastores = new List<DataStoreInfo>();
+                    var cmds = _conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList);
+                    if (Array.IndexOf(cmds, CommandType.CommandType_ListDataStores) >= 0)
                     {
-                        ICollection<DataStoreInfo> dstores = service.ListDataStores(false);
-                        foreach (DataStoreInfo info in dstores)
+                        using (var svc = _conn.CreateFeatureService())
                         {
-                            datstores.Add(info.Name);
+                            var stores = svc.ListDataStores(false);
+                            foreach (var store in stores)
+                            {
+                                var ds = new DataStoreInfo(
+                                    store.Name,
+                                    store.Name + ((store.IsFdoEnabled) ? "" : " (*)"),
+                                    store.IsFdoEnabled);
+
+                                datastores.Add(ds);
+                            }
                         }
                     }
-                    SetDataStore(datstores.ToArray());
+                    else
+                    {
+                        var prop = _conn.GetConnectTimeProperty(_view.DataStoreParameter) as EnumerableDictionaryProperty;
+                        if (prop != null)
+                        {
+                            foreach (string name in prop.Values)
+                            {
+                                datastores.Add(new DataStoreInfo(name, name, true));
+                            }
+                        }
+                    }
+                    SetDataStore(datastores.ToArray());
                 }
             }
             catch (Exception ex)

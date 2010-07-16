@@ -60,6 +60,9 @@
                 <MenuItem id="ConnectPostGis"
                           label="${res:CMD_ConnectPostGis}"
                           class="FdoToolbox.Express.Commands.ConnectPostGisCommand" />
+                <MenuItem id="ConnectPostgres"
+                          label="${res:CMD_ConnectPostgres}"
+                          class="FdoToolbox.Express.Commands.ConnectPostgresCommand" />
                 <MenuItem id="ConnectMySql"
                           label="${res:CMD_ConnectMySql}"
                           class="FdoToolbox.Express.Commands.ConnectMySqlCommand" />

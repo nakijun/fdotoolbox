@@ -1185,23 +1185,15 @@ namespace FdoToolbox.Core.Feature
             List<DataStoreInfo> stores = new List<DataStoreInfo>();
             using (IListDataStores dlist = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ListDataStores) as IListDataStores)
             {
+                if (!onlyFdoEnabled)
+                    dlist.IncludeNonFdoEnabledDatastores = true;
+
                 using (IDataStoreReader reader = dlist.Execute())
                 {
                     while (reader.ReadNext())
                     {
-                        if (onlyFdoEnabled)
-                        {
-                            if (reader.GetIsFdoEnabled())
-                            {
-                                DataStoreInfo dinfo = new DataStoreInfo(reader);
-                                stores.Add(dinfo);
-                            }
-                        }
-                        else
-                        {
-                            DataStoreInfo dinfo = new DataStoreInfo(reader);
-                            stores.Add(dinfo);
-                        }
+                        DataStoreInfo dinfo = new DataStoreInfo(reader);
+                        stores.Add(dinfo);
                     }
                 }
             }

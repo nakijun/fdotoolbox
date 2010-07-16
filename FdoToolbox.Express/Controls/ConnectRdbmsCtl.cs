@@ -28,6 +28,7 @@ using System.Text;
 using System.Windows.Forms;
 using FdoToolbox.Base.Controls;
 using FdoToolbox.Base.Services;
+using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Express.Controls
 {
@@ -66,11 +67,12 @@ namespace FdoToolbox.Express.Controls
             set { btnOK.Enabled = value; }
         }
 
-        public string[] DataStores
+        public DataStoreInfo[] DataStores
         {
             set
             {
                 cmbDataStore.DataSource = value;
+                cmbDataStore.DisplayMember = "Description";
                 if (value.Length > 0)
                     cmbDataStore.SelectedIndex = 0;
             }
@@ -80,7 +82,7 @@ namespace FdoToolbox.Express.Controls
         {
             get
             {
-                return cmbDataStore.SelectedItem != null ? cmbDataStore.SelectedItem.ToString() : string.Empty;
+                return cmbDataStore.SelectedItem != null ? ((DataStoreInfo)cmbDataStore.SelectedItem).Name : string.Empty;
             }
         }
 
