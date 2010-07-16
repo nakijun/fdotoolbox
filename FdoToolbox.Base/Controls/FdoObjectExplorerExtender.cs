@@ -299,11 +299,11 @@ namespace FdoToolbox.Base.Controls
             //the node will be gone anyway.
             node.Nodes.Add(string.Empty);
 
-            SetConnectionToolTip(node, conn);
-
             TreeNode root = _explorer.GetRootNode(RootNodeName);
             root.Nodes.Add(node);
             root.Expand();
+
+            SetConnectionToolTip(node, conn);
         }
 
         void CreateSchemaNodes(TreeNode connNode)
@@ -365,13 +365,20 @@ namespace FdoToolbox.Base.Controls
             using (FdoFeatureService service = conn.CreateFeatureService())
             {
                 List<string> ctxStrings = new List<string>();
-                ICollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
-                foreach (SpatialContextInfo sci in contexts)
+                try
                 {
-                    if (sci.IsActive)
-                        ctxStrings.Add("- " + sci.Name + " (Active)");
-                    else
-                        ctxStrings.Add("- " + sci.Name);
+                    ICollection<SpatialContextInfo> contexts = service.GetSpatialContexts();
+                    foreach (SpatialContextInfo sci in contexts)
+                    {
+                        if (sci.IsActive)
+                            ctxStrings.Add("- " + sci.Name + " (Active)");
+                        else
+                            ctxStrings.Add("- " + sci.Name);
+                    }
+                }
+                catch
+                {
+                    ctxStrings.Add("Could not retrieve spatial contexts");
                 }
                 connNode.ToolTipText = string.Format(
                     "Provider: {0}{4}Type: {1}{4}Connection String: {2}{4}Spatial Contexts:{4}{3}",

@@ -62,12 +62,16 @@ namespace FdoToolbox.Express.Controls
         private readonly IFdoConnectionManager _connMgr;
         private FdoConnection _conn;
 
+        static string[] CONFIG_PROVIDERS = { "OSGEO.MYSQL", "OSGEO.SQLSERVERSPATIAL", "OSGEO.ODBC" };
+
         public ConnectRdbmsPresenter(IConnectRdbmsView view, IFdoConnectionManager connMgr)
         {
             _view = view;
             _connMgr = connMgr;
             _view.DataStoreEnabled = false;
             _view.SubmitEnabled = false;
+
+            _view.ConfigEnabled = (Array.IndexOf<string>(CONFIG_PROVIDERS, view.Provider.ToUpper()) >= 0);
         }
 
         private void SetDataStore(DataStoreInfo[] values)
@@ -79,8 +83,11 @@ namespace FdoToolbox.Express.Controls
 
         private void InitConnection()
         {
-            if(_conn == null)
-                _conn = new FdoConnection(_view.Provider); 
+            if (_conn == null)
+                _conn = new FdoConnection(_view.Provider);
+
+            if (!string.IsNullOrEmpty(_view.ConfigPath) && System.IO.File.Exists(_view.ConfigPath))
+                _conn.SetConfiguration(_view.ConfigPath);
         }
 
         public void PendingConnect()

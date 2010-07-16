@@ -70,7 +70,10 @@ namespace FdoToolbox.Base.Services
         {
             if (_ConnectionDict.ContainsKey(name))
                 throw new FdoConnectionException("Unable to add connection named " + name + " to the connection manager");
-            conn.Open();
+
+            if (conn.State != FdoConnectionState.Open)
+                conn.Open();
+
             _ConnectionDict.Add(name, conn);
             this.ConnectionAdded(this, new EventArgs<string>(name));
         }
