@@ -216,6 +216,19 @@ namespace FdoToolbox.Core.ETL.Specialized
             set { _BatchSize = value; }
         }
 
+        private bool _ForceWkb;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to force the input geometries to be 
+        /// WKB compliant. If necessary, the geometry will be flattened (stripped of Z and
+        /// M components)
+        /// </summary>
+        public bool ForceWkb
+        {
+            get { return _ForceWkb; }
+            set { _ForceWkb = value; }
+        }
+
         private bool _FlattenGeometries;
 
         /// <summary>
@@ -337,6 +350,12 @@ namespace FdoToolbox.Core.ETL.Specialized
                 opts.FlattenGeometries = false;
             else
                 opts.FlattenGeometries = el.Options.FlattenGeometries;
+
+            if (!el.Options.ForceWKBSpecified)
+                opts.ForceWkb = false;
+            else
+                opts.ForceWkb = el.Options.ForceWKB;
+
             if (!string.IsNullOrEmpty(el.Options.BatchSize))
                 opts.BatchSize = Convert.ToInt32(el.Options.BatchSize);
             opts.Name = el.name;
@@ -441,6 +460,9 @@ namespace FdoToolbox.Core.ETL.Specialized
             el.Options.Filter = this.SourceFilter;
             el.Options.FlattenGeometries = this.FlattenGeometries;
             el.Options.FlattenGeometriesSpecified = true;
+            el.Options.ForceWKB = this.ForceWkb;
+            el.Options.ForceWKBSpecified = true;
+
             if (this.BatchSize > 0)
                 el.Options.BatchSize = this.BatchSize.ToString();
 

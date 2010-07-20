@@ -105,6 +105,11 @@ namespace FdoToolbox.Core.ETL.Operations
             return nvc;
         }
 
+        protected bool IsUsingPropertyMappings()
+        {
+            return _mappings != null && _mappings.Count > 0;
+        }
+
         private List<string> propertySnapshot = null;
 
         /// <summary>
@@ -136,6 +141,7 @@ namespace FdoToolbox.Core.ETL.Operations
                 }
                 catch (OSGeo.FDO.Common.Exception ex)
                 {
+                    ex.Data["Class/Table"] = this.ClassName;
                     RaiseFailedFeatureProcessed(row, ex);
                     RePrepare(propVals);
                 }

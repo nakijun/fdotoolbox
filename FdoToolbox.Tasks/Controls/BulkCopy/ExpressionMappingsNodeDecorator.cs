@@ -236,7 +236,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                     throw new MappingException("Cannot map alias. Invalid expression: " + ex.Message);
                 }
 
-                if (expr.GetType() == typeof(Function))
+                if (typeof(Function).IsAssignableFrom(expr.GetType()))
                 {
                     Function func = expr as Function;
                     FdoConnection conn = Parent.GetSourceConnection();
@@ -276,7 +276,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                         throw new MappingException("Cannot map alias. Expression evaluates to an un-mappable property type");
                     }
                 }
-                else if (expr.GetType() == typeof(BinaryExpression))
+                else if (typeof(BinaryExpression).IsAssignableFrom(expr.GetType()))
                 {
                     if (dp == null)
                         throw new MappingException("Cannot map alias. Expression evaluates to an un-mappable property type");
@@ -285,7 +285,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                     if (!ValueConverter.IsConvertible(DataType.DataType_Boolean, dp.DataType))
                         throw new MappingException("Cannot map alias to property " + dst.Name + ". Expression evaluates to a data type that cannot be mapped to " + dp.DataType);
                 }
-                else if (expr.GetType() == typeof(DataValue))
+                else if (typeof(DataValue).IsAssignableFrom(expr.GetType()))
                 {
                     if (dp == null)
                         throw new MappingException("Cannot map alias. Expression evaluates to an un-mappable property type");
@@ -295,7 +295,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                         throw new MappingException("Cannot map alias to property " + dst.Name + ". Expression evaluates to a data type that cannot be mapped to " + dp.DataType);
                 }
                 //else if (expr.GetType() == typeof(Identifier))
-                //{ 
+                //{
                 //    //TODO: use the property type of the referenced property
                 //}
                 else //Cannot be evaluated

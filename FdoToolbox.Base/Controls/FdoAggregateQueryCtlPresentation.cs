@@ -101,10 +101,13 @@ namespace FdoToolbox.Base.Controls
                 {
                     if (pd.PropertyType != PropertyType.PropertyType_RasterProperty)
                     {
-                        p.Add(pd.Name);
-                        bool groupable = pd.PropertyType == PropertyType.PropertyType_DataProperty && ((pd as DataPropertyDefinition).DataType != DataType.DataType_CLOB && (pd as DataPropertyDefinition).DataType != DataType.DataType_BLOB);
-                        if (groupable)
-                            pg.Add(pd.Name);
+                        if (pd.PropertyType == PropertyType.PropertyType_DataProperty || pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                        {
+                            p.Add(pd.Name);
+                            bool groupable = pd.PropertyType == PropertyType.PropertyType_DataProperty && ((pd as DataPropertyDefinition).DataType != DataType.DataType_CLOB && (pd as DataPropertyDefinition).DataType != DataType.DataType_BLOB);
+                            if (groupable)
+                                pg.Add(pd.Name);
+                        }
                     }
                     else //Raster's can't be previewed via this approach, so disable map view
                     {

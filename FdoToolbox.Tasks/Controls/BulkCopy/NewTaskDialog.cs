@@ -64,6 +64,9 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             cmbSrcConnection.DataSource = srcNames;
             cmbDstConnection.DataSource = dstNames;
 
+            cmbSrcConnection.SelectedIndex = 0;
+            cmbDstConnection.SelectedIndex = 0;
+
             base.OnLoad(e);
         }
 

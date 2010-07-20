@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{282A4797-CC1B-40F7-A9D8-12249F10FD48}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -119,34 +119,40 @@
     <Compile Include="Commands\ObjectExplorerCommands.cs" />
     <Compile Include="Commands\StartupCommand.cs" />
     <Compile Include="Controls\ConnectArcSdeCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ConnectArcSdeCtl.Designer.cs">
       <DependentUpon>ConnectArcSdeCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectArcSdePresentation.cs" />
     <Compile Include="Controls\ConnectMySqlCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ConnectMySqlCtl.Designer.cs">
       <DependentUpon>ConnectMySqlCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectOdbcCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ConnectOdbcCtl.Designer.cs">
       <DependentUpon>ConnectOdbcCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectOdbcPresentation.cs" />
     <Compile Include="Controls\ConnectOgrCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ConnectOgrCtl.Designer.cs">
       <DependentUpon>ConnectOgrCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectOgrPresentation.cs" />
     <Compile Include="Controls\ConnectPostGisCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ConnectPostGisCtl.Designer.cs">
       <DependentUpon>ConnectPostGisCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectPostgresCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ConnectPostgresCtl.Designer.cs">
       <DependentUpon>ConnectPostgresCtl.cs</DependentUpon>
@@ -159,11 +165,13 @@
     </Compile>
     <Compile Include="Controls\ConnectRdbmsPresentation.cs" />
     <Compile Include="Controls\ConnectSqlServerCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ConnectSqlServerCtl.Designer.cs">
       <DependentUpon>ConnectSqlServerCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\CopySpatialContextsCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\CopySpatialContextsCtl.Designer.cs">
       <DependentUpon>CopySpatialContextsCtl.cs</DependentUpon>
@@ -172,23 +180,27 @@
     </Compile>
     <Compile Include="Controls\CreateSqliteCtlPresentation.cs" />
     <Compile Include="Controls\CreateSqliteCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\CreateSqliteCtl.Designer.cs">
       <DependentUpon>CreateSqliteCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\CreateShpCtlPresentation.cs" />
     <Compile Include="Controls\CreateShpCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\CreateShpCtl.Designer.cs">
       <DependentUpon>CreateShpCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\CreateSdfCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\CreateSdfCtl.Designer.cs">
       <DependentUpon>CreateSdfCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\CreateSdfCtlPresentation.cs" />
     <Compile Include="Controls\FileToFileCtl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\FileToFileCtl.Designer.cs">
       <DependentUpon>FileToFileCtl.cs</DependentUpon>
