@@ -55,6 +55,30 @@ namespace FdoToolbox.Core.Utility
         private FdoGeometryUtil() { }
 
         /// <summary>
+        /// Forces the given geometry to be WKB compliant. If necessary, a <see cref="Flatten"/> call
+        /// will be made on the geometry.
+        /// </summary>
+        /// <param name="geom"></param>
+        /// <param name="fact"></param>
+        /// <returns></returns>
+        public static IGeometry ForceWkb(IGeometry geom, FgfGeometryFactory fact)
+        {
+            byte [] wkb = null;
+            try
+            {
+                wkb = fact.GetWkb(geom);
+            }
+            catch
+            {
+                using (IGeometry wg = Flatten(geom, fact))
+                {
+                    wkb = fact.GetWkb(geom);
+                }
+            }
+            return fact.CreateGeometryFromWkb(wkb);
+        }
+
+        /// <summary>
         /// Gets the geometric types.
         /// </summary>
         /// <param name="value">The value.</param>

@@ -103,6 +103,15 @@ namespace FdoToolbox.Base.Controls
                 for (int i = 0; i < errors.Count; i++)
                 {
                     writer.WriteLine("------- EXCEPTION #" + (i+1) + " -------");
+                    if (errors[i].Data.Count > 0)
+                    {
+                        writer.WriteLine("\n== Exception User Data: ==");
+                        foreach (var key in errors[i].Data.Keys)
+                        {
+                            writer.WriteLine("{0} = {1}", key, errors[i].Data[key]);
+                        }
+                        writer.WriteLine();
+                    }
                     writer.WriteLine(errors[i].ToString());
                     writer.WriteLine("------- EXCEPTION END -------");
                 }

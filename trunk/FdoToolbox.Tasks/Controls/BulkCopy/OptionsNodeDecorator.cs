@@ -43,11 +43,13 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         const string OPT_CLS_FILTER = "OPT_CLS_FILTER";
         const string OPT_BATCH_SIZE = "OPT_BATCH_SIZE";
         const string OPT_FLATTEN = "OPT_FLATTEN";
+        const string OPT_FORCEWKB = "OPT_FORCEWKB";
 
         private ContextMenuStrip ctxDeleteTarget;
         private ContextMenuStrip ctxSourceFilter;
         private ContextMenuStrip ctxBatchSize;
         private ContextMenuStrip ctxFlatten;
+        private ContextMenuStrip ctxForceWkb;
 
         internal OptionsNodeDecorator(CopyTaskNodeDecorator parent, TreeNode optionsNode)
         {
@@ -74,14 +76,22 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             flattenNode.Name = OPT_FLATTEN;
             flattenNode.ContextMenuStrip = ctxFlatten;
 
+            //Options - Force WKB
+            TreeNode forceWkbNode = new TreeNode("Force WKB Geometry");
+            forceWkbNode.ToolTipText = "If true, will force the input geometry to be WKB compliant";
+            forceWkbNode.Name = OPT_FORCEWKB;
+            forceWkbNode.ContextMenuStrip = ctxForceWkb;
+
             _node.Nodes.Add(delTargetNode);
             _node.Nodes.Add(srcFilterNode);
             _node.Nodes.Add(flattenNode);
+            _node.Nodes.Add(forceWkbNode);
 
             //Set default values to avoid any nasty surprises
             this.Delete = false;
             this.SourceFilter = string.Empty;
             this.Flatten = false;
+            this.ForceWkb = false;
 
             //Test for batch support
             using (FdoFeatureService svc = Parent.GetTargetConnection().CreateFeatureService())
@@ -104,6 +114,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             ctxSourceFilter = new ContextMenuStrip();
             ctxBatchSize = new ContextMenuStrip();
             ctxFlatten = new ContextMenuStrip();
+            ctxForceWkb = new ContextMenuStrip();
 
             //Delete Target
             ctxDeleteTarget.Items.Add("True", null, delegate { this.Delete = true; });
@@ -123,6 +134,10 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             //Flatten Geometries
             ctxFlatten.Items.Add("True", null, delegate { this.Flatten = true; });
             ctxFlatten.Items.Add("False", null, delegate { this.Flatten = false; });
+
+            //Force wkb
+            ctxForceWkb.Items.Add("True", null, delegate { this.ForceWkb = true; });
+            ctxForceWkb.Items.Add("False", null, delegate { this.ForceWkb = false; });
 
             //Batch Size
             ctxBatchSize.Items.Add("Set Size", null, delegate {
@@ -172,19 +187,29 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         {
             get
             {
-                if (_node.Nodes.Count == 4)
+                if (_node.Nodes.Count == 5)
                 {
-                    return Convert.ToInt32(_node.Nodes[3].Tag);
+                    return Convert.ToInt32(_node.Nodes[4].Tag);
                 }
                 return 0;
             }
             set 
             {
-                if (_node.Nodes.Count == 4)
+                if (_node.Nodes.Count == 5)
                 {
-                    _node.Nodes[3].Tag = value;
-                    _node.Nodes[3].Text = "Insert Batch Size: " + value;
+                    _node.Nodes[4].Tag = value;
+                    _node.Nodes[4].Text = "Insert Batch Size: " + value;
                 }
+            }
+        }
+
+        public bool ForceWkb
+        {
+            get { return Convert.ToBoolean(_node.Nodes[3].Tag); }
+            set
+            {
+                _node.Nodes[3].Tag = value;
+                _node.Nodes[3].Text = "Force WKB: " + value;
             }
         }
     }

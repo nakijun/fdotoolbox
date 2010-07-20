@@ -243,6 +243,8 @@ namespace FdoToolbox.Tasks.Controls
                 task.Options.FlattenGeometriesSpecified = true;
                 task.Options.DeleteTarget = dec.Options.Delete;
                 task.Options.Filter = dec.Options.SourceFilter;
+                task.Options.ForceWKB = dec.Options.ForceWkb;
+                task.Options.ForceWKBSpecified = true;
 
                 //Property Mappings
                 NameValueCollection mappings = dec.PropertyMappings.GetPropertyMappings();
@@ -320,6 +322,7 @@ namespace FdoToolbox.Tasks.Controls
                 dec.Options.Delete = task.DeleteTarget;
                 dec.Options.SourceFilter = task.SourceFilter;
                 dec.Options.Flatten = task.FlattenGeometries;
+                
 
                 //Property Mappings
                 foreach (string srcProp in task.SourcePropertyNames)

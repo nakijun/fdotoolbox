@@ -90,7 +90,8 @@ namespace FdoToolbox.Base.Controls
                 List<string> p = new List<string>();
                 foreach (PropertyDefinition pd in _view.SelectedClass.Properties)
                 {
-                    p.Add(pd.Name);
+                    if (pd.PropertyType == PropertyType.PropertyType_DataProperty || pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                        p.Add(pd.Name);
                 }
                 _view.PropertyList = p;
                 _view.FireMapPreviewStateChanged(_view.SelectedClass.ClassType == ClassType.ClassType_FeatureClass);

@@ -130,7 +130,11 @@ namespace FdoToolbox.Core.ETL.Specialized
                 }
                 else
                 {
-                    output = new FdoOutputOperation(dstConn, Options.TargetClassName, propertyMappings);
+                    //HACK: SQL Server just sucks using regular operation
+                    if (dstConn.Provider.StartsWith("OSGeo.SQLServerSpatial"))
+                        output = new FdoSqlOutputOperation(dstConn, Options.TargetClassName, propertyMappings);
+                    else
+                        output = new FdoOutputOperation(dstConn, Options.TargetClassName, propertyMappings);
                 }
             }
             else
@@ -146,7 +150,11 @@ namespace FdoToolbox.Core.ETL.Specialized
                 }
                 else
                 {
-                    output = new FdoOutputOperation(dstConn, Options.TargetClassName);
+                    //HACK: SQL Server just sucks using regular operation
+                    if (dstConn.Provider.StartsWith("OSGeo.SQLServerSpatial"))
+                        output = new FdoSqlOutputOperation(dstConn, Options.TargetClassName);
+                    else
+                        output = new FdoOutputOperation(dstConn, Options.TargetClassName);
                 }
             }
 
@@ -161,6 +169,8 @@ namespace FdoToolbox.Core.ETL.Specialized
                 Register(convert);
             if (Options.FlattenGeometries)
                 Register(new FdoFlattenGeometryOperation());
+            if (Options.ForceWkb)
+                Register(new FdoForceWkbOperation());
             Register(output);
         }
 

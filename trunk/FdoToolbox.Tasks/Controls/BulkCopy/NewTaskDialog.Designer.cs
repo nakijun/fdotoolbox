@@ -52,6 +52,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.cmbSrcClass);
             this.groupBox1.Controls.Add(this.cmbSrcSchema);
             this.groupBox1.Controls.Add(this.cmbSrcConnection);
@@ -67,6 +69,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // cmbSrcClass
             // 
+            this.cmbSrcClass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbSrcClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSrcClass.FormattingEnabled = true;
             this.cmbSrcClass.Location = new System.Drawing.Point(102, 67);
@@ -77,6 +81,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // cmbSrcSchema
             // 
+            this.cmbSrcSchema.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbSrcSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSrcSchema.FormattingEnabled = true;
             this.cmbSrcSchema.Location = new System.Drawing.Point(102, 40);
@@ -87,6 +93,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // cmbSrcConnection
             // 
+            this.cmbSrcConnection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbSrcConnection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSrcConnection.FormattingEnabled = true;
             this.cmbSrcConnection.Location = new System.Drawing.Point(102, 13);
@@ -124,6 +132,9 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.cmbDstClass);
             this.groupBox2.Controls.Add(this.cmbDstConnection);
             this.groupBox2.Controls.Add(this.cmbDstSchema);
@@ -139,6 +150,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // cmbDstClass
             // 
+            this.cmbDstClass.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbDstClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDstClass.FormattingEnabled = true;
             this.cmbDstClass.Location = new System.Drawing.Point(102, 73);
@@ -149,6 +162,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // cmbDstConnection
             // 
+            this.cmbDstConnection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbDstConnection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDstConnection.FormattingEnabled = true;
             this.cmbDstConnection.Location = new System.Drawing.Point(102, 19);
@@ -159,6 +174,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // cmbDstSchema
             // 
+            this.cmbDstSchema.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbDstSchema.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDstSchema.FormattingEnabled = true;
             this.cmbDstSchema.Location = new System.Drawing.Point(102, 46);
@@ -196,6 +213,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // btnOK
             // 
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.Enabled = false;
             this.btnOK.Location = new System.Drawing.Point(124, 260);
             this.btnOK.Name = "btnOK";
@@ -207,6 +225,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(205, 260);
             this.btnCancel.Name = "btnCancel";
@@ -227,6 +246,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             // 
             // txtName
             // 
+            this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.Location = new System.Drawing.Point(64, 15);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(216, 20);

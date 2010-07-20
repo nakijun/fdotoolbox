@@ -52,7 +52,16 @@ namespace FdoToolbox.Core
         /// </summary>
         /// <param name="msg">The message.</param>
         /// <param name="inner">The inner exception.</param>
-        public FdoETLException(string msg, Exception inner) : base(msg, inner) { }
+        public FdoETLException(string msg, Exception inner) : base(msg, inner) 
+        {
+            if (inner.Data.Count > 0)
+            {
+                foreach (var key in inner.Data.Keys)
+                {
+                    this.Data[key] = inner.Data[key];
+                }
+            }
+        }
     }
 
     /// <summary>
