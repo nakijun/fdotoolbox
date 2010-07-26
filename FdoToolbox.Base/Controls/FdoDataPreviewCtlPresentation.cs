@@ -406,7 +406,20 @@ namespace FdoToolbox.Base.Controls
             }
             if (query != null)
             {
-                long count = GetFeatureCount();
+                long count = 0;
+                try
+                {
+                    count = GetFeatureCount();
+                }
+                catch (Exception)
+                {
+                    if (!_view.Confirm(ResourceService.GetString("TITLE_DATA_PREVIEW"), "An error occured attempting to get the total number of features in this feature class. As a result, the size of the result set produced by your query cannot be determined. Proceed anyway?"))
+                    {
+                        _view.SetBusyCursor(false);
+                        return;
+                    }
+                }
+
                 int limit = Preferences.DataPreviewWarningLimit;
 
                 if (_view.SelectedQueryMode == QueryMode.Standard)
