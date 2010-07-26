@@ -39,6 +39,12 @@ namespace FdoUtil
             _file = file;
         }
 
+        private static string GenerateLogFileName(string prefix)
+        {
+            var dt = DateTime.Now;
+            return prefix + string.Format("{0}y{1}m{2}d{3}h{4}m{5}s", dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second) + ".log";
+        }
+
         public override int Execute()
         {
             CommandStatus retCode;
@@ -65,7 +71,7 @@ namespace FdoUtil
                     List<Exception> errors = new List<Exception>(copy.GetAllErrors());
                     if (errors.Count > 0)
                     {
-                        string file = "bcp-error-" + DateTime.Now.ToShortTimeString() + ".log";
+                        string file = GenerateLogFileName("bcp-error-");
                         LogErrors(errors, file);
                         Console.WriteLine("Errors were encountered during bulk copy.");
                         retCode = CommandStatus.E_FAIL_BULK_COPY_WITH_ERRORS;
@@ -89,7 +95,7 @@ namespace FdoUtil
                     List<Exception> errors = new List<Exception>(join.GetAllErrors());
                     if (errors.Count > 0)
                     {
-                        string file = "join-error-" + DateTime.Now.ToShortTimeString() + ".log";
+                        string file = GenerateLogFileName("join-error-");
                         LogErrors(errors, file);
                         Console.WriteLine("Errors were encountered during join operation");
                         retCode = CommandStatus.E_FAIL_JOIN_WITH_ERRORS;
@@ -108,8 +114,10 @@ namespace FdoUtil
         private void LogErrors(List<Exception> errors, string file)
         {
             string dir = Path.GetDirectoryName(file);
-            if (!Directory.Exists(dir))
+            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
+
+            Console.WriteLine("Saving errors to: " + file);
 
             using (StreamWriter writer = new StreamWriter(file, false))
             {

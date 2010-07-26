@@ -81,6 +81,11 @@ namespace FdoToolbox.Core.ETL.Operations
             }
         }
 
+        private static string EscapeValue(string value)
+        {
+            return value.Replace("'", "''");
+        }
+
         string QUALIFIER_BEGIN = "[";
         string QUALIFIER_END = "]";
 
@@ -152,6 +157,8 @@ namespace FdoToolbox.Core.ETL.Operations
                     {
                         if (obj.IsGeometryProperty(name))
                             values[i] = VALUE_BEGIN + ((IGeometry)obj[name]).Text + VALUE_END;
+                        else if (obj[name].GetType() == typeof(string))
+                            values[i] = VALUE_BEGIN + EscapeValue((string)obj[name]) + VALUE_END;
                         else if (obj[name].GetType() == typeof(DateTime))
                             values[i] = VALUE_BEGIN + ((DateTime)obj[name]).ToString(ISO8601_FMT) + VALUE_END;
                         else
