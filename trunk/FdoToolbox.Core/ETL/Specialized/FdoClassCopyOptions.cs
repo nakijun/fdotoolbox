@@ -373,10 +373,10 @@ namespace FdoToolbox.Core.ETL.Specialized
                 foreach (FdoPropertyMappingElement propMap in el.PropertyMappings)
                 {
                     if (srcClass.Properties.IndexOf(propMap.source) < 0)
-                        throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target +") contains a source property not found in the source class definition");
+                        throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a source property not found in the source class definition (" + el.Source.@class + ")");
 
                     if (dstClass.Properties.IndexOf(propMap.target) < 0)
-                        throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") contains a target property not found in the target class definition");
+                        throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a target property not found in the target class definition (" + el.Target.@class + ")");
 
                     PropertyDefinition sp = srcClass.Properties[propMap.source];
                     PropertyDefinition tp = dstClass.Properties[propMap.target];
