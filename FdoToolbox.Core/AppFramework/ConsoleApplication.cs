@@ -90,6 +90,7 @@ namespace FdoToolbox.Core.AppFramework
             {
                 Console.Error.WriteLine(ex.Message);
                 ShowUsage();
+                Environment.ExitCode = (int)CommandStatus.E_FAIL_INVALID_ARGUMENTS;
                 return;
             }
 
