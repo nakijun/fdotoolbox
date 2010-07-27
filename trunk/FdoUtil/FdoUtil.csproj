@@ -96,6 +96,7 @@
     <Compile Include="CreateFileCommand.cs" />
     <Compile Include="DestroyCommand.cs" />
     <Compile Include="DumpSchemaCommand.cs" />
+    <Compile Include="ExecuteSqlCommand.cs" />
     <Compile Include="FdoUtilApp.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

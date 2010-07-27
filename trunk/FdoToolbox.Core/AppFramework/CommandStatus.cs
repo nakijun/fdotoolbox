@@ -99,6 +99,22 @@ namespace FdoToolbox.Core.AppFramework
         /// </summary>
         E_FAIL_JOIN_WITH_ERRORS = 16,
         /// <summary>
+        /// The specified SQL statement was a SELECT statement
+        /// </summary>
+        E_FAIL_INVALID_SQL = 17,
+        /// <summary>
+        /// The specified SQL statement threw an exception during execution
+        /// </summary>
+        E_FAIL_SQL_EXECUTION_ERROR = 18,
+        /// <summary>
+        /// The specified provider does not support SQL commands
+        /// </summary>
+        E_FAIL_SQL_COMMAND_NOT_SUPPORTED = 19,
+        /// <summary>
+        /// The command was invoked with invalid or incomplete arguments
+        /// </summary>
+        E_FAIL_INVALID_ARGUMENTS = 20,
+        /// <summary>
         /// Unknown failure
         /// </summary>
         E_FAIL_UNKNOWN

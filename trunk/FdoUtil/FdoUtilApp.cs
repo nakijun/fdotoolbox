@@ -42,6 +42,27 @@ namespace FdoUtil
 
             switch (cmdName)
             {
+                case "ExecuteSql":
+                    {
+                        if (IsSwitchDefined("-help", args))
+                        {
+                            Console.WriteLine("Descripton: {0}\nUsage: {1}",
+                                "Executes a non-SELECT SQL query. The specified provider must support SQL commands",
+                                "FdoUtil.exe -cmd:ExecuteSql -provider:<FDO provider> -connection:<connection string> -sql:<sql statement>");
+                            return;
+                        }
+
+                        string provider = GetArgument("-provider", args);
+                        string connStr = GetArgument("-connection", args);
+                        string sql = GetArgument("-sql", args);
+
+                        ThrowIfEmpty(provider, "-provider");
+                        ThrowIfEmpty(connStr, "-connection");
+                        ThrowIfEmpty(sql, "-sql");
+
+                        _Command = new ExecuteSqlCommand(provider, connStr, sql);
+                    }
+                    break;
                 case "CreateFile":
                     {
                         if (IsSwitchDefined("-help", args))
@@ -289,6 +310,7 @@ namespace FdoUtil
  - UnregisterProvider
  - BulkCopy
  - RunTask
+ - ExecuteSql
 For more information about a command type: FdoUtil.exe -cmd:<command name> -help
 For more help. Consult the help file cmd_readme.txt";
             Console.WriteLine(usage);
