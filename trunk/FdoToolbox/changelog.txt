@@ -6,9 +6,8 @@ v0.9.5
 	  can have x86 and x64 versions of this release installed on the same machine and 
 	  each version will have their own settings/preferences.
 	- Express connect support for OSGeo.PostgreSQL provider
-	- Fix express connections to MS Access databases and Excel spreadsheets in 64-bit 
-	  windows. It is assumed that the 64-bit Access 2010 Database Engine is installed.
 	- Drag/Drop support for excel documents (*.xls)
+	- Streamlined naming convention for new connections.
 	- FdoUtil.exe enhancements:
 		- Updated command: RunTask
 			- Now has an optional -bcptask parameter, allowing execution of a single task
@@ -17,6 +16,7 @@ v0.9.5
 			- Allows a non-SELECT SQL statement to be executed
 	
 - Fixes:
+	- Added more UI messages and feedback when saving/loading tasks.
 	- Added workaround for Object Explorer refresh issue with OSGeo.PostgreSQL connections.
 	- Fix Object Explorer issue when more than one un-qualified feature class name exists.
 	- Fix FdoFeatureService.ListDataStores not listing non-fdo datastores. This allows
