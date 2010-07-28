@@ -115,6 +115,11 @@ namespace FdoToolbox.Core.AppFramework
         /// </summary>
         E_FAIL_INVALID_ARGUMENTS = 20,
         /// <summary>
+        /// A RunTask command was executed with a bcptask parameter specifying
+        /// a copy task that doesn't exist
+        /// </summary>
+        E_FAIL_MISSING_BULK_COPY_TASKS = 21,
+        /// <summary>
         /// Unknown failure
         /// </summary>
         E_FAIL_UNKNOWN
