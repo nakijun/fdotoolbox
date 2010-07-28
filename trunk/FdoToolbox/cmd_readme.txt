@@ -31,6 +31,7 @@ The valid list of commands for FdoUtil.exe include:
 - UnregisterProvider
 - BulkCopy
 - RunTask
+- ExecuteSql
 
 The valid list of command for FdoInfo.exe include:
 - GetConnectionParameters
@@ -175,11 +176,33 @@ RunTask
 
 Description: Executes a pre-defined task definition
 
-Usage: FdoUtil.exe -cmd:RunTask -task:<path to task definition>
+Usage: FdoUtil.exe -cmd:RunTask -task:<path to task definition> [-bcptask:<name of task within bulk copy definition>]
 
 Notes: The task definition must be a valid Bulk Copy or Join definition. Bulk Copy tasks must have a .BulkCopyDefinition extension and Join tasks must have a .JoinDefinition extensions.
 
 RunTask will make no attempts to validate the connections defined within these tasks.
+
+The -bcptask option if specified will only execute the specified task within the bulk copy definition instead of all the tasks (default). If the task is not found, an error is returned.
+
+The -bcptask option does not apply to join tasks. Specifying this option with a join task definition will return an error.
+
+ExecuteSql
+----------
+
+Description: Executes a non-SELECT SQL statement
+
+Usage: FdoUtil.exe -cmd:ExecuteSql -provider:<fdo provider> -connection:<connection string> -sql:<SQL statement>
+
+Notes: This command only works for FDO providers that support SQL statements. Assuming a stock FDO distribution bundled with FDO Toolbox, then the providers which support SQL statements are:
+
+- OSGeo.MySQL
+- OSGeo.ODBC
+- OSGeo.PostgreSQL
+- OSGeo.SQLServerSpatial
+- King.Oracle
+- OSGeo.SQLite
+
+FdoUtil.exe does not validate the SQL statement for any syntax errors.
 
 ======= FdoInfo.exe command description ======= [B2]
 
