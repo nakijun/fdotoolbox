@@ -169,6 +169,9 @@
   <data name="LBL_SOURCE_FILTER" xml:space="preserve">
     <value>Source class filter</value>
   </data>
+  <data name="LOADING_TASK_DEFINITION_WAIT" xml:space="preserve">
+    <value>Loading task definition. Please wait.</value>
+  </data>
   <data name="MENU_NEW_TASK" xml:space="preserve">
     <value>New Task</value>
   </data>

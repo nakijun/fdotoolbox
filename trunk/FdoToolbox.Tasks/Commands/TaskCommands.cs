@@ -170,19 +170,23 @@ namespace FdoToolbox.Tasks.Commands
             string file = FileService.OpenFile(ResourceService.GetString("TITLE_LOAD_TASK"), ResourceService.GetString("FILTER_TASK_DEFINITION"));
             if (FileService.FileExists(file))
             {
-                if (TaskDefinitionHelper.IsBulkCopy(file))
+                using (new TempCursor(Cursors.WaitCursor))
                 {
-                    string name = string.Empty;
-                    FdoBulkCopyOptions opt = ldr.BulkCopyFromXml(file, ref name, false);
-                    FdoBulkCopy cpy = new FdoBulkCopy(opt);
-                    mgr.AddTask(name, cpy);
-                }
-                else if (TaskDefinitionHelper.IsJoin(file))
-                {
-                    string name = string.Empty;
-                    FdoJoinOptions opt = ldr.JoinFromXml(file, ref name, false);
-                    FdoJoin join = new FdoJoin(opt);
-                    mgr.AddTask(name, join);
+                    LoggingService.Info(ResourceService.GetString("LOADING_TASK_DEFINITION_WAIT"));
+                    if (TaskDefinitionHelper.IsBulkCopy(file))
+                    {
+                        string name = string.Empty;
+                        FdoBulkCopyOptions opt = ldr.BulkCopyFromXml(file, ref name, false);
+                        FdoBulkCopy cpy = new FdoBulkCopy(opt);
+                        mgr.AddTask(name, cpy);
+                    }
+                    else if (TaskDefinitionHelper.IsJoin(file))
+                    {
+                        string name = string.Empty;
+                        FdoJoinOptions opt = ldr.JoinFromXml(file, ref name, false);
+                        FdoJoin join = new FdoJoin(opt);
+                        mgr.AddTask(name, join);
+                    }
                 }
             }
         }

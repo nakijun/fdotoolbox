@@ -135,7 +135,10 @@ namespace FdoToolbox.Tasks.Controls
         {
             TreeNode node = mTreeView.SelectedNode;
             if (node.Level == NODE_LEVEL_TASK)
+            {
                 mTreeView.Nodes.Remove(node);
+                _tasks.Remove(node.Index);
+            }
         }
 
         //Right-click TreeView hack
@@ -175,31 +178,36 @@ namespace FdoToolbox.Tasks.Controls
                 return;
             }
 
-            TaskLoader loader = new TaskLoader();
-            if (IsNew)
-            {   
-                string name = string.Empty;
-                FdoBulkCopyOptions opts = loader.BulkCopyFromXml(Save(), ref name, false);
-                FdoBulkCopy bcp = new FdoBulkCopy(opts);
-                tmgr.AddTask(name, bcp);
-                this.Close();
-            }
-            else
+            //This could take a while...
+            using (new TempCursor(Cursors.WaitCursor))
             {
-                FdoBulkCopy bcp = tmgr.GetTask(txtName.Text) as FdoBulkCopy;
-                if (bcp == null)
+                LoggingService.Info("Updating loaded task. Please wait.");
+                TaskLoader loader = new TaskLoader();
+                if (IsNew)
                 {
-                    MessageService.ShowMessage("This named task is not a bulk copy task or could not find the named task to update");
-                    return;
+                    string name = string.Empty;
+                    FdoBulkCopyOptions opts = loader.BulkCopyFromXml(Save(), ref name, false);
+                    FdoBulkCopy bcp = new FdoBulkCopy(opts);
+                    tmgr.AddTask(name, bcp);
+                    this.Close();
                 }
-                string name = string.Empty;
-                FdoBulkCopyOptions opts = loader.BulkCopyFromXml(Save(), ref name, false);
-                Debug.Assert(name == txtName.Text); //unchanged
+                else
+                {
+                    FdoBulkCopy bcp = tmgr.GetTask(txtName.Text) as FdoBulkCopy;
+                    if (bcp == null)
+                    {
+                        MessageService.ShowMessage("This named task is not a bulk copy task or could not find the named task to update");
+                        return;
+                    }
+                    string name = string.Empty;
+                    FdoBulkCopyOptions opts = loader.BulkCopyFromXml(Save(), ref name, false);
+                    Debug.Assert(name == txtName.Text); //unchanged
 
-                //Update options
-                bcp.Options = opts;
-                MessageService.ShowMessage("Saved");
-                this.Close();
+                    //Update options
+                    bcp.Options = opts;
+                    MessageService.ShowMessage("Task updated. To save to disk, right-click the task object and choose: " + ResourceService.GetString("CMD_SaveTask"));
+                    this.Close();
+                }
             }
         }
 
