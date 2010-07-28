@@ -18,6 +18,7 @@ v0.9.5
 	  geometry correctness. This approach, we can let the SQL server fix the "bad" geometries.
 	
 - Fixes:
+	- Bundled a custom-built SQLite provider to fix FDO Trac ticket #659
 	- Data Query will can now gracefully continue even if the method of counting the query result set size fails.
 	- Added more UI messages and feedback when saving/loading tasks.
 	- Added workaround for Object Explorer refresh issue with OSGeo.PostgreSQL connections.

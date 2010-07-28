@@ -146,8 +146,7 @@ goto quit
 
 :clean
 echo Cleaning Temp doc directories
-rd /S /Q %DOCPATH%\doc
-rd /S /Q %DOCPATH%\msdn-chm
+rd /S /Q %DOCPATH%\Help
 echo Cleaning Output Directory
 rd /S /Q out
 echo Cleaning FdoInfo
@@ -180,9 +179,6 @@ rd /S /Q %MGMODULE%\obj
 echo Cleaning FdoToolbox.AddInManager
 rd /S /Q %FDOTOOLBOXADDINMGR%\bin
 rd /S /Q %FDOTOOLBOXADDINMGR%\obj
-echo Cleaning FdoToolbox.AdoDb
-rd /S /Q %FDOTOOLBOXADODB%\bin
-rd /S /Q %FDOTOOLBOXADODB%\obj
 echo Cleaning FdoToolbox.Express
 rd /S /Q %FDOTOOLBOXEXPRESS%\bin
 rd /S /Q %FDOTOOLBOXEXPRESS%\obj

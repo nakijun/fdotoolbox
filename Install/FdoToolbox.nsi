@@ -47,12 +47,13 @@ SetCompressor /SOLID /FINAL lzma
 !endif
 
 # Installer vars
+!define INST_PRODUCT "FDO Toolbox"
 !if ${SLN_CONFIG} == "Release"
-	!define INST_PRODUCT "FDO Toolbox"
-	!define INST_PRODUCT_NAME "${INST_PRODUCT} ${RELEASE_VERSION} (${CPU})"
+	!define INST_PRODUCT_QUALIFIED "${INST_PRODUCT} (${CPU})"
+	!define INST_PRODUCT_NAME "${INST_PRODUCT_QUALIFIED} ${RELEASE_VERSION} "
 !else
-	!define INST_PRODUCT "FDO Toolbox"
-	!define INST_PRODUCT_NAME "${INST_PRODUCT} ${RELEASE_VERSION} (${CPU}, Debug)"
+	!define INST_PRODUCT_QUALIFIED "${INST_PRODUCT} (${CPU}, Debug)"
+	!define INST_PRODUCT_NAME "${INST_PRODUCT_QUALIFIED} ${RELEASE_VERSION}"
 !endif
 
 !define PROJECT_URL "http://fdotoolbox.googlecode.com"
@@ -68,7 +69,7 @@ SetCompressor /SOLID /FINAL lzma
 	VIAddVersionKey "FileVersion" "${RELEASE_VERSION}"
 !endif
 
-!define REG_KEY_UNINSTALL "Software\Microsoft\Windows\CurrentVersion\Uninstall\${INST_PRODUCT}"
+!define REG_KEY_UNINSTALL "Software\Microsoft\Windows\CurrentVersion\Uninstall\${INST_PRODUCT_QUALIFIED}"
 
 # Project Output
 !define INST_OUTPUT_FDOTOOLBOX "${SLN_DIR}\out\${CPU}\${SLN_CONFIG}"
@@ -78,7 +79,7 @@ SetCompressor /SOLID /FINAL lzma
 !define EXE_FDOTOOLBOX "FdoToolbox.exe"
 
 # Shortcuts
-!define LNK_FDOTOOLBOX "FDO Toolbox"
+!define LNK_FDOTOOLBOX "${INST_PRODUCT_QUALIFIED}"
 
 ;-------------------
 ; General
@@ -218,13 +219,13 @@ Section
 	# TODO: Add more useful information to Add/Remove programs
 	# See: http://nsis.sourceforge.net/Add_uninstall_information_to_Add/Remove_Programs
 	
-	# create FDO Toolbox shortcuts
-	CreateDirectory "$SMPROGRAMS\${INST_PRODUCT}"
+	# create FDO Toolbox shortcuts. Use INST_PRODUCT_QUALIFIED so we can have x86 and x64 entries that don't clash
+	CreateDirectory "$SMPROGRAMS\${INST_PRODUCT_QUALIFIED}"
 	
-	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\${LNK_FDOTOOLBOX}.lnk" "$INSTDIR\${EXE_FDOTOOLBOX}"
-	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\User Documentation.lnk" "$INSTDIR\${HELP_USER}"
-	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\Core API Documentation.lnk" "$INSTDIR\${HELP_API}"
-	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT_QUALIFIED}\${LNK_FDOTOOLBOX}.lnk" "$INSTDIR\${EXE_FDOTOOLBOX}"
+	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT_QUALIFIED}\User Documentation.lnk" "$INSTDIR\${HELP_USER}"
+	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT_QUALIFIED}\Core API Documentation.lnk" "$INSTDIR\${HELP_API}"
+	CreateShortCut "$SMPROGRAMS\${INST_PRODUCT_QUALIFIED}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 	
 	CreateShortCut "$DESKTOP\${LNK_FDOTOOLBOX}.lnk" "$INSTDIR\${EXE_FDOTOOLBOX}"
 	
@@ -256,7 +257,7 @@ Function .onInit
 	
 	; SP level of 1 or higher is enough
 	${If} $0 < 1
-		MessageBox MB_OK|MB_ICONINFORMATION "${INST_PRODUCT} requires that the .net Framework 2.0 SP1 or above is installed. Please download and install the .net Framework 2.0 SP1 or above before installing ${INST_PRODUCT}."
+		MessageBox MB_OK|MB_ICONINFORMATION "${INST_PRODUCT_QUALIFIED} requires that the .net Framework 2.0 SP1 or above is installed. Please download and install the .net Framework 2.0 SP1 or above before installing ${INST_PRODUCT}."
 	    Quit
 	${EndIf}
 FunctionEnd
