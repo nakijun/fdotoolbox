@@ -14,8 +14,11 @@ v0.9.5
 			  within a bulk copy definition file instead of all tasks in the file.
 		- New command: ExecuteSql
 			- Allows a non-SELECT SQL statement to be executed
+	- SQL Server output now uses direct SQL INSERT statements as regular FDO insert enforces 
+	  geometry correctness. This approach, we can let the SQL server fix the "bad" geometries.
 	
 - Fixes:
+	- Data Query will can now gracefully continue even if the method of counting the query result set size fails.
 	- Added more UI messages and feedback when saving/loading tasks.
 	- Added workaround for Object Explorer refresh issue with OSGeo.PostgreSQL connections.
 	- Fix Object Explorer issue when more than one un-qualified feature class name exists.
