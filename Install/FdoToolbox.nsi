@@ -25,6 +25,12 @@
 
 SetCompressor /SOLID /FINAL lzma
 
+;-------------------------------
+; Windows > Vista settings
+;-------------------------------
+
+RequestExecutionLevel admin
+
 ;-------------------
 ; Script variables
 ;-------------------
@@ -143,6 +149,8 @@ LicenseData "${INST_SRC}\${INST_LICENSE}"
 
 # default section
 Section 
+	; Windows > Vista
+	SetShellVarContext all
 
 	; Registry
 	!if ${CPU} == "x64"
@@ -233,6 +241,16 @@ SectionEnd
 
 # uninstall section
 Section "uninstall"
+	; Windows > Vista
+	SetShellVarContext all
+
+	; Registry
+	!if ${CPU} == "x64"
+	SetRegView 64
+	!else
+	SetRegView 32
+	!endif
+
     # remove uninstaller
 	Delete "$INSTDIR\uninstall.exe"
 	
@@ -246,10 +264,17 @@ Section "uninstall"
 	RMDir /r "$INSTDIR"
 	
 	# remove shortcuts
-	RMDir /r "$SMPROGRAMS\${INST_PRODUCT}"
+	RMDir /r "$SMPROGRAMS\${INST_PRODUCT_QUALIFIED}"
 SectionEnd
 
 Function .onInit
+	; Registry
+	!if ${CPU} == "x64"
+	SetRegView 64
+	!else
+	SetRegView 32
+	!endif
+	
 	!insertmacro MUI_LANGDLL_DISPLAY
   
 	; Check .NET version
