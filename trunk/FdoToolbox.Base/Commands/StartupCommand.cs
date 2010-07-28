@@ -68,7 +68,6 @@ namespace FdoToolbox.Base.Commands
 
                 svcMgr.RestoreSession();
                 Msg.MainForm = wb;
-                wb.SetTitle(Res.GetString("UI_TITLE"));
 
                 //Find and register drag and drop handlers
                 List<IDragDropHandler> handlers = AddInTree.BuildItems<IDragDropHandler>("/FdoToolbox/DragDropHandlers", this);

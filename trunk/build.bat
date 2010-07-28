@@ -119,6 +119,8 @@ if exist "%FDOTOOLBOX_OUTDIR%\FDO Toolbox Core API.chm" goto build_user_doc
 
 :build_api_doc
 echo Building API Documentation
+REM This can take a while so only build if nothing is already there.
+if exist "%FDOTOOLBOX_OUTDIR%\FDO Toolbox Core API.chm" goto build_user_doc
 pushd %DOCPATH%
 msbuild.exe /p:Configuration=%TYPEBUILD%;Platform=%PLATFORM% FdoToolboxCoreApi.%TYPEBUILD%.%PLATFORM%.shfbproj
 copy "Help\FDO Toolbox Core API.chm" %FDOTOOLBOX_OUTDIR%

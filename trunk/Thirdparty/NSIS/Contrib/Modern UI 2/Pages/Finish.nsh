@@ -256,9 +256,9 @@ Finish page (implemented using nsDialogs)
     !endif
     
     ;Create dialog
-    nsDialogs::Create /NOUNLOAD 1044
+    nsDialogs::Create 1044
     Pop $mui.FinishPage
-    nsDialogs::SetRTL /NOUNLOAD $(^RTL)
+    nsDialogs::SetRTL $(^RTL)
     SetCtlColors $mui.FinishPage "" "${MUI_BGCOLOR}"
 
     ;Image control
@@ -404,8 +404,6 @@ Finish page (implemented using nsDialogs)
     !ifndef MUI_FINISHPAGE_NOREBOOTSUPPORT        
       ${endif}
     !endif
-
-    !insertmacro MUI_PAGE_FUNCTION_CUSTOM SHOW
 
     !ifdef MUI_FINISHPAGE_CANCEL_ENABLED
       StrCpy $mui.FinishPage.DisableAbortWarning "1"

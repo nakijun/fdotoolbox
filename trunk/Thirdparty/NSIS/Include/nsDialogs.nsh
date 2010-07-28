@@ -252,9 +252,13 @@ Header file for creating custom installer pages with nsDialogs
 !define __NSD_ListBox_STYLE ${DEFAULT_STYLES}|${WS_TABSTOP}|${WS_VSCROLL}|${LBS_DISABLENOSCROLL}|${LBS_HASSTRINGS}|${LBS_NOINTEGRALHEIGHT}|${LBS_NOTIFY}
 !define __NSD_ListBox_EXSTYLE ${WS_EX_WINDOWEDGE}|${WS_EX_CLIENTEDGE}
 
+!define __NSD_ProgressBar_CLASS msctls_progress32
+!define __NSD_ProgressBar_STYLE ${DEFAULT_STYLES}
+!define __NSD_ProgressBar_EXSTYLE ${WS_EX_WINDOWEDGE}|${WS_EX_CLIENTEDGE}
+
 !macro __NSD_DefineControl NAME
 
-	!define NSD_Create${NAME} "nsDialogs::CreateControl /NOUNLOAD ${__NSD_${Name}_CLASS} ${__NSD_${Name}_STYLE} ${__NSD_${Name}_EXSTYLE}"
+	!define NSD_Create${NAME} "nsDialogs::CreateControl ${__NSD_${Name}_CLASS} ${__NSD_${Name}_STYLE} ${__NSD_${Name}_EXSTYLE}"
 
 !macroend
 
@@ -277,6 +281,7 @@ Header file for creating custom installer pages with nsDialogs
 !insertmacro __NSD_DefineControl ComboBox
 !insertmacro __NSD_DefineControl DropList
 !insertmacro __NSD_DefineControl ListBox
+!insertmacro __NSD_DefineControl ProgressBar
 
 !macro __NSD_OnControlEvent EVENT HWND FUNCTION
 
@@ -286,7 +291,7 @@ Header file for creating custom installer pages with nsDialogs
 	StrCpy $1 "${HWND}"
 
 	GetFunctionAddress $0 "${FUNCTION}"
-	nsDialogs::On${EVENT} /NOUNLOAD $1 $0
+	nsDialogs::On${EVENT} $1 $0
 
 	Pop $1
 	Pop $0
@@ -304,7 +309,7 @@ Header file for creating custom installer pages with nsDialogs
 	Push $0
 
 	GetFunctionAddress $0 "${FUNCTION}"
-	nsDialogs::On${EVENT} /NOUNLOAD $0
+	nsDialogs::On${EVENT} $0
 
 	Pop $0
 
@@ -320,6 +325,32 @@ Header file for creating custom installer pages with nsDialogs
 !insertmacro __NSD_DefineControlCallback Change
 !insertmacro __NSD_DefineControlCallback Notify
 !insertmacro __NSD_DefineDialogCallback Back
+
+!macro _NSD_CreateTimer FUNCTION INTERVAL
+
+	Push $0
+
+	GetFunctionAddress $0 "${FUNCTION}"
+	nsDialogs::CreateTimer $0 "${INTERVAL}"
+
+	Pop $0
+
+!macroend
+
+!define NSD_CreateTimer `!insertmacro _NSD_CreateTimer`
+
+!macro _NSD_KillTimer FUNCTION
+
+	Push $0
+
+	GetFunctionAddress $0 "${FUNCTION}"
+	nsDialogs::KillTimer $0
+
+	Pop $0
+
+!macroend
+
+!define NSD_KillTimer `!insertmacro _NSD_KillTimer`
 
 !macro _NSD_AddStyle CONTROL STYLE
 
@@ -479,16 +510,21 @@ Header file for creating custom installer pages with nsDialogs
 !define NSD_LB_GetSelection `!insertmacro __NSD_LB_GetSelection`
 
 
-!macro __NSD_SetImage CONTROL IMAGE HANDLE
-
+!macro __NSD_LoadAndSetImage _LIHINSTMODE _IMGTYPE _LIHINSTSRC _LIFLAGS CONTROL IMAGE HANDLE
+	
 	Push $0
 	Push $R0
 
 	StrCpy $R0 ${CONTROL} # in case ${CONTROL} is $0
-
-	System::Call 'user32::LoadImage(i0, ts, i ${IMAGE_BITMAP}, i0, i0, i${LR_LOADFROMFILE}) i.s' "${IMAGE}"
-	Pop $0
-    SendMessage $R0 ${STM_SETIMAGE} ${IMAGE_BITMAP} $0
+	
+	!if "${_LIHINSTMODE}" == "exeresource"
+		System::Call 'kernel32::GetModuleHandle(i0) i.r0'
+		!undef _LIHINSTSRC
+		!define _LIHINSTSRC r0
+	!endif
+	
+	System::Call 'user32::LoadImage(i ${_LIHINSTSRC}, ts, i ${_IMGTYPE}, i0, i0, i${_LIFLAGS}) i.r0' "${IMAGE}"
+	SendMessage $R0 ${STM_SETIMAGE} ${_IMGTYPE} $0
 
 	Pop $R0
 	Exch $0
@@ -497,7 +533,21 @@ Header file for creating custom installer pages with nsDialogs
 
 !macroend
 
-!define NSD_SetImage `!insertmacro __NSD_SetImage`
+!macro __NSD_SetIconFromExeResource CONTROL IMAGE HANDLE
+	!insertmacro __NSD_LoadAndSetImage exeresource ${IMAGE_ICON} 0 ${LR_DEFAULTSIZE} "${CONTROL}" "${IMAGE}" ${HANDLE}
+!macroend
+
+!macro __NSD_SetIconFromInstaller CONTROL HANDLE
+	!insertmacro __NSD_SetIconFromExeResource "${CONTROL}" "#103" ${HANDLE}
+!macroend
+
+!define NSD_SetImage `!insertmacro __NSD_LoadAndSetImage file ${IMAGE_BITMAP} 0 "${LR_LOADFROMFILE}"`
+!define NSD_SetBitmap `${NSD_SetImage}`
+
+!define NSD_SetIcon `!insertmacro __NSD_LoadAndSetImage file ${IMAGE_ICON} 0 "${LR_LOADFROMFILE}|${LR_DEFAULTSIZE}"`
+!define NSD_SetIconFromExeResource `!insertmacro __NSD_SetIconFromExeResource`
+!define NSD_SetIconFromInstaller `!insertmacro __NSD_SetIconFromInstaller`
+
 
 !macro __NSD_SetStretchedImage CONTROL IMAGE HANDLE
 
@@ -550,14 +600,23 @@ Header file for creating custom installer pages with nsDialogs
 !macroend
 
 !define NSD_FreeImage `!insertmacro __NSD_FreeImage`
+!define NSD_FreeBitmap `${NSD_FreeImage}`
 
-!macro __NSD_ClearImage CONTROL
+!macro __NSD_FreeIcon IMAGE
+	System::Call user32::DestroyIcon(is) ${IMAGE}
+!macroend
 
-	SendMessage ${CONTROL} ${STM_SETIMAGE} ${IMAGE_BITMAP} 0
+!define NSD_FreeIcon `!insertmacro __NSD_FreeIcon`
+
+!macro __NSD_ClearImage _IMGTYPE CONTROL
+
+	SendMessage ${CONTROL} ${STM_SETIMAGE} ${_IMGTYPE} 0
 
 !macroend
 
-!define NSD_ClearImage `!insertmacro __NSD_ClearImage`
+!define NSD_ClearImage `!insertmacro __NSD_ClearImage ${IMAGE_BITMAP}`
+!define NSD_ClearIcon  `!insertmacro __NSD_ClearImage ${IMAGE_ICON}`
+
 
 !define DEBUG `System::Call kernel32::OutputDebugString(ts)`
 
@@ -603,11 +662,11 @@ Header file for creating custom installer pages with nsDialogs
 			StrCpy $R0 1018
 		${EndIf}
 
-		nsDialogs::Create /NOUNLOAD $R0
+		nsDialogs::Create $R0
 		Pop $R9
 
 		ReadINIStr $R0 $0 Settings RTL
-		nsDialogs::SetRTL /NOUNLOAD $R0
+		nsDialogs::SetRTL $R0
 
 		ReadINIStr $R0 $0 Settings NumFields
 
@@ -695,7 +754,7 @@ Header file for creating custom installer pages with nsDialogs
 		${NSD_CreateBrowseButton} $R8u $R4u 15u $R6u ...
 		Pop $R8
 
-		nsDialogs::SetUserData /NOUNLOAD $R8 $R1 # remember field id
+		nsDialogs::SetUserData $R8 $R1 # remember field id
 
 		WriteINIStr $0 "Field $R1" HWND2 $R8
 
@@ -716,7 +775,7 @@ Header file for creating custom installer pages with nsDialogs
 		${NSD_CreateBrowseButton} $R8u $R4u 15u $R6u ...
 		Pop $R8
 
-		nsDialogs::SetUserData /NOUNLOAD $R8 $R1 # remember field id
+		nsDialogs::SetUserData $R8 $R1 # remember field id
 
 		WriteINIStr $0 "Field $R1" HWND2 $R8
 
@@ -733,7 +792,7 @@ Header file for creating custom installer pages with nsDialogs
 
 		Pop $R0
 
-		nsDialogs::GetUserData /NOUNLOAD $R0
+		nsDialogs::GetUserData $R0
 		Pop $R1
 
 		ReadINIStr $R2 $0 "Field $R1" HWND
@@ -741,7 +800,7 @@ Header file for creating custom installer pages with nsDialogs
 
 		${NSD_GetText} $R2 $R3
 
-		nsDialogs::SelectFileDialog /NOUNLOAD save $R3 $R4
+		nsDialogs::SelectFileDialog save $R3 $R4
 		Pop $R3
 
 		${If} $R3 != ""
@@ -754,7 +813,7 @@ Header file for creating custom installer pages with nsDialogs
 
 		Pop $R0
 
-		nsDialogs::GetUserData /NOUNLOAD $R0
+		nsDialogs::GetUserData $R0
 		Pop $R1
 
 		ReadINIStr $R2 $0 "Field $R1" HWND
@@ -762,7 +821,7 @@ Header file for creating custom installer pages with nsDialogs
 
 		${NSD_GetText} $R2 $R4
 
-		nsDialogs::SelectFolderDialog /NOUNLOAD $R3 $R4
+		nsDialogs::SelectFolderDialog $R3 $R4
 		Pop $R3
 
 		${If} $R3 != error
@@ -776,7 +835,7 @@ Header file for creating custom installer pages with nsDialogs
 		${NSD_CreateLink} $R3u $R4u $R5u $R6u $R7
 		Pop $R9
 
-		nsDialogs::SetUserData /NOUNLOAD $R9 $R1 # remember field id
+		nsDialogs::SetUserData $R9 $R1 # remember field id
 
 		${NSD_OnClick} $R9 ${UNINSTALLER_FUNCPREFIX}OnLink
 
@@ -786,7 +845,7 @@ Header file for creating custom installer pages with nsDialogs
 
 		Pop $R0
 
-		nsDialogs::GetUserData /NOUNLOAD $R0
+		nsDialogs::GetUserData $R0
 		Pop $R1
 
 		ReadINIStr $R1 $0 "Field $R1" STATE

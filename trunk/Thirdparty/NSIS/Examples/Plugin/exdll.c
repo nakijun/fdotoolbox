@@ -1,5 +1,5 @@
 #include <windows.h>
-#include "exdll.h"
+#include <nsis/pluginapi.h> // nsis plugin
 
 HINSTANCE g_hInstance;
 

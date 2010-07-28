@@ -676,7 +676,4 @@
   <data name="UI_OBJECT_EXPLORER" xml:space="preserve">
     <value>Object Explorer</value>
   </data>
-  <data name="UI_TITLE" xml:space="preserve">
-    <value>FDO Toolbox</value>
-  </data>
 </root>

@@ -60,11 +60,12 @@ namespace FdoToolbox.Base
         /// <summary>
         /// Initializes the workbench.
         /// </summary>
-        public static void InitializeWorkbench()
+        public static void InitializeWorkbench(string title)
         {
             if (!_init)
             {
                 instance = new Workbench();
+                instance.SetTitle(title);
                 _init = true;
                 WorkbenchInitialized(instance, EventArgs.Empty);
             }

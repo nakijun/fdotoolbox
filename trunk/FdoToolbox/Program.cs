@@ -35,7 +35,13 @@ namespace FdoToolbox
 {
     static class Program
     {
+        //Use a different GUID for x86 and x64 versions. Otherwise an x86 version will
+        //just re-activate an already open x64 version and vice versa.
+#if X64
+        static Mutex appMutex = new Mutex(true, "{D427D01F-C2C5-4cc6-9340-413E8F27B01B}");
+#else
         static Mutex appMutex = new Mutex(true, "{E6C2B9BD-6614-409a-9845-BBB23C9539B7}");
+#endif
 
         /// <summary>
         /// The main entry point for the application.
@@ -66,14 +72,17 @@ namespace FdoToolbox
 
                 LoggingService.Info("Starting core services...");
 
+#if X64
+                string title = "FDO Toolbox (x64)";
+#else
+                string title = "FDO Toolbox (x86)";
+#endif
                 // CoreStartup is a helper class making starting the Core easier.
                 // The parameter is used as the application name, e.g. for the default title of
                 // MessageService.ShowMessage() calls.
-#if X64
-                CoreStartup coreStartup = new CoreStartup("FDO Toolbox (x64)");
-#else
-                CoreStartup coreStartup = new CoreStartup("FDO Toolbox (x86)");
-#endif
+
+                CoreStartup coreStartup = new CoreStartup(title);
+
                 // It is also used as default storage location for the application settings:
                 // "%Application Data%\%Application Name%", but you can override that by setting c.ConfigDirectory
 
@@ -151,7 +160,7 @@ namespace FdoToolbox
                 // Workbench is our class from the base project, this method creates an instance
                 // of the main form.
                 log4net.Config.XmlConfigurator.Configure();
-                Workbench.InitializeWorkbench();
+                Workbench.InitializeWorkbench(title);
 
                 try
                 {
