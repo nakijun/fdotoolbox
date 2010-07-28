@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using OSGeo.FDO.ClientServices;
 
 namespace FdoToolbox.Base.Services
 {
@@ -53,8 +54,8 @@ namespace FdoToolbox.Base.Services
         {
             _namePrefixes = new Dictionary<string, string>();
             _counter = new Dictionary<string, int>();
-            SetPreferredNamePrefix("OSGeo.SDF", "SDFConnection");
-            SetPreferredNamePrefix("OSGeo.SHP", "SHPConnection");
+            //SetPreferredNamePrefix("OSGeo.SDF", "SDFConnection");
+            //SetPreferredNamePrefix("OSGeo.SHP", "SHPConnection");
             
             _init = true;
             Initialize(this, EventArgs.Empty);
@@ -100,7 +101,12 @@ namespace FdoToolbox.Base.Services
         public string GetDefaultConnectionName(string provider)
         {
             if (!_namePrefixes.ContainsKey(provider))
-                _namePrefixes[provider] = "Connection";
+            {
+                using (var pnt = new ProviderNameTokens(provider))
+                {
+                    SetPreferredNamePrefix(provider, pnt.GetLocalName() + "_");
+                }
+            }
 
             if (!_counter.ContainsKey(provider))
                 _counter[provider] = 0;
