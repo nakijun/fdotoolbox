@@ -27,16 +27,29 @@ using FdoToolbox.Core.ETL;
 using FdoToolbox.Core.ETL.Specialized;
 using FdoToolbox.Core;
 using System.IO;
+using FdoToolbox.Core.Configuration;
+using System.Xml.Serialization;
 
 namespace FdoUtil
 {
     public class RunTaskCommand : ConsoleCommand
     {
         private string _file;
+        private string[] _taskNames;
 
         public RunTaskCommand(string file)
         {
             _file = file;
+            _taskNames = new string[0];
+        }
+
+        public RunTaskCommand(string file, string[] tasks)
+        {
+            _file = file;
+            if (tasks != null)
+                _taskNames = tasks;
+            else
+                _taskNames = new string[0];
         }
 
         private static string GenerateLogFileName(string prefix)
@@ -52,20 +65,92 @@ namespace FdoUtil
             string name = null;
             if (TaskDefinitionHelper.IsBulkCopy(_file))
             {
-                using (FdoBulkCopyOptions opts = loader.BulkCopyFromXml(_file, ref name, true))
+                FdoBulkCopyTaskDefinition def = null;
+                using (var sr = new StreamReader(_file))
                 {
+                    XmlSerializer ser = new XmlSerializer(typeof(FdoBulkCopyTaskDefinition));
+                    def = (FdoBulkCopyTaskDefinition)ser.Deserialize(sr);
+                }
+
+                if (def == null)
+                {
+                    return (int)CommandStatus.E_FAIL_TASK_VALIDATION;
+                }
+
+                //If more than one task specified, load the default task and weed
+                //out unneeded elements.
+                if (_taskNames.Length > 0)
+                {
+                    base.WriteLine("Certain tasks have been specified, only part of the bulk copy definition will execute");
+                    var keepConnections = new Dictionary<string, FdoConnectionEntryElement>();
+                    var keepTasks = new List<FdoCopyTaskElement>();
+
+                    //Store needed tasks
+                    foreach (var task in def.CopyTasks)
+                    {
+                        if (Array.IndexOf(_taskNames, task.name) >= 0)
+                        {
+                            keepTasks.Add(task);
+                        }
+                    }
+
+                    //Store needed connections
+                    foreach (var task in keepTasks)
+                    {
+                        foreach (var conn in def.Connections)
+                        {
+                            //Is referenced as source/target connection?
+                            if (task.Source.connection == conn.name || task.Target.connection == conn.name)
+                            {
+                                if (!keepConnections.ContainsKey(conn.name))
+                                    keepConnections.Add(conn.name, conn);
+                            }
+                        }
+                    }
+
+                    if (keepTasks.Count != _taskNames.Length)
+                    {
+                        List<string> names = new List<string>();
+                        foreach (var n in _taskNames)
+                        {
+                            bool found = false;
+                            foreach (var task in keepTasks)
+                            {
+                                if (task.name == n)
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found)
+                                names.Add(n);
+                        }
+
+                        base.WriteError("Could not find specified tasks in bulk copy definition: " + string.Join(",", names.ToArray()));
+
+                        return (int)CommandStatus.E_FAIL_MISSING_BULK_COPY_TASKS;
+                    }
+
+                    //Now replace
+                    def.Connections = new List<FdoConnectionEntryElement>(keepConnections.Values).ToArray();
+                    def.CopyTasks = keepTasks.ToArray();
+                }
+
+                using (FdoBulkCopyOptions opts = loader.BulkCopyFromXml(def, ref name, true))
+                {   
                     FdoBulkCopy copy = new FdoBulkCopy(opts);
                     copy.ProcessMessage += delegate(object sender, MessageEventArgs e)
                     {
-                        Console.WriteLine(e.Message);
+                        base.WriteLine(e.Message);
                     };
                     copy.ProcessAborted += delegate(object sender, EventArgs e)
                     {
-                        Console.WriteLine("Bulk Copy Aborted");
+                        base.WriteLine("Bulk Copy Aborted");
                     };
                     copy.ProcessCompleted += delegate(object sender, EventArgs e)
                     {
-                        Console.WriteLine("Bulk Copy Completed");
+                        base.WriteLine("Bulk Copy Completed");
                     };
                     copy.Execute();
                     List<Exception> errors = new List<Exception>(copy.GetAllErrors());
@@ -73,7 +158,7 @@ namespace FdoUtil
                     {
                         string file = GenerateLogFileName("bcp-error-");
                         LogErrors(errors, file);
-                        Console.WriteLine("Errors were encountered during bulk copy.");
+                        base.WriteError("Errors were encountered during bulk copy.");
                         retCode = CommandStatus.E_FAIL_BULK_COPY_WITH_ERRORS;
                     }
                     else { retCode = CommandStatus.E_OK; }
@@ -81,6 +166,12 @@ namespace FdoUtil
             }
             else if (TaskDefinitionHelper.IsJoin(_file))
             {
+                if (_taskNames.Length > 0)
+                {
+                    base.WriteError("Parameter -bcptask is not applicable for join tasks");
+                    return (int)CommandStatus.E_FAIL_INVALID_ARGUMENTS;
+                }
+
                 using (FdoJoinOptions opts = loader.JoinFromXml(_file, ref name, true))
                 {
                     opts.Left.Connection.Open();
@@ -89,7 +180,7 @@ namespace FdoUtil
                     FdoJoin join = new FdoJoin(opts);
                     join.ProcessMessage += delegate(object sender, MessageEventArgs e)
                     {
-                        Console.WriteLine(e.Message);
+                        base.WriteLine(e.Message);
                     };
                     join.Execute();
                     List<Exception> errors = new List<Exception>(join.GetAllErrors());
@@ -97,7 +188,7 @@ namespace FdoUtil
                     {
                         string file = GenerateLogFileName("join-error-");
                         LogErrors(errors, file);
-                        Console.WriteLine("Errors were encountered during join operation");
+                        base.WriteError("Errors were encountered during join operation");
                         retCode = CommandStatus.E_FAIL_JOIN_WITH_ERRORS;
                     }
                     else { retCode = CommandStatus.E_OK; }
@@ -117,7 +208,7 @@ namespace FdoUtil
             if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
 
-            Console.WriteLine("Saving errors to: " + file);
+            base.WriteLine("Saving errors to: " + file);
 
             using (StreamWriter writer = new StreamWriter(file, false))
             {
@@ -129,7 +220,7 @@ namespace FdoUtil
                 }
             }
 
-            Console.WriteLine("Errors have been logged to {0}", file);
+            base.WriteError("Errors have been logged to {0}", file);
         }
     }
 }

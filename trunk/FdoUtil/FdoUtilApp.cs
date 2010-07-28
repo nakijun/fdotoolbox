@@ -280,10 +280,17 @@ namespace FdoUtil
                         }
 
                         string taskFile = GetArgument("-task", args);
+                        string subTaskName = GetArgument("-bcptask", args);
+                        string[] cmdArgs = null;
+                        if (!string.IsNullOrEmpty(subTaskName))
+                            cmdArgs = new string[] { subTaskName };
 
                         ThrowIfEmpty(taskFile, "-task");
 
-                        _Command = new RunTaskCommand(taskFile);
+                        if (cmdArgs != null)
+                            _Command = new RunTaskCommand(taskFile, cmdArgs);
+                        else
+                            _Command = new RunTaskCommand(taskFile);
                     }
                     break;
                 default:
