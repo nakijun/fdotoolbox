@@ -1,9 +1,10 @@
 #summary Planned features for upcoming releases
 
-=== 0.9.4 ===
+=== 0.9.6 ===
 
- * 64-bit support
+ * FdoUtil.exe enhancements
 
 === Post-1.0 ===
 
+ * Replace SharpMap with MapWindow 6.0
  * Support features of new versions of FDO (3.6 onwards) as they are released.
