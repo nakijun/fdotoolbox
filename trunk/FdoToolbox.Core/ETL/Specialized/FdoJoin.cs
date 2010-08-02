@@ -151,11 +151,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                 output = new FdoBatchedOutputOperation(_options.Target.Connection, _options.Target.ClassName, _options.BatchSize);
             else
             {
-                //HACK: SQL Server just sucks using regular operation
-                if (_options.Target.Connection.Provider.StartsWith("OSGeo.SQLServerSpatial"))
-                    output = new FdoSqlOutputOperation(_options.Target.Connection, _options.Target.ClassName);
-                else
-                    output = new FdoOutputOperation(_options.Target.Connection, _options.Target.ClassName);
+                output = new FdoOutputOperation(_options.Target.Connection, _options.Target.ClassName);
             }
 
             //Register operations

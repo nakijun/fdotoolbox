@@ -174,7 +174,9 @@
     <Compile Include="ETL\Operations\FdoNestedLoopsJoinOperation.cs" />
     <Compile Include="ETL\Operations\FdoOperationBase.cs" />
     <Compile Include="ETL\Operations\FdoOutputOperation.cs" />
-    <Compile Include="ETL\Operations\FdoSqlOutputOperation.cs" />
+    <Compile Include="ETL\Operations\FdoSqlOutputOperation.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ETL\Operations\IFdoOperation.cs" />
     <Compile Include="ETL\Operations\OperationStatistics.cs" />
     <Compile Include="ETL\Operations\PartialProcessOperation.cs" />
