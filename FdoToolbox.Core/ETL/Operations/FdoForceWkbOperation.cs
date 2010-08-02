@@ -50,8 +50,8 @@ namespace FdoToolbox.Core.ETL.Operations
         private FdoRow MakeWkbCompliant(FdoRow row)
         {
             //Already 2D? Move along!
-            if (FdoGeometryUtil.Is2D(row.Geometry))
-                return row;
+            //if (FdoGeometryUtil.Is2D(row.Geometry))
+            //    return row;
 
             row.Geometry = FdoGeometryUtil.ForceWkb(row.Geometry, _geomFactory);
             return row;
