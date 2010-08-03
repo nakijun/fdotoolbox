@@ -320,27 +320,12 @@ namespace FdoToolbox.Core.ETL.Specialized
             return null;
         }
 
-        internal static FdoClassCopyOptions FromElement(FdoCopyTaskElement el, FdoConnectionEntryElement[] connectionEntries)
+        internal static FdoClassCopyOptions FromElement(FdoCopyTaskElement el, FeatureSchemaCache cache, FdoConnection sourceConn)
         {
-            FdoConnection sourceConn = null;
-            FdoConnection targetConn = null;
-
-            foreach (FdoConnectionEntryElement connEnt in connectionEntries)
-            {
-                if (connEnt.name == el.Source.connection)
-                    sourceConn = new FdoConnection(connEnt.provider, connEnt.ConnectionString);
-
-                if (connEnt.name == el.Target.connection)
-                    targetConn = new FdoConnection(connEnt.provider, connEnt.ConnectionString);
-
-                if (sourceConn != null && targetConn != null)
-                    break;
-            }
-
-            if (sourceConn == null)
+            if (!cache.HasConnection(el.Source.connection))
                 throw new TaskLoaderException("The referenced source connection is not defined");
 
-            if (targetConn == null)
+            if (!cache.HasConnection(el.Target.connection))
                 throw new TaskLoaderException("The referenced target connection is not defined");
 
             FdoClassCopyOptions opts = new FdoClassCopyOptions(el.Source.connection, el.Target.connection, el.Source.schema, el.Source.@class, el.Target.schema, el.Target.@class);
@@ -360,92 +345,82 @@ namespace FdoToolbox.Core.ETL.Specialized
                 opts.BatchSize = Convert.ToInt32(el.Options.BatchSize);
             opts.Name = el.name;
 
-            sourceConn.Open();
-            targetConn.Open();
+            ClassDefinition srcClass = cache.GetClassByName(el.Source.connection, el.Source.schema, el.Source.@class);
+            ClassDefinition dstClass = cache.GetClassByName(el.Target.connection, el.Target.schema, el.Target.@class);
 
-            using (FdoFeatureService srcSvc = sourceConn.CreateFeatureService())
-            using (FdoFeatureService dstSvc = targetConn.CreateFeatureService())
+            // 
+            foreach (FdoPropertyMappingElement propMap in el.PropertyMappings)
             {
-                ClassDefinition srcClass = srcSvc.GetClassByName(el.Source.@class);
-                ClassDefinition dstClass = dstSvc.GetClassByName(el.Target.@class);
+                if (srcClass.Properties.IndexOf(propMap.source) < 0)
+                    throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a source property not found in the source class definition (" + el.Source.@class + ")");
 
-                // 
-                foreach (FdoPropertyMappingElement propMap in el.PropertyMappings)
+                if (dstClass.Properties.IndexOf(propMap.target) < 0)
+                    throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a target property not found in the target class definition (" + el.Target.@class + ")");
+
+                PropertyDefinition sp = srcClass.Properties[propMap.source];
+                PropertyDefinition tp = dstClass.Properties[propMap.target];
+
+                if (sp.PropertyType != tp.PropertyType)
+                    throw new TaskLoaderException("The properties in the mapping (" + propMap.source + " -> " + propMap.target + ") are of different types");
+
+                //if (sp.PropertyType != PropertyType.PropertyType_DataProperty)
+                //    throw new TaskLoaderException("One or more properties in the mapping (" + propMap.source + " -> " + propMap.target + ") is not a data property");
+
+                DataPropertyDefinition sdp = sp as DataPropertyDefinition;
+                DataPropertyDefinition tdp = tp as DataPropertyDefinition;
+
+                opts.AddPropertyMapping(propMap.source, propMap.target);
+
+                //Property mapping is between two data properties
+                if (sdp != null && tdp != null)
                 {
-                    if (srcClass.Properties.IndexOf(propMap.source) < 0)
-                        throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a source property not found in the source class definition (" + el.Source.@class + ")");
-
-                    if (dstClass.Properties.IndexOf(propMap.target) < 0)
-                        throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a target property not found in the target class definition (" + el.Target.@class + ")");
-
-                    PropertyDefinition sp = srcClass.Properties[propMap.source];
-                    PropertyDefinition tp = dstClass.Properties[propMap.target];
-
-                    if (sp.PropertyType != tp.PropertyType)
-                        throw new TaskLoaderException("The properties in the mapping (" + propMap.source + " -> " + propMap.target + ") are of different types");
-
-                    //if (sp.PropertyType != PropertyType.PropertyType_DataProperty)
-                    //    throw new TaskLoaderException("One or more properties in the mapping (" + propMap.source + " -> " + propMap.target + ") is not a data property");
-
-                    DataPropertyDefinition sdp = sp as DataPropertyDefinition;
-                    DataPropertyDefinition tdp = tp as DataPropertyDefinition;
-
-                    opts.AddPropertyMapping(propMap.source, propMap.target);
-
-                    //Property mapping is between two data properties
-                    if (sdp != null && tdp != null)
+                    //Types not equal, so add a conversion rule
+                    if (sdp.DataType != tdp.DataType)
                     {
-                        //Types not equal, so add a conversion rule
-                        if (sdp.DataType != tdp.DataType)
-                        {
-                            FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
-                                propMap.source,
-                                propMap.target,
-                                sdp.DataType,
-                                tdp.DataType,
-                                propMap.nullOnFailedConversion,
-                                propMap.truncate);
-                            opts.AddDataConversionRule(propMap.source, rule);
-                        }
+                        FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
+                            propMap.source,
+                            propMap.target,
+                            sdp.DataType,
+                            tdp.DataType,
+                            propMap.nullOnFailedConversion,
+                            propMap.truncate);
+                        opts.AddDataConversionRule(propMap.source, rule);
                     }
                 }
+            }
 
-                //
-                foreach (FdoExpressionMappingElement exprMap in el.ExpressionMappings)
+            //
+            foreach (FdoExpressionMappingElement exprMap in el.ExpressionMappings)
+            {
+                if (string.IsNullOrEmpty(exprMap.target))
+                    continue;
+
+                opts.AddSourceExpression(exprMap.alias, exprMap.Expression, exprMap.target);
+
+                FdoPropertyType? pt = ExpressionUtility.ParseExpressionType(exprMap.Expression, sourceConn);
+                if (pt.HasValue)
                 {
-                    if (string.IsNullOrEmpty(exprMap.target))
-                        continue;
-
-                    opts.AddSourceExpression(exprMap.alias, exprMap.Expression, exprMap.target);
-
-                    FdoPropertyType? pt = ExpressionUtility.ParseExpressionType(exprMap.Expression, sourceConn);
-                    if (pt.HasValue)
+                    DataType? srcDt = ValueConverter.GetDataType(pt.Value);
+                    if (srcDt.HasValue)
                     {
-                        DataType? srcDt = ValueConverter.GetDataType(pt.Value);
-                        if (srcDt.HasValue)
+                        PropertyDefinition tp = dstClass.Properties[exprMap.target];
+                        DataPropertyDefinition tdp = tp as DataPropertyDefinition;
+                        if (tdp != null)
                         {
-                            PropertyDefinition tp = dstClass.Properties[exprMap.target];
-                            DataPropertyDefinition tdp = tp as DataPropertyDefinition;
-                            if (tdp != null)
+                            if (srcDt.Value != tdp.DataType)
                             {
-                                if (srcDt.Value != tdp.DataType)
-                                {
-                                    FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
-                                        exprMap.alias,
-                                        exprMap.target,
-                                        srcDt.Value,
-                                        tdp.DataType,
-                                        exprMap.nullOnFailedConversion,
-                                        exprMap.truncate);
-                                    opts.AddDataConversionRule(exprMap.alias, rule);
-                                }
+                                FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
+                                    exprMap.alias,
+                                    exprMap.target,
+                                    srcDt.Value,
+                                    tdp.DataType,
+                                    exprMap.nullOnFailedConversion,
+                                    exprMap.truncate);
+                                opts.AddDataConversionRule(exprMap.alias, rule);
                             }
                         }
                     }
                 }
-
-                sourceConn.Close();
-                targetConn.Close();
             }
 
             return opts;

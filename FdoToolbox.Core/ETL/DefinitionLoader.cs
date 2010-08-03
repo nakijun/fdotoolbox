@@ -30,9 +30,112 @@ using System.IO;
 using OSGeo.FDO.Filter;
 using System.Xml;
 using System.Collections.Specialized;
+using OSGeo.FDO.Schema;
+using Iesi.Collections.Generic;
 
 namespace FdoToolbox.Core.ETL
 {
+    internal class FeatureSchemaCache : IDisposable
+    {
+        private Dictionary<string, FeatureSchemaCollection> _cache;
+
+        public FeatureSchemaCache()
+        {
+            _cache = new Dictionary<string, FeatureSchemaCollection>();
+        }
+
+        public void Add(string name, FeatureSchemaCollection schemas)
+        {
+            _cache[name] = schemas;
+        }
+
+        public ClassDefinition GetClassByName(string name, string schemaName, string className)
+        {
+            if (!_cache.ContainsKey(name))
+                return null;
+
+            FeatureSchemaCollection item = _cache[name];
+
+            int sidx = item.IndexOf(schemaName);
+            if (sidx >= 0)
+            {
+                var classes = item[sidx].Classes;
+                int cidx = classes.IndexOf(className);
+
+                if (cidx >= 0)
+                    return classes[cidx];
+            }
+            return null;
+        }
+
+        public void Dispose()
+        {
+            foreach (var key in _cache.Keys)
+            {
+                _cache[key].Dispose();
+            }
+            _cache.Clear();
+        }
+
+        internal bool HasConnection(string connName)
+        {
+            return _cache.ContainsKey(connName);
+        }
+    }
+
+    internal class MultiSchemaQuery
+    {
+        private List<SchemaQuery> _query;
+
+        public MultiSchemaQuery(string connName)
+        {
+            this.ConnectionName = connName;
+            _query = new List<SchemaQuery>();
+        }
+
+        public string ConnectionName { get; set; }
+
+        public SchemaQuery TryGet(string schemaName)
+        {
+            foreach (var q in _query)
+            {
+                if (q.SchemaName == schemaName)
+                    return q;
+            }
+            return null;
+        }
+
+        public void Add(SchemaQuery query)
+        {
+            _query.Add(query);
+        }
+
+        public SchemaQuery[] SchemaQueries { get { return _query.ToArray(); } }
+    }
+
+    internal class SchemaQuery
+    {
+        public SchemaQuery(string schemaName)
+        {
+            this.SchemaName = schemaName;
+            _classes = new HashedSet<string>();
+        }
+
+        private HashedSet<string> _classes;
+
+        public string SchemaName { get; set; }
+
+        public void AddClass(string name)
+        {
+            _classes.Add(name);
+        }
+
+        public IEnumerable<string> ClassNames
+        {
+            get { return _classes; }
+        }
+    }
+
     /// <summary>
     /// Task definition loader base class
     /// </summary>
@@ -106,11 +209,83 @@ namespace FdoToolbox.Core.ETL
                 def.UpdateConnectionReferences(oldName, changeConnNames[oldName]);
             }
 
-            FdoBulkCopyOptions opts = new FdoBulkCopyOptions(connections, owner);
+            //Compile the list of classes to be queried
+            Dictionary<string, MultiSchemaQuery> queries = new Dictionary<string, MultiSchemaQuery>();
             foreach (FdoCopyTaskElement task in def.CopyTasks)
             {
-                FdoClassCopyOptions copt = FdoClassCopyOptions.FromElement(task, def.Connections);
-                opts.AddClassCopyOption(copt);
+                MultiSchemaQuery src = null;
+                MultiSchemaQuery dst = null;
+
+                //Process source
+                if (!queries.ContainsKey(task.Source.connection))
+                    src = queries[task.Source.connection] = new MultiSchemaQuery(task.Source.connection);
+                else
+                    src = queries[task.Source.connection];
+
+                var sq = src.TryGet(task.Source.schema);
+                if (sq != null)
+                {
+                    sq.AddClass(task.Source.@class);
+                }
+                else
+                {
+                    sq = new SchemaQuery(task.Source.schema);
+                    sq.AddClass(task.Source.@class);
+                    src.Add(sq);
+                }
+
+                //Process target
+                if (!queries.ContainsKey(task.Target.connection))
+                    dst = queries[task.Target.connection] = new MultiSchemaQuery(task.Target.connection);
+                else
+                    dst = queries[task.Target.connection];
+
+                var tq = dst.TryGet(task.Target.schema);
+                if (tq != null)
+                {
+                    tq.AddClass(task.Target.@class);
+                }
+                else
+                {
+                    tq = new SchemaQuery(task.Target.schema);
+                    tq.AddClass(task.Target.@class);
+                    dst.Add(tq);
+                }
+            }
+
+            var schemaCache = new FeatureSchemaCache();
+
+            //Now populate the schema cache
+            foreach (string connName in queries.Keys)
+            {
+                if (connections.ContainsKey(connName))
+                {
+                    var mqry = queries[connName];
+                    var conn = connections[connName];
+
+                    FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
+
+                    using (var svc = conn.CreateFeatureService())
+                    {
+                        foreach (var sq in mqry.SchemaQueries)
+                        {
+                            schemas.Add(svc.PartialDescribeSchema(sq.SchemaName, new List<string>(sq.ClassNames)));
+                        }
+                    }
+
+                    schemaCache.Add(connName, schemas);
+                }
+            }
+
+            
+            FdoBulkCopyOptions opts = new FdoBulkCopyOptions(connections, owner);
+            using (schemaCache)
+            {
+                foreach (FdoCopyTaskElement task in def.CopyTasks)
+                {
+                    FdoClassCopyOptions copt = FdoClassCopyOptions.FromElement(task, schemaCache, connections[task.Source.connection]);
+                    opts.AddClassCopyOption(copt);
+                }
             }
             return opts;
         }
