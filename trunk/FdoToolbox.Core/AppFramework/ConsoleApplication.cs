@@ -82,6 +82,7 @@ namespace FdoToolbox.Core.AppFramework
         /// <param name="args">The array of commandline arguments</param>
         public virtual void Run(string[] args)
         {
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(OnCancelKeyPress);
             try
             {
                 ParseArguments(args);
@@ -116,6 +117,14 @@ namespace FdoToolbox.Core.AppFramework
             Console.WriteLine("Status: {0}", retCode);
 #endif
             System.Environment.ExitCode = retCode;
+        }
+
+        void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            if (_Command != null)
+            {
+                _Command.Abort();
+            }
         }
 
         /// <summary>

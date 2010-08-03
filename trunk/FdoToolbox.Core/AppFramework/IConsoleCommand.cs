@@ -45,5 +45,10 @@ namespace FdoToolbox.Core.AppFramework
         /// If true, suppresses all console output.
         /// </summary>
         bool IsSilent { get; set; }
+
+        /// <summary>
+        /// Aborts execution of the command
+        /// </summary>
+        void Abort();
     }
 }
