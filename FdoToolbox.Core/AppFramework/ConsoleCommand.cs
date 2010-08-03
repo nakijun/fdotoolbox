@@ -207,5 +207,10 @@ namespace FdoToolbox.Core.AppFramework
             conn.ConnectionString = connStr;
             return conn;
         }
+
+        public virtual void Abort()
+        {
+            WriteWarning("Command Aborting");
+        }
     }
 }
