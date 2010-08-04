@@ -120,6 +120,10 @@ namespace FdoToolbox.Core.AppFramework
         /// </summary>
         E_FAIL_MISSING_BULK_COPY_TASKS = 21,
         /// <summary>
+        /// An I/O error occured
+        /// </summary>
+        E_FAIL_IO_ERROR = 22,
+        /// <summary>
         /// Unknown failure
         /// </summary>
         E_FAIL_UNKNOWN

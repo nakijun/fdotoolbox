@@ -37,6 +37,7 @@ The valid list of command for FdoInfo.exe include:
 - GetConnectionParameters
 - GetCreateDataStoreParameters
 - GetDestroyDataStoreParameters
+- ListBcpTasks
 - ListClasses
 - ListClassProperties
 - ListDataStores
@@ -234,6 +235,15 @@ Description: Gets and displays the parameters required to destroy a Data Store f
 Usage: FdoInfo.exe -cmd:GetDestroyDataStoreParameters -provider:<provider name>
 
 Notes: Only works for providers that support IDestroyDataStore
+
+ListBcpTasks
+------------
+
+Description: Lists all available copy tasks for execution in a bulk copy definition file
+
+Usage: FdoInfo.exe -cmd:ListBcpTasks -task:<path to bulk copy definition>
+
+Notes: Use in conjunction with the -bcptask parameter of the FdoUtil.exe RunTask command to selectively execute certain copy tasks from a bulk copy definition
 
 ListClasses
 -----------

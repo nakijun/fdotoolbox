@@ -94,6 +94,7 @@
     <Compile Include="GetConnectionParametersCommand.cs" />
     <Compile Include="GetCreateDataStoreParametersCommand.cs" />
     <Compile Include="GetDestroyDataStoreParametersCommand.cs" />
+    <Compile Include="ListBcpTasksCommand.cs" />
     <Compile Include="ListClassesCommand.cs" />
     <Compile Include="ListClassPropertiesCommand.cs" />
     <Compile Include="ListDataStoresCommand.cs" />
