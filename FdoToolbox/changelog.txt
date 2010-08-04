@@ -1,3 +1,16 @@
+v0.9.6
+------
+
+- Changes:
+	- Revert to regular FDO insert for SQL Server output connections. If you encounter geometry validity problems use ForceWKB = true
+
+- Enhancements:
+	- Faster performance when loading a bulk copy definition file. Bulk copies involving connections with lots of large schemas should
+	  see significant gains in performance.
+	- New FdoInfo.exe command: ListBcpTasks
+	- New "Dump Schema Mapping" command. The only applies to providers that support schema overrides. This command will dump a default 
+	  XML configuration file, which you can then edit with a text editor and load to override the default schema mappings.
+
 v0.9.5
 ------
 
@@ -6,6 +19,7 @@ v0.9.5
 	  can have x86 and x64 versions of this release installed on the same machine and 
 	  each version will have their own settings/preferences.
 	- Express connect support for OSGeo.PostgreSQL provider
+	- New ForceWKB bulk copy task option.
 	- Drag/Drop support for excel documents (*.xls)
 	- Streamlined naming convention for new connections.
 	- FdoUtil.exe enhancements:

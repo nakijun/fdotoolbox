@@ -111,6 +111,21 @@ namespace FdoInfo
                         _Command = new ListDataStoresCommand(provider, connStr, fdoOnly);
                     }
                     break;
+                case "ListBcpTasks":
+                    {
+                        if (IsSwitchDefined("-help", args))
+                        {
+                            Console.WriteLine("Lists all available copy tasks for execution in a bulk copy definition file");
+                            Console.WriteLine("Usage: FdoInfo.exe -cmd:ListBcpTasks -task:<path to bulk copy definition>");
+                            return;
+                        }
+
+                        string task = GetArgument("-task", args);
+                        ThrowIfEmpty(task, "-task");
+
+                        _Command = new ListBcpTasksCommand(task);
+                    }
+                    break;
                 case "ListSchemas":
                     {
                         if (IsSwitchDefined("-help", args))
@@ -205,6 +220,7 @@ Valid command names include:
 - GetConnectionParameters
 - GetCreateDataStoreParameters
 - GetDestroyDataStoreParameters
+- ListBcpTasks
 - ListClasses
 - ListClassProperties
 - ListDataStores
