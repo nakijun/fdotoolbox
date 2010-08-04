@@ -213,6 +213,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dump Schema Mapping.
+        /// </summary>
+        internal static string CMD_DumpSchemaMapping {
+            get {
+                return ResourceManager.GetString("CMD_DumpSchemaMapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Class Attributes.
         /// </summary>
         internal static string CMD_EditClassAttributes {
@@ -1514,6 +1523,15 @@ namespace FdoToolbox.Base {
         internal static string TITLE_SAVE_SCHEMA {
             get {
                 return ResourceManager.GetString("TITLE_SAVE_SCHEMA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Schema Mapping.
+        /// </summary>
+        internal static string TITLE_SAVE_SCHEMA_MAPPING {
+            get {
+                return ResourceManager.GetString("TITLE_SAVE_SCHEMA_MAPPING", resourceCulture);
             }
         }
         

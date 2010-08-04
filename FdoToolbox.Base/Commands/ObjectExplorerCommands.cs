@@ -35,9 +35,70 @@ using OSGeo.FDO.Schema;
 using FdoToolbox.Base.Forms;
 using System.Collections.Specialized;
 using FdoToolbox.Core;
+using OSGeo.FDO.Common.Io;
+using OSGeo.FDO.Xml;
+using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Base.Commands
 {
+    internal class DumpSchemaMappingCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            string path = FileService.SaveFile(Res.GetString("TITLE_SAVE_SCHEMA_MAPPING"), Res.GetString("FILTER_XML_FILES"));
+            if (!string.IsNullOrEmpty(path))
+            {
+                TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
+                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                FdoConnection conn = mgr.GetConnection(connNode.Name);
+
+                using (var fact = new FgfGeometryFactory())
+                {
+                    using (var svc = conn.CreateFeatureService())
+                    {   
+                        //Write spatial contexts
+                        using (IoStream ios = new IoFileStream(path, "w"))
+                        {
+                            var writer = new OSGeo.FDO.Common.Xml.XmlWriter(ios);
+                            var flags = new XmlSpatialContextFlags();
+                            var scWriter = new XmlSpatialContextWriter(writer, flags);
+
+                            foreach (var sc in svc.GetSpatialContexts())
+                            {
+                                using (var geom = fact.CreateGeometry(sc.ExtentGeometryText))
+                                {
+                                    scWriter.CoordinateSystem = sc.CoordinateSystem;
+                                    scWriter.CoordinateSystemWkt = sc.CoordinateSystemWkt;
+                                    scWriter.Description = sc.Description;
+                                    scWriter.Extent = fact.GetFgf(geom);
+
+                                    scWriter.ExtentType = sc.ExtentType;
+                                    scWriter.Name = sc.Name;
+                                    scWriter.XYTolerance = sc.XYTolerance;
+                                    scWriter.ZTolerance = sc.ZTolerance;
+
+                                    scWriter.WriteSpatialContext();
+                                }
+                            }
+
+                            //Write schemas
+                            var schemas = svc.DescribeSchema();
+                            schemas.WriteXml(writer);
+
+                            //Write schema mappings
+                            var mappings = svc.DescribeSchemaMapping(true);
+                            mappings.WriteXml(writer);
+                            
+                            ios.Close();
+                        }
+
+                        Log.InfoFormatted("Connection saved to: {0}", path);
+                    }
+                }
+            }
+        }
+    }
+
     internal class RemoveAllConnectionsCommand : AbstractMenuCommand
     {
         public override void Run()
