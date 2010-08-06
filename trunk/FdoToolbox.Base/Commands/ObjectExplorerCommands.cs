@@ -59,36 +59,40 @@ namespace FdoToolbox.Base.Commands
                         //Write spatial contexts
                         using (IoStream ios = new IoFileStream(path, "w"))
                         {
-                            var writer = new OSGeo.FDO.Common.Xml.XmlWriter(ios);
-                            var flags = new XmlSpatialContextFlags();
-                            var scWriter = new XmlSpatialContextWriter(writer, flags);
-
-                            foreach (var sc in svc.GetSpatialContexts())
+                            using (var writer = new OSGeo.FDO.Common.Xml.XmlWriter(ios))
                             {
-                                using (var geom = fact.CreateGeometry(sc.ExtentGeometryText))
+                                var flags = new XmlSpatialContextFlags();
+                                using (var scWriter = new XmlSpatialContextWriter(writer, flags))
                                 {
-                                    scWriter.CoordinateSystem = sc.CoordinateSystem;
-                                    scWriter.CoordinateSystemWkt = sc.CoordinateSystemWkt;
-                                    scWriter.Description = sc.Description;
-                                    scWriter.Extent = fact.GetFgf(geom);
+                                    foreach (var sc in svc.GetSpatialContexts())
+                                    {
+                                        using (var geom = fact.CreateGeometry(sc.ExtentGeometryText))
+                                        {
+                                            scWriter.CoordinateSystem = sc.CoordinateSystem;
+                                            scWriter.CoordinateSystemWkt = sc.CoordinateSystemWkt;
+                                            scWriter.Description = sc.Description;
+                                            scWriter.Extent = fact.GetFgf(geom);
 
-                                    scWriter.ExtentType = sc.ExtentType;
-                                    scWriter.Name = sc.Name;
-                                    scWriter.XYTolerance = sc.XYTolerance;
-                                    scWriter.ZTolerance = sc.ZTolerance;
+                                            scWriter.ExtentType = sc.ExtentType;
+                                            scWriter.Name = sc.Name;
+                                            scWriter.XYTolerance = sc.XYTolerance;
+                                            scWriter.ZTolerance = sc.ZTolerance;
 
-                                    scWriter.WriteSpatialContext();
+                                            scWriter.WriteSpatialContext();
+                                        }
+                                    }
                                 }
+
+                                //Write schemas
+                                var schemas = svc.DescribeSchema();
+                                schemas.WriteXml(writer);
+
+                                //Write schema mappings
+                                var mappings = svc.DescribeSchemaMapping(true);
+                                mappings.WriteXml(writer);
+
+                                writer.Close();
                             }
-
-                            //Write schemas
-                            var schemas = svc.DescribeSchema();
-                            schemas.WriteXml(writer);
-
-                            //Write schema mappings
-                            var mappings = svc.DescribeSchemaMapping(true);
-                            mappings.WriteXml(writer);
-                            
                             ios.Close();
                         }
 
