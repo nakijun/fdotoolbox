@@ -59,7 +59,7 @@ namespace FdoToolbox.Base.Commands
                         //Write spatial contexts
                         using (IoStream ios = new IoFileStream(path, "w"))
                         {
-                            using (var writer = new OSGeo.FDO.Common.Xml.XmlWriter(ios))
+                            using (var writer = new OSGeo.FDO.Common.Xml.XmlWriter(ios, true, OSGeo.FDO.Common.Xml.XmlWriter.LineFormat.LineFormat_Indent))
                             {
                                 var flags = new XmlSpatialContextFlags();
                                 using (var scWriter = new XmlSpatialContextWriter(writer, flags))
