@@ -22,16 +22,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using OSGeo.FDO.Schema;
-using FdoToolbox.Core.Feature;
-using FdoToolbox.Base.Controls.SchemaDesigner;
-using ICSharpCode.Core;
-
-using Comp = System.ComponentModel;
-using System.Drawing;
-using FdoToolbox.Core.Utility;
 using System.Collections.Specialized;
+using System.Drawing;
+using System.Text;
+
+using FdoToolbox.Base.Controls.SchemaDesigner;
+using FdoToolbox.Core.Feature;
+using FdoToolbox.Core.Utility;
+using ICSharpCode.Core;
+using OSGeo.FDO.Common.Io;
+using OSGeo.FDO.Common.Xml;
+using OSGeo.FDO.Schema;
+using Comp = System.ComponentModel;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -757,7 +759,15 @@ namespace FdoToolbox.Base.Controls
                     try
                     {
                         ApplySchema();
-                        _schema.WriteXml(xmlFile);
+                        using (var ios = new IoFileStream(xmlFile, "w"))
+                        {
+                            using (var writer = new XmlWriter(ios, false, XmlWriter.LineFormat.LineFormat_Indent))
+                            {
+                                _schema.WriteXml(writer);
+                                writer.Close();
+                            }
+                            ios.Close();
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -766,7 +776,15 @@ namespace FdoToolbox.Base.Controls
                 }
                 else //No changes, just write the thing
                 {
-                    _schema.WriteXml(xmlFile);
+                    using (var ios = new IoFileStream(xmlFile, "w"))
+                    {
+                        using (var writer = new XmlWriter(ios, false, XmlWriter.LineFormat.LineFormat_Indent))
+                        {
+                            _schema.WriteXml(writer);
+                            writer.Close();
+                        }
+                        ios.Close();
+                    }
                 }
             }
             else //standalone
@@ -775,7 +793,15 @@ namespace FdoToolbox.Base.Controls
                 if(_schema.ElementState != SchemaElementState.SchemaElementState_Unchanged)
                     _schema.AcceptChanges();
 
-                _schema.WriteXml(xmlFile);
+                using (var ios = new IoFileStream(xmlFile, "w"))
+                {
+                    using (var writer = new XmlWriter(ios, false, XmlWriter.LineFormat.LineFormat_Indent))
+                    {
+                        _schema.WriteXml(writer);
+                        writer.Close();
+                    }
+                    ios.Close();
+                }
             }
         }
 

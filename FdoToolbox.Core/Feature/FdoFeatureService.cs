@@ -22,29 +22,30 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using OSGeo.FDO.Connections;
-using OSGeo.FDO.Schema;
-using OSGeo.FDO.Commands.Schema;
-using OSGeo.FDO.Common.Io;
-using OSGeo.FDO.Commands.SpatialContext;
-using OSGeo.FDO.Geometry;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Text;
+
+using FdoToolbox.Core.Connections;
+using FdoToolbox.Core.Feature.Overrides;
+using FdoToolbox.Core.Utility;
+using Iesi.Collections.Generic;
+using OSGeo.FDO.ClientServices;
+using OSGeo.FDO.Commands;
 using OSGeo.FDO.Commands.DataStore;
 using OSGeo.FDO.Commands.Feature;
-using OSGeo.FDO.Expression;
-using OSGeo.FDO.Connections.Capabilities;
+using OSGeo.FDO.Commands.Schema;
+using OSGeo.FDO.Commands.SpatialContext;
 using OSGeo.FDO.Commands.SQL;
+using OSGeo.FDO.Common.Io;
+using OSGeo.FDO.Common.Xml;
+using OSGeo.FDO.Connections;
+using OSGeo.FDO.Connections.Capabilities;
+using OSGeo.FDO.Expression;
 using OSGeo.FDO.Filter;
-using OSGeo.FDO.Commands;
-using Iesi.Collections.Generic;
-using System.Collections.ObjectModel;
-using FdoToolbox.Core.Utility;
-using OSGeo.FDO.ClientServices;
-using FdoToolbox.Core.Connections;
-
+using OSGeo.FDO.Geometry;
+using OSGeo.FDO.Schema;
 using Res = FdoToolbox.Core.ResourceUtil;
-using FdoToolbox.Core.Feature.Overrides;
 
 namespace FdoToolbox.Core.Feature
 {
@@ -894,7 +895,15 @@ namespace FdoToolbox.Core.Feature
             FeatureSchema schema = GetSchemaByName(schemaName);
             if (schema != null)
             {
-                schema.WriteXml(xmlFile);
+                using (var ios = new IoFileStream(xmlFile, "w"))
+                {
+                    using (var writer = new XmlWriter(ios, false, XmlWriter.LineFormat.LineFormat_Indent))
+                    {
+                        schema.WriteXml(writer);
+                        writer.Close();
+                    }
+                    ios.Close();
+                }
             }
             else
             {
@@ -1036,7 +1045,15 @@ namespace FdoToolbox.Core.Feature
         public void WriteSchemaToXml(string schemaFile)
         {
             FeatureSchemaCollection schemas = DescribeSchema();
-            schemas.WriteXml(schemaFile);
+            using (var ios = new IoFileStream(schemaFile, "w"))
+            {
+                using (var writer = new XmlWriter(ios, false, XmlWriter.LineFormat.LineFormat_Indent))
+                {
+                    schemas.WriteXml(writer);
+                    writer.Close();
+                }
+                ios.Close();
+            }
         }
 
         /// <summary>
