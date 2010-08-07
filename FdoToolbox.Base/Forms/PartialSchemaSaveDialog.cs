@@ -23,14 +23,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Text;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
-using OSGeo.FDO.Schema;
+
+using FdoToolbox.Base.Services;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Core.Utility;
 using ICSharpCode.Core;
-using FdoToolbox.Base.Services;
+using OSGeo.FDO.Common.Io;
+using OSGeo.FDO.Common.Xml;
+using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Base.Forms
 {
@@ -196,7 +199,16 @@ namespace FdoToolbox.Base.Forms
 
             if (rdXml.Checked)
             {
-                schema.WriteXml(txtXml.Text);
+                using (var ios = new IoFileStream(txtXml.Text, "w"))
+                {
+                    using (var writer = new XmlWriter(ios, false, XmlWriter.LineFormat.LineFormat_Indent))
+                    {
+                        schema.WriteXml(writer);
+                        writer.Close();
+                    }
+                    ios.Close();
+                }
+                
                 MessageService.ShowMessage("Schema saved to: " + txtXml.Text);
                 this.DialogResult = DialogResult.OK;
             }
