@@ -2471,6 +2471,7 @@ namespace FdoToolbox.Core.Feature
         /// <param name="schemaName"></param>
         /// <param name="classes"></param>
         /// <returns></returns>
+        /// <exception cref="SchemaNotFoundException">Thrown if no schema of the specified name exists</exception>
         public FeatureSchema PartialDescribeSchema(string schemaName, List<string> classes)
         {
             if (SupportsPartialSchemaDiscovery())
@@ -2484,7 +2485,7 @@ namespace FdoToolbox.Core.Feature
                         describe.ClassNames.Add(new OSGeo.FDO.Common.StringElement(cls));
                     }
                     FeatureSchemaCollection schemas = describe.Execute();
-                    if (schemas != null)
+                    if (schemas != null && schemas.Count == 1)
                         return schemas[0];
                 }
             }
@@ -2493,19 +2494,23 @@ namespace FdoToolbox.Core.Feature
                 //Use old approach, full schema and rip out classes not in
                 //the list
                 FeatureSchema schema = GetSchemaByName(schemaName);
-                List<string> clsRemove = new List<string>();
-                foreach (ClassDefinition cd in schema.Classes)
+                if (schema != null)
                 {
-                    if (!classes.Contains(cd.Name))
-                        clsRemove.Add(cd.Name);
+                    List<string> clsRemove = new List<string>();
+                    foreach (ClassDefinition cd in schema.Classes)
+                    {
+                        if (!classes.Contains(cd.Name))
+                            clsRemove.Add(cd.Name);
+                    }
+                    foreach (string cls in clsRemove)
+                    {
+                        schema.Classes.RemoveAt(schema.Classes.IndexOf(cls));
+                    }
+                    return schema;
                 }
-                foreach (string cls in clsRemove)
-                {
-                    schema.Classes.RemoveAt(schema.Classes.IndexOf(cls));
-                }
-                return schema;
             }
-            return null;
+
+            throw new SchemaNotFoundException(schemaName);
         }
 
         public PhysicalSchemaMappingCollection DescribeSchemaMapping(bool includeDefaults)
