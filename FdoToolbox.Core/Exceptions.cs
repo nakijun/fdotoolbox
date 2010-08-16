@@ -26,6 +26,29 @@ using System.Text;
 
 namespace FdoToolbox.Core
 {
+    [global::System.Serializable]
+    public class SchemaNotFoundException : Exception
+    {
+        //
+        // For guidelines regarding the creation of new exception types, see
+        //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconerrorraisinghandlingguidelines.asp
+        // and
+        //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
+        //
+
+        public SchemaNotFoundException(string name) 
+        {
+            this.Name = name;
+        }
+
+        public string Name { get; private set; }
+
+        protected SchemaNotFoundException(
+          SerializationInfo info,
+          StreamingContext context)
+            : base(info, context) { }
+    }
+
     /// <summary>
     /// Thrown during any part of an ETL process
     /// </summary>

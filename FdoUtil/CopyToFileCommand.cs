@@ -101,10 +101,13 @@ namespace FdoUtil
                     //See if partial class list is needed
                     if (_srcClasses.Count > 0)
                     {
+                        WriteLine("Checking if partial schema discovery is supported: " + srcService.SupportsPartialSchemaDiscovery());
+
                         srcSchema = srcService.PartialDescribeSchema(_srcSchema, _srcClasses);
                     }
                     else //Full copy
                     {
+                        WriteLine("No classes specified, reading full source schema");
                         srcSchema = srcService.GetSchemaByName(_srcSchema);
                     }
 
@@ -115,11 +118,13 @@ namespace FdoUtil
                     }
                     else
                     {
+                        WriteLine("Checking source schema for incompatibilities");
                         FeatureSchema targetSchema = null;
                         IncompatibleSchema incSchema;
                         if (destService.CanApplySchema(srcSchema, out incSchema))
                         {
-                            Console.WriteLine("Applying source schema to target");
+                            int clsCount = srcSchema.Classes.Count;
+                            WriteLine("Applying source schema (containing " +  clsCount + " classes) to target");
                             destService.ApplySchema(srcSchema);
                             targetSchema = srcSchema;
                         }
@@ -127,6 +132,8 @@ namespace FdoUtil
                         {
                             WriteWarning("Incompatibilities were detected in source schema. Applying a modified version to target");
                             FeatureSchema fixedSchema = destService.AlterSchema(srcSchema, incSchema);
+                            int clsCount = fixedSchema.Classes.Count;
+                            WriteLine("Applying modified source schema (containing " + clsCount + " classes) to target");
                             destService.ApplySchema(fixedSchema);
                             targetSchema = fixedSchema;
                         }
