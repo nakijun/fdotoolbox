@@ -58,17 +58,36 @@ namespace FdoToolbox.Tasks.Controls
             foreach (string name in _connMgr.GetConnectionNames())
             {
                 string connName = name; //Can't bind to iter variable
-                btnAddConnection.DropDown.Items.Add(connName, null, delegate(object sender, EventArgs e)
+                var item = btnAddConnection.DropDown.Items.Add(connName, null, delegate(object sender, EventArgs e)
                 {
                     AddParticipatingConnection(connName);
                 });
+                item.Name = name;
             }
+        }
+
+        protected override void OnConnectionAdded(object sender, FdoToolbox.Core.EventArgs<string> e)
+        {
+            string name = e.Data;
+            btnAddConnection.DropDown.Items.Add(name, null, delegate(object s, EventArgs evt)
+            {
+                AddParticipatingConnection(name);
+            });
+        }
+
+        protected override void OnConnectionRemoved(object sender, FdoToolbox.Core.EventArgs<string> e)
+        {
+            string name = e.Data;
+            btnAddConnection.DropDown.Items.RemoveByKey(name);
         }
 
         private void AddParticipatingConnection(string name)
         {
             FdoConnection conn = _connMgr.GetConnection(name);
-            grdConnections.Rows.Add(name, conn.Provider, conn.SafeConnectionString, conn.ConnectionString);
+            if (conn != null)
+            {
+                grdConnections.Rows.Add(name, conn.Provider, conn.SafeConnectionString, conn.ConnectionString);
+            }
         }
 
         private CopyTaskNodeDecorator AddNewTask(TreeNode root, string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass, string taskName)
