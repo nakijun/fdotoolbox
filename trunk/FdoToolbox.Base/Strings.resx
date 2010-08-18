@@ -682,4 +682,10 @@
   <data name="CMD_DumpSchemaMapping" xml:space="preserve">
     <value>Dump Schema Mapping</value>
   </data>
+  <data name="CMD_OpenLogsDir" xml:space="preserve">
+    <value>Open Logs Directory</value>
+  </data>
+  <data name="CMD_OpenSessionDir" xml:space="preserve">
+    <value>Open Session Directory</value>
+  </data>
 </root>
