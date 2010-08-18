@@ -164,24 +164,24 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
         }
 
-        internal void AddClassModifier(TargetClassModificationItem moditem)
-        {
-            var copt = FindByTargetClassName(moditem.Name);
-            if (copt != null)
-            {
-                copt.PreCopyTargetModifier = moditem;
-            }
-        }
+        //internal void AddClassModifier(TargetClassModificationItem moditem)
+        //{
+        //    var copt = FindByTargetClassName(moditem.Name);
+        //    if (copt != null)
+        //    {
+        //        copt.PreCopyTargetModifier = moditem;
+        //    }
+        //}
 
-        private FdoClassCopyOptions FindByTargetClassName(string name)
-        {
-            foreach (var copt in _copyOptions)
-            {
-                if (copt.TargetClassName == name)
-                    return copt;
-            }
+        //private FdoClassCopyOptions FindByTargetClassName(string name)
+        //{
+        //    foreach (var copt in _copyOptions)
+        //    {
+        //        if (copt.TargetClassName == name)
+        //            return copt;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
     }
 }

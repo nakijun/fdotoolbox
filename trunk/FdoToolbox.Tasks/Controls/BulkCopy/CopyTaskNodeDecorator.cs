@@ -80,10 +80,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             this.Name = taskName;
             this.Description = "Copies features from " + srcClass + " to " + dstClass;
 
-            if (createIfNotExists)
-                dstClass = srcClass + " (created if it doesn't exist)";
-
-            InitDescription(srcConnName, srcSchema, srcClass, dstConnName, dstSchema, dstClass);
+            InitDescription(srcConnName, srcSchema, srcClass, dstConnName, dstSchema, dstClass, createIfNotExists);
 
             _connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
 
@@ -119,34 +116,44 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
 
         public string SourceSchemaName { get { return _srcSchemaName; } }
 
-        public string SourceClassName { get { return _srcClassName; } }
+        public string SourceClassName { get { return _srcNode.Tag.ToString(); } }
 
         public string TargetSchemaName { get { return _dstSchemaName; } }
 
-        public string TargetClassName { get { return _dstClassName; } }
+        public string TargetClassName { get { return _dstNode.Tag.ToString(); } }
 
         public bool CreateIfNotExists { get; private set; }
 
-        private void InitDescription(string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass)
+        private TreeNode _srcNode;
+        private TreeNode _dstNode;
+
+        private void InitDescription(string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass, bool createIfNotExists)
         {
-            TreeNode srcNode = new TreeNode("Source");
-            TreeNode dstNode = new TreeNode("Target");
-            srcNode.Nodes.Add("Connection: " + srcConnName);
-            srcNode.Nodes.Add("Schema: " + srcSchema);
-            srcNode.Nodes.Add("Feature Class: " + srcClass);
+            _srcNode = new TreeNode("Source");
+            _dstNode = new TreeNode("Target");
+            _srcNode.Nodes.Add("Connection: " + srcConnName);
+            _srcNode.Nodes.Add("Schema: " + srcSchema);
+            _srcNode.Nodes.Add("Feature Class: " + srcClass);
 
-            dstNode.Nodes.Add("Connection: " + dstConnName);
-            dstNode.Nodes.Add("Schema: " + dstSchema);
-            dstNode.Nodes.Add("Feature Class: " + dstClass);
+            _dstNode.Nodes.Add("Connection: " + dstConnName);
+            _dstNode.Nodes.Add("Schema: " + dstSchema);
 
-            _node.Nodes[0].Nodes.Add(srcNode);
-            _node.Nodes[0].Nodes.Add(dstNode);
+            if (createIfNotExists)
+                dstClass = srcClass;
+
+            if (createIfNotExists)
+                _dstNode.Nodes.Add("Feature Class: " + dstClass + " (created if it doesn't exist)");
+            else
+                _dstNode.Nodes.Add("Feature Class: " + dstClass);
+
+            _node.Nodes[0].Nodes.Add(_srcNode);
+            _node.Nodes[0].Nodes.Add(_dstNode);
 
             _srcSchemaName = srcSchema;
-            _srcClassName = srcClass;
+            _srcNode.Tag = srcClass;
 
             _dstSchemaName = dstSchema;
-            _dstClassName = dstClass;
+            _dstNode.Tag = dstClass;
         }
 
         private string _srcConnName;
