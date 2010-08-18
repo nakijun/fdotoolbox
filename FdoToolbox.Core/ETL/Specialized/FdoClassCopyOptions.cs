@@ -39,6 +39,8 @@ namespace FdoToolbox.Core.ETL.Specialized
         private string _SourceConnectionName;
         private string _TargetConnectionName;
 
+        internal TargetClassModificationItem PreCopyTargetModifier { get; set; }
+
         /// <summary>
         /// Gets the name of the source connection.
         /// </summary>
@@ -349,7 +351,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             return null;
         }
 
-        internal static FdoClassCopyOptions FromElement(FdoCopyTaskElement el, FeatureSchemaCache cache, FdoConnection sourceConn, FdoConnection targetConn, out ClassModificationItem mod)
+        internal static FdoClassCopyOptions FromElement(FdoCopyTaskElement el, FeatureSchemaCache cache, FdoConnection sourceConn, FdoConnection targetConn, out TargetClassModificationItem mod)
         {
             mod = null;
             if (!cache.HasConnection(el.Source.connection))
@@ -455,7 +457,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                             {
                                 if (mod == null)
                                 {
-                                    mod = new UpdateClass(el.Target.@class);
+                                    mod = new UpdateTargetClass(el.Target.@class);
                                 }
 
                                 var prop = FdoSchemaUtil.CreatePropertyFromExpressionType(exprMap.Expression, availableFunctions, defaultSc.Name);
@@ -472,7 +474,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                         {
                             if (mod == null)
                             {
-                                mod = new CreateClassFromSource(el.Target.@class);
+                                mod = new CreateTargetClassFromSource(el.Source.schema, el.Target.@class);
                             }
 
                             var prop = FdoSchemaUtil.CreatePropertyFromExpressionType(exprMap.Expression, availableFunctions, defaultSc.Name);
@@ -513,7 +515,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
             else //class doesn't exist
             {
-                mod = new CreateClassFromSource(el.Target.@class);
+                mod = new CreateTargetClassFromSource(el.Source.schema, el.Target.@class);
             }
 
             return opts;
