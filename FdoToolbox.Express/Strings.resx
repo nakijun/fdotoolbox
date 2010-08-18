@@ -273,4 +273,7 @@
   <data name="CMD_ConnectPostgres" xml:space="preserve">
     <value>Connect to PostgreSQL / PostGIS</value>
   </data>
+  <data name="CMD_CreateSqlServer" xml:space="preserve">
+    <value>Create SQL Server</value>
+  </data>
 </root>
