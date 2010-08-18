@@ -145,11 +145,11 @@ namespace FdoToolbox.Core.ETL
         }
     }
 
-    internal abstract class ClassModificationItem
+    internal abstract class TargetClassModificationItem
     {
         public string Name { get; private set; }
 
-        protected ClassModificationItem(string name) { this.Name = name; }
+        protected TargetClassModificationItem(string name) { this.Name = name; }
 
         private Dictionary<string, PropertyDefinition> _propsToCreate = new Dictionary<string, PropertyDefinition>();
 
@@ -164,14 +164,16 @@ namespace FdoToolbox.Core.ETL
         }
     }
 
-    internal class CreateClassFromSource : ClassModificationItem
+    internal class CreateTargetClassFromSource : TargetClassModificationItem
     {
-        public CreateClassFromSource(string name) : base(name) { }
+        public string Schema { get; set; }
+
+        public CreateTargetClassFromSource(string schema, string name) : base(name) { }
     }
 
-    internal class UpdateClass : ClassModificationItem
+    internal class UpdateTargetClass : TargetClassModificationItem
     {
-        public UpdateClass(string name) : base(name) { }
+        public UpdateTargetClass(string name) : base(name) { }
     }
 
     /// <summary>
@@ -225,6 +227,41 @@ namespace FdoToolbox.Core.ETL
         public FdoBulkCopyOptions BulkCopyFromXml(FdoBulkCopyTaskDefinition def, ref string name, bool owner)
         {
             Prepare(def);
+
+            // TODO/FIXME/HACK:
+            //
+            // The introduction of on-the-fly schema modifications before copying has introduced a
+            // potential problem which will only occur when multiple copy tasks copy to the same target
+            // feature class. 
+            //
+            // What happens is because a target will be multiple sources copying to it, if we need
+            // to create/update the target class definition, the current infrastructure will be confused
+            // as to which source feature class to clone from.
+            //
+            // A possible solution is to return the first matching name. This will cause a "create" operation
+            // to be queued. We then alter the pre-modification process so that subsequent "create" operations
+            // becomes "update" operations instead.
+            //
+            // On second thought, the current infrastructure should be smart enought to prevent this, as
+            // the UI only allows:
+            //
+            // 1. Mapping to an existing class
+            // 2. Mapping to a class of the same name (create if necessary)
+            //
+            // It won't be possible to map to a class that doesn't exist, as the requirement for auto-create/update
+            // is that the class name will be the same.
+            //
+            // ie. It won't be possible to create this mapping
+            //
+            // a. Foo -> Foo (create if necessary)
+            // b. Bar -> Foo
+            // 
+            // Rule 1 prevents mapping b) from happening
+            // Rule 2 ensures that Foo will only ever be created once
+            //
+            // If multiple sources are mapped to the same target, I believe the bcp infrastructure should ensure
+            // that target must already exist first.
+
 
             name = def.name;
             Dictionary<string, FdoConnection> connections = new Dictionary<string, FdoConnection>();
@@ -291,7 +328,7 @@ namespace FdoToolbox.Core.ETL
                 }
             }
 
-            List<ClassModificationItem> modifiers = new List<ClassModificationItem>();
+            List<TargetClassModificationItem> modifiers = new List<TargetClassModificationItem>();
             using (var schemaCache = new FeatureSchemaCache())
             {
                 //Now populate the schema cache with source schemas
@@ -349,9 +386,12 @@ namespace FdoToolbox.Core.ETL
                                         if (!conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSchemaModification))
                                             throw new NotSupportedException("The connection named " + connName + " does not support schema modification. Therefore, copy tasks and property/expression mappings cannot have createIfNotExists = true");
 
+                                        //This cumbersome, but we need the parent schema name of the class that we will need to copy
+                                        string srcSchema = GetSourceSchemaForMapping(def, sq.SchemaName, notFound);
+
                                         foreach (string className in notFound)
                                         {
-                                            modifiers.Add(new CreateClassFromSource(className));
+                                            modifiers.Add(new CreateTargetClassFromSource(srcSchema, className));
                                         }
                                     }
                                     schemas.Add(schema);
@@ -372,7 +412,7 @@ namespace FdoToolbox.Core.ETL
 
                 foreach (FdoCopyTaskElement task in def.CopyTasks)
                 {
-                    ClassModificationItem mod;
+                    TargetClassModificationItem mod;
                     FdoClassCopyOptions copt = FdoClassCopyOptions.FromElement(task, schemaCache, connections[task.Source.connection], connections[task.Target.connection], out mod);
                     if (mod != null)
                         opts.AddClassModifier(mod);
@@ -382,6 +422,26 @@ namespace FdoToolbox.Core.ETL
 
                 return opts;
             }
+        }
+
+        private static string GetSourceSchemaForMapping(FdoBulkCopyTaskDefinition def, string targetSchema, string[] classNames)
+        {
+            ISet<string> matches = new HashedSet<string>();
+            List<string> classes = new List<string>(classNames);
+            foreach (var task in def.CopyTasks)
+            {
+                if (classes.Contains(task.Target.@class) && task.Target.schema.Equals(targetSchema))
+                {
+                    matches.Add(task.Source.schema);
+                }
+            }
+            if (matches.Count > 1)
+                throw new TaskValidationException("The specified class names have various parent schema names");
+
+            if (matches.Count == 0)
+                throw new TaskValidationException("Could not determine parent schema name for the given class names");
+
+            return new List<string>(matches)[0]; //The price to pay for targeting linq-less fx 2.0
         }
 
         /// <summary>
