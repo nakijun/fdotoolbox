@@ -84,6 +84,10 @@
                 <MenuItem id="CreateSqlite"
                           label="${res:CMD_CreateSqlite}"
                           class="FdoToolbox.Express.Commands.CreateSqliteCommand" />
+                <MenuItem type="Separator" />
+                <MenuItem id="CreateSqlServer"
+                          label="${res:CMD_CreateSqlServer}"
+                          class="FdoToolbox.Express.Commands.CreateSqlServerCommand" />
             </MenuItem>
             <MenuItem id="ExpressBulkCopy"
                       label="${res:CMD_ExpressBcp}"

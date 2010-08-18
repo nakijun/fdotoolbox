@@ -31,6 +31,16 @@ using FdoToolbox.Base;
 
 namespace FdoToolbox.Express.Commands
 {
+    public class CreateSqlServerCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            var ctl = new CreateSqlServerCtl();
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
+
     public class CreateSdfCommand : AbstractMenuCommand
     {
         public override void Run()
