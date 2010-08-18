@@ -252,6 +252,7 @@
     <Compile Include="Utility\ExpressionUtility.cs" />
     <Compile Include="Utility\ExpressUtility.cs" />
     <Compile Include="Utility\FdoGeometryUtil.cs" />
+    <Compile Include="Utility\FdoSchemaUtil.cs" />
     <Compile Include="Utility\WKTParser.cs" />
   </ItemGroup>
   <ItemGroup>

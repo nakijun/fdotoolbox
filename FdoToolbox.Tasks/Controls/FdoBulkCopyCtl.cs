@@ -90,9 +90,9 @@ namespace FdoToolbox.Tasks.Controls
             }
         }
 
-        private CopyTaskNodeDecorator AddNewTask(TreeNode root, string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass, string taskName)
+        private CopyTaskNodeDecorator AddNewTask(TreeNode root, string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass, string taskName, bool createIfNotExists)
         {
-            return new CopyTaskNodeDecorator(root, srcConnName, srcSchema, srcClass, dstConnName, dstSchema, dstClass, taskName);
+            return new CopyTaskNodeDecorator(root, srcConnName, srcSchema, srcClass, dstConnName, dstSchema, dstClass, taskName, createIfNotExists);
         }
 
         private string[] GetAvailableConnectionNames()
@@ -126,7 +126,8 @@ namespace FdoToolbox.Tasks.Controls
                                                dlg.TargetConnectionName,
                                                dlg.TargetSchema,
                                                dlg.TargetClass,
-                                               dlg.TaskName);
+                                               dlg.TaskName,
+                                               dlg.CreateIfNotExist);
 
                 _tasks[task.DecoratedNode.Index] = task;
                 root.Expand();
@@ -248,6 +249,8 @@ namespace FdoToolbox.Tasks.Controls
             {
                 FdoCopyTaskElement task = new FdoCopyTaskElement();
                 task.name = dec.Name;
+                task.createIfNotExists = dec.CreateIfNotExists;
+
                 task.Source = new FdoCopySourceElement();
                 task.Target = new FdoCopyTargetElement();
                 task.Options = new FdoCopyOptionsElement();
@@ -285,6 +288,7 @@ namespace FdoToolbox.Tasks.Controls
                     PropertyConversionNodeDecorator conv = dec.PropertyMappings.GetConversionRule(p.source);
                     p.nullOnFailedConversion = conv.NullOnFailedConversion;
                     p.truncate = conv.Truncate;
+                    p.createIfNotExists = conv.CreateIfNotExists;
 
                     pmaps.Add(p);
                 }
@@ -300,6 +304,7 @@ namespace FdoToolbox.Tasks.Controls
                     PropertyConversionNodeDecorator conv = dec.ExpressionMappings.GetConversionRule(e.alias);
                     e.nullOnFailedConversion = conv.NullOnFailedConversion;
                     e.truncate = conv.Truncate;
+                    e.createIfNotExists = conv.CreateIfNotExists;
 
                     emaps.Add(e);
                 }
@@ -337,7 +342,8 @@ namespace FdoToolbox.Tasks.Controls
                                                task.TargetConnectionName,
                                                task.TargetSchema,
                                                task.TargetClassName,
-                                               task.Name);
+                                               task.Name,
+                                               task.CreateIfNotExists);
 
                 _tasks[dec.DecoratedNode.Index] = dec;
                 root.Expand();
@@ -349,14 +355,14 @@ namespace FdoToolbox.Tasks.Controls
                 dec.Options.Delete = task.DeleteTarget;
                 dec.Options.SourceFilter = task.SourceFilter;
                 dec.Options.Flatten = task.FlattenGeometries;
-                
 
+                var checkProps = new List<string>(task.CheckSourceProperties);
                 //Property Mappings
                 foreach (string srcProp in task.SourcePropertyNames)
                 {
                     string dstProp = task.GetTargetProperty(srcProp);
-
-                    dec.PropertyMappings.MapProperty(srcProp, dstProp);
+                    bool createIfNotExists = checkProps.Contains(srcProp);
+                    dec.PropertyMappings.MapProperty(srcProp, dstProp, createIfNotExists);
 
                     FdoDataPropertyConversionRule rule = task.GetDataConversionRule(srcProp);
                     PropertyConversionNodeDecorator cd = dec.PropertyMappings.GetConversionRule(srcProp);
@@ -372,9 +378,9 @@ namespace FdoToolbox.Tasks.Controls
                 {
                     string expr = task.GetExpression(alias);
                     string dstProp = task.GetTargetPropertyForAlias(alias);
-
+                    bool createIfNotExists = checkProps.Contains(alias);
                     dec.ExpressionMappings.AddExpression(alias, expr);
-                    dec.ExpressionMappings.MapExpression(alias, dstProp);
+                    dec.ExpressionMappings.MapExpression(alias, dstProp, createIfNotExists);
 
                     FdoDataPropertyConversionRule rule = task.GetDataConversionRule(alias);
                     PropertyConversionNodeDecorator cd = dec.ExpressionMappings.GetConversionRule(alias);

@@ -163,5 +163,12 @@ namespace FdoToolbox.Core.ETL.Specialized
                 _connections.Clear();
             }
         }
+
+        private List<ClassModificationItem> _classModifiers = new List<ClassModificationItem>();
+
+        internal void AddClassModifier(ClassModificationItem moditem)
+        {
+            _classModifiers.Add(moditem);
+        }
     }
 }

@@ -131,7 +131,6 @@
     <Compile Include="Controls\FdoBulkCopyCtl.Designer.cs">
       <DependentUpon>FdoBulkCopyCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\FdoBulkCopyPresenter.cs" />
     <Compile Include="Controls\FdoJoinCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>

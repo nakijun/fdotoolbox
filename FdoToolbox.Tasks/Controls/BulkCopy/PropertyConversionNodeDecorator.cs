@@ -31,6 +31,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         public TreeNode _propertyNode;
         private ContextMenuStrip _ctxNull;
         private ContextMenuStrip _ctxTruncate;
+        private ContextMenuStrip _ctxCreate;
 
         public PropertyConversionNodeDecorator(TreeNode propertyNode)
         {
@@ -43,20 +44,28 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         {
             _ctxNull = new ContextMenuStrip();
             _ctxTruncate = new ContextMenuStrip();
+            _ctxCreate = new ContextMenuStrip();
 
             _propertyNode.Nodes.Add("Set to NULL on failed conversion");
             _propertyNode.Nodes.Add("Truncate value");
+            _propertyNode.Nodes.Add("Create if not exists");
 
             this.NullOnFailedConversion = true;
             this.Truncate = false;
+            this.CreateIfNotExists = false;
 
             _ctxNull.Items.Add("True", null, delegate { this.NullOnFailedConversion = true; });
             _ctxNull.Items.Add("False", null, delegate { this.NullOnFailedConversion = false; });
             _ctxTruncate.Items.Add("True", null, delegate { this.Truncate = true; });
             _ctxTruncate.Items.Add("False", null, delegate { this.Truncate = false; });
+            _ctxCreate.Items.Add("True", null, delegate { 
+                this.CreateIfNotExists = true; 
+            });
+            _ctxCreate.Items.Add("False", null, delegate { this.CreateIfNotExists = false; });
 
             _propertyNode.Nodes[0].ContextMenuStrip = _ctxNull;
             _propertyNode.Nodes[1].ContextMenuStrip = _ctxTruncate;
+            _propertyNode.Nodes[2].ContextMenuStrip = _ctxCreate;
         }
 
         public bool NullOnFailedConversion
@@ -83,6 +92,19 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                 _propertyNode.Nodes[1].Tag = value;
                 _propertyNode.Nodes[1].Text = "Truncate value: " + value;
             }  
+        }
+
+        public bool CreateIfNotExists
+        {
+            get 
+            { 
+                return Convert.ToBoolean(_propertyNode.Nodes[2].Tag); 
+            }
+            set
+            {
+                _propertyNode.Nodes[2].Tag = value;
+                _propertyNode.Nodes[2].Text = "Create if not exists: " + value;
+            }
         }
     }
 }

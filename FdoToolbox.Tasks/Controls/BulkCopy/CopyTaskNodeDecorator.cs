@@ -67,7 +67,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             return _connMgr.GetConnection(_dstConnName);
         }
 
-        internal CopyTaskNodeDecorator(TreeNode root, string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass, string taskName)
+        internal CopyTaskNodeDecorator(TreeNode root, string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass, string taskName, bool createIfNotExists)
         {
             _node = new TreeNode();
             root.Nodes.Add(_node);
@@ -79,12 +79,17 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
 
             this.Name = taskName;
             this.Description = "Copies features from " + srcClass + " to " + dstClass;
+
+            if (createIfNotExists)
+                dstClass = srcClass + " (created if it doesn't exist)";
+
             InitDescription(srcConnName, srcSchema, srcClass, dstConnName, dstSchema, dstClass);
 
             _connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
 
             _srcConnName = srcConnName;
             _dstConnName = dstConnName;
+            this.CreateIfNotExists = createIfNotExists;
 
             using (FdoFeatureService srcSvc = GetSourceConnection().CreateFeatureService())
             using (FdoFeatureService dstSvc = GetTargetConnection().CreateFeatureService())
@@ -93,7 +98,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                 Debug.Assert(sourceClass != null);
 
                 ClassDefinition targetClass = dstSvc.GetClassByName(dstSchema, dstClass);
-                Debug.Assert(targetClass != null);
+                if (targetClass == null && !this.CreateIfNotExists)
+                    throw new InvalidOperationException("Target class " + dstClass + " does not exist. If you want this class created make sure you checked \"Create class of the name name\" when creating a new copy task");
 
                 _srcClass = sourceClass;
                 _dstClass = targetClass;
@@ -118,6 +124,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         public string TargetSchemaName { get { return _dstSchemaName; } }
 
         public string TargetClassName { get { return _dstClassName; } }
+
+        public bool CreateIfNotExists { get; private set; }
 
         private void InitDescription(string srcConnName, string srcSchema, string srcClass, string dstConnName, string dstSchema, string dstClass)
         {

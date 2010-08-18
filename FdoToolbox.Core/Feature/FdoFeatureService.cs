@@ -1015,12 +1015,19 @@ namespace FdoToolbox.Core.Feature
             {
                 using (IDescribeSchema describe = Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
                 {
-                    describe.SchemaName = schemaName;
-                    OSGeo.FDO.Common.StringElement el = new OSGeo.FDO.Common.StringElement(className);
-                    describe.ClassNames.Add(el);
-                    FeatureSchemaCollection schemas = describe.Execute();
-                    if (schemas != null)
-                        return schemas[0].Classes[0];
+                    try
+                    {
+                        describe.SchemaName = schemaName;
+                        OSGeo.FDO.Common.StringElement el = new OSGeo.FDO.Common.StringElement(className);
+                        describe.ClassNames.Add(el);
+                        FeatureSchemaCollection schemas = describe.Execute();
+                        if (schemas != null)
+                            return schemas[0].Classes[0];
+                    }
+                    catch (OSGeo.FDO.Common.Exception)
+                    {
+                        return null;
+                    }
                 }
             }
             else
@@ -2463,6 +2470,90 @@ namespace FdoToolbox.Core.Feature
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Returns a feature schema containing the given sub-set of classes. This also returns
+        /// a list of classes that did not exist.
+        /// </summary>
+        /// <param name="schemaName"></param>
+        /// <param name="classes"></param>
+        /// <param name="classesNotFound">An array of class name that were not found</param>
+        /// <returns></returns>
+        public FeatureSchema PartialDescribeSchema(string schemaName, List<string> classes, out string[] classesNotFound)
+        {
+            classesNotFound = new string[0];
+            List<string> notFound = new List<string>();
+            if (SupportsPartialSchemaDiscovery())
+            {
+                List<string> classesToQuery = new List<string>();
+
+                //Compile a list of legit classes to query against the master list provided by IGetClassNames
+                using (IGetClassNames getclasses = Connection.CreateCommand(CommandType.CommandType_GetClassNames) as IGetClassNames)
+                {
+                    getclasses.SchemaName = schemaName;
+                    using (var names = getclasses.Execute())
+                    {
+                        foreach (OSGeo.FDO.Common.StringElement el in names)
+                        {
+                            if (classes.Contains(el.String))
+                                classesToQuery.Add(el.String);
+                        }
+                    }
+                }
+
+                //Now weed out specified classes that don't exist
+                foreach (var name in classes)
+                {
+                    if (!classesToQuery.Contains(name))
+                        notFound.Add(name);
+                }
+
+                classesNotFound = notFound.ToArray();
+
+                //Use new API
+                using (IDescribeSchema describe = Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+                {
+                    describe.SchemaName = schemaName;
+                    foreach (string cls in classesToQuery)
+                    {
+                        describe.ClassNames.Add(new OSGeo.FDO.Common.StringElement(cls));
+                    }
+                    FeatureSchemaCollection schemas = describe.Execute();
+                    if (schemas != null && schemas.Count == 1)
+                        return schemas[0];
+                }
+            }
+            else
+            {
+                //Use old approach, full schema and rip out classes not in
+                //the list
+                FeatureSchema schema = GetSchemaByName(schemaName);
+                if (schema != null)
+                {
+                    List<string> clsRemove = new List<string>();
+                    foreach (ClassDefinition cd in schema.Classes)
+                    {
+                        if (!classes.Contains(cd.Name))
+                            clsRemove.Add(cd.Name);
+                    }
+                    foreach (string cls in clsRemove)
+                    {
+                        schema.Classes.RemoveAt(schema.Classes.IndexOf(cls));
+                    }
+                    //Add classes that don't exist
+                    foreach (string cls in classes)
+                    {
+                        var cidx = schema.Classes.IndexOf(cls);
+                        if (cidx < 0)
+                            notFound.Add(cls);
+                    }
+                    classesNotFound = notFound.ToArray();
+                    return schema;
+                }
+            }
+
+            throw new SchemaNotFoundException(schemaName);
         }
 
         /// <summary>

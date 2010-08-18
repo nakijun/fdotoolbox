@@ -83,15 +83,24 @@ namespace FdoToolbox.Core.ETL
         }
     }
 
+    internal enum SchemaOrigin
+    {
+        Source,
+        Target
+    }
+
     internal class MultiSchemaQuery
     {
         private List<SchemaQuery> _query;
 
-        public MultiSchemaQuery(string connName)
+        public MultiSchemaQuery(string connName, SchemaOrigin origin)
         {
             this.ConnectionName = connName;
+            this.Origin = origin;
             _query = new List<SchemaQuery>();
         }
+
+        public SchemaOrigin Origin { get; private set; }
 
         public string ConnectionName { get; set; }
 
@@ -134,6 +143,35 @@ namespace FdoToolbox.Core.ETL
         {
             get { return _classes; }
         }
+    }
+
+    internal abstract class ClassModificationItem
+    {
+        public string Name { get; private set; }
+
+        protected ClassModificationItem(string name) { this.Name = name; }
+
+        private Dictionary<string, PropertyDefinition> _propsToCreate = new Dictionary<string, PropertyDefinition>();
+
+        public void AddProperty(PropertyDefinition propDef)
+        {
+            _propsToCreate.Add(propDef.Name, propDef);
+        }
+
+        public ICollection<PropertyDefinition> PropertiesToCreate
+        {
+            get { return _propsToCreate.Values; }
+        }
+    }
+
+    internal class CreateClassFromSource : ClassModificationItem
+    {
+        public CreateClassFromSource(string name) : base(name) { }
+    }
+
+    internal class UpdateClass : ClassModificationItem
+    {
+        public UpdateClass(string name) : base(name) { }
     }
 
     /// <summary>
@@ -218,7 +256,7 @@ namespace FdoToolbox.Core.ETL
 
                 //Process source
                 if (!queries.ContainsKey(task.Source.connection))
-                    src = queries[task.Source.connection] = new MultiSchemaQuery(task.Source.connection);
+                    src = queries[task.Source.connection] = new MultiSchemaQuery(task.Source.connection, SchemaOrigin.Source);
                 else
                     src = queries[task.Source.connection];
 
@@ -236,7 +274,7 @@ namespace FdoToolbox.Core.ETL
 
                 //Process target
                 if (!queries.ContainsKey(task.Target.connection))
-                    dst = queries[task.Target.connection] = new MultiSchemaQuery(task.Target.connection);
+                    dst = queries[task.Target.connection] = new MultiSchemaQuery(task.Target.connection, SchemaOrigin.Target);
                 else
                     dst = queries[task.Target.connection];
 
@@ -253,41 +291,97 @@ namespace FdoToolbox.Core.ETL
                 }
             }
 
-            var schemaCache = new FeatureSchemaCache();
-
-            //Now populate the schema cache
-            foreach (string connName in queries.Keys)
+            List<ClassModificationItem> modifiers = new List<ClassModificationItem>();
+            using (var schemaCache = new FeatureSchemaCache())
             {
-                if (connections.ContainsKey(connName))
+                //Now populate the schema cache with source schemas
+                foreach (string connName in queries.Keys)
                 {
-                    var mqry = queries[connName];
-                    var conn = connections[connName];
-
-                    FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
-
-                    using (var svc = conn.CreateFeatureService())
+                    if (connections.ContainsKey(connName))
                     {
-                        foreach (var sq in mqry.SchemaQueries)
+                        var mqry = queries[connName];
+                        var conn = connections[connName];
+
+                        FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
+
+                        using (var svc = conn.CreateFeatureService())
                         {
-                            schemas.Add(svc.PartialDescribeSchema(sq.SchemaName, new List<string>(sq.ClassNames)));
+                            foreach (var sq in mqry.SchemaQueries)
+                            {
+                                //Source schema queries are expected to fully check out so use original method
+                                if (mqry.Origin == SchemaOrigin.Source)
+                                {
+                                    schemas.Add(svc.PartialDescribeSchema(sq.SchemaName, new List<string>(sq.ClassNames)));
+                                }
+                            }
                         }
+
+                        if (schemas.Count > 0)
+                            schemaCache.Add(connName, schemas);
                     }
-
-                    schemaCache.Add(connName, schemas);
                 }
-            }
 
-            
-            FdoBulkCopyOptions opts = new FdoBulkCopyOptions(connections, owner);
-            using (schemaCache)
-            {
+                //Now populate the schema cache with target schemas, taking note of any
+                //classes that need to be created or updated.
+                foreach (string connName in queries.Keys)
+                {
+                    if (connections.ContainsKey(connName))
+                    {
+                        var mqry = queries[connName];
+                        var conn = connections[connName];
+
+                        FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
+
+                        using (var svc = conn.CreateFeatureService())
+                        {
+                            foreach (var sq in mqry.SchemaQueries)
+                            {
+                                //Source schema queries are expected to fully check out so use original method
+                                if (mqry.Origin == SchemaOrigin.Target)
+                                {
+                                    //Because we may need to create new classes, the old method will break down on non-existent class names
+                                    //So use the new method
+                                    string[] notFound;
+                                    var schema = svc.PartialDescribeSchema(sq.SchemaName, new List<string>(sq.ClassNames), out notFound);
+                                    if (notFound.Length > 0)
+                                    {
+                                        //If we can't modify schemas we'll stop right here. This is caused by elements containing createIfNotExists = true
+                                        if (!conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSchemaModification))
+                                            throw new NotSupportedException("The connection named " + connName + " does not support schema modification. Therefore, copy tasks and property/expression mappings cannot have createIfNotExists = true");
+
+                                        foreach (string className in notFound)
+                                        {
+                                            modifiers.Add(new CreateClassFromSource(className));
+                                        }
+                                    }
+                                    schemas.Add(schema);
+                                }
+                            }
+                        }
+
+                        if (schemas.Count > 0)
+                            schemaCache.Add(connName, schemas);
+                    }
+                }
+
+                FdoBulkCopyOptions opts = new FdoBulkCopyOptions(connections, owner);
+                foreach (var mod in modifiers)
+                {
+                    opts.AddClassModifier(mod);
+                }
+
                 foreach (FdoCopyTaskElement task in def.CopyTasks)
                 {
-                    FdoClassCopyOptions copt = FdoClassCopyOptions.FromElement(task, schemaCache, connections[task.Source.connection]);
+                    ClassModificationItem mod;
+                    FdoClassCopyOptions copt = FdoClassCopyOptions.FromElement(task, schemaCache, connections[task.Source.connection], connections[task.Target.connection], out mod);
+                    if (mod != null)
+                        opts.AddClassModifier(mod);
+
                     opts.AddClassCopyOption(copt);
                 }
+
+                return opts;
             }
-            return opts;
         }
 
         /// <summary>
