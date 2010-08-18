@@ -516,6 +516,14 @@ namespace FdoToolbox.Core.ETL.Specialized
             else //class doesn't exist
             {
                 mod = new CreateTargetClassFromSource(el.Source.schema, el.Target.@class);
+
+                foreach (FdoPropertyMappingElement propMap in el.PropertyMappings)
+                {
+                    opts.AddPropertyMapping(propMap.source, propMap.target);
+
+                    if (propMap.createIfNotExists)
+                        opts.AddSourcePropertyToCheck(propMap.source);
+                }
             }
 
             return opts;

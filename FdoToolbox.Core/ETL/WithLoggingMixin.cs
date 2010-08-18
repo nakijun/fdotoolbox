@@ -26,6 +26,7 @@ using log4net;
 using log4net.Util;
 using System.Globalization;
 using log4net.Core;
+using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -45,6 +46,8 @@ namespace FdoToolbox.Core.ETL
             log = LogManager.GetLogger(GetType());
         }
 
+        public event MessageEventHandler OnError = delegate { };
+        
         /// <summary>
         /// Logs an error message
         /// </summary>
@@ -60,7 +63,11 @@ namespace FdoToolbox.Core.ETL
             else
                 errorMessage = message.ToString();
             errors.Add(new FdoETLException(errorMessage, exception));
+
+            OnError(this, new MessageEventArgs(message.ToString()));
         }
+
+        public event MessageEventHandler OnWarn = delegate { };
 
         /// <summary>
         /// Logs a warn message
@@ -71,9 +78,13 @@ namespace FdoToolbox.Core.ETL
         {
             if (log.IsWarnEnabled)
             {
-                log.Logger.Log(GetType(), Level.Warn, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+                var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
+                log.Logger.Log(GetType(), Level.Warn, ssf, null);
+                OnWarn(this, new MessageEventArgs(ssf.ToString()));
             }
         }
+
+        public event MessageEventHandler OnDebug = delegate { };
 
         /// <summary>
         /// Logs a debug message
@@ -84,10 +95,13 @@ namespace FdoToolbox.Core.ETL
         {
             if (log.IsDebugEnabled)
             {
-                log.Logger.Log(GetType(), Level.Debug, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+                var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
+                log.Logger.Log(GetType(), Level.Debug, ssf, null);
+                OnDebug(this, new MessageEventArgs(ssf.ToString()));
             }
         }
 
+        public event MessageEventHandler OnNotice = delegate { };
 
         /// <summary>
         /// Logs a notice message
@@ -98,10 +112,13 @@ namespace FdoToolbox.Core.ETL
         {
             if (log.Logger.IsEnabledFor(Level.Notice))
             {
-                log.Logger.Log(GetType(), Level.Notice, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+                var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
+                log.Logger.Log(GetType(), Level.Notice, ssf, null);
+                OnNotice(this, new MessageEventArgs(ssf.ToString()));
             }
         }
 
+        public event MessageEventHandler OnInfo = delegate { };
 
         /// <summary>
         /// Logs an information message
@@ -112,7 +129,9 @@ namespace FdoToolbox.Core.ETL
         {
             if (log.IsInfoEnabled)
             {
-                log.Logger.Log(GetType(), Level.Info, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+                var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
+                log.Logger.Log(GetType(), Level.Info, ssf, null);
+                OnInfo(this, new MessageEventArgs(ssf.ToString()));
             }
         }
 

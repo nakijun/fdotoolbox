@@ -77,7 +77,14 @@ namespace FdoToolbox.Core.ETL.Operations
                         {
                             del.SetFeatureClassName(_className);
                             if (!string.IsNullOrEmpty(_filter))
+                            {
                                 del.SetFilter(_filter);
+                                Info("Deleting everything from class " + _className + " with filter: " + _filter);
+                            }
+                            else
+                            {
+                                Info("Deleting everything from class: " + _className);
+                            }
                             int result = del.Execute();
                             Info(result + " features deleted from class: " + _className);
                         }

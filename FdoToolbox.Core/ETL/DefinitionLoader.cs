@@ -168,7 +168,7 @@ namespace FdoToolbox.Core.ETL
     {
         public string Schema { get; set; }
 
-        public CreateTargetClassFromSource(string schema, string name) : base(name) { }
+        public CreateTargetClassFromSource(string schema, string name) : base(name) { this.Schema = schema; }
     }
 
     internal class UpdateTargetClass : TargetClassModificationItem
@@ -380,20 +380,20 @@ namespace FdoToolbox.Core.ETL
                                     //So use the new method
                                     string[] notFound;
                                     var schema = svc.PartialDescribeSchema(sq.SchemaName, new List<string>(sq.ClassNames), out notFound);
-                                    if (notFound.Length > 0)
-                                    {
-                                        //If we can't modify schemas we'll stop right here. This is caused by elements containing createIfNotExists = true
-                                        if (!conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSchemaModification))
-                                            throw new NotSupportedException("The connection named " + connName + " does not support schema modification. Therefore, copy tasks and property/expression mappings cannot have createIfNotExists = true");
+                                    //if (notFound.Length > 0)
+                                    //{
+                                    //    //If we can't modify schemas we'll stop right here. This is caused by elements containing createIfNotExists = true
+                                    //    if (!conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSchemaModification))
+                                    //        throw new NotSupportedException("The connection named " + connName + " does not support schema modification. Therefore, copy tasks and property/expression mappings cannot have createIfNotExists = true");
 
-                                        //This cumbersome, but we need the parent schema name of the class that we will need to copy
-                                        string srcSchema = GetSourceSchemaForMapping(def, sq.SchemaName, notFound);
+                                    //    //This cumbersome, but we need the parent schema name of the class that we will need to copy
+                                    //    string srcSchema = GetSourceSchemaForMapping(def, sq.SchemaName, notFound);
 
-                                        foreach (string className in notFound)
-                                        {
-                                            modifiers.Add(new CreateTargetClassFromSource(srcSchema, className));
-                                        }
-                                    }
+                                    //    foreach (string className in notFound)
+                                    //    {
+                                    //        modifiers.Add(new CreateTargetClassFromSource(srcSchema, className));
+                                    //    }
+                                    //}
                                     schemas.Add(schema);
                                 }
                             }
@@ -405,19 +405,16 @@ namespace FdoToolbox.Core.ETL
                 }
 
                 FdoBulkCopyOptions opts = new FdoBulkCopyOptions(connections, owner);
-                foreach (var mod in modifiers)
-                {
-                    opts.AddClassModifier(mod);
-                }
-
+                
                 foreach (FdoCopyTaskElement task in def.CopyTasks)
                 {
                     TargetClassModificationItem mod;
                     FdoClassCopyOptions copt = FdoClassCopyOptions.FromElement(task, schemaCache, connections[task.Source.connection], connections[task.Target.connection], out mod);
-                    if (mod != null)
-                        opts.AddClassModifier(mod);
-
                     opts.AddClassCopyOption(copt);
+
+                    if (mod != null)
+                        copt.PreCopyTargetModifier = mod;
+                        //opts.AddClassModifier(mod);
                 }
 
                 return opts;
