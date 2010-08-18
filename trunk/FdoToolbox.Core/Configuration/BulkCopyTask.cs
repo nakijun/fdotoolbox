@@ -190,6 +190,16 @@ namespace FdoToolbox.Core.Configuration {
                 this.truncateField = value;
             }
         }
+
+        private bool createIfNotExistsField;
+
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(false)]
+        public bool createIfNotExists
+        {
+            get { return this.createIfNotExistsField; }
+            set { this.createIfNotExistsField = value; }
+        }
     }
     
     /// <remarks/>
@@ -256,6 +266,16 @@ namespace FdoToolbox.Core.Configuration {
             set {
                 this.truncateField = value;
             }
+        }
+
+        private bool createIfNotExistsField;
+
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(false)]
+        public bool createIfNotExists
+        {
+            get { return this.createIfNotExistsField; }
+            set { this.createIfNotExistsField = value; }
         }
     }
     
@@ -537,6 +557,16 @@ namespace FdoToolbox.Core.Configuration {
             set {
                 this.nameField = value;
             }
+        }
+
+        private bool createIfNotExistsField;
+
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(false)]
+        public bool createIfNotExists
+        {
+            get { return this.createIfNotExistsField; }
+            set { this.createIfNotExistsField = value; }
         }
     }
 }

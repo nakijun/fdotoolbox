@@ -27,6 +27,7 @@ using FdoToolbox.Core.Configuration;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Core.Utility;
+using OSGeo.FDO.Connections.Capabilities;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
@@ -67,7 +68,15 @@ namespace FdoToolbox.Core.ETL.Specialized
             get { return _Name; }
             set { _Name = value; }
         }
-	
+
+        /// <summary>
+        /// Gets or sets whether the source class definition should be created in the target schema 
+        /// </summary>
+        public bool CreateIfNotExists
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FdoClassCopyOptions"/> class.
@@ -203,6 +212,26 @@ namespace FdoToolbox.Core.ETL.Specialized
             _propertyMappings[sourceProperty] = targetProperty;
         }
 
+        private List<string> _checkSourceProperties = new List<string>();
+
+        /// <summary>
+        /// Adds a source property to check if it needs to be created in the target class definition
+        /// </summary>
+        /// <param name="sourceProperty"></param>
+        public void AddSourcePropertyToCheck(string sourceProperty)
+        {
+            _checkSourceProperties.Add(sourceProperty);
+        }
+
+        /// <summary>
+        /// Gets an array of source property names that need to be checked in the target class to see
+        /// whether they need to be created or not.
+        /// </summary>
+        public string[] CheckSourceProperties
+        {
+            get { return _checkSourceProperties.ToArray(); }
+        }
+
         private int _BatchSize;
 
         /// <summary>
@@ -320,8 +349,9 @@ namespace FdoToolbox.Core.ETL.Specialized
             return null;
         }
 
-        internal static FdoClassCopyOptions FromElement(FdoCopyTaskElement el, FeatureSchemaCache cache, FdoConnection sourceConn)
+        internal static FdoClassCopyOptions FromElement(FdoCopyTaskElement el, FeatureSchemaCache cache, FdoConnection sourceConn, FdoConnection targetConn, out ClassModificationItem mod)
         {
+            mod = null;
             if (!cache.HasConnection(el.Source.connection))
                 throw new TaskLoaderException("The referenced source connection is not defined");
 
@@ -344,83 +374,146 @@ namespace FdoToolbox.Core.ETL.Specialized
             if (!string.IsNullOrEmpty(el.Options.BatchSize))
                 opts.BatchSize = Convert.ToInt32(el.Options.BatchSize);
             opts.Name = el.name;
+            opts.CreateIfNotExists = el.createIfNotExists;
 
             ClassDefinition srcClass = cache.GetClassByName(el.Source.connection, el.Source.schema, el.Source.@class);
             ClassDefinition dstClass = cache.GetClassByName(el.Target.connection, el.Target.schema, el.Target.@class);
 
-            // 
-            foreach (FdoPropertyMappingElement propMap in el.PropertyMappings)
+            if (!el.createIfNotExists && dstClass == null)
+                throw new InvalidOperationException("Target class " + el.Target.@class + " does not exist and the createIfNotExist option is false");
+
+            if (dstClass != null)
             {
-                if (srcClass.Properties.IndexOf(propMap.source) < 0)
-                    throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a source property not found in the source class definition (" + el.Source.@class + ")");
-
-                if (dstClass.Properties.IndexOf(propMap.target) < 0)
-                    throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a target property not found in the target class definition (" + el.Target.@class + ")");
-
-                PropertyDefinition sp = srcClass.Properties[propMap.source];
-                PropertyDefinition tp = dstClass.Properties[propMap.target];
-
-                if (sp.PropertyType != tp.PropertyType)
-                    throw new TaskLoaderException("The properties in the mapping (" + propMap.source + " -> " + propMap.target + ") are of different types");
-
-                //if (sp.PropertyType != PropertyType.PropertyType_DataProperty)
-                //    throw new TaskLoaderException("One or more properties in the mapping (" + propMap.source + " -> " + propMap.target + ") is not a data property");
-
-                DataPropertyDefinition sdp = sp as DataPropertyDefinition;
-                DataPropertyDefinition tdp = tp as DataPropertyDefinition;
-
-                opts.AddPropertyMapping(propMap.source, propMap.target);
-
-                //Property mapping is between two data properties
-                if (sdp != null && tdp != null)
+                foreach (FdoPropertyMappingElement propMap in el.PropertyMappings)
                 {
-                    //Types not equal, so add a conversion rule
-                    if (sdp.DataType != tdp.DataType)
+                    if (srcClass.Properties.IndexOf(propMap.source) < 0)
+                        throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a source property not found in the source class definition (" + el.Source.@class + ")");
+
+                    if (dstClass.Properties.IndexOf(propMap.target) < 0)
+                        throw new TaskLoaderException("The property mapping (" + propMap.source + " -> " + propMap.target + ") in task (" + el.name + ") contains a target property not found in the target class definition (" + el.Target.@class + ")");
+
+                    PropertyDefinition sp = srcClass.Properties[propMap.source];
+                    PropertyDefinition tp = dstClass.Properties[propMap.target];
+
+                    if (sp.PropertyType != tp.PropertyType)
+                        throw new TaskLoaderException("The properties in the mapping (" + propMap.source + " -> " + propMap.target + ") are of different types");
+
+                    //if (sp.PropertyType != PropertyType.PropertyType_DataProperty)
+                    //    throw new TaskLoaderException("One or more properties in the mapping (" + propMap.source + " -> " + propMap.target + ") is not a data property");
+
+                    DataPropertyDefinition sdp = sp as DataPropertyDefinition;
+                    DataPropertyDefinition tdp = tp as DataPropertyDefinition;
+
+                    opts.AddPropertyMapping(propMap.source, propMap.target);
+
+                    //Add to list of properties to check for
+                    if (propMap.createIfNotExists)
                     {
-                        FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
-                            propMap.source,
-                            propMap.target,
-                            sdp.DataType,
-                            tdp.DataType,
-                            propMap.nullOnFailedConversion,
-                            propMap.truncate);
-                        opts.AddDataConversionRule(propMap.source, rule);
+                        opts.AddSourcePropertyToCheck(propMap.source);
+                    }
+
+                    //Property mapping is between two data properties
+                    if (sdp != null && tdp != null)
+                    {
+                        //Types not equal, so add a conversion rule
+                        if (sdp.DataType != tdp.DataType)
+                        {
+                            FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
+                                propMap.source,
+                                propMap.target,
+                                sdp.DataType,
+                                tdp.DataType,
+                                propMap.nullOnFailedConversion,
+                                propMap.truncate);
+                            opts.AddDataConversionRule(propMap.source, rule);
+                        }
                     }
                 }
-            }
 
-            //
-            foreach (FdoExpressionMappingElement exprMap in el.ExpressionMappings)
-            {
-                if (string.IsNullOrEmpty(exprMap.target))
-                    continue;
+                SpatialContextInfo defaultSc = null;
+                FunctionDefinitionCollection availableFunctions = (FunctionDefinitionCollection)sourceConn.Capability.GetObjectCapability(CapabilityType.FdoCapabilityType_ExpressionFunctions);
 
-                opts.AddSourceExpression(exprMap.alias, exprMap.Expression, exprMap.target);
-
-                FdoPropertyType? pt = ExpressionUtility.ParseExpressionType(exprMap.Expression, sourceConn);
-                if (pt.HasValue)
+                using (var svc = targetConn.CreateFeatureService())
                 {
-                    DataType? srcDt = ValueConverter.GetDataType(pt.Value);
-                    if (srcDt.HasValue)
+                    defaultSc = svc.GetActiveSpatialContext();
+                }
+
+                //
+                foreach (FdoExpressionMappingElement exprMap in el.ExpressionMappings)
+                {
+                    if (string.IsNullOrEmpty(exprMap.target))
+                        continue;
+
+                    opts.AddSourceExpression(exprMap.alias, exprMap.Expression, exprMap.target);
+                    //Add to list of properties to check for
+                    if (exprMap.createIfNotExists)
                     {
-                        PropertyDefinition tp = dstClass.Properties[exprMap.target];
-                        DataPropertyDefinition tdp = tp as DataPropertyDefinition;
-                        if (tdp != null)
+                        if (dstClass != null)
                         {
-                            if (srcDt.Value != tdp.DataType)
+                            //Class exists but property doesn't
+                            if (dstClass.Properties.IndexOf(exprMap.target) < 0)
                             {
-                                FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
-                                    exprMap.alias,
-                                    exprMap.target,
-                                    srcDt.Value,
-                                    tdp.DataType,
-                                    exprMap.nullOnFailedConversion,
-                                    exprMap.truncate);
-                                opts.AddDataConversionRule(exprMap.alias, rule);
+                                if (mod == null)
+                                {
+                                    mod = new UpdateClass(el.Target.@class);
+                                }
+
+                                var prop = FdoSchemaUtil.CreatePropertyFromExpressionType(exprMap.Expression, availableFunctions, defaultSc.Name);
+                                if (prop == null)
+                                {
+                                    throw new InvalidOperationException("Could not derive a property definition from the expression: " + exprMap.Expression);
+                                }
+
+                                prop.Name = exprMap.target;
+                                mod.AddProperty(prop);
+                            }
+                        }
+                        else //Class doesn't exist
+                        {
+                            if (mod == null)
+                            {
+                                mod = new CreateClassFromSource(el.Target.@class);
+                            }
+
+                            var prop = FdoSchemaUtil.CreatePropertyFromExpressionType(exprMap.Expression, availableFunctions, defaultSc.Name);
+                            if (prop == null)
+                            {
+                                throw new InvalidOperationException("Could not derive a property definition from the expression: " + exprMap.Expression);
+                            }
+                            prop.Name = exprMap.target;
+                            mod.AddProperty(prop);
+                        }
+                    }
+
+                    FdoPropertyType? pt = ExpressionUtility.ParseExpressionType(exprMap.Expression, sourceConn);
+                    if (pt.HasValue)
+                    {
+                        DataType? srcDt = ValueConverter.GetDataType(pt.Value);
+                        if (srcDt.HasValue)
+                        {
+                            PropertyDefinition tp = dstClass.Properties[exprMap.target];
+                            DataPropertyDefinition tdp = tp as DataPropertyDefinition;
+                            if (tdp != null)
+                            {
+                                if (srcDt.Value != tdp.DataType)
+                                {
+                                    FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
+                                        exprMap.alias,
+                                        exprMap.target,
+                                        srcDt.Value,
+                                        tdp.DataType,
+                                        exprMap.nullOnFailedConversion,
+                                        exprMap.truncate);
+                                    opts.AddDataConversionRule(exprMap.alias, rule);
+                                }
                             }
                         }
                     }
                 }
+            }
+            else //class doesn't exist
+            {
+                mod = new CreateClassFromSource(el.Target.@class);
             }
 
             return opts;
@@ -430,6 +523,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         {
             FdoCopyTaskElement el = new FdoCopyTaskElement();
             el.name = this.Name;
+            el.createIfNotExists = this.CreateIfNotExists;
             el.Options = new FdoCopyOptionsElement();
             el.Options.DeleteTarget = this.DeleteTarget;
             el.Options.Filter = this.SourceFilter;
@@ -456,6 +550,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             List<FdoPropertyMappingElement> propMappings = new List<FdoPropertyMappingElement>();
             List<FdoExpressionMappingElement> exprMappings = new List<FdoExpressionMappingElement>();
 
+            List<string> check = new List<string>(this.CheckSourceProperties);
             Dictionary<string, FdoPropertyMappingElement> convRules = new Dictionary<string, FdoPropertyMappingElement>();
             foreach (FdoDataPropertyConversionRule rule in this.ConversionRules)
             {
@@ -466,6 +561,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                 map.truncate = rule.Truncate;
                 map.source = rule.SourceProperty;
                 map.target = rule.TargetProperty;
+                if (check.Contains(map.source))
+                    map.createIfNotExists = true;
+
                 convRules.Add(map.source, map);
             }
 
@@ -480,6 +578,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                     FdoPropertyMappingElement map = new FdoPropertyMappingElement();
                     map.source = prop;
                     map.target = this.GetTargetProperty(prop);
+                    if (check.Contains(map.source))
+                        map.createIfNotExists = true;
+
                     propMappings.Add(map);
                 }
             }
@@ -490,6 +591,9 @@ namespace FdoToolbox.Core.ETL.Specialized
                 map.alias = alias;
                 map.Expression = this.GetExpression(alias);
                 map.target = this.GetTargetPropertyForAlias(alias);
+                if (check.Contains(map.alias))
+                    map.createIfNotExists = true;
+
                 exprMappings.Add(map);
             }
 

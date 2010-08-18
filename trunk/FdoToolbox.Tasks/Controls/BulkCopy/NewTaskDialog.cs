@@ -47,10 +47,10 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         private void CheckButtonStates()
         {
             btnOK.Enabled = (!string.IsNullOrEmpty(txtName.Text)
-                && cmbDstClass.SelectedIndex >= 0
+                && (this.CreateIfNotExist || cmbDstClass.SelectedIndex >= 0)
                 && cmbDstConnection.SelectedIndex >= 0
                 && cmbDstSchema.SelectedIndex >= 0
-                && cmbSrcClass.SelectedIndex >= 0
+                && (this.CreateIfNotExist || cmbSrcClass.SelectedIndex >= 0)
                 && cmbSrcConnection.SelectedIndex >= 0
                 && cmbSrcSchema.SelectedIndex >= 0);
         }
@@ -149,7 +149,14 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             using (FdoFeatureService svc = CreateTargetService())
             {
                 string schema = cmbDstSchema.SelectedItem.ToString();
-                cmbDstClass.DataSource = svc.GetClassNames(schema);
+                string srcClass = this.SourceClass;
+                var classes = svc.GetClassNames(schema);
+                if (!string.IsNullOrEmpty(srcClass))
+                {
+                    //Activate this option only if the source class name doesn't exist in the target's selected schema
+                    chkCreate.Enabled = !classes.Contains(srcClass);
+                }
+                cmbDstClass.DataSource = classes;
                 CheckEmptyName();
             }
         }
@@ -212,7 +219,17 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             get { return txtName.Text; }
         }
 
+        public bool CreateIfNotExist
+        {
+            get { return chkCreate.Enabled && chkCreate.Checked; }
+        }
+
         private void txtName_Leave(object sender, EventArgs e)
+        {
+            CheckButtonStates();
+        }
+
+        private void chkCreate_CheckedChanged(object sender, EventArgs e)
         {
             CheckButtonStates();
         }
