@@ -26,6 +26,7 @@ using System.Text;
 using ICSharpCode.Core;
 using FdoToolbox.Base.Services;
 using FdoToolbox.Base.Controls;
+using System.Diagnostics;
 
 namespace FdoToolbox.Base.Commands
 {
@@ -38,6 +39,22 @@ namespace FdoToolbox.Base.Commands
             {
                 wb.Close();
             }
+        }
+    }
+
+    internal class OpenLogsDirectoryCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Process.Start(Preferences.LogPath);
+        }
+    }
+
+    internal class OpenSessionDirectoryCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Process.Start(Preferences.SessionDirectory);
         }
     }
 
