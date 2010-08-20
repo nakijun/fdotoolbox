@@ -125,6 +125,33 @@ namespace FdoToolbox.Core.ETL.Specialized
                                 Info("Creating a cloned copy of source class " + ct.Schema + ":" + ct.Name);
 
                                 var cloned = FdoFeatureService.CloneClass(cls);
+                                var propList = new List<string>(_opts.CheckSourceProperties);
+                                var removeList = new List<string>();
+                                foreach (PropertyDefinition prop in cloned.Properties)
+                                {
+                                    string propName = prop.Name;
+                                    if (!propList.Contains(propName))
+                                    {
+                                        removeList.Add(propName);
+                                    }
+                                }
+
+                                if (removeList.Count > 0)
+                                {
+                                    Info("Removing " + removeList.Count + " unused properties from cloned class");
+                                    var props = cloned.Properties;
+                                    var ids = cloned.IdentityProperties;
+                                    foreach (var name in removeList)
+                                    {
+                                        if (ids.Contains(name))
+                                            ids.RemoveAt(ids.IndexOf(name));
+
+                                        if (props.Contains(name))
+                                            props.RemoveAt(props.IndexOf(name));
+                                    }
+                                    Info(removeList.Count + " unused properties removed");
+                                }
+
                                 foreach (var prop in ct.PropertiesToCreate)
                                 {
                                     Info("Adding property to cloned class: " + prop.Name);
@@ -164,7 +191,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                             }
                         }
                     }
-                    else if (typeof(UpdateTargetClass).IsAssignableFrom(_target.GetType()))
+                    else if (typeof(UpdateTargetClass).IsAssignableFrom(_opts.PreCopyTargetModifier.GetType()))
                     {
                         var ut = (UpdateTargetClass)_opts.PreCopyTargetModifier;
                         using (var tsvc = _target.CreateFeatureService())
