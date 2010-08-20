@@ -478,27 +478,29 @@ namespace FdoToolbox.Core.ETL.Specialized
                             mod.AddProperty(prop);
                         }
                     }
-
-                    FdoPropertyType? pt = ExpressionUtility.ParseExpressionType(exprMap.Expression, sourceConn);
-                    if (pt.HasValue)
+                    else //Conversion rules can only apply if both properties exist.
                     {
-                        DataType? srcDt = ValueConverter.GetDataType(pt.Value);
-                        if (srcDt.HasValue)
+                        FdoPropertyType? pt = ExpressionUtility.ParseExpressionType(exprMap.Expression, sourceConn);
+                        if (pt.HasValue)
                         {
-                            PropertyDefinition tp = dstClass.Properties[exprMap.target];
-                            DataPropertyDefinition tdp = tp as DataPropertyDefinition;
-                            if (tdp != null)
+                            DataType? srcDt = ValueConverter.GetDataType(pt.Value);
+                            if (srcDt.HasValue)
                             {
-                                if (srcDt.Value != tdp.DataType)
+                                PropertyDefinition tp = dstClass.Properties[exprMap.target];
+                                DataPropertyDefinition tdp = tp as DataPropertyDefinition;
+                                if (tdp != null)
                                 {
-                                    FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
-                                        exprMap.alias,
-                                        exprMap.target,
-                                        srcDt.Value,
-                                        tdp.DataType,
-                                        exprMap.nullOnFailedConversion,
-                                        exprMap.truncate);
-                                    opts.AddDataConversionRule(exprMap.alias, rule);
+                                    if (srcDt.Value != tdp.DataType)
+                                    {
+                                        FdoDataPropertyConversionRule rule = new FdoDataPropertyConversionRule(
+                                            exprMap.alias,
+                                            exprMap.target,
+                                            srcDt.Value,
+                                            tdp.DataType,
+                                            exprMap.nullOnFailedConversion,
+                                            exprMap.truncate);
+                                        opts.AddDataConversionRule(exprMap.alias, rule);
+                                    }
                                 }
                             }
                         }

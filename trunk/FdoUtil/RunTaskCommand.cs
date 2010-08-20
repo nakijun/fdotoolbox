@@ -136,7 +136,7 @@ namespace FdoUtil
                     def.Connections = new List<FdoConnectionEntryElement>(keepConnections.Values).ToArray();
                     def.CopyTasks = keepTasks.ToArray();
                 }
-
+                
                 using (FdoBulkCopyOptions opts = loader.BulkCopyFromXml(def, ref name, true))
                 {   
                     FdoBulkCopy copy = new FdoBulkCopy(opts);

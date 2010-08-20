@@ -76,12 +76,12 @@ namespace FdoToolbox.Core.ETL
         /// <param name="args">The args.</param>
         protected void Warn(string format, params object[] args)
         {
+            var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
             if (log.IsWarnEnabled)
             {
-                var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
                 log.Logger.Log(GetType(), Level.Warn, ssf, null);
-                OnWarn(this, new MessageEventArgs(ssf.ToString()));
             }
+            OnWarn(this, new MessageEventArgs(ssf.ToString()));
         }
 
         public event MessageEventHandler OnDebug = delegate { };
@@ -93,12 +93,12 @@ namespace FdoToolbox.Core.ETL
         /// <param name="args">The args.</param>
         protected void Debug(string format, params object[] args)
         {
+            var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
             if (log.IsDebugEnabled)
             {
-                var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
                 log.Logger.Log(GetType(), Level.Debug, ssf, null);
-                OnDebug(this, new MessageEventArgs(ssf.ToString()));
             }
+            OnDebug(this, new MessageEventArgs(ssf.ToString()));
         }
 
         public event MessageEventHandler OnNotice = delegate { };
@@ -110,12 +110,12 @@ namespace FdoToolbox.Core.ETL
         /// <param name="args">The args.</param>
         protected void Notice(string format, params object[] args)
         {
+            var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
             if (log.Logger.IsEnabledFor(Level.Notice))
             {
-                var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
                 log.Logger.Log(GetType(), Level.Notice, ssf, null);
-                OnNotice(this, new MessageEventArgs(ssf.ToString()));
             }
+            OnNotice(this, new MessageEventArgs(ssf.ToString()));
         }
 
         public event MessageEventHandler OnInfo = delegate { };
@@ -127,12 +127,12 @@ namespace FdoToolbox.Core.ETL
         /// <param name="args">The args.</param>
         protected void Info(string format, params object[] args)
         {
+            var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
             if (log.IsInfoEnabled)
             {
-                var ssf = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
                 log.Logger.Log(GetType(), Level.Info, ssf, null);
-                OnInfo(this, new MessageEventArgs(ssf.ToString()));
             }
+            OnInfo(this, new MessageEventArgs(ssf.ToString()));
         }
 
         /// <summary>
