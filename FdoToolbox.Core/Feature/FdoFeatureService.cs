@@ -1333,39 +1333,7 @@ namespace FdoToolbox.Core.Feature
                 if (cidx >= 0)
                 {
                     ClassDefinition classDef = altSchema.Classes[cidx];
-                    //Process each incompatible property
-                    foreach (IncompatibleProperty incProp in incClass.Properties)
-                    {
-                        int pidx = classDef.Properties.IndexOf(incProp.Name);
-                        if (pidx >= 0)
-                        {
-                            PropertyDefinition prop = classDef.Properties[pidx];
-                            AlterProperty(ref classDef, ref prop, incProp.ReasonCodes);
-                        }
-                        else
-                        {
-                            throw new FeatureServiceException(Res.GetStringFormatted("ERR_INCOMPATIBLE_PROPERTY_NOT_FOUND", incProp.Name, incClass.Name));
-                        }
-                    }
-                    AlterClass(ref classDef, incClass.ReasonCodes);
-
-                    //Fix the spatial context association
-                    SpatialContextInfo scInfo = GetActiveSpatialContext();
-                    foreach (PropertyDefinition pd in classDef.Properties)
-                    {
-                        if (pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
-                        {
-                            GeometricPropertyDefinition g = pd as GeometricPropertyDefinition;
-                            if (scInfo != null)
-                                g.SpatialContextAssociation = scInfo.Name;
-                            else
-                                g.SpatialContextAssociation = string.Empty;
-                        }
-                    }
-
-                    //Finally make sure the data properties lie within the limits of this
-                    //connection
-                    FixDataProperties(ref classDef);
+                    classDef = AlterClassDefinition(classDef, incClass);
                 }
                 else
                 {
@@ -1374,6 +1342,50 @@ namespace FdoToolbox.Core.Feature
             }
 
             return altSchema;
+        }
+
+        /// <summary>
+        /// Alters the given class definition to be compatible with the current connection
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <param name="incClass"></param>
+        /// <returns></returns>
+        public ClassDefinition AlterClassDefinition(ClassDefinition classDef, IncompatibleClass incClass)
+        {
+            //Process each incompatible property
+            foreach (IncompatibleProperty incProp in incClass.Properties)
+            {
+                int pidx = classDef.Properties.IndexOf(incProp.Name);
+                if (pidx >= 0)
+                {
+                    PropertyDefinition prop = classDef.Properties[pidx];
+                    AlterProperty(ref classDef, ref prop, incProp.ReasonCodes);
+                }
+                else
+                {
+                    throw new FeatureServiceException(Res.GetStringFormatted("ERR_INCOMPATIBLE_PROPERTY_NOT_FOUND", incProp.Name, incClass.Name));
+                }
+            }
+            AlterClass(ref classDef, incClass.ReasonCodes);
+
+            //Fix the spatial context association
+            SpatialContextInfo scInfo = GetActiveSpatialContext();
+            foreach (PropertyDefinition pd in classDef.Properties)
+            {
+                if (pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                {
+                    GeometricPropertyDefinition g = pd as GeometricPropertyDefinition;
+                    if (scInfo != null)
+                        g.SpatialContextAssociation = scInfo.Name;
+                    else
+                        g.SpatialContextAssociation = string.Empty;
+                }
+            }
+
+            //Finally make sure the data properties lie within the limits of this
+            //connection
+            FixDataProperties(ref classDef);
+            return classDef;
         }
 
         private void AlterClass(ref ClassDefinition classDef, ISet<IncompatibleClassReason> reasons)
@@ -1681,190 +1693,199 @@ namespace FdoToolbox.Core.Feature
         public bool CanApplySchema(FeatureSchema schema, out IncompatibleSchema incSchema)
         {
             incSchema = null;
-            ISchemaCapabilities capabilities = _conn.SchemaCapabilities;
             foreach (ClassDefinition classDef in schema.Classes)
             {
                 //Ignore deleted classes
                 if (classDef.ElementState == SchemaElementState.SchemaElementState_Deleted)
                     continue;
 
-                string className = classDef.Name;
-                ClassType ctype = classDef.ClassType;
-                IncompatibleClass cls = null;
-                if (Array.IndexOf<ClassType>(capabilities.ClassTypes, ctype) < 0)
+                IncompatibleClass cls;
+                if (!CanApplyClass(classDef, out cls))
                 {
-                    string classReason = "Un-supported class type";
-                    AddIncompatibleClass(className, ref cls, classReason, IncompatibleClassReason.UnsupportedClassType);
-                }
-                if (!capabilities.SupportsCompositeId && classDef.IdentityProperties.Count > 1)
-                {
-                    string classReason = "Multiple identity properties (composite id) not supported"; 
-                    AddIncompatibleClass(className, ref cls, classReason, IncompatibleClassReason.UnsupportedCompositeKeys);
-                }
-                if (!capabilities.SupportsInheritance && classDef.BaseClass != null)
-                {
-                    string classReason = "Class inherits from a base class (inheritance not supported)";
-                    AddIncompatibleClass(className, ref cls, classReason, IncompatibleClassReason.UnsupportedInheritance);
-                }
-                foreach (PropertyDefinition propDef in classDef.Properties)
-                {
-                    //Ignore deleted properties
-                    if (propDef.ElementState == SchemaElementState.SchemaElementState_Deleted)
-                        continue;
+                    if (cls != null)
+                    {
+                        if (incSchema == null)
+                            incSchema = new IncompatibleSchema(schema.Name);
 
-                    string propName = propDef.Name;
-                    DataPropertyDefinition dataDef = propDef as DataPropertyDefinition;
-                    //AssociationPropertyDefinition assocDef = propDef as AssociationPropertyDefinition;
-                    //GeometricPropertyDefinition geomDef = propDef as GeometricPropertyDefinition;
-                    //RasterPropertyDefinition rasterDef = propDef as RasterPropertyDefinition;
-                    ObjectPropertyDefinition objDef = propDef as ObjectPropertyDefinition;
-                    if (!capabilities.SupportsAutoIdGeneration)
-                    {
-                        if (dataDef != null && dataDef.IsAutoGenerated)
-                        {
-                            string classReason = "Class has unsupported auto-generated properties";
-                            string propReason = "Unsupported auto-generated id";
-
-                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedIdentityProperty);
-                        }
+                        incSchema.AddClass(cls);
                     }
-                    else
-                    {
-                        if (dataDef != null && dataDef.IsAutoGenerated)
-                        {
-                            if (Array.IndexOf<DataType>(capabilities.SupportedAutoGeneratedTypes, dataDef.DataType) < 0)
-                            {
-                                string classReason = "Class has unsupported auto-generated data type";
-                                string propReason = "Unsupported auto-generated data type: " + dataDef.DataType;
-                                AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedAutoGeneratedType);
-                            }
-                        }
-                    }
-                    if (dataDef != null && classDef.IdentityProperties.Contains(dataDef))
-                    {
-                        if (Array.IndexOf<DataType>(capabilities.SupportedIdentityPropertyTypes, dataDef.DataType) < 0)
-                        {
-                            string classReason = "Class has unsupported identity property data type";
-                            string propReason = "Unsupported identity property data type";
-                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedIdentityPropertyType);
-                        }
-                    }
-                    if (!capabilities.SupportsAssociationProperties)
-                    {
-                        if (propDef.PropertyType == PropertyType.PropertyType_AssociationProperty)
-                        {
-                            string classReason = "Class has unsupported association properties";
-                            string propReason = "Unsupported association property type";
-                            
-                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedAssociationProperties);
-                        }
-                    }
-                    if (!capabilities.SupportsDefaultValue)
-                    {
-                        if (dataDef != null && !string.IsNullOrEmpty(dataDef.DefaultValue))
-                        {
-                            string classReason = "Class has properties with unsupported default values";
-                            string propReason = "Default values not supported";
-                            
-                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedDefaultValues);
-                        }
-                    }
-                    if (!capabilities.SupportsExclusiveValueRangeConstraints)
-                    {
-                        if (dataDef != null && dataDef.ValueConstraint != null && dataDef.ValueConstraint.ConstraintType == PropertyValueConstraintType.PropertyValueConstraintType_Range)
-                        {
-                            PropertyValueConstraintRange range = dataDef.ValueConstraint as PropertyValueConstraintRange;
-                            if (!range.MaxInclusive && !range.MinInclusive)
-                            {
-                                string classReason = "Class has properties with unsupported exclusive range constraints";
-                                string propReason = "Exclusive range constraint not supported";
-
-                                AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedExclusiveValueRangeConstraints);
-                            }
-                        }
-                    }
-                    if (!capabilities.SupportsInclusiveValueRangeConstraints)
-                    {
-                        if (dataDef != null && dataDef.ValueConstraint != null && dataDef.ValueConstraint.ConstraintType == PropertyValueConstraintType.PropertyValueConstraintType_Range)
-                        {
-                            PropertyValueConstraintRange range = dataDef.ValueConstraint as PropertyValueConstraintRange;
-                            if (range.MaxInclusive && range.MinInclusive)
-                            {
-                                string classReason = "Class has properties with unsupported inclusive range constraints";
-                                string propReason = "Inclusive range constraint not supported";
-
-                                AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedInclusiveValueRangeConstraints);
-                            }
-                        }
-                    }
-                    if (!capabilities.SupportsNullValueConstraints)
-                    {
-                        if (dataDef != null && dataDef.Nullable)
-                        {
-                            string classReason = "Class has unsupported nullable properties";
-                            string propReason = "Null value constraints not supported";
-
-                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedNullValueConstraints);
-                        }
-                    }
-                    if (!capabilities.SupportsObjectProperties)
-                    {
-                        if (objDef != null)
-                        {
-                            string classReason = "Class has unsupported object properties";
-                            string propReason = "Object properties not supported";
-
-                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedObjectProperties);
-                        }
-                    }
-                    if (!capabilities.SupportsUniqueValueConstraints)
-                    {
-                        //
-                    }
-                    if (!capabilities.SupportsValueConstraintsList)
-                    {
-                        if (dataDef != null && dataDef.ValueConstraint != null && dataDef.ValueConstraint.ConstraintType == PropertyValueConstraintType.PropertyValueConstraintType_List)
-                        {
-                            string classReason = "Class has properties with unsupported value list constraints";
-                            string propReason = "value list constraints not supported";
-
-                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedValueListConstraints);
-                        }
-                    }
-
-                    if (dataDef != null)
-                    {
-                        if (Array.IndexOf<DataType>(capabilities.DataTypes, dataDef.DataType) < 0)
-                        {
-                            string classReason = "Class has properties with unsupported data type: " + dataDef.DataType;
-                            string propReason = "Unsupported data type: " + dataDef.DataType;
-
-                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedDataType);
-                        }
-                    }
-
-                    if (dataDef != null && dataDef.Length == 0)
-                    {
-                        if (dataDef.DataType == DataType.DataType_String || dataDef.DataType == DataType.DataType_BLOB || dataDef.DataType == DataType.DataType_CLOB)
-                        {
-                            string classReason = "Class has a string/BLOB/CLOB property of zero-length";
-                            string propReason = "Zero-length property";
-
-                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.ZeroLengthProperty);
-                        }
-                    }
-                }
-                
-                if (cls != null)
-                {
-                    if (incSchema == null)
-                        incSchema = new IncompatibleSchema(schema.Name);
-
-                    incSchema.AddClass(cls);
                 }
             }
 
             return (incSchema == null);
+        }
+
+        public bool CanApplyClass(ClassDefinition classDef, out IncompatibleClass cls)
+        {
+            cls = null;
+            ISchemaCapabilities capabilities = _conn.SchemaCapabilities;
+            string className = classDef.Name;
+            ClassType ctype = classDef.ClassType;
+
+            if (Array.IndexOf<ClassType>(capabilities.ClassTypes, ctype) < 0)
+            {
+                string classReason = "Un-supported class type";
+                AddIncompatibleClass(className, ref cls, classReason, IncompatibleClassReason.UnsupportedClassType);
+            }
+            if (!capabilities.SupportsCompositeId && classDef.IdentityProperties.Count > 1)
+            {
+                string classReason = "Multiple identity properties (composite id) not supported";
+                AddIncompatibleClass(className, ref cls, classReason, IncompatibleClassReason.UnsupportedCompositeKeys);
+            }
+            if (!capabilities.SupportsInheritance && classDef.BaseClass != null)
+            {
+                string classReason = "Class inherits from a base class (inheritance not supported)";
+                AddIncompatibleClass(className, ref cls, classReason, IncompatibleClassReason.UnsupportedInheritance);
+            }
+            foreach (PropertyDefinition propDef in classDef.Properties)
+            {
+                //Ignore deleted properties
+                if (propDef.ElementState == SchemaElementState.SchemaElementState_Deleted)
+                    continue;
+
+                string propName = propDef.Name;
+                DataPropertyDefinition dataDef = propDef as DataPropertyDefinition;
+                //AssociationPropertyDefinition assocDef = propDef as AssociationPropertyDefinition;
+                //GeometricPropertyDefinition geomDef = propDef as GeometricPropertyDefinition;
+                //RasterPropertyDefinition rasterDef = propDef as RasterPropertyDefinition;
+                ObjectPropertyDefinition objDef = propDef as ObjectPropertyDefinition;
+                if (!capabilities.SupportsAutoIdGeneration)
+                {
+                    if (dataDef != null && dataDef.IsAutoGenerated)
+                    {
+                        string classReason = "Class has unsupported auto-generated properties";
+                        string propReason = "Unsupported auto-generated id";
+
+                        AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedIdentityProperty);
+                    }
+                }
+                else
+                {
+                    if (dataDef != null && dataDef.IsAutoGenerated)
+                    {
+                        if (Array.IndexOf<DataType>(capabilities.SupportedAutoGeneratedTypes, dataDef.DataType) < 0)
+                        {
+                            string classReason = "Class has unsupported auto-generated data type";
+                            string propReason = "Unsupported auto-generated data type: " + dataDef.DataType;
+                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedAutoGeneratedType);
+                        }
+                    }
+                }
+                if (dataDef != null && classDef.IdentityProperties.Contains(dataDef))
+                {
+                    if (Array.IndexOf<DataType>(capabilities.SupportedIdentityPropertyTypes, dataDef.DataType) < 0)
+                    {
+                        string classReason = "Class has unsupported identity property data type";
+                        string propReason = "Unsupported identity property data type";
+                        AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedIdentityPropertyType);
+                    }
+                }
+                if (!capabilities.SupportsAssociationProperties)
+                {
+                    if (propDef.PropertyType == PropertyType.PropertyType_AssociationProperty)
+                    {
+                        string classReason = "Class has unsupported association properties";
+                        string propReason = "Unsupported association property type";
+
+                        AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedAssociationProperties);
+                    }
+                }
+                if (!capabilities.SupportsDefaultValue)
+                {
+                    if (dataDef != null && !string.IsNullOrEmpty(dataDef.DefaultValue))
+                    {
+                        string classReason = "Class has properties with unsupported default values";
+                        string propReason = "Default values not supported";
+
+                        AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedDefaultValues);
+                    }
+                }
+                if (!capabilities.SupportsExclusiveValueRangeConstraints)
+                {
+                    if (dataDef != null && dataDef.ValueConstraint != null && dataDef.ValueConstraint.ConstraintType == PropertyValueConstraintType.PropertyValueConstraintType_Range)
+                    {
+                        PropertyValueConstraintRange range = dataDef.ValueConstraint as PropertyValueConstraintRange;
+                        if (!range.MaxInclusive && !range.MinInclusive)
+                        {
+                            string classReason = "Class has properties with unsupported exclusive range constraints";
+                            string propReason = "Exclusive range constraint not supported";
+
+                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedExclusiveValueRangeConstraints);
+                        }
+                    }
+                }
+                if (!capabilities.SupportsInclusiveValueRangeConstraints)
+                {
+                    if (dataDef != null && dataDef.ValueConstraint != null && dataDef.ValueConstraint.ConstraintType == PropertyValueConstraintType.PropertyValueConstraintType_Range)
+                    {
+                        PropertyValueConstraintRange range = dataDef.ValueConstraint as PropertyValueConstraintRange;
+                        if (range.MaxInclusive && range.MinInclusive)
+                        {
+                            string classReason = "Class has properties with unsupported inclusive range constraints";
+                            string propReason = "Inclusive range constraint not supported";
+
+                            AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedInclusiveValueRangeConstraints);
+                        }
+                    }
+                }
+                if (!capabilities.SupportsNullValueConstraints)
+                {
+                    if (dataDef != null && dataDef.Nullable)
+                    {
+                        string classReason = "Class has unsupported nullable properties";
+                        string propReason = "Null value constraints not supported";
+
+                        AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedNullValueConstraints);
+                    }
+                }
+                if (!capabilities.SupportsObjectProperties)
+                {
+                    if (objDef != null)
+                    {
+                        string classReason = "Class has unsupported object properties";
+                        string propReason = "Object properties not supported";
+
+                        AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedObjectProperties);
+                    }
+                }
+                if (!capabilities.SupportsUniqueValueConstraints)
+                {
+                    //
+                }
+                if (!capabilities.SupportsValueConstraintsList)
+                {
+                    if (dataDef != null && dataDef.ValueConstraint != null && dataDef.ValueConstraint.ConstraintType == PropertyValueConstraintType.PropertyValueConstraintType_List)
+                    {
+                        string classReason = "Class has properties with unsupported value list constraints";
+                        string propReason = "value list constraints not supported";
+
+                        AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedValueListConstraints);
+                    }
+                }
+
+                if (dataDef != null)
+                {
+                    if (Array.IndexOf<DataType>(capabilities.DataTypes, dataDef.DataType) < 0)
+                    {
+                        string classReason = "Class has properties with unsupported data type: " + dataDef.DataType;
+                        string propReason = "Unsupported data type: " + dataDef.DataType;
+
+                        AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.UnsupportedDataType);
+                    }
+                }
+
+                if (dataDef != null && dataDef.Length == 0)
+                {
+                    if (dataDef.DataType == DataType.DataType_String || dataDef.DataType == DataType.DataType_BLOB || dataDef.DataType == DataType.DataType_CLOB)
+                    {
+                        string classReason = "Class has a string/BLOB/CLOB property of zero-length";
+                        string propReason = "Zero-length property";
+
+                        AddIncompatibleProperty(className, ref cls, propName, classReason, propReason, IncompatiblePropertyReason.ZeroLengthProperty);
+                    }
+                }
+            }
+            return (cls == null);
         }
 
         private static void AddIncompatibleClass(string className, ref IncompatibleClass cls, string classReason, IncompatibleClassReason rcode)
