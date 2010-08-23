@@ -339,6 +339,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                 exprNode.Text = exprNode.Name + " => " + destProperty;
             else
                 exprNode.Text = exprNode.Name;
+
+            GetConversionRule(srcAlias).CreateIfNotExists = createIfNotExists;
         }
 
         public IEnumerable<string> GetAliases()
