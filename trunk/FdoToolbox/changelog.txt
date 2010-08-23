@@ -1,5 +1,14 @@
+v1.0 beta 1
+-----------
+
 - Enhancements:
+	- Bulk Copy support for on-the-fly schema modifications (ie. If copying to non-existent classes and/or properties. These will be created before copying)
 	- Express support for creating SQL Server Spatial data stores.
+	- Support for execution of arbitrary SQL statements for providers that support SQL commands.
+	- FdoUtil.exe enhancements:
+		- RunTask: New -log parameter to specify custom file name for error log
+		- BulkCopy: New -log parameter to specify custom file name for error log
+	- New menu commands to open the Log and Session directories
 
 v0.9.6
 ------
