@@ -53,6 +53,21 @@ namespace FdoUtil
             _flatten = flatten;
         }
 
+        public string LogFile
+        {
+            get;
+            set;
+        }
+
+        private string GenerateLogFileName(string prefix)
+        {
+            if (!string.IsNullOrEmpty(this.LogFile))
+                return this.LogFile;
+
+            var dt = DateTime.Now;
+            return prefix + string.Format("{0}y{1}m{2}d{3}h{4}m{5}s", dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second) + ".log";
+        }
+
         public override int Execute()
         {
             CommandStatus retCode;
@@ -156,6 +171,15 @@ namespace FdoUtil
                         copy.ProcessCompleted += new EventHandler(OnCompleted);
                         Console.WriteLine("Executing bulk copy");
                         copy.Execute();
+                        List<Exception> errors = new List<Exception>(copy.GetAllErrors());
+                        if (errors.Count > 0)
+                        {
+                            string file = GenerateLogFileName("bcp-error-");
+                            LogErrors(errors, file);
+                            base.WriteError("Errors were encountered during bulk copy.");
+                            retCode = CommandStatus.E_FAIL_BULK_COPY_WITH_ERRORS;
+                        }
+                        else { retCode = CommandStatus.E_OK; }
                         retCode = CommandStatus.E_OK;
                     }
                 }
@@ -171,6 +195,27 @@ namespace FdoUtil
                 destConn.Dispose();
             }
             return (int)retCode;
+        }
+
+        private void LogErrors(List<Exception> errors, string file)
+        {
+            string dir = Path.GetDirectoryName(file);
+            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            base.WriteLine("Saving errors to: " + file);
+
+            using (StreamWriter writer = new StreamWriter(file, false))
+            {
+                for (int i = 0; i < errors.Count; i++)
+                {
+                    writer.WriteLine("------- EXCEPTION #" + (i + 1) + " -------");
+                    writer.WriteLine(errors[i].ToString());
+                    writer.WriteLine("------- EXCEPTION END -------");
+                }
+            }
+
+            base.WriteError("Errors have been logged to {0}", file);
         }
 
         void OnCompleted(object sender, EventArgs e)

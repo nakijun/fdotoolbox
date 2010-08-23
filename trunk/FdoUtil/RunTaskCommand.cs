@@ -36,6 +36,7 @@ namespace FdoUtil
     {
         private string _file;
         private string[] _taskNames;
+        private string _logFile;
 
         public RunTaskCommand(string file)
         {
@@ -52,8 +53,17 @@ namespace FdoUtil
                 _taskNames = new string[0];
         }
 
-        private static string GenerateLogFileName(string prefix)
+        public string LogFile
         {
+            get { return _logFile; }
+            set { _logFile = value; }
+        }
+
+        private string GenerateLogFileName(string prefix)
+        {
+            if (!string.IsNullOrEmpty(_logFile))
+                return _logFile;
+
             var dt = DateTime.Now;
             return prefix + string.Format("{0}y{1}m{2}d{3}h{4}m{5}s", dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second) + ".log";
         }

@@ -225,7 +225,7 @@ namespace FdoUtil
                         {
                             Console.WriteLine("Description: {0}\nUsage: {1}\nNotes: {2}{3}{4}",
                                 "Copies data from a FDO data source to any flat-file FDO data source",
-                                "FdoUtil.exe -cmd:BulkCopy -src_provider:<provider name> -src_conn:<connection string> -dest_path:<path to file or directory> -src_schema:<source schema name> [-src_classes:<comma-separated list of class names>] [-copy_srs:<source spatial context name>] [-quiet]",
+                                "FdoUtil.exe -cmd:BulkCopy -src_provider:<provider name> -src_conn:<connection string> -dest_path:<path to file or directory> -src_schema:<source schema name> [-src_classes:<comma-separated list of class names>] [-copy_srs:<source spatial context name>] [-quiet] [-log:<named error log file>]",
                                 "When -dest_path is a directory, it is assumed SHP is the output format\n",
                                 "Please note that the output format is determined by file extension\n",
                                 "Valid file extensions include: sdf, sqlite, db");
@@ -263,6 +263,10 @@ namespace FdoUtil
                             }
                         }
                         _Command = new CopyToFileCommand(srcProvider, srcConnStr, srcSchema, srcClasses, destFile, srcSpatialContext, flatten);
+
+                        string log = GetArgument("-log", args);
+                        if (!string.IsNullOrEmpty(log))
+                            ((CopyToFileCommand)_Command).LogFile = log;
                     }
                     break;
                 case "RunTask":
@@ -271,7 +275,7 @@ namespace FdoUtil
                         {
                             Console.WriteLine("Description: {0}\nUsage: {1}\nNotes: {2}{3}{4}",
                                 "Runs a pre-defined task definition",
-                                "FdoUtil.exe -cmd:RunTask -task:<path to task definition>",
+                                "FdoUtil.exe -cmd:RunTask -task:<path to task definition> [-log:<name of error log>]",
                                 "The task definition indicated by the -task parameter must be a valid\n",
                                 "Bulk Copy or Join Definition\n",
                                 "Valid file extensions include: BulkCopyDefinition, JoinDefinition");
@@ -291,6 +295,10 @@ namespace FdoUtil
                             _Command = new RunTaskCommand(taskFile, cmdArgs);
                         else
                             _Command = new RunTaskCommand(taskFile);
+
+                        string log = GetArgument("-log", args);
+                        if (!string.IsNullOrEmpty(log))
+                            ((RunTaskCommand)_Command).LogFile = log;
                     }
                     break;
                 default:
