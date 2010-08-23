@@ -688,4 +688,10 @@
   <data name="CMD_OpenSessionDir" xml:space="preserve">
     <value>Open Session Directory</value>
   </data>
+  <data name="ERR_UNSUPPORTED_SQL" xml:space="preserve">
+    <value>This connection doesn't support SQL commands</value>
+  </data>
+  <data name="CMD_ExecuteSql" xml:space="preserve">
+    <value>Execute SQL</value>
+  </data>
 </root>

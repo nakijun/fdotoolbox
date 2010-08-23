@@ -41,6 +41,25 @@ using OSGeo.FDO.Geometry;
 
 namespace FdoToolbox.Base.Commands
 {
+    internal class RunSqlCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
+            FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+            FdoConnection conn = mgr.GetConnection(connNode.Name);
+            if (!conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSQL))
+            {
+                MessageService.ShowError(Res.GetString("ERR_UNSUPPORTED_SQL"));
+            }
+            else
+            {
+                var dlg = new FdoSqlCommandDialog(conn);
+                dlg.ShowDialog();
+            }
+        }
+    }
+
     internal class DumpSchemaMappingCommand : AbstractMenuCommand
     {
         public override void Run()

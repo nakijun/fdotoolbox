@@ -249,6 +249,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Execute SQL.
+        /// </summary>
+        internal static string CMD_ExecuteSql {
+            get {
+                return ResourceManager.GetString("CMD_ExecuteSql", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         internal static string CMD_Exit {
@@ -515,6 +524,15 @@ namespace FdoToolbox.Base {
         internal static string ERR_UNABLE_TO_SAVE_SCHEMAS {
             get {
                 return ResourceManager.GetString("ERR_UNABLE_TO_SAVE_SCHEMAS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This connection doesn&apos;t support SQL commands.
+        /// </summary>
+        internal static string ERR_UNSUPPORTED_SQL {
+            get {
+                return ResourceManager.GetString("ERR_UNSUPPORTED_SQL", resourceCulture);
             }
         }
         
