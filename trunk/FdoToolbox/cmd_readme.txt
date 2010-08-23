@@ -160,12 +160,14 @@ BulkCopy
 
 Description: Copies data from an FDO data source to a flat-file FDO data source
 
-Usage: FdoUtil.exe -cmd:BulkCopy -src_provider:<provider name> -src_conn:<connection string> -dest_path:<path to file or directory> -src_schema:<source schema name> [-src_classes:<comma-separated list of class names>] [-copy_srs:<source spatial context name>] [-flatten] [-quiet]
+Usage: FdoUtil.exe -cmd:BulkCopy -src_provider:<provider name> -src_conn:<connection string> -dest_path:<path to file or directory> -src_schema:<source schema name> [-src_classes:<comma-separated list of class names>] [-copy_srs:<source spatial context name>] [-log:<custom log file name>] [-flatten] [-quiet]
 
 Notes: 
 
 When -dest_path is a directory, it is assumed SHP is the output format, otherwise the output format is determined by file extension given
 If -flatten is defined, any geometries copied will have any Z and/or M coordinates stripped away.
+
+If the -log parameter is specified, the error log will be saved using this name. If omitted, a system-generated name will be used.
 
 Valid file extensions include: 
 	- sdf (OSGeo.SDF)
@@ -177,7 +179,7 @@ RunTask
 
 Description: Executes a pre-defined task definition
 
-Usage: FdoUtil.exe -cmd:RunTask -task:<path to task definition> [-bcptask:<name of task within bulk copy definition>]
+Usage: FdoUtil.exe -cmd:RunTask -task:<path to task definition> [-bcptask:<name of task within bulk copy definition>] [-log:<custom log file name>]
 
 Notes: The task definition must be a valid Bulk Copy or Join definition. Bulk Copy tasks must have a .BulkCopyDefinition extension and Join tasks must have a .JoinDefinition extensions.
 
@@ -186,6 +188,8 @@ RunTask will make no attempts to validate the connections defined within these t
 The -bcptask option if specified will only execute the specified task within the bulk copy definition instead of all the tasks (default). If the task is not found, an error is returned.
 
 The -bcptask option does not apply to join tasks. Specifying this option with a join task definition will return an error.
+
+If the -log parameter is specified, the error log will be saved using this name. If omitted, a system-generated name will be used.
 
 ExecuteSql
 ----------
