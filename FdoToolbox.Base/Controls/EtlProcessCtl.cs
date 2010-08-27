@@ -102,6 +102,10 @@ namespace FdoToolbox.Base.Controls
 
         private void bgEtlProc_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (e.Error != null)
+            {
+                AppendText(string.Format("An unhandled exception was thrown during process execution: {0}", e.Error.ToString()));
+            }
             btnOK.Enabled = true;
             btnCancel.Enabled = false;
             if (e.Cancelled)
