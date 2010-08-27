@@ -53,6 +53,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                 && (this.CreateIfNotExist || cmbSrcClass.SelectedIndex >= 0)
                 && cmbSrcConnection.SelectedIndex >= 0
                 && cmbSrcSchema.SelectedIndex >= 0);
+
+            cmbDstClass.Enabled = !this.CreateIfNotExist;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -211,7 +213,13 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
 
         public string TargetClass
         {
-            get { return cmbDstClass.SelectedItem != null ? cmbDstClass.SelectedItem.ToString() : string.Empty; }
+            get 
+            {
+                if (this.CreateIfNotExist)
+                    return this.SourceClass;
+                else
+                    return cmbDstClass.SelectedItem != null ? cmbDstClass.SelectedItem.ToString() : string.Empty; 
+            }
         }
 
         public string TaskName
