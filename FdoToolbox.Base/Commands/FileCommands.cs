@@ -42,6 +42,14 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
+    internal class OpenFdoDirectoryCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Process.Start(Preferences.FdoPath);
+        }
+    }
+
     internal class OpenLogsDirectoryCommand : AbstractMenuCommand
     {
         public override void Run()

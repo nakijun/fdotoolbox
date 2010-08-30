@@ -694,4 +694,7 @@
   <data name="CMD_ExecuteSql" xml:space="preserve">
     <value>Execute SQL</value>
   </data>
+  <data name="CMD_OpenFdoDir" xml:space="preserve">
+    <value>Open FDO Directory</value>
+  </data>
 </root>
