@@ -52,20 +52,24 @@ RequestExecutionLevel admin
 	!define RELEASE_VERSION "Trunk"
 !endif
 
+!ifndef RELEASE_LABEL
+	!define RELEASE_LABEL "${RELEASE_VERSION}"
+!endif
+
 # Installer vars
 !define INST_PRODUCT "FDO Toolbox"
 !if ${SLN_CONFIG} == "Release"
 	!define INST_PRODUCT_QUALIFIED "${INST_PRODUCT} (${CPU})"
-	!define INST_PRODUCT_NAME "${INST_PRODUCT_QUALIFIED} ${RELEASE_VERSION} "
+	!define INST_PRODUCT_NAME "${INST_PRODUCT_QUALIFIED} ${RELEASE_LABEL} "
 !else
 	!define INST_PRODUCT_QUALIFIED "${INST_PRODUCT} (${CPU}, Debug)"
-	!define INST_PRODUCT_NAME "${INST_PRODUCT_QUALIFIED} ${RELEASE_VERSION}"
+	!define INST_PRODUCT_NAME "${INST_PRODUCT_QUALIFIED} ${RELEASE_LABEL}"
 !endif
 
 !define PROJECT_URL "http://fdotoolbox.googlecode.com"
 !define INST_SRC "."
 !define INST_LICENSE "..\FdoToolbox\license.txt"
-!define INST_OUTPUT "FDOToolbox-${SLN_CONFIG}-${RELEASE_VERSION}-${CPU}-Setup.exe"
+!define INST_OUTPUT "FDOToolbox-${SLN_CONFIG}-${RELEASE_LABEL}-${CPU}-Setup.exe"
 
 !if ${RELEASE_VERSION} != "Trunk"
 	VIProductVersion "${RELEASE_VERSION}"

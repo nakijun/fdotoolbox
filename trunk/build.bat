@@ -59,6 +59,8 @@ if "%1"=="-platform" goto get_platform
 
 if "%1"=="-version" goto get_version
 
+if "%1"=="-vlabel" goto get_version_label
+
 if "%1"=="-v"       goto get_verbose
 if "%1"=="-verbose" goto get_verbose
 
@@ -78,6 +80,10 @@ goto next_param
 
 :get_version
 SET RELEASE_VERSION=%2
+goto next_param
+
+:get_version_label
+SET RELEASE_LABEL=%2
 goto next_param
 
 :get_conf
@@ -111,6 +117,7 @@ if "%TYPEACTION%"=="clean" goto clean
 echo Configuration is: %TYPEBUILD%
 echo Platform is: %PLATFORM%
 echo Release Version is: %RELEASE_VERSION%
+echo Release Label is: %RELEASE_LABEL%
 
 echo Building FdoToolbox
 msbuild.exe /p:Configuration=%TYPEBUILD%;Platform=%PLATFORM% %VERBOSITY% FdoToolbox.sln
@@ -142,7 +149,11 @@ rem IF NOT EXIST %FDOTOOLBOX_OUTDIR%\FDO xcopy /S /Y /I %THIRDPARTY%\Fdo\*.* %FD
 :create_installer
 echo Creating installer
 pushd %INSTALL%
+if defined RELEASE_LABEL (
+makensis /DSLN_CONFIG=%TYPEBUILD% /DCPU=%PLATFORM% /DRELEASE_VERSION=%RELEASE_VERSION% /DRELEASE_LABEL=%RELEASE_LABEL% FdoToolbox.nsi
+) else (
 makensis /DSLN_CONFIG=%TYPEBUILD% /DCPU=%PLATFORM% /DRELEASE_VERSION=%RELEASE_VERSION% FdoToolbox.nsi
+)
 popd
 goto quit
 
