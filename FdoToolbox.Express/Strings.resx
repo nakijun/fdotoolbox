@@ -276,4 +276,10 @@
   <data name="CMD_CreateSqlServer" xml:space="preserve">
     <value>Create SQL Server</value>
   </data>
+  <data name="CMD_CreateMySql" xml:space="preserve">
+    <value>Create MySQL</value>
+  </data>
+  <data name="CMD_CreatePostgres" xml:space="preserve">
+    <value>Create PostgreSQL</value>
+  </data>
 </root>

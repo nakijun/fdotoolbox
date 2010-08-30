@@ -169,6 +169,24 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create MySQL.
+        /// </summary>
+        internal static string CMD_CreateMySql {
+            get {
+                return ResourceManager.GetString("CMD_CreateMySql", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create PostgreSQL.
+        /// </summary>
+        internal static string CMD_CreatePostgres {
+            get {
+                return ResourceManager.GetString("CMD_CreatePostgres", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create SDF file.
         /// </summary>
         internal static string CMD_CreateSdf {

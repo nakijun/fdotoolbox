@@ -31,6 +31,26 @@ using FdoToolbox.Base;
 
 namespace FdoToolbox.Express.Commands
 {
+    public class CreateMySqlCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            var ctl = new CreateMySqlCtl();
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
+
+    public class CreatePostgresCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            var ctl = new CreatePostgresCtl();
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
+
     public class CreateSqlServerCommand : AbstractMenuCommand
     {
         public override void Run()

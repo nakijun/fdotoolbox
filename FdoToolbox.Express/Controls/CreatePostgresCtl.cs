@@ -26,23 +26,22 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class CreateSqlServerCtl : CreateRdbmsCtl
+    public partial class CreatePostgresCtl : CreateRdbmsCtl
     {
-        public CreateSqlServerCtl()
+        public CreatePostgresCtl()
         {
             InitializeComponent();
-            this.Title = "Create SQL Server Data Store";
+            this.Title = "Create PostgreSQL Data Store";
         }
 
         public override string Provider
         {
             get
             {
-                return "OSGeo.SQLServerSpatial";
+                return "OSGeo.PostgreSQL";
             }
         }
     }

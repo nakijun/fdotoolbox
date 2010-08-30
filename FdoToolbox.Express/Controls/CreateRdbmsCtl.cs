@@ -42,9 +42,15 @@ namespace FdoToolbox.Express.Controls
             _presenter = new CreateRdbmsPresenter(this, ServiceManager.Instance.GetService<IFdoConnectionManager>());
         }
 
+        public virtual bool IsFdoMetadataOptional
+        {
+            get { return true; }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             _presenter.Init();
+            chkFdoMetadata.Enabled = this.IsFdoMetadataOptional;
         }
 
         public string Service
@@ -218,7 +224,9 @@ namespace FdoToolbox.Express.Controls
             sc.Name = "Default";
             sc.XYTolerance = sc.ZTolerance = this.Tolerance;
             sc.CoordinateSystem = this.CSName;
-            sc.CoordinateSystemWkt = this.CSWkt;
+            if (_presenter.RequiresWKT)
+                sc.CoordinateSystemWkt = this.CSWkt;
+
             sc.IsActive = true;
             sc.ExtentType = this.ExtentType;
             if (sc.ExtentType == OSGeo.FDO.Commands.SpatialContext.SpatialContextExtentType.SpatialContextExtentType_Static)

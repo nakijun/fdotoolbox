@@ -42,6 +42,8 @@ namespace FdoToolbox.Express.Controls
         string Username { get; }
         string Password { get; }
 
+        bool IsFdoMetadataOptional { get; }
+
         bool ExtentsEnabled { set; }
         bool SubmitEnabled { set; }
         bool FdoMetadataEnabled { set; }
@@ -91,11 +93,17 @@ namespace FdoToolbox.Express.Controls
             _connMgr = connMgr;
         }
 
+        public bool RequiresWKT
+        {
+            get;
+            private set;
+        }
+
         public void Init()
         {
             var conn = new FdoConnection(_view.Provider);
             _view.AvailableExtentTypes = conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_SpatialContextTypes);
-            _view.WKTEnabled = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsCSysWKTFromCSysName);
+            _view.WKTEnabled = this.RequiresWKT = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsCSysWKTFromCSysName);
         }
 
         public bool Create()
@@ -168,7 +176,9 @@ namespace FdoToolbox.Express.Controls
             {
                 var props = cmd.DataStoreProperties;
                 props.SetProperty(_view.DataStoreParameter, _view.DataStoreName);
-                props.SetProperty(_view.FdoEnabledParameter, _view.UseFdoMetadata.ToString().ToLower());
+
+                if (_view.IsFdoMetadataOptional)
+                    props.SetProperty(_view.FdoEnabledParameter, _view.UseFdoMetadata.ToString().ToLower());
 
                 cmd.Execute();
             }

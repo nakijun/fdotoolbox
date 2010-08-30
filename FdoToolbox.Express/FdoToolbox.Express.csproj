@@ -178,6 +178,18 @@
     </Compile>
     <Compile Include="Controls\CopySpatialContextsCtlPresentation.cs">
     </Compile>
+    <Compile Include="Controls\CreateMySqlCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CreateMySqlCtl.Designer.cs">
+      <DependentUpon>CreateMySqlCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CreatePostgresCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CreatePostgresCtl.Designer.cs">
+      <DependentUpon>CreatePostgresCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CreateRdbmsCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
