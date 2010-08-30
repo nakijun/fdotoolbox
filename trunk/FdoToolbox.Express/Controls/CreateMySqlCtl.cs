@@ -26,23 +26,30 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Express.Controls
 {
-    public partial class CreateSqlServerCtl : CreateRdbmsCtl
+    public partial class CreateMySqlCtl : CreateRdbmsCtl
     {
-        public CreateSqlServerCtl()
+        public CreateMySqlCtl()
         {
             InitializeComponent();
-            this.Title = "Create SQL Server Data Store";
+            this.Title = "Create MySQL Data Store";
+        }
+
+        public override bool IsFdoMetadataOptional
+        {
+            get
+            {
+                return false; // f_* tables will be created regardless
+            }
         }
 
         public override string Provider
         {
             get
             {
-                return "OSGeo.SQLServerSpatial";
+                return "OSGeo.MySQL";
             }
         }
     }
