@@ -330,6 +330,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open FDO Directory.
+        /// </summary>
+        internal static string CMD_OpenFdoDir {
+            get {
+                return ResourceManager.GetString("CMD_OpenFdoDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Logs Directory.
         /// </summary>
         internal static string CMD_OpenLogsDir {
