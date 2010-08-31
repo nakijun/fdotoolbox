@@ -30,7 +30,7 @@ namespace FdoToolbox.Core.ETL.Operations
     /// <summary>
     /// A delete ETL operation
     /// </summary>
-    public class FdoDeleteOperation : FdoOperationBase
+    public class FdoDeleteOperation : FdoSingleActionOperationBase
     {
         private FdoConnection _conn;
         private string _className;
@@ -58,45 +58,33 @@ namespace FdoToolbox.Core.ETL.Operations
             _filter = deleteFilter;
         }
 
-        private int counter = 0;
-
-        /// <summary>
-        /// Executes the operation
-        /// </summary>
-        /// <param name="rows"></param>
-        /// <returns></returns>
-        public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
+        public override void ExecuteAction()
         {
-            if (counter < 1) //Shouldn't be reentrant, but just play it safe.
+            using (FdoFeatureService svc = _conn.CreateFeatureService())
             {
-                using (FdoFeatureService svc = _conn.CreateFeatureService())
+                using (IDelete del = svc.CreateCommand<IDelete>(OSGeo.FDO.Commands.CommandType.CommandType_Delete))
                 {
-                    using (IDelete del = svc.CreateCommand<IDelete>(OSGeo.FDO.Commands.CommandType.CommandType_Delete))
+                    try
                     {
-                        try
+                        del.SetFeatureClassName(_className);
+                        if (!string.IsNullOrEmpty(_filter))
                         {
-                            del.SetFeatureClassName(_className);
-                            if (!string.IsNullOrEmpty(_filter))
-                            {
-                                del.SetFilter(_filter);
-                                Info("Deleting everything from class " + _className + " with filter: " + _filter);
-                            }
-                            else
-                            {
-                                Info("Deleting everything from class: " + _className);
-                            }
-                            int result = del.Execute();
-                            Info(result + " features deleted from class: " + _className);
+                            del.SetFilter(_filter);
+                            Info("Deleting everything from class " + _className + " with filter: " + _filter);
                         }
-                        catch (OSGeo.FDO.Common.Exception ex)
+                        else
                         {
-                            Error(ex, "Error occured executing delete");
+                            Info("Deleting everything from class: " + _className);
                         }
+                        int result = del.Execute();
+                        Info(result + " features deleted from class: " + _className);
+                    }
+                    catch (OSGeo.FDO.Common.Exception ex)
+                    {
+                        Error(ex, "Error occured executing delete");
                     }
                 }
-                counter++;
             }
-            return rows;
         }
     }
 }

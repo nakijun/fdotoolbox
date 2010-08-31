@@ -588,5 +588,51 @@ namespace FdoToolbox.Core.Utility
             }
             return new string[0];
         }
+
+        /// <summary>
+        /// Utility method to create a bulk copy operation from
+        /// one class to another
+        /// </summary>
+        /// <param name="sourceConn"></param>
+        /// <param name="targetConn"></param>
+        /// <param name="srcSchemaName"></param>
+        /// <param name="srcQuery"></param>
+        /// <param name="targetSchemaName"></param>
+        /// <param name="targetClassName"></param>
+        /// <param name="propertyMapping"></param>
+        /// <returns></returns>
+        public static FdoBulkCopy CreateBulkCopy(
+            FdoConnection sourceConn, 
+            FdoConnection targetConn, 
+            string srcSchemaName,
+            FeatureQueryOptions srcQuery, 
+            string targetSchemaName,
+            string targetClassName, 
+            NameValueCollection propertyMapping)
+        {
+            var dict = new Dictionary<string, FdoConnection>();
+            dict["SOURCE"] = sourceConn;
+            dict["TARGET"] = targetConn;
+
+            var opts = new FdoBulkCopyOptions(dict, false);
+            var copt = new FdoClassCopyOptions(
+                "SOURCE",
+                "TARGET",
+                srcSchemaName,
+                srcQuery.ClassName,
+                targetSchemaName,
+                targetClassName);
+
+            foreach (string p in propertyMapping.Keys)
+            {
+                copt.AddPropertyMapping(p, propertyMapping[p]);
+            }
+
+            copt.FlattenGeometries = true;
+            copt.ForceWkb = true;
+
+            opts.AddClassCopyOption(copt);
+            return new FdoBulkCopy(opts, 100);
+        }
     }
 }

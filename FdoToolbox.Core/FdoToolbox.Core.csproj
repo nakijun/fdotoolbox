@@ -49,6 +49,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DocumentationFile>..\out\x86\Debug\FdoToolbox.Core.xml</DocumentationFile>
     <OutputPath>..\out\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>..\out\x64\Release\</OutputPath>
@@ -160,9 +161,11 @@
     <Compile Include="ETL\FdoRow.cs" />
     <Compile Include="ETL\IPipelineExecuter.cs" />
     <Compile Include="ETL\ObjectArrayKeys.cs" />
+    <Compile Include="ETL\Operations\FdoApplySchemaOperation.cs" />
     <Compile Include="ETL\Operations\FdoBatchedOutputOperation.cs" />
     <Compile Include="ETL\Operations\FdoBranchingOperation.cs" />
     <Compile Include="ETL\Operations\FdoCopySpatialContextOperation.cs" />
+    <Compile Include="ETL\Operations\FdoCreateDataStoreOperation.cs" />
     <Compile Include="ETL\Operations\FdoDataValueConversionOperation.cs" />
     <Compile Include="ETL\Operations\FdoDeleteOperation.cs" />
     <Compile Include="ETL\Operations\FdoFeatureTableInputOperation.cs" />
@@ -171,9 +174,9 @@
     <Compile Include="ETL\Operations\FdoForceWkbOperation.cs" />
     <Compile Include="ETL\Operations\FdoInputOperation.cs" />
     <None Include="ETL\Operations\FdoJoinOperation.cs" />
-    <Compile Include="ETL\Operations\FdoNestedLoopsJoinOperation.cs" />
     <Compile Include="ETL\Operations\FdoOperationBase.cs" />
     <Compile Include="ETL\Operations\FdoOutputOperation.cs" />
+    <Compile Include="ETL\Operations\FdoSingleActionOperation.cs" />
     <Compile Include="ETL\Operations\FdoSqlOutputOperation.cs">
       <SubType>Code</SubType>
     </Compile>
