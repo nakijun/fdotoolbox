@@ -30,7 +30,7 @@ namespace FdoToolbox.Core.ETL.Operations
     /// <summary>
     /// An ETL operation that copies spatial contexts from one data source to another
     /// </summary>
-    public class FdoCopySpatialContextOperation : FdoOperationBase
+    public class FdoCopySpatialContextOperation : FdoSingleActionOperationBase
     {
         private FdoConnection _source;
         private FdoConnection _target;
@@ -52,22 +52,10 @@ namespace FdoToolbox.Core.ETL.Operations
             _overwrite = overwrite;
         }
 
-        private int counter = 0;
-
-        /// <summary>
-        /// Executes the operation
-        /// </summary>
-        /// <param name="rows"></param>
-        /// <returns></returns>
-        public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
+        public override void ExecuteAction()
         {
-            if (counter < 1)
-            {
-                ICopySpatialContext copy = CopySpatialContextOverrideFactory.GetCopySpatialContextOverride(_target);
-                copy.Execute(_source, _target, _overwrite, _scNames);
-                counter++;
-            }
-            return rows;
+            ICopySpatialContext copy = CopySpatialContextOverrideFactory.GetCopySpatialContextOverride(_target);
+            copy.Execute(_source, _target, _overwrite, _scNames);
         }
     }
 }

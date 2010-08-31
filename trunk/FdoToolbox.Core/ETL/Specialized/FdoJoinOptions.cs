@@ -429,6 +429,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// Left join, left side objects are merged with right side objects regardless of whether the right side object exists or not
         /// </summary>
         Left,
+        /*
         /// <summary>
         /// Right join, right side objects are merged with left side objects regardless of whether the left side object exists or not
         /// </summary>
@@ -437,5 +438,6 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// Full join, both sides of the join are merged regardless of whether either side exists or not
         /// </summary>
         Full = Left | Right,
+         */
     }
 }

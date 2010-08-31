@@ -50,11 +50,13 @@ namespace FdoToolbox.Core.ETL
 
         private HashedSet<string> readOnlyProperties = new HashedSet<string>();
 
+        internal static readonly IEqualityComparer DefaultComparer = StringComparer.InvariantCulture;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FdoRow"/> class.
         /// </summary>
         internal FdoRow()
-            : base(new Hashtable(StringComparer.InvariantCultureIgnoreCase))
+            : base(new Hashtable(DefaultComparer))
         {
         }
 
@@ -63,7 +65,7 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         /// <param name="itemsToClone">The items to clone.</param>
         private FdoRow(IDictionary itemsToClone)
-            : base(new Hashtable(itemsToClone, StringComparer.InvariantCultureIgnoreCase))
+            : base(new Hashtable(itemsToClone, DefaultComparer))
         {
         }
 
@@ -94,7 +96,7 @@ namespace FdoToolbox.Core.ETL
         /// <param name="source">The source row.</param>
         public void Copy(IDictionary source)
         {
-            items = new Hashtable(source, StringComparer.InvariantCultureIgnoreCase);
+            items = new Hashtable(source, DefaultComparer);
         }
 
         /// <summary>

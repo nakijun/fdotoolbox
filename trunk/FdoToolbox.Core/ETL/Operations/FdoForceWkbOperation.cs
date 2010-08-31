@@ -49,6 +49,10 @@ namespace FdoToolbox.Core.ETL.Operations
 
         private FdoRow MakeWkbCompliant(FdoRow row)
         {
+            //Not applicable?
+            if (row.Geometry == null)
+                return row;
+
             //Already 2D? Move along!
             //if (FdoGeometryUtil.Is2D(row.Geometry))
             //    return row;
