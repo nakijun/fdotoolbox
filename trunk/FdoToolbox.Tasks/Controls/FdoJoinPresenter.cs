@@ -52,7 +52,6 @@ namespace FdoToolbox.Tasks.Controls
         List<string> RightClasses { set; }
 
         Array JoinTypes { set; }
-        Array SpatialPredicates { set; }
 
         string SelectedLeftConnection { get; set; }
         string SelectedRightConnection { get; set; }
@@ -69,11 +68,12 @@ namespace FdoToolbox.Tasks.Controls
         string LeftPrefix { get; set; }
         string RightPrefix { get; set; }
 
+        string LeftFilter { get; set; }
+        string RightFilter { get; set; }
+
         FdoJoinType SelectedJoinType { get; set; }
 
         bool TargetGeometryPropertyEnabled { get; set; }
-
-        bool ForceOneToOne { get; set; }
 
         /// <summary>
         /// Sets the properties or gets the checked properties
@@ -87,10 +87,6 @@ namespace FdoToolbox.Tasks.Controls
 
         int BatchSize { get; set; }
         bool BatchEnabled { get; set; }
-
-        bool SpatialPredicateListEnabled { set; }
-        bool SpatialPredicateEnabled { get; set; }
-        SpatialOperations SelectedSpatialPredicate { get; set; }
 
         void ClearJoins();
         void AddPropertyJoin(string left, string right);
@@ -127,7 +123,6 @@ namespace FdoToolbox.Tasks.Controls
         {
             _view = view;
             _view.JoinTypes = Enum.GetValues(typeof(FdoJoinType));
-            _view.SpatialPredicates = Enum.GetValues(typeof(SpatialOperations));
             _connMgr = connMgr;
             _taskMgr = taskMgr;
         }
@@ -143,13 +138,10 @@ namespace FdoToolbox.Tasks.Controls
             ConnectionChanged(JoinSourceType.Left);
             ConnectionChanged(JoinSourceType.Right);
             ConnectionChanged(JoinSourceType.Target);
-
-            _view.ForceOneToOne = true;
-
+            
             _init = true;
             SetTargetGeometries();
 
-            JoinPredicateCheckChanged();
             GeometryPropertyCheckChanged();
         }
 
@@ -172,22 +164,14 @@ namespace FdoToolbox.Tasks.Controls
             _view.SelectedRightSchema = options.Right.SchemaName;
             _view.SelectedRightClass = options.Right.ClassName;
 
-            if (options.SpatialJoinPredicate.HasValue)
-            {
-                _view.SpatialPredicateEnabled = true;
-                _view.SelectedSpatialPredicate = options.SpatialJoinPredicate.Value;
-            }
-            else
-            {
-                _view.SpatialPredicateEnabled = false;
-            }
-
             _view.SelectedTargetConnection = _connMgr.GetName(options.Target.Connection);
             _view.SelectedTargetSchema = options.Target.SchemaName;
             _view.SelectedTargetClass = options.Target.ClassName;
 
             _view.LeftPrefix = options.LeftPrefix;
             _view.RightPrefix = options.RightPrefix;
+            _view.LeftFilter = options.LeftFilter;
+            _view.RightFilter = options.RightFilter;
             _view.CheckLeftProperties(options.LeftProperties);
             _view.CheckRightProperties(options.RightProperties);
 
@@ -196,7 +180,6 @@ namespace FdoToolbox.Tasks.Controls
                 //assert _view.BatchEnabled == true;
                 _view.BatchSize = options.BatchSize;
             }
-            _view.ForceOneToOne = options.ForceOneToOne;
 
             if (!string.IsNullOrEmpty(options.GeometryProperty))
             {
@@ -390,6 +373,26 @@ namespace FdoToolbox.Tasks.Controls
             if (string.IsNullOrEmpty(_view.TaskName))
                 throw new TaskValidationException(ResourceService.GetString("ERR_TASK_NAME_REQUIRED"));
 
+            var leftPropNames = _view.LeftProperties;
+            var rightPropNames = _view.RightProperties;
+            var allPropNames = new List<string>();
+            foreach (var p in leftPropNames)
+            {
+                var name = _view.LeftPrefix + p;
+                if (allPropNames.Contains(name))
+                    throw new TaskValidationException(ResourceService.GetStringFormatted("ERR_MERGED_CLASS_DUPLICATE_PROPERTY", name));
+
+                allPropNames.Add(name);
+            }
+            foreach (var p in rightPropNames)
+            {
+                var name = _view.RightPrefix + p;
+                if (allPropNames.Contains(name))
+                    throw new TaskValidationException(ResourceService.GetStringFormatted("ERR_MERGED_CLASS_DUPLICATE_PROPERTY", name));
+
+                allPropNames.Add(name);
+            }
+
             FdoJoinOptions options = null;
             if (_join == null)
             {
@@ -431,12 +434,9 @@ namespace FdoToolbox.Tasks.Controls
             }
 
             options.SetJoinPairs(_view.GetJoinedProperties());
-            if (_view.SpatialPredicateEnabled)
-                options.SpatialJoinPredicate = _view.SelectedSpatialPredicate;
-
+            
             options.JoinType = _view.SelectedJoinType;
-            options.ForceOneToOne = _view.ForceOneToOne;
-
+            
             foreach (string leftProp in _view.LeftProperties)
             {
                 options.AddLeftProperty(leftProp);
@@ -449,6 +449,8 @@ namespace FdoToolbox.Tasks.Controls
 
             options.LeftPrefix = _view.LeftPrefix;
             options.RightPrefix = _view.RightPrefix;
+            options.LeftFilter = _view.LeftFilter;
+            options.RightFilter = _view.RightFilter;
 
             options.Validate();
 
@@ -462,11 +464,6 @@ namespace FdoToolbox.Tasks.Controls
             {
                 _join.Options = options;
             }
-        }
-
-        internal void JoinPredicateCheckChanged()
-        {
-            _view.SpatialPredicateListEnabled = _view.SpatialPredicateEnabled;
         }
 
         internal void GeometryPropertyCheckChanged()

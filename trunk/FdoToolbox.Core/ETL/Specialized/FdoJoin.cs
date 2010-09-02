@@ -221,14 +221,26 @@ namespace FdoToolbox.Core.ETL.Specialized
 
             foreach (var leftp in _options.LeftProperties)
             {
-                leftMaps.Add(leftp, leftp);
+                if (string.IsNullOrEmpty(_options.LeftPrefix))
+                    leftMaps.Add(leftp, leftp);
+                else
+                    leftMaps.Add(leftp, _options.LeftPrefix + leftp);
                 leftQuery.AddFeatureProperty(leftp);
             }
             foreach (var rightp in _options.RightProperties)
             {
-                rightMaps.Add(rightp, rightp);
+                if (string.IsNullOrEmpty(_options.RightPrefix))
+                    rightMaps.Add(rightp, rightp);
+                else
+                    rightMaps.Add(rightp, _options.RightPrefix + rightp);
                 rightQuery.AddFeatureProperty(rightp);
             }
+
+            if (!string.IsNullOrEmpty(_options.LeftFilter))
+                leftQuery.Filter = _options.LeftFilter;
+
+            if (!string.IsNullOrEmpty(_options.RightFilter))
+                rightQuery.Filter = _options.RightFilter;
             
             //don't forget join keys
             foreach (string l in _options.JoinPairs.Keys)
@@ -238,13 +250,21 @@ namespace FdoToolbox.Core.ETL.Specialized
                 if (!_options.LeftProperties.Contains(l))
                 {
                     leftQuery.AddFeatureProperty(l);
-                    leftMaps.Add(l, l);
+
+                    if (string.IsNullOrEmpty(_options.LeftPrefix))
+                        leftMaps.Add(l, l);
+                    else
+                        leftMaps.Add(l, _options.LeftPrefix + l);
                 }
 
                 if (!_options.RightProperties.Contains(r))
                 {
                     rightQuery.AddFeatureProperty(r);
-                    rightMaps.Add(r, r);
+
+                    if (string.IsNullOrEmpty(_options.RightPrefix))
+                        rightMaps.Add(r, r);
+                    else
+                        rightMaps.Add(r, _options.RightPrefix + r);
                 }
 
             }
@@ -254,13 +274,27 @@ namespace FdoToolbox.Core.ETL.Specialized
             {
                 if (_options.Side == JoinSide.Left)
                 {
-                    leftQuery.AddFeatureProperty(_options.GeometryProperty);
-                    leftMaps.Add(_options.GeometryProperty, _options.GeometryProperty);
+                    if (!leftQuery.PropertyList.Contains(_options.GeometryProperty))
+                    {
+                        leftQuery.AddFeatureProperty(_options.GeometryProperty);
+
+                        if (string.IsNullOrEmpty(_options.LeftPrefix))
+                            leftMaps.Add(_options.GeometryProperty, _options.GeometryProperty);
+                        else
+                            leftMaps.Add(_options.GeometryProperty, _options.LeftPrefix + _options.GeometryProperty);
+                    }
                 }
                 else
                 {
-                    rightQuery.AddFeatureProperty(_options.GeometryProperty);
-                    rightMaps.Add(_options.GeometryProperty, _options.GeometryProperty);
+                    if (!rightQuery.PropertyList.Contains(_options.GeometryProperty))
+                    {
+                        rightQuery.AddFeatureProperty(_options.GeometryProperty);
+
+                        if (string.IsNullOrEmpty(_options.RightPrefix))
+                            rightMaps.Add(_options.GeometryProperty, _options.GeometryProperty);
+                        else
+                            rightMaps.Add(_options.GeometryProperty, _options.RightPrefix + _options.GeometryProperty);
+                    }
                 }
             }
 
@@ -271,6 +305,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             //Copy left source
             ParameterlessAction copyLeft = () =>
             {
+                SendMessage("Copying left source with filter: " + _options.LeftFilter);
                 var copy = ExpressUtility.CreateBulkCopy(
                     _options.Left.Connection,
                     tempConn,
@@ -295,6 +330,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             //Copy right source
             ParameterlessAction copyRight = () =>
             {
+                SendMessage("Copying right source with filter: " + _options.RightFilter);
                 var copy = ExpressUtility.CreateBulkCopy(
                     _options.Right.Connection,
                     tempConn,
@@ -328,9 +364,13 @@ namespace FdoToolbox.Core.ETL.Specialized
                     var tokens = new List<string>();
                     foreach (string p in _options.JoinPairs.Keys)
                     {
-                        tokens.Add(p);
+                        if (!string.IsNullOrEmpty(_options.LeftPrefix))
+                            tokens.Add(_options.LeftPrefix + p);
+                        else
+                            tokens.Add(p);
                     }
                     sql = sql + string.Join(", ", tokens.ToArray()) + ")";
+                    SendMessage("Executing SQL: " + sql);
                     svc.ExecuteSQLNonQuery(sql);
                 }
             };
@@ -344,9 +384,13 @@ namespace FdoToolbox.Core.ETL.Specialized
                     foreach (string p in _options.JoinPairs.Keys)
                     {
                         string prop = _options.JoinPairs[p];
-                        tokens.Add(prop);
+                        if (!string.IsNullOrEmpty(_options.RightPrefix))
+                            tokens.Add(_options.RightPrefix + prop);
+                        else
+                            tokens.Add(prop);
                     }
                     sql = sql + string.Join(", ", tokens.ToArray()) + ")";
+                    SendMessage("Executing SQL: " + sql);
                     svc.ExecuteSQLNonQuery(sql);
                 }
             };
@@ -363,25 +407,48 @@ namespace FdoToolbox.Core.ETL.Specialized
                     sql.Append(srcClass + " AS SELECT ");
                     foreach (var p in _options.LeftProperties)
                     {
-                        sql.Append("l." + p + ", ");
+                        if (!string.IsNullOrEmpty(_options.LeftPrefix))
+                            sql.Append("l." + _options.LeftPrefix + p + ", ");
+                        else
+                            sql.Append("l." + p + ", ");
                     }
 
                     if (!string.IsNullOrEmpty(_options.GeometryProperty))
                     {
                         if (_options.Side == JoinSide.Left)
-                            sql.Append("l." + _options.GeometryProperty + ", ");
+                        {
+                            if (!_options.LeftProperties.Contains(_options.GeometryProperty))
+                            {
+                                if (!string.IsNullOrEmpty(_options.LeftPrefix))
+                                    sql.Append("l." + _options.LeftPrefix + _options.GeometryProperty + ", ");
+                                else
+                                    sql.Append("l." + _options.GeometryProperty + ", ");
+                            }
+                        }
                         else
-                            sql.Append("r." + _options.GeometryProperty + ", ");
+                        {
+                            if (!_options.RightProperties.Contains(_options.GeometryProperty))
+                            {
+                                if (!string.IsNullOrEmpty(_options.RightPrefix))
+                                    sql.Append("r." + _options.RightPrefix + _options.GeometryProperty + ", ");
+                                else
+                                    sql.Append("r." + _options.GeometryProperty + ", ");
+                            }
+                        }
                     }
 
                     int rc = _options.RightProperties.Count;
                     int i = 0;
                     foreach (var p in _options.RightProperties)
                     {
+                        string pn = p;
+                        if (!string.IsNullOrEmpty(_options.RightPrefix))
+                            pn = _options.RightPrefix + pn;
+
                         if (i == rc - 1)
-                            sql.Append("r." + p + " FROM ");
+                            sql.Append("r." + pn + " FROM ");
                         else
-                            sql.Append("r." + p + ", ");
+                            sql.Append("r." + pn + ", ");
                         i++;
                     }
                     sql.Append(leftClassName + " l ");
@@ -400,9 +467,18 @@ namespace FdoToolbox.Core.ETL.Specialized
 
                     rc = _options.JoinPairs.Count;
                     i = 0;
-                    foreach (string left in _options.JoinPairs.Keys)
+                    foreach (string l in _options.JoinPairs.Keys)
                     {
-                        string right = _options.JoinPairs[left];
+                        string r = _options.JoinPairs[l];
+
+                        string left = l;
+                        string right = r;
+
+                        if (!string.IsNullOrEmpty(_options.LeftPrefix))
+                            left = _options.LeftPrefix + left;
+
+                        if (!string.IsNullOrEmpty(_options.RightPrefix))
+                            right = _options.RightPrefix + right;
 
                         if (i == rc - 1)
                             sql.Append("l." + left + " = r." + right);
@@ -411,7 +487,7 @@ namespace FdoToolbox.Core.ETL.Specialized
 
                         i++;
                     }
-
+                    SendMessage("Executing SQL: " + sql.ToString());
                     svc.ExecuteSQLNonQuery(sql.ToString());
                 }
             };
@@ -426,6 +502,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                     {
                         SendMessage("Exposing view as a FDO feature class");
                         string sql = "INSERT INTO geometry_columns(f_table_name, f_geometry_column, geometry_type, geometry_dettype, coord_dimension, srid, geometry_format) VALUES('" + srcClass + "','" + _options.GeometryProperty + "',15,7743,0,0,'FGF')";
+                        SendMessage("Executing SQL: " + sql.ToString());
                         svc.ExecuteSQLNonQuery(sql);
                     }
                 };
@@ -493,7 +570,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                 _allErrors.AddRange(copyLeftErrors);
                 SendMessage(copyRightErrors.Count + " errors encountered copying right source to temp db");
                 _allErrors.AddRange(copyRightErrors);
-                SendMessage(copyTargetErrors.Count + " errors encountered copying left source to target");
+                SendMessage(copyTargetErrors.Count + " errors encountered copying merged source to target");
                 _allErrors.AddRange(copyTargetErrors);
                 SendMessage("Join Operation completed in " + sw.Elapsed.ToString());
             };
@@ -511,6 +588,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         {
             var props = cls.Properties;
             var remove = new List<PropertyDefinition>();
+            
             foreach (PropertyDefinition p in props)
             {
                 if (!propNames.Contains(p.Name) && !joinProps.Contains(p.Name))
@@ -524,6 +602,16 @@ namespace FdoToolbox.Core.ETL.Specialized
             foreach (PropertyDefinition p in remove)
             {
                 props.Remove(p);
+            }
+
+            //Strip auto-generation because we want to preserve all original values (even from auto-generated properties)
+            foreach (PropertyDefinition p in props)
+            {
+                if (p.PropertyType == PropertyType.PropertyType_DataProperty)
+                {
+                    DataPropertyDefinition dp = (DataPropertyDefinition)p;
+                    dp.IsAutoGenerated = false;
+                }
             }
 
             if (!string.IsNullOrEmpty(prefix))
@@ -549,13 +637,29 @@ namespace FdoToolbox.Core.ETL.Specialized
             {
                 int idx = props.IndexOf(p.Name);
                 if (idx < 0)
-                    props.Add(FdoFeatureService.CloneProperty(p));
+                {
+                    var prop = FdoFeatureService.CloneProperty(p);
+                    props.Add(prop);
+                }
             }
             foreach (PropertyDefinition p in rightCls.Properties)
             {
                 int idx = props.IndexOf(p.Name);
                 if (idx < 0)
-                    props.Add(FdoFeatureService.CloneProperty(p));
+                {
+                    var prop = FdoFeatureService.CloneProperty(p);
+                    props.Add(prop);
+                }
+            }
+
+            //Strip off autogeneration because we want to preserve original values
+            foreach (PropertyDefinition p in props)
+            {
+                if (p.PropertyType == PropertyType.PropertyType_DataProperty)
+                {
+                    DataPropertyDefinition dp = (DataPropertyDefinition)p;
+                    dp.IsAutoGenerated = false;
+                }
             }
 
             DataPropertyDefinition fid = new DataPropertyDefinition("FID", "Autogenerated ID");
@@ -568,7 +672,20 @@ namespace FdoToolbox.Core.ETL.Specialized
 
             if (!string.IsNullOrEmpty(_options.GeometryProperty))
             {
-                int idx = props.IndexOf(_options.GeometryProperty);
+                //If prefixed, we need to qualify it to match what's in the merged class
+                string pn = _options.GeometryProperty;
+                if (_options.Side == JoinSide.Left)
+                {
+                    if (!string.IsNullOrEmpty(_options.LeftPrefix))
+                        pn = _options.LeftPrefix + pn;
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(_options.RightPrefix))
+                        pn = _options.RightPrefix + pn;
+                }
+
+                int idx = props.IndexOf(pn);
                 if (idx < 0)
                 {
                     throw new FdoETLException("Property not found in merged class: " + _options.GeometryProperty);
@@ -642,6 +759,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             join.Left.Prefix = _options.LeftPrefix;
             join.Left.PropertyList = new List<string>(_options.LeftProperties).ToArray();
             join.Left.Provider = _options.Left.Connection.Provider;
+            join.Left.Filter = _options.LeftFilter;
 
             join.Right.Class = _options.Right.ClassName;
             join.Right.ConnectionString = _options.Right.Connection.ConnectionString;
@@ -649,6 +767,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             join.Right.Prefix = _options.RightPrefix;
             join.Right.PropertyList = new List<string>(_options.RightProperties).ToArray();
             join.Right.Provider = _options.Right.Connection.Provider;
+            join.Right.Filter = _options.RightFilter;
 
             join.Target.Class = _options.Target.ClassName;
             join.Target.ConnectionString = _options.Target.Connection.ConnectionString;
@@ -661,11 +780,6 @@ namespace FdoToolbox.Core.ETL.Specialized
                 join.JoinSettings.DesignatedGeometry.Property = _options.GeometryProperty;
                 join.JoinSettings.DesignatedGeometry.Side = _options.Side;
             }
-            if (_options.SpatialJoinPredicate.HasValue)
-            {
-                join.JoinSettings.SpatialPredicate = (SpatialPredicate)Enum.Parse(typeof(SpatialPredicate), _options.SpatialJoinPredicate.Value.ToString());
-            }
-            join.JoinSettings.ForceOneToOne = _options.ForceOneToOne;
             join.JoinSettings.JoinType = (JoinType)Enum.Parse(typeof(JoinType), _options.JoinType.ToString());
             List<JoinKey> keys = new List<JoinKey>();
             foreach (string key in _options.JoinPairs.Keys)

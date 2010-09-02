@@ -623,6 +623,9 @@ namespace FdoToolbox.Core.Utility
                 targetSchemaName,
                 targetClassName);
 
+            if (!string.IsNullOrEmpty(srcQuery.Filter))
+                copt.SourceFilter = srcQuery.Filter;
+
             foreach (string p in propertyMapping.Keys)
             {
                 copt.AddPropertyMapping(p, propertyMapping[p]);

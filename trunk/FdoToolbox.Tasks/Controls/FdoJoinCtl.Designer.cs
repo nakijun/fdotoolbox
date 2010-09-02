@@ -33,8 +33,12 @@ namespace FdoToolbox.Tasks.Controls
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.chkOneToOne = new System.Windows.Forms.CheckBox();
             this.label19 = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.txtRightPrefix = new System.Windows.Forms.TextBox();
+            this.txtLeftPrefix = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.rdRightGeom = new System.Windows.Forms.RadioButton();
             this.rdLeftGeom = new System.Windows.Forms.RadioButton();
@@ -45,8 +49,6 @@ namespace FdoToolbox.Tasks.Controls
             this.grdJoin = new System.Windows.Forms.DataGridView();
             this.COL_LEFT = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.COL_RIGHT = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.chkJoinPredicate = new System.Windows.Forms.CheckBox();
-            this.cmbSpatialPredicate = new System.Windows.Forms.ComboBox();
             this.cmbJoinTypes = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btnDeleteJoin = new System.Windows.Forms.Button();
@@ -59,6 +61,8 @@ namespace FdoToolbox.Tasks.Controls
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtRightFilter = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.chkRightProperties = new System.Windows.Forms.CheckedListBox();
             this.cmbRightClass = new System.Windows.Forms.ComboBox();
@@ -68,6 +72,8 @@ namespace FdoToolbox.Tasks.Controls
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtLeftFilter = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.chkLeftProperties = new System.Windows.Forms.CheckedListBox();
             this.label14 = new System.Windows.Forms.Label();
             this.cmbLeftClass = new System.Windows.Forms.ComboBox();
@@ -77,20 +83,15 @@ namespace FdoToolbox.Tasks.Controls
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.txtRightPrefix = new System.Windows.Forms.TextBox();
-            this.txtLeftPrefix = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdJoin)).BeginInit();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -129,8 +130,8 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.chkOneToOne);
             this.groupBox5.Controls.Add(this.label19);
+            this.groupBox5.Controls.Add(this.groupBox6);
             this.groupBox5.Controls.Add(this.label3);
             this.groupBox5.Controls.Add(this.rdRightGeom);
             this.groupBox5.Controls.Add(this.rdLeftGeom);
@@ -139,8 +140,6 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox5.Controls.Add(this.label18);
             this.groupBox5.Controls.Add(this.label4);
             this.groupBox5.Controls.Add(this.grdJoin);
-            this.groupBox5.Controls.Add(this.chkJoinPredicate);
-            this.groupBox5.Controls.Add(this.cmbSpatialPredicate);
             this.groupBox5.Controls.Add(this.cmbJoinTypes);
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Location = new System.Drawing.Point(3, 240);
@@ -150,29 +149,70 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Join Options";
             // 
-            // chkOneToOne
-            // 
-            this.chkOneToOne.AutoSize = true;
-            this.chkOneToOne.Location = new System.Drawing.Point(243, 72);
-            this.chkOneToOne.Name = "chkOneToOne";
-            this.chkOneToOne.Size = new System.Drawing.Size(83, 17);
-            this.chkOneToOne.TabIndex = 16;
-            this.chkOneToOne.Text = "Force 1 to 1";
-            this.chkOneToOne.UseVisualStyleBackColor = true;
-            // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(419, 73);
+            this.label19.Location = new System.Drawing.Point(248, 72);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(32, 13);
             this.label19.TabIndex = 15;
             this.label19.Text = "Right";
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.Controls.Add(this.txtRightPrefix);
+            this.groupBox6.Controls.Add(this.txtLeftPrefix);
+            this.groupBox6.Controls.Add(this.label17);
+            this.groupBox6.Controls.Add(this.label16);
+            this.groupBox6.Location = new System.Drawing.Point(424, 20);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(209, 73);
+            this.groupBox6.TabIndex = 11;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Property Prefixes";
+            // 
+            // txtRightPrefix
+            // 
+            this.txtRightPrefix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRightPrefix.Location = new System.Drawing.Point(77, 40);
+            this.txtRightPrefix.Name = "txtRightPrefix";
+            this.txtRightPrefix.Size = new System.Drawing.Size(121, 20);
+            this.txtRightPrefix.TabIndex = 3;
+            // 
+            // txtLeftPrefix
+            // 
+            this.txtLeftPrefix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLeftPrefix.Location = new System.Drawing.Point(77, 17);
+            this.txtLeftPrefix.Name = "txtLeftPrefix";
+            this.txtLeftPrefix.Size = new System.Drawing.Size(121, 20);
+            this.txtLeftPrefix.TabIndex = 2;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(10, 43);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(32, 13);
+            this.label17.TabIndex = 1;
+            this.label17.Text = "Right";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(10, 20);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(25, 13);
+            this.label16.TabIndex = 0;
+            this.label16.Text = "Left";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(419, 50);
+            this.label3.Location = new System.Drawing.Point(248, 49);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(25, 13);
             this.label3.TabIndex = 14;
@@ -181,29 +221,31 @@ namespace FdoToolbox.Tasks.Controls
             // rdRightGeom
             // 
             this.rdRightGeom.AutoSize = true;
-            this.rdRightGeom.Location = new System.Drawing.Point(460, 71);
+            this.rdRightGeom.Location = new System.Drawing.Point(289, 70);
             this.rdRightGeom.Name = "rdRightGeom";
             this.rdRightGeom.Size = new System.Drawing.Size(85, 17);
             this.rdRightGeom.TabIndex = 13;
             this.rdRightGeom.TabStop = true;
             this.rdRightGeom.Text = "radioButton2";
             this.rdRightGeom.UseVisualStyleBackColor = true;
+            this.rdRightGeom.CheckedChanged += new System.EventHandler(this.rdRightGeom_CheckedChanged);
             // 
             // rdLeftGeom
             // 
             this.rdLeftGeom.AutoSize = true;
-            this.rdLeftGeom.Location = new System.Drawing.Point(460, 48);
+            this.rdLeftGeom.Location = new System.Drawing.Point(289, 47);
             this.rdLeftGeom.Name = "rdLeftGeom";
             this.rdLeftGeom.Size = new System.Drawing.Size(85, 17);
             this.rdLeftGeom.TabIndex = 12;
             this.rdLeftGeom.TabStop = true;
             this.rdLeftGeom.Text = "radioButton1";
             this.rdLeftGeom.UseVisualStyleBackColor = true;
+            this.rdLeftGeom.CheckedChanged += new System.EventHandler(this.rdLeftGeom_CheckedChanged);
             // 
             // chkGeometryProperty
             // 
             this.chkGeometryProperty.AutoSize = true;
-            this.chkGeometryProperty.Location = new System.Drawing.Point(243, 48);
+            this.chkGeometryProperty.Location = new System.Drawing.Point(251, 18);
             this.chkGeometryProperty.Name = "chkGeometryProperty";
             this.chkGeometryProperty.Size = new System.Drawing.Size(170, 17);
             this.chkGeometryProperty.TabIndex = 11;
@@ -270,28 +312,6 @@ namespace FdoToolbox.Tasks.Controls
             this.COL_RIGHT.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.COL_RIGHT.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // chkJoinPredicate
-            // 
-            this.chkJoinPredicate.AutoSize = true;
-            this.chkJoinPredicate.Location = new System.Drawing.Point(285, 19);
-            this.chkJoinPredicate.Name = "chkJoinPredicate";
-            this.chkJoinPredicate.Size = new System.Drawing.Size(128, 17);
-            this.chkJoinPredicate.TabIndex = 4;
-            this.chkJoinPredicate.Text = "Spatial Join Predicate";
-            this.chkJoinPredicate.UseVisualStyleBackColor = true;
-            this.chkJoinPredicate.CheckedChanged += new System.EventHandler(this.chkJoinPredicate_CheckedChanged);
-            // 
-            // cmbSpatialPredicate
-            // 
-            this.cmbSpatialPredicate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSpatialPredicate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSpatialPredicate.FormattingEnabled = true;
-            this.cmbSpatialPredicate.Location = new System.Drawing.Point(422, 17);
-            this.cmbSpatialPredicate.Name = "cmbSpatialPredicate";
-            this.cmbSpatialPredicate.Size = new System.Drawing.Size(206, 21);
-            this.cmbSpatialPredicate.TabIndex = 3;
-            // 
             // cmbJoinTypes
             // 
             this.cmbJoinTypes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -344,7 +364,7 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Location = new System.Drawing.Point(433, 59);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(209, 96);
+            this.groupBox4.Size = new System.Drawing.Size(209, 175);
             this.groupBox4.TabIndex = 9;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Target";
@@ -411,6 +431,8 @@ namespace FdoToolbox.Tasks.Controls
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.txtRightFilter);
+            this.groupBox3.Controls.Add(this.label21);
             this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.chkRightProperties);
             this.groupBox3.Controls.Add(this.cmbRightClass);
@@ -425,6 +447,23 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox3.TabIndex = 8;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Right Source";
+            // 
+            // txtRightFilter
+            // 
+            this.txtRightFilter.Location = new System.Drawing.Point(77, 147);
+            this.txtRightFilter.Name = "txtRightFilter";
+            this.txtRightFilter.Size = new System.Drawing.Size(121, 20);
+            this.txtRightFilter.TabIndex = 13;
+            this.txtRightFilter.Click += new System.EventHandler(this.txtRightFilter_Click);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(10, 150);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(29, 13);
+            this.label21.TabIndex = 12;
+            this.label21.Text = "Filter";
             // 
             // label15
             // 
@@ -441,7 +480,7 @@ namespace FdoToolbox.Tasks.Controls
             this.chkRightProperties.FormattingEnabled = true;
             this.chkRightProperties.Location = new System.Drawing.Point(77, 92);
             this.chkRightProperties.Name = "chkRightProperties";
-            this.chkRightProperties.Size = new System.Drawing.Size(121, 79);
+            this.chkRightProperties.Size = new System.Drawing.Size(121, 49);
             this.chkRightProperties.TabIndex = 8;
             // 
             // cmbRightClass
@@ -503,6 +542,8 @@ namespace FdoToolbox.Tasks.Controls
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txtLeftFilter);
+            this.groupBox2.Controls.Add(this.label20);
             this.groupBox2.Controls.Add(this.chkLeftProperties);
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.cmbLeftClass);
@@ -518,13 +559,30 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Left Source";
             // 
+            // txtLeftFilter
+            // 
+            this.txtLeftFilter.Location = new System.Drawing.Point(77, 147);
+            this.txtLeftFilter.Name = "txtLeftFilter";
+            this.txtLeftFilter.Size = new System.Drawing.Size(121, 20);
+            this.txtLeftFilter.TabIndex = 9;
+            this.txtLeftFilter.Click += new System.EventHandler(this.txtLeftFilter_Click);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(10, 150);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(29, 13);
+            this.label20.TabIndex = 8;
+            this.label20.Text = "Filter";
+            // 
             // chkLeftProperties
             // 
             this.chkLeftProperties.CheckOnClick = true;
             this.chkLeftProperties.FormattingEnabled = true;
             this.chkLeftProperties.Location = new System.Drawing.Point(77, 92);
             this.chkLeftProperties.Name = "chkLeftProperties";
-            this.chkLeftProperties.Size = new System.Drawing.Size(121, 79);
+            this.chkLeftProperties.Size = new System.Drawing.Size(121, 49);
             this.chkLeftProperties.TabIndex = 7;
             // 
             // label14
@@ -604,63 +662,11 @@ namespace FdoToolbox.Tasks.Controls
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // groupBox6
-            // 
-            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox6.Controls.Add(this.txtRightPrefix);
-            this.groupBox6.Controls.Add(this.txtLeftPrefix);
-            this.groupBox6.Controls.Add(this.label17);
-            this.groupBox6.Controls.Add(this.label16);
-            this.groupBox6.Location = new System.Drawing.Point(433, 161);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(209, 73);
-            this.groupBox6.TabIndex = 11;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Property Prefixes";
-            // 
-            // txtRightPrefix
-            // 
-            this.txtRightPrefix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtRightPrefix.Location = new System.Drawing.Point(77, 40);
-            this.txtRightPrefix.Name = "txtRightPrefix";
-            this.txtRightPrefix.Size = new System.Drawing.Size(121, 20);
-            this.txtRightPrefix.TabIndex = 3;
-            // 
-            // txtLeftPrefix
-            // 
-            this.txtLeftPrefix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLeftPrefix.Location = new System.Drawing.Point(77, 17);
-            this.txtLeftPrefix.Name = "txtLeftPrefix";
-            this.txtLeftPrefix.Size = new System.Drawing.Size(121, 20);
-            this.txtLeftPrefix.TabIndex = 2;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(10, 43);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(32, 13);
-            this.label17.TabIndex = 1;
-            this.label17.Text = "Right";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(10, 20);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(25, 13);
-            this.label16.TabIndex = 0;
-            this.label16.Text = "Left";
-            // 
             // FdoJoinCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.btnDeleteJoin);
-            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.btnAddJoin);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.groupBox4);
@@ -674,6 +680,8 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox1.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBatchSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grdJoin)).EndInit();
             this.groupBox4.ResumeLayout(false);
@@ -682,8 +690,6 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox6.ResumeLayout(false);
-            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -699,8 +705,6 @@ namespace FdoToolbox.Tasks.Controls
         private System.Windows.Forms.Button btnAddJoin;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DataGridView grdJoin;
-        private System.Windows.Forms.CheckBox chkJoinPredicate;
-        private System.Windows.Forms.ComboBox cmbSpatialPredicate;
         private System.Windows.Forms.ComboBox cmbJoinTypes;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.ComboBox cmbTargetConnection;
@@ -743,7 +747,10 @@ namespace FdoToolbox.Tasks.Controls
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridViewComboBoxColumn COL_LEFT;
         private System.Windows.Forms.DataGridViewComboBoxColumn COL_RIGHT;
-        private System.Windows.Forms.CheckBox chkOneToOne;
+        private System.Windows.Forms.TextBox txtRightFilter;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox txtLeftFilter;
+        private System.Windows.Forms.Label label20;
 
     }
 }

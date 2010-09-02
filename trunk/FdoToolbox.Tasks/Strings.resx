@@ -151,6 +151,9 @@
   <data name="ERR_CLASS_NOT_FOUND" xml:space="preserve">
     <value>Class {0} not found in schema {1}</value>
   </data>
+  <data name="ERR_MERGED_CLASS_DUPLICATE_PROPERTY" xml:space="preserve">
+    <value>Merged class will have duplicate property named: {0}. Either uncheck this property or specify a prefix on the left or right side to differentiate these property names</value>
+  </data>
   <data name="ERR_NO_EDITOR_FOR_TASK" xml:space="preserve">
     <value>No editor specified for editing this particular task</value>
   </data>

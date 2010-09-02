@@ -18,6 +18,7 @@
             <xs:element name="Class" type="xs:string" minOccurs="1" maxOccurs="1" />
             <xs:element name="PropertyList" type="PropertyList" minOccurs="1" maxOccurs="1" />
             <xs:element name="Prefix" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="Filter" type="xs:string" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="PropertyList">
@@ -35,9 +36,7 @@
     </xs:complexType>
     <xs:complexType name="FdoJoinSettings">
         <xs:sequence>
-            <xs:element name="ForceOneToOne" type="xs:boolean" minOccurs="1" maxOccurs="1" />
             <xs:element name="JoinType" type="JoinType" minOccurs="1" maxOccurs="1" />
-            <xs:element name="SpatialPredicate" type="SpatialPredicate" minOccurs="0" maxOccurs="1" />
             <xs:element name="DesignatedGeometry" type="FdoDesignatedGeometry" minOccurs="0" maxOccurs="1" />
             <xs:element name="JoinKeys" type="JoinKeyList" minOccurs="0" maxOccurs="1" />
         </xs:sequence>

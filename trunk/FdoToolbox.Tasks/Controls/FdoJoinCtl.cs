@@ -36,6 +36,8 @@ using FdoToolbox.Tasks.Services;
 using FdoToolbox.Core.ETL.Operations;
 using FdoToolbox.Base.Controls;
 using FdoToolbox.Core.Feature;
+using FdoToolbox.Base.Forms;
+using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Tasks.Controls
 {
@@ -119,11 +121,6 @@ namespace FdoToolbox.Tasks.Controls
         public Array JoinTypes
         {
             set { cmbJoinTypes.DataSource = value; }
-        }
-
-        public Array SpatialPredicates
-        {
-            set { cmbSpatialPredicate.DataSource = value; }
         }
 
         public FdoJoinType SelectedJoinType
@@ -304,32 +301,6 @@ namespace FdoToolbox.Tasks.Controls
             }
         }
 
-        public bool SpatialPredicateEnabled
-        {
-            get
-            {
-                //return cmbSpatialPredicate.Enabled;
-                return chkJoinPredicate.Checked;
-            }
-            set
-            {
-                //cmbSpatialPredicate.Enabled = value;
-                chkJoinPredicate.Checked = value;
-            }
-        }
-
-        public OSGeo.FDO.Filter.SpatialOperations SelectedSpatialPredicate
-        {
-            get
-            {
-                return (OSGeo.FDO.Filter.SpatialOperations)cmbSpatialPredicate.SelectedItem;
-            }
-            set
-            {
-                cmbSpatialPredicate.SelectedItem = value;
-            }
-        }
-
         public void ClearJoins()
         {
             grdJoin.Rows.Clear();
@@ -434,14 +405,16 @@ namespace FdoToolbox.Tasks.Controls
             set { txtTargetClass.Text = value; }
         }
 
-        private void chkJoinPredicate_CheckedChanged(object sender, EventArgs e)
-        {
-            _presenter.JoinPredicateCheckChanged();
-        }
-
         private void chkGeometryProperty_CheckedChanged(object sender, EventArgs e)
         {
             _presenter.GeometryPropertyCheckChanged();
+            if (chkGeometryProperty.Checked)
+            {
+                if (rdLeftGeom.Checked)
+                    rdLeftGeom_CheckedChanged(this, EventArgs.Empty);
+                else if (rdRightGeom.Checked)
+                    rdRightGeom_CheckedChanged(this, EventArgs.Empty);
+            }
         }
 
         public string LeftPrefix
@@ -461,12 +434,6 @@ namespace FdoToolbox.Tasks.Controls
             get { return chkGeometryProperty.Checked; }
             set { chkGeometryProperty.Checked = value; }
         }
-
-        public bool SpatialPredicateListEnabled
-        {
-            set { cmbSpatialPredicate.Enabled = value; }
-        }
-
 
         public bool LeftGeometryEnabled
         {
@@ -526,13 +493,6 @@ namespace FdoToolbox.Tasks.Controls
                 grdJoin.Rows.RemoveAt(rowIndex);
         }
 
-
-        public bool ForceOneToOne
-        {
-            get { return chkOneToOne.Checked; }
-            set { chkOneToOne.Checked = value; }
-        }
-
         public bool DependsOnConnection(FdoToolbox.Core.Feature.FdoConnection conn)
         {
             IFdoConnectionManager connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
@@ -571,6 +531,92 @@ namespace FdoToolbox.Tasks.Controls
                 if (idx >= 0)
                     chkRightProperties.SetItemChecked(idx, true);
             }
+        }
+
+        private void rdLeftGeom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdLeftGeom.Checked)
+            {
+                int idx = chkLeftProperties.Items.IndexOf(rdLeftGeom.Text);
+                if (idx >= 0)
+                    chkLeftProperties.SetItemChecked(idx, true);
+            }
+        }
+
+        private void rdRightGeom_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdRightGeom.Checked)
+            {
+                int idx = chkRightProperties.Items.IndexOf(rdRightGeom.Text);
+                if (idx >= 0)
+                    chkRightProperties.SetItemChecked(idx, true);
+            }
+        }
+
+        private void PromptLeftFilter()
+        {
+            var connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+            var conn = connMgr.GetConnection(this.SelectedLeftConnection);
+
+            using (var svc = conn.CreateFeatureService())
+            {
+                using (ClassDefinition cd = svc.GetClassByName(this.SelectedLeftSchema, this.SelectedLeftClass))
+                {
+                    var expr = ExpressionEditor.EditExpression(conn, cd, txtLeftFilter.Text, ExpressionMode.Filter);
+                    if (expr != null)
+                        txtLeftFilter.Text = expr;
+                }
+            }
+        }
+
+        private void PromptRightFilter()
+        {
+            var connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+            var conn = connMgr.GetConnection(this.SelectedRightConnection);
+
+            using (var svc = conn.CreateFeatureService())
+            {
+                using (ClassDefinition cd = svc.GetClassByName(this.SelectedRightSchema, this.SelectedRightClass))
+                {
+                    var expr = ExpressionEditor.EditExpression(conn, cd, txtRightFilter.Text, ExpressionMode.Filter);
+                    if (expr != null)
+                        txtRightFilter.Text = expr;
+                }
+            }
+        }
+
+        public string LeftFilter
+        {
+            get
+            {
+                return txtLeftFilter.Text;
+            }
+            set
+            {
+                txtLeftFilter.Text = value;
+            }
+        }
+
+        public string RightFilter
+        {
+            get
+            {
+                return txtRightFilter.Text;
+            }
+            set
+            {
+                txtRightFilter.Text = value;
+            }
+        }
+
+        private void txtLeftFilter_Click(object sender, EventArgs e)
+        {
+            PromptLeftFilter();
+        }
+
+        private void txtRightFilter_Click(object sender, EventArgs e)
+        {
+            PromptRightFilter();
         }
     }
 }
