@@ -177,7 +177,7 @@ namespace FdoToolbox.Core.Utility
                     t = typeof(DateTime);
                     break;
                 case DataType.DataType_Decimal:
-                    t = typeof(decimal);
+                    t = typeof(double); //FDO coerces decimals to doubles (otherwise why is there not a GetDecimal() method in FdoIReader?)
                     break;
                 case DataType.DataType_Double:
                     t = typeof(double);

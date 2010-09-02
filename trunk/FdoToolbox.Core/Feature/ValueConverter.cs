@@ -54,7 +54,7 @@ namespace FdoToolbox.Core.Feature
                 case DataType.DataType_DateTime:
                     return FdoPropertyType.DateTime;
                 case DataType.DataType_Decimal:
-                    return FdoPropertyType.Decimal;
+                    return FdoPropertyType.Double; //FDO coerces decimals to doubles (otherwise, why is there not a GetDecimal() method in FdoIReader?)
                 case DataType.DataType_Double:
                     return FdoPropertyType.Double;
                 case DataType.DataType_Int16:

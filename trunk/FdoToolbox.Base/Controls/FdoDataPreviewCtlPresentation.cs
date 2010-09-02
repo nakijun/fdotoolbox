@@ -241,24 +241,41 @@ namespace FdoToolbox.Base.Controls
                                         feat[name] = reader.GetLOB(name).Data;
                                         break;
                                     case FdoPropertyType.DateTime:
-                                        feat[name] = reader.GetDateTime(name);
+                                        {
+                                            try
+                                            {
+                                                feat[name] = reader.GetDateTime(name);
+                                            }
+                                            catch //Unrepresentable dates
+                                            {
+                                                feat[name] = DBNull.Value;
+                                            }
+                                        }
                                         break;
-                                    case FdoPropertyType.Decimal:
-                                        feat[name] = reader.GetDouble(name);
+                                    case FdoPropertyType.Decimal: //We should probably remove this as FDO coerces decimals to doubles (otherwise why is there not a GetDecimal() method in FdoIReader?)
+                                        {
+                                            double val = reader.GetDouble(name);
+                                            if (Double.IsNaN(val))
+                                                feat[name] = DBNull.Value;
+                                            else
+                                                feat[name] = Convert.ToDecimal(val);
+                                        }
                                         break;
                                     case FdoPropertyType.Double:
                                         feat[name] = reader.GetDouble(name);
                                         break;
                                     case FdoPropertyType.Geometry:
-                                        try
                                         {
-                                            byte[] fgf = reader.GetGeometry(name);
-                                            OSGeo.FDO.Geometry.IGeometry geom = service.GeometryFactory.CreateGeometryFromFgf(fgf);
-                                            feat[name] = new FdoGeometry(geom);
-                                        }
-                                        catch
-                                        {
-                                            feat[name] = DBNull.Value;
+                                            try
+                                            {
+                                                byte[] fgf = reader.GetGeometry(name);
+                                                OSGeo.FDO.Geometry.IGeometry geom = service.GeometryFactory.CreateGeometryFromFgf(fgf);
+                                                feat[name] = new FdoGeometry(geom);
+                                            }
+                                            catch
+                                            {
+                                                feat[name] = DBNull.Value;
+                                            }
                                         }
                                         break;
                                     case FdoPropertyType.Int16:
