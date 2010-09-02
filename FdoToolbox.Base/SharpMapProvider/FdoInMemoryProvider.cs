@@ -105,18 +105,27 @@ namespace FdoToolbox.Base.SharpMapProvider
                     if (geom.Contains(env) || geom.Intersects(poly))
                     {
                         FeatureDataRow row = table.NewRow();
+                        bool add = true;
                         foreach (DataColumn col in _data.Columns)
                         {
                             if (col.ColumnName == _data.GeometryColumn)
                             {
-                                row.Geometry = Converter.FromFdoGeometry(geom, _geomFactory);
+                                try
+                                {
+                                    row.Geometry = Converter.FromFdoGeometry(geom, _geomFactory);
+                                }
+                                catch //Can't help you if you fail conversion.
+                                {
+                                    add = false;
+                                }
                             }
                             else
                             {
                                 row[col.ColumnName] = feat[col.ColumnName];
                             }
                         }
-                        table.AddRow(row);
+                        if (add)
+                            table.AddRow(row);
                     }
                 }
             }

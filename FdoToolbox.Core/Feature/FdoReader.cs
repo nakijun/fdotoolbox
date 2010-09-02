@@ -93,7 +93,14 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public double GetDouble(string name)
         {
-            return _internalReader.GetDouble(name);
+            try
+            {
+                return _internalReader.GetDouble(name);
+            }
+            catch
+            {
+                return double.NaN;
+            }
         }
 
         /// <summary>
@@ -173,7 +180,14 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public float GetSingle(string name)
         {
-            return _internalReader.GetSingle(name);
+            try
+            {
+                return _internalReader.GetSingle(name);
+            }
+            catch 
+            {
+                return float.NaN;
+            }
         }
 
         /// <summary>
@@ -488,8 +502,14 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public double GetDouble(int i)
         {
-            //return _internalReader.GetDouble(GetName(i));
-            return _internalReader.GetDouble(i);
+            try
+            {
+                return _internalReader.GetDouble(i);
+            }
+            catch
+            {
+                return double.NaN;
+            }
         }
 
         /// <summary>
@@ -512,8 +532,14 @@ namespace FdoToolbox.Core.Feature
         /// <exception cref="T:System.IndexOutOfRangeException">The index passed was outside the range of 0 through <see cref="P:System.Data.IDataRecord.FieldCount"/>. </exception>
         public float GetFloat(int i)
         {
-            //return _internalReader.GetSingle(GetName(i));
-            return _internalReader.GetSingle(i);
+            try
+            {
+                return _internalReader.GetSingle(i);
+            }
+            catch
+            {
+                return float.NaN;
+            }
         }
 
         /// <summary>
@@ -766,7 +792,14 @@ namespace FdoToolbox.Core.Feature
 
         public float GetSingle(int index)
         {
-            return _internalReader.GetSingle(index);
+            try
+            {
+                return _internalReader.GetSingle(index);
+            }
+            catch
+            {
+                return float.NaN;
+            }
         }
 
         public bool IsNull(int index)
