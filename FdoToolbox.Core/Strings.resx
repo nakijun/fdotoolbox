@@ -165,6 +165,12 @@
   <data name="ERR_INSERT" xml:space="preserve">
     <value>Error inserting new feature</value>
   </data>
+  <data name="ERR_INVALID_LEFT_FILTER" xml:space="preserve">
+    <value>Left join source filter is not valid: {0}</value>
+  </data>
+  <data name="ERR_INVALID_RIGHT_FILTER" xml:space="preserve">
+    <value>Right join source filter is not valid: {1}</value>
+  </data>
   <data name="ERR_JOIN_KEYS_UNDEFINED" xml:space="preserve">
     <value>No properties defined to join both left and right sides on.</value>
   </data>

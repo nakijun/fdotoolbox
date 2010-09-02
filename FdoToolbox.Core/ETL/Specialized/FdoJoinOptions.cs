@@ -114,6 +114,16 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// </summary>
         public FdoSource Target { get { return _Target; } }
 
+        /// <summary>
+        /// Gets or sets the filter for the left source
+        /// </summary>
+        public string LeftFilter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filter for the right source
+        /// </summary>
+        public string RightFilter { get; set; }
+
         private string _LeftPrefix;
 
         /// <summary>
@@ -227,18 +237,6 @@ namespace FdoToolbox.Core.ETL.Specialized
             _Target = new FdoSource(conn, schemaName, className);
         }
 
-        private SpatialOperations? _SpatialJoinPredicate;
-
-        /// <summary>
-        /// Gets or sets the spatial join predicate. This only applies if both sides of
-        /// the join have geometric properties
-        /// </summary>
-        public SpatialOperations? SpatialJoinPredicate
-        {
-            get { return _SpatialJoinPredicate; }
-            set { _SpatialJoinPredicate = value; }
-        }
-	
         /// <summary>
         /// Creates the query for the left side of the join
         /// </summary>
@@ -272,19 +270,6 @@ namespace FdoToolbox.Core.ETL.Specialized
             set { _GeometryProperty = value; }
         }
 
-        private bool _ForceOneToOne;
-
-        /// <summary>
-        /// If true, will only merge the left side with the first matching result
-        /// on the right side. Otherwise, all matching results on the right side
-        /// are merged.
-        /// </summary>
-        public bool ForceOneToOne
-        {
-            get { return _ForceOneToOne; }
-            set { _ForceOneToOne = value; }
-        }
-
         /// <summary>
         /// Validates these options
         /// </summary>
@@ -302,7 +287,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             if (string.IsNullOrEmpty(_Target.ClassName))
                 throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_TARGET_CLASS_UNDEFINED"));
 
-            if (this.JoinPairs.Count == 0 && !this.SpatialJoinPredicate.HasValue)
+            if (this.JoinPairs.Count == 0)
                 throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_KEYS_UNDEFINED"));
 
             int count = this.LeftProperties.Count + this.RightProperties.Count;
@@ -316,6 +301,32 @@ namespace FdoToolbox.Core.ETL.Specialized
                 //If all properties are unique then the counts should be the same
                 if (set.Count < count)
                     throw new TaskValidationException(ResourceUtil.GetString("ERR_JOIN_PROPERTY_NAME_COLLISION"));
+            }
+
+            //Verify left source filter checks out
+            if (!string.IsNullOrEmpty(this.LeftFilter))
+            {
+                try
+                {
+                    using (var filter = Filter.Parse(this.LeftFilter)) { }
+                }
+                catch
+                {
+                    throw new TaskValidationException(ResourceUtil.GetStringFormatted("ERR_INVALID_LEFT_FILTER", this.LeftFilter));
+                }
+            }
+
+            //Verify right source filter checks out
+            if (!string.IsNullOrEmpty(this.RightFilter))
+            {
+                try
+                {
+                    using (var filter = Filter.Parse(this.RightFilter)) { }
+                }
+                catch
+                {
+                    throw new TaskValidationException(ResourceUtil.GetStringFormatted("ERR_INVALID_RIGHT_FILTER", this.LeftFilter));
+                }
             }
 
             //Create target class. The schema must already exist, but the class must *not* already exist.

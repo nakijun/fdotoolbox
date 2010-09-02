@@ -88,6 +88,9 @@ namespace FdoToolbox.Base.Controls
             }
             catch (ThreadAbortException)
             {
+                //FIXME: Sometimes this doesn't terminate cleanly. I'm guessing the proper
+                //way would be to implement a "kill switch" in EtlProcess and
+                //for this code block to flick this switch
                 Thread.ResetAbort();
             }
         }

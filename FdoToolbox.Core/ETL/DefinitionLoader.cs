@@ -503,9 +503,8 @@ namespace FdoToolbox.Core.ETL
 
             opts.LeftPrefix = def.Left.Prefix;
             opts.RightPrefix = def.Right.Prefix;
-            opts.ForceOneToOne = def.JoinSettings.ForceOneToOne;
-            if (def.JoinSettings.SpatialPredicateSpecified)
-                opts.SpatialJoinPredicate = (SpatialOperations)Enum.Parse(typeof(SpatialOperations), def.JoinSettings.SpatialPredicate.ToString());
+            opts.LeftFilter = def.Left.Filter;
+            opts.RightFilter = def.Right.Filter;
 
             return opts;
         }
