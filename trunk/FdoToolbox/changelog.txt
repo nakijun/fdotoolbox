@@ -5,9 +5,13 @@ v1.0 beta 2
 	- Express support for creating MySQL data stores
 	- Express support for creating PostgreSQL data stores
 	- New command to open current FDO directory
+	- Join Operations now use a temp SQLite data store to perform the join and to funnel data through
+	- Join Operations now support filtering on both sides of the join
 
 - Fixes:
 	- Fix "create class of same name" option not working when target schema already has classes
+	- Disable configuration section in the Generic Connect UI for providers that don't support configuration
+	- Reader fixes for decimal properties
 
 v1.0 beta 1
 -----------
