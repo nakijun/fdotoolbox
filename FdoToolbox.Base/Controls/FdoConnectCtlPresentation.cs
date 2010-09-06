@@ -31,6 +31,7 @@ using FdoToolbox.Core.Connections;
 using FdoToolbox.Core;
 using FdoToolbox.Base.Forms;
 using FdoToolbox.Base.Services;
+using OSGeo.FDO.ClientServices;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -131,6 +132,11 @@ namespace FdoToolbox.Base.Controls
                             _view.AddProperty(p);
                         }
                     }
+                }
+
+                using (var conn = FeatureAccessManager.GetConnectionManager().CreateConnection(prov.Name))
+                {
+                    _view.ConfigEnabled = conn.ConnectionCapabilities.SupportsConfiguration();
                 }
             }
         }
