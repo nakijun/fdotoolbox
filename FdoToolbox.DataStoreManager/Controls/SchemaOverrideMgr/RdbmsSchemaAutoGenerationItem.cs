@@ -25,7 +25,7 @@ using System.Text;
 using Rdbms = OSGeo.FDO.Providers.Rdbms.Override;
 using OSGeo.FDO.Common;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class RdbmsSchemaAutoGenerationItem : NotifyPropertyChanged
     {

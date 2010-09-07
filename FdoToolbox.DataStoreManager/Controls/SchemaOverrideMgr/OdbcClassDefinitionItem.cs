@@ -26,7 +26,7 @@ using Rdbms = OSGeo.FDO.Providers.Rdbms.Override;
 using Odbc = OSGeo.FDO.Providers.Rdbms.Override.ODBC;
 using System.ComponentModel;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class OdbcClassDefinitionItem : RdbmsClassDefinitionItem<Odbc.OvClassDefinition>
     {

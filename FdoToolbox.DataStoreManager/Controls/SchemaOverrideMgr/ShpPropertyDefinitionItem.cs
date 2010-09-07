@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 using Shp = OSGeo.FDO.Providers.SHP.Override;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class ShpPropertyDefinitionItem : PhysicalElementMappingItem<Shp.PropertyDefinition>
     {

@@ -26,7 +26,7 @@ using Rdbms = OSGeo.FDO.Providers.Rdbms.Override;
 using MySql = OSGeo.FDO.Providers.Rdbms.Override.MySQL;
 using System.ComponentModel;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class MySqlClassDefinitionItem : RdbmsClassDefinitionItem<MySql.OvClassDefinition>
     {

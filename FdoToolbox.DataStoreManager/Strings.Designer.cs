@@ -79,6 +79,24 @@ namespace FdoToolbox.DataStoreManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data Store Editor.
+        /// </summary>
+        internal static string TITLE_DATA_STORE {
+            get {
+                return ResourceManager.GetString("TITLE_DATA_STORE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Store Editor (Standalone).
+        /// </summary>
+        internal static string TITLE_DATA_STORE_STANDALONE {
+            get {
+                return ResourceManager.GetString("TITLE_DATA_STORE_STANDALONE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schema Overrides.
         /// </summary>
         internal static string TITLE_SCHEMA_OVERRIDES {

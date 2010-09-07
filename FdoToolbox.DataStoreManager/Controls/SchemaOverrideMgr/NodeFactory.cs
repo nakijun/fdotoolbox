@@ -28,7 +28,7 @@ using OSGeo.FDO.ClientServices;
 using ICSharpCode.Core;
 using System.Windows.Forms;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class NodeFactory
     {

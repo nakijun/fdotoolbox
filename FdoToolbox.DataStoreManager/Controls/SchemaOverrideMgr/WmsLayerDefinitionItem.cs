@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 using Wms = OSGeo.FDO.Providers.WMS.Override;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class WmsLayerDefinitionItem : PhysicalElementMappingItem<Wms.OvLayerDefinition>
     {

@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 using Sql = OSGeo.FDO.Providers.Rdbms.Override.SQLServerSpatial;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class SqlServerObjectPropertyDefinitionItem : RdbmsObjectPropertyDefinitionItem<Sql.OvObjectPropertyDefinition>
     {

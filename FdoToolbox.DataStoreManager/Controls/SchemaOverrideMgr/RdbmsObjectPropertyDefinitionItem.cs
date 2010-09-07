@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 using Rdbms = OSGeo.FDO.Providers.Rdbms.Override;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public abstract class RdbmsObjectPropertyDefinitionItem<T> : RdbmsPropertyDefinitionItem<T> where T : Rdbms.OvObjectPropertyDefinition
     {

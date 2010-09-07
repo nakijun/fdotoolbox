@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 using Odbc = OSGeo.FDO.Providers.Rdbms.Override.ODBC;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class OdbcGeometricPropertyDefinitionItem : RdbmsGeometricPropertyDefinitionItem<Odbc.OvGeometricPropertyDefinition>
     {

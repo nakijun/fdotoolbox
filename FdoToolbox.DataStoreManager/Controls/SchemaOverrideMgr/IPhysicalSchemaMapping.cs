@@ -25,7 +25,7 @@ using System.Text;
 using OSGeo.FDO.Commands.Schema;
 using OSGeo.FDO.Connections;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public interface IPhysicalSchemaMapping
     {

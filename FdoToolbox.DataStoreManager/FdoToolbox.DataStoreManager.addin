@@ -32,6 +32,14 @@
         <Class id="Startup" class="FdoToolbox.DataStoreManager.Commands.StartupCommand" />
     </Path>
 
+    <Path name="/Workspace/Tools">
+        <MenuItem id="SchemaEditor"
+                  insertafter="CoordSysCatalog"
+                  label="${res:CMD_SchemaEditor}"
+                  icon="chart_organisation"
+                  class="FdoToolbox.DataStoreManager.Commands.SchemaEditorCommand" />
+    </Path>
+
     <!-- Toolbar definition -->
     <Path name="/Workbench/Toolbar">
         <ToolbarItem id="SchemaEditor"
@@ -53,20 +61,16 @@
                       icon="chart_organisation"
                       class="FdoToolbox.DataStoreManager.Commands.CreateSchemaCommand" />
         </Condition>
-        <Condition action="Disable" name="SupportsSchemaMappings">
-            <MenuItem id="ManageSchemaMappings"
-                      label="${res:CMD_ManageSchemaMappings}"
-                      class="FdoToolbox.DataStoreManager.Commands.ManageSchemaMappingsCommand" />
-        </Condition>
-    </Path>
-
-    <Path name="/ObjectExplorer/ContextMenus/SelectedSchema">
         <Condition name="CommandSupported" command="ApplySchema" action="Disable">
             <MenuItem id="ManageSchema"
                       label="${res:CMD_EditSchema}"
                       icon="chart_organisation"
                       class="FdoToolbox.DataStoreManager.Commands.EditSchemaCommand"></MenuItem>
         </Condition>
+    </Path>
+
+    <Path name="/ObjectExplorer/ContextMenus/SelectedSchema">
+        
     </Path>
 
     <!-- Application Console toolbar definition -->

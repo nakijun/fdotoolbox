@@ -25,9 +25,9 @@ using System.Text;
 using OSGeo.FDO.Commands.Schema;
 using System.ComponentModel;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
-    public abstract class PhysicalElementMappingItem<T> : DesignTimeWrapper<T> where T : PhysicalElementMapping
+    public abstract class PhysicalElementMappingItem<T> : DesignTimeWrapper<T>, FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr.IPhysicalElementMappingItem where T : PhysicalElementMapping
     {
         protected PhysicalElementMappingItem(T value)
             : base(value)

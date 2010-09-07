@@ -25,7 +25,7 @@ using System.Text;
 using Odbc = OSGeo.FDO.Providers.Rdbms.Override.ODBC;
 using System.ComponentModel;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     [TypeConverter(typeof(OdbcColumnTypeConverter))]
     public class OdbcColumnItem : RdbmsColumnItem<Odbc.OvColumn>
