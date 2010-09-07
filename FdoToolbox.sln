@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoUtil", "FdoUtil\FdoUtil.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Raster", "FdoToolbox.Raster\FdoToolbox.Raster.csproj", "{C6D1F465-958B-4C6A-8514-1E413B81A18E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.OverrideManager", "FdoToolbox.OverrideManager\FdoToolbox.OverrideManager.csproj", "{9EE614F6-AE3F-499D-8A5F-7C87C62654AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.DataStoreManager", "FdoToolbox.DataStoreManager\FdoToolbox.DataStoreManager.csproj", "{9EE614F6-AE3F-499D-8A5F-7C87C62654AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

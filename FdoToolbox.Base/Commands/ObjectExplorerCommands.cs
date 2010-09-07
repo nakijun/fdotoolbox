@@ -382,34 +382,6 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    internal class EditSchemaCommand : AbstractMenuCommand
-    {
-        public override void Run()
-        {
-            Workbench wb = Workbench.Instance;
-            TreeNode connNode = null;
-            TreeNode node = wb.ObjectExplorer.GetSelectedNode();
-            if(node.Level == 2)
-            {
-                connNode = node.Parent;
-                string name = connNode.Name;
-                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-                FdoConnection conn = mgr.GetConnection(name);
-
-                if (conn != null)
-                {
-                    FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl(conn, node.Name);
-                    ctl.SchemaApplied += delegate
-                    {
-                        mgr.RefreshConnection(name);
-                    };
-                    
-                    wb.ShowContent(ctl, ViewRegion.Document);
-                }
-            }
-        }
-    }
-
     internal class ManageSpatialContextsCommand : AbstractMenuCommand
     {
         public override void Run()
@@ -445,32 +417,6 @@ namespace FdoToolbox.Base.Commands
                     FdoConnection conn = mgr.GetConnection(node.Name);
 
                     FdoDataStoreMgrCtl ctl = new FdoDataStoreMgrCtl(conn);
-                    
-                    wb.ShowContent(ctl, ViewRegion.Document);
-                }
-            }
-        }
-    }
-
-    internal class CreateSchemaCommand : AbstractMenuCommand
-    {
-        public override void Run()
-        {
-            Workbench wb = Workbench.Instance;
-            TreeNode node = wb.ObjectExplorer.GetSelectedNode();
-            if (node.Level == 1)
-            {
-                string name = node.Name;
-                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-                FdoConnection conn = mgr.GetConnection(name);
-
-                if (conn != null)
-                {
-                    FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl(conn);
-                    ctl.SchemaApplied += delegate
-                    {
-                        mgr.RefreshConnection(name);
-                    };
                     
                     wb.ShowContent(ctl, ViewRegion.Document);
                 }

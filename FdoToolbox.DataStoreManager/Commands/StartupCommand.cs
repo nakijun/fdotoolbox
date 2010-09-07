@@ -19,38 +19,22 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Text;
 using ICSharpCode.Core;
-using FdoToolbox.Base.Controls;
+using FdoToolbox.Core;
+using FdoToolbox.Base;
+using FdoToolbox.Base.Services;
 
-namespace FdoToolbox.Base.Commands
+namespace FdoToolbox.DataStoreManager.Commands
 {
-    internal class CoordSysCatalogCommand : AbstractMenuCommand
+    public class StartupCommand : AbstractCommand
     {
         public override void Run()
         {
-            Workbench wb = Workbench.Instance;
-            if (wb != null)
-            {
-                CoordSysCatalog cat = new CoordSysCatalog();
-                wb.ShowContent(cat, ViewRegion.Document);
-            }
-        }
-    }
-
-    internal class PreferencesCommand : AbstractMenuCommand
-    {
-        public override void Run()
-        {
-            Workbench wb = Workbench.Instance;
-            if (wb != null)
-            {
-                PreferencesCtl ctl = new PreferencesCtl();
-                wb.ShowContent(ctl, ViewRegion.Dialog);
-            }
+            ResourceService.RegisterNeutralStrings(FdoToolbox.DataStoreManager.Strings.ResourceManager);
+            ResourceService.RegisterNeutralImages(FdoToolbox.DataStoreManager.Images.ResourceManager);
         }
     }
 }

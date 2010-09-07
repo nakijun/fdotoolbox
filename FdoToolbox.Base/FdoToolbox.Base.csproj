@@ -276,13 +276,6 @@
     <Compile Include="Controls\FdoMapPreviewPresenter.cs" />
     <Compile Include="Controls\FdoObjectExplorerExtender.cs" />
     <Compile Include="Controls\FdoRegProviderCtlPresentation.cs" />
-    <Compile Include="Controls\FdoSchemaDesignerCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\FdoSchemaDesignerCtl.Designer.cs">
-      <DependentUpon>FdoSchemaDesignerCtl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\FdoSchemaDesignerPresenter.cs" />
     <Compile Include="Controls\FdoSpatialContextMgrCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -350,49 +343,6 @@
     <Compile Include="Controls\PreferenceSheets\ScriptPreferencesCtl.Designer.cs">
       <DependentUpon>ScriptPreferencesCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SchemaDesigner\AssociationPropertyDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\ClassDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\ClassDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\DataPropertyDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\FeatureClassDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\FeatureSchemaDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\GeometricPropertyDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\GeometryPropertyLookupEditor.cs" />
-    <Compile Include="Controls\SchemaDesigner\GeometryTypeCtl.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\GeometryTypeCtl.Designer.cs">
-      <DependentUpon>GeometryTypeCtl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\GeometryTypeEditor.cs" />
-    <Compile Include="Controls\SchemaDesigner\ListConstraintSettingsCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\ListConstraintSettingsCtl.Designer.cs">
-      <DependentUpon>ListConstraintSettingsCtl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\ObjectPropertyDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\PropertyDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\RangeConstraintSettingsCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\RangeConstraintSettingsCtl.Designer.cs">
-      <DependentUpon>RangeConstraintSettingsCtl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\SpatialContextAssociationEditor.cs" />
-    <Compile Include="Controls\SchemaDesigner\UniqueConstraintDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\UniqueConstraintDialog.Designer.cs">
-      <DependentUpon>UniqueConstraintDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\ValueConstraintDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\ValueConstraintDialog.Designer.cs">
-      <DependentUpon>ValueConstraintDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SchemaDesigner\ValueConstraintEditor.cs" />
     <Compile Include="Controls\TempCursor.cs" />
     <Compile Include="Controls\TextBoxAppender.cs" />
     <Compile Include="Controls\TextEditor.cs">
@@ -517,7 +467,6 @@
     <Compile Include="Services\DragDropHandlerService.cs" />
     <Compile Include="Services\DragDropHandlers\ConnectionFileHandler.cs" />
     <Compile Include="Services\DragDropHandlers\IDragDropHandler.cs" />
-    <Compile Include="Services\DragDropHandlers\SchemaFileHandler.cs" />
     <Compile Include="Services\IDragDropHandlerService.cs" />
     <Compile Include="Services\ManagerBase.cs" />
     <Compile Include="Services\NamingService.cs" />
@@ -698,10 +647,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>FdoRegProviderCtl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FdoSchemaDesignerCtl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FdoSchemaDesignerCtl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoSpatialContextMgrCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoSpatialContextMgrCtl.cs</DependentUpon>
@@ -729,26 +674,6 @@
     <EmbeddedResource Include="Controls\PreferenceSheets\ScriptPreferencesCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ScriptPreferencesCtl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SchemaDesigner\GeometryTypeCtl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>GeometryTypeCtl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SchemaDesigner\ListConstraintSettingsCtl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ListConstraintSettingsCtl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SchemaDesigner\RangeConstraintSettingsCtl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>RangeConstraintSettingsCtl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SchemaDesigner\UniqueConstraintDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>UniqueConstraintDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SchemaDesigner\ValueConstraintDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ValueConstraintDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutDialog.resx">
       <SubType>Designer</SubType>
