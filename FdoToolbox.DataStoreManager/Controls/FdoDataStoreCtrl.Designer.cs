@@ -29,23 +29,23 @@
         private void InitializeComponent()
         {
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.schemaView = new FdoToolbox.DataStoreManager.Controls.FdoSchemaView();
-            this.spatialContextView = new FdoToolbox.DataStoreManager.Controls.FdoSpatialContextView();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnImport = new System.Windows.Forms.ToolStripButton();
             this.btnExport = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnSaveXmlConfig = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.sDFFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sQLiteFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSaveSdf = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSaveSqlite = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnApply = new System.Windows.Forms.ToolStripDropDownButton();
-            this.featureSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.allFeatureSchemaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.spatialContextsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSaveSelectedSchema = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSaveAllSchemas = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSaveSpatialContexts = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.everythingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSaveEverything = new System.Windows.Forms.ToolStripMenuItem();
             this.btnReload = new System.Windows.Forms.ToolStripButton();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.schemaView = new FdoToolbox.DataStoreManager.Controls.FdoSchemaView();
+            this.spatialContextView = new FdoToolbox.DataStoreManager.Controls.FdoSpatialContextView();
             this.toolStrip1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -66,6 +66,130 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // btnImport
+            // 
+            this.btnImport.Image = global::FdoToolbox.DataStoreManager.Images.folder;
+            this.btnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnImport.Name = "btnImport";
+            this.btnImport.Size = new System.Drawing.Size(63, 22);
+            this.btnImport.Text = "Import";
+            this.btnImport.ToolTipText = "Import an existing XML configuration";
+            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnSaveXmlConfig,
+            this.toolStripSeparator1,
+            this.btnSaveSdf,
+            this.btnSaveSqlite});
+            this.btnExport.Image = global::FdoToolbox.DataStoreManager.Images.disk;
+            this.btnExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(69, 22);
+            this.btnExport.Text = "Export";
+            // 
+            // btnSaveXmlConfig
+            // 
+            this.btnSaveXmlConfig.Image = global::FdoToolbox.DataStoreManager.Images.page_white_code;
+            this.btnSaveXmlConfig.Name = "btnSaveXmlConfig";
+            this.btnSaveXmlConfig.Size = new System.Drawing.Size(234, 22);
+            this.btnSaveXmlConfig.Text = "XML Configuration Document";
+            this.btnSaveXmlConfig.ToolTipText = "Export this current configuration to a XML file";
+            this.btnSaveXmlConfig.Click += new System.EventHandler(this.btnSaveXmlConfig_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(231, 6);
+            // 
+            // btnSaveSdf
+            // 
+            this.btnSaveSdf.Image = global::FdoToolbox.DataStoreManager.Images.database;
+            this.btnSaveSdf.Name = "btnSaveSdf";
+            this.btnSaveSdf.Size = new System.Drawing.Size(234, 22);
+            this.btnSaveSdf.Text = "SDF File";
+            this.btnSaveSdf.ToolTipText = "Apply current schema and spatial context to a new SDF file";
+            this.btnSaveSdf.Click += new System.EventHandler(this.btnSaveSdf_Click);
+            // 
+            // btnSaveSqlite
+            // 
+            this.btnSaveSqlite.Image = global::FdoToolbox.DataStoreManager.Images.database;
+            this.btnSaveSqlite.Name = "btnSaveSqlite";
+            this.btnSaveSqlite.Size = new System.Drawing.Size(234, 22);
+            this.btnSaveSqlite.Text = "SQLite File";
+            this.btnSaveSqlite.ToolTipText = "Apply this current schema and spatial context to a SQLite file";
+            this.btnSaveSqlite.Click += new System.EventHandler(this.btnSaveSqlite_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnApply
+            // 
+            this.btnApply.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnSaveSelectedSchema,
+            this.btnSaveAllSchemas,
+            this.btnSaveSpatialContexts,
+            this.toolStripSeparator2,
+            this.btnSaveEverything});
+            this.btnApply.Image = global::FdoToolbox.DataStoreManager.Images.application_edit;
+            this.btnApply.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(67, 22);
+            this.btnApply.Text = "Apply";
+            // 
+            // btnSaveSelectedSchema
+            // 
+            this.btnSaveSelectedSchema.Image = global::FdoToolbox.DataStoreManager.Images.chart_organisation;
+            this.btnSaveSelectedSchema.Name = "btnSaveSelectedSchema";
+            this.btnSaveSelectedSchema.Size = new System.Drawing.Size(205, 22);
+            this.btnSaveSelectedSchema.Text = "Selected Feature Schema";
+            this.btnSaveSelectedSchema.ToolTipText = "Apply the currently selected feature schema";
+            this.btnSaveSelectedSchema.Click += new System.EventHandler(this.btnSaveSelectedSchema_Click);
+            // 
+            // btnSaveAllSchemas
+            // 
+            this.btnSaveAllSchemas.Image = global::FdoToolbox.DataStoreManager.Images.chart_organisation;
+            this.btnSaveAllSchemas.Name = "btnSaveAllSchemas";
+            this.btnSaveAllSchemas.Size = new System.Drawing.Size(205, 22);
+            this.btnSaveAllSchemas.Text = "All Feature Schemas";
+            this.btnSaveAllSchemas.ToolTipText = "Apply all feature schemas";
+            this.btnSaveAllSchemas.Click += new System.EventHandler(this.btnSaveAllSchemas_Click);
+            // 
+            // btnSaveSpatialContexts
+            // 
+            this.btnSaveSpatialContexts.Image = global::FdoToolbox.DataStoreManager.Images.world;
+            this.btnSaveSpatialContexts.Name = "btnSaveSpatialContexts";
+            this.btnSaveSpatialContexts.Size = new System.Drawing.Size(205, 22);
+            this.btnSaveSpatialContexts.Text = "Spatial Contexts";
+            this.btnSaveSpatialContexts.ToolTipText = "Apply all spatial contexts";
+            this.btnSaveSpatialContexts.Click += new System.EventHandler(this.btnSaveSpatialContexts_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(202, 6);
+            // 
+            // btnSaveEverything
+            // 
+            this.btnSaveEverything.Image = global::FdoToolbox.DataStoreManager.Images.disk_multiple;
+            this.btnSaveEverything.Name = "btnSaveEverything";
+            this.btnSaveEverything.Size = new System.Drawing.Size(205, 22);
+            this.btnSaveEverything.Text = "Everything";
+            this.btnSaveEverything.ToolTipText = "Apply all feature schemas and spatial contexts";
+            this.btnSaveEverything.Click += new System.EventHandler(this.btnSaveEverything_Click);
+            // 
+            // btnReload
+            // 
+            this.btnReload.Image = global::FdoToolbox.DataStoreManager.Images.arrow_refresh;
+            this.btnReload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnReload.Name = "btnReload";
+            this.btnReload.Size = new System.Drawing.Size(63, 22);
+            this.btnReload.Text = "Reload";
+            this.btnReload.ToolTipText = "Reloads all schemas, mappings and spatial contexts from the current connection";
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -84,21 +208,22 @@
             this.splitContainer1.SplitterDistance = 292;
             this.splitContainer1.TabIndex = 1;
             // 
-            // fdoSchemaView1
+            // schemaView
             // 
             this.schemaView.CanCollapse = false;
             this.schemaView.CanExpand = false;
             this.schemaView.ContentBackgroundColor = System.Drawing.SystemColors.Control;
+            this.schemaView.Context = null;
             this.schemaView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.schemaView.HeaderBackgroundColor = System.Drawing.Color.LightSteelBlue;
             this.schemaView.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.schemaView.HeaderText = "Feature Schemas";
             this.schemaView.Location = new System.Drawing.Point(0, 0);
-            this.schemaView.Name = "fdoSchemaView1";
+            this.schemaView.Name = "schemaView";
             this.schemaView.Size = new System.Drawing.Size(596, 292);
             this.schemaView.TabIndex = 0;
             // 
-            // fdoSpatialContextView1
+            // spatialContextView
             // 
             this.spatialContextView.CanCollapse = false;
             this.spatialContextView.CanExpand = false;
@@ -108,125 +233,9 @@
             this.spatialContextView.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.spatialContextView.HeaderText = "Spatial Contexts";
             this.spatialContextView.Location = new System.Drawing.Point(0, 0);
-            this.spatialContextView.Name = "fdoSpatialContextView1";
+            this.spatialContextView.Name = "spatialContextView";
             this.spatialContextView.Size = new System.Drawing.Size(596, 104);
             this.spatialContextView.TabIndex = 0;
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // btnImport
-            // 
-            this.btnImport.Image = global::FdoToolbox.DataStoreManager.Images.folder;
-            this.btnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(63, 22);
-            this.btnImport.Text = "Import";
-            this.btnImport.ToolTipText = "Import an existing XML configuration";
-            // 
-            // btnExport
-            // 
-            this.btnExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnSaveXmlConfig,
-            this.toolStripSeparator1,
-            this.sDFFileToolStripMenuItem,
-            this.sQLiteFileToolStripMenuItem});
-            this.btnExport.Image = global::FdoToolbox.DataStoreManager.Images.disk;
-            this.btnExport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(69, 22);
-            this.btnExport.Text = "Export";
-            // 
-            // btnSaveXmlConfig
-            // 
-            this.btnSaveXmlConfig.Image = global::FdoToolbox.DataStoreManager.Images.page_white_code;
-            this.btnSaveXmlConfig.Name = "btnSaveXmlConfig";
-            this.btnSaveXmlConfig.Size = new System.Drawing.Size(234, 22);
-            this.btnSaveXmlConfig.Text = "XML Configuration Document";
-            this.btnSaveXmlConfig.ToolTipText = "Export this current configuration to a XML file";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(231, 6);
-            // 
-            // sDFFileToolStripMenuItem
-            // 
-            this.sDFFileToolStripMenuItem.Image = global::FdoToolbox.DataStoreManager.Images.database;
-            this.sDFFileToolStripMenuItem.Name = "sDFFileToolStripMenuItem";
-            this.sDFFileToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
-            this.sDFFileToolStripMenuItem.Text = "SDF File";
-            this.sDFFileToolStripMenuItem.ToolTipText = "Apply current schema and spatial context to a new SDF file";
-            // 
-            // sQLiteFileToolStripMenuItem
-            // 
-            this.sQLiteFileToolStripMenuItem.Image = global::FdoToolbox.DataStoreManager.Images.database;
-            this.sQLiteFileToolStripMenuItem.Name = "sQLiteFileToolStripMenuItem";
-            this.sQLiteFileToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
-            this.sQLiteFileToolStripMenuItem.Text = "SQLite File";
-            this.sQLiteFileToolStripMenuItem.ToolTipText = "Apply this current schema and spatial context to a SQLite file";
-            // 
-            // btnApply
-            // 
-            this.btnApply.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.featureSchemaToolStripMenuItem,
-            this.allFeatureSchemaToolStripMenuItem,
-            this.spatialContextsToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.everythingToolStripMenuItem});
-            this.btnApply.Image = global::FdoToolbox.DataStoreManager.Images.application_edit;
-            this.btnApply.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(67, 22);
-            this.btnApply.Text = "Apply";
-            // 
-            // featureSchemaToolStripMenuItem
-            // 
-            this.featureSchemaToolStripMenuItem.Image = global::FdoToolbox.DataStoreManager.Images.chart_organisation;
-            this.featureSchemaToolStripMenuItem.Name = "featureSchemaToolStripMenuItem";
-            this.featureSchemaToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.featureSchemaToolStripMenuItem.Text = "Selected Feature Schema";
-            this.featureSchemaToolStripMenuItem.ToolTipText = "Apply the currently selected feature schema";
-            // 
-            // allFeatureSchemaToolStripMenuItem
-            // 
-            this.allFeatureSchemaToolStripMenuItem.Image = global::FdoToolbox.DataStoreManager.Images.chart_organisation;
-            this.allFeatureSchemaToolStripMenuItem.Name = "allFeatureSchemaToolStripMenuItem";
-            this.allFeatureSchemaToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.allFeatureSchemaToolStripMenuItem.Text = "All Feature Schemas";
-            this.allFeatureSchemaToolStripMenuItem.ToolTipText = "Apply all feature schemas";
-            // 
-            // spatialContextsToolStripMenuItem
-            // 
-            this.spatialContextsToolStripMenuItem.Image = global::FdoToolbox.DataStoreManager.Images.world;
-            this.spatialContextsToolStripMenuItem.Name = "spatialContextsToolStripMenuItem";
-            this.spatialContextsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.spatialContextsToolStripMenuItem.Text = "Spatial Contexts";
-            this.spatialContextsToolStripMenuItem.ToolTipText = "Apply all spatial contexts";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(202, 6);
-            // 
-            // everythingToolStripMenuItem
-            // 
-            this.everythingToolStripMenuItem.Image = global::FdoToolbox.DataStoreManager.Images.disk_multiple;
-            this.everythingToolStripMenuItem.Name = "everythingToolStripMenuItem";
-            this.everythingToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.everythingToolStripMenuItem.Text = "Everything";
-            this.everythingToolStripMenuItem.ToolTipText = "Apply all feature schemas and spatial contexts";
-            // 
-            // btnReload
-            // 
-            this.btnReload.Image = global::FdoToolbox.DataStoreManager.Images.arrow_refresh;
-            this.btnReload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnReload.Name = "btnReload";
-            this.btnReload.Size = new System.Drawing.Size(63, 22);
-            this.btnReload.Text = "Reload";
-            this.btnReload.ToolTipText = "Reloads all schemas, mappings and spatial contexts from the current connection";
             // 
             // FdoDataStoreCtrl
             // 
@@ -256,13 +265,13 @@
         private System.Windows.Forms.ToolStripDropDownButton btnExport;
         private System.Windows.Forms.ToolStripMenuItem btnSaveXmlConfig;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem sDFFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sQLiteFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem btnSaveSdf;
+        private System.Windows.Forms.ToolStripMenuItem btnSaveSqlite;
         private System.Windows.Forms.ToolStripDropDownButton btnApply;
-        private System.Windows.Forms.ToolStripMenuItem featureSchemaToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allFeatureSchemaToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem spatialContextsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem everythingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem btnSaveSelectedSchema;
+        private System.Windows.Forms.ToolStripMenuItem btnSaveAllSchemas;
+        private System.Windows.Forms.ToolStripMenuItem btnSaveSpatialContexts;
+        private System.Windows.Forms.ToolStripMenuItem btnSaveEverything;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnImport;

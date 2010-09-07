@@ -35,7 +35,7 @@ using OSGeo.FDO.Commands.SpatialContext;
 
 namespace FdoToolbox.Base.Forms
 {
-    internal partial class FdoSpatialContextDialog : Form, IFdoSpatialContextDialogView
+    public partial class FdoSpatialContextDialog : Form, IFdoSpatialContextDialogView
     {
         private FdoSpatialContextDialogPresenter _presenter;
 
@@ -401,6 +401,12 @@ namespace FdoToolbox.Base.Forms
                 return sci;
             }
             return null;
+        }
+
+
+        public bool ComputeExtentsEnabled
+        {
+            set { btnComputeExtents.Enabled = value; }
         }
     }
 }

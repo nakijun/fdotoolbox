@@ -33,8 +33,8 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnImport = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnFix = new System.Windows.Forms.ToolStripButton();
             this.btnAddSchema = new System.Windows.Forms.ToolStripButton();
+            this.btnFix = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.schemaTree = new System.Windows.Forms.TreeView();
             this.imgTree = new System.Windows.Forms.ImageList(this.components);
@@ -82,15 +82,6 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // btnFix
-            // 
-            this.btnFix.Image = global::FdoToolbox.DataStoreManager.Images.wrench_orange;
-            this.btnFix.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnFix.Name = "btnFix";
-            this.btnFix.Size = new System.Drawing.Size(132, 22);
-            this.btnFix.Text = "Fix Incompatibilities";
-            this.btnFix.Click += new System.EventHandler(this.btnFix_Click);
-            // 
             // btnAddSchema
             // 
             this.btnAddSchema.Image = global::FdoToolbox.DataStoreManager.Images.chart_organisation_add;
@@ -99,6 +90,15 @@
             this.btnAddSchema.Size = new System.Drawing.Size(94, 22);
             this.btnAddSchema.Text = "Add Schema";
             this.btnAddSchema.Click += new System.EventHandler(this.btnAddSchema_Click);
+            // 
+            // btnFix
+            // 
+            this.btnFix.Image = global::FdoToolbox.DataStoreManager.Images.wrench_orange;
+            this.btnFix.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnFix.Name = "btnFix";
+            this.btnFix.Size = new System.Drawing.Size(132, 22);
+            this.btnFix.Text = "Fix Incompatibilities";
+            this.btnFix.Click += new System.EventHandler(this.btnFix_Click);
             // 
             // splitContainer1
             // 
@@ -138,7 +138,7 @@
             this.imgTree.Images.SetKeyName(2, "feature_class.png");
             this.imgTree.Images.SetKeyName(3, "key.png");
             this.imgTree.Images.SetKeyName(4, "table.png");
-            this.imgTree.Images.SetKeyName(5, "world.png");
+            this.imgTree.Images.SetKeyName(5, "shape_handles.png");
             this.imgTree.Images.SetKeyName(6, "table_relationship.png");
             this.imgTree.Images.SetKeyName(7, "package.png");
             // 

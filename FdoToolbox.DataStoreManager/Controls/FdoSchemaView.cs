@@ -38,7 +38,7 @@ namespace FdoToolbox.DataStoreManager.Controls
     {
         private FdoSchemaViewTreePresenter _presenter;
 
-        internal FdoSchemaView()
+        public FdoSchemaView()
         {
             InitializeComponent();
         }
@@ -50,6 +50,10 @@ namespace FdoToolbox.DataStoreManager.Controls
             get { return _context; }
             set
             {
+                //Stupid WinForms designer!
+                if (value == null)
+                    return;
+
                 _context = value;
                 _presenter = new FdoSchemaViewTreePresenter(this, _context);
                 this.RightPaneVisible = false;
@@ -68,6 +72,12 @@ namespace FdoToolbox.DataStoreManager.Controls
 
                 _presenter.Initialize();
             }
+        }
+
+        internal void Reset()
+        {
+            this.RightPaneVisible = false;
+            _presenter.Initialize();
         }
 
         internal bool PhysicalMappingsVisible
@@ -144,8 +154,54 @@ namespace FdoToolbox.DataStoreManager.Controls
                 _view = view;
                 _context = context;
                 _view.schemaTree.AfterSelect += new TreeViewEventHandler(OnAfterSelect);
+                _view.schemaTree.MouseDown += new MouseEventHandler(RightClickHack);
 
+                _context.SchemaAdded += new SchemaElementEventHandler<FeatureSchema>(OnSchemaAdded);
+                _context.ClassAdded += new SchemaElementEventHandler<ClassDefinition>(OnClassAdded);
+                _context.PropertyAdded += new SchemaElementEventHandler<PropertyDefinition>(OnPropertyAdded);
                 InitContextMenus();
+            }
+
+            void RightClickHack(object sender, MouseEventArgs e)
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    _view.schemaTree.SelectedNode = _view.schemaTree.GetNodeAt(e.X, e.Y);
+                }
+            }
+
+            void OnPropertyAdded(PropertyDefinition item)
+            {
+                if (item.Parent != null && item.Parent.Parent != null)
+                {
+                    string clsName = item.Parent.Name;
+                    string schName = item.Parent.Parent.Name;
+
+                    var sn = _view.schemaTree.Nodes[schName];
+                    var cn = sn.Nodes[clsName];
+
+                    var node = CreatePropertyNode(item);
+                    cn.Nodes.Add(node);
+                    cn.Expand();
+                }
+            }
+
+            void OnClassAdded(ClassDefinition item)
+            {
+                if (item.Parent != null)
+                {
+                    string schema = item.Parent.Name;
+                    var sn = _view.schemaTree.Nodes[schema];
+                    var node = CreateClassNode(item);
+                    sn.Nodes.Add(node);
+                    sn.Expand();
+                }
+            }
+
+            void OnSchemaAdded(FeatureSchema item)
+            {
+                var node = CreateSchemaNode(item);
+                _view.schemaTree.Nodes.Add(node);
             }
 
             private void InitContextMenus()
@@ -154,25 +210,65 @@ namespace FdoToolbox.DataStoreManager.Controls
                 ctxProperty = new ContextMenuStrip();
                 ctxSchema = new ContextMenuStrip();
 
+                //Schema
+                var schemaAdd = new ToolStripMenuItem("Add");
+
+                if (_context.IsSupportedClass(ClassType.ClassType_FeatureClass))
+                    schemaAdd.DropDown.Items.Add("Feature Class", ResourceService.GetBitmap("feature_class"), (s, e) => { AddClass(ClassType.ClassType_FeatureClass); });
+                if (_context.IsSupportedClass(ClassType.ClassType_Class))
+                    schemaAdd.DropDown.Items.Add("Class", ResourceService.GetBitmap("database_table"), (s, e) => { AddClass(ClassType.ClassType_Class); });
+
+                var classAdd = new ToolStripMenuItem("Add");
+
+                if (_context.IsSupportedProperty(PropertyType.PropertyType_DataProperty))
+                    classAdd.DropDown.Items.Add("Data Property", ResourceService.GetBitmap("database_table"), (s, e) => { AddProperty(PropertyType.PropertyType_DataProperty); });
+
+                if (_context.IsSupportedProperty(PropertyType.PropertyType_GeometricProperty))
+                    classAdd.DropDown.Items.Add("Geometric Property", ResourceService.GetBitmap("shape_handles"), (s, e) => { AddProperty(PropertyType.PropertyType_GeometricProperty); });
+
+                if (_context.IsSupportedProperty(PropertyType.PropertyType_AssociationProperty))
+                    classAdd.DropDown.Items.Add("Association Property", ResourceService.GetBitmap("table_relationship"), (s, e) => { AddProperty(PropertyType.PropertyType_AssociationProperty); });
+
+                if (_context.IsSupportedProperty(PropertyType.PropertyType_ObjectProperty))
+                    classAdd.DropDown.Items.Add("Object Property", ResourceService.GetBitmap("package"), (s, e) => { AddProperty(PropertyType.PropertyType_ObjectProperty); });
+
+                ctxSchema.Items.Add(schemaAdd);
+                ctxClass.Items.Add(classAdd);
+
                 //Add delete item to all
+                ctxClass.Items.Add(new ToolStripSeparator());
                 ctxClass.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteClass);
+                ctxProperty.Items.Add(new ToolStripSeparator());
                 ctxProperty.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteProperty);
+                ctxSchema.Items.Add(new ToolStripSeparator());
                 ctxSchema.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteSchema);
             }
 
             void OnDeleteClass(object sender, EventArgs e)
             {
-
+                var node = _view.schemaTree.SelectedNode;
+                if (node.Level == LEVEL_CLASS)
+                {
+                    _context.DeleteClass((ClassDefinition)node.Tag);
+                }
             }
 
             void OnDeleteProperty(object sender, EventArgs e)
             {
-
+                var node = _view.schemaTree.SelectedNode;
+                if (node.Level == LEVEL_PROPERTY)
+                {
+                    _context.DeleteProperty((PropertyDefinition)node.Tag);
+                }
             }
 
             void OnDeleteSchema(object sender, EventArgs e)
             {
-
+                var node = _view.schemaTree.SelectedNode;
+                if (node.Level == LEVEL_SCHEMA)
+                {
+                    _context.DeleteSchema((FeatureSchema)node.Tag);
+                }
             }
 
             void OnAfterSelect(object sender, TreeViewEventArgs e)
@@ -182,37 +278,41 @@ namespace FdoToolbox.DataStoreManager.Controls
                     case LEVEL_SCHEMA:
                         {
                             _view.TAB_LOGICAL.Text = "Logical Schema";
-                            var schema = (FeatureSchema)e.Node.Tag;
-                            OnSchemaSelected(schema);
+                            OnSchemaSelected(e.Node);
                         }
                         break;
                     case LEVEL_CLASS:
                         {
-                            var cls = (ClassDefinition)e.Node.Tag;
-                            OnClassSelected(cls);
+                            OnClassSelected(e.Node);
                         }
                         break;
                     case LEVEL_PROPERTY:
                         {
-                            var prop = (PropertyDefinition)e.Node.Tag;
-                            OnPropertySelected(prop);
+                            OnPropertySelected(e.Node);
                         }
                         break;
                 }
             }
 
-            private void OnPropertySelected(PropertyDefinition prop)
+            private void OnPropertySelected(TreeNode node)
             {
+                PropertyDefinition prop = (PropertyDefinition)node.Tag;
+                //C# Lambdas, making code and design compact and elegant since 2007
+                NodeUpdateHandler update = () =>
+                {
+                    node.Text = prop.Name;
+                    node.Name = prop.Name;
+                };
                 Control c = null;
                 if (prop.PropertyType == PropertyType.PropertyType_DataProperty)
                 {
                     _view.TAB_LOGICAL.Text = "Logical Data Property";
-                    c = new DataPropertyCtrl(new DataPropertyDefinitionDecorator((DataPropertyDefinition)prop), _context);
+                    c = new DataPropertyCtrl(new DataPropertyDefinitionDecorator((DataPropertyDefinition)prop), _context, update);
                 }
                 else if (prop.PropertyType == PropertyType.PropertyType_GeometricProperty)
                 {
                     _view.TAB_LOGICAL.Text = "Logical Geometric Property";
-                    c = new GeometricPropertyCtrl(new GeometricPropertyDefinitionDecorator((GeometricPropertyDefinition)prop), _context);
+                    c = new GeometricPropertyCtrl(new GeometricPropertyDefinitionDecorator((GeometricPropertyDefinition)prop), _context, update);
                 }
 
                 if (c != null)
@@ -227,18 +327,25 @@ namespace FdoToolbox.DataStoreManager.Controls
                 }
             }
 
-            private void OnClassSelected(ClassDefinition cls)
+            private void OnClassSelected(TreeNode node)
             {
+                ClassDefinition cls = (ClassDefinition)node.Tag;
+                //C# Lambdas, making code and design compact and elegant since 2007
+                NodeUpdateHandler update = () =>
+                {
+                    node.Text = cls.Name;
+                    node.Name = cls.Name;
+                };
                 Control c = null;
                 if (cls.ClassType == ClassType.ClassType_Class)
                 {
                     _view.TAB_LOGICAL.Text = "Logical Class";
-                    c = new ClassDefinitionCtrl(new ClassDecorator((Class)cls), _context);
+                    c = new ClassDefinitionCtrl(new ClassDecorator((Class)cls), _context, update);
                 }
                 else if (cls.ClassType == ClassType.ClassType_FeatureClass)
                 {
                     _view.TAB_LOGICAL.Text = "Logical Feature Class";
-                    c = new ClassDefinitionCtrl(new FeatureClassDecorator((FeatureClass)cls), _context);
+                    c = new ClassDefinitionCtrl(new FeatureClassDecorator((FeatureClass)cls), _context, update);
                 }
 
                 if (c != null)
@@ -258,9 +365,16 @@ namespace FdoToolbox.DataStoreManager.Controls
                 get { return _context.Connection != null && _context.CanShowPhysicalMapping; }
             }
 
-            private void OnSchemaSelected(FeatureSchema schema)
+            private void OnSchemaSelected(TreeNode node)
             {
-                var c = new SchemaCtrl(new FeatureSchemaDecorator(schema));
+                FeatureSchema schema = (FeatureSchema)node.Tag;
+                //C# Lambdas, making code and design compact and elegant since 2007
+                NodeUpdateHandler update = () =>
+                {
+                    node.Text = schema.Name;
+                    node.Name = schema.Name;
+                };
+                var c = new SchemaCtrl(new FeatureSchemaDecorator(schema), update);
                 _view.SetLogicalControl(c);
                 _view.PhysicalMappingsVisible = false;
                 _view.RightPaneVisible = true;
@@ -343,17 +457,90 @@ namespace FdoToolbox.DataStoreManager.Controls
 
             internal void AddSchema()
             {
-                FeatureSchema schema = new FeatureSchema(_context.GetName("Schema"), "");
+                string name = _context.GenerateName("Schema");
+                while(_context.SchemaNameExists(name))
+                {
+                    name = _context.GenerateName("Schema");
+                }
+
+                FeatureSchema schema = new FeatureSchema(name, "");
                 _context.AddSchema(schema);
             }
 
-            internal void AddFeatureClass()
+            internal void AddClass(ClassType type)
             {
                 string schema = GetSelectedSchema();
                 if (!string.IsNullOrEmpty(schema))
                 {
-                    FeatureClass cls = new FeatureClass(_context.GetName("FeatureClass"), "");
-                    _context.AddClass(schema, cls);
+                    string name = _context.GenerateName("FeatureClass");
+                    while(_context.ClassNameExists(schema, name))
+                    {
+                        name = _context.GenerateName("FeatureClass");
+                    }
+                    ClassDefinition cls = null;
+                    if (type == ClassType.ClassType_Class)
+                        cls = new Class(name, "");
+                    else if (type == ClassType.ClassType_FeatureClass)
+                        cls = new FeatureClass(name, "");
+
+                    if (cls != null)
+                        _context.AddClass(schema, cls);
+                }
+            }
+
+            internal void AddProperty(PropertyType type)
+            {
+                TreeNode node = _view.schemaTree.SelectedNode;
+                if (node.Level == LEVEL_CLASS)
+                {
+                    string schema = node.Parent.Name;
+                    string clsName = node.Name;
+                    string prefix = "Property";
+
+                    switch (type)
+                    {
+                        case PropertyType.PropertyType_AssociationProperty:
+                            prefix = "AssociationProperty";
+                            break;
+                        case PropertyType.PropertyType_DataProperty:
+                            prefix = "DataProperty";
+                            break;
+                        case PropertyType.PropertyType_GeometricProperty:
+                            prefix = "GeometricProperty";
+                            break;
+                        case PropertyType.PropertyType_ObjectProperty:
+                            prefix = "ObjectProperty";
+                            break;
+                        case PropertyType.PropertyType_RasterProperty:
+                            prefix = "RasterProperty";
+                            break;
+                    }
+
+                    string name = _context.GenerateName(prefix);
+                    while (_context.PropertyNameExists(schema, clsName, name))
+                    {
+                        name = _context.GenerateName(prefix);
+                    }
+
+                    PropertyDefinition pd = null;
+                    switch (type)
+                    { 
+                        case PropertyType.PropertyType_AssociationProperty: //TODO
+                            break;
+                        case PropertyType.PropertyType_DataProperty:
+                            pd = new DataPropertyDefinition(name, "");
+                            break;
+                        case PropertyType.PropertyType_GeometricProperty:
+                            pd = new GeometricPropertyDefinition(name, "");
+                            break;
+                        case PropertyType.PropertyType_ObjectProperty: //TODO
+                            break;
+                        case PropertyType.PropertyType_RasterProperty:
+                            break;
+                    }
+
+                    if (pd != null)
+                        _context.AddProperty(schema, clsName, pd);
                 }
             }
 
@@ -380,16 +567,6 @@ namespace FdoToolbox.DataStoreManager.Controls
         private void btnAddSchema_Click(object sender, EventArgs e)
         {
             _presenter.AddSchema();
-        }
-
-        private void btnAddFeatureClass_Click(object sender, EventArgs e)
-        {
-            _presenter.AddFeatureClass();
-        }
-
-        private void btnAddClass_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void btnImport_Click(object sender, EventArgs e)

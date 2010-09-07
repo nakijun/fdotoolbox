@@ -30,6 +30,7 @@ using FdoToolbox.Base.Controls;
 using ICSharpCode.Core;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.DataStoreManager.Controls.SchemaDesigner;
+using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.DataStoreManager.Controls
 {
@@ -62,6 +63,59 @@ namespace FdoToolbox.DataStoreManager.Controls
             schemaView.Context = _context;
             spatialContextView.Context = _context;
             base.OnLoad(e);
+        }
+
+        private void btnSaveXmlConfig_Click(object sender, EventArgs e)
+        {
+            string file = FileService.SaveFile("Save XML Configuration", "XML Files (*.xml)|*.xml");
+            if (!string.IsNullOrEmpty(file))
+            {
+                var conf = _context.GetConfiguration();
+                conf.Save(file);
+                MessageService.ShowMessageFormatted("Configuration saved to {0}", file);
+                LoggingService.Info("Configuration Saved");
+            }
+        }
+
+        private void btnSaveSdf_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSaveSqlite_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSaveEverything_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSaveSpatialContexts_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSaveAllSchemas_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSaveSelectedSchema_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnImport_Click(object sender, EventArgs e)
+        {
+            string file = FileService.OpenFile("Open XML Configuration", "XML files (*.xml)|*.xml");
+            if (!string.IsNullOrEmpty(file))
+            {
+                var conf = FdoDataStoreConfiguration.FromFile(file);
+                _context.SetConfiguration(conf);
+                schemaView.Reset();
+            }
         }
     }
 }

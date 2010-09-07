@@ -151,6 +151,13 @@ namespace FdoToolbox.DataStoreManager {
             }
         }
         
+        internal static System.Drawing.Bitmap package {
+            get {
+                object obj = ResourceManager.GetObject("package", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap page_white_code {
             get {
                 object obj = ResourceManager.GetObject("page_white_code", resourceCulture);
@@ -161,6 +168,20 @@ namespace FdoToolbox.DataStoreManager {
         internal static System.Drawing.Bitmap plus_white {
             get {
                 object obj = ResourceManager.GetObject("plus-white", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap shape_handles {
+            get {
+                object obj = ResourceManager.GetObject("shape_handles", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap table_relationship {
+            get {
+                object obj = ResourceManager.GetObject("table_relationship", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

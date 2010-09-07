@@ -42,6 +42,7 @@ namespace FdoToolbox.Base.Forms
 
         bool NameEnabled { get; set; }
         bool IsExtentDefined { get; }
+        bool ComputeExtentsEnabled { set; }
         
         SpatialContextExtentType[] ExtentTypes { set; }
         SpatialContextExtentType SelectedExtentType { get; }
@@ -70,7 +71,15 @@ namespace FdoToolbox.Base.Forms
 
         public void Init()
         {
-            _view.ExtentTypes = (SpatialContextExtentType[])_conn.Capability.GetObjectCapability(CapabilityType.FdoCapabilityType_SpatialContextTypes);
+            if (_conn != null)
+            {
+                _view.ExtentTypes = (SpatialContextExtentType[])_conn.Capability.GetObjectCapability(CapabilityType.FdoCapabilityType_SpatialContextTypes);
+            }
+            else
+            {
+                _view.ExtentTypes = (SpatialContextExtentType[])Enum.GetValues(typeof(SpatialContextExtentType));
+                _view.ComputeExtentsEnabled = false;
+            }
         }
 
         public void ComputeExtents(IEnumerable<ClassDefinition> classes)

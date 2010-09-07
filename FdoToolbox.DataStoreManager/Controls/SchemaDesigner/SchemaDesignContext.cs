@@ -29,6 +29,9 @@ using System.ComponentModel;
 
 namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 {
+    internal delegate void SchemaElementEventHandler<T>(T item);
+    public delegate void NodeUpdateHandler();
+
     public class SchemaDesignContext
     {
         private FeatureSchemaCollection _schemas;
@@ -124,6 +127,35 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             }
 
             this.Connection = conn;
+        }
+
+        internal void SetConfiguration(FdoDataStoreConfiguration conf)
+        {
+            _schemas = conf.Schemas;
+            _mappings = conf.Mappings;
+
+            if (_schemas == null)
+                _schemas = new FeatureSchemaCollection(null);
+
+            if (_mappings == null)
+                _mappings = new PhysicalSchemaMappingCollection();
+
+            _spatialContexts.Clear();
+            if (conf.SpatialContexts != null && conf.SpatialContexts.Length > 0)
+            {
+                foreach (var sc in conf.SpatialContexts)
+                {
+                    _spatialContexts.Add(sc);
+                }
+            }
+        }
+
+        public FdoDataStoreConfiguration GetConfiguration()
+        {
+            return new FdoDataStoreConfiguration(
+                _schemas,
+                new List<SpatialContextInfo>(_spatialContexts).ToArray(),
+                _mappings);
         }
 
         /// <summary>
@@ -240,11 +272,18 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 
         private int counter = 0;
 
-        public string GetName(string prefix)
+        internal string GenerateName(string prefix)
         {
             counter++;
             return prefix + counter;
         }
+
+        internal event SchemaElementEventHandler<FeatureSchema> SchemaAdded;
+        internal event SchemaElementEventHandler<FeatureSchema> SchemaRemoved;
+        internal event SchemaElementEventHandler<ClassDefinition> ClassAdded;
+        internal event SchemaElementEventHandler<ClassDefinition> ClassRemoved;
+        internal event SchemaElementEventHandler<PropertyDefinition> PropertyAdded;
+        internal event SchemaElementEventHandler<PropertyDefinition> PropertyRemoved;
 
         internal void ResetCounter()
         {
@@ -255,15 +294,22 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         {
             _schemas.Add(schema);
             //Broadcast
+
+            var handler = this.SchemaAdded;
+            if (handler != null)
+                handler(schema);
         }
 
-        internal void AddClass(string schema, FeatureClass cls)
+        internal void AddClass(string schema, ClassDefinition cls)
         {
             var fidx = _schemas.IndexOf(schema);
             if (fidx >= 0)
             {
                 _schemas[fidx].Classes.Add(cls);
                 //Broadcast
+                var handler = this.ClassAdded;
+                if (handler != null)
+                    handler(cls);
             }
         }
 
@@ -279,6 +325,9 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                     cd.Properties.Add(prop);
                     
                     //Broadcast
+                    var handler = this.PropertyAdded;
+                    if (handler != null)
+                        handler(prop);
                 }
             }
         }
@@ -303,6 +352,79 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         internal bool FixIncompatibilities()
         {
             return false;
+        }
+
+        internal bool ClassNameExists(string schema, string name)
+        {
+            var fidx = _schemas.IndexOf(schema);
+            if (fidx >= 0)
+                return _schemas[fidx].Classes.Contains(name);
+
+            return false;
+        }
+
+        internal bool SchemaNameExists(string name)
+        {
+            return _schemas.Contains(name);
+        }
+
+        internal bool PropertyNameExists(string schema, string clsName, string name)
+        {
+            var fidx = _schemas.IndexOf(schema);
+            if (fidx >= 0)
+            {
+                var cidx = _schemas[fidx].Classes.IndexOf(clsName);
+                if (cidx >= 0)
+                    return _schemas[fidx].Classes[clsName].Properties.Contains(name);
+            }
+            return false;
+        }
+
+        internal void DeleteClass(ClassDefinition classDefinition)
+        {
+            
+        }
+
+        internal void DeleteProperty(PropertyDefinition propertyDefinition)
+        {
+            
+        }
+
+        internal void DeleteSchema(FeatureSchema featureSchema)
+        {
+            
+        }
+
+        internal bool IsSupportedClass(ClassType classType)
+        {
+            if (this.Connection == null)
+                return true;
+            else
+                return Array.IndexOf(this.Connection.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_ClassTypes), classType) >= 0;
+        }
+
+        internal bool IsSupportedProperty(PropertyType propertyType)
+        {
+            if (this.Connection == null)
+            {
+                return true;
+            }
+            else
+            {
+                if (propertyType == PropertyType.PropertyType_AssociationProperty)
+                    return this.Connection.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsAssociationProperties);
+                else if (propertyType == PropertyType.PropertyType_ObjectProperty)
+                    return this.Connection.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsObjectProperties);
+                else if (propertyType == PropertyType.PropertyType_RasterProperty)
+                    return false;
+                else
+                    return true;
+            }
+        }
+
+        internal void AddSpatialContext(SpatialContextInfo sc)
+        {
+            _spatialContexts.Add(sc);
         }
     }
 }
