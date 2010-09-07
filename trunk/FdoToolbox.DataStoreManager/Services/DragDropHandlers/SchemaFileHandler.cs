@@ -55,9 +55,9 @@ namespace FdoToolbox.DataStoreManager.Services.DragDropHandlers
             Workbench wb = Workbench.Instance;
             if (wb != null)
             {
-                FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl();
-                ctl.LoadSchema(file);
-                wb.ShowContent(ctl, ViewRegion.Document);
+                //FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl();
+                //ctl.LoadSchema(file);
+                //wb.ShowContent(ctl, ViewRegion.Document);
             }
         }
 

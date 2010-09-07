@@ -26,7 +26,7 @@ using System.Text;
 using OSGeo.FDO.Providers.Rdbms.Override;
 using System.ComponentModel;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public abstract class RdbmsPhysicalSchemaMappingItem<T> : PhysicalSchemaMappingItem<T> where T : OvPhysicalSchemaMapping
     {

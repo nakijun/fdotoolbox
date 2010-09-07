@@ -35,7 +35,7 @@ namespace FdoToolbox.DataStoreManager.Commands
             Workbench wb = Workbench.Instance;
             if (wb != null)
             {
-                FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl();
+                var ctl = new FdoDataStoreCtrl();
                 wb.ShowContent(ctl, ViewRegion.Document);
             }
         }

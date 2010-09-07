@@ -29,7 +29,7 @@ using FdoToolbox.Base.Services;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.DataStoreManager.Controls;
 
-namespace FdoToolbox.OverrideManager.Commands
+namespace FdoToolbox.DataStoreManager.Commands
 {
     internal class CreateSchemaCommand : AbstractMenuCommand
     {
@@ -45,13 +45,14 @@ namespace FdoToolbox.OverrideManager.Commands
 
                 if (conn != null)
                 {
-                    FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl(conn);
-                    ctl.SchemaApplied += delegate
-                    {
-                        mgr.RefreshConnection(name);
-                    };
+                    //FdoDataStoreCtl ctl = new FdoDataStoreCtl(conn);
+                    //var ctl = new FdoSchemaDesignerCtl(conn);
+                    //ctl.SchemaApplied += delegate
+                    //{
+                    //    mgr.RefreshConnection(name);
+                    //};
 
-                    wb.ShowContent(ctl, ViewRegion.Document);
+                    //wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }
         }
@@ -62,24 +63,25 @@ namespace FdoToolbox.OverrideManager.Commands
         public override void Run()
         {
             Workbench wb = Workbench.Instance;
-            TreeNode connNode = null;
             TreeNode node = wb.ObjectExplorer.GetSelectedNode();
-            if (node.Level == 2)
+            if (node.Level == 1)
             {
-                connNode = node.Parent;
-                string name = connNode.Name;
+                string name = node.Name;
                 FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(name);
 
                 if (conn != null)
                 {
-                    FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl(conn, node.Name);
-                    ctl.SchemaApplied += delegate
-                    {
-                        mgr.RefreshConnection(name);
-                    };
-
+                    var ctl = new FdoDataStoreCtrl(conn);
                     wb.ShowContent(ctl, ViewRegion.Document);
+
+                    //FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl(conn, node.Name);
+                    //ctl.SchemaApplied += delegate
+                    //{
+                    //    mgr.RefreshConnection(name);
+                    //};
+
+                    //wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }
         }

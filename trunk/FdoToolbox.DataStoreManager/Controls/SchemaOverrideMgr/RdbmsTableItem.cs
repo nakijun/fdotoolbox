@@ -25,9 +25,9 @@ using System.Text;
 using Rdbms = OSGeo.FDO.Providers.Rdbms.Override;
 using System.ComponentModel;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
-    public abstract class RdbmsTableItem<T> : PhysicalElementMappingItem<T> where T : Rdbms.OvTable
+    public abstract class RdbmsTableItem<T> : PhysicalElementMappingItem<T>, FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr.IRdbmsTableItem where T : Rdbms.OvTable
     {
         protected RdbmsTableItem(T table) : base(table)
         {

@@ -27,7 +27,7 @@ using OSGeo.FDO.Commands.Schema;
 using System.ComponentModel;
 using OSGeo.FDO.Connections;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public abstract class PhysicalSchemaMappingItem<T> : PhysicalElementMappingItem<T>, IPhysicalSchemaMapping where T : PhysicalSchemaMapping
     {

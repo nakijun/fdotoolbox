@@ -25,7 +25,7 @@ using System.Text;
 using Rdbms = OSGeo.FDO.Providers.Rdbms.Override;
 using MySql = OSGeo.FDO.Providers.Rdbms.Override.MySQL;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class MySqlAssociationPropertyDefinitionItem : RdbmsAssociationPropertyDefinitionItem<MySql.OvAssociationPropertyDefinition>
     {

@@ -25,7 +25,7 @@ using System.Text;
 using Rdbms = OSGeo.FDO.Providers.Rdbms.Override;
 using Sql = OSGeo.FDO.Providers.Rdbms.Override.SQLServerSpatial;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class SqlServerClassDefinitionItem : RdbmsClassDefinitionItem<Sql.OvClassDefinition>
     {

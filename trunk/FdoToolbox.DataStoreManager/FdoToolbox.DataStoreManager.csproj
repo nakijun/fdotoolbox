@@ -170,60 +170,96 @@
     <Compile Include="..\Properties\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Commands\ManageSchemaMappingsCommand.cs" />
     <Compile Include="Commands\ObjectExplorerCommands.cs" />
     <Compile Include="Commands\StartupCommand.cs" />
     <Compile Include="Commands\ToolCommands.cs" />
     <Compile Include="Conditions\SchemaMappingConditionEvaluator.cs" />
-    <Compile Include="Controls\FdoDataStoreCtl.cs">
+    <Compile Include="Controls\CollapsiblePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\FdoDataStoreCtl.Designer.cs">
-      <DependentUpon>FdoDataStoreCtl.cs</DependentUpon>
+    <Compile Include="Controls\CollapsiblePanel.Designer.cs">
+      <DependentUpon>CollapsiblePanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\FdoSchemaDesignerCtl.cs">
+    <Compile Include="Controls\FdoDataStoreCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\FdoSchemaDesignerCtl.Designer.cs">
-      <DependentUpon>FdoSchemaDesignerCtl.cs</DependentUpon>
+    <Compile Include="Controls\FdoDataStoreCtrl.Designer.cs">
+      <DependentUpon>FdoDataStoreCtrl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\FdoSchemaDesignerPresenter.cs" />
-    <Compile Include="Controls\FdoSchemaOverrideMgr.cs">
+    <Compile Include="Controls\FdoSchemaView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\FdoSchemaOverrideMgr.Designer.cs">
-      <DependentUpon>FdoSchemaOverrideMgr.cs</DependentUpon>
+    <Compile Include="Controls\FdoSchemaView.Designer.cs">
+      <DependentUpon>FdoSchemaView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SchemaDesigner\AssociationPropertyDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\ClassDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\ClassDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\DataPropertyDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\FeatureClassDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\FeatureSchemaDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\GeometricPropertyDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\GeometryPropertyLookupEditor.cs" />
+    <Compile Include="Controls\FdoSpatialContextView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoSpatialContextView.Designer.cs">
+      <DependentUpon>FdoSpatialContextView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\AttributesCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\AttributesCtrl.Designer.cs">
+      <DependentUpon>AttributesCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\ClassDefinitionCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\ClassDefinitionCtrl.Designer.cs">
+      <DependentUpon>ClassDefinitionCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\DataPropertyCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\DataPropertyCtrl.Designer.cs">
+      <DependentUpon>DataPropertyCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\DesignTimeDecorators.cs" />
+    <Compile Include="Controls\SchemaDesigner\GeometricPropertyCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\GeometricPropertyCtrl.Designer.cs">
+      <DependentUpon>GeometricPropertyCtrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SchemaDesigner\GeometryTypeCtl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\SchemaDesigner\GeometryTypeCtl.Designer.cs">
       <DependentUpon>GeometryTypeCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SchemaDesigner\GeometryTypeEditor.cs" />
     <Compile Include="Controls\SchemaDesigner\ListConstraintSettingsCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\SchemaDesigner\ListConstraintSettingsCtl.Designer.cs">
       <DependentUpon>ListConstraintSettingsCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SchemaDesigner\ObjectPropertyDefinitionDesign.cs" />
-    <Compile Include="Controls\SchemaDesigner\PropertyDefinitionDesign.cs" />
+    <Compile Include="Controls\SchemaDesigner\PhysicalConfigCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\PhysicalConfigCtrl.Designer.cs">
+      <DependentUpon>PhysicalConfigCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\PropertyCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\PropertyCtrl.Designer.cs">
+      <DependentUpon>PropertyCtrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SchemaDesigner\RangeConstraintSettingsCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\SchemaDesigner\RangeConstraintSettingsCtl.Designer.cs">
       <DependentUpon>RangeConstraintSettingsCtl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SchemaDesigner\SpatialContextAssociationEditor.cs" />
+    <Compile Include="Controls\SchemaDesigner\SchemaCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\SchemaCtrl.Designer.cs">
+      <DependentUpon>SchemaCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\SchemaDesignContext.cs" />
     <Compile Include="Controls\SchemaDesigner\UniqueConstraintDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -236,9 +272,11 @@
     <Compile Include="Controls\SchemaDesigner\ValueConstraintDialog.Designer.cs">
       <DependentUpon>ValueConstraintDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SchemaDesigner\ValueConstraintEditor.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\DesignTimeWrapper.cs" />
+    <Compile Include="Controls\SchemaOverrideMgr\IPhysicalElementMappingItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\IPhysicalSchemaMapping.cs" />
+    <Compile Include="Controls\SchemaOverrideMgr\IRdbmsGeometricPropertyDefinitionItem.cs" />
+    <Compile Include="Controls\SchemaOverrideMgr\IRdbmsTableItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\NodeFactory.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\MySqlAssociationPropertyDefinitionItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\MySqlClassDefinitionItem.cs" />
@@ -276,12 +314,24 @@
     <Compile Include="Controls\SchemaOverrideMgr\ShpSchemaMappingItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\SqlServerAssociationPropertyDefinitionItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\SqlServerClassDefinitionItem.cs" />
+    <Compile Include="Controls\SchemaOverrideMgr\SqlDataColumnCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaOverrideMgr\SqlDataColumnCtrl.Designer.cs">
+      <DependentUpon>SqlDataColumnCtrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SchemaOverrideMgr\SqlServerColumnItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\SqlServerDataPropertyDefinitionItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\SqlServerGeometricColumnItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\SqlServerGeometricPropertyDefinitionItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\SqlServerObjectPropertyDefinitionItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\SqlServerPhysicalSchemaMappingItem.cs" />
+    <Compile Include="Controls\SchemaOverrideMgr\SqlServerTableCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaOverrideMgr\SqlServerTableCtrl.Designer.cs">
+      <DependentUpon>SqlServerTableCtrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SchemaOverrideMgr\SqlServerTableItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\WmsClassDefinitionItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\WmsLayerDefinitionItem.cs" />
@@ -305,6 +355,16 @@
     <Content Include="FdoToolbox.DataStoreManager.addin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\chart_organisation_add.png" />
+    <None Include="Resources\cross.png" />
+    <None Include="Resources\feature_class.png" />
+    <None Include="Resources\database_table.png" />
+    <None Include="Resources\arrow_refresh.png" />
+    <None Include="Resources\world.png" />
+    <None Include="Resources\disk_multiple.png" />
+    <None Include="Resources\chart_organisation.png" />
+    <None Include="Resources\minus-white.png" />
+    <None Include="Resources\plus-white.png" />
     <None Include="Resources\page_white_code.png" />
     <None Include="Resources\disk.png" />
     <None Include="Resources\database.png" />
@@ -314,16 +374,29 @@
     <None Include="Resources\application_edit.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\FdoDataStoreCtl.resx">
-      <DependentUpon>FdoDataStoreCtl.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\CollapsiblePanel.resx">
+      <DependentUpon>CollapsiblePanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FdoSchemaDesignerCtl.resx">
-      <DependentUpon>FdoSchemaDesignerCtl.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="Controls\FdoDataStoreCtrl.resx">
+      <DependentUpon>FdoDataStoreCtrl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FdoSchemaOverrideMgr.resx">
-      <DependentUpon>FdoSchemaOverrideMgr.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="Controls\FdoSchemaView.resx">
+      <DependentUpon>FdoSchemaView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoSpatialContextView.resx">
+      <DependentUpon>FdoSpatialContextView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\AttributesCtrl.resx">
+      <DependentUpon>AttributesCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\ClassDefinitionCtrl.resx">
+      <DependentUpon>ClassDefinitionCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\DataPropertyCtrl.resx">
+      <DependentUpon>DataPropertyCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\GeometricPropertyCtrl.resx">
+      <DependentUpon>GeometricPropertyCtrl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SchemaDesigner\GeometryTypeCtl.resx">
       <DependentUpon>GeometryTypeCtl.cs</DependentUpon>
@@ -333,9 +406,18 @@
       <DependentUpon>ListConstraintSettingsCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\PhysicalConfigCtrl.resx">
+      <DependentUpon>PhysicalConfigCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\PropertyCtrl.resx">
+      <DependentUpon>PropertyCtrl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SchemaDesigner\RangeConstraintSettingsCtl.resx">
       <DependentUpon>RangeConstraintSettingsCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\SchemaCtrl.resx">
+      <DependentUpon>SchemaCtrl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SchemaDesigner\UniqueConstraintDialog.resx">
       <DependentUpon>UniqueConstraintDialog.cs</DependentUpon>
@@ -344,6 +426,12 @@
     <EmbeddedResource Include="Controls\SchemaDesigner\ValueConstraintDialog.resx">
       <DependentUpon>ValueConstraintDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaOverrideMgr\SqlDataColumnCtrl.resx">
+      <DependentUpon>SqlDataColumnCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaOverrideMgr\SqlServerTableCtrl.resx">
+      <DependentUpon>SqlServerTableCtrl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Images.resx">
       <Generator>ResXFileCodeGenerator</Generator>

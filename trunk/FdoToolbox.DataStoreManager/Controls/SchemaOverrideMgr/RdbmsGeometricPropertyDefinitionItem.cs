@@ -25,9 +25,9 @@ using System.Text;
 using Rdbms = OSGeo.FDO.Providers.Rdbms.Override;
 using System.ComponentModel;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
-    public abstract class RdbmsGeometricPropertyDefinitionItem<T> : RdbmsPropertyDefinitionItem<T> where T : Rdbms.OvGeometricPropertyDefinition
+    public abstract class RdbmsGeometricPropertyDefinitionItem<T> : RdbmsPropertyDefinitionItem<T>, FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr.IRdbmsGeometricPropertyDefinitionItem where T : Rdbms.OvGeometricPropertyDefinition
     {
         protected RdbmsGeometricPropertyDefinitionItem(T value)
             : base(value)

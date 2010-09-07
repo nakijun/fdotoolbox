@@ -25,7 +25,7 @@ using System.Linq;
 using System.Text;
 using SHP = OSGeo.FDO.Providers.SHP.Override;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class ShpSchemaMappingItem : PhysicalSchemaMappingItem<SHP.PhysicalSchemaMapping>
     {

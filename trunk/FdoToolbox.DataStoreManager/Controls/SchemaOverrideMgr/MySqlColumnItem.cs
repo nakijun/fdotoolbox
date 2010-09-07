@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 using MySql = OSGeo.FDO.Providers.Rdbms.Override.MySQL;
 
-namespace FdoToolbox.OverrideManager.Controls.SchemaOverrideMgr
+namespace FdoToolbox.DataStoreManager.Controls.SchemaOverrideMgr
 {
     public class MySqlColumnItem : RdbmsColumnItem<MySql.OvColumn>
     {
