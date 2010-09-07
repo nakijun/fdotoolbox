@@ -338,6 +338,7 @@
     <Compile Include="Controls\SchemaOverrideMgr\WmsPhysicalSchemaMappingItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\WmsRasterDefinitionItem.cs" />
     <Compile Include="Controls\SchemaOverrideMgr\WmsStyleDefinitionItem.cs" />
+    <Compile Include="FdoDataStoreConfiguration.cs" />
     <Compile Include="Images.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -355,6 +356,9 @@
     <Content Include="FdoToolbox.DataStoreManager.addin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\table_relationship.png" />
+    <None Include="Resources\package.png" />
+    <None Include="Resources\shape_handles.png" />
     <None Include="Resources\chart_organisation_add.png" />
     <None Include="Resources\cross.png" />
     <None Include="Resources\feature_class.png" />

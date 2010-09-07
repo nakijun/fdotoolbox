@@ -39,7 +39,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 
         private SchemaDesignContext _context;
 
-        public GeometricPropertyCtrl(GeometricPropertyDefinitionDecorator p, SchemaDesignContext context)
+        public GeometricPropertyCtrl(GeometricPropertyDefinitionDecorator p, SchemaDesignContext context, NodeUpdateHandler updater)
             : this()
         {
             _context = context;
@@ -74,6 +74,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             chkGeometryTypes.ItemCheck += (s, e) =>
             {
                 p.GeometryTypes = GetUpdatedGeometryMask();
+            };
+
+            p.PropertyChanged += (s, evt) =>
+            {
+                if (evt.PropertyName == "Name")
+                    updater();
             };
         }
 

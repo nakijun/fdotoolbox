@@ -37,11 +37,17 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             InitializeComponent();
         }
 
-        public SchemaCtrl(FeatureSchemaDecorator schema)
+        public SchemaCtrl(FeatureSchemaDecorator schema, NodeUpdateHandler updater)
             : this()
         {
             txtName.DataBindings.Add("Text", schema, "Name");
             txtDescription.DataBindings.Add("Text", schema, "Description");
+
+            schema.PropertyChanged += (s, evt) =>
+            {
+                if (evt.PropertyName == "Name")
+                    updater();
+            };
         }
     }
 }

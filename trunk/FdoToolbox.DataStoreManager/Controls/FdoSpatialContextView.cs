@@ -28,6 +28,7 @@ using System.Text;
 using System.Windows.Forms;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.DataStoreManager.Controls.SchemaDesigner;
+using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.DataStoreManager.Controls
 {
@@ -45,6 +46,10 @@ namespace FdoToolbox.DataStoreManager.Controls
             get { return _context; }
             set
             {
+                //Stupid WinForms designer!
+                if (value == null)
+                    return;
+
                 _context = value;
                 
                 grdSpatialContexts.DataSource = _context.SpatialContexts;
@@ -55,6 +60,15 @@ namespace FdoToolbox.DataStoreManager.Controls
         internal bool CanDelete
         {
             get { return grdSpatialContexts.SelectedRows.Count == 1 && _context.CanDestroySpatialContexts; }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            var sc = FdoSpatialContextDialog.CreateNew(_context.Connection);
+            if (sc != null)
+            {
+                _context.AddSpatialContext(sc);
+            }
         }
     }
 }

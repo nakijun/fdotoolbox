@@ -41,7 +41,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         private SchemaDesignContext _context;
         private ClassDefinitionDecorator _cls;
 
-        private ClassDefinitionCtrl(ClassDefinitionDecorator cls, SchemaDesignContext context)
+        private ClassDefinitionCtrl(ClassDefinitionDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater)
             : this()
         {
             _cls = cls;
@@ -59,6 +59,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 
             chkAbstract.DataBindings.Add("Checked", cls, "IsAbstract");
             chkComputed.DataBindings.Add("Checked", cls, "IsComputed");
+
+            cls.PropertyChanged += (s, evt) =>
+            {
+                if (evt.PropertyName == "Name")
+                    updater();
+            };
         }
 
         private void BindIdentityProperties(ClassDefinitionDecorator cls)
@@ -96,14 +102,14 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             };
         }
 
-        public ClassDefinitionCtrl(ClassDecorator cls, SchemaDesignContext context)
-            : this((ClassDefinitionDecorator)cls, context)
+        public ClassDefinitionCtrl(ClassDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater)
+            : this((ClassDefinitionDecorator)cls, context, updater)
         {
             cmbGeometricProperty.Enabled = false;
         }
 
-        public ClassDefinitionCtrl(FeatureClassDecorator cls, SchemaDesignContext context)
-            : this((ClassDefinitionDecorator)cls, context)
+        public ClassDefinitionCtrl(FeatureClassDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater)
+            : this((ClassDefinitionDecorator)cls, context, updater)
         {
             cmbGeometricProperty.DataSource = cls.AvailableGeometricProperties;
             cmbGeometricProperty.SelectionChangeCommitted += (s, e) =>
