@@ -27,12 +27,14 @@ using ICSharpCode.Core;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Core.Utility;
 using FdoToolbox.Base.Services;
+using System.ComponentModel;
 
 namespace FdoToolbox.Base.Controls
 {
     /// <summary>
     /// The Object Explorer
     /// </summary>
+    [ToolboxItem(false)]
     public partial class ObjectExplorer : ViewContent, IObjectExplorer
     {
         private ToolStrip objToolStrip;

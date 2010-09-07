@@ -37,6 +37,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A control that provides the ability to perform bulk data updates
     /// </summary>
+    [ToolboxItem(false)]
     public partial class FdoBulkUpdateCtl : ViewContent, IFdoBulkUpdateView
     {
         private FdoBulkUpdatePresenter _presenter;

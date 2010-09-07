@@ -38,6 +38,7 @@ namespace FdoToolbox.Base.Scripting
     /// <summary>
     /// The application script manager view
     /// </summary>
+    [ToolboxItem(false)]
     public partial class ScriptManager : ViewContent
     {
         /// <summary>

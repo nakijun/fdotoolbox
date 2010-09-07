@@ -25,12 +25,14 @@ using System.Text;
 using System.Windows.Forms;
 using ICSharpCode.Core;
 using ICSharpCode.TextEditor;
+using System.ComponentModel;
 
 namespace FdoToolbox.Base.Controls
 {
     /// <summary>
     /// A text editor component
     /// </summary>
+    [ToolboxItem(false)]
     public class TextEditor : ViewContent
     {
         ToolStrip toolstrip;

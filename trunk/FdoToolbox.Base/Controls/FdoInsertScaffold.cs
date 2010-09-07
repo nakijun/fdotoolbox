@@ -36,6 +36,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A user interface helper to create new FDO features
     /// </summary>
+    [ToolboxItem(false)]
     public partial class FdoInsertScaffold : ViewContent, IFdoInsertView
     {
         private FdoInsertScaffoldPresenter _presenter;

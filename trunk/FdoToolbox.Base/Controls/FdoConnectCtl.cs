@@ -37,6 +37,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A view that allows the creation of FDO connection in a generic fashion
     /// </summary>
+    [ToolboxItem(false)]
     public partial class FdoConnectCtl : ViewContent, IFdoConnectView
     {
         private FdoConnectCtlPresenter _presenter;

@@ -35,6 +35,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A base view class that provides common functionality for all view content
     /// </summary>
+    [ToolboxItem(false)]
     public partial class ViewContent : UserControl, IViewContent
     {
         private IFdoConnectionManager connMgr;
