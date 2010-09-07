@@ -19,38 +19,55 @@
 //
 // See license.txt for more/additional licensing information
 #endregion
-
 using System;
 using System.Collections.Generic;
 using System.Text;
 using ICSharpCode.Core;
 using FdoToolbox.Base.Controls;
+using FdoToolbox.Base;
+using FdoToolbox.Base.Services.DragDropHandlers;
+using FdoToolbox.DataStoreManager.Controls;
 
-namespace FdoToolbox.Base.Commands
+namespace FdoToolbox.DataStoreManager.Services.DragDropHandlers
 {
-    internal class CoordSysCatalogCommand : AbstractMenuCommand
+    /// <summary>
+    /// Drag and Drop handler for feature schema files
+    /// </summary>
+    public class SchemaFileHandler : IDragDropHandler
     {
-        public override void Run()
+        string[] extensions = { ".schema" };
+
+        /// <summary>
+        /// Gets the file extension this handler can handle
+        /// </summary>
+        /// <value></value>
+        public string[] FileExtensions
+        {
+            get { return extensions; }
+        }
+
+        /// <summary>
+        /// Handles the file drop
+        /// </summary>
+        /// <param name="file">The file being dropped</param>
+        public void HandleDrop(string file)
         {
             Workbench wb = Workbench.Instance;
             if (wb != null)
             {
-                CoordSysCatalog cat = new CoordSysCatalog();
-                wb.ShowContent(cat, ViewRegion.Document);
+                FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl();
+                ctl.LoadSchema(file);
+                wb.ShowContent(ctl, ViewRegion.Document);
             }
         }
-    }
 
-    internal class PreferencesCommand : AbstractMenuCommand
-    {
-        public override void Run()
+        /// <summary>
+        /// Gets a description of the action this handler will take
+        /// </summary>
+        /// <value></value>
+        public string HandlerAction
         {
-            Workbench wb = Workbench.Instance;
-            if (wb != null)
-            {
-                PreferencesCtl ctl = new PreferencesCtl();
-                wb.ShowContent(ctl, ViewRegion.Dialog);
-            }
+            get { return "Open in Standalone Schema Editor"; }
         }
     }
 }

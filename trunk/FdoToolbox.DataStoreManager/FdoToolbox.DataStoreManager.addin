@@ -1,0 +1,77 @@
+﻿<AddIn name="FDO Toolbox Schema Override Manager Add-In"
+       author="Jackie Ng"
+       url="http://fdotoolbox.googlecode.com"
+       description="Schema Override Manager AddIn of FDO Toolbox"
+       addInManagerHidden="false">
+
+    <Manifest>
+        <Identity name="FdoToolbox.DataStoreManager" version="@FdoToolbox.DataStoreManager.dll" />
+        <Dependency addin="FdoToolbox.Base" />
+    </Manifest>
+
+    <Runtime>
+        <Import assembly="FdoToolbox.DataStoreManager.dll">
+            <ConditionEvaluator name="SupportsSchemaMappings" class="FdoToolbox.DataStoreManager.Conditions.SchemaMappingConditionEvaluator" />
+        </Import>
+    </Runtime>
+
+    <Path name="/Workspace/FileFilter">
+    </Path>
+
+    <!-- Drag and Drop handlers -->
+    <Path name="/FdoToolbox/DragDropHandlers">
+        <Class id="SchemaHandler" class="FdoToolbox.DataStoreManager.Services.DragDropHandlers.SchemaFileHandler" />
+    </Path>
+
+    <!-- Main Menu definition -->
+    <Path name="/Workbench/MainMenu">
+    </Path>
+
+    <!-- Auto-start commands -->
+    <Path name="/Workspace/Autostart">
+        <Class id="Startup" class="FdoToolbox.DataStoreManager.Commands.StartupCommand" />
+    </Path>
+
+    <!-- Toolbar definition -->
+    <Path name="/Workbench/Toolbar">
+        <ToolbarItem id="SchemaEditor"
+                     tooltip="${res:CMD_SchemaEditor}"
+                     icon="chart_organisation"
+                     insertbefore="Preferences"
+                     class="FdoToolbox.DataStoreManager.Commands.SchemaEditorCommand" />
+    </Path>
+    
+    <!-- Object Explorer toolbar definition -->
+    <Path name="/ObjectExplorer/Toolbar">
+        
+    </Path>
+
+    <Path name="/ObjectExplorer/ContextMenus/SelectedConnection">
+        <Condition action="Disable" name="CommandSupported" command="ApplySchema">
+            <MenuItem id="CreateSchema"
+                      label="${res:CMD_CreateSchema}"
+                      icon="chart_organisation"
+                      class="FdoToolbox.DataStoreManager.Commands.CreateSchemaCommand" />
+        </Condition>
+        <Condition action="Disable" name="SupportsSchemaMappings">
+            <MenuItem id="ManageSchemaMappings"
+                      label="${res:CMD_ManageSchemaMappings}"
+                      class="FdoToolbox.DataStoreManager.Commands.ManageSchemaMappingsCommand" />
+        </Condition>
+    </Path>
+
+    <Path name="/ObjectExplorer/ContextMenus/SelectedSchema">
+        <Condition name="CommandSupported" command="ApplySchema" action="Disable">
+            <MenuItem id="ManageSchema"
+                      label="${res:CMD_EditSchema}"
+                      icon="chart_organisation"
+                      class="FdoToolbox.DataStoreManager.Commands.EditSchemaCommand"></MenuItem>
+        </Condition>
+    </Path>
+
+    <!-- Application Console toolbar definition -->
+    <Path name="/AppConsole/Toolbar">
+
+    </Path>
+
+</AddIn>
