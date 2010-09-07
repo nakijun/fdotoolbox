@@ -35,6 +35,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
+    [ToolboxItem(false)]
     public partial class CreateSqliteCtl : ViewContent, ICreateSqliteView
     {
         private CreateSqlitePresenter _presenter;

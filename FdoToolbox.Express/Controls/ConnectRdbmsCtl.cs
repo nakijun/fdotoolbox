@@ -32,6 +32,7 @@ using FdoToolbox.Core.Feature;
 
 namespace FdoToolbox.Express.Controls
 {
+    [ToolboxItem(false)]
     public partial class ConnectRdbmsCtl : ViewContent, IConnectRdbmsView
     {
         private ConnectRdbmsPresenter _presenter;

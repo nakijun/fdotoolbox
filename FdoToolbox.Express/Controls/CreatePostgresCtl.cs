@@ -29,6 +29,7 @@ using System.Windows.Forms;
 
 namespace FdoToolbox.Express.Controls
 {
+    [ToolboxItem(false)]
     public partial class CreatePostgresCtl : CreateRdbmsCtl
     {
         public CreatePostgresCtl()

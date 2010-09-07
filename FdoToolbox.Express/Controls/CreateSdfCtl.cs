@@ -35,6 +35,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
+    [ToolboxItem(false)]
     public partial class CreateSdfCtl : ViewContent, ICreateSdfView
     {
         private CreateSdfPresenter _presenter;

@@ -15,22 +15,22 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>..\out\x86\Debug\AddIns\OverrideManager\</OutputPath>
+    <OutputPath>..\out\x86\Debug\AddIns\DataStoreManager\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>..\out\x86\Release\AddIns\OverrideManager\</OutputPath>
+    <OutputPath>..\out\x86\Release\AddIns\DataStoreManager\</OutputPath>
     <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\out\x64\Debug\AddIns\OverrideManager\</OutputPath>
+    <OutputPath>..\out\x64\Debug\AddIns\DataStoreManager\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>..\out\x64\Release\AddIns\OverrideManager\</OutputPath>
+    <OutputPath>..\out\x64\Release\AddIns\DataStoreManager\</OutputPath>
     <Optimize>true</Optimize>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>

@@ -33,6 +33,7 @@ using FdoToolbox.Base.Controls;
 
 namespace FdoToolbox.Express.Controls
 {
+    [ToolboxItem(false)]
     public partial class ConnectOgrCtl : ViewContent, IConnectOgrView
     {
         private ConnectOgrPresenter _presenter;
