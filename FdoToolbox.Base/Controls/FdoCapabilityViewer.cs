@@ -33,6 +33,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// A control that can display the capabilities of a given connection
     /// </summary>
+    [ToolboxItem(false)]
     public partial class FdoCapabilityViewer : ViewContent, IFdoCapabilityView
     {
         private FdoCapabilityViewerPresenter _presenter;

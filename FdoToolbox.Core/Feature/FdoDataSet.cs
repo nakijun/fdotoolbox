@@ -33,6 +33,7 @@ namespace FdoToolbox.Core.Feature
     /// <summary>
     /// Represents an in-memory cache of spatial data
     /// </summary>
+    [ToolboxItem(false)]
     public class FdoDataSet : DataSet
     {
         /// <summary>

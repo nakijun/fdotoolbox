@@ -26,9 +26,11 @@ using ICSharpCode.Core;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace FdoToolbox.AddInManager
 {
+    [ToolboxItem(false)]
     public class AddInControl : Control
     {
         AddIn addIn;

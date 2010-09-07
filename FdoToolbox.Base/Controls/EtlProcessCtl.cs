@@ -36,6 +36,7 @@ namespace FdoToolbox.Base.Controls
     /// <summary>
     /// Dialog view used to relay the activity of a running <see cref="EtlProcess"/>
     /// </summary>
+    [ToolboxItem(false)]
     public partial class EtlProcessCtl : ViewContent, IViewContent
     {
         private EtlProcessCtl()
