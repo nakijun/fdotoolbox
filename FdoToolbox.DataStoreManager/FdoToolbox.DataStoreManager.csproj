@@ -175,6 +175,12 @@
     <Compile Include="Commands\StartupCommand.cs" />
     <Compile Include="Commands\ToolCommands.cs" />
     <Compile Include="Conditions\SchemaMappingConditionEvaluator.cs" />
+    <Compile Include="Controls\FdoDataStoreCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoDataStoreCtl.Designer.cs">
+      <DependentUpon>FdoDataStoreCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FdoSchemaDesignerCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -308,6 +314,9 @@
     <None Include="Resources\application_edit.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\FdoDataStoreCtl.resx">
+      <DependentUpon>FdoDataStoreCtl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoSchemaDesignerCtl.resx">
       <DependentUpon>FdoSchemaDesignerCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
