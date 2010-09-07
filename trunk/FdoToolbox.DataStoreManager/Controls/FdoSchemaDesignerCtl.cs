@@ -39,7 +39,7 @@ namespace FdoToolbox.DataStoreManager.Controls
     /// certain elements of this view are disabled based on the capabilities of the underlying connection. In standalone mode,
     /// no view elements are disabled.
     /// </summary>
-    internal partial class FdoSchemaDesignerCtl : ViewContent, IFdoSchemaDesignerView, IConnectionDependentView
+    public partial class FdoSchemaDesignerCtl : ViewContent, IFdoSchemaDesignerView, IConnectionDependentView
     {
         private FdoSchemaDesignerPresenter _presenter;
 
