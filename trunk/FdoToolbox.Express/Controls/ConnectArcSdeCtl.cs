@@ -12,6 +12,7 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Express.Controls
 {
+    [ToolboxItem(false)]
     public partial class ConnectArcSdeCtl : ViewContent, IConnectArcSdeView
     {
         private ConnectArcSdePresenter _presenter;

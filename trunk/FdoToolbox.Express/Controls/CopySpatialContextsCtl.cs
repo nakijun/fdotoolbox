@@ -33,6 +33,7 @@ using FdoToolbox.Base.Services;
 
 namespace FdoToolbox.Express.Controls
 {
+    [ToolboxItem(false)]
     public partial class CopySpatialContextsCtl : ViewContent, ICopySpatialContextsView
     {
         private CopySpatialContextsCtlPresenter _presenter;

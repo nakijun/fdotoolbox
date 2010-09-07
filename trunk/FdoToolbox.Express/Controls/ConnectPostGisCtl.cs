@@ -30,6 +30,7 @@ using ICSharpCode.Core;
 
 namespace FdoToolbox.Express.Controls
 {
+    [ToolboxItem(false)]
     public partial class ConnectPostGisCtl : ConnectRdbmsCtl
     {
         public ConnectPostGisCtl()
