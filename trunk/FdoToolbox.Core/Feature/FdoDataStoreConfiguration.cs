@@ -30,18 +30,37 @@ using OSGeo.FDO.Common.Xml;
 using OSGeo.FDO.Xml;
 using OSGeo.FDO.Geometry;
 
-namespace FdoToolbox.DataStoreManager
+namespace FdoToolbox.Core.Feature
 {
+    /// <summary>
+    /// Encapsulates all aspects of a FDO data store. This is essentially an
+    /// object representation of a FDO XML configuration document.
+    /// </summary>
     public class FdoDataStoreConfiguration
     {
+        /// <summary>
+        /// Gets or sets the feature schemas in this data store
+        /// </summary>
         public FeatureSchemaCollection Schemas { get; set; }
 
+        /// <summary>
+        /// Gets or sets the spatial contexts in this data store
+        /// </summary>
         public SpatialContextInfo[] SpatialContexts { get; set; }
 
+        /// <summary>
+        /// Gets or sets the logical to physical schema mappings in this data store
+        /// </summary>
         public PhysicalSchemaMappingCollection Mappings { get; set; }
 
         private FdoDataStoreConfiguration() { }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="schemas"></param>
+        /// <param name="contexts"></param>
+        /// <param name="mappings"></param>
         public FdoDataStoreConfiguration(FeatureSchemaCollection schemas, SpatialContextInfo[] contexts, PhysicalSchemaMappingCollection mappings)
         {
             this.Schemas = schemas;
@@ -49,6 +68,10 @@ namespace FdoToolbox.DataStoreManager
             this.Mappings = mappings;
         }
 
+        /// <summary>
+        /// Saves this out to a FDO XML configuration document
+        /// </summary>
+        /// <param name="xmlFile"></param>
         public void Save(string xmlFile)
         {
             using (var fact = new FgfGeometryFactory())
@@ -108,6 +131,11 @@ namespace FdoToolbox.DataStoreManager
             }
         }
 
+        /// <summary>
+        /// Loads a FDO XML configuration document
+        /// </summary>
+        /// <param name="xmlFile"></param>
+        /// <returns></returns>
         public static FdoDataStoreConfiguration FromFile(string xmlFile)
         {
             using (var fact = new FgfGeometryFactory())
