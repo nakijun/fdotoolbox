@@ -844,6 +844,16 @@ namespace FdoToolbox.Core.Feature
         /// <param name="fs"></param>
         public void ApplySchema(FeatureSchema fs)
         {
+            ApplySchema(fs, null);
+        }
+
+        /// <summary>
+        /// Applies a feature schema (with optional schema mapping) to the current connection
+        /// </summary>
+        /// <param name="fs"></param>
+        /// <param name="mapping"></param>
+        public void ApplySchema(FeatureSchema fs, PhysicalSchemaMapping mapping)
+        {
             // Fix any invalid spatial context assocations
             IList<SpatialContextInfo> contexts = GetSpatialContexts();
             foreach (ClassDefinition cls in fs.Classes)
@@ -881,6 +891,8 @@ namespace FdoToolbox.Core.Feature
             using (IApplySchema apply = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
             {
                 apply.FeatureSchema = fs;
+                if (mapping != null)
+                    apply.PhysicalMapping = mapping;
                 apply.Execute();
             }
         }
