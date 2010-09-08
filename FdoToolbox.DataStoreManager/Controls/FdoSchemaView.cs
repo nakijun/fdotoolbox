@@ -44,6 +44,15 @@ namespace FdoToolbox.DataStoreManager.Controls
             InitializeComponent();
         }
 
+        public event EventHandler UpdateState;
+
+        private void FlagUpdateState()
+        {
+            var handler = this.UpdateState;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             EvaluateStates();
@@ -201,6 +210,7 @@ namespace FdoToolbox.DataStoreManager.Controls
                     var node = CreatePropertyNode(item);
                     cn.Nodes.Add(node);
                     cn.Expand();
+                    _view.FlagUpdateState();
                 }
             }
 
@@ -213,6 +223,7 @@ namespace FdoToolbox.DataStoreManager.Controls
                     var node = CreateClassNode(item);
                     sn.Nodes.Add(node);
                     sn.Expand();
+                    _view.FlagUpdateState();
                 }
             }
 
@@ -221,6 +232,7 @@ namespace FdoToolbox.DataStoreManager.Controls
                 var node = CreateSchemaNode(item);
                 _view.schemaTree.Nodes.Add(node);
                 _view.EvaluateStates();
+                _view.FlagUpdateState();
             }
 
             private void InitContextMenus()
@@ -292,6 +304,8 @@ namespace FdoToolbox.DataStoreManager.Controls
 
             void OnAfterSelect(object sender, TreeViewEventArgs e)
             {
+                //For all we know they may have edited something on the previous user interface.
+                _view.FlagUpdateState();
                 switch (e.Node.Level)
                 {
                     case LEVEL_SCHEMA:
