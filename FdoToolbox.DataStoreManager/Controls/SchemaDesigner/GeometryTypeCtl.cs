@@ -39,12 +39,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             InitializeComponent();
             GeometricType[] gtypes = (GeometricType[])Enum.GetValues(typeof(GeometricType));
             LoadGeometricTypes(gtypes);
+            this.CheckOnClick = true;
         }
-
-        public GeometryTypeCtl(FdoConnection conn) : this() { }
 
         private void LoadGeometricTypes(GeometricType[] gtypes)
         {
+            this.Items.Clear();
             foreach (GeometricType gt in gtypes)
             {
                 if(gt != GeometricType.GeometricType_All)
@@ -156,5 +156,44 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             }
         }
         */
+
+        internal int GetPostCheckValue(ItemCheckEventArgs e)
+        {
+            //HACK: Someone at Microsoft is obviously on the wrong side of
+            //the ballmer peak again, because the CheckedListBox does not
+            //offer an ItemChecked event. So MS, please explain how on earth
+            //do we listen for a change of checked values *after* an item is
+            //checked/unchecked???????
+
+            GeometricType gtype = default(GeometricType);
+            if (this.CheckedIndices.Count > 0)
+            {
+                if (e.NewValue == CheckState.Unchecked)
+                {
+                    foreach (int idx in this.CheckedIndices)
+                    {
+                        if (idx == e.Index)
+                        {
+                            continue;
+                        }
+                        gtype |= (GeometricType)Enum.Parse(typeof(GeometricType), this.Items[idx].ToString());
+                    }
+                }
+                else
+                {
+                    foreach (int idx in this.CheckedIndices)
+                    {
+                        gtype |= (GeometricType)Enum.Parse(typeof(GeometricType), this.Items[idx].ToString());
+                    }
+                    gtype |= (GeometricType)this.Items[e.Index];
+                }
+            }
+            else
+            {
+                if (e.NewValue == CheckState.Checked)
+                    gtype |= (GeometricType)this.Items[e.Index];
+            }
+            return (int)gtype;
+        }
     }
 }

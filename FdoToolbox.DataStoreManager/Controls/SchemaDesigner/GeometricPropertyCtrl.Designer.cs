@@ -37,7 +37,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cmbSpatialContext = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.chkGeometryTypes = new System.Windows.Forms.CheckedListBox();
+            this.chkGeometryTypes = new FdoToolbox.DataStoreManager.Controls.SchemaDesigner.GeometryTypeCtl();
             this.SuspendLayout();
             // 
             // txtDescription
@@ -128,6 +128,7 @@
             // chkGeometryTypes
             // 
             this.chkGeometryTypes.FormattingEnabled = true;
+            this.chkGeometryTypes.GeometryTypes = 0;
             this.chkGeometryTypes.Location = new System.Drawing.Point(10, 206);
             this.chkGeometryTypes.Name = "chkGeometryTypes";
             this.chkGeometryTypes.Size = new System.Drawing.Size(188, 64);
@@ -165,6 +166,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbSpatialContext;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckedListBox chkGeometryTypes;
+        private GeometryTypeCtl chkGeometryTypes;
     }
 }

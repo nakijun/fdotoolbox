@@ -41,7 +41,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         private SchemaDesignContext _context;
         private ClassDefinitionDecorator _cls;
 
-        private ClassDefinitionCtrl(ClassDefinitionDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater)
+        private ClassDefinitionCtrl(ClassDefinitionDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater, NodeUpdateHandler idUpdater)
             : this()
         {
             _cls = cls;
@@ -51,7 +51,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 
             txtType.Text = cls.ClassType.ToString();
 
-            BindIdentityProperties(cls);
+            BindIdentityProperties(cls, idUpdater);
 
             //cmbBaseClass.DisplayMember = "Name";
             //cmbBaseClass.DataSource = _context.GetClassesExceptFor(cls.ParentName, cls.Name);
@@ -67,7 +67,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             };
         }
 
-        private void BindIdentityProperties(ClassDefinitionDecorator cls)
+        private void BindIdentityProperties(ClassDefinitionDecorator cls, NodeUpdateHandler idUpdater)
         {
             //Fill the list
             foreach (PropertyDefinition p in cls.Properties)
@@ -94,22 +94,24 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (e.NewValue == CheckState.Checked)
                 {
                     cls.MarkAsIdentity(name);
+                    idUpdater();
                 }
                 else if (e.NewValue == CheckState.Unchecked)
                 {
                     cls.RemoveIdentityProperty(name);
+                    idUpdater();
                 }
             };
         }
 
-        public ClassDefinitionCtrl(ClassDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater)
-            : this((ClassDefinitionDecorator)cls, context, updater)
+        public ClassDefinitionCtrl(ClassDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater, NodeUpdateHandler idUpdater)
+            : this((ClassDefinitionDecorator)cls, context, updater, idUpdater)
         {
             cmbGeometricProperty.Enabled = false;
         }
 
-        public ClassDefinitionCtrl(FeatureClassDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater)
-            : this((ClassDefinitionDecorator)cls, context, updater)
+        public ClassDefinitionCtrl(FeatureClassDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater, NodeUpdateHandler idUpdater)
+            : this((ClassDefinitionDecorator)cls, context, updater, idUpdater)
         {
             cmbGeometricProperty.DataSource = cls.AvailableGeometricProperties;
             cmbGeometricProperty.SelectionChangeCommitted += (s, e) =>

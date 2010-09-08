@@ -52,28 +52,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             cmbSpatialContext.DisplayMember = "Name";
             cmbSpatialContext.DataSource = _context.SpatialContexts;
 
-            var allTypes = (GeometricType[])Enum.GetValues(typeof(GeometricType));
-            //Fill the list
-            foreach (GeometricType gt in allTypes)
-            {
-                chkGeometryTypes.Items.Add(gt, false);
-            }
-
-            //Now check the ones which are identity
-            foreach (GeometricType gt in allTypes)
-            {
-                if ((p.GeometryTypes & (int)gt) > 0)
-                {
-                    var idx = chkGeometryTypes.Items.IndexOf(gt);
-                    if (idx >= 0)
-                        chkGeometryTypes.SetItemChecked(idx, true);
-                }
-            }
+            chkGeometryTypes.GeometryTypes = p.GeometryTypes;
 
             //Now wire up change listener
             chkGeometryTypes.ItemCheck += (s, e) =>
             {
-                p.GeometryTypes = GetUpdatedGeometryMask();
+                p.GeometryTypes = chkGeometryTypes.GetPostCheckValue(e);
             };
 
             p.PropertyChanged += (s, evt) =>
@@ -81,19 +65,6 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (evt.PropertyName == "Name")
                     updater();
             };
-        }
-
-        public int GetUpdatedGeometryMask()
-        {
-            GeometricType mask = default(GeometricType);
-            if (chkGeometryTypes.CheckedItems.Count > 0)
-            {
-                foreach (GeometricType gt in chkGeometryTypes.CheckedItems)
-                {
-                    mask |= gt;
-                }
-            }
-            return (int)mask;
         }
     }
 }
