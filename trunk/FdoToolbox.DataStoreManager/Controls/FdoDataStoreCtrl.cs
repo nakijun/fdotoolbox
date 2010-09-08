@@ -58,11 +58,42 @@ namespace FdoToolbox.DataStoreManager.Controls
             if (!_context.IsConnected)
                 this.Title = ResourceService.GetString("TITLE_DATA_STORE_STANDALONE");
 
-            btnApply.Enabled = btnReload.Enabled = _context.IsConnected;
+            schemaView.UpdateState += new EventHandler(OnUpdateState);
 
             schemaView.Context = _context;
             spatialContextView.Context = _context;
+
+            EvaluateCommandStates();
+
             base.OnLoad(e);
+        }
+
+        void OnUpdateState(object sender, EventArgs e)
+        {
+            EvaluateCommandStates();
+        }
+
+        void EvaluateCommandStates()
+        {
+            btnApply.Enabled = true;
+            btnReload.Enabled = true;
+            btnSaveAllSchemas.Enabled = true;
+            btnSaveEverything.Enabled = true;
+            btnSaveSpatialContexts.Enabled = true;
+            btnSaveSelectedSchema.Enabled = true;
+
+            //If we're not connected, there's nothing to apply
+            btnApply.Enabled = btnReload.Enabled = _context.IsConnected;
+
+            if (!_context.IsConnected)
+                return;
+
+            btnSaveAllSchemas.Enabled = _context.Schemas.Count > 0 && _context.SchemasChanged;
+            btnSaveSelectedSchema.Enabled = !string.IsNullOrEmpty(schemaView.GetSelectedSchema()) && _context.SchemasChanged;
+            btnSaveSpatialContexts.Enabled = _context.SpatialContexts.Count > 0;
+
+            //Any one of the above will do
+            btnSaveEverything.Enabled = (btnSaveAllSchemas.Enabled || btnSaveSelectedSchema.Enabled || btnSaveSpatialContexts.Enabled);
         }
 
         private void btnSaveXmlConfig_Click(object sender, EventArgs e)
