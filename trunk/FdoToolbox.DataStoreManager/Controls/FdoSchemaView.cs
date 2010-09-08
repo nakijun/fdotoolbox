@@ -31,6 +31,7 @@ using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Commands.Schema;
 using FdoToolbox.DataStoreManager.Controls.SchemaDesigner;
 using ICSharpCode.Core;
+using FdoToolbox.Base.Forms;
 
 namespace FdoToolbox.DataStoreManager.Controls
 {
@@ -125,6 +126,10 @@ namespace FdoToolbox.DataStoreManager.Controls
             }
         }
 
+        internal string GetSelectedSchema()
+        {
+            return _presenter.GetSelectedSchema();
+        }
 
         class FdoSchemaViewTreePresenter
         {
@@ -336,16 +341,35 @@ namespace FdoToolbox.DataStoreManager.Controls
                     node.Text = cls.Name;
                     node.Name = cls.Name;
                 };
+                NodeUpdateHandler idUpdater = () =>
+                {
+                    //Go through all the data property nodes and update their images
+                    //to reflect what they currently are
+                    foreach (TreeNode pn in node.Nodes)
+                    {
+                        string pName = pn.Name;
+                        if (cls.Properties.Contains(pName))
+                        {
+                            var p = cls.Properties[pName];
+                            if (p.PropertyType == PropertyType.PropertyType_DataProperty)
+                            {
+                                pn.ImageIndex = pn.SelectedImageIndex = IDX_DATA_PROPERTY;
+                                if (cls.IdentityProperties.Contains(pName))
+                                    pn.ImageIndex = pn.SelectedImageIndex = IDX_KEY;
+                            }
+                        }
+                    }
+                };
                 Control c = null;
                 if (cls.ClassType == ClassType.ClassType_Class)
                 {
                     _view.TAB_LOGICAL.Text = "Logical Class";
-                    c = new ClassDefinitionCtrl(new ClassDecorator((Class)cls), _context, update);
+                    c = new ClassDefinitionCtrl(new ClassDecorator((Class)cls), _context, update, idUpdater);
                 }
                 else if (cls.ClassType == ClassType.ClassType_FeatureClass)
                 {
                     _view.TAB_LOGICAL.Text = "Logical Feature Class";
-                    c = new ClassDefinitionCtrl(new FeatureClassDecorator((FeatureClass)cls), _context, update);
+                    c = new ClassDefinitionCtrl(new FeatureClassDecorator((FeatureClass)cls), _context, update, idUpdater);
                 }
 
                 if (c != null)
@@ -544,7 +568,7 @@ namespace FdoToolbox.DataStoreManager.Controls
                 }
             }
 
-            private string GetSelectedSchema()
+            internal string GetSelectedSchema()
             {
                 var node = _view.schemaTree.SelectedNode;
                 if (node != null)
@@ -555,7 +579,28 @@ namespace FdoToolbox.DataStoreManager.Controls
 
             internal void FixIncompatibilities()
             {
-                _context.FixIncompatibilities();
+                var inc = _context.FindIncompatibilities();
+                if (inc.Length > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var i in inc)
+                    {
+                        sb.Append(i.ToString());
+                        sb.Append(Environment.NewLine);
+                    }
+
+                    bool attemptAlter = WrappedMessageBox.Confirm("Question",
+                        ResourceService.GetStringFormatted("MSG_INCOMPATIBLE_SCHEMA", sb.ToString()), MessageBoxText.YesNo);
+
+                    if (attemptAlter)
+                    {
+                        _context.FixIncompatibilities();
+                    }
+                }
+                else
+                {
+                    MessageService.ShowMessage("No incompatibilities detected, nothing changed");
+                }
             }
         }
 

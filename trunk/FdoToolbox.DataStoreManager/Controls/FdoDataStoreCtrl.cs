@@ -89,7 +89,11 @@ namespace FdoToolbox.DataStoreManager.Controls
 
         private void btnSaveEverything_Click(object sender, EventArgs e)
         {
-
+            if (_context.SaveSpatialContexts() && _context.SaveAllSchemas())
+            {
+                MessageService.ShowMessage("Changes have been saved");
+                schemaView.Reset();
+            }
         }
 
         private void btnSaveSpatialContexts_Click(object sender, EventArgs e)
@@ -99,12 +103,38 @@ namespace FdoToolbox.DataStoreManager.Controls
 
         private void btnSaveAllSchemas_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                if (_context.SaveAllSchemas())
+                {
+                    MessageService.ShowMessage("Schemas saved");
+                    schemaView.Reset();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageService.ShowError(ex);
+            }
         }
 
         private void btnSaveSelectedSchema_Click(object sender, EventArgs e)
         {
-
+            string schName = schemaView.GetSelectedSchema();
+            if (!string.IsNullOrEmpty(schName))
+            {
+                try
+                {
+                    if (_context.SaveSchema(schName))
+                    {
+                        MessageService.ShowMessage("Schema saved");
+                        schemaView.Reset();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageService.ShowError(ex);
+                }
+            }
         }
 
         private void btnImport_Click(object sender, EventArgs e)
