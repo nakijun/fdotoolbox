@@ -44,6 +44,32 @@ namespace FdoToolbox.DataStoreManager.Controls
             InitializeComponent();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            EvaluateStates();
+        }
+
+        private void EvaluateStates()
+        {
+            this.RightPaneVisible = false;
+            btnAddSchema.Enabled = true;
+            btnFix.Enabled = false;
+            btnImport.Enabled = true;
+            this.PhysicalMappingsVisible = false;
+
+            if (_context != null && _context.IsConnected)
+            {
+                btnFix.Enabled = _context.Schemas.Count > 0;
+                this.PhysicalMappingsVisible = _context.CanOverrideSchemas;
+
+                if (_context.Schemas.Count == 1 && !_context.CanHaveMultipleSchemas)
+                {
+                    btnImport.Enabled = false;
+                    btnAddSchema.Enabled = false;
+                }
+            }
+        }
+
         private SchemaDesignContext _context;
 
         public SchemaDesignContext Context
@@ -57,28 +83,15 @@ namespace FdoToolbox.DataStoreManager.Controls
 
                 _context = value;
                 _presenter = new FdoSchemaViewTreePresenter(this, _context);
-                this.RightPaneVisible = false;
 
-                if (!_context.IsConnected)
-                {
-                    this.PhysicalMappingsVisible = false;
-                    btnFix.Enabled = false;
-                }
-                else
-                {
-                    btnFix.Enabled = true;
-                    btnImport.Enabled = _context.CanModifyExistingSchemas;
-                    this.PhysicalMappingsVisible = _context.CanOverrideSchemas;
-                }
-
-                _presenter.Initialize();
+                Reset();
             }
         }
 
         internal void Reset()
         {
-            this.RightPaneVisible = false;
             _presenter.Initialize();
+            EvaluateStates();
         }
 
         internal bool PhysicalMappingsVisible
@@ -207,6 +220,7 @@ namespace FdoToolbox.DataStoreManager.Controls
             {
                 var node = CreateSchemaNode(item);
                 _view.schemaTree.Nodes.Add(node);
+                _view.EvaluateStates();
             }
 
             private void InitContextMenus()
