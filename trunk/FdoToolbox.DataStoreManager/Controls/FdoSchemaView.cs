@@ -208,6 +208,14 @@ namespace FdoToolbox.DataStoreManager.Controls
                     var cn = sn.Nodes[clsName];
 
                     var node = CreatePropertyNode(item);
+
+                    if (item.PropertyType == PropertyType.PropertyType_DataProperty)
+                    {
+                        ClassDefinition cls = (ClassDefinition)item.Parent;
+                        if (cls.IdentityProperties.Contains(item.Name))
+                            node.ImageIndex = node.SelectedImageIndex = IDX_KEY;
+                    }
+
                     cn.Nodes.Add(node);
                     cn.Expand();
                     _view.FlagUpdateState();
@@ -269,10 +277,9 @@ namespace FdoToolbox.DataStoreManager.Controls
                 //Add delete item to all
                 ctxClass.Items.Add(new ToolStripSeparator());
                 ctxClass.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteClass);
-                ctxProperty.Items.Add(new ToolStripSeparator());
-                ctxProperty.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteProperty);
                 ctxSchema.Items.Add(new ToolStripSeparator());
                 ctxSchema.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteSchema);
+                ctxProperty.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteProperty);
             }
 
             void OnDeleteClass(object sender, EventArgs e)
@@ -448,6 +455,13 @@ namespace FdoToolbox.DataStoreManager.Controls
                         foreach (PropertyDefinition prop in cls.Properties)
                         {
                             var pnode = CreatePropertyNode(prop);
+                            if (prop.PropertyType == PropertyType.PropertyType_DataProperty)
+                            {
+                                if (cls.IdentityProperties.Contains(prop.Name))
+                                {
+                                    pnode.ImageIndex = pnode.SelectedImageIndex = IDX_KEY;
+                                }
+                            }
                             cnode.Nodes.Add(pnode);
                         }
                     }
