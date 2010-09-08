@@ -215,6 +215,7 @@
     <Compile Include="Feature\DataTypeComparer.cs" />
     <Compile Include="Feature\FdoConnection.cs" />
     <Compile Include="Feature\FdoDataReader.cs" />
+    <Compile Include="Feature\FdoDataStoreConfiguration.cs" />
     <Compile Include="Feature\FdoFeature.cs" />
     <Compile Include="Feature\FdoDataSet.cs">
       <SubType>Component</SubType>
