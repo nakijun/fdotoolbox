@@ -113,14 +113,31 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         public ClassDefinitionCtrl(FeatureClassDecorator cls, SchemaDesignContext context, NodeUpdateHandler updater, NodeUpdateHandler idUpdater)
             : this((ClassDefinitionDecorator)cls, context, updater, idUpdater)
         {
+            // Basically if no geometry property has been designated but the feature class 
+            // has geometric properties, then we want to auto-assign the first geometry
+            // property out of the available ones
+
             cmbGeometricProperty.DataSource = cls.AvailableGeometricProperties;
-            cmbGeometricProperty.SelectionChangeCommitted += (s, e) =>
+            if (cls.GeometryProperty != null)
+            {
+                cmbGeometricProperty.SelectedItem = cls.GeometryProperty.Name;
+            }
+            EventHandler selIndexChanged = (s, e) =>
             {
                 if (cmbGeometricProperty.SelectedItem != null)
                 {
                     cls.AssignGeometricProperty(cmbGeometricProperty.SelectedItem.ToString());
                 }
             };
+            cmbGeometricProperty.SelectedIndexChanged += selIndexChanged;
+            if (cls.GeometryProperty == null)
+            {
+                if (cls.AvailableGeometricProperties.Count > 0)
+                {
+                    cmbGeometricProperty.SelectedIndex = 0;
+                    selIndexChanged(this, EventArgs.Empty);
+                }
+            }
         }
     }
 }
