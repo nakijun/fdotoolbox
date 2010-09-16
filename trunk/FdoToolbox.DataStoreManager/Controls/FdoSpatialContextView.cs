@@ -62,13 +62,66 @@ namespace FdoToolbox.DataStoreManager.Controls
             get { return grdSpatialContexts.SelectedRows.Count == 1 && _context.CanDestroySpatialContexts; }
         }
 
+        public event EventHandler UpdateState;
+
+        private void FlagUpdateState()
+        {
+            var handler = this.UpdateState;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             var sc = FdoSpatialContextDialog.CreateNew(_context.Connection);
             if (sc != null)
             {
                 _context.AddSpatialContext(sc);
+                FlagUpdateState();
             }
+        }
+
+        internal void EvaluateCommandStates()
+        {
+            btnAdd.Enabled = _context.CanCreateSpatialContexts;
+            btnEdit.Enabled = _context.CanEditSpatialContexts;
+            btnDelete.Enabled = _context.CanDestroySpatialContexts;
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (grdSpatialContexts.SelectedRows.Count == 1)
+            {
+                var sc = (SpatialContextInfo)grdSpatialContexts.SelectedRows[0].DataBoundItem;
+                sc = FdoSpatialContextDialog.Edit(_context.Connection, sc);
+                if (sc != null)
+                {
+                    _context.UpdateSpatialContext(sc);
+                    FlagUpdateState();
+                }
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (grdSpatialContexts.SelectedRows.Count == 1)
+            {
+                var sc = (SpatialContextInfo)grdSpatialContexts.SelectedRows[0].DataBoundItem;
+                if (sc != null)
+                {
+                    _context.RemoveSpatialContext(sc);
+                }
+            }
+        }
+
+        private void grdSpatialContexts_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                grdSpatialContexts.Rows[e.RowIndex].Selected = true;
+            }
+
+            btnEdit.Enabled = grdSpatialContexts.SelectedRows.Count == 1 && _context.CanEditSpatialContexts;
         }
     }
 }

@@ -72,6 +72,7 @@
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(47, 22);
             this.btnEdit.Text = "Edit";
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // btnDelete
             // 
@@ -81,6 +82,7 @@
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(60, 22);
             this.btnDelete.Text = "Delete";
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // grdSpatialContexts
             // 
@@ -93,6 +95,8 @@
             this.grdSpatialContexts.ReadOnly = true;
             this.grdSpatialContexts.Size = new System.Drawing.Size(449, 267);
             this.grdSpatialContexts.TabIndex = 1;
+            this.grdSpatialContexts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdSpatialContexts_CellContentClick);
+            this.grdSpatialContexts.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdSpatialContexts_CellContentClick);
             // 
             // FdoSpatialContextView
             // 

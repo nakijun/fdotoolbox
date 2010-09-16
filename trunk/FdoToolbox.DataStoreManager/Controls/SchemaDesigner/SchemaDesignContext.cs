@@ -84,10 +84,8 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             get { return this.Connection != null; }
         }
 
-        public SchemaDesignContext(FdoConnection conn)
+        public void EvaluateCapabilities()
         {
-            _spatialContexts = new BindingList<SpatialContextInfo>();
-
             //Default disconnected state
             this.CanOverrideSchemas = false;
             this.CanShowPhysicalMapping = false;
@@ -95,7 +93,29 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             this.CanHaveMultipleSpatialContexts = true;
             this.CanHaveMultipleSchemas = true;
             this.CanDestroySpatialContexts = false;
+            this.CanEditSpatialContexts = true;
+            this.CanCreateSpatialContexts = true;
 
+            var conn = this.Connection;
+            if (conn != null)
+            {
+                var cmds = conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList);
+
+                this.CanModifyExistingSchemas = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSchemaModification);
+                //this.CanOverrideSchemas = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSchemaOverrides);
+                //this.CanShowPhysicalMapping = Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchemaMapping) >= 0;
+                this.CanHaveMultipleSchemas = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSchemas);
+                this.CanHaveMultipleSpatialContexts = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts);
+
+                this.CanDestroySpatialContexts = Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) >= 0;
+                this.CanCreateSpatialContexts = (Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
+                this.CanEditSpatialContexts = _spatialContexts.Count > 0 && (Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
+            }
+        }
+
+        public SchemaDesignContext(FdoConnection conn)
+        {
+            _spatialContexts = new BindingList<SpatialContextInfo>();
 
             if (conn == null)
             {
@@ -104,13 +124,6 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             }
             else
             {
-                this.CanModifyExistingSchemas = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSchemaModification);
-                //this.CanOverrideSchemas = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSchemaOverrides);
-                //this.CanShowPhysicalMapping = Array.IndexOf(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchemaMapping) >= 0;
-                this.CanHaveMultipleSchemas = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSchemas);
-                this.CanHaveMultipleSpatialContexts = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts);
-                this.CanDestroySpatialContexts = Array.IndexOf(conn.Capability.GetArrayCapability(CapabilityType.FdoCapabilityType_CommandList), OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) >= 0;
-
                 using (var svc = conn.CreateFeatureService())
                 {
                     _schemas = svc.DescribeSchema();
@@ -127,6 +140,8 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             }
 
             this.Connection = conn;
+
+            EvaluateCapabilities();
         }
 
         internal void SetConfiguration(FdoDataStoreConfiguration conf)
@@ -164,6 +179,18 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         /// mapping UIs will be read-only
         /// </summary>
         public bool CanShowPhysicalMapping
+        {
+            get;
+            private set;
+        }
+
+        public bool CanCreateSpatialContexts
+        {
+            get;
+            private set;
+        }
+
+        public bool CanEditSpatialContexts
         {
             get;
             private set;
@@ -525,6 +552,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 {
                     _spatialContexts.Add(c);
                 }
+                this.SpatialContextsChanged = false;
                 return true;
             }
         }
@@ -552,6 +580,23 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             {
                 schema.RejectChanges();
             }
+        }
+
+        public bool SpatialContextsChanged
+        {
+            get;
+            private set;
+        }
+
+        internal void RemoveSpatialContext(SpatialContextInfo sc)
+        {
+            _spatialContexts.Remove(sc);
+            this.SpatialContextsChanged = true;
+        }
+
+        internal void UpdateSpatialContext(SpatialContextInfo sc)
+        {
+            this.SpatialContextsChanged = true;
         }
     }
 }

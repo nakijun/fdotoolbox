@@ -231,15 +231,6 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Schema.
-        /// </summary>
-        internal static string CMD_EditSchema {
-            get {
-                return ResourceManager.GetString("CMD_EditSchema", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit Schema Attributes.
         /// </summary>
         internal static string CMD_EditSchemaAttributes {
@@ -299,15 +290,6 @@ namespace FdoToolbox.Base {
         internal static string CMD_LoadConnection {
             get {
                 return ResourceManager.GetString("CMD_LoadConnection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Load Schema.
-        /// </summary>
-        internal static string CMD_LoadSchema {
-            get {
-                return ResourceManager.GetString("CMD_LoadSchema", resourceCulture);
             }
         }
         
@@ -434,15 +416,6 @@ namespace FdoToolbox.Base {
         internal static string CMD_SaveSchema {
             get {
                 return ResourceManager.GetString("CMD_SaveSchema", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Standalone Schema Editor.
-        /// </summary>
-        internal static string CMD_SchemaEditor {
-            get {
-                return ResourceManager.GetString("CMD_SchemaEditor", resourceCulture);
             }
         }
         

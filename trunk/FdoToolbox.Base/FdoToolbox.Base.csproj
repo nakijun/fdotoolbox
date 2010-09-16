@@ -276,14 +276,6 @@
     <Compile Include="Controls\FdoMapPreviewPresenter.cs" />
     <Compile Include="Controls\FdoObjectExplorerExtender.cs" />
     <Compile Include="Controls\FdoRegProviderCtlPresentation.cs" />
-    <Compile Include="Controls\FdoSpatialContextMgrCtl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\FdoSpatialContextMgrCtl.Designer.cs">
-      <DependentUpon>FdoSpatialContextMgrCtl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\FdoSpatialContextMgrCtlPresentation.cs">
-    </Compile>
     <Compile Include="Controls\FdoSqlQueryCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -646,10 +638,6 @@
     <EmbeddedResource Include="Controls\FdoRegProviderCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoRegProviderCtl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\FdoSpatialContextMgrCtl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FdoSpatialContextMgrCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoStandardQueryCtl.resx">
       <SubType>Designer</SubType>

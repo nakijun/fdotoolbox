@@ -42,7 +42,6 @@
             this.btnSaveSpatialContexts = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnSaveEverything = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnReload = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.schemaView = new FdoToolbox.DataStoreManager.Controls.FdoSchemaView();
             this.spatialContextView = new FdoToolbox.DataStoreManager.Controls.FdoSpatialContextView();
@@ -58,8 +57,7 @@
             this.btnImport,
             this.btnExport,
             this.toolStripSeparator3,
-            this.btnApply,
-            this.btnReload});
+            this.btnApply});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(596, 25);
@@ -181,16 +179,6 @@
             this.btnSaveEverything.ToolTipText = "Apply all feature schemas and spatial contexts";
             this.btnSaveEverything.Click += new System.EventHandler(this.btnSaveEverything_Click);
             // 
-            // btnReload
-            // 
-            this.btnReload.Image = global::FdoToolbox.DataStoreManager.Images.arrow_refresh;
-            this.btnReload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnReload.Name = "btnReload";
-            this.btnReload.Size = new System.Drawing.Size(63, 22);
-            this.btnReload.Text = "Reload";
-            this.btnReload.ToolTipText = "Reloads all schemas, mappings and spatial contexts from the current connection";
-            this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
-            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -276,6 +264,5 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnImport;
-        private System.Windows.Forms.ToolStripButton btnReload;
     }
 }

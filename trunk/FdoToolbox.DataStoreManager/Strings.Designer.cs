@@ -61,6 +61,24 @@ namespace FdoToolbox.DataStoreManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data Store Editor.
+        /// </summary>
+        internal static string CMD_DataStoreEditor {
+            get {
+                return ResourceManager.GetString("CMD_DataStoreEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Data Store.
+        /// </summary>
+        internal static string CMD_EditDataStore {
+            get {
+                return ResourceManager.GetString("CMD_EditDataStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage Schema Mappings.
         /// </summary>
         internal static string CMD_ManageSchemaMappings {
