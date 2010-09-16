@@ -62,6 +62,7 @@ namespace FdoToolbox.DataStoreManager.Controls
                 this.Title = ResourceService.GetString("TITLE_DATA_STORE_STANDALONE");
 
             schemaView.UpdateState += new EventHandler(OnUpdateState);
+            spatialContextView.UpdateState += new EventHandler(OnUpdateState);
 
             schemaView.Context = _context;
             spatialContextView.Context = _context;
@@ -88,15 +89,16 @@ namespace FdoToolbox.DataStoreManager.Controls
 
         void EvaluateCommandStates()
         {
+            _context.EvaluateCapabilities();
+
             btnApply.Enabled = true;
-            btnReload.Enabled = true;
             btnSaveAllSchemas.Enabled = true;
             btnSaveEverything.Enabled = true;
             btnSaveSpatialContexts.Enabled = true;
             btnSaveSelectedSchema.Enabled = true;
 
             //If we're not connected, there's nothing to apply
-            btnApply.Enabled = btnReload.Enabled = _context.IsConnected;
+            btnApply.Enabled = _context.IsConnected;
 
             if (!_context.IsConnected)
                 return;
@@ -116,6 +118,8 @@ namespace FdoToolbox.DataStoreManager.Controls
             {
                 ResetApplyButton();
             }
+
+            spatialContextView.EvaluateCommandStates();
         }
 
         private void btnSaveXmlConfig_Click(object sender, EventArgs e)
@@ -153,6 +157,11 @@ namespace FdoToolbox.DataStoreManager.Controls
         private void btnSaveSpatialContexts_Click(object sender, EventArgs e)
         {
             ResetApplyButton();
+            if (_context.SaveSpatialContexts())
+            {
+                MessageService.ShowMessage("Spatial Context changse have been saved");
+                EvaluateCommandStates();
+            }
         }
 
         private void btnSaveAllSchemas_Click(object sender, EventArgs e)
@@ -204,9 +213,13 @@ namespace FdoToolbox.DataStoreManager.Controls
             }
         }
 
-        private void btnReload_Click(object sender, EventArgs e)
-        {
+        public event EventHandler DataStoreChanged;
 
+        private void OnDataStoreChanged()
+        {
+            var handler = this.DataStoreChanged;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
     }
 }

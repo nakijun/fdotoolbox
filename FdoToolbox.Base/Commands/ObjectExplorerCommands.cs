@@ -222,60 +222,6 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    internal class LoadSchemaCommand : AbstractMenuCommand
-    {
-        public override void Run()
-        {
-            string path = FileService.OpenFile(Res.GetString("TITLE_LOAD_SCHEMA"), Res.GetString("FILTER_SCHEMA_FILE"));
-            if (FileService.FileExists(path))
-            {
-                TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
-                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-                FdoConnection conn = mgr.GetConnection(connNode.Name);
-                using (FdoFeatureService service = conn.CreateFeatureService())
-                {
-                    FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
-                    schemas.ReadXml(path);
-                    foreach (FeatureSchema fs in schemas)
-                    {
-                        FeatureSchema theSchema = fs;
-                        IncompatibleSchema incSchema;
-                        bool canApply = service.CanApplySchema(schemas[0], out incSchema);
-                        if (!canApply)
-                        {
-                            bool attemptAlter = WrappedMessageBox.Confirm("Question", Res.GetStringFormatted("MSG_INCOMPATIBLE_SCHEMA", incSchema.ToString()), MessageBoxText.YesNo);
-                            if (attemptAlter)
-                            {
-                                try
-                                {
-                                    theSchema = service.AlterSchema(fs, incSchema);
-                                }
-                                catch (FeatureServiceException)
-                                {
-                                    string msg = Res.GetString("ERR_FAIL_ALTER_SCHEMA");
-                                    MessageService.ShowError(msg);
-                                    Log.Info(msg);
-                                    continue;
-                                }
-                            }
-                            else
-                            {
-                                return;
-                            }
-                        }
-                        using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
-                        {
-                            service.ApplySchema(theSchema);
-                        }
-                    }
-                    MessageService.ShowMessage(Res.GetStringFormatted("MSG_SCHEMA_LOADED", connNode.Name, path));
-                    Log.InfoFormatted(Res.GetString("MSG_SCHEMA_LOADED"), connNode.Name, path);
-                    mgr.RefreshConnection(connNode.Name);
-                }
-            }
-        }
-    }
-
     internal class SaveSchemaCommand : AbstractMenuCommand
     {
         public override void Run()
@@ -378,27 +324,6 @@ namespace FdoToolbox.Base.Commands
                     ctl = new FdoDataPreviewCtl(conn);
                 
                 wb.ShowContent(ctl, ViewRegion.Document);
-            }
-        }
-    }
-
-    internal class ManageSpatialContextsCommand : AbstractMenuCommand
-    {
-        public override void Run()
-        {
-            Workbench wb = Workbench.Instance;
-            if (wb != null)
-            {
-                TreeNode node = wb.ObjectExplorer.GetSelectedNode();
-                if (node.Level == 1)
-                {
-                    FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-                    FdoConnection conn = mgr.GetConnection(node.Name);
-
-                    FdoSpatialContextMgrCtl ctl = new FdoSpatialContextMgrCtl(conn);
-                    
-                    wb.ShowContent(ctl, ViewRegion.Document);
-                }
             }
         }
     }

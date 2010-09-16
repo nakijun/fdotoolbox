@@ -31,8 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FdoSchemaView));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.btnImport = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnAddSchema = new System.Windows.Forms.ToolStripButton();
             this.btnFix = new System.Windows.Forms.ToolStripButton();
             this.btnUndo = new System.Windows.Forms.ToolStripButton();
@@ -58,8 +56,6 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnImport,
-            this.toolStripSeparator1,
             this.btnAddSchema,
             this.btnFix,
             this.btnUndo});
@@ -68,21 +64,6 @@
             this.toolStrip1.Size = new System.Drawing.Size(449, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // btnImport
-            // 
-            this.btnImport.Image = global::FdoToolbox.DataStoreManager.Images.folder;
-            this.btnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(63, 22);
-            this.btnImport.Text = "Import";
-            this.btnImport.ToolTipText = "Import existing feature schemas from an XML file";
-            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // btnAddSchema
             // 
@@ -206,8 +187,6 @@
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton btnImport;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton btnFix;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TabControl tabControl1;

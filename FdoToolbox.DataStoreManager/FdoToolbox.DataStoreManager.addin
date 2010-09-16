@@ -33,20 +33,20 @@
     </Path>
 
     <Path name="/Workspace/Tools">
-        <MenuItem id="SchemaEditor"
+        <MenuItem id="DataStoreEditor"
                   insertafter="CoordSysCatalog"
-                  label="${res:CMD_SchemaEditor}"
-                  icon="chart_organisation"
-                  class="FdoToolbox.DataStoreManager.Commands.SchemaEditorCommand" />
+                  label="${res:CMD_DataStoreEditor}"
+                  icon="database_edit"
+                  class="FdoToolbox.DataStoreManager.Commands.DataStoreEditorCommand" />
     </Path>
 
     <!-- Toolbar definition -->
     <Path name="/Workbench/Toolbar">
-        <ToolbarItem id="SchemaEditor"
-                     tooltip="${res:CMD_SchemaEditor}"
-                     icon="chart_organisation"
+        <ToolbarItem id="DataStoreEditor"
+                     tooltip="${res:CMD_DataStoreEditor}"
+                     icon="database_edit"
                      insertbefore="Preferences"
-                     class="FdoToolbox.DataStoreManager.Commands.SchemaEditorCommand" />
+                     class="FdoToolbox.DataStoreManager.Commands.DataStoreEditorCommand" />
     </Path>
     
     <!-- Object Explorer toolbar definition -->
@@ -55,18 +55,11 @@
     </Path>
 
     <Path name="/ObjectExplorer/ContextMenus/SelectedConnection">
-        <Condition action="Disable" name="CommandSupported" command="ApplySchema">
-            <MenuItem id="CreateSchema"
-                      label="${res:CMD_CreateSchema}"
-                      icon="chart_organisation"
-                      class="FdoToolbox.DataStoreManager.Commands.CreateSchemaCommand" />
-        </Condition>
-        <Condition name="CommandSupported" command="ApplySchema" action="Disable">
-            <MenuItem id="ManageSchema"
-                      label="${res:CMD_EditSchema}"
-                      icon="chart_organisation"
-                      class="FdoToolbox.DataStoreManager.Commands.EditSchemaCommand"></MenuItem>
-        </Condition>
+        <MenuItem type="Separator" />
+        <MenuItem id="DataStoreEdit"
+                  label="${res:CMD_EditDataStore}"
+                  icon="database_edit"
+                  class="FdoToolbox.DataStoreManager.Commands.EditDataStoreCommand"></MenuItem>
     </Path>
 
     <Path name="/ObjectExplorer/ContextMenus/SelectedSchema">

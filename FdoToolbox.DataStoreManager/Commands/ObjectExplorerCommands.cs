@@ -31,34 +31,7 @@ using FdoToolbox.DataStoreManager.Controls;
 
 namespace FdoToolbox.DataStoreManager.Commands
 {
-    internal class CreateSchemaCommand : AbstractMenuCommand
-    {
-        public override void Run()
-        {
-            Workbench wb = Workbench.Instance;
-            TreeNode node = wb.ObjectExplorer.GetSelectedNode();
-            if (node.Level == 1)
-            {
-                string name = node.Name;
-                FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
-                FdoConnection conn = mgr.GetConnection(name);
-
-                if (conn != null)
-                {
-                    //FdoDataStoreCtl ctl = new FdoDataStoreCtl(conn);
-                    //var ctl = new FdoSchemaDesignerCtl(conn);
-                    //ctl.SchemaApplied += delegate
-                    //{
-                    //    mgr.RefreshConnection(name);
-                    //};
-
-                    //wb.ShowContent(ctl, ViewRegion.Document);
-                }
-            }
-        }
-    }
-
-    internal class EditSchemaCommand : AbstractMenuCommand
+    internal class EditDataStoreCommand : AbstractMenuCommand
     {
         public override void Run()
         {
@@ -73,15 +46,11 @@ namespace FdoToolbox.DataStoreManager.Commands
                 if (conn != null)
                 {
                     var ctl = new FdoDataStoreCtrl(conn);
+                    ctl.DataStoreChanged += delegate
+                    {
+                        mgr.RefreshConnection(name);
+                    };
                     wb.ShowContent(ctl, ViewRegion.Document);
-
-                    //FdoSchemaDesignerCtl ctl = new FdoSchemaDesignerCtl(conn, node.Name);
-                    //ctl.SchemaApplied += delegate
-                    //{
-                    //    mgr.RefreshConnection(name);
-                    //};
-
-                    //wb.ShowContent(ctl, ViewRegion.Document);
                 }
             }
         }

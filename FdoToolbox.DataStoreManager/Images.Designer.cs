@@ -116,6 +116,13 @@ namespace FdoToolbox.DataStoreManager {
             }
         }
         
+        internal static System.Drawing.Bitmap database_edit {
+            get {
+                object obj = ResourceManager.GetObject("database_edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap database_table {
             get {
                 object obj = ResourceManager.GetObject("database_table", resourceCulture);

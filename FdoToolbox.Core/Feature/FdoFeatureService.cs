@@ -1335,8 +1335,10 @@ namespace FdoToolbox.Core.Feature
         /// <returns></returns>
         public FeatureSchema AlterSchema(FeatureSchema schema, IncompatibleSchema incompatibleSchema)
         {
-            //Clone the incoming schema so we can work with the cloned copy
-            FeatureSchema altSchema = CloneSchema(schema);
+            //DO NOT clone the schema, as this resets the state of the cloned schema to added, which
+            //can trip up the IApplySchema command. Anyway RejectChanges() is the ultimate reset button
+            //should we ever want this schema in its initial state.
+            FeatureSchema altSchema = schema;
             
             //Process each incompatible class
             foreach (IncompatibleClass incClass in incompatibleSchema.Classes)

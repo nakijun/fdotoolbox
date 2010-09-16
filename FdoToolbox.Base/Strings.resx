@@ -169,9 +169,6 @@
   <data name="CMD_EditClassAttributes" xml:space="preserve">
     <value>Edit Class Attributes</value>
   </data>
-  <data name="CMD_EditSchema" xml:space="preserve">
-    <value>Edit Schema</value>
-  </data>
   <data name="CMD_EditSchemaAttributes" xml:space="preserve">
     <value>Edit Schema Attributes</value>
   </data>
@@ -189,9 +186,6 @@
   </data>
   <data name="CMD_LoadConnection" xml:space="preserve">
     <value>Load Connection</value>
-  </data>
-  <data name="CMD_LoadSchema" xml:space="preserve">
-    <value>Load Schema</value>
   </data>
   <data name="CMD_ManageDataStores" xml:space="preserve">
     <value>Manage Data Stores</value>
@@ -225,9 +219,6 @@
   </data>
   <data name="CMD_SaveSchema" xml:space="preserve">
     <value>Save Schema</value>
-  </data>
-  <data name="CMD_SchemaEditor" xml:space="preserve">
-    <value>Standalone Schema Editor</value>
   </data>
   <data name="CMD_ScriptManager" xml:space="preserve">
     <value>Script Manager</value>

@@ -28,7 +28,7 @@ using FdoToolbox.Base;
 
 namespace FdoToolbox.DataStoreManager.Commands
 {
-    internal class SchemaEditorCommand : AbstractMenuCommand
+    internal class DataStoreEditorCommand : AbstractMenuCommand
     {
         public override void Run()
         {

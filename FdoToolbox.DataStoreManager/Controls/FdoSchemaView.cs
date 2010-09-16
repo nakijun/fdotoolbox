@@ -63,7 +63,6 @@ namespace FdoToolbox.DataStoreManager.Controls
             this.RightPaneVisible = false;
             btnAddSchema.Enabled = true;
             btnFix.Enabled = false;
-            btnImport.Enabled = true;
             this.PhysicalMappingsVisible = false;
 
             if (_context != null && _context.IsConnected)
@@ -73,7 +72,6 @@ namespace FdoToolbox.DataStoreManager.Controls
 
                 if (_context.Schemas.Count == 1 && !_context.CanHaveMultipleSchemas)
                 {
-                    btnImport.Enabled = false;
                     btnAddSchema.Enabled = false;
                 }
             }
@@ -670,6 +668,7 @@ namespace FdoToolbox.DataStoreManager.Controls
                     if (attemptAlter)
                     {
                         _context.FixIncompatibilities();
+                        _view.FlagUpdateState();
                     }
                 }
                 else
@@ -687,11 +686,6 @@ namespace FdoToolbox.DataStoreManager.Controls
         private void btnAddSchema_Click(object sender, EventArgs e)
         {
             _presenter.AddSchema();
-        }
-
-        private void btnImport_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void btnUndo_Click(object sender, EventArgs e)
