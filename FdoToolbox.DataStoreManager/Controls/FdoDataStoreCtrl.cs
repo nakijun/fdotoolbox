@@ -36,10 +36,13 @@ namespace FdoToolbox.DataStoreManager.Controls
 {
     public partial class FdoDataStoreCtrl : ViewContent
     {
+        private Color _defaultButtonColor;
+
         public FdoDataStoreCtrl()
         {
             InitializeComponent();
             this.Title = ResourceService.GetString("TITLE_DATA_STORE");
+            _defaultButtonColor = btnApply.BackColor;
         }
 
         private SchemaDesignContext _context;
@@ -68,6 +71,16 @@ namespace FdoToolbox.DataStoreManager.Controls
             base.OnLoad(e);
         }
 
+        void HighlightApplyButton()
+        {
+            btnApply.BackColor = Color.OrangeRed;
+        }
+
+        void ResetApplyButton()
+        {
+            btnApply.BackColor = _defaultButtonColor;
+        }
+
         void OnUpdateState(object sender, EventArgs e)
         {
             EvaluateCommandStates();
@@ -94,6 +107,15 @@ namespace FdoToolbox.DataStoreManager.Controls
 
             //Any one of the above will do
             btnSaveEverything.Enabled = (btnSaveAllSchemas.Enabled || btnSaveSelectedSchema.Enabled || btnSaveSpatialContexts.Enabled);
+
+            if (_context.SchemasChanged && btnApply.Enabled)
+            {
+                HighlightApplyButton();
+            }
+            else
+            {
+                ResetApplyButton();
+            }
         }
 
         private void btnSaveXmlConfig_Click(object sender, EventArgs e)
@@ -120,6 +142,7 @@ namespace FdoToolbox.DataStoreManager.Controls
 
         private void btnSaveEverything_Click(object sender, EventArgs e)
         {
+            ResetApplyButton();
             if (_context.SaveSpatialContexts() && _context.SaveAllSchemas())
             {
                 MessageService.ShowMessage("Changes have been saved");
@@ -129,13 +152,14 @@ namespace FdoToolbox.DataStoreManager.Controls
 
         private void btnSaveSpatialContexts_Click(object sender, EventArgs e)
         {
-
+            ResetApplyButton();
         }
 
         private void btnSaveAllSchemas_Click(object sender, EventArgs e)
         {
             try
             {
+                ResetApplyButton();
                 if (_context.SaveAllSchemas())
                 {
                     MessageService.ShowMessage("Schemas saved");
@@ -150,6 +174,7 @@ namespace FdoToolbox.DataStoreManager.Controls
 
         private void btnSaveSelectedSchema_Click(object sender, EventArgs e)
         {
+            ResetApplyButton();
             string schName = schemaView.GetSelectedSchema();
             if (!string.IsNullOrEmpty(schName))
             {
@@ -177,6 +202,11 @@ namespace FdoToolbox.DataStoreManager.Controls
                 _context.SetConfiguration(conf);
                 schemaView.Reset();
             }
+        }
+
+        private void btnReload_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

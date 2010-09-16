@@ -355,6 +355,7 @@
     <Content Include="FdoToolbox.DataStoreManager.addin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\arrow_undo.png" />
     <None Include="Resources\table_relationship.png" />
     <None Include="Resources\package.png" />
     <None Include="Resources\shape_handles.png" />

@@ -186,7 +186,42 @@ namespace FdoToolbox.DataStoreManager.Controls
                 _context.SchemaAdded += new SchemaElementEventHandler<FeatureSchema>(OnSchemaAdded);
                 _context.ClassAdded += new SchemaElementEventHandler<ClassDefinition>(OnClassAdded);
                 _context.PropertyAdded += new SchemaElementEventHandler<PropertyDefinition>(OnPropertyAdded);
+
+                _context.ClassRemoved += new SchemaElementEventHandler<ClassDefinition>(OnClassRemoved);
+                _context.PropertyRemoved += new SchemaElementEventHandler<PropertyDefinition>(OnPropertyRemoved);
+
                 InitContextMenus();
+            }
+
+            void OnPropertyRemoved(PropertyDefinition item)
+            {
+                if (item.Parent != null && item.Parent.Parent != null)
+                {
+                    var cls = item.Parent;
+                    var schema = cls.Parent;
+
+                    var sn = _view.schemaTree.Nodes[schema.Name];
+                    var cn = sn.Nodes[cls.Name];
+
+                    var pn = cn.Nodes[item.Name];
+                    pn.Remove();
+
+                    _view.FlagUpdateState();
+                }
+            }
+
+            void OnClassRemoved(ClassDefinition item)
+            {
+                if (item.Parent != null)
+                {
+                    string schema = item.Parent.Name;
+                    var sn = _view.schemaTree.Nodes[schema];
+
+                    var cn = sn.Nodes[item.Name];
+                    cn.Remove();
+
+                    _view.FlagUpdateState();
+                }
             }
 
             void RightClickHack(object sender, MouseEventArgs e)
@@ -249,37 +284,44 @@ namespace FdoToolbox.DataStoreManager.Controls
                 ctxProperty = new ContextMenuStrip();
                 ctxSchema = new ContextMenuStrip();
 
+                bool canAdd = !_context.IsConnected || _context.CanModifyExistingSchemas;
+                bool canDelete = !_context.IsConnected || _context.CanModifyExistingSchemas;
+
                 //Schema
-                var schemaAdd = new ToolStripMenuItem("Add");
+                if (canAdd)
+                {
+                    var schemaAdd = new ToolStripMenuItem("Add");
 
-                if (_context.IsSupportedClass(ClassType.ClassType_FeatureClass))
-                    schemaAdd.DropDown.Items.Add("Feature Class", ResourceService.GetBitmap("feature_class"), (s, e) => { AddClass(ClassType.ClassType_FeatureClass); });
-                if (_context.IsSupportedClass(ClassType.ClassType_Class))
-                    schemaAdd.DropDown.Items.Add("Class", ResourceService.GetBitmap("database_table"), (s, e) => { AddClass(ClassType.ClassType_Class); });
+                    if (_context.IsSupportedClass(ClassType.ClassType_FeatureClass))
+                        schemaAdd.DropDown.Items.Add("Feature Class", ResourceService.GetBitmap("feature_class"), (s, e) => { AddClass(ClassType.ClassType_FeatureClass); });
+                    if (_context.IsSupportedClass(ClassType.ClassType_Class))
+                        schemaAdd.DropDown.Items.Add("Class", ResourceService.GetBitmap("database_table"), (s, e) => { AddClass(ClassType.ClassType_Class); });
 
-                var classAdd = new ToolStripMenuItem("Add");
+                    var classAdd = new ToolStripMenuItem("Add");
 
-                if (_context.IsSupportedProperty(PropertyType.PropertyType_DataProperty))
-                    classAdd.DropDown.Items.Add("Data Property", ResourceService.GetBitmap("database_table"), (s, e) => { AddProperty(PropertyType.PropertyType_DataProperty); });
+                    if (_context.IsSupportedProperty(PropertyType.PropertyType_DataProperty))
+                        classAdd.DropDown.Items.Add("Data Property", ResourceService.GetBitmap("database_table"), (s, e) => { AddProperty(PropertyType.PropertyType_DataProperty); });
 
-                if (_context.IsSupportedProperty(PropertyType.PropertyType_GeometricProperty))
-                    classAdd.DropDown.Items.Add("Geometric Property", ResourceService.GetBitmap("shape_handles"), (s, e) => { AddProperty(PropertyType.PropertyType_GeometricProperty); });
+                    if (_context.IsSupportedProperty(PropertyType.PropertyType_GeometricProperty))
+                        classAdd.DropDown.Items.Add("Geometric Property", ResourceService.GetBitmap("shape_handles"), (s, e) => { AddProperty(PropertyType.PropertyType_GeometricProperty); });
 
-                if (_context.IsSupportedProperty(PropertyType.PropertyType_AssociationProperty))
-                    classAdd.DropDown.Items.Add("Association Property", ResourceService.GetBitmap("table_relationship"), (s, e) => { AddProperty(PropertyType.PropertyType_AssociationProperty); });
+                    if (_context.IsSupportedProperty(PropertyType.PropertyType_AssociationProperty))
+                        classAdd.DropDown.Items.Add("Association Property", ResourceService.GetBitmap("table_relationship"), (s, e) => { AddProperty(PropertyType.PropertyType_AssociationProperty); });
 
-                if (_context.IsSupportedProperty(PropertyType.PropertyType_ObjectProperty))
-                    classAdd.DropDown.Items.Add("Object Property", ResourceService.GetBitmap("package"), (s, e) => { AddProperty(PropertyType.PropertyType_ObjectProperty); });
+                    if (_context.IsSupportedProperty(PropertyType.PropertyType_ObjectProperty))
+                        classAdd.DropDown.Items.Add("Object Property", ResourceService.GetBitmap("package"), (s, e) => { AddProperty(PropertyType.PropertyType_ObjectProperty); });
 
-                ctxSchema.Items.Add(schemaAdd);
-                ctxClass.Items.Add(classAdd);
+                    ctxSchema.Items.Add(schemaAdd);
+                    ctxClass.Items.Add(classAdd);
+                }
 
                 //Add delete item to all
-                ctxClass.Items.Add(new ToolStripSeparator());
-                ctxClass.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteClass);
-                ctxSchema.Items.Add(new ToolStripSeparator());
-                ctxSchema.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteSchema);
-                ctxProperty.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteProperty);
+                if (canDelete)
+                {
+                    ctxClass.Items.Add(new ToolStripSeparator());
+                    ctxClass.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteClass);
+                    ctxProperty.Items.Add("Delete", ResourceService.GetBitmap("cross"), OnDeleteProperty);
+                }
             }
 
             void OnDeleteClass(object sender, EventArgs e)
@@ -297,15 +339,6 @@ namespace FdoToolbox.DataStoreManager.Controls
                 if (node.Level == LEVEL_PROPERTY)
                 {
                     _context.DeleteProperty((PropertyDefinition)node.Tag);
-                }
-            }
-
-            void OnDeleteSchema(object sender, EventArgs e)
-            {
-                var node = _view.schemaTree.SelectedNode;
-                if (node.Level == LEVEL_SCHEMA)
-                {
-                    _context.DeleteSchema((FeatureSchema)node.Tag);
                 }
             }
 
@@ -659,6 +692,19 @@ namespace FdoToolbox.DataStoreManager.Controls
         private void btnImport_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnUndo_Click(object sender, EventArgs e)
+        {
+            if (!_context.SchemasChanged)
+            {
+                MessageService.ShowMessage("Schema(s) not changed. Nothing to undo");
+                return;
+            }
+
+            _context.UndoSchemaChanges();
+            Reset();
+            FlagUpdateState();
         }
     }
 }
