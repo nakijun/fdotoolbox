@@ -279,7 +279,6 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         }
 
         internal event SchemaElementEventHandler<FeatureSchema> SchemaAdded;
-        internal event SchemaElementEventHandler<FeatureSchema> SchemaRemoved;
         internal event SchemaElementEventHandler<ClassDefinition> ClassAdded;
         internal event SchemaElementEventHandler<ClassDefinition> ClassRemoved;
         internal event SchemaElementEventHandler<PropertyDefinition> PropertyAdded;
@@ -382,17 +381,18 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 
         internal void DeleteClass(ClassDefinition classDefinition)
         {
-            
+            classDefinition.Delete();
+            var handler = this.ClassRemoved;
+            if (handler != null)
+                handler(classDefinition);
         }
 
         internal void DeleteProperty(PropertyDefinition propertyDefinition)
         {
-            
-        }
-
-        internal void DeleteSchema(FeatureSchema featureSchema)
-        {
-            
+            propertyDefinition.Delete();
+            var handler = this.PropertyRemoved;
+            if (handler != null)
+                handler(propertyDefinition);
         }
 
         internal bool IsSupportedClass(ClassType classType)
@@ -544,6 +544,14 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 }
             }
             return inc.ToArray();
+        }
+
+        internal void UndoSchemaChanges()
+        {
+            foreach (FeatureSchema schema in _schemas)
+            {
+                schema.RejectChanges();
+            }
         }
     }
 }

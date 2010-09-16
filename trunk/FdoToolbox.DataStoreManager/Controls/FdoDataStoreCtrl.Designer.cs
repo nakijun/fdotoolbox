@@ -189,6 +189,7 @@
             this.btnReload.Size = new System.Drawing.Size(63, 22);
             this.btnReload.Text = "Reload";
             this.btnReload.ToolTipText = "Reloads all schemas, mappings and spatial contexts from the current connection";
+            this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
             // 
             // splitContainer1
             // 

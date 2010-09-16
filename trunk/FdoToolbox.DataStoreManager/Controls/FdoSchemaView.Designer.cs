@@ -35,6 +35,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnAddSchema = new System.Windows.Forms.ToolStripButton();
             this.btnFix = new System.Windows.Forms.ToolStripButton();
+            this.btnUndo = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.schemaTree = new System.Windows.Forms.TreeView();
             this.imgTree = new System.Windows.Forms.ImageList(this.components);
@@ -60,7 +61,8 @@
             this.btnImport,
             this.toolStripSeparator1,
             this.btnAddSchema,
-            this.btnFix});
+            this.btnFix,
+            this.btnUndo});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(449, 25);
@@ -99,6 +101,16 @@
             this.btnFix.Size = new System.Drawing.Size(132, 22);
             this.btnFix.Text = "Fix Incompatibilities";
             this.btnFix.Click += new System.EventHandler(this.btnFix_Click);
+            // 
+            // btnUndo
+            // 
+            this.btnUndo.Image = global::FdoToolbox.DataStoreManager.Images.arrow_undo;
+            this.btnUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnUndo.Name = "btnUndo";
+            this.btnUndo.Size = new System.Drawing.Size(56, 22);
+            this.btnUndo.Text = "Undo";
+            this.btnUndo.ToolTipText = "Undo all schema modifications";
+            this.btnUndo.Click += new System.EventHandler(this.btnUndo_Click);
             // 
             // splitContainer1
             // 
@@ -204,5 +216,6 @@
         protected internal System.Windows.Forms.TreeView schemaTree;
         private System.Windows.Forms.ImageList imgTree;
         private System.Windows.Forms.ToolStripButton btnAddSchema;
+        private System.Windows.Forms.ToolStripButton btnUndo;
     }
 }

@@ -81,6 +81,13 @@ namespace FdoToolbox.DataStoreManager {
             }
         }
         
+        internal static System.Drawing.Bitmap arrow_undo {
+            get {
+                object obj = ResourceManager.GetObject("arrow_undo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap chart_organisation {
             get {
                 object obj = ResourceManager.GetObject("chart_organisation", resourceCulture);
