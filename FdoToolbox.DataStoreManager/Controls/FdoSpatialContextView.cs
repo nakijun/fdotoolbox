@@ -116,6 +116,7 @@ namespace FdoToolbox.DataStoreManager.Controls
 
         private void grdSpatialContexts_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            grdSpatialContexts.ClearSelection();
             if (e.RowIndex >= 0)
             {
                 grdSpatialContexts.Rows[e.RowIndex].Selected = true;
