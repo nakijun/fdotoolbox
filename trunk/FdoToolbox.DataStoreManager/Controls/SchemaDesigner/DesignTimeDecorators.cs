@@ -27,6 +27,7 @@ using System.ComponentModel;
 using OSGeo.FDO.Common;
 using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Commands.Schema;
+using System.Diagnostics;
 
 namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 {
@@ -75,6 +76,10 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
+#if DEBUG
+            Debug.WriteLine(string.Format("PropertyChanged: {0}.{1}", this.DecoratedObject.GetType().Name, propertyName));
+#endif
+
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -532,6 +537,207 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                     OnPropertyChanged("ValueConstraint");
                 }
             }   
+        }
+    }
+
+    public class AssociationPropertyDefinitionDecorator : PropertyDefinitionDecorator
+    {
+        private AssociationPropertyDefinition _a;
+
+        public AssociationPropertyDefinitionDecorator(AssociationPropertyDefinition p) : base(p) { _a = p; }
+
+        public ClassDefinition AssociatedClass
+        {
+            get { return _a.AssociatedClass; }
+            set
+            {
+                _a.AssociatedClass = value;
+                OnPropertyChanged("AssociatedClass");
+            }
+        }
+
+        public DeleteRule DeleteRule
+        {
+            get { return _a.DeleteRule; }
+            set
+            {
+                _a.DeleteRule = value;
+                OnPropertyChanged("DeleteRule");
+            }
+        }
+
+        public DataPropertyDefinitionCollection IdentityProperties
+        {
+            get { return _a.IdentityProperties; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return _a.IsReadOnly; }
+            set
+            {
+                _a.IsReadOnly = value;
+                OnPropertyChanged("IsReadOnly");
+            }
+        }
+
+        public bool LockCascade
+        {
+            get { return _a.LockCascade; }
+            set
+            {
+                _a.LockCascade = value;
+                OnPropertyChanged("LockCascade");
+            }
+        }
+
+        public string Multiplicity
+        {
+            get { return _a.Multiplicity; }
+            set
+            {
+                _a.Multiplicity = value;
+                OnPropertyChanged("Multiplicity");
+            }
+        }
+
+        public DataPropertyDefinitionCollection ReverseIdentityProperties
+        {
+            get { return _a.ReverseIdentityProperties; }
+        }
+
+        public string ReverseMultiplicity
+        {
+            get { return _a.ReverseMultiplicity; }
+            set
+            {
+                _a.ReverseMultiplicity = value;
+                OnPropertyChanged("ReverseMultiplicity");
+            }
+        }
+
+        public string ReverseName
+        {
+            get { return _a.ReverseName; }
+            set
+            {
+                _a.ReverseName = value;
+                OnPropertyChanged("ReverseName");
+            }
+        }
+
+        internal KeyMapping[] GetMappings()
+        {
+            var aids = _a.IdentityProperties;
+            var rids = _a.ReverseIdentityProperties;
+
+            Debug.Assert(aids.Count == rids.Count);
+
+            List<KeyMapping> mappings = new List<KeyMapping>();
+
+            for (int i = 0; i < aids.Count; i++)
+            {
+                var ap = aids[i];
+                var rp = rids[i];
+
+                mappings.Add(new KeyMapping(ap.Name, rp.Name));
+            }
+
+            return mappings.ToArray();
+        }
+
+        /// <summary>
+        /// Helper method to set the identity and reverse identity properties
+        /// </summary>
+        /// <param name="map"></param>
+        internal void AddKeyMapping(KeyMapping map)
+        {
+            var aids = _a.IdentityProperties;
+            var rids = _a.ReverseIdentityProperties;
+
+            Debug.Assert(aids.Count == rids.Count);
+
+            var acls = (ClassDefinition)_a.Parent;
+            var rcls = _a.AssociatedClass;
+
+            var ap = acls.Properties[map.Primary];
+            var rp = rcls.Properties[map.Foreign];
+
+            Debug.Assert(ap.PropertyType == rp.PropertyType);
+            Debug.Assert(ap.PropertyType == PropertyType.PropertyType_DataProperty);
+
+            aids.Add((DataPropertyDefinition)ap);
+            rids.Add((DataPropertyDefinition)rp);
+        }
+
+        internal void RemoveKeyMapping(int index)
+        {
+            var aids = _a.IdentityProperties;
+            var rids = _a.ReverseIdentityProperties;
+
+            Debug.Assert(aids.Count == rids.Count);
+
+            aids.RemoveAt(index);
+            rids.RemoveAt(index);
+
+            OnPropertyChanged("IdentityProperties");
+            OnPropertyChanged("ReverseIdentityProperties");
+        }
+
+        internal void ResetMappings()
+        {
+            _a.IdentityProperties.Clear();
+            _a.ReverseIdentityProperties.Clear();
+
+            OnPropertyChanged("IdentityProperties");
+            OnPropertyChanged("ReverseIdentityProperties");
+        }
+    }
+
+    public class ObjectPropertyDefinitionDecorator : PropertyDefinitionDecorator
+    {
+        private ObjectPropertyDefinition _o;
+
+        public ObjectPropertyDefinitionDecorator(ObjectPropertyDefinition p) : base(p) { _o = p; }
+
+        public ClassDefinition Class
+        {
+            get { return _o.Class; }
+            set
+            {
+                _o.Class = value;
+                OnPropertyChanged("Class");
+            }
+        }
+
+        public DataPropertyDefinition IdentityProperty
+        {
+            get { return _o.IdentityProperty; }
+            set
+            {
+                _o.IdentityProperty = value;
+                OnPropertyChanged("IdentityProperty");
+            }
+        }
+
+        public ObjectType ObjectType
+        {
+            get { return _o.ObjectType; }
+            set
+            {
+                _o.ObjectType = value;
+                OnPropertyChanged("ObjectType");
+            }
+        }
+
+        public OrderType OrderType
+        {
+            get { return _o.OrderType; }
+            set
+            {
+                _o.OrderType = value;
+                OnPropertyChanged("OrderType");
+            }
         }
     }
 }

@@ -198,6 +198,18 @@
     <Compile Include="Controls\FdoSpatialContextView.Designer.cs">
       <DependentUpon>FdoSpatialContextView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SchemaDesigner\AddMappingDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\AddMappingDialog.Designer.cs">
+      <DependentUpon>AddMappingDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\AssociationPropertyCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\AssociationPropertyCtrl.Designer.cs">
+      <DependentUpon>AssociationPropertyCtrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SchemaDesigner\AttributesCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -234,6 +246,12 @@
     </Compile>
     <Compile Include="Controls\SchemaDesigner\ListConstraintSettingsCtl.Designer.cs">
       <DependentUpon>ListConstraintSettingsCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\ObjectPropertyCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SchemaDesigner\ObjectPropertyCtrl.Designer.cs">
+      <DependentUpon>ObjectPropertyCtrl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SchemaDesigner\PhysicalConfigCtrl.cs">
       <SubType>UserControl</SubType>
@@ -391,6 +409,12 @@
     <EmbeddedResource Include="Controls\FdoSpatialContextView.resx">
       <DependentUpon>FdoSpatialContextView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\AddMappingDialog.resx">
+      <DependentUpon>AddMappingDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\AssociationPropertyCtrl.resx">
+      <DependentUpon>AssociationPropertyCtrl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SchemaDesigner\AttributesCtrl.resx">
       <DependentUpon>AttributesCtrl.cs</DependentUpon>
     </EmbeddedResource>
@@ -410,6 +434,9 @@
     <EmbeddedResource Include="Controls\SchemaDesigner\ListConstraintSettingsCtl.resx">
       <DependentUpon>ListConstraintSettingsCtl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SchemaDesigner\ObjectPropertyCtrl.resx">
+      <DependentUpon>ObjectPropertyCtrl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SchemaDesigner\PhysicalConfigCtrl.resx">
       <DependentUpon>PhysicalConfigCtrl.cs</DependentUpon>

@@ -385,6 +385,16 @@ namespace FdoToolbox.DataStoreManager.Controls
                     _view.TAB_LOGICAL.Text = "Logical Geometric Property";
                     c = new GeometricPropertyCtrl(new GeometricPropertyDefinitionDecorator((GeometricPropertyDefinition)prop), _context, update);
                 }
+                else if (prop.PropertyType == PropertyType.PropertyType_AssociationProperty)
+                {
+                    _view.TAB_LOGICAL.Text = "Logical Association Property";
+                    c = new AssociationPropertyCtrl(new AssociationPropertyDefinitionDecorator((AssociationPropertyDefinition)prop), _context, update);
+                }
+                else if (prop.PropertyType == PropertyType.PropertyType_ObjectProperty)
+                {
+                    _view.TAB_LOGICAL.Text = "Logical Object Property";
+                    c = new ObjectPropertyCtrl(new ObjectPropertyDefinitionDecorator((ObjectPropertyDefinition)prop), _context, update);
+                }
 
                 if (c != null)
                 {
@@ -622,7 +632,8 @@ namespace FdoToolbox.DataStoreManager.Controls
                     PropertyDefinition pd = null;
                     switch (type)
                     { 
-                        case PropertyType.PropertyType_AssociationProperty: //TODO
+                        case PropertyType.PropertyType_AssociationProperty:
+                            pd = new AssociationPropertyDefinition(name, "");
                             break;
                         case PropertyType.PropertyType_DataProperty:
                             pd = new DataPropertyDefinition(name, "");
@@ -630,7 +641,8 @@ namespace FdoToolbox.DataStoreManager.Controls
                         case PropertyType.PropertyType_GeometricProperty:
                             pd = new GeometricPropertyDefinition(name, "");
                             break;
-                        case PropertyType.PropertyType_ObjectProperty: //TODO
+                        case PropertyType.PropertyType_ObjectProperty:
+                            pd = new ObjectPropertyDefinition(name, "");
                             break;
                         case PropertyType.PropertyType_RasterProperty:
                             break;

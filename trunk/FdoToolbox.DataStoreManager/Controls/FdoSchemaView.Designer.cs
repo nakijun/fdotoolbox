@@ -108,7 +108,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
             this.splitContainer1.Size = new System.Drawing.Size(449, 267);
-            this.splitContainer1.SplitterDistance = 219;
+            this.splitContainer1.SplitterDistance = 179;
             this.splitContainer1.TabIndex = 5;
             // 
             // schemaTree
@@ -119,7 +119,7 @@
             this.schemaTree.Location = new System.Drawing.Point(0, 0);
             this.schemaTree.Name = "schemaTree";
             this.schemaTree.SelectedImageIndex = 0;
-            this.schemaTree.Size = new System.Drawing.Size(219, 267);
+            this.schemaTree.Size = new System.Drawing.Size(179, 267);
             this.schemaTree.TabIndex = 4;
             // 
             // imgTree
@@ -143,7 +143,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(226, 267);
+            this.tabControl1.Size = new System.Drawing.Size(266, 267);
             this.tabControl1.TabIndex = 5;
             // 
             // TAB_LOGICAL
@@ -151,7 +151,7 @@
             this.TAB_LOGICAL.Location = new System.Drawing.Point(4, 22);
             this.TAB_LOGICAL.Name = "TAB_LOGICAL";
             this.TAB_LOGICAL.Padding = new System.Windows.Forms.Padding(3);
-            this.TAB_LOGICAL.Size = new System.Drawing.Size(218, 241);
+            this.TAB_LOGICAL.Size = new System.Drawing.Size(258, 241);
             this.TAB_LOGICAL.TabIndex = 0;
             this.TAB_LOGICAL.Text = "Logical Property";
             this.TAB_LOGICAL.UseVisualStyleBackColor = true;

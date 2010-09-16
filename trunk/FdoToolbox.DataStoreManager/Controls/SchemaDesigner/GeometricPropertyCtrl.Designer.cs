@@ -127,8 +127,14 @@
             // 
             // chkGeometryTypes
             // 
+            this.chkGeometryTypes.CheckOnClick = true;
             this.chkGeometryTypes.FormattingEnabled = true;
             this.chkGeometryTypes.GeometryTypes = 0;
+            this.chkGeometryTypes.Items.AddRange(new object[] {
+            OSGeo.FDO.Schema.GeometricType.GeometricType_Point,
+            OSGeo.FDO.Schema.GeometricType.GeometricType_Curve,
+            OSGeo.FDO.Schema.GeometricType.GeometricType_Surface,
+            OSGeo.FDO.Schema.GeometricType.GeometricType_Solid});
             this.chkGeometryTypes.Location = new System.Drawing.Point(10, 206);
             this.chkGeometryTypes.Name = "chkGeometryTypes";
             this.chkGeometryTypes.Size = new System.Drawing.Size(188, 64);
@@ -138,6 +144,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.Controls.Add(this.chkGeometryTypes);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cmbSpatialContext);
