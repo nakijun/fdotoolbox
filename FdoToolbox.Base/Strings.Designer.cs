@@ -582,7 +582,7 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FDO Feature Schema (*.schema)|*.schema.
+        ///   Looks up a localized string similar to FDO Data Store Configuration (*.xml)|*.xml|FDO Feature Schema (*.schema)|*.schema.
         /// </summary>
         internal static string FILTER_SCHEMA_FILE {
             get {
