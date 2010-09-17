@@ -70,10 +70,34 @@ namespace FdoToolbox.Express.Controls
                 try
                 {
                     FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SHP", _view.ShpDirectory);
-                    conn.Open();
-                    using (FdoFeatureService service = conn.CreateFeatureService())
+                    FdoDataStoreConfiguration config = FdoDataStoreConfiguration.FromFile(_view.FeatureSchemaDefinition);
+                    
+                    //SHP allows the following:
+                    // 1 feature schema
+                    // Multiple spatial contexts
+                    if (config.Schemas.Count > 1)
                     {
-                        service.LoadSchemasFromXml(_view.FeatureSchemaDefinition, _view.FixIncompatibilities);
+                        _view.ShowError("More than 1 feature schema was found in the document. SHP only allows 1 feature schema");
+                        return false;
+                    }
+                    var schema = config.Schemas[0];
+                    using (var svc = conn.CreateFeatureService())
+                    {
+                        foreach (var sc in config.SpatialContexts)
+                        {
+                            svc.CreateSpatialContext(sc, true);
+                        }
+
+                        if (_view.FixIncompatibilities)
+                        {
+                            IncompatibleSchema incs;
+                            if (!svc.CanApplySchema(schema, out incs))
+                            {
+                                schema = svc.AlterSchema(schema, incs);
+                            }
+                        }
+
+                        svc.ApplySchema(schema);
                     }
                     conn.Dispose();
                     if (_view.CreateConnection)
@@ -85,6 +109,7 @@ namespace FdoToolbox.Express.Controls
                 }
                 catch (OSGeo.FDO.Common.Exception ex)
                 {
+                    _view.ShowError(ex);
                     LoggingService.Error("Failed to create SHP", ex);
                     return false;
                 }
