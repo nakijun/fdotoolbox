@@ -308,6 +308,7 @@ namespace FdoToolbox.Base.Controls
 
         void CreateSchemaNodes(TreeNode connNode)
         {
+            Action<TimeSpan> act = (ts) => LoggingService.Info("Connection " + connNode.Name + ": Schema population completed in " + ts.TotalMilliseconds + "ms");
             FdoConnection conn = _connMgr.GetConnection(connNode.Name);
             if (conn != null)
             {
@@ -315,35 +316,41 @@ namespace FdoToolbox.Base.Controls
                 {
                     if (service.SupportsPartialSchemaDiscovery())
                     {
-                        List<string> schemaNames = service.GetSchemaNames();
-
-                        //Pre-sort
-                        SortedList<string, string> sorted = new SortedList<string, string>();
-                        foreach (string name in schemaNames)
-                            sorted.Add(name, name);
-
-                        foreach (string name in schemaNames)
+                        using (var measure = new TimeMeasurement(act))
                         {
-                            TreeNode schemaNode = CreateSchemaNode(name, true);
-                            connNode.Nodes.Add(schemaNode);
-                            schemaNode.Nodes.Add(ResourceService.GetString("TEXT_LOADING"));
+                            List<string> schemaNames = service.GetSchemaNames();
+
+                            //Pre-sort
+                            SortedList<string, string> sorted = new SortedList<string, string>();
+                            foreach (string name in schemaNames)
+                                sorted.Add(name, name);
+
+                            foreach (string name in schemaNames)
+                            {
+                                TreeNode schemaNode = CreateSchemaNode(name, true);
+                                connNode.Nodes.Add(schemaNode);
+                                schemaNode.Nodes.Add(ResourceService.GetString("TEXT_LOADING"));
+                            }
                         }
                     }
                     else
                     {
-                        FeatureSchemaCollection schemas = service.DescribeSchema();
-
-                        //Pre-sort
-                        SortedList<string, FeatureSchema> sorted = new SortedList<string, FeatureSchema>();
-                        foreach (FeatureSchema schema in schemas)
-                            sorted.Add(schema.Name, schema);
-
-                        foreach (FeatureSchema schema in schemas)
+                        using (var measure = new TimeMeasurement(act))
                         {
-                            TreeNode schemaNode = CreateSchemaNode(schema.Name, false);
-                            GetClassNodesFull(schema, schemaNode);
-                            connNode.Nodes.Add(schemaNode);
-                            schemaNode.Expand();
+                            FeatureSchemaCollection schemas = service.DescribeSchema();
+
+                            //Pre-sort
+                            SortedList<string, FeatureSchema> sorted = new SortedList<string, FeatureSchema>();
+                            foreach (FeatureSchema schema in schemas)
+                                sorted.Add(schema.Name, schema);
+
+                            foreach (FeatureSchema schema in schemas)
+                            {
+                                TreeNode schemaNode = CreateSchemaNode(schema.Name, false);
+                                GetClassNodesFull(schema, schemaNode);
+                                connNode.Nodes.Add(schemaNode);
+                                schemaNode.Expand();
+                            }
                         }
                     }
                 }

@@ -217,24 +217,27 @@ namespace FdoToolbox.DataStoreManager.Controls
                         schema = svc.AlterSchema(schema, incs);
                     }
 
-                    foreach (var sc in conf.SpatialContexts)
+                    using (var cur = new TempCursor(Cursors.WaitCursor))
                     {
-                        svc.CreateSpatialContext(sc, true);
-                    }
-
-                    //Only for SQLite, but this is general enough
-                    var fscs = svc.DescribeSchema();
-                    if (fscs.Count == 1)
-                    {
-                        var fsc = fscs[0];
-                        foreach (ClassDefinition cls in schema.Classes)
+                        foreach (var sc in conf.SpatialContexts)
                         {
-                            var klass = FdoSchemaUtil.CloneClass(cls);
-                            fsc.Classes.Add(klass);
+                            svc.CreateSpatialContext(sc, true);
                         }
-                        schema = fsc;
+
+                        //Only for SQLite, but this is general enough
+                        var fscs = svc.DescribeSchema();
+                        if (fscs.Count == 1)
+                        {
+                            var fsc = fscs[0];
+                            foreach (ClassDefinition cls in schema.Classes)
+                            {
+                                var klass = FdoSchemaUtil.CloneClass(cls);
+                                fsc.Classes.Add(klass);
+                            }
+                            schema = fsc;
+                        }
+                        svc.ApplySchema(schema);
                     }
-                    svc.ApplySchema(schema);
                 }
                 conn.Close();
             }
@@ -243,52 +246,40 @@ namespace FdoToolbox.DataStoreManager.Controls
 
         private void btnSaveEverything_Click(object sender, EventArgs e)
         {
-            ResetApplyButton();
-            if (_context.SaveSpatialContexts() && _context.SaveAllSchemas())
+            using (var cur = new TempCursor(Cursors.WaitCursor))
             {
-                MessageService.ShowMessage("Changes have been saved");
-                schemaView.Reset();
+                ResetApplyButton();
+                if (_context.SaveSpatialContexts() && _context.SaveAllSchemas())
+                {
+                    MessageService.ShowMessage("Changes have been saved");
+                    schemaView.Reset();
+                }
             }
         }
 
         private void btnSaveSpatialContexts_Click(object sender, EventArgs e)
         {
-            ResetApplyButton();
-            if (_context.SaveSpatialContexts())
+            using (var cur = new TempCursor(Cursors.WaitCursor))
             {
-                MessageService.ShowMessage("Spatial Context changse have been saved");
-                EvaluateCommandStates();
+                ResetApplyButton();
+                if (_context.SaveSpatialContexts())
+                {
+                    MessageService.ShowMessage("Spatial Context changse have been saved");
+                    EvaluateCommandStates();
+                }
             }
         }
 
         private void btnSaveAllSchemas_Click(object sender, EventArgs e)
         {
-            try
-            {
-                ResetApplyButton();
-                if (_context.SaveAllSchemas())
-                {
-                    MessageService.ShowMessage("Schemas saved");
-                    schemaView.Reset();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageService.ShowError(ex);
-            }
-        }
-
-        private void btnSaveSelectedSchema_Click(object sender, EventArgs e)
-        {
-            ResetApplyButton();
-            string schName = schemaView.GetSelectedSchema();
-            if (!string.IsNullOrEmpty(schName))
+            using (var cur = new TempCursor(Cursors.WaitCursor))
             {
                 try
                 {
-                    if (_context.SaveSchema(schName))
+                    ResetApplyButton();
+                    if (_context.SaveAllSchemas())
                     {
-                        MessageService.ShowMessage("Schema saved");
+                        MessageService.ShowMessage("Schemas saved");
                         schemaView.Reset();
                     }
                 }
@@ -299,14 +290,41 @@ namespace FdoToolbox.DataStoreManager.Controls
             }
         }
 
+        private void btnSaveSelectedSchema_Click(object sender, EventArgs e)
+        {
+            using (var cur = new TempCursor(Cursors.WaitCursor))
+            {
+                ResetApplyButton();
+                string schName = schemaView.GetSelectedSchema();
+                if (!string.IsNullOrEmpty(schName))
+                {
+                    try
+                    {
+                        if (_context.SaveSchema(schName))
+                        {
+                            MessageService.ShowMessage("Schema saved");
+                            schemaView.Reset();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageService.ShowError(ex);
+                    }
+                }
+            }
+        }
+
         private void btnImport_Click(object sender, EventArgs e)
         {
             string file = FileService.OpenFile("Open XML Configuration", "XML files (*.xml)|*.xml");
             if (!string.IsNullOrEmpty(file))
             {
-                var conf = FdoDataStoreConfiguration.FromFile(file);
-                _context.SetConfiguration(conf);
-                schemaView.Reset();
+                using (var cur = new TempCursor(Cursors.WaitCursor))
+                {
+                    var conf = FdoDataStoreConfiguration.FromFile(file);
+                    _context.SetConfiguration(conf);
+                    schemaView.Reset();
+                }
             }
         }
 
