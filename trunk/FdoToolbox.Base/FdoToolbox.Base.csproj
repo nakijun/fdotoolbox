@@ -176,7 +176,7 @@
     <Compile Include="Commands\ObjectExplorerCommands.cs" />
     <Compile Include="Commands\TextEditorCommands.cs" />
     <Compile Include="Commands\ToolCommands.cs" />
-    <Compile Include="Conditions\CommandSupportConditionEvaluator.cs" />
+    <Compile Include="Conditions\ConditionEvaluators.cs" />
     <Compile Include="Controls\PreferenceSheets\BasePreferencesCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>

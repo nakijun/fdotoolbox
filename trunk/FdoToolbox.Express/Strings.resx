@@ -282,4 +282,10 @@
   <data name="CMD_CreatePostgres" xml:space="preserve">
     <value>Create PostgreSQL</value>
   </data>
+  <data name="CMD_ConnectAdskOracle" xml:space="preserve">
+    <value>Connect to Oracle (Autodesk Provider)</value>
+  </data>
+  <data name="CMD_ConnectAdskSqlServer" xml:space="preserve">
+    <value>Connect to SQL Server 2005 (Autodesk Provider)</value>
+  </data>
 </root>

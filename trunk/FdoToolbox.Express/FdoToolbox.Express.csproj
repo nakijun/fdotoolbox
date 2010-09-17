@@ -118,6 +118,18 @@
     <Compile Include="Commands\CreateCommands.cs" />
     <Compile Include="Commands\ObjectExplorerCommands.cs" />
     <Compile Include="Commands\StartupCommand.cs" />
+    <Compile Include="Controls\ConnectAdskOracleCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectAdskOracleCtl.Designer.cs">
+      <DependentUpon>ConnectAdskOracleCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectAdskSqlServerCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectAdskSqlServerCtl.Designer.cs">
+      <DependentUpon>ConnectAdskSqlServerCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ConnectArcSdeCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -83,4 +83,30 @@ namespace FdoToolbox.Base.Conditions
             return false;
         }
     }
+
+    /// <summary>
+    /// A condition evaluator that allows commands to be enabled/disabled based on whether a given provider is
+    /// registered with this installation
+    /// </summary>
+    public class ProviderSupportConditionEvaluator : IConditionEvaluator
+    {
+        public bool IsValid(object caller, Condition condition)
+        {
+            var provider = condition.Properties["Provider"];
+
+            return ProviderExists(provider);
+        }
+
+        private bool ProviderExists(string provider)
+        {
+            var list = FdoFeatureService.GetProviders();
+            foreach (var prov in list)
+            {
+                if (prov.Name.StartsWith(provider))
+                    return true;
+            }
+            return false;
+        }
+    }
+
 }

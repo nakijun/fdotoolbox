@@ -61,6 +61,24 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to Oracle (Autodesk Provider).
+        /// </summary>
+        internal static string CMD_ConnectAdskOracle {
+            get {
+                return ResourceManager.GetString("CMD_ConnectAdskOracle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect to SQL Server 2005 (Autodesk Provider).
+        /// </summary>
+        internal static string CMD_ConnectAdskSqlServer {
+            get {
+                return ResourceManager.GetString("CMD_ConnectAdskSqlServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect to ArcSDE.
         /// </summary>
         internal static string CMD_ConnectArcSde {
