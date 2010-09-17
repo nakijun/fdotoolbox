@@ -26,6 +26,7 @@ using FdoToolbox.Core.ETL.Operations;
 using FdoToolbox.Core.Feature;
 using System.Collections.Specialized;
 using OSGeo.FDO.Schema;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
@@ -124,7 +125,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                                 var cls = ssvc.GetClassByName(ct.Schema, ct.Name);
                                 Info("Creating a cloned copy of source class " + ct.Schema + ":" + ct.Name);
 
-                                var cloned = FdoFeatureService.CloneClass(cls);
+                                var cloned = FdoSchemaUtil.CloneClass(cls);
                                 var propList = new List<string>(_opts.CheckSourceProperties);
                                 var removeList = new List<string>();
                                 foreach (PropertyDefinition prop in cloned.Properties)
@@ -155,7 +156,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                                 foreach (var prop in ct.PropertiesToCreate)
                                 {
                                     Info("Adding property to cloned class: " + prop.Name);
-                                    cloned.Properties.Add(FdoFeatureService.CloneProperty(prop));
+                                    cloned.Properties.Add(FdoSchemaUtil.CloneProperty(prop));
                                 }
 
                                 //Add an auto-generated identity property if none exist
@@ -210,7 +211,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                                     if (cls.Properties.IndexOf(prop.Name) < 0)
                                     {
                                         Info("Adding property to class: " + prop.Name);
-                                        cls.Properties.Add(FdoFeatureService.CloneProperty(prop));
+                                        cls.Properties.Add(FdoSchemaUtil.CloneProperty(prop));
                                     }
                                     else 
                                     {

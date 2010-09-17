@@ -58,7 +58,7 @@ namespace FdoToolbox.Base.Forms
         public PartialSchemaSaveDialog(FeatureSchema schema)
             : this()
         {
-            _schema = FdoFeatureService.CloneSchema(schema); //Operate on a clone
+            _schema = FdoSchemaUtil.CloneSchema(schema); //Operate on a clone
             InitTree();
         }
 

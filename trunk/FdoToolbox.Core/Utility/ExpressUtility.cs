@@ -460,7 +460,7 @@ namespace FdoToolbox.Core.Utility
                     //Assume single-schema
                     FeatureSchema fs = schemas[0];
                     //Clone and apply to target
-                    FeatureSchema targetSchema = FdoFeatureService.CloneSchema(fs);
+                    FeatureSchema targetSchema = FdoSchemaUtil.CloneSchema(fs);
                     IncompatibleSchema incSchema;
                     string sourceSchemaName = fs.Name;
                     string targetSchemaName = string.Empty;
