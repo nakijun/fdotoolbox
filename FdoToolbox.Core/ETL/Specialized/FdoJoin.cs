@@ -189,8 +189,8 @@ namespace FdoToolbox.Core.ETL.Specialized
             dprops["File"] = Path.GetTempFileName();
 
             var tempSchema = new FeatureSchema("Default", "");
-            var leftCopy = FdoFeatureService.CloneClass(leftCls);
-            var rightCopy = FdoFeatureService.CloneClass(rightCls);
+            var leftCopy = FdoSchemaUtil.CloneClass(leftCls);
+            var rightCopy = FdoSchemaUtil.CloneClass(rightCls);
 
             string leftClassName = "LEFT_SIDE";
             string rightClassName = "RIGHT_SIDE";
@@ -638,7 +638,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                 int idx = props.IndexOf(p.Name);
                 if (idx < 0)
                 {
-                    var prop = FdoFeatureService.CloneProperty(p);
+                    var prop = FdoSchemaUtil.CloneProperty(p);
                     props.Add(prop);
                 }
             }
@@ -647,7 +647,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                 int idx = props.IndexOf(p.Name);
                 if (idx < 0)
                 {
-                    var prop = FdoFeatureService.CloneProperty(p);
+                    var prop = FdoSchemaUtil.CloneProperty(p);
                     props.Add(prop);
                 }
             }

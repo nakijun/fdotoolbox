@@ -32,6 +32,7 @@ using OSGeo.FDO.Expression;
 using System.Collections.ObjectModel;
 using OSGeo.FDO.Connections.Capabilities;
 using System.IO;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Core.Tests
 {
@@ -67,7 +68,7 @@ namespace FdoToolbox.Core.Tests
             FeatureSchemaCollection schemas = new FeatureSchemaCollection(null);
             schemas.ReadXml(Path.Combine(TestHelper.CurrentPath, "Test.xml"));
 
-            FeatureSchema cloned = FdoFeatureService.CloneSchema(schemas[0]);
+            FeatureSchema cloned = FdoSchemaUtil.CloneSchema(schemas[0]);
             AssertHelper.EqualSchemas(schemas[0], cloned);
         }
 
@@ -90,7 +91,7 @@ namespace FdoToolbox.Core.Tests
             fc.Properties.Add(name);
             fc.IdentityProperties.Add(id);
 
-            ClassDefinition cd = FdoFeatureService.CloneClass(fc);
+            ClassDefinition cd = FdoSchemaUtil.CloneClass(fc);
             Assert.IsNotNull(cd);
             Assert.AreEqual(cd.Name, fc.Name);
             Assert.AreEqual(cd.Description, fc.Description);
@@ -124,7 +125,7 @@ namespace FdoToolbox.Core.Tests
 
             ((FeatureClass)c1).GeometryProperty = geom;
 
-            ClassDefinition cd = FdoFeatureService.CloneClass(c1);
+            ClassDefinition cd = FdoSchemaUtil.CloneClass(c1);
             Assert.IsNotNull(cd);
             FeatureClass fc = cd as FeatureClass;
             Assert.IsNotNull(fc);
@@ -151,7 +152,7 @@ namespace FdoToolbox.Core.Tests
             name.Length = 255;
             name.Nullable = true;
 
-            cd = FdoFeatureService.CloneClass(c1);
+            cd = FdoSchemaUtil.CloneClass(c1);
             Assert.IsNotNull(cd);
             Assert.AreEqual(cd.Name, c1.Name);
             Assert.AreEqual(cd.Description, c1.Description);
@@ -175,7 +176,7 @@ namespace FdoToolbox.Core.Tests
             list.ConstraintList.Add(new StringValue("C"));
             dp.ValueConstraint = list;
 
-            DataPropertyDefinition dp2 = FdoFeatureService.CloneProperty(dp) as DataPropertyDefinition;
+            DataPropertyDefinition dp2 = FdoSchemaUtil.CloneProperty(dp) as DataPropertyDefinition;
             AssertHelper.EqualProperty(dp, dp2);
 
             GeometricPropertyDefinition gp = new GeometricPropertyDefinition("Sna", "Fu");
@@ -185,7 +186,7 @@ namespace FdoToolbox.Core.Tests
             gp.ReadOnly = false;
             gp.SpatialContextAssociation = "LL84";
 
-            GeometricPropertyDefinition gp2 = FdoFeatureService.CloneProperty(gp) as GeometricPropertyDefinition;
+            GeometricPropertyDefinition gp2 = FdoSchemaUtil.CloneProperty(gp) as GeometricPropertyDefinition;
             AssertHelper.EqualProperty(gp, gp2);
         }
 

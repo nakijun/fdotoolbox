@@ -409,7 +409,7 @@ namespace FdoToolbox.Core.ETL.Specialized
 
                         //Clone copy of source property of same name
                         var srcProp = srcClass.Properties[srcClass.Properties.IndexOf(propMap.source)];
-                        srcProp = FdoFeatureService.CloneProperty(srcProp);
+                        srcProp = FdoSchemaUtil.CloneProperty(srcProp);
                         mod.AddProperty(srcProp);
                     }
                     else

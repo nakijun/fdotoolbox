@@ -113,10 +113,14 @@ namespace FdoToolbox.Core.Feature
                         }
                     }
 
+                    
+
                     //Write logical schema
                     if (this.Schemas != null)
                     {
-                        this.Schemas.WriteXml(writer);
+                        var schemas = CloneSchemas(this.Schemas);
+
+                        schemas.WriteXml(writer);
                     }
 
                     //Write physical mappings
@@ -129,6 +133,11 @@ namespace FdoToolbox.Core.Feature
                 }
                 ws.Close();
             }
+        }
+
+        private FeatureSchemaCollection CloneSchemas(FeatureSchemaCollection featureSchemaCollection)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
