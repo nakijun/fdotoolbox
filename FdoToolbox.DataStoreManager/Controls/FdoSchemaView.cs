@@ -579,10 +579,14 @@ namespace FdoToolbox.DataStoreManager.Controls
                 string schema = GetSelectedSchema();
                 if (!string.IsNullOrEmpty(schema))
                 {
-                    string name = _context.GenerateName("FeatureClass");
+                    string prefix = "FeatureClass";
+                    if (type == ClassType.ClassType_Class)
+                        prefix = "Class";
+
+                    string name = _context.GenerateName(prefix);
                     while(_context.ClassNameExists(schema, name))
                     {
-                        name = _context.GenerateName("FeatureClass");
+                        name = _context.GenerateName(prefix);
                     }
                     ClassDefinition cls = null;
                     if (type == ClassType.ClassType_Class)
@@ -600,6 +604,16 @@ namespace FdoToolbox.DataStoreManager.Controls
                 TreeNode node = _view.schemaTree.SelectedNode;
                 if (node.Level == LEVEL_CLASS)
                 {
+                    if (type == PropertyType.PropertyType_AssociationProperty || type == PropertyType.PropertyType_ObjectProperty)
+                    {
+                        var sn = node.Parent;
+                        if (sn.Nodes.Count == 1) //The selected class is the only one
+                        {
+                            MessageService.ShowError("No other class definitions exist in the current schema");
+                            return;
+                        }
+                    }
+
                     string schema = node.Parent.Name;
                     string clsName = node.Name;
                     string prefix = "Property";

@@ -137,7 +137,14 @@ namespace FdoToolbox.Core.Feature
 
         private FeatureSchemaCollection CloneSchemas(FeatureSchemaCollection featureSchemaCollection)
         {
-            throw new NotImplementedException();
+            var schemas = new FeatureSchemaCollection(null);
+
+            foreach (FeatureSchema fsc in featureSchemaCollection)
+            {
+                var sc = FdoToolbox.Core.Utility.FdoSchemaUtil.CloneSchema(fsc, true);
+                schemas.Add(sc);
+            }
+            return schemas;
         }
 
         /// <summary>
