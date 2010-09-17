@@ -77,7 +77,8 @@ namespace FdoToolbox.Base.Forms
             }
             else
             {
-                _view.ExtentTypes = (SpatialContextExtentType[])Enum.GetValues(typeof(SpatialContextExtentType));
+                //Can only have static extents (for XML serialization purposes)
+                _view.ExtentTypes = new SpatialContextExtentType[] { SpatialContextExtentType.SpatialContextExtentType_Static };
                 _view.ComputeExtentsEnabled = false;
             }
         }

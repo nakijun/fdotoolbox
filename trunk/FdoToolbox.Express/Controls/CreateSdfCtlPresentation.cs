@@ -60,15 +60,55 @@ namespace FdoToolbox.Express.Controls
         {
             if (ExpressUtility.CreateFlatFileDataSource("OSGeo.SDF", _view.SdfFile))
             {
-                FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SDF", _view.SdfFile);
+                FdoDataStoreConfiguration dstore = null;
                 if (FileService.FileExists(_view.FeatureSchemaDefinition))
                 {
-                    conn.Open();
-                    using (FdoFeatureService service = conn.CreateFeatureService())
+                    dstore = FdoDataStoreConfiguration.FromFile(_view.FeatureSchemaDefinition);
+                    
+                    //SDF only permits the following:
+                    // 1 feature schema
+                    // 1 spatial context
+
+                    if (dstore.Schemas.Count > 1)
                     {
-                        service.LoadSchemasFromXml(_view.FeatureSchemaDefinition, _view.FixIncompatibilities);
+                        _view.ShowError("Multiple schemas were found in this document. SDF only allows 1 feature schema");
+                        return false;
+                    }
+                    if (dstore.SpatialContexts.Length > 1)
+                    {
+                        _view.ShowError("Multiple spatial contexts were found in this doucment. SDF only allows 1 spatial context");
+                        return false;
                     }
                 }
+                FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SDF", _view.SdfFile);
+                if (dstore != null)
+                {
+                    using (var svc = conn.CreateFeatureService())
+                    {
+                        if (dstore.SpatialContexts.Length == 1)
+                        {
+                            //Overwrite existing spatial context if it exists
+                            var sc = dstore.SpatialContexts[0];
+                            var asc = svc.GetActiveSpatialContext();
+                            if (asc != null)
+                                sc.Name = asc.Name;
+
+                            svc.CreateSpatialContext(sc, (asc != null));
+                        }
+
+                        var schema = dstore.Schemas[0];
+                        if (_view.FixIncompatibilities)
+                        {
+                            IncompatibleSchema incS;
+                            if (!svc.CanApplySchema(schema, out incS))
+                            {
+                                schema = svc.AlterSchema(schema, incS);
+                            }
+                        }
+                        svc.ApplySchema(schema);
+                    }
+                }
+
                 if (_view.CreateConnection)
                 {
                     _connMgr.AddConnection(_view.ConnectionName, conn);
