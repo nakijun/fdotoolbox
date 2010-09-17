@@ -87,19 +87,20 @@ namespace FdoToolbox.Core.Feature
                         {
                             foreach (var sc in this.SpatialContexts)
                             {
+                                //XmlSpatialContextWriter forbids writing dynamically calculated extents
+                                if (sc.ExtentType == OSGeo.FDO.Commands.SpatialContext.SpatialContextExtentType.SpatialContextExtentType_Dynamic)
+                                    continue;
+
                                 scWriter.CoordinateSystem = sc.CoordinateSystem;
                                 scWriter.CoordinateSystemWkt = sc.CoordinateSystemWkt;
                                 scWriter.Description = sc.Description;
                                 
                                 scWriter.ExtentType = sc.ExtentType;
 
-                                if (sc.ExtentType == OSGeo.FDO.Commands.SpatialContext.SpatialContextExtentType.SpatialContextExtentType_Static)
+                                using (var geom = fact.CreateGeometry(sc.ExtentGeometryText))
                                 {
-                                    using (var geom = fact.CreateGeometry(sc.ExtentGeometryText))
-                                    {
-                                        byte[] fgf = fact.GetFgf(geom);
-                                        scWriter.Extent = fgf;
-                                    }
+                                    byte[] fgf = fact.GetFgf(geom);
+                                    scWriter.Extent = fgf;
                                 }
 
                                 scWriter.Name = sc.Name;
@@ -107,8 +108,6 @@ namespace FdoToolbox.Core.Feature
                                 scWriter.ZTolerance = sc.ZTolerance;
 
                                 scWriter.WriteSpatialContext();
-
-                                
                             }
                         }
                     }
