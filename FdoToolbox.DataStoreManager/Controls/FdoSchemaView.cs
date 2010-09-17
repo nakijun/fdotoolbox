@@ -650,7 +650,10 @@ namespace FdoToolbox.DataStoreManager.Controls
                             pd = new AssociationPropertyDefinition(name, "");
                             break;
                         case PropertyType.PropertyType_DataProperty:
-                            pd = new DataPropertyDefinition(name, "");
+                            var dp = new DataPropertyDefinition(name, "");
+                            if (dp.DataType == DataType.DataType_String)
+                                dp.Length = 255;
+                            pd = dp;
                             break;
                         case PropertyType.PropertyType_GeometricProperty:
                             pd = new GeometricPropertyDefinition(name, "");

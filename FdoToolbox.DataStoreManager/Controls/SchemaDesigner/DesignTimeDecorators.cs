@@ -239,7 +239,9 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 var p = cls.Properties[name];
                 if (p.PropertyType == PropertyType.PropertyType_DataProperty)
                 {
-                    cls.IdentityProperties.Add((DataPropertyDefinition)p);
+                    var dp = (DataPropertyDefinition)p;
+                    dp.Nullable = false;
+                    cls.IdentityProperties.Add(dp);
                     OnPropertyChanged("IdentityProperties");
                 }
             }
@@ -537,6 +539,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                     OnPropertyChanged("ValueConstraint");
                 }
             }   
+        }
+
+        internal bool IsIdentity()
+        {
+            var cls = (ClassDefinition)this.DecoratedObject.Parent;
+            return cls.IdentityProperties.Contains(this.Name);
         }
     }
 
