@@ -16,6 +16,7 @@ v1.0 beta 2
 	- Reader fixes for decimal properties
 	
 - Other:
+	- The "Dump Schema Mappings" command is now renamed to "Export Data Store Configuration to XML" to reflect its proper function
 	- Feature Schemas are now serialized as FDO data store documents (w/ spatial context and schema mapping information). These
 	  documents serve double-duty as XML configuration documents for when you create a connection.
 	- Schema population time in Object Explorer is now measured and written out to the Application Console

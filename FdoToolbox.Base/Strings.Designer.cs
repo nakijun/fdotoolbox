@@ -213,15 +213,6 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dump Schema Mapping.
-        /// </summary>
-        internal static string CMD_DumpSchemaMapping {
-            get {
-                return ResourceManager.GetString("CMD_DumpSchemaMapping", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit Class Attributes.
         /// </summary>
         internal static string CMD_EditClassAttributes {
@@ -254,6 +245,15 @@ namespace FdoToolbox.Base {
         internal static string CMD_Exit {
             get {
                 return ResourceManager.GetString("CMD_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Data Store Configuration to XML.
+        /// </summary>
+        internal static string CMD_ExportDataStoreXml {
+            get {
+                return ResourceManager.GetString("CMD_ExportDataStoreXml", resourceCulture);
             }
         }
         
@@ -1356,6 +1356,15 @@ namespace FdoToolbox.Base {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Data Store Configuration.
+        /// </summary>
+        internal static string TITLE_EXPORT_DATASTORE_XML {
+            get {
+                return ResourceManager.GetString("TITLE_EXPORT_DATASTORE_XML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expression Editor.
         /// </summary>
         internal static string TITLE_EXPRESSION_EDITOR {
@@ -1541,15 +1550,6 @@ namespace FdoToolbox.Base {
         internal static string TITLE_SAVE_SCHEMA {
             get {
                 return ResourceManager.GetString("TITLE_SAVE_SCHEMA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Save Schema Mapping.
-        /// </summary>
-        internal static string TITLE_SAVE_SCHEMA_MAPPING {
-            get {
-                return ResourceManager.GetString("TITLE_SAVE_SCHEMA_MAPPING", resourceCulture);
             }
         }
         

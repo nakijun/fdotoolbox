@@ -667,11 +667,11 @@
   <data name="UI_OBJECT_EXPLORER" xml:space="preserve">
     <value>Object Explorer</value>
   </data>
-  <data name="TITLE_SAVE_SCHEMA_MAPPING" xml:space="preserve">
-    <value>Save Schema Mapping</value>
+  <data name="TITLE_EXPORT_DATASTORE_XML" xml:space="preserve">
+    <value>Export Data Store Configuration</value>
   </data>
-  <data name="CMD_DumpSchemaMapping" xml:space="preserve">
-    <value>Dump Schema Mapping</value>
+  <data name="CMD_ExportDataStoreXml" xml:space="preserve">
+    <value>Export Data Store Configuration to XML</value>
   </data>
   <data name="CMD_OpenLogsDir" xml:space="preserve">
     <value>Open Logs Directory</value>

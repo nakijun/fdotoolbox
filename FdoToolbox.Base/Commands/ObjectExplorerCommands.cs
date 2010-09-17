@@ -60,60 +60,27 @@ namespace FdoToolbox.Base.Commands
         }
     }
 
-    internal class DumpSchemaMappingCommand : AbstractMenuCommand
+    internal class ExportDataStoreXmlCommand : AbstractMenuCommand
     {
         public override void Run()
         {
-            string path = FileService.SaveFile(Res.GetString("TITLE_SAVE_SCHEMA_MAPPING"), Res.GetString("FILTER_XML_FILES"));
+            string path = FileService.SaveFile(Res.GetString("TITLE_EXPORT_DATASTORE_XML"), Res.GetString("FILTER_XML_FILES"));
             if (!string.IsNullOrEmpty(path))
             {
                 TreeNode connNode = Workbench.Instance.ObjectExplorer.GetSelectedNode();
                 FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                 FdoConnection conn = mgr.GetConnection(connNode.Name);
 
-                using (var fact = new FgfGeometryFactory())
+                using (new TempCursor(Cursors.WaitCursor))
                 {
                     using (var svc = conn.CreateFeatureService())
-                    {   
-                        //Write spatial contexts
-                        using (IoStream ios = new IoFileStream(path, "w"))
-                        {
-                            using (var writer = new OSGeo.FDO.Common.Xml.XmlWriter(ios, true, OSGeo.FDO.Common.Xml.XmlWriter.LineFormat.LineFormat_Indent))
-                            {
-                                var flags = new XmlSpatialContextFlags();
-                                using (var scWriter = new XmlSpatialContextWriter(writer, flags))
-                                {
-                                    foreach (var sc in svc.GetSpatialContexts())
-                                    {
-                                        using (var geom = fact.CreateGeometry(sc.ExtentGeometryText))
-                                        {
-                                            scWriter.CoordinateSystem = sc.CoordinateSystem;
-                                            scWriter.CoordinateSystemWkt = sc.CoordinateSystemWkt;
-                                            scWriter.Description = sc.Description;
-                                            scWriter.Extent = fact.GetFgf(geom);
+                    {
+                        var scs = new List<SpatialContextInfo>(svc.GetSpatialContexts()).ToArray();
+                        var schemas = svc.DescribeSchema();
+                        var mappings = svc.DescribeSchemaMapping(true);
 
-                                            scWriter.ExtentType = sc.ExtentType;
-                                            scWriter.Name = sc.Name;
-                                            scWriter.XYTolerance = sc.XYTolerance;
-                                            scWriter.ZTolerance = sc.ZTolerance;
-
-                                            scWriter.WriteSpatialContext();
-                                        }
-                                    }
-                                }
-
-                                //Write schemas
-                                var schemas = svc.DescribeSchema();
-                                schemas.WriteXml(writer);
-
-                                //Write schema mappings
-                                var mappings = svc.DescribeSchemaMapping(true);
-                                mappings.WriteXml(writer);
-
-                                writer.Close();
-                            }
-                            ios.Close();
-                        }
+                        var dstore = new FdoDataStoreConfiguration(schemas, scs, mappings);
+                        dstore.Save(path);
 
                         Log.InfoFormatted("Connection saved to: {0}", path);
                     }
