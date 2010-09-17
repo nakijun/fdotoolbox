@@ -89,6 +89,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             grdMappings.DataSource = _mappings;
 
             _mappings.ListChanged += new ListChangedEventHandler(OnMappingsChanged);
+
+            p.PropertyChanged += (s, evt) =>
+            {
+                if (evt.PropertyName == "Name")
+                    updater();
+            };
         }
 
         protected override void OnLoad(EventArgs e)

@@ -79,6 +79,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             };
 
             cmbIdentityProperty.DataBindings.Add("SelectedItem", p, "IdentityProperty");
+
+            p.PropertyChanged += (s, evt) =>
+            {
+                if (evt.PropertyName == "Name")
+                    updater();
+            };
         }
     }
 }
