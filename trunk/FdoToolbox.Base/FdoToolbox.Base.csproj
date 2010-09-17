@@ -340,6 +340,7 @@
     <Compile Include="Controls\TextEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\TimeMeasurement.cs" />
     <Compile Include="Controls\ViewContent.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -15,9 +15,10 @@ v1.0 beta 2
 	- Disable configuration section in the Generic Connect UI for providers that don't support configuration
 	- Reader fixes for decimal properties
 	
-- Changes:
+- Other:
 	- Feature Schemas are now serialized as FDO data store documents (w/ spatial context and schema mapping information). These
 	  documents serve double-duty as XML configuration documents for when you create a connection.
+	- Schema population time in Object Explorer is now measured and written out to the Application Console
 
 v1.0 beta 1
 -----------
