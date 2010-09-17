@@ -216,4 +216,24 @@ namespace FdoToolbox.Express.Commands
             wb.ShowContent(ctl, ViewRegion.Dialog);
         }
     }
+
+    public class ConnectAdskSqlServerCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            var ctl = new ConnectAdskSqlServerCtl();
+            var wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
+
+    public class ConnectAdskOracleCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            var ctl = new ConnectAdskOracleCtl();
+            var wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
 }
