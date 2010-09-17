@@ -31,6 +31,9 @@ using ICSharpCode.Core;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.DataStoreManager.Controls.SchemaDesigner;
 using FdoToolbox.Base.Services;
+using FdoToolbox.Core.Utility;
+using FdoToolbox.Base.Forms;
+using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.DataStoreManager.Controls
 {
@@ -136,12 +139,106 @@ namespace FdoToolbox.DataStoreManager.Controls
 
         private void btnSaveSdf_Click(object sender, EventArgs e)
         {
+            string file = FileService.SaveFile("Export to SDF", "Autodesk SDF (*.sdf)|*.sdf");
+            if (!string.IsNullOrEmpty(file))
+            {
+                //SDF only allows
+                // 1 feature schema
+                // 1 spatial context
+                if (ExportToFile("OSGeo.SDF", file, 1, 1))
+                {
+                    if (Confirm("Export", "Successfully exported to: " + file + ". Connect to it?"))
+                    {
+                        var connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                        var nameSvc = ServiceManager.Instance.GetService<NamingService>();
 
+                        var name = nameSvc.GetDefaultConnectionName("OSGeo.SDF");
+                        var conn = ExpressUtility.CreateFlatFileConnection(file);
+
+                        connMgr.AddConnection(name, conn);
+                    }
+                }
+            }
         }
 
         private void btnSaveSqlite_Click(object sender, EventArgs e)
         {
+            string file = FileService.SaveFile("Export to SQLite", "SQLite databases (*.sqlite)|*.sqlite|SQLite databases (*.db)|*.db");
+            if (!string.IsNullOrEmpty(file))
+            {
+                //SQLite only allows
+                // 1 feature schema
+                // any number spatial contexts
+                if (ExportToFile("OSGeo.SQLite", file, 1, -1))
+                {
+                    if (Confirm("Export", "Successfully exported to: " + file + ". Connect to it?"))
+                    {
+                        var connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+                        var nameSvc = ServiceManager.Instance.GetService<NamingService>();
 
+                        var name = nameSvc.GetDefaultConnectionName("OSGeo.SQLite");
+                        var conn = ExpressUtility.CreateFlatFileConnection(file);
+
+                        connMgr.AddConnection(name, conn);
+                    }
+                }
+            }
+        }
+
+        private bool ExportToFile(string provider, string file, int maxSchemas, int maxSpatialContexts)
+        {
+            var conf = _context.GetConfiguration();
+            if (maxSchemas > 0 && conf.Schemas.Count > maxSchemas)
+            {
+                ShowError("This provider only allows " + maxSchemas + " feature schema(s)");
+                return false;
+            }
+            if (maxSpatialContexts > 0 && conf.SpatialContexts.Length > maxSpatialContexts)
+            {
+                ShowError("This provider only allows " + maxSpatialContexts + " spatial context(s)");
+                return false;
+            }
+
+            if (ExpressUtility.CreateFlatFileDataSource(provider, file))
+            {
+                var conn = ExpressUtility.CreateFlatFileConnection(provider, file);
+                var schema = conf.Schemas[0];
+                schema = FdoSchemaUtil.CloneSchema(schema, true);
+                using (var svc = conn.CreateFeatureService())
+                {
+                    IncompatibleSchema incs;
+                    if (!svc.CanApplySchema(schema, out incs))
+                    {
+                        string msg = "This schema has incompatibilities. Attempt to fix it? " + incs.ToString();
+                        if (!WrappedMessageBox.Confirm("Incompatible schema", msg, MessageBoxText.YesNo))
+                        {
+                            return false;
+                        }
+                        schema = svc.AlterSchema(schema, incs);
+                    }
+
+                    foreach (var sc in conf.SpatialContexts)
+                    {
+                        svc.CreateSpatialContext(sc, true);
+                    }
+
+                    //Only for SQLite, but this is general enough
+                    var fscs = svc.DescribeSchema();
+                    if (fscs.Count == 1)
+                    {
+                        var fsc = fscs[0];
+                        foreach (ClassDefinition cls in schema.Classes)
+                        {
+                            var klass = FdoSchemaUtil.CloneClass(cls);
+                            fsc.Classes.Add(klass);
+                        }
+                        schema = fsc;
+                    }
+                    svc.ApplySchema(schema);
+                }
+                conn.Close();
+            }
+            return true;
         }
 
         private void btnSaveEverything_Click(object sender, EventArgs e)
