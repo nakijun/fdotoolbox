@@ -30,11 +30,15 @@ namespace FdoToolbox.Tasks.Controls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FdoBulkCopyCtl));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Copy Tasks");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Copy Tasks");
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.grdConnections = new System.Windows.Forms.DataGridView();
+            this.COL_NAME = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.COL_PROVIDER = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.COL_CONNSTR = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.COL_CONNSTR_ACTUAL = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnAddConnection = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -48,10 +52,7 @@ namespace FdoToolbox.Tasks.Controls
             this.btnSave = new System.Windows.Forms.Button();
             this.ctxSelectedTask = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.COL_NAME = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.COL_PROVIDER = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.COL_CONNSTR = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.COL_CONNSTR_ACTUAL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdConnections)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -59,6 +60,9 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox3.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             this.ctxSelectedTask.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -76,18 +80,17 @@ namespace FdoToolbox.Tasks.Controls
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.Location = new System.Drawing.Point(83, 19);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(456, 20);
+            this.txtName.Size = new System.Drawing.Size(479, 20);
             this.txtName.TabIndex = 1;
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.grdConnections);
             this.groupBox1.Controls.Add(this.toolStrip1);
-            this.groupBox1.Location = new System.Drawing.Point(13, 58);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox1.Location = new System.Drawing.Point(0, 52);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(566, 107);
+            this.groupBox1.Size = new System.Drawing.Size(589, 175);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Participating Connections";
@@ -107,136 +110,8 @@ namespace FdoToolbox.Tasks.Controls
             this.grdConnections.Name = "grdConnections";
             this.grdConnections.ReadOnly = true;
             this.grdConnections.RowHeadersVisible = false;
-            this.grdConnections.Size = new System.Drawing.Size(560, 63);
+            this.grdConnections.Size = new System.Drawing.Size(583, 131);
             this.grdConnections.TabIndex = 1;
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnAddConnection,
-            this.toolStripSeparator1});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 16);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(560, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // btnAddConnection
-            // 
-            this.btnAddConnection.Image = ((System.Drawing.Image)(resources.GetObject("btnAddConnection.Image")));
-            this.btnAddConnection.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAddConnection.Name = "btnAddConnection";
-            this.btnAddConnection.Size = new System.Drawing.Size(115, 22);
-            this.btnAddConnection.Text = "Add Connection";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.txtName);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(13, 0);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(566, 52);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "General";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.mTreeView);
-            this.groupBox3.Controls.Add(this.toolStrip2);
-            this.groupBox3.Location = new System.Drawing.Point(13, 168);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(566, 290);
-            this.groupBox3.TabIndex = 4;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Classes To Copy";
-            // 
-            // mTreeView
-            // 
-            this.mTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mTreeView.Location = new System.Drawing.Point(3, 41);
-            this.mTreeView.Name = "mTreeView";
-            treeNode1.Name = "NODE_TASKS";
-            treeNode1.Text = "Copy Tasks";
-            this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-            this.mTreeView.ShowNodeToolTips = true;
-            this.mTreeView.Size = new System.Drawing.Size(560, 246);
-            this.mTreeView.TabIndex = 2;
-            this.mTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.mTreeView_AfterSelect);
-            this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mTreeView_MouseDown);
-            // 
-            // toolStrip2
-            // 
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnAddTask,
-            this.toolStripSeparator2,
-            this.btnRemoveTask});
-            this.toolStrip2.Location = new System.Drawing.Point(3, 16);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(560, 25);
-            this.toolStrip2.TabIndex = 1;
-            this.toolStrip2.Text = "toolStrip2";
-            // 
-            // btnAddTask
-            // 
-            this.btnAddTask.Image = ((System.Drawing.Image)(resources.GetObject("btnAddTask.Image")));
-            this.btnAddTask.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAddTask.Name = "btnAddTask";
-            this.btnAddTask.Size = new System.Drawing.Size(71, 22);
-            this.btnAddTask.Text = "Add Task";
-            this.btnAddTask.Click += new System.EventHandler(this.btnAddTask_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // btnRemoveTask
-            // 
-            this.btnRemoveTask.Enabled = false;
-            this.btnRemoveTask.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveTask.Image")));
-            this.btnRemoveTask.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRemoveTask.Name = "btnRemoveTask";
-            this.btnRemoveTask.Size = new System.Drawing.Size(66, 22);
-            this.btnRemoveTask.Text = "Remove";
-            this.btnRemoveTask.Click += new System.EventHandler(this.btnRemoveTask_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Enabled = false;
-            this.btnSave.Location = new System.Drawing.Point(504, 464);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 5;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // ctxSelectedTask
-            // 
-            this.ctxSelectedTask.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.removeToolStripMenuItem});
-            this.ctxSelectedTask.Name = "ctxSelectedTask";
-            this.ctxSelectedTask.Size = new System.Drawing.Size(114, 26);
-            // 
-            // removeToolStripMenuItem
-            // 
-            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-            this.removeToolStripMenuItem.Text = "Remove";
-            this.removeToolStripMenuItem.Click += new System.EventHandler(this.btnRemoveTask_Click);
             // 
             // COL_NAME
             // 
@@ -264,14 +139,158 @@ namespace FdoToolbox.Tasks.Controls
             this.COL_CONNSTR_ACTUAL.ReadOnly = true;
             this.COL_CONNSTR_ACTUAL.Visible = false;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnAddConnection,
+            this.toolStripSeparator1});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 16);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(583, 25);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // btnAddConnection
+            // 
+            this.btnAddConnection.Image = ((System.Drawing.Image)(resources.GetObject("btnAddConnection.Image")));
+            this.btnAddConnection.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAddConnection.Name = "btnAddConnection";
+            this.btnAddConnection.Size = new System.Drawing.Size(126, 22);
+            this.btnAddConnection.Text = "Add Connection";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.txtName);
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox2.Location = new System.Drawing.Point(0, 0);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(589, 52);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "General";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.mTreeView);
+            this.groupBox3.Controls.Add(this.toolStrip2);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox3.Location = new System.Drawing.Point(0, 0);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(589, 224);
+            this.groupBox3.TabIndex = 4;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Classes To Copy";
+            // 
+            // mTreeView
+            // 
+            this.mTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mTreeView.Location = new System.Drawing.Point(3, 41);
+            this.mTreeView.Name = "mTreeView";
+            treeNode2.Name = "NODE_TASKS";
+            treeNode2.Text = "Copy Tasks";
+            this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode2});
+            this.mTreeView.ShowNodeToolTips = true;
+            this.mTreeView.Size = new System.Drawing.Size(583, 180);
+            this.mTreeView.TabIndex = 2;
+            this.mTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.mTreeView_AfterSelect);
+            this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mTreeView_MouseDown);
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnAddTask,
+            this.toolStripSeparator2,
+            this.btnRemoveTask});
+            this.toolStrip2.Location = new System.Drawing.Point(3, 16);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(583, 25);
+            this.toolStrip2.TabIndex = 1;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // btnAddTask
+            // 
+            this.btnAddTask.Image = ((System.Drawing.Image)(resources.GetObject("btnAddTask.Image")));
+            this.btnAddTask.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAddTask.Name = "btnAddTask";
+            this.btnAddTask.Size = new System.Drawing.Size(76, 22);
+            this.btnAddTask.Text = "Add Task";
+            this.btnAddTask.Click += new System.EventHandler(this.btnAddTask_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnRemoveTask
+            // 
+            this.btnRemoveTask.Enabled = false;
+            this.btnRemoveTask.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveTask.Image")));
+            this.btnRemoveTask.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRemoveTask.Name = "btnRemoveTask";
+            this.btnRemoveTask.Size = new System.Drawing.Size(70, 22);
+            this.btnRemoveTask.Text = "Remove";
+            this.btnRemoveTask.Click += new System.EventHandler(this.btnRemoveTask_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSave.Enabled = false;
+            this.btnSave.Location = new System.Drawing.Point(504, 464);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 5;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // ctxSelectedTask
+            // 
+            this.ctxSelectedTask.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeToolStripMenuItem});
+            this.ctxSelectedTask.Name = "ctxSelectedTask";
+            this.ctxSelectedTask.Size = new System.Drawing.Size(118, 26);
+            // 
+            // removeToolStripMenuItem
+            // 
+            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.removeToolStripMenuItem.Text = "Remove";
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.btnRemoveTask_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.groupBox2);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
+            this.splitContainer1.Size = new System.Drawing.Size(589, 455);
+            this.splitContainer1.SplitterDistance = 227;
+            this.splitContainer1.TabIndex = 6;
+            // 
             // FdoBulkCopyCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
             this.Name = "FdoBulkCopyCtl";
             this.Size = new System.Drawing.Size(595, 500);
             this.groupBox1.ResumeLayout(false);
@@ -286,6 +305,9 @@ namespace FdoToolbox.Tasks.Controls
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             this.ctxSelectedTask.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -313,5 +335,6 @@ namespace FdoToolbox.Tasks.Controls
         private System.Windows.Forms.DataGridViewTextBoxColumn COL_PROVIDER;
         private System.Windows.Forms.DataGridViewTextBoxColumn COL_CONNSTR;
         private System.Windows.Forms.DataGridViewTextBoxColumn COL_CONNSTR_ACTUAL;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }

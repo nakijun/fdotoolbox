@@ -66,6 +66,19 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             {
                 this.AddProperty(prop);
             }
+
+            _node.ContextMenuStrip = new ContextMenuStrip();
+            var item = _node.ContextMenuStrip.Items.Add("Auto-Map", null, OnAutoMap);
+            item.ToolTipText = "Maps each un-mapped property to a property of the same name (will be created if doesn't exist)";
+        }
+
+        private void OnAutoMap(object sender, EventArgs e)
+        {
+            foreach (TreeNode node in _node.Nodes)
+            {
+                if (node.Tag == null)
+                    this.MapProperty(node.Name, node.Name, true);
+            }
         }
 
         public NameValueCollection GetPropertyMappings()
@@ -184,6 +197,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         {
             var srcCls = Parent.SourceClass;
             var dstCls = Parent.TargetClass;
+
+            LoggingService.Info(string.Format("Mapping {0} to {1} (create if not exists: {2})", propertyName, destProperty, createIfNotExists));
 
             PropertyDefinition src = srcCls.Properties[propertyName];
             if (dstCls != null)
