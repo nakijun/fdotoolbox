@@ -263,6 +263,12 @@ namespace FdoToolbox.DataStoreManager.Controls
                     var sn = _view.schemaTree.Nodes[schema];
                     var node = CreateClassNode(item);
                     sn.Nodes.Add(node);
+
+                    foreach (PropertyDefinition pd in item.Properties)
+                    {
+                        OnPropertyAdded(pd);
+                    }
+
                     sn.Expand();
                     _view.FlagUpdateState();
                 }
@@ -272,6 +278,12 @@ namespace FdoToolbox.DataStoreManager.Controls
             {
                 var node = CreateSchemaNode(item);
                 _view.schemaTree.Nodes.Add(node);
+
+                foreach (ClassDefinition cd in item.Classes)
+                {
+                    OnClassAdded(cd);
+                }
+
                 _view.EvaluateStates();
                 _view.FlagUpdateState();
             }
