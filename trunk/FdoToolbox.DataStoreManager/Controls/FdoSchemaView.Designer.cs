@@ -121,6 +121,7 @@
             this.schemaTree.SelectedImageIndex = 0;
             this.schemaTree.Size = new System.Drawing.Size(179, 267);
             this.schemaTree.TabIndex = 4;
+            this.schemaTree.KeyUp += new System.Windows.Forms.KeyEventHandler(this.schemaTree_KeyUp);
             // 
             // imgTree
             // 
@@ -161,7 +162,7 @@
             this.TAB_PHYSICAL.Location = new System.Drawing.Point(4, 22);
             this.TAB_PHYSICAL.Name = "TAB_PHYSICAL";
             this.TAB_PHYSICAL.Padding = new System.Windows.Forms.Padding(3);
-            this.TAB_PHYSICAL.Size = new System.Drawing.Size(218, 241);
+            this.TAB_PHYSICAL.Size = new System.Drawing.Size(258, 241);
             this.TAB_PHYSICAL.TabIndex = 1;
             this.TAB_PHYSICAL.Text = "Physical Mapping";
             this.TAB_PHYSICAL.UseVisualStyleBackColor = true;

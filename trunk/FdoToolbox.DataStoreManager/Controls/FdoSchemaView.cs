@@ -717,6 +717,19 @@ namespace FdoToolbox.DataStoreManager.Controls
                     MessageService.ShowMessage("No incompatibilities detected, nothing changed");
                 }
             }
+
+            internal void HandleDeleteKeyPress(TreeNode node)
+            {
+                switch (node.Level)
+                {
+                    case LEVEL_CLASS:
+                        _context.DeleteClass((ClassDefinition)node.Tag);
+                        break;
+                    case LEVEL_PROPERTY:
+                        _context.DeleteProperty((PropertyDefinition)node.Tag);
+                        break;
+                }
+            }
         }
 
         private void btnFix_Click(object sender, EventArgs e)
@@ -740,6 +753,18 @@ namespace FdoToolbox.DataStoreManager.Controls
             _context.UndoSchemaChanges();
             Reset();
             FlagUpdateState();
+        }
+
+        private void schemaTree_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                var node = schemaTree.SelectedNode;
+                if (node != null)
+                {
+                    _presenter.HandleDeleteKeyPress(node);
+                }
+            }
         }
     }
 }
