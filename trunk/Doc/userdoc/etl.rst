@@ -41,6 +41,16 @@ Saving the task will create an XML file that describes the bulk copy operation. 
 
 If you load a saved task, it will automatically load any participating connections in the Object Explorer if they don't already exist.
 
+SQL Server Notes
+----------------
+
+An important note about bulk copying to SQL Server. If the geometric property refers to a spatial context with a geodetic (lat/long) coordinate system, inserts into SQL Server containing polygon geometries may fail if the ring orientation is not correct. Unfortunately there is no mechanism in FDO or the bulk copy API to fix the ring orientation. As such, avoid using FDO Toolbox for copying such geometries to SQL Server if:
+
+ * Your SQL Server Data Store uses a geodetic coordinate system
+ * Your source polygons have invalid ring orientation. SQL Server expects: counter-clockwise exterior rings and clockwise interior rings.
+ 
+Note that this only applies to polygon geometries. Other geometry types are unaffected.
+
 .. index::
    single: Join
 
@@ -69,7 +79,10 @@ is not enforced by the ETL framework, the first operation should be a `FdoInputO
  * `FdoFlattenGeometryOperation` 
  * `FdoInputOperation`
  * `FdoJoinOperation`
- * `FdoNestedLoopsJoinOperation`
+ * `FdoForceWkbOperation`
+ * `FdoSingleActionOperation`
+ * `FdoCreateDataStoreOperation`
+ * `FdoApplySchemaOperation`
  * `FdoOutputOperation`
  
 You can define new operations by implementing the `IFdoOperation` interface or alternatively to derive from the `FdoOperationBase` and implement the `Execute` method.
