@@ -198,6 +198,12 @@
     <Compile Include="Controls\FdoSpatialContextView.Designer.cs">
       <DependentUpon>FdoSpatialContextView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ImportElementsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\ImportElementsDialog.Designer.cs">
+      <DependentUpon>ImportElementsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SchemaDesigner\AddMappingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -408,6 +414,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FdoSpatialContextView.resx">
       <DependentUpon>FdoSpatialContextView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ImportElementsDialog.resx">
+      <DependentUpon>ImportElementsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SchemaDesigner\AddMappingDialog.resx">
       <DependentUpon>AddMappingDialog.cs</DependentUpon>

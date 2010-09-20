@@ -26,6 +26,7 @@ using OSGeo.FDO.Schema;
 using OSGeo.FDO.Commands.Schema;
 using FdoToolbox.Core.Feature;
 using System.ComponentModel;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 {
@@ -597,6 +598,38 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         internal void UpdateSpatialContext(SpatialContextInfo sc)
         {
             this.SpatialContextsChanged = true;
+        }
+
+        internal string[] AddClassesToSchema(string schemaName, ClassCollection classCollection)
+        {
+            List<string> notAdded = new List<string>();
+            FeatureSchema fsc = null;
+            var fidx = _schemas.IndexOf(schemaName);
+            if (fidx >= 0)
+            {
+                fsc = _schemas[fidx];
+            }
+            else
+            {
+                fsc = new FeatureSchema(schemaName, "");
+                AddSchema(fsc);
+            }
+
+            foreach (ClassDefinition cls in classCollection)
+            {
+                var cidx = fsc.Classes.IndexOf(cls.Name);
+                if (cidx >= 0)
+                {
+                    notAdded.Add(cls.Name);
+                }
+                else
+                {
+                    ClassDefinition copy = FdoSchemaUtil.CloneClass(cls, false);
+                    AddClass(fsc.Name, copy);
+                }
+            }
+
+            return notAdded.ToArray();
         }
     }
 }

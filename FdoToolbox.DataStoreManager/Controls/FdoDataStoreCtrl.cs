@@ -319,11 +319,20 @@ namespace FdoToolbox.DataStoreManager.Controls
             string file = FileService.OpenFile("Open XML Configuration", "XML files (*.xml)|*.xml");
             if (!string.IsNullOrEmpty(file))
             {
-                using (var cur = new TempCursor(Cursors.WaitCursor))
+                var conf = FdoDataStoreConfiguration.FromFile(file);
+                if (!_context.IsConnected)
                 {
-                    var conf = FdoDataStoreConfiguration.FromFile(file);
-                    _context.SetConfiguration(conf);
-                    schemaView.Reset();
+                    using (var cur = new TempCursor(Cursors.WaitCursor))
+                    {
+                        _context.SetConfiguration(conf);
+                        schemaView.Reset();
+                    }
+                }
+                else
+                {
+                    //Prompt for elements to import 
+                    var impDiag = new ImportElementsDialog(conf, _context);
+                    impDiag.ShowDialog();
                 }
             }
         }
