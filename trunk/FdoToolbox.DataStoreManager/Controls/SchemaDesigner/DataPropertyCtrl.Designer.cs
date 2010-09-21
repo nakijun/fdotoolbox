@@ -45,7 +45,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtValueConstraint = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnEditConstraint = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numScale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPrecision)).BeginInit();
@@ -211,22 +211,23 @@
             this.txtValueConstraint.Size = new System.Drawing.Size(153, 20);
             this.txtValueConstraint.TabIndex = 24;
             // 
-            // button1
+            // btnEditConstraint
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(172, 334);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(29, 23);
-            this.button1.TabIndex = 25;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnEditConstraint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEditConstraint.Location = new System.Drawing.Point(172, 334);
+            this.btnEditConstraint.Name = "btnEditConstraint";
+            this.btnEditConstraint.Size = new System.Drawing.Size(29, 23);
+            this.btnEditConstraint.TabIndex = 25;
+            this.btnEditConstraint.Text = "...";
+            this.btnEditConstraint.UseVisualStyleBackColor = true;
+            this.btnEditConstraint.Click += new System.EventHandler(this.btnEditConstraint_Click);
             // 
             // DataPropertyCtrl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnEditConstraint);
             this.Controls.Add(this.txtValueConstraint);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.numPrecision);
@@ -273,6 +274,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtValueConstraint;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnEditConstraint;
     }
 }
