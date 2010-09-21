@@ -9,11 +9,13 @@ v1.0 beta 2
 	- New command to open current FDO directory
 	- Join Operations now use a temp SQLite data store to perform the join and to funnel data through
 	- Join Operations now support filtering on both sides of the join
+	- Bulk Copy tasks now have an "auto-map" option which will automatically map all unmapped properties to properties of the same name (create if not exists = true)
 
 - Fixes:
 	- Fix "create class of same name" option not working when target schema already has classes
 	- Disable configuration section in the Generic Connect UI for providers that don't support configuration
 	- Reader fixes for decimal properties
+	- Make the Bulk Copy UI more flexible and resizable
 	
 - Other:
 	- The "Dump Schema Mappings" command is now renamed to "Export Data Store Configuration to XML" to reflect its proper function
