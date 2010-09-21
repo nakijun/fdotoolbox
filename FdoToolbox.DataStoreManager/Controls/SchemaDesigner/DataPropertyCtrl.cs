@@ -46,10 +46,13 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 
         private SchemaDesignContext _context;
 
+        private DataPropertyDefinitionDecorator _dp;
+
         public DataPropertyCtrl(DataPropertyDefinitionDecorator p, SchemaDesignContext context, NodeUpdateHandler updater)
             : this()
         {
             _context = context;
+            _dp = p;
 
             txtName.DataBindings.Add("Text", p, "Name");
             txtDescription.DataBindings.Add("Text", p, "Description");
@@ -92,6 +95,11 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             };
 
             chkNullable.Enabled = !p.IsIdentity();
+
+            if (p.ValueConstraint != null)
+                txtValueConstraint.Text = p.ValueConstraint.ToString();
+
+            btnEditConstraint.Enabled = _context.SupportsValueConstraints;
         }
 
         private void cmbDataType_SelectedIndexChanged(object sender, EventArgs e)
@@ -121,6 +129,42 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                     numLength.Enabled = false;
                     numPrecision.Enabled = true;
                     numScale.Enabled = true;
+                }
+            }
+        }
+
+        private void btnEditConstraint_Click(object sender, EventArgs e)
+        {
+            if (_context.IsConnected)
+            {
+                var constraint = _dp.ValueConstraint;
+                if (constraint == null)
+                {
+                    constraint = ValueConstraintDialog.GetConstraint(_context.Connection);
+                    if (constraint != null)
+                        _dp.ValueConstraint = constraint;
+                }
+                else
+                {
+                    constraint = ValueConstraintDialog.GetConstraint(constraint, _context.Connection);
+                    if (constraint != null)
+                        _dp.ValueConstraint = constraint;
+                }
+            }
+            else
+            {
+                var constraint = _dp.ValueConstraint;
+                if (constraint == null)
+                {
+                    constraint = ValueConstraintDialog.GetConstraint();
+                    if (constraint != null)
+                        _dp.ValueConstraint = constraint;
+                }
+                else
+                {
+                    constraint = ValueConstraintDialog.GetConstraint(constraint);
+                    if (constraint != null)
+                        _dp.ValueConstraint = constraint;
                 }
             }
         }

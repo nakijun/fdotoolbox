@@ -98,6 +98,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             this.CanEditSpatialContexts = true;
             this.CanCreateSpatialContexts = true;
             this.CanHaveUniqueConstraints = true;
+            this.SupportsValueConstraints = true;
 
             var conn = this.Connection;
             if (conn != null)
@@ -114,6 +115,9 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 this.CanDestroySpatialContexts = Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) >= 0;
                 this.CanCreateSpatialContexts = (Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
                 this.CanEditSpatialContexts = _spatialContexts.Count > 0 && (Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
+                this.SupportsValueConstraints =
+                    conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsValueConstraintsList) ||
+                    conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsExclusiveValueRangeConstraints);
             }
         }
 
@@ -213,6 +217,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         }
 
         public bool CanModifyExistingSchemas
+        {
+            get;
+            private set;
+        }
+
+        public bool SupportsValueConstraints
         {
             get;
             private set;
