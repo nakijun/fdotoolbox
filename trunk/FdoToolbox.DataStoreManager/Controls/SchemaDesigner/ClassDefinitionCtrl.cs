@@ -67,6 +67,8 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             };
 
             lstUniqueConstraints.DataSource = cls.GetUniqueConstraints();
+
+            lnkEditUniqueConstraints.Enabled = _context.CanHaveUniqueConstraints;
         }
 
         private void BindIdentityProperties(ClassDefinitionDecorator cls, NodeUpdateHandler idUpdater)

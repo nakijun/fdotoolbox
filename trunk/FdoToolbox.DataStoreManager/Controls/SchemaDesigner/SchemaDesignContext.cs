@@ -97,6 +97,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             this.CanDestroySpatialContexts = false;
             this.CanEditSpatialContexts = true;
             this.CanCreateSpatialContexts = true;
+            this.CanHaveUniqueConstraints = true;
 
             var conn = this.Connection;
             if (conn != null)
@@ -108,6 +109,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 //this.CanShowPhysicalMapping = Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_DescribeSchemaMapping) >= 0;
                 this.CanHaveMultipleSchemas = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSchemas);
                 this.CanHaveMultipleSpatialContexts = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts);
+                this.CanHaveUniqueConstraints = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsUniqueValueConstraints);
 
                 this.CanDestroySpatialContexts = Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext) >= 0;
                 this.CanCreateSpatialContexts = (Array.IndexOf(cmds, OSGeo.FDO.Commands.CommandType.CommandType_CreateSpatialContext) >= 0);
@@ -181,6 +183,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         /// mapping UIs will be read-only
         /// </summary>
         public bool CanShowPhysicalMapping
+        {
+            get;
+            private set;
+        }
+
+        public bool CanHaveUniqueConstraints
         {
             get;
             private set;
