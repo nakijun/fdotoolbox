@@ -261,6 +261,41 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 }
             }
         }
+
+        internal void SetUniqueConstraints(IList<UniqueConstraintInfo> constraints)
+        {
+            var ucs = this.DecoratedObject.UniqueConstraints;
+            var props = this.DecoratedObject.Properties;
+
+            ucs.Clear();
+            foreach (var uc in constraints)
+            {
+                var constraint = new UniqueConstraint();
+                foreach (string name in uc.PropertyNames)
+                {
+                    int idx = props.IndexOf(name);
+                    if (idx >= 0)
+                        constraint.Properties.Add((DataPropertyDefinition)props[idx]);
+                }
+                ucs.Add(constraint);
+            }
+            OnPropertyChanged("UniqueConstraints");
+        }
+
+        internal IList<UniqueConstraintInfo> GetUniqueConstraints()
+        {
+            var ucs = new List<UniqueConstraintInfo>();
+            foreach (OSGeo.FDO.Schema.UniqueConstraint uc in this.DecoratedObject.UniqueConstraints)
+            {
+                var tuple = new List<string>();
+                foreach (DataPropertyDefinition dp in uc.Properties)
+                {
+                    tuple.Add(dp.Name);
+                }
+                ucs.Add(new UniqueConstraintInfo(tuple.ToArray()));
+            }
+            return ucs;
+        }
     }
 
     public class FeatureClassDecorator : ClassDefinitionDecorator

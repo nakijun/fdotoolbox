@@ -65,6 +65,8 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (evt.PropertyName == "Name")
                     updater();
             };
+
+            lstUniqueConstraints.DataSource = cls.GetUniqueConstraints();
         }
 
         private void BindIdentityProperties(ClassDefinitionDecorator cls, NodeUpdateHandler idUpdater)
@@ -144,6 +146,25 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                     cmbGeometricProperty.SelectedIndex = 0;
                     selIndexChanged(this, EventArgs.Empty);
                 }
+            }
+        }
+
+        private void lnkEditUniqueConstraints_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var dlg = new UniqueConstraintDialog();
+            var dataProps = new List<string>();
+            foreach (PropertyDefinition p in _cls.Properties)
+            {
+                if (p.PropertyType == PropertyType.PropertyType_DataProperty)
+                    dataProps.Add(p.Name);
+            }
+            dlg.PropertyNames = dataProps;
+            dlg.Constraints = _cls.GetUniqueConstraints();
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                //Rebuild unique constraint collection
+                _cls.SetUniqueConstraints(dlg.Constraints);
+                lstUniqueConstraints.DataSource = dlg.Constraints;
             }
         }
     }
