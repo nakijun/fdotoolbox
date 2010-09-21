@@ -44,6 +44,7 @@
             this.txtBaseClassName = new System.Windows.Forms.TextBox();
             this.txtType = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.lnkEditUniqueConstraints = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // label1
@@ -198,10 +199,22 @@
             this.label7.TabIndex = 14;
             this.label7.Text = "Type";
             // 
+            // lnkEditUniqueConstraints
+            // 
+            this.lnkEditUniqueConstraints.AutoSize = true;
+            this.lnkEditUniqueConstraints.Location = new System.Drawing.Point(115, 353);
+            this.lnkEditUniqueConstraints.Name = "lnkEditUniqueConstraints";
+            this.lnkEditUniqueConstraints.Size = new System.Drawing.Size(25, 13);
+            this.lnkEditUniqueConstraints.TabIndex = 16;
+            this.lnkEditUniqueConstraints.TabStop = true;
+            this.lnkEditUniqueConstraints.Text = "Edit";
+            this.lnkEditUniqueConstraints.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkEditUniqueConstraints_LinkClicked);
+            // 
             // ClassDefinitionCtrl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lnkEditUniqueConstraints);
             this.Controls.Add(this.txtType);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txtBaseClassName);
@@ -243,5 +256,6 @@
         private System.Windows.Forms.TextBox txtBaseClassName;
         private System.Windows.Forms.TextBox txtType;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.LinkLabel lnkEditUniqueConstraints;
     }
 }

@@ -221,6 +221,7 @@ namespace FdoToolbox.Core.Utility
                         CopyProperties(cd.Properties, c.Properties, ignoreDeleted);
                         CopyIdentityProperties(cd.IdentityProperties, c.IdentityProperties, ignoreDeleted);
                         CopyElementAttributes(cd.Attributes, c.Attributes);
+                        CopyUniqueConstraints(cd.UniqueConstraints, c);
                         classDef = c;
                     }
                     break;
@@ -235,6 +236,8 @@ namespace FdoToolbox.Core.Utility
                             string geomName = sfc.GeometryProperty.Name;
                             fc.GeometryProperty = fc.Properties[fc.Properties.IndexOf(geomName)] as GeometricPropertyDefinition;
                         }
+                        CopyElementAttributes(cd.Attributes, fc.Attributes);
+                        CopyUniqueConstraints(cd.UniqueConstraints, fc);
                         classDef = fc;
                     }
                     break;
@@ -242,6 +245,33 @@ namespace FdoToolbox.Core.Utility
                     throw new UnsupportedException(Res.GetStringFormatted("ERR_UNSUPPORTED_CLONE_CLASS_TYPE", cd.ClassType));
             }
             return classDef;
+        }
+
+        /// <summary>
+        /// Utility method to copy all unique constraints of a class
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        private static void CopyUniqueConstraints(UniqueConstraintCollection source, ClassDefinition target)
+        {
+            if (source.Count == 0)
+                return;
+
+            var props = target.Properties;
+            foreach (UniqueConstraint uniq in source)
+            {
+                var ucs = new UniqueConstraint();
+                foreach (DataPropertyDefinition dp in uniq.Properties)
+                {
+                    if (props.Contains(dp.Name))
+                    {
+                        var prop = props[dp.Name];
+                        if (prop.PropertyType == PropertyType.PropertyType_DataProperty)
+                            ucs.Properties.Add((DataPropertyDefinition)prop);
+                    }
+                }
+                target.UniqueConstraints.Add(ucs);
+            }
         }
 
         /// <summary>
