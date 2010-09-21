@@ -1,7 +1,7 @@
-﻿<AddIn name="FDO Toolbox Schema Override Manager Add-In"
+﻿<AddIn name="FDO Toolbox Data Store Editor Add-In"
        author="Jackie Ng"
        url="http://fdotoolbox.googlecode.com"
-       description="Schema Override Manager AddIn of FDO Toolbox"
+       description="Data Store Editor AddIn of FDO Toolbox"
        addInManagerHidden="false">
 
     <Manifest>
