@@ -53,7 +53,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_el.Name != value)
                 {
                     _el.Name = value;
-                    OnPropertyChanged("Name");
+                    OnPropertyChanged("Name", value);
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_el.Description != value)
                 {
                     _el.Description = value;
-                    OnPropertyChanged("Description");
+                    OnPropertyChanged("Description", value);
                 }
             }
         }
@@ -74,10 +74,25 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         // boiler-plate
         public event PropertyChangedEventHandler PropertyChanged;
 
+        protected virtual void OnPropertyChanged<T>(string propertyName, T value)
+        {
+#if DEBUG
+            string newValue = (value == null) ? "(null)" : value.ToString();
+            string msg = string.Format(this.Name + " - PropertyChanged: {0}.{1} to {2}", this.DecoratedObject.GetType().Name, propertyName, newValue);
+            Debug.WriteLine(msg);
+            ICSharpCode.Core.LoggingService.Info(msg);
+#endif
+
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
 #if DEBUG
-            Debug.WriteLine(string.Format("PropertyChanged: {0}.{1}", this.DecoratedObject.GetType().Name, propertyName));
+            string msg = string.Format(this.Name + " - PropertyChanged: {0}.{1}", this.DecoratedObject.GetType().Name, propertyName);
+            Debug.WriteLine(msg);
+            ICSharpCode.Core.LoggingService.Info(msg);
 #endif
 
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -146,7 +161,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (cls.BaseClass != value)
                 {
                     cls.BaseClass = value;
-                    OnPropertyChanged("BaseClass");
+                    OnPropertyChanged("BaseClass", value);
                 }
             }
         }
@@ -174,7 +189,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (this.DecoratedObject.IsAbstract != value)
                 {
                     this.DecoratedObject.IsAbstract = value;
-                    OnPropertyChanged("IsAbstract");
+                    OnPropertyChanged("IsAbstract", value);
                 }
             }
         }
@@ -187,7 +202,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (this.DecoratedObject.IsComputed != value)
                 {
                     this.DecoratedObject.IsComputed = value;
-                    OnPropertyChanged("IsComputed");
+                    OnPropertyChanged("IsComputed", value);
                 }
             }
         }
@@ -280,7 +295,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_fc.GeometryProperty != value)
                 {
                     _fc.GeometryProperty = value;
-                    OnPropertyChanged("GeometryProperty");
+                    OnPropertyChanged("GeometryProperty", value);
                 }
             }
         }
@@ -294,7 +309,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (p.PropertyType == PropertyType.PropertyType_GeometricProperty)
                 {
                     var g = (GeometricPropertyDefinition)p;
-                    cls.GeometryProperty = g;
+                    this.GeometryProperty = g;
                 }
             }
         }
@@ -322,7 +337,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (this.DecoratedObject.IsSystem != value)
                 {
                     this.DecoratedObject.IsSystem = value;
-                    OnPropertyChanged("IsSystem");
+                    OnPropertyChanged("IsSystem", value);
                 }
             }
         }
@@ -347,7 +362,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_g.GeometryTypes != value)
                 {
                     _g.GeometryTypes = value;
-                    OnPropertyChanged("GeometryTypes");
+                    OnPropertyChanged("GeometryTypes", value);
                 }
             }
         }
@@ -360,7 +375,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_g.HasElevation != value)
                 {
                     _g.HasElevation = value;
-                    OnPropertyChanged("HasElevation");
+                    OnPropertyChanged("HasElevation", value);
                 }
             }
         }
@@ -373,7 +388,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_g.HasMeasure != value)
                 {
                     _g.HasMeasure = value;
-                    OnPropertyChanged("HasMeasure");
+                    OnPropertyChanged("HasMeasure", value);
                 }
             }
         }
@@ -386,7 +401,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_g.ReadOnly != value)
                 {
                     _g.ReadOnly = value;
-                    OnPropertyChanged("ReadOnly");
+                    OnPropertyChanged("ReadOnly", value);
                 }
             }
         }
@@ -399,7 +414,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_g.SpatialContextAssociation != value)
                 {
                     _g.SpatialContextAssociation = value;
-                    OnPropertyChanged("SpatialContextAssociation");
+                    OnPropertyChanged("SpatialContextAssociation", value);
                 }
             }
         }
@@ -412,7 +427,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_g.SpecificGeometryTypes != value)
                 {
                     _g.SpecificGeometryTypes = value;
-                    OnPropertyChanged("SpecificGeometryTypes");
+                    OnPropertyChanged("SpecificGeometryTypes", value);
                 }
             }
         }
@@ -432,7 +447,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_d.DataType != value)
                 {
                     _d.DataType = value;
-                    OnPropertyChanged("DataType");
+                    OnPropertyChanged("DataType", value);
                 }
             }
         }
@@ -445,7 +460,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_d.DefaultValue != value)
                 {
                     _d.DefaultValue = value;
-                    OnPropertyChanged("DefaultValue");
+                    OnPropertyChanged("DefaultValue", value);
                 }
             }
         }
@@ -458,7 +473,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_d.IsAutoGenerated != value)
                 {
                     _d.IsAutoGenerated = value;
-                    OnPropertyChanged("IsAutoGenerated");
+                    OnPropertyChanged("IsAutoGenerated", value);
                 }
             }
         }
@@ -471,7 +486,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_d.Length != value)
                 {
                     _d.Length = value;
-                    OnPropertyChanged("Length");
+                    OnPropertyChanged("Length", value);
                 }
             }
         }
@@ -484,7 +499,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_d.Nullable != value)
                 {
                     _d.Nullable = value;
-                    OnPropertyChanged("Nullable");
+                    OnPropertyChanged("Nullable", value);
                 }
             }
         }
@@ -497,7 +512,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_d.Precision != value)
                 {
                     _d.Precision = value;
-                    OnPropertyChanged("Precision");
+                    OnPropertyChanged("Precision", value);
                 }
             }
         }
@@ -510,7 +525,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_d.ReadOnly != value)
                 {
                     _d.ReadOnly = value;
-                    OnPropertyChanged("ReadOnly");
+                    OnPropertyChanged("ReadOnly", value);
                 }
             }
         }
@@ -523,7 +538,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_d.Scale != value)
                 {
                     _d.Scale = value;
-                    OnPropertyChanged("Scale");
+                    OnPropertyChanged("Scale", value);
                 }
             }   
         }
@@ -536,7 +551,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 if (_d.ValueConstraint != value)
                 {
                     _d.ValueConstraint = value;
-                    OnPropertyChanged("ValueConstraint");
+                    OnPropertyChanged("ValueConstraint", value);
                 }
             }   
         }
@@ -560,7 +575,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _a.AssociatedClass = value;
-                OnPropertyChanged("AssociatedClass");
+                OnPropertyChanged("AssociatedClass", value);
             }
         }
 
@@ -570,7 +585,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _a.DeleteRule = value;
-                OnPropertyChanged("DeleteRule");
+                OnPropertyChanged("DeleteRule", value);
             }
         }
 
@@ -585,7 +600,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _a.IsReadOnly = value;
-                OnPropertyChanged("IsReadOnly");
+                OnPropertyChanged("IsReadOnly", value);
             }
         }
 
@@ -595,7 +610,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _a.LockCascade = value;
-                OnPropertyChanged("LockCascade");
+                OnPropertyChanged("LockCascade", value);
             }
         }
 
@@ -605,7 +620,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _a.Multiplicity = value;
-                OnPropertyChanged("Multiplicity");
+                OnPropertyChanged("Multiplicity", value);
             }
         }
 
@@ -620,7 +635,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _a.ReverseMultiplicity = value;
-                OnPropertyChanged("ReverseMultiplicity");
+                OnPropertyChanged("ReverseMultiplicity", value);
             }
         }
 
@@ -630,7 +645,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _a.ReverseName = value;
-                OnPropertyChanged("ReverseName");
+                OnPropertyChanged("ReverseName", value);
             }
         }
 
@@ -714,7 +729,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _o.Class = value;
-                OnPropertyChanged("Class");
+                OnPropertyChanged("Class", value);
             }
         }
 
@@ -724,7 +739,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _o.IdentityProperty = value;
-                OnPropertyChanged("IdentityProperty");
+                OnPropertyChanged("IdentityProperty", value);
             }
         }
 
@@ -734,7 +749,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _o.ObjectType = value;
-                OnPropertyChanged("ObjectType");
+                OnPropertyChanged("ObjectType", value);
             }
         }
 
@@ -744,7 +759,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             set
             {
                 _o.OrderType = value;
-                OnPropertyChanged("OrderType");
+                OnPropertyChanged("OrderType", value);
             }
         }
     }

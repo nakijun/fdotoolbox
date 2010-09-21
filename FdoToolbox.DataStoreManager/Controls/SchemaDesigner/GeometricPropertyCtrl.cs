@@ -50,7 +50,28 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             chkMeasure.DataBindings.Add("Checked", p, "HasMeasure");
 
             cmbSpatialContext.DisplayMember = "Name";
-            cmbSpatialContext.DataSource = _context.SpatialContexts;
+            var scNames = _context.GetSpatialContextNames();
+            cmbSpatialContext.DataSource = scNames;
+            //Assign current association if defined
+            if (!string.IsNullOrEmpty(p.SpatialContextAssociation))
+            {
+                cmbSpatialContext.SelectedItem = p.SpatialContextAssociation;
+            }
+            //Setup event handler that will update the model
+            EventHandler scChanged = (s, e) =>
+            {
+                if (cmbSpatialContext.SelectedItem != null)
+                    p.SpatialContextAssociation = cmbSpatialContext.SelectedItem.ToString();
+            };
+            //Wire it up
+            cmbSpatialContext.SelectedIndexChanged += scChanged;
+            //If spatial contexts available and this property hasn't been assigned one, assign
+            //it to the first available spatial context name
+            if (string.IsNullOrEmpty(p.SpatialContextAssociation) && scNames.Length > 0)
+            {
+                cmbSpatialContext.SelectedIndex = 0;
+                scChanged(this, EventArgs.Empty);
+            }
 
             chkGeometryTypes.GeometryTypes = p.GeometryTypes;
 

@@ -28,7 +28,7 @@ King Oracle Provider
 SQLite Provider
 ---------------
 
-[TODO]
+ * Although the SQLite provider supports multiple spatial contexts, spatial contexts beyond the first are unusable. This is due to a defect in the current provider.
 
 .. _postgis-constraints:
 
@@ -42,5 +42,5 @@ PostGIS Provider
 SQL Server Spatial (2008) Provider
 ----------------------------------
 
- * This provider is extremely sensitive to geometry validity and will reject any input of invalid geometries, FDO itself does not provide any form of geometry validation. Take note of this when bulk copying to sql server.
+ * This provider is extremely sensitive to geometry validity and will reject any input of invalid geometries, FDO itself does not provide any form of geometry validation. This mostly occurs when copying polygon geometries (with invalid ring orientation) to a feature class that uses a spatial context with a geodetic (lat/long) coordinate system. Take note of this when bulk copying to sql server.
  * Bulk copying to this provider is quite slow. Use alternate means of copying data if possible.

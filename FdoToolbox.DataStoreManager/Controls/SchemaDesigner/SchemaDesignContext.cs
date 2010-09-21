@@ -27,6 +27,7 @@ using OSGeo.FDO.Commands.Schema;
 using FdoToolbox.Core.Feature;
 using System.ComponentModel;
 using FdoToolbox.Core.Utility;
+using ICSharpCode.Core;
 
 namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
 {
@@ -527,11 +528,13 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 //Delete removed ones
                 foreach (var c in delete)
                 {
+                    LoggingService.Info("Removing spatial context: " + c.Name);
                     svc.DestroySpatialContext(c);
                 }
-                //Create removed ones
+                //Create added ones
                 foreach (var c in create)
                 {
+                    LoggingService.Info("Adding spatial context: " + c.Name);
                     svc.CreateSpatialContext(c, false);
                 }
                 //Update existing ones
@@ -539,6 +542,7 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                 {
                     try
                     {
+                        LoggingService.Info("Updating spatial context: " + c.Name);
                         svc.CreateSpatialContext(c, true);
                     }
                     catch //Use destroy/create method
@@ -630,6 +634,16 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             }
 
             return notAdded.ToArray();
+        }
+
+        internal string[] GetSpatialContextNames()
+        {
+            List<string> names = new List<string>();
+            foreach (var sc in _spatialContexts)
+            {
+                names.Add(sc.Name);
+            }
+            return names.ToArray();
         }
     }
 }
