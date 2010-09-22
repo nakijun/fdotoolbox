@@ -164,6 +164,11 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             {
                 return _srcConnName;
             }
+            internal set
+            {
+                _srcConnName = value;
+                _srcNode.Nodes[0].Text = "Connection: " + _srcConnName;
+            }
         }
 
         private string _dstConnName;
@@ -173,6 +178,11 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             get
             {
                 return _dstConnName;
+            }
+            internal set
+            {
+                _dstConnName = value;
+                _dstNode.Nodes[0].Text = "Connection: " + _dstConnName;
             }
         }
 

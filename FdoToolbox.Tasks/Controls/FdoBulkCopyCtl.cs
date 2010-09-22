@@ -47,6 +47,39 @@ namespace FdoToolbox.Tasks.Controls
             }
         }
 
+        protected override void OnConnectionRenamed(object sender, ConnectionRenameEventArgs e)
+        {
+            int idx = GetConnectionIndex(e.OldName);
+            if (idx >= 0)
+            {
+                grdConnections.Rows[idx].Cells[0].Value = e.NewName;
+                UpdateConnectionReferences(e.OldName, e.NewName);
+            }
+        }
+
+        private void UpdateConnectionReferences(string oldName, string newName)
+        {
+            foreach (var task in _tasks.Values)
+            {
+                if (task.SourceConnectionName.Equals(oldName))
+                    task.SourceConnectionName = newName;
+
+                if (task.TargetConnectionName.Equals(oldName))
+                    task.TargetConnectionName = newName;
+            }
+        }
+
+        protected override void OnBeforeConnectionRemove(object sender, ConnectionBeforeRemoveEventArgs e)
+        {
+            if (ConnectionAdded(e.ConnectionName))
+            {
+                //TODO: Prompt to remove the referenced connection and any copy tasks that use
+                //this connection
+                MessageService.ShowMessage("This bulk copy task depends on the current connection");
+                e.Cancel = true;
+            }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             PopulateConnections();
@@ -80,12 +113,17 @@ namespace FdoToolbox.Tasks.Controls
 
         private bool ConnectionAdded(string name)
         {
+            return GetConnectionIndex(name) >= 0;
+        }
+
+        private int GetConnectionIndex(string name)
+        {
             foreach (DataGridViewRow row in grdConnections.Rows)
             {
                 if (name.Equals(row.Cells[0].Value))
-                    return true;
+                    return row.Index;
             }
-            return false;
+            return -1;
         }
 
         protected override void OnConnectionAdded(object sender, FdoToolbox.Core.EventArgs<string> e)
