@@ -54,8 +54,6 @@ namespace FdoToolbox.Base.Services
         {
             _namePrefixes = new Dictionary<string, string>();
             _counter = new Dictionary<string, int>();
-            //SetPreferredNamePrefix("OSGeo.SDF", "SDFConnection");
-            //SetPreferredNamePrefix("OSGeo.SHP", "SHPConnection");
             
             _init = true;
             Initialize(this, EventArgs.Empty);
@@ -94,11 +92,22 @@ namespace FdoToolbox.Base.Services
         private FdoConnectionManager _manager;
 
         /// <summary>
-        /// Gets the default name of the connection based on its provider
+        /// 
         /// </summary>
         /// <param name="provider">The provider.</param>
         /// <returns></returns>
         public string GetDefaultConnectionName(string provider)
+        {
+            return GetDefaultConnectionName(provider, string.Empty);
+        }
+
+        /// <summary>
+        /// Gets the default name of the connection based on its provider
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public string GetDefaultConnectionName(string provider, string file)
         {
             if (!_namePrefixes.ContainsKey(provider))
             {
@@ -114,11 +123,15 @@ namespace FdoToolbox.Base.Services
             if (_manager == null)
                 _manager = ServiceManager.Instance.GetService<FdoConnectionManager>();
 
-            string name = _namePrefixes[provider] + _counter[provider];
+            string name = "";
+            if (!string.IsNullOrEmpty(file)) //Try [PROVIDER]_[FileName] first before adding numbers
+                name = _namePrefixes[provider] + file;
+            else 
+                name = _namePrefixes[provider] + file + _counter[provider];
             while (_manager.NameExists(name))
             {
                 _counter[provider]++;
-                name = _namePrefixes[provider] + _counter[provider];
+                name = _namePrefixes[provider] + file + _counter[provider];
             }
             return name;
         }
