@@ -41,7 +41,7 @@ using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Tasks.Controls
 {
-    public partial class FdoJoinCtl : ViewContent, IConnectionDependentView, IFdoJoinView
+    public partial class FdoJoinCtl : ViewContent, IFdoJoinView
     {
         private FdoJoinPresenter _presenter;
 
@@ -64,6 +64,82 @@ namespace FdoToolbox.Tasks.Controls
             txtName.ReadOnly = true; //This is edit mode, so the task name can't be changed
         }
 
+        protected override void OnBeforeConnectionRemove(object sender, ConnectionBeforeRemoveEventArgs e)
+        {
+            if (this.SelectedLeftConnection.Equals(e.ConnectionName) ||
+                this.SelectedRightConnection.Equals(e.ConnectionName) ||
+                this.SelectedTargetConnection.Equals(e.ConnectionName))
+            {
+                MessageService.ShowMessage("Cannot remove connection " + e.ConnectionName + " as this join task depends on it");
+                e.Cancel = true;
+            }
+        }
+
+        protected override void OnConnectionRenamed(object sender, ConnectionRenameEventArgs e)
+        {
+            var left = (BindingList<string>)cmbLeftConnection.DataSource;
+            var right = (BindingList<string>)cmbRightConnection.DataSource;
+            var target = (BindingList<string>)cmbTargetConnection.DataSource;
+
+            var idx = left.IndexOf(e.OldName);
+            if (idx >= 0)
+                left[idx] = e.NewName;
+
+            idx = right.IndexOf(e.OldName);
+            if (idx >= 0)
+                right[idx] = e.NewName;
+
+            idx = target.IndexOf(e.OldName);
+            if (idx >= 0)
+                target[idx] = e.NewName;
+
+            /*
+            string selLeft = this.SelectedLeftConnection;
+            string selRight = this.SelectedRightConnection;
+            string selTarget = this.SelectedTargetConnection;
+
+            //Fix the selected values if they are affected
+            if (selLeft.Equals(e.OldName))
+            {
+                selLeft = e.NewName;
+            }
+            if (selRight.Equals(e.OldName))
+            {
+                selRight = e.NewName;
+            }
+            if (selTarget.Equals(e.OldName))
+            {
+                selTarget = e.NewName;
+            }
+
+            //Fix the list, any list that is fixed needs to have
+            //their current value re-set
+            if (left.Contains(e.OldName))
+            {
+                left.Remove(e.OldName);
+                left.Add(e.NewName);
+
+                this.LeftConnections = left;
+                this.SelectedLeftConnection = selLeft;
+            }
+            if (right.Contains(e.OldName))
+            {
+                right.Remove(e.OldName);
+                right.Add(e.NewName);
+
+                this.RightConnections = right;
+                this.SelectedRightConnection = selRight;
+            }
+            if (target.Contains(e.OldName))
+            {
+                target.Remove(e.OldName);
+                target.Add(e.NewName);
+
+                this.TargetConnections = target;
+                this.SelectedTargetConnection = selTarget;
+            }*/
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             if (_initOptions == null)
@@ -80,17 +156,17 @@ namespace FdoToolbox.Tasks.Controls
 
         public List<string> LeftConnections
         {
-            set { cmbLeftConnection.DataSource = value; }
+            set { cmbLeftConnection.DataSource = new BindingList<string>(value); }
         }
 
         public List<string> RightConnections
         {
-            set { cmbRightConnection.DataSource = value; }
+            set { cmbRightConnection.DataSource = new BindingList<string>(value); }
         }
 
         public List<string> TargetConnections
         {
-            set { cmbTargetConnection.DataSource = value; }
+            set { cmbTargetConnection.DataSource = new BindingList<string>(value); }
         }
 
         public List<string> LeftSchemas
