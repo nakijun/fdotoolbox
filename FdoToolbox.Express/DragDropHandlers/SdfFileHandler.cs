@@ -71,7 +71,7 @@ namespace FdoToolbox.Express.DragDropHandlers
                 return;
             }
 
-            string name = namer.GetDefaultConnectionName(conn.Provider);
+            string name = namer.GetDefaultConnectionName(conn.Provider, System.IO.Path.GetFileNameWithoutExtension(file));
             connMgr.AddConnection(name, conn);
         }
     }

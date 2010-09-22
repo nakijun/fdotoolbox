@@ -152,7 +152,7 @@ namespace FdoToolbox.DataStoreManager.Controls
                         var connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                         var nameSvc = ServiceManager.Instance.GetService<NamingService>();
 
-                        var name = nameSvc.GetDefaultConnectionName("OSGeo.SDF");
+                        var name = nameSvc.GetDefaultConnectionName("OSGeo.SDF", System.IO.Path.GetFileNameWithoutExtension(file));
                         var conn = ExpressUtility.CreateFlatFileConnection(file);
 
                         connMgr.AddConnection(name, conn);
@@ -176,7 +176,7 @@ namespace FdoToolbox.DataStoreManager.Controls
                         var connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
                         var nameSvc = ServiceManager.Instance.GetService<NamingService>();
 
-                        var name = nameSvc.GetDefaultConnectionName("OSGeo.SQLite");
+                        var name = nameSvc.GetDefaultConnectionName("OSGeo.SQLite", System.IO.Path.GetFileNameWithoutExtension(file));
                         var conn = ExpressUtility.CreateFlatFileConnection(file);
 
                         connMgr.AddConnection(name, conn);
