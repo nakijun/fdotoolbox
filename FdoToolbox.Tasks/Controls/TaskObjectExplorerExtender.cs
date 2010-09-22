@@ -26,6 +26,8 @@ using FdoToolbox.Base.Controls;
 using FdoToolbox.Tasks.Services;
 using FdoToolbox.Base.Services;
 using System.Windows.Forms;
+using FdoToolbox.Core.ETL.Specialized;
+using ICSharpCode.Core;
 
 namespace FdoToolbox.Tasks.Controls
 {
@@ -44,10 +46,13 @@ namespace FdoToolbox.Tasks.Controls
 
         private IObjectExplorer _explorer;
         private TaskManager _taskMgr;
+        private FdoConnectionManager _connMgr;
 
         public void Decorate(IObjectExplorer explorer)
         {
             _explorer = explorer;
+            _connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+            _connMgr.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(OnBeforeConnectionRemove);
             _taskMgr = ServiceManager.Instance.GetService<TaskManager>();
             _taskMgr.TaskAdded += new TaskEventHandler(OnTaskAdded);
             _taskMgr.TaskRemoved += new TaskEventHandler(OnTaskRemoved);
@@ -58,6 +63,40 @@ namespace FdoToolbox.Tasks.Controls
 
             _explorer.RegisterRootNode(RootNodeName, "Tasks", IMG_TASK, PATH_TASKS);
             _explorer.RegisterContextMenu(NODE_TASK, PATH_SELECTED_TASK);
+        }
+
+        void OnBeforeConnectionRemove(object sender, ConnectionBeforeRemoveEventArgs e)
+        {
+            foreach (var name in _taskMgr.GetTaskNames())
+            {
+                var task = _taskMgr.GetTask(name);
+                if (typeof(FdoBulkCopy).IsAssignableFrom(task.GetType()))
+                {
+                    var bcp = (FdoBulkCopy)task;
+                    var names = new List<string>(bcp.Options.ConnectionNames);
+                    if (names.Contains(e.ConnectionName))
+                    {
+                        MessageService.ShowMessage("Cannot remove connection as the task (" + name + ") depends on this connection");
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+                else if (typeof(FdoJoin).IsAssignableFrom(task.GetType()))
+                {
+                    var join = (FdoJoin)task;
+                    var conn = _connMgr.GetConnection(e.ConnectionName);
+
+                    var opts = join.Options;
+                    if (opts.Left.Connection == conn ||
+                        opts.Right.Connection == conn ||
+                        opts.Target.Connection == conn)
+                    {
+                        MessageService.ShowMessage("Cannot remove connection as the task (" + name + ") depends on this connection");
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+            }
         }
 
         void OnTaskRenamed(object sender, TaskRenameEventArgs e)
