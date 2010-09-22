@@ -45,7 +45,22 @@ namespace FdoToolbox.Base.Services
             List<string> names = new List<string>(GetConnectionNames());
             foreach (string name in names)
             {
-                this.RemoveConnection(name);
+                //Yes we're inlining RemoveConnection(), but we want any cancel action to cancel
+                //the Clear() method
+                if (_ConnectionDict.ContainsKey(name))
+                {
+                    ConnectionBeforeRemoveEventArgs e = new ConnectionBeforeRemoveEventArgs(name);
+                    this.BeforeConnectionRemove(this, e);
+                    if (e.Cancel)
+                        return;
+
+                    FdoConnection conn = _ConnectionDict[name];
+                    conn.Close();
+                    _ConnectionDict.Remove(name);
+                    conn.Dispose();
+                    if (this.ConnectionRemoved != null)
+                        this.ConnectionRemoved(this, new EventArgs<string>(name));
+                }
             }
         }
 
