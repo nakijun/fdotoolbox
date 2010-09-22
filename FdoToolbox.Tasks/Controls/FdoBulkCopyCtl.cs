@@ -60,10 +60,32 @@ namespace FdoToolbox.Tasks.Controls
                 string connName = name; //Can't bind to iter variable
                 var item = btnAddConnection.DropDown.Items.Add(connName, null, delegate(object sender, EventArgs e)
                 {
-                    AddParticipatingConnection(connName);
+                    if (!ConnectionAdded(connName))
+                        AddParticipatingConnection(connName);
+                    else
+                        MessageService.ShowMessage("Connection " + connName + " already added");
                 });
                 item.Name = name;
             }
+        }
+
+        private void btnAddAll_Click(object sender, EventArgs e)
+        {
+            foreach (string name in _connMgr.GetConnectionNames())
+            {
+                if (!ConnectionAdded(name))
+                    AddParticipatingConnection(name);
+            }
+        }
+
+        private bool ConnectionAdded(string name)
+        {
+            foreach (DataGridViewRow row in grdConnections.Rows)
+            {
+                if (name.Equals(row.Cells[0].Value))
+                    return true;
+            }
+            return false;
         }
 
         protected override void OnConnectionAdded(object sender, FdoToolbox.Core.EventArgs<string> e)
