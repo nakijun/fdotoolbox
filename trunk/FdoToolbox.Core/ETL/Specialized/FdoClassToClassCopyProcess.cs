@@ -242,13 +242,21 @@ namespace FdoToolbox.Core.ETL.Specialized
             //Register delete operation first if delete target specified
             if (Options.DeleteTarget)
             {
-                FdoDeleteOperation op = new FdoDeleteOperation(dstConn, Options.TargetClassName);
-                //There's info here worth bubbling up
-                op.OnInfo += (sender, e) =>
+                using (var svc = dstConn.CreateFeatureService())
                 {
-                    SendMessageFormatted("[{0}:{1}] {2}", this.Name, "Delete", e.Message);
-                };
-                Register(op);
+                    var cls = svc.GetClassByName(Options.TargetSchema, Options.TargetClassName);
+                    //We can't delete if the class in question doesn't exist
+                    if (cls != null)
+                    {
+                        FdoDeleteOperation op = new FdoDeleteOperation(dstConn, Options.TargetClassName);
+                        //There's info here worth bubbling up
+                        op.OnInfo += (sender, e) =>
+                        {
+                            SendMessageFormatted("[{0}:{1}] {2}", this.Name, "Delete", e.Message);
+                        };
+                        Register(op);
+                    }
+                }
             }
 
             if (Options.PreCopyTargetModifier != null)

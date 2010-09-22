@@ -30,7 +30,7 @@ namespace FdoToolbox.Tasks.Controls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FdoBulkCopyCtl));
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Copy Tasks");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Copy Tasks");
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -53,6 +53,7 @@ namespace FdoToolbox.Tasks.Controls
             this.ctxSelectedTask = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.btnAddAll = new System.Windows.Forms.ToolStripButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdConnections)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -143,7 +144,8 @@ namespace FdoToolbox.Tasks.Controls
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnAddConnection,
-            this.toolStripSeparator1});
+            this.toolStripSeparator1,
+            this.btnAddAll});
             this.toolStrip1.Location = new System.Drawing.Point(3, 16);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(583, 25);
@@ -192,10 +194,10 @@ namespace FdoToolbox.Tasks.Controls
             this.mTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mTreeView.Location = new System.Drawing.Point(3, 41);
             this.mTreeView.Name = "mTreeView";
-            treeNode2.Name = "NODE_TASKS";
-            treeNode2.Text = "Copy Tasks";
+            treeNode1.Name = "NODE_TASKS";
+            treeNode1.Text = "Copy Tasks";
             this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.mTreeView.ShowNodeToolTips = true;
             this.mTreeView.Size = new System.Drawing.Size(583, 180);
             this.mTreeView.TabIndex = 2;
@@ -285,6 +287,15 @@ namespace FdoToolbox.Tasks.Controls
             this.splitContainer1.SplitterDistance = 227;
             this.splitContainer1.TabIndex = 6;
             // 
+            // btnAddAll
+            // 
+            this.btnAddAll.Image = ((System.Drawing.Image)(resources.GetObject("btnAddAll.Image")));
+            this.btnAddAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAddAll.Name = "btnAddAll";
+            this.btnAddAll.Size = new System.Drawing.Size(136, 22);
+            this.btnAddAll.Text = "Add All Connections";
+            this.btnAddAll.Click += new System.EventHandler(this.btnAddAll_Click);
+            // 
             // FdoBulkCopyCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -336,5 +347,6 @@ namespace FdoToolbox.Tasks.Controls
         private System.Windows.Forms.DataGridViewTextBoxColumn COL_CONNSTR;
         private System.Windows.Forms.DataGridViewTextBoxColumn COL_CONNSTR_ACTUAL;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ToolStripButton btnAddAll;
     }
 }
