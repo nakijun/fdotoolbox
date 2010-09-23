@@ -50,6 +50,14 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// </summary>
         /// <returns></returns>
         EtlProcess ToEtlProcess();
+
+        /// <summary>
+        /// Updates affected connection references. Does nothing if the process
+        /// does not hold connection name references
+        /// </summary>
+        /// <param name="oldName"></param>
+        /// <param name="newName"></param>
+        void UpdateConnectionReferences(string oldName, string newName);
     }
 
     /// <summary>

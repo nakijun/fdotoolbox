@@ -48,6 +48,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         public string SourceConnectionName
         {
             get { return _SourceConnectionName; }
+            internal set { _SourceConnectionName = value; }
         }
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace FdoToolbox.Core.ETL.Specialized
         public string TargetConnectionName
         {
             get { return _TargetConnectionName; }
+            internal set { _TargetConnectionName = value; }
         }
 
         private string _Name;

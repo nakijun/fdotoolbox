@@ -185,6 +185,19 @@ namespace FdoToolbox.Tasks.Services
                 this.RemoveTask(name);
             }
         }
+
+        internal void UpdateConnectionReferences(string oldName, string newName)
+        {
+            foreach (string name in _taskDict.Keys)
+            {
+                var proc = _taskDict[name];
+                if (typeof(IFdoSpecializedEtlProcess).IsAssignableFrom(proc.GetType()))
+                {
+                    IFdoSpecializedEtlProcess fp = (IFdoSpecializedEtlProcess)proc;
+                    fp.UpdateConnectionReferences(oldName, newName);
+                }
+            }
+        }
     }
 
     public delegate void TaskEventHandler(object sender, EventArgs<string> e);

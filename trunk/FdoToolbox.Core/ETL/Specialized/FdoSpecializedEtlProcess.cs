@@ -114,5 +114,13 @@ namespace FdoToolbox.Core.ETL.Specialized
         /// </summary>
         /// <returns></returns>
         public virtual string GetDescription() { return string.Empty; }
+
+        /// <summary>
+        /// Updates affected connection references. Does nothing if the process
+        /// does not hold connection name references
+        /// </summary>
+        /// <param name="oldName"></param>
+        /// <param name="newName"></param>
+        public virtual void UpdateConnectionReferences(string oldName, string newName) { }
     }
 }

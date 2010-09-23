@@ -53,6 +53,7 @@ namespace FdoToolbox.Tasks.Controls
             _explorer = explorer;
             _connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
             _connMgr.BeforeConnectionRemove += new ConnectionBeforeRemoveHandler(OnBeforeConnectionRemove);
+            _connMgr.ConnectionRenamed += new ConnectionRenamedEventHandler(OnConnectionRenamed);
             _taskMgr = ServiceManager.Instance.GetService<TaskManager>();
             _taskMgr.TaskAdded += new TaskEventHandler(OnTaskAdded);
             _taskMgr.TaskRemoved += new TaskEventHandler(OnTaskRemoved);
@@ -63,6 +64,11 @@ namespace FdoToolbox.Tasks.Controls
 
             _explorer.RegisterRootNode(RootNodeName, "Tasks", IMG_TASK, PATH_TASKS);
             _explorer.RegisterContextMenu(NODE_TASK, PATH_SELECTED_TASK);
+        }
+
+        void OnConnectionRenamed(object sender, ConnectionRenameEventArgs e)
+        {
+            _taskMgr.UpdateConnectionReferences(e.OldName, e.NewName);
         }
 
         void OnBeforeConnectionRemove(object sender, ConnectionBeforeRemoveEventArgs e)

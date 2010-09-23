@@ -183,5 +183,24 @@ namespace FdoToolbox.Core.ETL.Specialized
 
         //    return null;
         //}
+
+        internal void UpdateConnectionReferences(string oldName, string newName)
+        {
+            if (_connections.ContainsKey(oldName))
+            {
+                var conn = _connections[oldName];
+                _connections.Remove(oldName);
+                _connections[newName] = conn;
+            }
+
+            foreach (var copt in _copyOptions)
+            {
+                if (copt.SourceConnectionName.Equals(oldName))
+                    copt.SourceConnectionName = newName;
+
+                if (copt.TargetConnectionName.Equals(oldName))
+                    copt.TargetConnectionName = newName;
+            }
+        }
     }
 }
