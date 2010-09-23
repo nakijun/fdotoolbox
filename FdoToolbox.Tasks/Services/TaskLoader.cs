@@ -28,6 +28,7 @@ using FdoToolbox.Base.Services;
 using FdoToolbox.Core.Feature;
 using ICSharpCode.Core;
 using FdoToolbox.Core.Configuration;
+using System.Collections.Specialized;
 
 namespace FdoToolbox.Tasks.Services
 {
@@ -75,7 +76,7 @@ namespace FdoToolbox.Tasks.Services
         /// Prepares the specified bulk copy definition (freshly deserialized) before the loading process begins
         /// </summary>
         /// <param name="def">The bulk copy definition.</param>
-        protected override void Prepare(FdoToolbox.Core.Configuration.FdoBulkCopyTaskDefinition def)
+        protected override NameValueCollection Prepare(FdoToolbox.Core.Configuration.FdoBulkCopyTaskDefinition def)
         {
             /* There is subtle precondition that would've resulted in all connection references being named to a
              * single reference, thus invalidating the whole task when loaded.
@@ -106,17 +107,23 @@ namespace FdoToolbox.Tasks.Services
             int counter = 0;
             FdoConnectionManager connMgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
 
+            NameValueCollection nameMappings = new NameValueCollection();
+
             foreach (FdoConnectionEntryElement el in def.Connections)
             {
-                string name = prefix + counter;
-                while (connMgr.GetConnection(name) != null)
+                string newName = prefix + counter;
+                while (connMgr.GetConnection(newName) != null)
                 {
                     counter++;
-                    name = prefix + counter;
+                    newName = prefix + counter;
                 }
-                def.UpdateConnectionReferences(el.name, name);
+                string oldName = el.name;
+                def.UpdateConnectionReferences(oldName, newName);
+                nameMappings.Add(newName, oldName);
                 counter++;
             }
+
+            return nameMappings;
         }
     }
 }
