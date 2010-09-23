@@ -266,5 +266,16 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
         }
 
+        public override void UpdateConnectionReferences(string oldName, string newName)
+        {
+            if (string.IsNullOrEmpty(oldName))
+                throw new ArgumentNullException("oldName");
+
+            if (string.IsNullOrEmpty(newName))
+                throw new ArgumentNullException("newName");
+
+            if (this.Options != null)
+                this.Options.UpdateConnectionReferences(oldName, newName);
+        }
     }
 }
