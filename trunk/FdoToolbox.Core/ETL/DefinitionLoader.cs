@@ -194,7 +194,8 @@ namespace FdoToolbox.Core.ETL
         /// Prepares the specified bulk copy definition (freshly deserialized) before the loading process begins
         /// </summary>
         /// <param name="def">The bulk copy definition.</param>
-        protected abstract void Prepare(FdoBulkCopyTaskDefinition def);
+        /// <returns>A collection of [old name] - [new name] mappings</returns>
+        protected abstract NameValueCollection Prepare(FdoBulkCopyTaskDefinition def);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseDefinitionLoader"/> class.
@@ -226,7 +227,7 @@ namespace FdoToolbox.Core.ETL
         /// <returns></returns>
         public FdoBulkCopyOptions BulkCopyFromXml(FdoBulkCopyTaskDefinition def, ref string name, bool owner)
         {
-            Prepare(def);
+            var nameMap = Prepare(def);
 
             // TODO/FIXME/HACK:
             //
@@ -266,6 +267,10 @@ namespace FdoToolbox.Core.ETL
             name = def.name;
             Dictionary<string, FdoConnection> connections = new Dictionary<string, FdoConnection>();
             Dictionary<string, string> changeConnNames = new Dictionary<string, string>();
+
+            //TODO: Prepare() ensured that all connections have unique names that don't already exist
+            //now in the effort to re-use existing connections, see which connection entries
+            //already exist and can be renamed back to the old name
 
             foreach (FdoConnectionEntryElement entry in def.Connections)
             {
@@ -652,9 +657,9 @@ namespace FdoToolbox.Core.ETL
         /// Prepares the specified bulk copy definition (freshly deserialized) before the loading process begins
         /// </summary>
         /// <param name="def">The bulk copy definition.</param>
-        protected override void Prepare(FdoBulkCopyTaskDefinition def)
+        protected override NameValueCollection Prepare(FdoBulkCopyTaskDefinition def)
         {
-            
+            return new NameValueCollection();
         }
     }
 }
