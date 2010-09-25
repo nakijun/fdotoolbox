@@ -105,8 +105,19 @@ namespace FdoToolbox.Core.ETL.Specialized
             {
                 if (counter < 1) //Shouldn't be reentrant, but just play it safe.
                 {
-                    //TODO: Make sure classes and properties are valid under the capabilities of the target connection
-
+                    //TODO:
+                    //
+                    //Extract the source spatial context from its association see if the target has the
+                    //named spatial context:
+                    //
+                    // - If it doesn't have the named spatial context see if the target supports multiple spatial contexts
+                    //    - If it does, create a copy of the source spatial context
+                    //    - If it doesn't, change the spatial context association to the active spatial context on the target
+                    //
+                    //I found this solution in a dream I had. (I am *NOT* kidding!)
+                    //
+                    //I N C E P T I O N?
+                    
                     if (typeof(CreateTargetClassFromSource).IsAssignableFrom(_opts.PreCopyTargetModifier.GetType()))
                     {
                         using (var tsvc = _target.CreateFeatureService())
@@ -273,6 +284,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             IFdoOperation input = new FdoInputOperation(srcConn, CreateSourceQuery());
             IFdoOperation output = null;
             IFdoOperation convert = null;
+            IFdoOperation reproject = null;
 
             NameValueCollection propertyMappings = new NameValueCollection();
             string[] srcProps = this.Options.SourcePropertyNames;
@@ -330,6 +342,17 @@ namespace FdoToolbox.Core.ETL.Specialized
                 convert = op;
             }
 
+            //TODO:
+            //
+            //Compare the WKTs of the source and target spatial contexts by their association (Pre-copy modifiers should've
+            //created and/or assigned the correct contexts). If they are different, set up a re-projection operation using
+            //the source and target WKTs, which will do a vertex by vertex transformation of all the geometries that pass
+            //through it.
+            //
+            //I found this solution in a dream I had. (I am *NOT* kidding!)
+            //
+            //I N C E P T I O N?
+
             Register(input);
             if(convert != null)
                 Register(convert);
@@ -337,6 +360,8 @@ namespace FdoToolbox.Core.ETL.Specialized
                 Register(new FdoFlattenGeometryOperation());
             if (Options.ForceWkb)
                 Register(new FdoForceWkbOperation());
+            if (reproject != null) //Will always be null atm
+                Register(reproject);
             Register(output);
         }
 
