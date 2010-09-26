@@ -23,6 +23,7 @@ v1.0 beta 2
 	- Bulk Copy process no longer tries to execute a delete on a non-existent target class
 	
 - Other:
+	- Update FDO to 3.5.0 RC2. This includes a better performing ArcSDE provider which implements RFC23
 	- Use a friendly connection name generation scheme for file-based FDO providers
 	- The "Dump Schema Mappings" command is now renamed to "Export Data Store Configuration to XML" to reflect its proper function
 	- Feature Schemas are now serialized as FDO data store documents (w/ spatial context and schema mapping information). These
