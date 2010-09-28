@@ -203,6 +203,7 @@
     <EmbeddedResource Include="Resources\HTML-Mode.xshd" />
     <None Include="ICSharpCode.SharpDevelop.snk" />
     <None Include="Resources\ICSharpCode.TextEditor.snk" />
+    <EmbeddedResource Include="Resources\SQL-Mode.xshd" />
     <EmbeddedResource Include="Resources\TextEditorControl.bmp" />
     <EmbeddedResource Include="Resources\Java-Mode.xshd" />
     <EmbeddedResource Include="Resources\JavaScript-Mode.xshd" />

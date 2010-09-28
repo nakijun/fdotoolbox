@@ -45,6 +45,11 @@ namespace FdoToolbox.Base.Forms
             _conn = conn;
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            txtSql.SetHighlighting("SQL");
+        }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
