@@ -42,6 +42,7 @@ namespace FdoToolbox.Base.Controls
             InitializeComponent();
             _editor = new TextEditorControl();
             _editor.Dock = DockStyle.Fill;
+            _editor.SetHighlighting("SQL");
             this.Controls.Add(_editor);
         }
 
