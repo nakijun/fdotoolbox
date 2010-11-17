@@ -42,6 +42,7 @@ namespace FdoToolbox.Tasks.Controls
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnAddConnection = new System.Windows.Forms.ToolStripSplitButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnAddAll = new System.Windows.Forms.ToolStripButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.mTreeView = new System.Windows.Forms.TreeView();
@@ -53,7 +54,6 @@ namespace FdoToolbox.Tasks.Controls
             this.ctxSelectedTask = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.btnAddAll = new System.Windows.Forms.ToolStripButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdConnections)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -164,6 +164,15 @@ namespace FdoToolbox.Tasks.Controls
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnAddAll
+            // 
+            this.btnAddAll.Image = ((System.Drawing.Image)(resources.GetObject("btnAddAll.Image")));
+            this.btnAddAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAddAll.Name = "btnAddAll";
+            this.btnAddAll.Size = new System.Drawing.Size(136, 22);
+            this.btnAddAll.Text = "Add All Connections";
+            this.btnAddAll.Click += new System.EventHandler(this.btnAddAll_Click);
             // 
             // groupBox2
             // 
@@ -286,15 +295,6 @@ namespace FdoToolbox.Tasks.Controls
             this.splitContainer1.Size = new System.Drawing.Size(589, 455);
             this.splitContainer1.SplitterDistance = 227;
             this.splitContainer1.TabIndex = 6;
-            // 
-            // btnAddAll
-            // 
-            this.btnAddAll.Image = ((System.Drawing.Image)(resources.GetObject("btnAddAll.Image")));
-            this.btnAddAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAddAll.Name = "btnAddAll";
-            this.btnAddAll.Size = new System.Drawing.Size(136, 22);
-            this.btnAddAll.Text = "Add All Connections";
-            this.btnAddAll.Click += new System.EventHandler(this.btnAddAll_Click);
             // 
             // FdoBulkCopyCtl
             // 

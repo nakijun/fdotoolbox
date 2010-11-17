@@ -30,6 +30,7 @@ using OSGeo.FDO.Expression;
 using OSGeo.FDO.Schema;
 using Iesi.Collections.Generic;
 using OSGeo.FDO.Geometry;
+using OSGeo.FDO.Spatial;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
@@ -52,6 +53,11 @@ namespace FdoToolbox.Core.ETL.Operations
         protected NameValueCollection _mappings = new NameValueCollection();
 
         /// <summary>
+        /// The FDO Class definition we're inserting data into
+        /// </summary>
+        protected ClassDefinition _clsDef;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="conn"></param>
@@ -61,6 +67,7 @@ namespace FdoToolbox.Core.ETL.Operations
             _conn = conn;
             _service = conn.CreateFeatureService();
             this.ClassName = className;
+            _clsDef = _service.GetClassByName(this.ClassName);
         }
 
         /// <summary>
@@ -419,6 +426,25 @@ namespace FdoToolbox.Core.ETL.Operations
                     IGeometry geom = row[name] as IGeometry;
                     if (geom != null)
                     {
+                        //HACK: Just for you SQL Server 2008! 
+                        if (geom.DerivedType == OSGeo.FDO.Common.GeometryType.GeometryType_Polygon ||
+                            geom.DerivedType == OSGeo.FDO.Common.GeometryType.GeometryType_CurvePolygon ||
+                            geom.DerivedType == OSGeo.FDO.Common.GeometryType.GeometryType_MultiCurvePolygon ||
+                            geom.DerivedType == OSGeo.FDO.Common.GeometryType.GeometryType_MultiPolygon)
+                        {
+                            if (_conn.Provider.ToUpper().StartsWith("OSGEO.SQLSERVERSPATIAL"))
+                            {
+                                //This isn't the most optimal way, as the most optimal
+                                //method according to RFC48 is to get the source rule and
+                                //strictness and pass that to SpatialUtility.GetPolygonVertexOrderAction()
+                                //along with the target rule and strictness. I don't think warping the
+                                //existing API to address such a provider-specific corner case is worth it.
+                                var caps = _clsDef.Capabilities;
+                                var rule = caps.get_PolygonVertexOrderRule(name);
+                                geom = SpatialUtility.FixPolygonVertexOrder(geom, rule);
+                            }
+                        }
+
                         gVal.Geometry = FdoGeometryFactory.Instance.GetFgf(geom);
                     }
                 }

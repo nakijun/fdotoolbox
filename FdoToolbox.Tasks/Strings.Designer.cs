@@ -79,6 +79,15 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Sequential Process.
+        /// </summary>
+        internal static string CMD_CreateSeqProcess {
+            get {
+                return ResourceManager.GetString("CMD_CreateSeqProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Task.
         /// </summary>
         internal static string CMD_DeleteTask {
@@ -187,7 +196,7 @@ namespace FdoToolbox.Tasks {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bulk Copy Definition (*.BulkCopyDefinition)|*.BulkCopyDefinition|Join Task Definition (*.JoinDefinition)|*.JoinDefinition.
+        ///   Looks up a localized string similar to Bulk Copy Definition (*.BulkCopyDefinition)|*.BulkCopyDefinition|Join Task Definition (*.JoinDefinition)|*.JoinDefinition|Sequential Process  (*.SequentialProcess)|*.SequentialProcess.
         /// </summary>
         internal static string FILTER_TASK_DEFINITION {
             get {

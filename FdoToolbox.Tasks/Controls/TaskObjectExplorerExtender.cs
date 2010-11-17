@@ -43,6 +43,7 @@ namespace FdoToolbox.Tasks.Controls
         const string IMG_TASK = "application_go";
         const string IMG_COPY = "table_go";
         const string IMG_JOIN = "table_relationship";
+        const string IMG_SEQPROC = "application_double";
 
         private IObjectExplorer _explorer;
         private TaskManager _taskMgr;
@@ -61,6 +62,7 @@ namespace FdoToolbox.Tasks.Controls
 
             _explorer.RegisterImage(IMG_TASK);
             _explorer.RegisterImage(IMG_JOIN);
+            _explorer.RegisterImage(IMG_SEQPROC);
 
             _explorer.RegisterRootNode(RootNodeName, "Tasks", IMG_TASK, PATH_TASKS);
             _explorer.RegisterContextMenu(NODE_TASK, PATH_SELECTED_TASK);

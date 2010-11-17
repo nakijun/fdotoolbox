@@ -112,6 +112,7 @@
     </Compile>
     <Compile Include="Commands\CreateBulkCopyCommand.cs" />
     <Compile Include="Commands\CreateJoinCommand.cs" />
+    <Compile Include="Commands\CreateSequentialProcessCommand.cs" />
     <Compile Include="Commands\StartupCommand.cs" />
     <Compile Include="Commands\TaskCommands.cs" />
     <Compile Include="Controls\BulkCopy\CopyTaskNodeDecorator.cs" />
@@ -138,6 +139,18 @@
       <DependentUpon>FdoJoinCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FdoJoinPresenter.cs" />
+    <Compile Include="Controls\FdoSequentialProcessCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoSequentialProcessCtl.Designer.cs">
+      <DependentUpon>FdoSequentialProcessCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NewProcessDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\NewProcessDialog.Designer.cs">
+      <DependentUpon>NewProcessDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TaskObjectExplorerExtender.cs" />
     <Compile Include="DragDropHandlers\BulkCopyFileHandler.cs" />
     <Compile Include="EventWatcher.cs" />
@@ -185,6 +198,12 @@
     <EmbeddedResource Include="Controls\FdoJoinCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FdoJoinCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FdoSequentialProcessCtl.resx">
+      <DependentUpon>FdoSequentialProcessCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\NewProcessDialog.resx">
+      <DependentUpon>NewProcessDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Strings.resx">
       <SubType>Designer</SubType>
