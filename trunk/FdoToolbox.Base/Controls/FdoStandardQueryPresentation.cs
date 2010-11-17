@@ -91,7 +91,37 @@ namespace FdoToolbox.Base.Controls
                 foreach (PropertyDefinition pd in _view.SelectedClass.Properties)
                 {
                     if (pd.PropertyType == PropertyType.PropertyType_DataProperty || pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
-                        p.Add(pd.Name);
+						p.Add(pd.Name);
+					else if (pd.PropertyType == PropertyType.PropertyType_ObjectProperty)
+					{
+						String szPrefix = pd.Name;
+						ObjectPropertyDefinition pdo = (ObjectPropertyDefinition)pd;
+
+						// TODO: make this an iterative loop
+						// only processing one sub-set for now
+		                foreach (PropertyDefinition pdSub in pdo.Class.Properties)
+						{
+							if (pdSub.PropertyType == PropertyType.PropertyType_DataProperty || pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
+								p.Add(szPrefix + "." + pdSub.Name);
+
+							// TODO: process objects and associations
+						}
+					}
+					else if (pd.PropertyType == PropertyType.PropertyType_AssociationProperty)
+					{
+						String szPrefix = pd.Name;
+						AssociationPropertyDefinition pda = (AssociationPropertyDefinition)pd;
+
+						// TODO: make this an iterative loop
+						// only processing one sub-set for now
+						foreach (PropertyDefinition pdSub in pda.AssociatedClass.Properties)
+						{
+							if (pdSub.PropertyType == PropertyType.PropertyType_DataProperty || pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
+								p.Add(szPrefix + "." + pdSub.Name);
+
+							// TODO: process objects and associations
+						}
+					}
                 }
                 _view.PropertyList = p;
                 _view.FireMapPreviewStateChanged(_view.SelectedClass.ClassType == ClassType.ClassType_FeatureClass);

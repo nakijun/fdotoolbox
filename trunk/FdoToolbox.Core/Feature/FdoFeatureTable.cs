@@ -366,10 +366,102 @@ namespace FdoToolbox.Core.Feature
                 }
                 else if (ptype == FdoPropertyType.Object)
                 {
-                }
+					// because the original code used an iterator over the reader.FieldCount
+					// it is a bit of a hack to get another definition of the class and check
+					// we are at the right property with a name comparison
+					// TODO: code review to see if this can be implemented better
+					FdoFeatureReader readerFeature = (FdoFeatureReader)reader;
+					ClassDefinition classDef = readerFeature.GetClassDefinition();
+
+					foreach (PropertyDefinition propertyDef in classDef.Properties)
+					{
+						// only looking for the right association
+						if ((PropertyType.PropertyType_ObjectProperty == propertyDef.PropertyType)
+							&& (propertyDef.Name.Equals(name)))
+						{
+							ObjectPropertyDefinition objectProp = (ObjectPropertyDefinition)propertyDef;
+							ClassDefinition classDefObject = objectProp.Class;
+
+							// TODO: this should be an iterative function?
+							foreach (PropertyDefinition propertyDefObject in classDefObject.Properties)
+							{
+								String nameObject = propertyDefObject.Name;
+
+								// TODO: find a better way to convert types
+								Type type = "".GetType();
+								// TODO: handle data and iterative associations and objects
+								if (PropertyType.PropertyType_DataProperty == propertyDefObject.PropertyType)
+								{
+									DataPropertyDefinition datapropertyDefObject = (DataPropertyDefinition)propertyDefObject;
+
+									DataType ptAssoc = datapropertyDefObject.DataType;
+									switch (ptAssoc)
+									{
+										case DataType.DataType_String:
+											type = "".GetType();
+										break;
+									}
+
+									DataColumn dc = this.Columns.Add(name + "." + nameObject, type);
+								}
+								else if (PropertyType.PropertyType_GeometricProperty == propertyDefObject.PropertyType)
+								{
+									type = typeof(FdoGeometry);
+									DataColumn dc = this.Columns.Add(name + "." + nameObject, type);
+								}
+							}
+						}
+					}
+				}
                 else if (ptype == FdoPropertyType.Association)
                 {
-                }
+					// because the original code used an iterator over the reader.FieldCount
+					// it is a bit of a hack to get another definition of the class and check
+					// we are at the right property with a name comparison
+					// TODO: code review to see if this can be implemented better
+					FdoFeatureReader readerFeature = (FdoFeatureReader)reader;
+					ClassDefinition classDef = readerFeature.GetClassDefinition();
+
+					foreach (PropertyDefinition propertyDef in classDef.Properties)
+					{
+						// only looking for the right association
+						if ((PropertyType.PropertyType_AssociationProperty == propertyDef.PropertyType)
+							&& (propertyDef.Name.Equals(name)))
+						{
+							AssociationPropertyDefinition assocProp = (AssociationPropertyDefinition)propertyDef;
+							ClassDefinition classDefAssoc = assocProp.AssociatedClass;
+
+							// TODO: this should be an iterative function?
+							foreach (PropertyDefinition propertyDefAssoc in classDefAssoc.Properties)
+							{
+								String nameAssoc = propertyDefAssoc.Name;
+
+								// TODO: find a better way to convert types
+								Type type = typeof(String);
+								// TODO: handle data and iterative associations and objects
+								if (PropertyType.PropertyType_DataProperty == propertyDefAssoc.PropertyType)
+								{
+									DataPropertyDefinition datapropertyDefAssoc = (DataPropertyDefinition)propertyDefAssoc;
+
+									DataType ptAssoc = datapropertyDefAssoc.DataType;
+									switch (ptAssoc)
+									{
+										case DataType.DataType_String:
+											type = typeof(String);
+										break;
+									}
+
+									DataColumn dc = this.Columns.Add(name + "." + nameAssoc, type);
+								}
+								else if (PropertyType.PropertyType_GeometricProperty == propertyDefAssoc.PropertyType)
+								{
+									type = typeof(FdoGeometry);
+									DataColumn dc = this.Columns.Add(name + "." + nameAssoc, type);
+								}
+							}
+						}
+					}
+				}
                 else
                 {
                     Type type = reader.GetFieldType(i);

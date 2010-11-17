@@ -214,6 +214,10 @@ namespace FdoToolbox.Base.Controls
 
                     table.InitTable(reader);
 
+					// need to store object class defn outside loop
+					ClassDefinition classDefObject = null;
+					ClassDefinition classDefAssoc = null;
+
                     while (reader.ReadNext() && !_queryWorker.CancellationPending)
                     {
                         //Pass processed feature to data grid view
@@ -227,8 +231,80 @@ namespace FdoToolbox.Base.Controls
 
                                 switch (pt)
                                 {
-                                    //case FdoPropertyType.Association:
-                                    case FdoPropertyType.BLOB:
+                                    case FdoPropertyType.Association:
+										// TODO: how to handle for non-StandardQuery
+										if (e.Argument is StandardQuery)
+										{
+											// because the original code used an iterator over the reader.FieldCount
+											// it is a bit of a hack to get another definition of the class and check
+											// we are at the right property with a name comparison
+											// TODO: code review to see if this can be implemented better
+											FdoFeatureReader readerFeature = (FdoFeatureReader)reader;
+											ClassDefinition classDef = readerFeature.GetClassDefinition();
+
+											foreach (PropertyDefinition propertyDef in classDef.Properties)
+											{
+												// only looking for the right association
+												if ( (PropertyType.PropertyType_AssociationProperty == propertyDef.PropertyType)
+													&& (propertyDef.Name.Equals(name)) )
+												{
+													AssociationPropertyDefinition assocProp = (AssociationPropertyDefinition)propertyDef;
+													ClassDefinition classAssoc = assocProp.AssociatedClass;
+
+													// get a reader from the association - nice!
+													IFeatureReader readerAssoc = readerFeature.GetFeatureObject(name);
+													if ((null != readerAssoc) && (readerAssoc.ReadNext()))
+													{
+														// TODO: this should be an iterative function
+
+														// the simple reassignment on each instance fails
+														//  (classDefObject.Properties is always zero after first record)
+														//  so have set classDefObject higher-up and re-use/
+														//   - problem will occur if more than one association
+														// ClassDefinition classDefObject = readerObject.GetClassDefinition();
+														if (null == classDefAssoc)
+															classDefAssoc = readerAssoc.GetClassDefinition();
+
+														foreach (PropertyDefinition propertyDefAssoc in classDefAssoc.Properties)
+														{
+															String nameAssoc = propertyDefAssoc.Name;
+
+															// TODO: only "data" type handled at present
+															if (PropertyType.PropertyType_DataProperty == propertyDefAssoc.PropertyType)
+															{
+																DataPropertyDefinition datapropertyDefAssoc = (DataPropertyDefinition)propertyDefAssoc;
+
+																String szFullName = name + "." + nameAssoc;
+																DataType ptAssoc = datapropertyDefAssoc.DataType;
+																// TODO: handle all types
+																switch (ptAssoc)
+																{
+																	case DataType.DataType_String:
+																		feat[szFullName] = readerAssoc.GetString(nameAssoc);
+																	break;
+
+																	case DataType.DataType_Int16:
+																		feat[szFullName] = readerAssoc.GetInt16(nameAssoc);
+																	break;
+
+																	case DataType.DataType_Int32:
+																		feat[szFullName] = readerAssoc.GetInt32(nameAssoc);
+																	break;
+
+																	case DataType.DataType_Int64:
+																		feat[szFullName] = readerAssoc.GetInt64(nameAssoc);
+																	break;
+																}
+															}
+														}
+														readerAssoc.Close();
+													}
+												}
+											}
+										}
+									break;
+
+									case FdoPropertyType.BLOB:
                                         feat[name] = reader.GetLOB(name).Data;
                                         break;
                                     case FdoPropertyType.Boolean:
@@ -286,8 +362,82 @@ namespace FdoToolbox.Base.Controls
                                         break;
                                     case FdoPropertyType.Int64:
                                         feat[name] = reader.GetInt64(name);
-                                        break;
-                                    //case FdoPropertyType.Object:
+                                    break;
+
+                                    case FdoPropertyType.Object:
+										// TODO: how to handle for non-StandardQuery
+										if (e.Argument is StandardQuery)
+										{
+											// because the original code used an iterator over the reader.FieldCount
+											// it is a bit of a hack to get another definition of the class and check
+											// we are at the right property with a name comparison
+											// TODO: code review to see if this can be implemented better
+											FdoFeatureReader readerFeature = (FdoFeatureReader)reader;
+											ClassDefinition classDef = readerFeature.GetClassDefinition();
+
+											foreach (PropertyDefinition propertyDef in classDef.Properties)
+											{
+												// only looking for the right object
+												if ((PropertyType.PropertyType_ObjectProperty == propertyDef.PropertyType)
+													&& (propertyDef.Name.Equals(name)))
+												{
+													ObjectPropertyDefinition assocProp = (ObjectPropertyDefinition)propertyDef;
+													ClassDefinition classAssoc = assocProp.Class;
+
+													// get a reader from the object - nice!
+													IFeatureReader readerObject = readerFeature.GetFeatureObject(name);
+													if ((null != readerObject) && (readerObject.ReadNext()))
+													{
+														// TODO: this should be an iterative function
+
+														// the simple reassignment on each instance fails
+														//  (classDefObject.Properties is always zero after first record)
+														//  so have set classDefObject higher-up and re-use/
+														//   - problem will occur if more than one association
+														// ClassDefinition classDefObject = readerObject.GetClassDefinition();
+														if (null == classDefObject)
+															classDefObject = readerObject.GetClassDefinition();
+
+														foreach (PropertyDefinition propertyDefObject in classDefObject.Properties)
+														{
+															String nameObject = propertyDefObject.Name;
+
+															// TODO: only "data" type handled at present
+															if (PropertyType.PropertyType_DataProperty == propertyDefObject.PropertyType)
+															{
+																DataPropertyDefinition datapropertyDefObject = (DataPropertyDefinition)propertyDefObject;
+
+																String szFullName = name + "." + nameObject;
+																DataType ptAssoc = datapropertyDefObject.DataType;
+																// TODO: handle all types
+																switch (ptAssoc)
+																{
+																	case DataType.DataType_String:
+																		feat[szFullName] = readerObject.GetString(nameObject);
+																	break;
+
+																	case DataType.DataType_Int16:
+																		feat[szFullName] = readerObject.GetInt16(nameObject);
+																	break;
+
+																	case DataType.DataType_Int32:
+																		feat[szFullName] = readerObject.GetInt32(nameObject);
+																	break;
+
+																	case DataType.DataType_Int64:
+																		feat[szFullName] = readerObject.GetInt64(nameObject);
+																	break;
+																}
+															}
+														}
+														readerObject.Close();
+														readerObject = null;
+													}
+												}
+											}
+										} 
+									break;
+
                                     //case FdoPropertyType.Raster:
                                     case FdoPropertyType.Single:
                                         feat[name] = reader.GetSingle(name);

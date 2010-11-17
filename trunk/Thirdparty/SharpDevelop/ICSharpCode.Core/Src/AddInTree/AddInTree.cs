@@ -202,9 +202,10 @@ namespace ICSharpCode.Core
 						}
 						foreach (LazyConditionEvaluator condition in runtime.DefinedConditionEvaluators) {
 							if (AddInTree.ConditionEvaluators.ContainsKey(condition.Name)) {
-								throw new AddInLoadException("Duplicate condition evaluator: " + condition.Name);
+								// throw new AddInLoadException("Duplicate condition evaluator: " + condition.Name);
 							}
-							AddInTree.ConditionEvaluators.Add(condition.Name, condition);
+							else
+								AddInTree.ConditionEvaluators.Add(condition.Name, condition);
 						}
 					}
 				}
