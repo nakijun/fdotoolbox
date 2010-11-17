@@ -60,11 +60,21 @@ namespace FdoToolbox.Base.Controls
         /// </summary>
         /// <param name="dp">The dp.</param>
         void AddDataProperty(DataPropertyDefinition dp);
-        /// <summary>
-        /// Adds the geometric property.
-        /// </summary>
-        /// <param name="gp">The gp.</param>
-        void AddGeometricProperty(GeometricPropertyDefinition gp);
+		/// <summary>
+		/// Adds the geometric property.
+		/// </summary>
+		/// <param name="gp">The gp.</param>
+		void AddGeometricProperty(GeometricPropertyDefinition gp);
+		/// <summary>
+		/// Adds the object property.
+		/// </summary>
+		/// <param name="gp">The gp.</param>
+		void AddObjectProperty(ObjectPropertyDefinition gp);
+		/// <summary>
+		/// Adds the association property.
+		/// </summary>
+		/// <param name="gp">The gp.</param>
+		void AddAssociationProperty(AssociationPropertyDefinition gp);
 
         /// <summary>
         /// Gets the values.
@@ -120,7 +130,15 @@ namespace FdoToolbox.Base.Controls
                             case PropertyType.PropertyType_GeometricProperty:
                                 _view.AddGeometricProperty((GeometricPropertyDefinition)pd);
                                 break;
-                        }
+
+							case PropertyType.PropertyType_ObjectProperty:
+								_view.AddObjectProperty((ObjectPropertyDefinition)pd);
+							break;
+
+							case PropertyType.PropertyType_AssociationProperty:
+								_view.AddAssociationProperty((AssociationPropertyDefinition)pd);
+							break;
+						}
                     }
                 }
             }

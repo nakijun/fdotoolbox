@@ -54,7 +54,13 @@ namespace FdoToolbox.Base.Commands
     {
         public override void Run()
         {
-            Process.Start(Preferences.LogPath);
+			if (System.IO.Directory.Exists(Preferences.LogPath))
+				Process.Start(Preferences.LogPath);
+			else
+			{
+				// TODO: put this as WrappedMessageBox with system string
+				System.Windows.Forms.MessageBox.Show("Log Path Does Not Exist!");
+			}
         }
     }
 

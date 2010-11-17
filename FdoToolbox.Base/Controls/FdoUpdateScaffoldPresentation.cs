@@ -38,8 +38,11 @@ namespace FdoToolbox.Base.Controls
         bool UseTransactionEnabled { set; get; }
         void InitializeGrid();
 
-        void AddDataProperty(DataPropertyDefinition dp, object value);
-        void AddGeometricProperty(GeometricPropertyDefinition gp, string fgft);
+		void AddDataProperty(DataPropertyDefinition dp, object value);
+		void AddDataProperty(DataPropertyDefinition dp, object value, String szClassHierarchy);
+
+		void AddGeometricProperty(GeometricPropertyDefinition gp, string fgft);
+		void AddGeometricProperty(GeometricPropertyDefinition gp, string fgft, String szClassHierarchy);
 
         Dictionary<string, ValueExpression> GetValues();
     }
@@ -81,10 +84,76 @@ namespace FdoToolbox.Base.Controls
                             case PropertyType.PropertyType_DataProperty:
                                 _view.AddDataProperty((DataPropertyDefinition)pd, _feature[pd.Name]);
                                 break;
+
                             case PropertyType.PropertyType_GeometricProperty:
-                                _view.AddGeometricProperty((GeometricPropertyDefinition)pd, (_feature[pd.Name] as FdoGeometry).Text);
-                                break;
-                        }
+								if (null != (_feature[pd.Name] as FdoGeometry))	// else throws exeption with the ".Text" null reference
+									_view.AddGeometricProperty((GeometricPropertyDefinition)pd, (_feature[pd.Name] as FdoGeometry).Text);
+                            break;
+
+							case PropertyType.PropertyType_AssociationProperty:
+								AssociationPropertyDefinition pdAssoc = (AssociationPropertyDefinition)pd;
+
+				                ClassDefinition cdAssoc = service.GetClassByName(pdAssoc.AssociatedClass.Name);
+								foreach (PropertyDefinition pdThis in cdAssoc.Properties)
+								{
+									String szPropertyName = pd.Name + "." + pdThis.Name;
+
+									// TODO: iterate associations and objects
+									switch (pdThis.PropertyType)
+									{
+										case PropertyType.PropertyType_DataProperty:
+											// TODO: fix this issue of reverse association
+											// at the moment can get geom from parent to child - but throws error from child to parent
+											try
+											{
+												_view.AddDataProperty((DataPropertyDefinition)pdThis, _feature[szPropertyName], pd.Name);
+											}
+											catch (Exception exThis)
+											{
+												// System.Windows.Forms.MessageBox.Show("Cannot Edit Association Property\n\n" + exThis.Message);
+											}
+										break;
+
+										case PropertyType.PropertyType_GeometricProperty:
+											// TODO: fix this issue of reverse association
+											// at the moment can get geom from parent to child - but throws error from child to parent
+											try
+											{
+												if (null != (_feature[szPropertyName] as FdoGeometry))	// else throws exeption with the ".Text" null reference
+													_view.AddGeometricProperty((GeometricPropertyDefinition)pdThis, (_feature[szPropertyName] as FdoGeometry).Text, pd.Name);
+											}
+											catch (Exception exThis)
+											{
+												System.Windows.Forms.MessageBox.Show("Cannot Edit Association Geometry\n\n" + exThis.Message);
+											}
+										break;
+									}
+								}
+							break;
+
+							case PropertyType.PropertyType_ObjectProperty:
+								ObjectPropertyDefinition pdObject = (ObjectPropertyDefinition)pd;
+								
+								ClassDefinition cdObject = service.GetClassByName(pdObject.Class.Name);
+								foreach (PropertyDefinition pdThis in cdObject.Properties)
+								{
+									String szPropertyName = pd.Name + "." + pdThis.Name;
+
+									// TODO: iterate associations and objects
+									switch (pdThis.PropertyType)
+									{
+										case PropertyType.PropertyType_DataProperty:
+											_view.AddDataProperty((DataPropertyDefinition)pdThis, _feature[szPropertyName], pd.Name);
+										break;
+
+										case PropertyType.PropertyType_GeometricProperty:
+											if (null != (_feature[szPropertyName] as FdoGeometry))	// else throws exeption with the ".Text" null reference
+												_view.AddGeometricProperty((GeometricPropertyDefinition)pdThis, (_feature[szPropertyName] as FdoGeometry).Text, pd.Name);
+										break;
+									}
+								}
+							break;
+						}
                     }
                 }
             }
