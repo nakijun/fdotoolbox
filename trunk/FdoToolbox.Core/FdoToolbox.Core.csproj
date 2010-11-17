@@ -147,6 +147,7 @@
     <Compile Include="Configuration\BulkCopyTask.cs" />
     <Compile Include="Configuration\FdoBulkCopyTaskDefinition.cs" />
     <Compile Include="Configuration\JoinTask.cs" />
+    <Compile Include="Configuration\SequentialProcessDefinition.cs" />
     <Compile Include="Configuration\SpatialConnection.cs" />
     <Compile Include="Connections\EnumerableDictionaryProperty.cs" />
     <Compile Include="Connections\DictionaryProperty.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="ETL\Specialized\FdoDataPropertyConversionRule.cs" />
     <Compile Include="ETL\Specialized\FdoJoin.cs" />
     <Compile Include="ETL\Specialized\FdoJoinOptions.cs" />
+    <Compile Include="ETL\Specialized\FdoSequentialProcess.cs" />
     <Compile Include="ETL\Specialized\FdoSpecializedEtlProcess.cs" />
     <Compile Include="ETL\Specialized\IFdoSpecializedEtlProcess.cs" />
     <Compile Include="ETL\Specialized\TableToFlatFile.cs" />

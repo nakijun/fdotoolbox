@@ -514,6 +514,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FdoToolbox.Base.addin" />
+    <None Include="Resources\application_double.png" />
     <None Include="Resources\script.png" />
     <None Include="Resources\map_edit.png" />
     <None Include="Resources\file_connection.png" />

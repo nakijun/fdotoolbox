@@ -592,6 +592,10 @@ namespace FdoToolbox.Core.ETL
         /// File extension for join definitions
         /// </summary>
         public const string JOINDEFINITION = ".JoinDefinition";
+        /// <summary>
+        /// File extension for sequential processes
+        /// </summary>
+        public const string SEQUENTIALPROCESS = ".SequentialProcess";
 
         /// <summary>
         /// Determines whether [the specified file] is a definition
@@ -607,7 +611,19 @@ namespace FdoToolbox.Core.ETL
 
             string ext = Path.GetExtension(file).ToLower();
 
-            return (ext == BULKCOPYDEFINITION.ToLower()) || (ext == JOINDEFINITION.ToLower());
+            return (ext == SEQUENTIALPROCESS.ToLower()) || (ext == BULKCOPYDEFINITION.ToLower()) || (ext == JOINDEFINITION.ToLower());
+        }
+
+        /// <summary>
+        /// Determines whether [the specified file] is a sequential process definition
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>
+        /// 	<c>true</c> if [the specified file] is a sequential process definition; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsSequentialProcess(string file)
+        {
+            return IsDefinitionFile(file) && (Path.GetExtension(file).ToLower() == SEQUENTIALPROCESS.ToLower());
         }
 
         /// <summary>
