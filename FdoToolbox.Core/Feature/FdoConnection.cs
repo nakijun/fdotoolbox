@@ -376,6 +376,14 @@ namespace FdoToolbox.Core.Feature
         {
             return _Connection.CreateSchemaMapping();
         }
+
+        /// <summary>
+        /// Forces the writes of any cached data to the targed datastore
+        /// </summary>
+        public void Flush()
+        {
+            _Connection.Flush();
+        }
     }
 
     /// <summary>

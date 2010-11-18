@@ -64,8 +64,14 @@ namespace FdoToolbox.Base.Controls
                 {
                     int deleted = service.DeleteFeatures(_className, _view.Filter.Trim(), _view.UseTransaction);
                     _view.ShowMessage(null, deleted + " feature(s) deleted");
-                    _view.Close();
                 }
+
+                if (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsFlush))
+                {
+                    _conn.Flush();
+                }
+
+                _view.Close();
             }
         }
 
