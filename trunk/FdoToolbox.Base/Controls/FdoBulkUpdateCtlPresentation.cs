@@ -95,8 +95,14 @@ namespace FdoToolbox.Base.Controls
                 {
                     int updated = service.UpdateFeatures(_className, _view.GetValues(), _view.Filter, _view.UseTransaction);
                     _view.ShowMessage(null, updated + " feature(s) updated");
-                    _view.Close();
                 }
+
+                if (_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsFlush))
+                {
+                    _conn.Flush();
+                }
+
+                _view.Close();
             }
         }
 
