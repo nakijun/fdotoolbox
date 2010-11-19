@@ -3,6 +3,7 @@ v1.0 beta 3
 - Enhancements:
 	- Using FDO 3.6.0 (build F036)
 	- Syntax highlighting for SQL query view
+	- Support for new Task Type: SequentialProcess. The SequentialProcess allows sequential invocations of FdoUtil.exe
 
 - Fixes:
 	- Support for Association properties. Patches provided by Crispin @ 1spatial.
