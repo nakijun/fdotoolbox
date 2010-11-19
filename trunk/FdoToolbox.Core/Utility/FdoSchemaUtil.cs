@@ -27,6 +27,9 @@ using OSGeo.FDO.Expression;
 using OSGeo.FDO.Connections.Capabilities;
 using OSGeo.FDO.Common.Io;
 using Res = FdoToolbox.Core.ResourceUtil;
+using Iesi.Collections;
+using Iesi.Collections.Generic;
+using System.Diagnostics;
 
 namespace FdoToolbox.Core.Utility
 {
@@ -150,6 +153,27 @@ namespace FdoToolbox.Core.Utility
             return CloneSchema(fs, false);
         }
 
+        private static ICollection<string> GetReferencedClasses(ClassDefinition clsDef)
+        {
+            HashedSet<string> clsNames = new HashedSet<string>();
+
+            foreach (PropertyDefinition propDef in clsDef.Properties)
+            {
+                if (propDef.PropertyType == PropertyType.PropertyType_AssociationProperty)
+                {
+                    AssociationPropertyDefinition ap = (AssociationPropertyDefinition)propDef;
+                    clsNames.Add(ap.AssociatedClass.QualifiedName);
+                }
+                else if (propDef.PropertyType == PropertyType.PropertyType_ObjectProperty)
+                {
+                    ObjectPropertyDefinition op = (ObjectPropertyDefinition)propDef;
+                    clsNames.Add(op.Class.QualifiedName);
+                }
+            }
+
+            return clsNames;
+        }
+
         /// <summary>
         /// Utility method to clone a feature schema
         /// </summary>
@@ -162,18 +186,21 @@ namespace FdoToolbox.Core.Utility
                 throw new ArgumentNullException("fs");
 
             /*
-            FeatureSchemaCollection newSchemas = new FeatureSchemaCollection(null);
-            using (IoMemoryStream stream = new IoMemoryStream())
-            {
-                //Clone selected schema
-                fs.WriteXml(stream);
-                stream.Reset();
-                newSchemas.ReadXml(stream);
-                stream.Close();
-            }
-            return newSchemas[0];
+             * This method is BIG. So it needs some explanation.
+             * 
+             * Because Association and Object Properties reference other classes, the classes
+             * containing such properties are processed *last*. Everything else is assumed to
+             * be cloned (without problems) and cached in a temp dictionary for processing these
+             * classes w/ Association/Object properties.
+             * 
+             * When processing these remaining classes, we iteratively attempt to clone each class.
+             * Each successfully cloned class will be added to the temp dictionary. Eventually all
+             * references will be satisfied, that's when we can finally return the cloned schema.
              */
 
+            Dictionary<string, ClassDefinition> cloned = new Dictionary<string,ClassDefinition>();
+            List<ClassDefinition> classesWithReferences = new List<ClassDefinition>();
+            
             FeatureSchema fsc = new FeatureSchema(fs.Name, fs.Description);
             CopyElementAttributes(fs.Attributes, fsc.Attributes);
 
@@ -183,8 +210,18 @@ namespace FdoToolbox.Core.Utility
                 {
                     if (cls.ElementState != SchemaElementState.SchemaElementState_Deleted)
                     {
-                        var klass = CloneClass(cls, ignoreDeleted);
-                        fsc.Classes.Add(klass);
+                        ICollection<string> refs = GetReferencedClasses(cls);
+                        if (refs.Count == 0)
+                        {
+                            var klass = CloneClass(cls, ignoreDeleted);
+                            fsc.Classes.Add(klass);
+                            cloned.Add(klass.QualifiedName, klass);
+                        }
+                        else
+                        {
+                            //Check for self-references
+                            classesWithReferences.Add(cls);
+                        }
                     }
                 }
             }
@@ -192,14 +229,237 @@ namespace FdoToolbox.Core.Utility
             {
                 foreach (ClassDefinition cls in fs.Classes)
                 {
-                    var klass = CloneClass(cls, ignoreDeleted);
-                    fsc.Classes.Add(klass);
+                    ICollection<string> refs = GetReferencedClasses(cls);
+                    if (refs.Count == 0)
+                    {
+                        var klass = CloneClass(cls, ignoreDeleted);
+                        fsc.Classes.Add(klass);
+                        cloned.Add(klass.QualifiedName, klass);
+                    }
+                    else
+                    {
+                        //Check for self-references
+                        classesWithReferences.Add(cls);
+                    }
+                }
+            }
+
+            //TODO: Does the FDO spec allow self-referenced Association/Object
+            //properties? If not, it would simplify this code greatly.
+
+            //Repeat until all references satisfied
+            while (classesWithReferences.Count > 0)
+            {
+                List<ClassDefinition> successfullyCloned = new List<ClassDefinition>();
+                foreach (ClassDefinition cls in classesWithReferences)
+                {
+                    bool bSuccess = false;
+
+                    ClassDefinition klass = null;
+                    switch (cls.ClassType)
+                    {
+                        case ClassType.ClassType_Class:
+                            klass = new Class(cls.Name, cls.Description);
+                            break;
+                        case ClassType.ClassType_FeatureClass:
+                            klass = new FeatureClass(cls.Name, cls.Description);
+                            break;
+                    }
+
+                    Dictionary<AssociationPropertyDefinition, AssociationPropertyDefinition> processAp = new Dictionary<AssociationPropertyDefinition, AssociationPropertyDefinition>();
+                    Dictionary<ObjectPropertyDefinition, ObjectPropertyDefinition> processOp = new Dictionary<ObjectPropertyDefinition, ObjectPropertyDefinition>();
+                    var props = cls.Properties;
+                    for (int i = 0; i < props.Count; i++)
+                    {
+                        var prop = props[i];
+                        if (prop.PropertyType == PropertyType.PropertyType_AssociationProperty)
+                        {
+                            var ap = (AssociationPropertyDefinition)prop;
+                            var apClone = new AssociationPropertyDefinition(ap.Name, ap.Description);
+
+                            ClassDefinition associatedClass = null;
+                            associatedClass = cloned[ap.AssociatedClass.QualifiedName];
+                            if (associatedClass == null)
+                            { 
+                                //could be a self-reference
+                                if (klass.Name.Equals(ap.AssociatedClass.Name))
+                                    associatedClass = klass;
+                            }
+
+                            if (associatedClass != null)
+                            {
+                                apClone.AssociatedClass = associatedClass;
+                                apClone.DeleteRule = ap.DeleteRule;
+                                //Process identity properties. Shelve for later processing if
+                                //any property can't be found
+                                var idProps = ap.IdentityProperties;
+                                bool foundAll = true;
+                                foreach (DataPropertyDefinition dp in idProps)
+                                {
+                                    if (!props.Contains(dp))
+                                        foundAll = false;
+                                }
+                                if (foundAll)
+                                {
+                                    foreach (DataPropertyDefinition dp in idProps)
+                                    {
+                                        apClone.IdentityProperties.Add((DataPropertyDefinition)props[dp.Name]);
+                                    }
+                                }
+                                else
+                                {
+                                    processAp.Add(apClone, ap);
+                                }
+
+                                apClone.LockCascade = ap.LockCascade;
+                                apClone.Multiplicity = ap.Multiplicity;
+                                //Process reverse identity properties. Shelve for later processing if
+                                //any property can't be found
+                                var ridProps = ap.ReverseIdentityProperties;
+                                foundAll = true;
+                                foreach (DataPropertyDefinition dp in ridProps)
+                                {
+                                    if (!props.Contains(dp))
+                                        foundAll = false;
+                                }
+                                if (foundAll)
+                                {
+                                    foreach (DataPropertyDefinition dp in ridProps)
+                                    {
+                                        apClone.ReverseIdentityProperties.Add((DataPropertyDefinition)apClone.AssociatedClass.Properties[dp.Name]);
+                                    }
+                                }
+                                else
+                                {
+                                    processAp.Add(apClone, ap);
+                                }
+
+                                apClone.ReverseMultiplicity = ap.ReverseMultiplicity;
+                                apClone.ReverseName = ap.ReverseName;
+
+                                klass.Properties.Add(apClone);
+                            }
+                            else 
+                            {
+                                break;
+                            }
+                        }
+                        else if (prop.PropertyType == PropertyType.PropertyType_ObjectProperty)
+                        {
+                            var op = (ObjectPropertyDefinition)prop;
+                            var opClone = new ObjectPropertyDefinition(op.Name, op.Description);
+
+                            if (cloned.ContainsKey(op.Class.QualifiedName))
+                            {
+                                ClassDefinition associatedClass = cloned[op.Class.QualifiedName];
+                                opClone.Class = associatedClass;
+                                //Process identity property. Shelve for later processing if none found
+                                if (props.Contains(op.IdentityProperty.Name))
+                                {
+                                    opClone.IdentityProperty = (DataPropertyDefinition)op.Class.Properties[op.IdentityProperty.Name];
+                                }
+                                else
+                                {
+                                    processOp.Add(opClone, op);
+                                }
+                                opClone.ObjectType = op.ObjectType;
+                                opClone.OrderType = op.OrderType;
+                                klass.Properties.Add(opClone);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            bool identity = false;
+                            bool geometry = false;
+                            var dp = prop as DataPropertyDefinition;
+                            var gp = prop as GeometricPropertyDefinition;
+                            identity = (dp != null && cls.IdentityProperties.Contains(dp));
+                            geometry = (gp != null && cls.ClassType == ClassType.ClassType_FeatureClass && ((FeatureClass)cls).GeometryProperty == gp);
+
+                            //Clone property and add to cloned class
+                            var cp = CloneProperty(prop);
+                            klass.Properties.Add(cp);
+                            if (identity)
+                            {
+                                Debug.Assert(cp.PropertyType == PropertyType.PropertyType_DataProperty);
+                                klass.IdentityProperties.Add((DataPropertyDefinition)cp);
+                            }
+                            if (geometry)
+                            {
+                                Debug.Assert(cp.PropertyType == PropertyType.PropertyType_GeometricProperty);
+                                Debug.Assert(klass.ClassType == ClassType.ClassType_FeatureClass);
+                                ((FeatureClass)klass).GeometryProperty = (GeometricPropertyDefinition)cp;
+                            }
+                        }
+                    }
+
+                    if (processAp.Count > 0)
+                    {
+                        foreach (AssociationPropertyDefinition apClone in processAp.Keys)
+                        {
+                            var ap = processAp[apClone];
+                            //Retry identity properties
+                            apClone.IdentityProperties.Clear();
+                            var idProps = ap.IdentityProperties;
+                            foreach (DataPropertyDefinition dp in idProps)
+                            {
+                                apClone.IdentityProperties.Add((DataPropertyDefinition)props[dp.Name]);
+                            }
+                            //Retry reverse identity properties
+                            apClone.ReverseIdentityProperties.Clear();
+                            var ridProps = ap.ReverseIdentityProperties;
+                            foreach (DataPropertyDefinition dp in ridProps)
+                            {
+                                apClone.ReverseIdentityProperties.Add((DataPropertyDefinition)apClone.AssociatedClass.Properties[dp.Name]);
+                            }
+                        }
+                    }
+
+                    if (processOp.Count > 0)
+                    {
+                        foreach (ObjectPropertyDefinition opClone in processOp.Keys)
+                        {
+                            var op = processOp[opClone];
+                            //Retry identity property
+                            opClone.IdentityProperty = (DataPropertyDefinition)op.Class.Properties[op.IdentityProperty.Name];
+                        }
+                    }
+
+                    //All properties accounted for
+                    if (klass.Properties.Count == cls.Properties.Count &&
+                        klass.IdentityProperties.Count == cls.IdentityProperties.Count)
+                    {
+                        bSuccess = true;
+                    }
+
+                    if (bSuccess)
+                    {
+                        fsc.Classes.Add(klass);
+                        successfullyCloned.Add(cls);
+                    }
+                }
+
+                //Purge successfully cloned entries
+                foreach (ClassDefinition cls in successfullyCloned)
+                {
+                    int ridx = classesWithReferences.IndexOf(cls);
+                    if (ridx >= 0)
+                        classesWithReferences.RemoveAt(ridx);
                 }
             }
 
             return fsc;
         }
 
+        /// <summary>
+        /// Clones the class.
+        /// </summary>
+        /// <param name="cls">The CLS.</param>
+        /// <returns></returns>
         public static ClassDefinition CloneClass(ClassDefinition cls)
         {
             return CloneClass(cls, false);
@@ -208,7 +468,8 @@ namespace FdoToolbox.Core.Utility
         /// <summary>
         /// Utility method to clone a class definition
         /// </summary>
-        /// <param name="cd"></param>
+        /// <param name="cd">The class to clone.</param>
+        /// <param name="ignoreDeleted">if set to <c>true</c> [ignore deleted].</param>
         /// <returns></returns>
         public static ClassDefinition CloneClass(ClassDefinition cd, bool ignoreDeleted)
         {
