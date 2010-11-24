@@ -153,6 +153,8 @@
     </Compile>
     <Compile Include="Controls\TaskObjectExplorerExtender.cs" />
     <Compile Include="DragDropHandlers\BulkCopyFileHandler.cs" />
+    <Compile Include="DragDropHandlers\JoinFileHandler.cs" />
+    <Compile Include="DragDropHandlers\SequentialProcessFileHandler.cs" />
     <Compile Include="EventWatcher.cs" />
     <Compile Include="IEtlProcessEditor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

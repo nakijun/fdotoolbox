@@ -36,12 +36,13 @@ namespace FdoToolbox.Core.ETL.Specialized
     {
         class InvokeExternalProcess : FdoSpecializedEtlProcess
         {
-            private Process _proc;
+            private string _fileName;
+            private string[] _args;
 
             public InvokeExternalProcess(string name, string[] args)
             {
-                _proc = new Process();
-                _proc.StartInfo = new ProcessStartInfo(name, string.Join(" ", args));
+                _fileName = name;
+                _args = args;
             }
 
             internal SequentialOperation Definition
@@ -52,26 +53,45 @@ namespace FdoToolbox.Core.ETL.Specialized
 
             protected override void Initialize()
             {
-                _proc.ErrorDataReceived += new DataReceivedEventHandler(OnErrorDataReceived);
-                _proc.OutputDataReceived += new DataReceivedEventHandler(OnOutputDataReceived);
+               
             }
 
             void OnErrorDataReceived(object sender, DataReceivedEventArgs e)
             {
-                SendMessage(e.Data);
+                if (e.Data != null)
+                    SendMessage(e.Data);
             }
 
             void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
             {
-                SendMessage(e.Data);
+                if (e.Data != null)
+                    SendMessage(e.Data);
             }
 
             public new int Execute()
             {
-                SendMessageFormatted("== Starting process {0} with arguments: {1}", _proc.StartInfo.FileName, _proc.StartInfo.Arguments);
-                _proc.Start();
-                _proc.WaitForExit();
-                return _proc.ExitCode;
+                SendMessageFormatted("== Starting process {0} with arguments: {1}", _fileName, string.Join(" ", _args));
+                using (var proc = new Process())
+                {
+                    proc.StartInfo.FileName = _fileName;
+                    proc.StartInfo.Arguments = string.Join(" ", _args);
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.RedirectStandardOutput = true;
+                    proc.StartInfo.CreateNoWindow = true;
+                    proc.Start();
+
+                    StreamReader srOut = proc.StandardOutput;
+                    string line = srOut.ReadLine();
+                    while (line != null)
+                    {
+                        SendMessage(line);
+                        line = srOut.ReadLine();
+                    }
+
+                    proc.WaitForExit();
+
+                    return proc.ExitCode;
+                }
             }
         }
 

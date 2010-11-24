@@ -1,4 +1,4 @@
-#region LGPL Header
+﻿#region LGPL Header
 // Copyright (C) 2009, Jackie Ng
 // http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
 // 
@@ -30,10 +30,7 @@ using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Tasks.DragDropHandlers
 {
-    /// <summary>
-    /// Drag and Drop handler for Bulk Copy Definitions
-    /// </summary>
-    public class BulkCopyFileHandler : IDragDropHandler
+    public class JoinFileHandler : IDragDropHandler
     {
         /// <summary>
         /// Gets a description of the action this handler will take
@@ -41,10 +38,10 @@ namespace FdoToolbox.Tasks.DragDropHandlers
         /// <value></value>
         public string HandlerAction
         {
-            get { return "Load Bulk Copy Definition"; }
+            get { throw new NotImplementedException(); }
         }
 
-        string[] extensions = { TaskDefinitionHelper.BULKCOPYDEFINITION };
+        string[] extensions = { TaskDefinitionHelper.JOINDEFINITION };
 
         /// <summary>
         /// Gets the file extensions this handler can handle
@@ -64,8 +61,8 @@ namespace FdoToolbox.Tasks.DragDropHandlers
             TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
             TaskLoader ldr = new TaskLoader();
             string prefix = string.Empty;
-            FdoBulkCopyOptions opt = ldr.BulkCopyFromXml(file, ref prefix, false);
-            FdoBulkCopy cpy = new FdoBulkCopy(opt);
+            FdoJoinOptions opt = ldr.JoinFromXml(file, ref prefix, false);
+            FdoJoin join = new FdoJoin(opt);
             
             string name = prefix;
             int counter = 0;
@@ -74,7 +71,7 @@ namespace FdoToolbox.Tasks.DragDropHandlers
                 counter++;
                 name = prefix + counter;
             }
-            mgr.AddTask(name, cpy);
+            mgr.AddTask(name, join);
         }
     }
 }
