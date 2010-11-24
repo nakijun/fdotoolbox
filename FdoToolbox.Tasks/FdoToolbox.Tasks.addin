@@ -26,6 +26,8 @@
     <!-- Drag and Drop handlers -->
     <Path name="/FdoToolbox/DragDropHandlers">
         <Class id="BcpHandler" class="FdoToolbox.Tasks.DragDropHandlers.BulkCopyFileHandler" />
+        <Class id="JoinHandler" class="FdoToolbox.Tasks.DragDropHandlers.JoinFileHandler" />
+        <Class id="SeqHandler" class="FdoToolbox.Tasks.DragDropHandlers.SequentialProcessFileHandler" />
     </Path>
     
     <!-- Main Menu definition -->

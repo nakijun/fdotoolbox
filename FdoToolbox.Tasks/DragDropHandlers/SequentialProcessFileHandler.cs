@@ -1,4 +1,4 @@
-#region LGPL Header
+﻿#region LGPL Header
 // Copyright (C) 2009, Jackie Ng
 // http://code.google.com/p/fdotoolbox, jumpinjackie@gmail.com
 // 
@@ -25,15 +25,14 @@ using System.Text;
 using FdoToolbox.Base.Services.DragDropHandlers;
 using FdoToolbox.Core.ETL;
 using FdoToolbox.Tasks.Services;
+using FdoToolbox.Core.Configuration;
 using FdoToolbox.Base.Services;
+using System.IO;
 using FdoToolbox.Core.ETL.Specialized;
 
 namespace FdoToolbox.Tasks.DragDropHandlers
 {
-    /// <summary>
-    /// Drag and Drop handler for Bulk Copy Definitions
-    /// </summary>
-    public class BulkCopyFileHandler : IDragDropHandler
+    public class SequentialProcessFileHandler : IDragDropHandler
     {
         /// <summary>
         /// Gets a description of the action this handler will take
@@ -41,10 +40,10 @@ namespace FdoToolbox.Tasks.DragDropHandlers
         /// <value></value>
         public string HandlerAction
         {
-            get { return "Load Bulk Copy Definition"; }
+            get { return "Load Sequential Process Definition"; }
         }
 
-        string[] extensions = { TaskDefinitionHelper.BULKCOPYDEFINITION };
+        string[] extensions = { TaskDefinitionHelper.SEQUENTIALPROCESS };
 
         /// <summary>
         /// Gets the file extensions this handler can handle
@@ -63,10 +62,10 @@ namespace FdoToolbox.Tasks.DragDropHandlers
         {
             TaskManager mgr = ServiceManager.Instance.GetService<TaskManager>();
             TaskLoader ldr = new TaskLoader();
-            string prefix = string.Empty;
-            FdoBulkCopyOptions opt = ldr.BulkCopyFromXml(file, ref prefix, false);
-            FdoBulkCopy cpy = new FdoBulkCopy(opt);
-            
+            SequentialProcessDefinition spd = (SequentialProcessDefinition)SequentialProcessDefinition.Serializer.Deserialize(File.OpenRead(file));
+            FdoSequentialProcess proc = new FdoSequentialProcess(spd);
+
+            string prefix = Path.GetFileNameWithoutExtension(file);
             string name = prefix;
             int counter = 0;
             while (mgr.NameExists(name))
@@ -74,7 +73,7 @@ namespace FdoToolbox.Tasks.DragDropHandlers
                 counter++;
                 name = prefix + counter;
             }
-            mgr.AddTask(name, cpy);
+            mgr.AddTask(name, proc);
         }
     }
 }
