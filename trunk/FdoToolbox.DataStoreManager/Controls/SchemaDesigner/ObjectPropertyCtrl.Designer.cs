@@ -40,6 +40,7 @@
             this.cmbOrderType = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.lnkClear = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // txtDescription
@@ -158,11 +159,22 @@
             this.label6.TabIndex = 38;
             this.label6.Text = "Object Type";
             // 
+            // lnkClear
+            // 
+            this.lnkClear.Location = new System.Drawing.Point(98, 131);
+            this.lnkClear.Name = "lnkClear";
+            this.lnkClear.Size = new System.Drawing.Size(33, 13);
+            this.lnkClear.TabIndex = 42;
+            this.lnkClear.TabStop = true;
+            this.lnkClear.Text = "Clear";
+            this.lnkClear.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkClearClicked);
+            // 
             // ObjectPropertyCtrl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.lnkClear);
             this.Controls.Add(this.cmbObjectType);
             this.Controls.Add(this.cmbOrderType);
             this.Controls.Add(this.label5);
@@ -196,5 +208,6 @@
         private System.Windows.Forms.ComboBox cmbOrderType;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.LinkLabel lnkClear;
     }
 }

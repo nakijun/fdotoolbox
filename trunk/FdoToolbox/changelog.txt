@@ -1,12 +1,14 @@
 v1.0 beta 3
 -----------
 - Enhancements:
-	- Using FDO 3.6.0 (build F036)
+	- Using FDO 3.6.0 (build F037)
 	- Syntax highlighting for SQL query view
 	- Support for new Task Type: SequentialProcess. The SequentialProcess allows sequential invocations of FdoUtil.exe
 
 - Fixes:
-	- Support for Association properties. Patches provided by Crispin @ 1spatial.
+	- Can now export XML configurations that contain Object and Association properties
+	- Improved Association and Object property support in the Data Store Editor
+	- Improved Insert/Update/Preview support for Association and Object properties. Patches provided by Crispin @ 1spatial.
 	- Bulk Copy: Fix bad polygons (w/ geodetic coordinates) when copying to SQL Server using APIs introduced with FDO RFC48 
 
 v1.0 beta 2
