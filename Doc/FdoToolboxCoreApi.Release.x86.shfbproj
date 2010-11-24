@@ -59,6 +59,7 @@
       <Filter entryType="Namespace" fullName="OSGeo.FDO.Spatial" isExposed="False" xmlns="" />
       <Filter entryType="Namespace" fullName="OSGeo.FDO.Xml" isExposed="False" xmlns="" />
     </ApiFilter>
+	<SdkLinkType>None</SdkLinkType>
     <FeedbackEMailAddress>
     </FeedbackEMailAddress>
   </PropertyGroup>

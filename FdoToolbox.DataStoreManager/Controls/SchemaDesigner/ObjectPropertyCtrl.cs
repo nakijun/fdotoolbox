@@ -58,12 +58,12 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
             cmbClass.DisplayMember = "Name";
             cmbClass.DataSource = _context.GetClasses(schema);
 
-            cmbClass.DataBindings.Add("SelectedItem", p, "Class");
-            cmbClass.SelectedIndexChanged += (sender, e) =>
+            EventHandler clsIndexChanged = (sender, e) =>
             {
                 var cls = cmbClass.SelectedItem as ClassDefinition;
                 if (cls != null)
                 {
+                    p.Class = cls;
                     cmbIdentityProperty.DisplayMember = "Name";
 
                     List<DataPropertyDefinition> dataProps = new List<DataPropertyDefinition>();
@@ -74,17 +74,47 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
                     }
 
                     cmbIdentityProperty.DataSource = dataProps;
-                    cmbIdentityProperty.SelectedIndex = 0;
+                    if (p.IdentityProperty != null && cls.Properties.Contains(p.IdentityProperty))
+                    {
+                        cmbIdentityProperty.SelectedItem = p.IdentityProperty;
+                    }
+                    else
+                    {
+                        if (cmbIdentityProperty.Items.Count == 0)
+                            cmbIdentityProperty.SelectedIndex = 0;
+                    }
+                }
+            };
+            EventHandler prpIndexChanged = (sender, e) =>
+            {
+                var prop = cmbIdentityProperty.SelectedItem as DataPropertyDefinition;
+                if (prop != null)
+                {
+                    p.IdentityProperty = prop;
+                }
+                else
+                {
+                    p.IdentityProperty = null;
                 }
             };
 
-            cmbIdentityProperty.DataBindings.Add("SelectedItem", p, "IdentityProperty");
+            cmbClass.SelectedItem = p.Class;
+            cmbClass.SelectedIndexChanged += clsIndexChanged;
+            
+            cmbIdentityProperty.SelectedIndexChanged += prpIndexChanged;
+
+            clsIndexChanged(this, EventArgs.Empty);
 
             p.PropertyChanged += (s, evt) =>
             {
                 if (evt.PropertyName == "Name")
                     updater();
             };
+        }
+
+        private void lnkClearClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            cmbIdentityProperty.SelectedItem = null;
         }
     }
 }
