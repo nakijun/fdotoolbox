@@ -426,6 +426,7 @@ namespace FdoToolbox.Core.ETL.Operations
                     IGeometry geom = row[name] as IGeometry;
                     if (geom != null)
                     {
+                        IGeometry origGeom = geom;
                         //HACK: Just for you SQL Server 2008! 
                         if (geom.DerivedType == OSGeo.FDO.Common.GeometryType.GeometryType_Polygon ||
                             geom.DerivedType == OSGeo.FDO.Common.GeometryType.GeometryType_CurvePolygon ||
@@ -441,11 +442,14 @@ namespace FdoToolbox.Core.ETL.Operations
                                 //existing API to address such a provider-specific corner case is worth it.
                                 var caps = _clsDef.Capabilities;
                                 var rule = caps.get_PolygonVertexOrderRule(name);
-                                geom = SpatialUtility.FixPolygonVertexOrder(geom, rule);
+                                geom = SpatialUtility.FixPolygonVertexOrder(origGeom, rule);
                             }
                         }
 
-                        gVal.Geometry = FdoGeometryFactory.Instance.GetFgf(geom);
+                        if (geom != null)
+                            gVal.Geometry = FdoGeometryFactory.Instance.GetFgf(geom);
+                        else
+                            gVal.Geometry = FdoGeometryFactory.Instance.GetFgf(origGeom);
                     }
                 }
             }
