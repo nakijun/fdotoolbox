@@ -33,6 +33,7 @@ using FdoToolbox.Base.Commands;
 using System.Collections;
 using OSGeo.FDO.Connections;
 using System.Diagnostics;
+using FdoToolbox.Core.Utility;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -513,7 +514,7 @@ namespace FdoToolbox.Base.Controls
                         {
                             GeometricPropertyDefinition geomDef = propDef as GeometricPropertyDefinition;
                             propertyNode.ImageKey = propertyNode.SelectedImageKey = IMG_GEOM_PROPERTY;
-                            propertyNode.ToolTipText = string.Format("Has Elevation: {0}\nHas Measure: {1}\nRead-Only: {2}", geomDef.HasElevation, geomDef.HasMeasure, geomDef.ReadOnly);
+                            propertyNode.ToolTipText = string.Format("Has Elevation: {0}\nHas Measure: {1}\nRead-Only: {2}\nGeometry Types: {3}\nSpatial Context: {4}", geomDef.HasElevation, geomDef.HasMeasure, geomDef.ReadOnly, GeomTypesAsString(geomDef.GeometryTypes), geomDef.SpatialContextAssociation);
                         }
                         break;
                     case PropertyType.PropertyType_RasterProperty:
@@ -540,6 +541,16 @@ namespace FdoToolbox.Base.Controls
                 }
                 classNode.Nodes.Add(propertyNode);
             }
+        }
+
+        private static string GeomTypesAsString(int p)
+        {
+            List<string> values = new List<string>();
+            foreach (var gt in FdoGeometryUtil.GetGeometricTypes(p))
+            {
+                values.Add(gt.ToString());
+            }
+            return string.Join(" ", values.ToArray());
         }
     }
 }

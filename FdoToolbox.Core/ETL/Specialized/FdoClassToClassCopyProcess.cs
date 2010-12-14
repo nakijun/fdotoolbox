@@ -27,6 +27,7 @@ using FdoToolbox.Core.Feature;
 using System.Collections.Specialized;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core.Utility;
+using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.ETL.Specialized
 {
@@ -105,24 +106,33 @@ namespace FdoToolbox.Core.ETL.Specialized
             {
                 if (counter < 1) //Shouldn't be reentrant, but just play it safe.
                 {
-                    //TODO:
-                    //
-                    //Extract the source spatial context from its association see if the target has the
-                    //named spatial context:
-                    //
-                    // - If it doesn't have the named spatial context see if the target supports multiple spatial contexts
-                    //    - If it does, create a copy of the source spatial context
-                    //    - If it doesn't, change the spatial context association to the active spatial context on the target
-                    //
-                    //I found this solution in a dream I had. (I am *NOT* kidding!)
-                    //
-                    //I N C E P T I O N?
+                    /*
+                     * Check and apply the following rules for all geometry properties to be created
+                     * 
+                     * Target supports multiple spatial contexts:
+                     * -------------------------------------------
+                     * If there is no spatial contexts of the specified (source) name. Create a copy of the source spatial context.
+                     * If there is a spatial context of the same name, using the same WKT. Do nothing
+                     * If there is a spatial context of the same name, but using a different WKT. Create a new spatial context using the source WKT, but use a different name.
+                     * 
+                     * Target only supports one spatial context:
+                     * If there is no spatial context already. Create a copy of the source spatial context.
+                     * If there is a spatial context of the same WKT. Change the association to match the name of this spatial context.
+                     * If there is a spatial context not using the source WKT. Change the association to match the name of this spatial context. This may not be ideal, but there is no other option at this point.
+                     * 
+                     * The regular schema compatibility fixes will handle the other properties
+                     */
+                    bool targetSupportsMultipleSpatialContexts = _target.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsMultipleSpatialContexts);
+                    List<SpatialContextInfo> targetSpatialContexts = null;
+                    List<SpatialContextInfo> sourceSpatialContexts = null;
                     
                     if (typeof(CreateTargetClassFromSource).IsAssignableFrom(_opts.PreCopyTargetModifier.GetType()))
                     {
                         using (var tsvc = _target.CreateFeatureService())
                         using (var ssvc = _source.CreateFeatureService())
                         {
+                            targetSpatialContexts = new List<SpatialContextInfo>(tsvc.GetSpatialContexts());
+                            sourceSpatialContexts = new List<SpatialContextInfo>(ssvc.GetSpatialContexts());
                             var ct = (CreateTargetClassFromSource)_opts.PreCopyTargetModifier;
 
                             Info("Getting current schema from target");
@@ -133,6 +143,8 @@ namespace FdoToolbox.Core.ETL.Specialized
                             }
                             else
                             {
+                                List<SpatialContextInfo> createScs = new List<SpatialContextInfo>();
+
                                 var cls = ssvc.GetClassByName(ct.Schema, ct.Name);
                                 Info("Creating a cloned copy of source class " + ct.Schema + ":" + ct.Name);
 
@@ -167,7 +179,8 @@ namespace FdoToolbox.Core.ETL.Specialized
                                 foreach (var prop in ct.PropertiesToCreate)
                                 {
                                     Info("Adding property to cloned class: " + prop.Name);
-                                    cloned.Properties.Add(FdoSchemaUtil.CloneProperty(prop));
+                                    PropertyDefinition clonedProp = FdoSchemaUtil.CloneProperty(prop);
+                                    cloned.Properties.Add(clonedProp);
                                 }
 
                                 //Add an auto-generated identity property if none exist
@@ -195,6 +208,25 @@ namespace FdoToolbox.Core.ETL.Specialized
                                     Info("Class successfully altered");
                                 }
 
+                                Info("Checking if any spatial contexts need to be created and/or references modified");
+                                foreach (PropertyDefinition pd in cloned.Properties)
+                                {
+                                    if (pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                                        AddSpatialContextsToCreate(targetSupportsMultipleSpatialContexts, targetSpatialContexts, sourceSpatialContexts, createScs, (GeometricPropertyDefinition)pd);
+                                }
+
+                                //We have to create spatial contexts first before applying the schema
+                                if (createScs.Count > 0)
+                                {
+                                    //The ones we create should be unique so no overwriting needed
+                                    ExpressUtility.CopyAllSpatialContexts(createScs, _target, false);
+
+                                    foreach (var sc in createScs)
+                                    {
+                                        Info("Created spatial context: " + sc.Name);
+                                    }
+                                }
+
                                 Info("Adding cloned class to target schema");
                                 schema.Classes.Add(cloned);
                                 Info("Applying schema back to target connection");
@@ -207,7 +239,10 @@ namespace FdoToolbox.Core.ETL.Specialized
                     {
                         var ut = (UpdateTargetClass)_opts.PreCopyTargetModifier;
                         using (var tsvc = _target.CreateFeatureService())
+                        using (var ssvc = _source.CreateFeatureService())
                         {
+                            targetSpatialContexts = new List<SpatialContextInfo>(tsvc.GetSpatialContexts());
+                            sourceSpatialContexts = new List<SpatialContextInfo>(ssvc.GetSpatialContexts());
                             var schema = tsvc.GetSchemaByName(_opts.TargetSchema);
                             var cidx = schema.Classes.IndexOf(ut.Name);
                             if (cidx < 0)
@@ -216,19 +251,39 @@ namespace FdoToolbox.Core.ETL.Specialized
                             }
                             else
                             {
+                                List<SpatialContextInfo> createScs = new List<SpatialContextInfo>();
+
                                 var cls = schema.Classes[cidx];
                                 foreach (var prop in ut.PropertiesToCreate)
                                 {
                                     if (cls.Properties.IndexOf(prop.Name) < 0)
                                     {
                                         Info("Adding property to class: " + prop.Name);
-                                        cls.Properties.Add(FdoSchemaUtil.CloneProperty(prop));
+                                        var clonedProp = FdoSchemaUtil.CloneProperty(prop);
+                                        if (clonedProp.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                                        {
+                                            AddSpatialContextsToCreate(targetSupportsMultipleSpatialContexts, targetSpatialContexts, sourceSpatialContexts, createScs, (GeometricPropertyDefinition)clonedProp);
+                                        }
+                                        cls.Properties.Add(clonedProp);
                                     }
                                     else 
                                     {
                                         Info("Skipping property " + prop.Name + " because it already exists");
                                     }
                                 }
+
+                                //We have to create spatial contexts first before applying the schema
+                                if (createScs.Count > 0)
+                                {
+                                    //The ones we create should be unique so no overwriting needed
+                                    ExpressUtility.CopyAllSpatialContexts(createScs, _target, false);
+
+                                    foreach (var sc in createScs)
+                                    {
+                                        Info("Created spatial context: " + sc.Name);
+                                    }
+                                }
+
                                 Info("Applying modified schema " + schema.Name + " to target connection");
                                 tsvc.ApplySchema(schema);
                                 Info("Modified schema " + schema.Name + " applied to target connection");
@@ -239,6 +294,259 @@ namespace FdoToolbox.Core.ETL.Specialized
                     counter++;
                 }
                 return rows;
+            }
+
+            private void AddSpatialContextsToCreate(bool targetSupportsMultipleSpatialContexts, List<SpatialContextInfo> targetSpatialContexts, List<SpatialContextInfo> sourceSpatialContexts, List<SpatialContextInfo> createScs, GeometricPropertyDefinition geom)
+            {
+                if (targetSupportsMultipleSpatialContexts)
+                {
+                    if (!string.IsNullOrEmpty(geom.SpatialContextAssociation))
+                    {
+                        //See if the source spatial context has a matching target (by name)
+                        SpatialContextInfo matchingTargetSc = FindMatchingSpatialContextByName(targetSpatialContexts, geom.SpatialContextAssociation);
+                        if (matchingTargetSc == null)
+                        {
+                            //The source spatial context name doesn't exist in target
+                            //We are free to create a copy of the source one as target supports multiple SCs
+                            SpatialContextInfo sourceSc = FindMatchingSpatialContextByName(sourceSpatialContexts, geom.SpatialContextAssociation);
+                            if (sourceSc != null)
+                            {
+                                Info("Adding source spatial context (" + sourceSc.Name + ") to list to be copied to target");
+                                var sc = sourceSc.Clone();
+                                //Add to list of ones to create
+                                createScs.Add(sc);
+                                //So that subsequent travels along this code path take into account
+                                //spatial context we will create as well
+                                targetSpatialContexts.Add(sc);
+                            }
+                            else
+                            {
+                                /* UNCOMMON CODE PATH. WE'RE WORKING WITH SOME MESSED UP DATA IF WE GET HERE */
+
+                                //We have a source geom property with an invalid spatial context association reference
+                                //So which SC should we assign?
+
+                                SpatialContextInfo sc = null;
+                                if (targetSpatialContexts.Count > 0)
+                                {
+                                    //Try first active SC on target
+                                    sc = FindFirstActiveSpatialContext(targetSpatialContexts);
+                                    //Otherwise first one on target
+                                    if (sc == null)
+                                        sc = targetSpatialContexts[0];
+
+                                    if (sc != null)
+                                    {
+                                        //Update reference only. No need to create 
+                                        geom.SpatialContextAssociation = sc.Name;
+                                        return;
+                                    }
+                                }
+                                if (sourceSpatialContexts.Count > 0)
+                                {
+                                    //Try first active SC on source
+                                    sc = FindFirstActiveSpatialContext(sourceSpatialContexts);
+                                    //Otherwise first one on target
+                                    if (sc == null)
+                                        sc = sourceSpatialContexts[0];
+
+                                    //Still nothing????
+                                    if (sc == null)
+                                        throw new Exception("Could not find a suitable replacement spatial context for geometry property" + geom.Name);
+
+                                    sc = sc.Clone();
+                                    //
+                                    string prefix = "SC" + geom.Name;
+                                    string name = prefix;
+                                    int scc = 0;
+                                    while (SpatialContextExistsByName(targetSpatialContexts, name))
+                                    {
+                                        counter++;
+                                        name = prefix + scc;
+                                    }
+                                    sc.Name = name;
+                                    //Add to list of ones to create
+                                    createScs.Add(sc);
+                                    //So that subsequent travels along this code path take into account
+                                    //spatial context we will create as well
+                                    targetSpatialContexts.Add(sc);
+                                    //Update reference to point to this sc we will create
+                                    geom.SpatialContextAssociation = sc.Name;
+                                }
+                            }
+                        }
+                        else //There is a matching target spatial context of the same name
+                        {
+                            //Compare target spatial context with source spatial context
+                            SpatialContextInfo sourceSc = FindMatchingSpatialContextByName(sourceSpatialContexts, geom.SpatialContextAssociation);
+                            if (sourceSc != null)
+                            {
+                                //Compare WKTs
+                                if (!sourceSc.CoordinateSystemWkt.Equals(matchingTargetSc.CoordinateSystemWkt))
+                                {
+                                    //WKTs do not match. Create a clone of the source but with a different name
+                                    var sc = sourceSc.Clone();
+                                    //
+                                    string prefix = "SC" + geom.Name;
+                                    string name = prefix;
+                                    int scc = 0;
+                                    while (SpatialContextExistsByName(targetSpatialContexts, name))
+                                    {
+                                        counter++;
+                                        name = prefix + scc;
+                                    }
+                                    sc.Name = name;
+                                    //Add to list of ones to create
+                                    createScs.Add(sc);
+                                    //So that subsequent travels along this code path take into account
+                                    //spatial context we will create as well
+                                    targetSpatialContexts.Add(sc);
+                                    //Update reference to point to this sc we will create
+                                    geom.SpatialContextAssociation = sc.Name;
+                                } 
+                                //Otherwise matches both in name and WKT. Nothing needs to be done
+                            }
+                            else //No source spatial context to compare with
+                            {
+                                /* UNCOMMON CODE PATH. WE'RE WORKING WITH SOME MESSED UP DATA IF WE GET HERE */
+
+                                //We have a source geom property with an invalid spatial context association reference
+                                //So which SC should we assign?
+
+                                geom.SpatialContextAssociation = matchingTargetSc.Name;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        /* UNCOMMON CODE PATH. WE'RE WORKING WITH SOME MESSED UP DATA IF WE GET HERE */
+
+                        //No spatial context association found on the cloned geometry property we created
+                        //Which SC should we assign?
+
+                        SpatialContextInfo sc = null;
+                        if (targetSpatialContexts.Count > 0)
+                        {
+                            //Try first active SC on target
+                            sc = FindFirstActiveSpatialContext(targetSpatialContexts);
+                            //Otherwise first one on target
+                            if (sc == null)
+                                sc = targetSpatialContexts[0];
+
+                            //Still nothing????
+                            if (sc != null)
+                            {
+                                //Update reference only. No need to create 
+                                geom.SpatialContextAssociation = sc.Name;
+                                return;
+                            }
+                        }
+                        
+                        if (sourceSpatialContexts.Count > 0)
+                        {
+                            //Try first active SC on source
+                            sc = FindFirstActiveSpatialContext(sourceSpatialContexts);
+                            //Otherwise first one on target
+                            if (sc == null)
+                                sc = sourceSpatialContexts[0];
+
+                            //Still nothing????
+                            if (sc == null)
+                                throw new Exception("Could not find a suitable replacement spatial context for geometry property" + geom.Name);
+
+                            sc = sc.Clone();
+                            //
+                            string prefix = "SC" + geom.Name;
+                            string name = prefix;
+                            int scc = 0;
+                            while (SpatialContextExistsByName(targetSpatialContexts, name))
+                            {
+                                counter++;
+                                name = prefix + scc;
+                            }
+                            sc.Name = name;
+                            //Add to list of ones to create
+                            createScs.Add(sc);
+                            //So that subsequent travels along this code path take into account
+                            //spatial context we will create as well
+                            targetSpatialContexts.Add(sc);
+                            //Update reference to point to this sc we will create
+                            geom.SpatialContextAssociation = sc.Name;
+                        }
+                    }
+                }
+                else //Only supports one spatial context
+                {
+                    System.Diagnostics.Debug.Assert(targetSpatialContexts.Count <= 1);
+                    if (targetSpatialContexts.Count == 1)
+                    {
+                        //Coerce to the target spatial context. We can't do anything else
+                        geom.SpatialContextAssociation = targetSpatialContexts[0].Name;
+                    }
+                    else
+                    {
+                        //We can create one, but only one!
+                        SpatialContextInfo sourceSc = FindMatchingSpatialContextByName(sourceSpatialContexts, geom.SpatialContextAssociation);
+                        if (sourceSc != null)
+                        {
+                            //You're it!
+                            var sc = sourceSc.Clone();
+                            createScs.Add(sc);
+                            geom.SpatialContextAssociation = sc.Name;
+                        }
+                        else
+                        {
+                            /* UNCOMMON CODE PATH. WE'RE WORKING WITH SOME MESSED UP DATA IF WE GET HERE */
+
+                            //No spatial contexts on target and the source reference points to 
+                            //nowhere! Now what?
+                            if (sourceSpatialContexts.Count == 0)
+                                throw new Exception("Could not find source spatial context with name " + geom.SpatialContextAssociation + " and target has no spatial context");
+
+                            //Try first active source spatial context
+                            sourceSc = FindFirstActiveSpatialContext(sourceSpatialContexts);
+
+                            //Last resort. First known source spatial context
+                            if (sourceSc == null)
+                                sourceSc = sourceSpatialContexts[0];
+
+                            var sc = sourceSc.Clone();
+                            createScs.Add(sc);
+                            geom.SpatialContextAssociation = sc.Name;
+                        }
+                    }
+                }
+            }
+
+            private static SpatialContextInfo FindFirstActiveSpatialContext(List<SpatialContextInfo> spatialContexts)
+            {
+                if (spatialContexts == null)
+                    return null;
+
+                foreach (var sc in spatialContexts)
+                {
+                    if (sc.IsActive)
+                        return sc;
+                }
+                return null;
+            }
+
+            private static bool SpatialContextExistsByName(ICollection<SpatialContextInfo> spatialContexts, string name)
+            {
+                return FindMatchingSpatialContextByName(spatialContexts, name) != null;
+            }
+
+            private static SpatialContextInfo FindMatchingSpatialContextByName(ICollection<SpatialContextInfo> spatialContexts, string name)
+            {
+                if (spatialContexts == null || string.IsNullOrEmpty(name))
+                    return null;
+
+                foreach (var sc in spatialContexts)
+                {
+                    if (sc.Name.Equals(name))
+                        return sc;
+                }
+                return null;
             }
         }
 
