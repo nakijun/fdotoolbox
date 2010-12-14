@@ -162,7 +162,11 @@ namespace FdoToolbox.Core.ETL
                 bool supportsDestroySc = target.Capability.HasArrayCapability(CapabilityType.FdoCapabilityType_CommandList, (int)OSGeo.FDO.Commands.CommandType.CommandType_DestroySpatialContext);
                 if (supportsMultipleScs)
                 {
+                    //Get all contexts in target
                     ReadOnlyCollection<SpatialContextInfo> contexts = tService.GetSpatialContexts();
+
+                    List<string> updated = new List<string>();
+                    //Destroy any clashing ones
                     if (overwrite && supportsDestroySc)
                     {
                         foreach (SpatialContextInfo c in contexts)
@@ -171,10 +175,25 @@ namespace FdoToolbox.Core.ETL
                                 tService.DestroySpatialContext(c);
                         }
                     }
+                    
+                    //Then overwrite them
                     foreach (SpatialContextInfo c in contexts)
                     {
                         if (SpatialContextInSpecifiedList(c, spatialContextNames))
+                        {
                             tService.CreateSpatialContext(c, overwrite);
+                            updated.Add(c.Name);
+                        }
+                    }
+
+                    //Now create the rest
+                    var sourceScs = sService.GetSpatialContexts();
+                    foreach (var sc in sourceScs)
+                    {
+                        if (!updated.Contains(sc.Name))
+                        {
+                            tService.CreateSpatialContext(sc, overwrite);
+                        }
                     }
                 }
                 else

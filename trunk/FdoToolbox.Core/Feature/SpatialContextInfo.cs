@@ -173,5 +173,21 @@ namespace FdoToolbox.Core.Feature
                 this.ExtentGeometryText = null;
             }
         }
+
+        internal SpatialContextInfo Clone()
+        {
+            var sc = new SpatialContextInfo();
+            sc.CoordinateSystem = this.CoordinateSystem;
+            sc.CoordinateSystemWkt = this.CoordinateSystemWkt;
+            sc.Description = this.Description;
+            sc.ExtentGeometryText = this.ExtentGeometryText;
+            sc.ExtentType = this.ExtentType;
+            sc.IsActive = this.IsActive;
+            sc.Name = this.Name;
+            sc.XYTolerance = this.XYTolerance;
+            sc.ZTolerance = this.ZTolerance;
+
+            return sc;
+        }
     }
 }
