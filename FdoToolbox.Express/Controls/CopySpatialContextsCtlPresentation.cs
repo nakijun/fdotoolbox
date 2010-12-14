@@ -82,10 +82,12 @@ namespace FdoToolbox.Express.Controls
             {
                 _view.OverwriteEnabled = false;
                 _view.Overwrite = true;
+                _view.MultiSelect = false;
             }
             else
             {
                 _view.OverwriteEnabled = true;
+                _view.MultiSelect = true;
             }
         }
 
