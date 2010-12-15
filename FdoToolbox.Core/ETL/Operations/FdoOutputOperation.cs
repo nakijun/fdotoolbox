@@ -67,7 +67,6 @@ namespace FdoToolbox.Core.ETL.Operations
             _conn = conn;
             _service = conn.CreateFeatureService();
             this.ClassName = className;
-            _clsDef = _service.GetClassByName(this.ClassName);
         }
 
         /// <summary>
@@ -126,6 +125,10 @@ namespace FdoToolbox.Core.ETL.Operations
         /// <returns></returns>
         public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
         {
+            //We fetch the class def here instead of the ctor as the class in question
+            //may have to be created by a pre-copy operation
+            _clsDef = _service.GetClassByName(this.ClassName);
+
             IInsert insert = null;
             using (FdoFeatureService service = _conn.CreateFeatureService())
             {
