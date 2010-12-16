@@ -13,6 +13,7 @@ v1.0 beta 4
 	- More intelligent handling of spatial contexts when creating geometry properties on-the-fly from Bulk Copy
 	- Saved connections also persist configuration information
 	- Stale Sequential Processes are now properly cleaned up when exiting
+	- Restore Sequential Processes on startup
 	- Fix faulty logic with copying spatial contexts if target connection supports multiple spatial contexts
 	- Fix NullReferenceException when copying to SQL Server and new Class Definitions were created
 
