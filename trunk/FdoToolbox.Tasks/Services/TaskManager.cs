@@ -27,6 +27,8 @@ using FdoToolbox.Core.ETL;
 using FdoToolbox.Core;
 using FdoToolbox.Core.ETL.Specialized;
 using FdoToolbox.Base;
+using System.IO;
+using FdoToolbox.Core.Configuration;
 
 namespace FdoToolbox.Tasks.Services
 {
@@ -81,6 +83,26 @@ namespace FdoToolbox.Tasks.Services
                     }
                     catch { }
                 }
+
+                files = System.IO.Directory.GetFiles(path, "*" + TaskDefinitionHelper.SEQUENTIALPROCESS);
+                foreach (string f in files)
+                {
+                    try
+                    {
+                        string prefix = Path.GetFileNameWithoutExtension(f);
+                        string name = prefix;
+                        int counter = 0;
+                        while (this.NameExists(name))
+                        {
+                            counter++;
+                            name = prefix + counter;
+                        }
+                        SequentialProcessDefinition spd = (SequentialProcessDefinition)SequentialProcessDefinition.Serializer.Deserialize(File.OpenRead(f));
+                        FdoSequentialProcess proc = new FdoSequentialProcess(spd);
+                        AddTask(name, proc);
+                    }
+                    catch { }
+                }
             }
         }
 
@@ -97,6 +119,11 @@ namespace FdoToolbox.Tasks.Services
                     System.IO.File.Delete(f);
                 }
                 files = System.IO.Directory.GetFiles(path, "*" + TaskDefinitionHelper.JOINDEFINITION);
+                foreach (string f in files)
+                {
+                    System.IO.File.Delete(f);
+                }
+                files = System.IO.Directory.GetFiles(path, "*" + TaskDefinitionHelper.SEQUENTIALPROCESS);
                 foreach (string f in files)
                 {
                     System.IO.File.Delete(f);

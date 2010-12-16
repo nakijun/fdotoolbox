@@ -63,7 +63,7 @@ namespace FdoToolbox.Base.Services.DragDropHandlers
             FdoConnection conn = null;
             try
             {
-                conn = FdoConnection.LoadFromFile(file);
+                conn = FdoConnection.LoadFromFile(file, true);
             }
             catch (Exception ex)
             {

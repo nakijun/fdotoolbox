@@ -316,7 +316,7 @@ namespace FdoToolbox.Base.Services
                             {
                                 name = System.IO.Path.GetFileNameWithoutExtension(f);
                             }
-                            FdoConnection conn = FdoConnection.LoadFromFile(f);
+                            FdoConnection conn = FdoConnection.LoadFromFile(f, true);
                             connections.Add(name, conn);
                         }
                         catch(Exception ex)
@@ -360,6 +360,11 @@ namespace FdoToolbox.Base.Services
             else
             {
                 string [] files = System.IO.Directory.GetFiles(path, "*.conn");
+                foreach (string f in files)
+                {
+                    System.IO.File.Delete(f);
+                }
+                files = System.IO.Directory.GetFiles(path, "*.xml");
                 foreach (string f in files)
                 {
                     System.IO.File.Delete(f);

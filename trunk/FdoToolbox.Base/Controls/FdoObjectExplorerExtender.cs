@@ -388,13 +388,15 @@ namespace FdoToolbox.Base.Controls
                 {
                     ctxStrings.Add("Could not retrieve spatial contexts");
                 }
+                string configStatus = conn.HasConfiguration ? "(This connection has custom configuration applied)" : string.Empty;
                 connNode.ToolTipText = string.Format(
-                    "Provider: {0}{4}Type: {1}{4}Connection String: {2}{4}Spatial Contexts:{4}{3}",
+                    "Provider: {0}{4}Type: {1}{4}Connection String: {2}{4}Spatial Contexts:{4}{3}{4}{5}",
                     conn.Provider,
                     conn.DataStoreType,
                     conn.SafeConnectionString,
                     ctxStrings.Count > 0 ? string.Join("\n", ctxStrings.ToArray()) : "none",
-                    Environment.NewLine);
+                    Environment.NewLine,
+                    configStatus);
             }
         }
 

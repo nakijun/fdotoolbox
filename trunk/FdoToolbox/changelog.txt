@@ -1,3 +1,21 @@
+v1.0 beta 4
+-----------
+- Enhancements:
+	- Sequential Process improvements
+		- Support for variables
+		- Support for control flow (ie. Jump to a certain operation on certain return codes)
+	- Using FDO 3.6.0 (build F040)
+	- Object Explorer improvements
+		- Geometry properties show geometric types and spatial context association
+		- Connections now indicate if configuration has been applied
+
+- Fixes:
+	- More intelligent handling of spatial contexts when creating geometry properties on-the-fly from Bulk Copy
+	- Saved connections also persist configuration information
+	- Stale Sequential Processes are now properly cleaned up when exiting
+	- Fix faulty logic with copying spatial contexts if target connection supports multiple spatial contexts
+	- Fix NullReferenceException when copying to SQL Server and new Class Definitions were created
+
 v1.0 beta 3
 -----------
 - Enhancements:
