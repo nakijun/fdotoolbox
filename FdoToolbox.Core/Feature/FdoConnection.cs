@@ -41,15 +41,6 @@ namespace FdoToolbox.Core.Feature
     /// </summary>
     public class FdoConnection : IDisposable
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="conn"></param>
-        internal FdoConnection(IConnection conn)
-        {
-            this.InternalConnection = conn;
-        }
-
         private ICapability _caps;
         
         /// <summary>
@@ -83,6 +74,7 @@ namespace FdoToolbox.Core.Feature
         /// <param name="provider">The provider name.</param>
         public FdoConnection(string provider)
         {
+            this.HasConfiguration = false;
             this.InternalConnection = FeatureAccessManager.GetConnectionManager().CreateConnection(provider);
         }
 
@@ -115,6 +107,16 @@ namespace FdoToolbox.Core.Feature
 
                 serializer.Serialize(writer, conn);
             }
+
+            if (HasConfiguration && !string.IsNullOrEmpty(_configXml))
+            {
+                string dir = Path.GetDirectoryName(file);
+                string baseName = Path.GetFileNameWithoutExtension(file);
+
+                string output = Path.Combine(dir, baseName + "_Configuration.xml");
+
+                File.WriteAllText(output, _configXml);
+            }
         }
 
         /// <summary>
@@ -131,6 +133,29 @@ namespace FdoToolbox.Core.Feature
                 c = (FdoToolbox.Core.Configuration.Connection)serializer.Deserialize(reader);
             }
             return new FdoConnection(c.Provider, c.ConnectionString);
+        }
+
+        /// <summary>
+        /// Creates an FDO connection from file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="tryLoadConfiguration">If true will attempt to load the configuration for this connection. The configuration file is assumed to be the same name as the connection file, except it has a _Configuration suffix and has a .xml extension</param>
+        /// <returns></returns>
+        public static FdoConnection LoadFromFile(string file, bool tryLoadConfiguration)
+        {
+            var conn = LoadFromFile(file);
+
+            if (tryLoadConfiguration)
+            {
+                string dir = Path.GetDirectoryName(file);
+                string baseName = Path.GetFileNameWithoutExtension(file);
+                string conf = Path.Combine(dir, baseName + "_Configuration.xml");
+
+                if (File.Exists(conf))
+                    conn.SetConfiguration(conf);
+            }
+
+            return conn;
         }
 
         /// <summary>
@@ -355,6 +380,8 @@ namespace FdoToolbox.Core.Feature
             return dp;
         }
 
+        private string _configXml;
+
         /// <summary>
         /// Sets the configuration for this connection
         /// </summary>
@@ -366,6 +393,21 @@ namespace FdoToolbox.Core.Feature
                 throw new InvalidOperationException(ResourceUtil.GetStringFormatted("ERR_UNSUPPORTED_CAPABILITY", cap));
             IoFileStream confStream = new IoFileStream(file, "r");
             _Connection.Configuration = confStream;
+
+            this.HasConfiguration = true;
+            _configXml = File.ReadAllText(file);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has configuration.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance has configuration; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasConfiguration
+        {
+            get;
+            private set;
         }
 
         /// <summary>
