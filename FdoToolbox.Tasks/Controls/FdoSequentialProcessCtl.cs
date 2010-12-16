@@ -150,16 +150,21 @@ namespace FdoToolbox.Tasks.Controls
                 }
                 if (_def == null) //is new
                 {
-                    _def = new SequentialProcessDefinition()
+                    _def = new SequentialProcessDefinition();
+                    foreach(var op in ops)
                     {
-                        Operations = ops.ToArray()
-                    };
+                        _def.AddOperation(op);
+                    }
                     var proc = new FdoSequentialProcess(_def);
                     tmgr.AddTask(txtName.Text, proc);
                 }
                 else
                 {
-                    _def.Operations = ops.ToArray();
+                    _def.ClearOperations();
+                    foreach (var op in ops)
+                    {
+                        _def.AddOperation(op);
+                    }
                 }
                 this.Close();
             }

@@ -68,6 +68,23 @@ namespace FdoToolbox.Core.ETL.Specialized
                     SendMessage(e.Data);
             }
 
+            public string GetNextAction(int code)
+            {
+                if (this.Definition.CompleteActions == null)
+                    return null;
+
+                if (this.Definition.CompleteActions.Count == 0)
+                    return null;
+
+                foreach (var act in this.Definition.CompleteActions)
+                {
+                    if (act.ReturnCode == code)
+                        return act.Operation;
+                }
+
+                return null;
+            }
+
             public new int Execute()
             {
                 SendMessageFormatted("== Starting process {0} with arguments: {1}", _fileName, string.Join(" ", _args));
@@ -139,7 +156,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                 args.Add("-cmd:" + opt.Command);
                 foreach (var arg in opt.Arguments)
                 {
-                    args.Add("-" + arg.Name + ":" + Escape(arg.Value));
+                    args.Add("-" + arg.Name + ":" + Escape(arg.GetProcessedValue(_def.Variables)));
                 }
 
                 _processes.Add(new InvokeExternalProcess(name, args.ToArray()) { Definition = opt });
@@ -155,6 +172,9 @@ namespace FdoToolbox.Core.ETL.Specialized
 
         private bool execute = true;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [global::System.Serializable]
         public class InvokeProcessException : Exception
         {
@@ -165,9 +185,32 @@ namespace FdoToolbox.Core.ETL.Specialized
             //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
             //
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="InvokeProcessException"/> class.
+            /// </summary>
             public InvokeProcessException() { }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="InvokeProcessException"/> class.
+            /// </summary>
+            /// <param name="message">The message.</param>
             public InvokeProcessException(string message) : base(message) { }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="InvokeProcessException"/> class.
+            /// </summary>
+            /// <param name="message">The message.</param>
+            /// <param name="inner">The inner.</param>
             public InvokeProcessException(string message, Exception inner) : base(message, inner) { }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="InvokeProcessException"/> class.
+            /// </summary>
+            /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            /// <exception cref="T:System.ArgumentNullException">
+            /// The <paramref name="info"/> parameter is null.
+            /// </exception>
+            /// <exception cref="T:System.Runtime.Serialization.SerializationException">
+            /// The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0).
+            /// </exception>
             protected InvokeProcessException(
               System.Runtime.Serialization.SerializationInfo info,
               System.Runtime.Serialization.StreamingContext context)
@@ -186,6 +229,138 @@ namespace FdoToolbox.Core.ETL.Specialized
             }
         }
 
+        class ExternalProcessIterator : IEnumerator<InvokeExternalProcess>
+        {
+            private IEnumerator<InvokeExternalProcess> _iter;
+            private FdoSequentialProcess _parent;
+
+            public ExternalProcessIterator(FdoSequentialProcess parent, List<InvokeExternalProcess> processes)
+            {
+                _parent = parent;
+                _iter = processes.GetEnumerator();
+                //Wire up event handlers
+                while (_iter.MoveNext())
+                {
+                    _iter.Current.ProcessMessage += new MessageEventHandler(OnSubProcessMessage);
+                }
+                _iter.Reset();
+            }
+
+            public InvokeExternalProcess Current
+            {
+                get { return _iter.Current; }
+            }
+
+            public void Dispose()
+            {
+                //Un-wire event handlers
+                _iter.Reset();
+                while (_iter.MoveNext())
+                {
+                    _iter.Current.ProcessMessage -= new MessageEventHandler(OnSubProcessMessage);
+                }
+                _iter.Dispose();
+            }
+
+            object System.Collections.IEnumerator.Current
+            {
+                get { return _iter.Current; }
+            }
+
+            private string _nextAction;
+
+            public bool MoveNext()
+            {
+                bool res = false;
+                if (_nextAction == null)
+                {
+                    res = _iter.MoveNext();
+                }
+                else
+                {
+                    //Store the current position so that in the event that we can't find
+                    //the specified next action to execute, we know where to continue from
+                    var current = _iter.Current;
+
+                    //The previous execution specified the next action to execute
+                    //So find that process. If we can't find it, resume from the
+                    //current process
+                    _iter.Reset();
+                    bool found = false;
+                    while (_iter.MoveNext() && !found)
+                    {
+                        var proc = _iter.Current;
+                        if (proc.Definition.Name.Equals(_nextAction))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                    {
+                        res = true;
+                    }
+                    else
+                    {
+                        _parent.SendMessage("The specified operation (" + _nextAction + ") was not found. Moving to next operation in sequence");
+                        _iter.Reset();
+                        while (_iter.MoveNext())
+                        {
+                            if (_iter.Current == current)
+                                break;
+                        }
+                        //Move to the next one after the current
+                        res = _iter.MoveNext();
+                    }
+                }
+                if (res)
+                {
+                    var proc = _iter.Current;
+
+                    var op = proc.Definition;
+                    _parent.SendMessage("Starting FdoUtil command: " + op.Command);
+                    int result = proc.Execute();
+                    _nextAction = proc.GetNextAction(result);
+
+                    if (_nextAction == null)
+                    {
+                        if (result != (int)CommandStatus.E_OK)
+                        {
+                            _parent.LogSubProcessErrors(proc.Name, new Exception[] { new InvokeProcessException("Command: " + op.Command + " exited with non-zero code " + result) });
+                            if (op.AbortProcessOnFailure)
+                            {
+                                _parent.SendMessage("FdoUtil command " + op.Command + " failed. Aborting process");
+                                //Go straight to end
+                                while (_iter.MoveNext()) { }
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            _parent.SendMessage("No registered jump detected for given return code. Moving to next operation in sequence");
+                        }
+                    }
+                    else
+                    {
+                        _parent.SendMessage("The next action to execute is: " + _nextAction);
+                    }
+                    return res;
+                }
+                return false;
+            }
+
+            void OnSubProcessMessage(object sender, MessageEventArgs e)
+            {
+                _parent.SendMessage(e.Message);
+            }
+
+            public void Reset()
+            {
+                _iter.Reset();
+            }
+        }
+
         /// <summary>
         /// Executes this process
         /// </summary>
@@ -194,21 +369,9 @@ namespace FdoToolbox.Core.ETL.Specialized
             Initialize();
             if (execute)
             {
-                foreach (InvokeExternalProcess proc in _processes)
+                using (var iter = new ExternalProcessIterator(this, _processes))
                 {
-                    var op = proc.Definition;
-                    SendMessage("Starting FdoUtil command: " + op.Command);
-                    proc.ProcessMessage += new MessageEventHandler(OnSubProcessMessage);
-                    int result = proc.Execute();
-                    if (result != (int)CommandStatus.E_OK)
-                    {
-                        LogSubProcessErrors(proc.Name, new Exception[] { new InvokeProcessException("Command: " + op.Command + " exited with non-zero code " + result) });
-                        if (op.AbortProcessOnFailure)
-                        {
-                            SendMessage("FdoUtil command " + op.Command + " failed. Aborting process");
-                            return;
-                        }
-                    }
+                    while (iter.MoveNext()) { }
                 }
             }
         }
@@ -241,11 +404,6 @@ namespace FdoToolbox.Core.ETL.Specialized
                     yield return ex;
                 }
             }
-        }
-
-        void OnSubProcessMessage(object sender, MessageEventArgs e)
-        {
-            SendMessage(e.Message);
         }
 
         /// <summary>

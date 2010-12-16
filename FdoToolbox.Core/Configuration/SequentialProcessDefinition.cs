@@ -48,12 +48,68 @@ namespace FdoToolbox.Core.Configuration
                 return _ser;
             }
         }
+        /// <summary>
+        /// Gets the variables that can be referenced by child operations
+        /// </summary>
+        [XmlElement(ElementName = "Variable")]
+        public BindingList<ProcessVariable> Variables { get; set; }
 
         /// <summary>
         /// Gets the sequence of FdoUtil.exe calls
         /// </summary>
         [XmlElement(ElementName = "SequentialOperation")]
-        public SequentialOperation[] Operations { get; set; }
+        public BindingList<SequentialOperation> Operations { get; set; }
+
+        public void AddVariable(string name, string value)
+        {
+            var v = new ProcessVariable() { Name = name, Value = value };
+            if (this.Variables == null)
+                this.Variables = new BindingList<ProcessVariable>();
+
+            this.Variables.Add(v);
+        }
+
+        public void AddOperation(SequentialOperation op)
+        {
+            if (this.Operations == null)
+                this.Operations = new BindingList<SequentialOperation>();
+
+            this.Operations.Add(op);
+        }
+
+        public void ClearOperations()
+        {
+            if (this.Operations != null)
+                this.Operations.Clear();
+        }
+
+        public void Save(string file)
+        {
+            using (var fs = File.OpenWrite(file))
+            {
+                Serializer.Serialize(fs, this);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Defines a variable that can be referenced by any child operation
+    /// </summary>
+    [Serializable]
+    public class ProcessVariable
+    {
+        /// <summary>
+        /// Gets or sets the name of the variable. Child operations can access
+        /// this variable by using %name%
+        /// </summary>
+        [XmlAttribute(AttributeName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of the variable
+        /// </summary>
+        [XmlAttribute(AttributeName = "value")]
+        public string Value { get; set; }
     }
 
     /// <summary>
@@ -62,6 +118,12 @@ namespace FdoToolbox.Core.Configuration
     [Serializable]
     public class SequentialOperation
     {
+        /// <summary>
+        /// Gets or sets the name of the operation
+        /// </summary>
+        [XmlAttribute(AttributeName = "name")]
+        public string Name { get; set; }
+
         /// <summary>
         /// Gets or set the FdoUtil.exe command
         /// </summary>
@@ -73,7 +135,31 @@ namespace FdoToolbox.Core.Configuration
         /// Gets or sets additional arguments for this operation
         /// </summary>
         [XmlElement(ElementName = "OperationArgument")]
-        public SequentialOperationArgument[] Arguments { get; set; }
+        public BindingList<SequentialOperationArgument> Arguments { get; set; }
+
+        /// <summary>
+        /// Gets or sets the branching conditions of this operation. If none of the
+        /// conditions are satisfied here, the next operation in sequence will be
+        /// executed
+        /// </summary>
+        [XmlElement(ElementName = "CompleteAction")]
+        public BindingList<OnCompleteAction> CompleteActions { get; set; }
+
+        public void AddArgument(string name, string value)
+        {
+            if (this.Arguments == null)
+                this.Arguments = new BindingList<SequentialOperationArgument>();
+
+            this.Arguments.Add(new SequentialOperationArgument() { Name = name, Value = value });
+        }
+
+        public void AddCompleteAction(int returnCode, string operation)
+        {
+            if (this.CompleteActions == null)
+                this.CompleteActions = new BindingList<OnCompleteAction>();
+
+            this.CompleteActions.Add(new OnCompleteAction() { ReturnCode = returnCode, Operation = operation });
+        }
 
         /// <summary>
         /// Gets or sets whether the sequential process is aborted if this operation
@@ -86,6 +172,25 @@ namespace FdoToolbox.Core.Configuration
         {
             return string.Format("Command: {0}, AbortOnFailure: {1}", this.Command, this.AbortProcessOnFailure);
         }
+    }
+
+    /// <summary>
+    /// Defines the next operation to execute on completion of the current one
+    /// </summary>
+    public class OnCompleteAction
+    {
+        /// <summary>
+        /// Gets or sets the return code to check for
+        /// </summary>
+        [XmlAttribute(AttributeName = "returnCode")]
+        public int ReturnCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the operation to execute if the current operation
+        /// signals the specified return code
+        /// </summary>
+        [XmlAttribute(AttributeName = "operation")]
+        public string Operation { get; set; }
     }
 
     /// <summary>
@@ -106,6 +211,29 @@ namespace FdoToolbox.Core.Configuration
         [XmlAttribute(AttributeName = "value")]
         public string Value { get; set; }
 
+        /// <summary>
+        /// Gets the argument value with any variable references
+        /// substituted for actual values
+        /// </summary>
+        /// <param name="variables"></param>
+        /// <returns></returns>
+        internal string GetProcessedValue(IEnumerable<ProcessVariable> variables)
+        {
+            StringBuilder val = new StringBuilder(this.Value);
+            foreach (var v in variables)
+            {
+                string token = "%" + v.Name + "%";
+                val.Replace(token, v.Value);
+            }
+            return val.ToString();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return string.Format("-{0}:{1}", this.Name, this.Value);
