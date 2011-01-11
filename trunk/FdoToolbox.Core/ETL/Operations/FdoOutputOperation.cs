@@ -134,6 +134,7 @@ namespace FdoToolbox.Core.ETL.Operations
             {
                 insert = service.CreateCommand<IInsert>(CommandType.CommandType_Insert);
             }
+            this.Info("Set feature class to: {0}", this.ClassName);
             insert.SetFeatureClassName(this.ClassName);
             PropertyValueCollection propVals = insert.PropertyValues;
 

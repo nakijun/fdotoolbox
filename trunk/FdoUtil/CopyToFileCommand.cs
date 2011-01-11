@@ -111,6 +111,11 @@ namespace FdoUtil
                             ExpressUtility.CopyAllSpatialContexts(new SpatialContextInfo[] { srcCtx }, destConn, true);
                         }
                     }
+                    else
+                    {
+                        //Copy all
+                        ExpressUtility.CopyAllSpatialContexts(srcConn, destConn, true);
+                    }
 
                     FeatureSchema srcSchema = null;
                     //See if partial class list is needed

@@ -634,18 +634,29 @@ namespace FdoToolbox.Core.Feature
         /// <summary>
         /// Applies a feature schema to the current connection
         /// </summary>
-        /// <param name="fs"></param>
+        /// <param name="fs">The schema to apply</param>
         public void ApplySchema(FeatureSchema fs)
         {
-            ApplySchema(fs, null);
+            ApplySchema(fs, null, false);
+        }
+        
+        /// <summary>
+        /// Applies a feature schema (with optional schema mapping) to the current connection
+        /// </summary>
+        /// <param name="fs">The schema to apply</param>
+        /// <param name="mapping"></param>
+        public void ApplySchema(FeatureSchema fs, PhysicalSchemaMapping mapping)
+        {
+            ApplySchema(fs, mapping, false);
         }
 
         /// <summary>
         /// Applies a feature schema (with optional schema mapping) to the current connection
         /// </summary>
-        /// <param name="fs"></param>
+        /// <param name="fs">The schema to apply</param>
         /// <param name="mapping"></param>
-        public void ApplySchema(FeatureSchema fs, PhysicalSchemaMapping mapping)
+        /// <param name="ignoreStates">If true, will disregard element states in the schema to apply</param>
+        public void ApplySchema(FeatureSchema fs, PhysicalSchemaMapping mapping, bool ignoreStates)
         {
             // Fix any invalid spatial context assocations
             IList<SpatialContextInfo> contexts = GetSpatialContexts();
@@ -684,6 +695,7 @@ namespace FdoToolbox.Core.Feature
             using (IApplySchema apply = _conn.CreateCommand(OSGeo.FDO.Commands.CommandType.CommandType_ApplySchema) as IApplySchema)
             {
                 apply.FeatureSchema = fs;
+                apply.IgnoreStates = ignoreStates;
                 if (mapping != null)
                     apply.PhysicalMapping = mapping;
                 apply.Execute();
