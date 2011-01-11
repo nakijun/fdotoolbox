@@ -620,11 +620,20 @@ namespace FdoToolbox.Core.ETL.Specialized
                     {
                         SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", Options.TargetClassName, e.BatchSize);
                     };
+                    bat.OnInfo += (sender, e) =>
+                    {
+                        SendMessageFormatted("[{0}:{1}] {2}", this.Name, "BatchOutput", e.Message);
+                    };
                     output = bat;
                 }
                 else
                 {
-                    output = new FdoOutputOperation(dstConn, Options.TargetClassName, propertyMappings);
+                    var outop = new FdoOutputOperation(dstConn, Options.TargetClassName, propertyMappings);
+                    outop.OnInfo += (sender, e) =>
+                    {
+                        SendMessageFormatted("[{0}:{1}] {2}", this.Name, "Output", e.Message);
+                    };
+                    output = outop;
                 }
             }
             else
@@ -636,17 +645,30 @@ namespace FdoToolbox.Core.ETL.Specialized
                     {
                         SendMessageFormatted("[Bulk Copy => {0}] {1} feature batch written", Options.TargetClassName, e.BatchSize);
                     };
+                    bat.OnInfo += (sender, e) =>
+                    {
+                        SendMessageFormatted("[{0}:{1}] {2}", this.Name, "BatchOutput", e.Message);
+                    };
                     output = bat;
                 }
                 else
                 {
-                    output = new FdoOutputOperation(dstConn, Options.TargetClassName);
+                    var outop = new FdoOutputOperation(dstConn, Options.TargetClassName);
+                    outop.OnInfo += (sender, e) =>
+                    {
+                        SendMessageFormatted("[{0}:{1}] {2}", this.Name, "Output", e.Message);
+                    };
+                    output = outop;
                 }
             }
 
             if (Options.ConversionRules.Count > 0)
             {
                 FdoDataValueConversionOperation op = new FdoDataValueConversionOperation(Options.ConversionRules);
+                op.OnInfo += (sender, e) =>
+                {
+                    SendMessageFormatted("[{0}:{1}] {2}", this.Name, "DataValueConvert", e.Message);
+                };
                 convert = op;
             }
 
