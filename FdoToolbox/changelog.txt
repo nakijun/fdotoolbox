@@ -8,6 +8,7 @@ v1.0 beta 4
 	- Object Explorer improvements
 		- Geometry properties show geometric types and spatial context association
 		- Connections now indicate if configuration has been applied
+	- Express connect support for King Oracle provider
 
 - Fixes:
 	- More intelligent handling of spatial contexts when creating geometry properties on-the-fly from Bulk Copy

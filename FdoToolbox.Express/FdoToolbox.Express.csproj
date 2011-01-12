@@ -137,6 +137,13 @@
       <DependentUpon>ConnectArcSdeCtl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ConnectArcSdePresentation.cs" />
+    <Compile Include="Controls\ConnectKingOracleCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectKingOracleCtl.Designer.cs">
+      <DependentUpon>ConnectKingOracleCtl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectKingOraclePresentation.cs" />
     <Compile Include="Controls\ConnectMySqlCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -291,6 +298,9 @@
     <EmbeddedResource Include="Controls\ConnectArcSdeCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ConnectArcSdeCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ConnectKingOracleCtl.resx">
+      <DependentUpon>ConnectKingOracleCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConnectOdbcCtl.resx">
       <SubType>Designer</SubType>

@@ -147,6 +147,16 @@ namespace FdoToolbox.Express.Commands
         }
     }
 
+    public class ConnectKingOracleCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            ConnectKingOracleCtl ctl = new ConnectKingOracleCtl();
+            Workbench wb = Workbench.Instance;
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
+
     public class ConnectOdbcCommand : AbstractMenuCommand 
     {
         public override void Run()

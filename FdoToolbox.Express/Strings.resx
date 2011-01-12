@@ -288,4 +288,10 @@
   <data name="CMD_ConnectAdskSqlServer" xml:space="preserve">
     <value>Connect to SQL Server 2005 (Autodesk Provider)</value>
   </data>
+  <data name="TITLE_CONNECT_KINGORACLE" xml:space="preserve">
+    <value>Connect to Oracle</value>
+  </data>
+  <data name="CMD_ConnectKingOracle" xml:space="preserve">
+    <value>Connect to Oracle (using King Oracle provider)</value>
+  </data>
 </root>
