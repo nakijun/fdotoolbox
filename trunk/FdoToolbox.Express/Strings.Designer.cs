@@ -88,6 +88,15 @@ namespace FdoToolbox.Express {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to Oracle (using King Oracle provider).
+        /// </summary>
+        internal static string CMD_ConnectKingOracle {
+            get {
+                return ResourceManager.GetString("CMD_ConnectKingOracle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connect to MySQL.
         /// </summary>
         internal static string CMD_ConnectMySql {
@@ -381,6 +390,15 @@ namespace FdoToolbox.Express {
         internal static string TITLE_CONNECT_ARCSDE {
             get {
                 return ResourceManager.GetString("TITLE_CONNECT_ARCSDE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect to Oracle.
+        /// </summary>
+        internal static string TITLE_CONNECT_KINGORACLE {
+            get {
+                return ResourceManager.GetString("TITLE_CONNECT_KINGORACLE", resourceCulture);
             }
         }
         

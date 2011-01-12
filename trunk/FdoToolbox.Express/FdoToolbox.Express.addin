@@ -60,6 +60,11 @@
                               label="${res:CMD_ConnectShpDir}"
                               class="FdoToolbox.Express.Commands.ConnectShpDirCommand" />
                 </Condition>
+                <Condition action="Disable" name="ProviderSupported" Provider="OSGeo.KingOracle">
+                    <MenuItem id="CreateSqlServer"
+                              label="${res:CMD_ConnectKingOracle}"
+                              class="FdoToolbox.Express.Commands.ConnectKingOracleCommand" />
+                </Condition>
                 <Condition action="Disable" name="ProviderSupported" Provider="OSGeo.ODBC">
                     <MenuItem id="ConnectOdbc"
                               label="${res:CMD_ConnectOdbc}"
