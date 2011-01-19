@@ -225,6 +225,8 @@ echo ************************************************************************
 echo build.bat [-h]
 echo           [-t]
 echo           [-v]
+echo           [-version=x.y.z.r]
+echo           [-vlabel=label]
 echo           [-p=CPU]
 echo           [-c=BuildType]
 echo           [-a=Action]
