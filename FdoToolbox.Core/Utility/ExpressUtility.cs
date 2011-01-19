@@ -284,7 +284,12 @@ namespace FdoToolbox.Core.Utility
                 {
                     try
                     {
-                        cmd.DataStoreProperties.SetProperty(pName, path);
+                        var dsprops = cmd.DataStoreProperties;
+                        dsprops.SetProperty(pName, path);
+                        //Ensures that FDO logical schemas being applied to SQLite are mostly intact.
+                        //See FDO trac ticket #739 for details.
+                        if (sqlite)
+                            dsprops.SetProperty("UseFdoMetadata", "TRUE");
                         cmd.Execute();
                         result = true;
                     }

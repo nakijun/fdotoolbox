@@ -89,6 +89,14 @@ namespace FdoToolbox.Core.Feature
             this.ConnectionString = connectionString;
         }
 
+        public void SaveConfiguration(string file)
+        {
+            if (!this.HasConfiguration)
+                throw new InvalidOperationException("This connection has no configuration");
+
+            File.WriteAllText(file, _configXml);
+        }
+
         /// <summary>
         /// Saves this connection to a file
         /// </summary>
@@ -115,7 +123,7 @@ namespace FdoToolbox.Core.Feature
 
                 string output = Path.Combine(dir, baseName + "_Configuration.xml");
 
-                File.WriteAllText(output, _configXml);
+                SaveConfiguration(output);
             }
         }
 
@@ -388,6 +396,9 @@ namespace FdoToolbox.Core.Feature
         /// <param name="file">The configuration file</param>
         public void SetConfiguration(string file)
         {
+            if (this.State != FdoConnectionState.Closed)
+                throw new InvalidOperationException("Cannot set configuration when connection is not in a closed state");
+
             CapabilityType cap = CapabilityType.FdoCapabilityType_SupportsConfiguration;
             if (!this.Capability.GetBooleanCapability(cap))
                 throw new InvalidOperationException(ResourceUtil.GetStringFormatted("ERR_UNSUPPORTED_CAPABILITY", cap));

@@ -58,7 +58,15 @@ namespace FdoToolbox.Core.ETL.Operations
             if (FdoGeometryUtil.Is2D(row.Geometry))
                 return row;
 
-            row.Geometry = FdoGeometryUtil.Flatten(row.Geometry, _geomFactory);
+            IGeometry geom = row.Geometry;
+            IGeometry trans = FdoGeometryUtil.Flatten(geom, _geomFactory);
+            
+            //Dispose the original if flatten returned a new instance
+            if (!IGeometry.ReferenceEquals(geom, trans))
+            {
+                row.Geometry = trans;
+                geom.Dispose();
+            }
             return row;
         }
 

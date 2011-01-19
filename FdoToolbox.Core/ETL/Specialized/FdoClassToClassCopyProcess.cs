@@ -693,6 +693,9 @@ namespace FdoToolbox.Core.ETL.Specialized
             if (reproject != null) //Will always be null atm
                 Register(reproject);
             Register(output);
+            
+            //This is to dispose of any FDO objects stored in the FdoRows being sent through
+            Register(new FdoCleanupOperation());
         }
 
         /// <summary>

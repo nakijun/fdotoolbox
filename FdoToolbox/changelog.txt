@@ -4,13 +4,15 @@ v1.0 beta 4
 	- Sequential Process improvements
 		- Support for variables
 		- Support for control flow (ie. Jump to a certain operation on certain return codes)
-	- Using FDO 3.6.0 (build F040)
+	- Using FDO 3.6.0 (build F044)
 	- Object Explorer improvements
 		- Geometry properties show geometric types and spatial context association
 		- Connections now indicate if configuration has been applied
 	- Express connect support for King Oracle provider
+	- Support for specifying configuration for connections in Bulk Copy Definitions
 
 - Fixes:
+    - Fix edited spatial contexts not being applied to the Data Store Editor
 	- More intelligent handling of spatial contexts when creating geometry properties on-the-fly from Bulk Copy
 	- Saved connections also persist configuration information
 	- Stale Sequential Processes are now properly cleaned up when exiting

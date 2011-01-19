@@ -19,6 +19,7 @@
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="provider" type="xs:string" use="required" />
+        <xs:attribute name="configPath" type="xs:string" use="optional" />
     </xs:complexType>
     <xs:complexType name="FdoCopyTaskListElement">
         <xs:sequence>
