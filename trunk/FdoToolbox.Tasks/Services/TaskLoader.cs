@@ -39,9 +39,10 @@ namespace FdoToolbox.Tasks.Services
         /// </summary>
         /// <param name="provider">The provider.</param>
         /// <param name="connStr">The connection string.</param>
+        /// <param name="configPath">The configuration path</param>
         /// <param name="name">The name that will be assigned to the connection.</param>
         /// <returns></returns>
-        protected override FdoConnection CreateConnection(string provider, string connStr, ref string name)
+        protected override FdoConnection CreateConnection(string provider, string connStr, string configPath, ref string name)
         {
             IFdoConnectionManager connMgr = ServiceManager.Instance.GetService<IFdoConnectionManager>();
             //Try to find by name first
@@ -68,6 +69,8 @@ namespace FdoToolbox.Tasks.Services
             //Make a new connection
             LoggingService.Info(ResourceService.GetString("INFO_REFERENCED_CONNECTION_NOT_FOUND"));
             conn = new FdoConnection(provider, connStr);
+            if (!string.IsNullOrEmpty(configPath) && System.IO.File.Exists(configPath))
+                conn.SetConfiguration(configPath);
             connMgr.AddConnection(name, conn);
             return conn;
         }

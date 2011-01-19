@@ -57,7 +57,16 @@ namespace FdoToolbox.Core.ETL.Operations
             //if (FdoGeometryUtil.Is2D(row.Geometry))
             //    return row;
 
-            row.Geometry = FdoGeometryUtil.ForceWkb(row.Geometry, _geomFactory);
+            IGeometry geom = row.Geometry;
+            IGeometry trans = FdoGeometryUtil.ForceWkb(geom, _geomFactory);
+
+            //Dispose the original if ForceWkb returned a new instance
+            if (!IGeometry.ReferenceEquals(geom, trans))
+            {
+                row.Geometry = trans;
+                geom.Dispose();
+            }
+
             return row;
         }
 

@@ -620,6 +620,29 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         internal void UpdateSpatialContext(SpatialContextInfo sc)
         {
             this.SpatialContextsChanged = true;
+            SpatialContextInfo edit = null;
+            foreach (var context in _spatialContexts)
+            {
+                if (context.Name == sc.Name)
+                {
+                    edit = context;
+                }
+            }
+
+            if (edit != null)
+            {
+                edit.CoordinateSystem = sc.CoordinateSystem;
+                edit.CoordinateSystemWkt = sc.CoordinateSystemWkt;
+                edit.Description = sc.Description;
+                edit.ExtentGeometryText = sc.ExtentGeometryText;
+                edit.ExtentType = sc.ExtentType;
+                edit.XYTolerance = sc.XYTolerance;
+                edit.ZTolerance = sc.ZTolerance;
+            }
+            else
+            {
+                _spatialContexts.Add(sc);
+            }
         }
 
         internal string[] AddClassesToSchema(string schemaName, ClassCollection classCollection)

@@ -186,9 +186,10 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         /// <param name="provider">The provider.</param>
         /// <param name="connStr">The connection string.</param>
+        /// <param name="configPath">The configuration path</param>
         /// <param name="name">The name that will be assigned to the connection.</param>
         /// <returns></returns>
-        protected abstract FdoConnection CreateConnection(string provider, string connStr, ref string name);
+        protected abstract FdoConnection CreateConnection(string provider, string connStr, string configPath, ref string name);
 
         /// <summary>
         /// Prepares the specified bulk copy definition (freshly deserialized) before the loading process begins
@@ -275,7 +276,8 @@ namespace FdoToolbox.Core.ETL
             foreach (FdoConnectionEntryElement entry in def.Connections)
             {
                 string connName = entry.name;
-                FdoConnection conn = CreateConnection(entry.provider, entry.ConnectionString, ref connName);
+                FdoConnection conn = CreateConnection(entry.provider, entry.ConnectionString, entry.configPath, ref connName);
+
                 connections[connName] = conn;
 
                 if (connName != entry.name)
@@ -485,7 +487,7 @@ namespace FdoToolbox.Core.ETL
             string dummy = string.Empty;
             opts.JoinType = (FdoJoinType)Enum.Parse(typeof(FdoJoinType), def.JoinSettings.JoinType.ToString());
             opts.SetLeft(
-                CreateConnection(def.Left.Provider, def.Left.ConnectionString, ref dummy),
+                CreateConnection(def.Left.Provider, def.Left.ConnectionString, null, ref dummy),
                 def.Left.FeatureSchema,
                 def.Left.Class);
             foreach (string p in def.Left.PropertyList)
@@ -493,7 +495,7 @@ namespace FdoToolbox.Core.ETL
                 opts.AddLeftProperty(p);
             }
             opts.SetRight(
-                CreateConnection(def.Right.Provider, def.Right.ConnectionString, ref dummy),
+                CreateConnection(def.Right.Provider, def.Right.ConnectionString, null, ref dummy),
                 def.Right.FeatureSchema,
                 def.Right.Class);
             foreach (string p in def.Right.PropertyList)
@@ -502,7 +504,7 @@ namespace FdoToolbox.Core.ETL
             }
 
             opts.SetTarget(
-                CreateConnection(def.Target.Provider, def.Target.ConnectionString, ref dummy),
+                CreateConnection(def.Target.Provider, def.Target.ConnectionString, null, ref dummy),
                 def.Target.FeatureSchema,
                 def.Target.Class);
 
@@ -662,11 +664,15 @@ namespace FdoToolbox.Core.ETL
         /// </summary>
         /// <param name="provider">The provider.</param>
         /// <param name="connStr">The conn STR.</param>
+        /// <param name="configPath">The configuration path</param>
         /// <param name="name">The name that will be assigned to the connection.</param>
         /// <returns></returns>
-        protected override FdoConnection CreateConnection(string provider, string connStr, ref string name)
+        protected override FdoConnection CreateConnection(string provider, string connStr, string configPath, ref string name)
         {
-            return new FdoConnection(provider, connStr);
+            var conn = new FdoConnection(provider, connStr);
+            if (!string.IsNullOrEmpty(configPath) && File.Exists(configPath))
+                conn.SetConfiguration(configPath);
+            return conn;
         }
 
         /// <summary>

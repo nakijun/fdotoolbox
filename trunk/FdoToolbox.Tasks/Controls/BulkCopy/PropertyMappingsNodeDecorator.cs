@@ -77,7 +77,13 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             foreach (TreeNode node in _node.Nodes)
             {
                 if (node.Tag == null)
-                    this.MapProperty(node.Name, node.Name, true);
+                {
+                    try
+                    {
+                        this.MapProperty(node.Name, node.Name, true);
+                    }
+                    catch (MappingException) { } //Target may not exist, so let it be
+                }
             }
         }
 
@@ -203,6 +209,9 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             PropertyDefinition src = srcCls.Properties[propertyName];
             if (dstCls != null)
             {
+                if (!dstCls.Properties.Contains(destProperty))
+                    throw new MappingException("Target property " + destProperty + "not found");
+
                 PropertyDefinition dst = dstCls.Properties[destProperty];
                 if (src.PropertyType == dst.PropertyType)
                 {

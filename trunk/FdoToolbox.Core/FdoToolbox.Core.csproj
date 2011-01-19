@@ -165,6 +165,7 @@
     <Compile Include="ETL\Operations\FdoApplySchemaOperation.cs" />
     <Compile Include="ETL\Operations\FdoBatchedOutputOperation.cs" />
     <Compile Include="ETL\Operations\FdoBranchingOperation.cs" />
+    <Compile Include="ETL\Operations\FdoCleanupOperation.cs" />
     <Compile Include="ETL\Operations\FdoCopySpatialContextOperation.cs" />
     <Compile Include="ETL\Operations\FdoCreateDataStoreOperation.cs" />
     <Compile Include="ETL\Operations\FdoDataValueConversionOperation.cs" />

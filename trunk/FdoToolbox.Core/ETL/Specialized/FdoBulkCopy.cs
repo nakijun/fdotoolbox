@@ -201,6 +201,15 @@ namespace FdoToolbox.Core.ETL.Specialized
                 entry.provider = conn.Provider;
                 entry.ConnectionString = conn.ConnectionString;
 
+                if (conn.HasConfiguration)
+                {
+                    string path = Path.GetDirectoryName(file);
+                    path = Path.Combine(path, entry.name + "_configuration.xml");
+
+                    conn.SaveConfiguration(path);
+                    entry.configPath = path;
+                }
+
                 connList.Add(entry);
             }
 

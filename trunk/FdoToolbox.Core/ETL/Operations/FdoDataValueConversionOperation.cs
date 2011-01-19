@@ -73,6 +73,9 @@ namespace FdoToolbox.Core.ETL.Operations
                     {
                         DataValue converted = ValueConverter.ConvertDataValue((DataValue)old, rule.TargetDataType, rule.NullOnFailure, rule.Truncate);
                         row[propertyName] = ValueConverter.GetClrValue(converted);
+
+                        converted.Dispose();
+                        old.Dispose();
                     }
                 }
             }
