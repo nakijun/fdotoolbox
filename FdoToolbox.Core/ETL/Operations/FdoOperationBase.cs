@@ -123,6 +123,18 @@ namespace FdoToolbox.Core.ETL.Operations
         }
 
         /// <summary>
+        /// Raises the OnFeatureFailed event
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="ex"></param>
+        public void RaiseFailedReadFeature(string data, Exception ex)
+        {
+            Statistics.MarkFeatureFailed();
+            this.Error(ex, "Error encountered reading feature: {0}", data);
+            OnFeatureFailed(this, null, ex);
+        }
+
+        /// <summary>
         /// Gets all errors that occured when running this operation
         /// </summary>
         /// <returns></returns>

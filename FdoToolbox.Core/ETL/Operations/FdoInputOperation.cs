@@ -91,7 +91,24 @@ namespace FdoToolbox.Core.ETL.Operations
 
                     while (reader.ReadNext())
                     {
-                        yield return CreateRowFromReader(reader);
+                        FdoRow row = null;
+                        try
+                        {
+                            row = CreateRowFromReader(reader);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (row != null)
+                            {
+                                RaiseFailedFeatureProcessed(row, ex);
+                            }
+                            else
+                            {
+                                RaiseFailedReadFeature(ex.Message, ex);
+                            }
+                        }
+                        if (row != null)
+                            yield return row;
                     }
                 }
             }
