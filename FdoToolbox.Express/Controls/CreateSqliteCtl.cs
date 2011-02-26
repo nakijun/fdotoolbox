@@ -71,7 +71,7 @@ namespace FdoToolbox.Express.Controls
             bool ok = false;
             using (TempCursor cur = new TempCursor(Cursors.WaitCursor))
             {
-                ok = _presenter.CheckConnectionName() && _presenter.CreateSdf();
+                ok = _presenter.CheckConnectionName() && _presenter.CreateSqlite();
             }
             if (ok)
             {

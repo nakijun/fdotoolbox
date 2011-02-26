@@ -60,6 +60,11 @@ namespace FdoToolbox.Express.Controls
 
         public bool CreateShp()
         {
+            if (_view.CreateConnection && string.IsNullOrEmpty(_view.ConnectionName))
+            {
+                _view.ShowError("Specify a connection name");
+                return false;
+            }
             //Creating SHP files is as follows
             //
             // 1. Connect to the *parent* directory of the shape file we want to create

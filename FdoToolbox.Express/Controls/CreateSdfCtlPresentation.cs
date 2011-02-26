@@ -58,6 +58,12 @@ namespace FdoToolbox.Express.Controls
 
         public bool CreateSdf()
         {
+            if (_view.CreateConnection && string.IsNullOrEmpty(_view.ConnectionName))
+            {
+                _view.ShowError("Specify a connection name");
+                return false;
+            }
+
             if (ExpressUtility.CreateFlatFileDataSource("OSGeo.SDF", _view.SdfFile))
             {
                 FdoDataStoreConfiguration dstore = null;
