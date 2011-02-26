@@ -56,8 +56,14 @@ namespace FdoToolbox.Express.Controls
             return !_connMgr.NameExists(_view.ConnectionName);
         }
 
-        public bool CreateSdf()
+        public bool CreateSqlite()
         {
+            if (_view.CreateConnection && string.IsNullOrEmpty(_view.ConnectionName))
+            {
+                _view.ShowError("Specify a connection name");
+                return false;
+            }
+
             if (ExpressUtility.CreateFlatFileDataSource("OSGeo.SQLite", _view.SQLiteFile))
             {
                 FdoConnection conn = ExpressUtility.CreateFlatFileConnection("OSGeo.SQLite", _view.SQLiteFile);
