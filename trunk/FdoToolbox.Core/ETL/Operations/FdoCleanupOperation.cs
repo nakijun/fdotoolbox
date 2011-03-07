@@ -31,20 +31,9 @@ namespace FdoToolbox.Core.ETL.Operations
         {
             foreach (FdoRow row in rows)
             {
-                yield return Cleanup(row);
+                row.Dispose();
+                yield return row;
             }
-        }
-
-        private static FdoRow Cleanup(FdoRow row)
-        {
-            //Dispose all IGeometry instances. Everything else is CLR objects
-            foreach (var col in row.Columns)
-            {
-                var geom = row[col] as OSGeo.FDO.Geometry.IGeometry;
-                if (geom != null)
-                    geom.Dispose();
-            }
-            return row;
         }
     }
 }

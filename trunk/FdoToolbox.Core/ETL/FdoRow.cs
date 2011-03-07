@@ -43,7 +43,7 @@ namespace FdoToolbox.Core.ETL
     [DebuggerDisplay("Count = {items.Count}")]
     [DebuggerTypeProxy(typeof(FdoToolbox.Core.ETL.QuackingDictionary.QuackingDictionaryDebugView))]
     [Serializable]
-    public class FdoRow : QuackingDictionary
+    public class FdoRow : QuackingDictionary, IDisposable
     {
         static readonly Dictionary<Type, List<PropertyInfo>> propertiesCache = new Dictionary<Type, List<PropertyInfo>>();
         static readonly Dictionary<Type, List<FieldInfo>> fieldsCache = new Dictionary<Type, List<FieldInfo>>();
@@ -479,6 +479,35 @@ namespace FdoToolbox.Core.ETL
                 }
             }
             return row;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                //Clear the geometry name list
+                _geometryProperties.Clear();
+                //Dispose all IDisposable instances. Everything else is CLR objects
+                foreach (var col in this.Columns)
+                {
+                    var disp = this[col] as IDisposable;
+                    if (disp != null)
+                        disp.Dispose();
+                }
+                //Clear the property dictionary
+                items.Clear();
+            }
+        }
+
+        ~FdoRow()
+        {
+            Dispose(false);
         }
     }
 }

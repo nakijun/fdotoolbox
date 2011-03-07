@@ -145,7 +145,7 @@ namespace FdoUtil
                         {
                             int clsCount = srcSchema.Classes.Count;
                             WriteLine("Applying source schema (containing " +  clsCount + " classes) to target");
-                            destService.ApplySchema(srcSchema);
+                            destService.ApplySchema(srcSchema, null, true);
                             targetSchema = srcSchema;
                         }
                         else
@@ -154,7 +154,7 @@ namespace FdoUtil
                             FeatureSchema fixedSchema = destService.AlterSchema(srcSchema, incSchema);
                             int clsCount = fixedSchema.Classes.Count;
                             WriteLine("Applying modified source schema (containing " + clsCount + " classes) to target");
-                            destService.ApplySchema(fixedSchema);
+                            destService.ApplySchema(fixedSchema, null, true);
                             targetSchema = fixedSchema;
                         }
 

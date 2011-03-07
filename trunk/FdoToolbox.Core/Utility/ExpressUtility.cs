@@ -228,9 +228,13 @@ namespace FdoToolbox.Core.Utility
         public static FdoConnection CreateFlatFileConnection(string provider, string file)
         {
             FdoConnection conn = null;
-            if (provider.StartsWith("OSGeo.SDF") || provider.StartsWith("OSGeo.SQLite"))
+            if (provider.StartsWith("OSGeo.SDF"))
             {
                 conn = new FdoConnection(provider, string.Format("File={0}", file));
+            }
+            else if (provider.StartsWith("OSGeo.SQLite"))
+            {
+                conn = new FdoConnection(provider, string.Format("File={0};UseFdoMetadata=TRUE", file));
             }
             else if (provider.StartsWith("OSGeo.SHP"))
             {

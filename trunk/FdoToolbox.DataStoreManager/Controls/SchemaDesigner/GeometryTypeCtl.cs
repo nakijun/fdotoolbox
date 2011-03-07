@@ -37,8 +37,8 @@ namespace FdoToolbox.DataStoreManager.Controls.SchemaDesigner
         public GeometryTypeCtl()
         {
             InitializeComponent();
-            GeometricType[] gtypes = (GeometricType[])Enum.GetValues(typeof(GeometricType));
-            LoadGeometricTypes(gtypes);
+            //GeometricType[] gtypes = (GeometricType[])Enum.GetValues(typeof(GeometricType));
+            //LoadGeometricTypes(gtypes);
             this.CheckOnClick = true;
         }
 
