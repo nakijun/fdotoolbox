@@ -470,7 +470,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                                 mod = new UpdateTargetClass(el.Target.@class);
                             }
 
-                            var prop = FdoSchemaUtil.CreatePropertyFromExpressionType(exprMap.Expression, availableFunctions, defaultSc.Name);
+                            var prop = FdoSchemaUtil.CreatePropertyFromExpressionType(exprMap.Expression, srcClass, availableFunctions, defaultSc.Name);
                             if (prop == null)
                             {
                                 throw new InvalidOperationException("Could not derive a property definition from the expression: " + exprMap.Expression);
@@ -530,7 +530,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                     if (exprMap.createIfNotExists)
                         opts.AddSourcePropertyToCheck(exprMap.alias);
 
-                    var prop = FdoSchemaUtil.CreatePropertyFromExpressionType(exprMap.Expression, availableFunctions, defaultSc.Name);
+                    var prop = FdoSchemaUtil.CreatePropertyFromExpressionType(exprMap.Expression, srcClass, availableFunctions, defaultSc.Name);
                     if (prop == null)
                     {
                         throw new InvalidOperationException("Could not derive a property definition from the expression: " + exprMap.Expression);
