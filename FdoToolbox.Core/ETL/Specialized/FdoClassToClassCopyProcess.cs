@@ -387,7 +387,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                                     //WKTs do not match. Create a clone of the source but with a different name
                                     var sc = sourceSc.Clone();
                                     //
-                                    string prefix = "SC" + geom.Name;
+                                    string prefix = "SC" + geom.SpatialContextAssociation;
                                     string name = prefix;
                                     int scc = 0;
                                     while (SpatialContextExistsByName(targetSpatialContexts, name))

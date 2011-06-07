@@ -66,7 +66,7 @@ namespace FdoToolbox.Core.Utility
             return modified;
         }
 
-        internal static PropertyDefinition CreatePropertyFromExpressionType(string exprText, FunctionDefinitionCollection functionDefs, string defaultSpatialContextName)
+        internal static PropertyDefinition CreatePropertyFromExpressionType(string exprText, ClassDefinition clsDef, FunctionDefinitionCollection functionDefs, string defaultSpatialContextName)
         {
             string name = string.Empty;
             using (var expr = Expression.Parse(exprText))
@@ -75,7 +75,12 @@ namespace FdoToolbox.Core.Utility
                 if (typeof(ComputedIdentifier).IsAssignableFrom(et))
                 {
                     var subExpr = ((ComputedIdentifier)expr).Expression;
-                    name = ((ComputedIdentifier)expr).Name;
+                    return CreatePropertyFromExpressionType(subExpr.ToString(), clsDef, functionDefs, defaultSpatialContextName);
+                }
+                else if (typeof(Identifier).IsAssignableFrom(et))
+                {
+                    var id = (Identifier)expr;
+                    return CloneProperty(clsDef.Properties[id.Name]);
                 }
                 else if (typeof(Function).IsAssignableFrom(et))
                 {
@@ -136,7 +141,7 @@ namespace FdoToolbox.Core.Utility
                 {
                     var geom = new GeometricPropertyDefinition(name, "");
                     geom.GeometryTypes = (int)GeometricType.GeometricType_All;
-                    
+
                     return geom;
                 }
             }
