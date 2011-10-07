@@ -243,7 +243,7 @@ namespace FdoToolbox.Core.ETL
                     }
                     else
                     {
-                        row[name] = reader.GetValue(i);
+                        row[name] = reader.GetValue(i); //reader[name];
                     }
 
                     if (readOnlyProperties.Contains(name))
