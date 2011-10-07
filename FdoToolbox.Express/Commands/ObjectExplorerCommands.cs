@@ -46,4 +46,20 @@ namespace FdoToolbox.Express.Commands
             wb.ShowContent(ctl, ViewRegion.Dialog);
         }
     }
+
+    public class DumpFeatureClassCommand : AbstractMenuCommand
+    {
+        public override void Run()
+        {
+            Workbench wb = Workbench.Instance;
+            TreeNode classNode = wb.ObjectExplorer.GetSelectedNode();
+            string srcConnName = classNode.Parent.Parent.Name;
+            string schemaName = classNode.Parent.Name;
+            string className = classNode.Name;
+            FdoConnectionManager mgr = ServiceManager.Instance.GetService<FdoConnectionManager>();
+            FdoConnection source = mgr.GetConnection(srcConnName);
+            var ctl = new DumpFeatureClassCtl(source, schemaName, className);
+            wb.ShowContent(ctl, ViewRegion.Dialog);
+        }
+    }
 }

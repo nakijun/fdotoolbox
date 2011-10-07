@@ -294,4 +294,7 @@
   <data name="CMD_ConnectKingOracle" xml:space="preserve">
     <value>Connect to Oracle (using King Oracle provider)</value>
   </data>
+  <data name="CMD_DumpFeatureClass" xml:space="preserve">
+    <value>Dump to SDF/SQLite</value>
+  </data>
 </root>

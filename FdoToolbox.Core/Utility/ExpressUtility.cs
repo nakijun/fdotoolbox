@@ -599,6 +599,68 @@ namespace FdoToolbox.Core.Utility
         }
 
         /// <summary>
+        /// Utility method to create a feature class dump bulk copy
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="schemaName"></param>
+        /// <param name="className"></param>
+        /// <param name="provider"></param>
+        /// <param name="savePath"></param>
+        /// <returns></returns>
+        public static FdoBulkCopy CreateBulkCopy(FdoConnection source, string schemaName, string className, string provider, string savePath)
+        {
+            if (!ExpressUtility.CreateFlatFileDataSource(provider, savePath))
+                throw new FdoException("Could not create " + savePath);
+
+            ClassDefinition srcClass = null;
+            using (var svc = source.CreateFeatureService())
+            {
+                srcClass = svc.GetClassByName(schemaName, className);
+            }
+
+            //Apply a copy of the source class to target
+            ClassDefinition clone = FdoSchemaUtil.CloneClass(srcClass, true);
+            FeatureSchema fs = null;
+
+            FdoConnection target = ExpressUtility.CreateFlatFileConnection(provider, savePath);
+            using (var svc = target.CreateFeatureService())
+            {
+                var schemas = svc.DescribeSchema();
+                if (schemas != null && schemas.Count == 1)
+                    fs = schemas[0];
+
+                if (fs == null)
+                    fs = new FeatureSchema("Default", "");
+
+                var classes = fs.Classes;
+                classes.Add(clone);
+
+                svc.ApplySchema(fs, null, true);
+            }
+
+            //Setup mappings
+            var mappings = new NameValueCollection();
+            foreach (PropertyDefinition prop in srcClass.Properties)
+            {
+                if (prop.PropertyType == PropertyType.PropertyType_DataProperty ||
+                    prop.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                {
+                    mappings.Add(prop.Name, prop.Name);
+                }
+            }
+
+            //Compile query
+            var query = new FeatureQueryOptions(className);
+
+            var bcp = CreateBulkCopy(source, target, schemaName, query, fs.Name, clone.Name, mappings);
+
+            //The target connection needs to be cleaned up when done
+            bcp.Options.MarkOwnerOfConnection("TARGET");
+
+            return bcp;
+        }
+
+        /// <summary>
         /// Utility method to create a bulk copy operation from
         /// one class to another
         /// </summary>

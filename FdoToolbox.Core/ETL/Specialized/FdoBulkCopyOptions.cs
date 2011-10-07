@@ -39,6 +39,8 @@ namespace FdoToolbox.Core.ETL.Specialized
 
         private bool _owner;
 
+        private List<string> _ownerOfConnection;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FdoBulkCopyOptions"/> class.
         /// </summary>
@@ -47,6 +49,7 @@ namespace FdoToolbox.Core.ETL.Specialized
             _copyOptions = new List<FdoClassCopyOptions>();
             _connections = new Dictionary<string, FdoConnection>();
             _owner = false;
+            _ownerOfConnection = new List<string>();
         }
 
         /// <summary>
@@ -60,6 +63,16 @@ namespace FdoToolbox.Core.ETL.Specialized
             _copyOptions = new List<FdoClassCopyOptions>();
             _connections = connections;
             _owner = owner;
+            _ownerOfConnection = new List<string>();
+        }
+
+        /// <summary>
+        /// Sets the specified named connection as the owner. This connection will be disposed and cleaned up when done
+        /// </summary>
+        /// <param name="name"></param>
+        internal void MarkOwnerOfConnection(string name)
+        {
+            _ownerOfConnection.Add(name);
         }
 
         /// <summary>
@@ -161,6 +174,16 @@ namespace FdoToolbox.Core.ETL.Specialized
                     conn.Dispose();
                 }
                 _connections.Clear();
+            }
+            else
+            {
+                foreach (string name in _ownerOfConnection)
+                {
+                    var conn = _connections[name];
+                    if (conn.State != FdoConnectionState.Closed)
+                        conn.Close();
+                    conn.Dispose();
+                }
             }
         }
 

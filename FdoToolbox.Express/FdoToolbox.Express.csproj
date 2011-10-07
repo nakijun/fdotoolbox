@@ -243,6 +243,12 @@
     <Compile Include="Controls\CreateSqlServerCtl.Designer.cs">
       <DependentUpon>CreateSqlServerCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DumpFeatureClassCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DumpFeatureClassCtl.Designer.cs">
+      <DependentUpon>DumpFeatureClassCtl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FileToFileCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -332,6 +338,9 @@
     <EmbeddedResource Include="Controls\CreateSdfCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CreateSdfCtl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DumpFeatureClassCtl.resx">
+      <DependentUpon>DumpFeatureClassCtl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FileToFileCtl.resx">
       <SubType>Designer</SubType>
