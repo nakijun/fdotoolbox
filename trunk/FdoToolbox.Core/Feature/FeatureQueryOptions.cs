@@ -45,6 +45,25 @@ namespace FdoToolbox.Core.Feature
             set { _ClassName = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the alias fo the feature class to query
+        /// </summary>
+        public string ClassAlias
+        {
+            get;
+            set;
+        }
+
+        private List<FdoJoinCriteriaInfo> _joinCriteria;
+
+        /// <summary>
+        /// Gets the list of join criteria
+        /// </summary>
+        public ReadOnlyCollection<FdoJoinCriteriaInfo> JoinCriteria
+        {
+            get { return _joinCriteria.AsReadOnly(); }
+        }
+
         private List<string> _PropertyList;
 
         /// <summary>
@@ -86,6 +105,7 @@ namespace FdoToolbox.Core.Feature
             _PropertyList = new List<string>();
             _ComputedProperties = new Dictionary<string, Expression>();
             _OrderBy = new List<string>();
+            _joinCriteria = new List<FdoJoinCriteriaInfo>();
         }
 
         /// <summary>
@@ -119,6 +139,24 @@ namespace FdoToolbox.Core.Feature
                     AddComputedProperty(alias, computedProperties[alias]);
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds a join criteria to the query result
+        /// </summary>
+        /// <param name="criteria"></param>
+        public void AddJoinCriteria(FdoJoinCriteriaInfo criteria)
+        {
+            _joinCriteria.Add(criteria);
+        }
+
+        /// <summary>
+        /// Removes a join criteria that is to be part of the query result
+        /// </summary>
+        /// <param name="criteria"></param>
+        public void RemoveJoinCriteria(FdoJoinCriteriaInfo criteria)
+        {
+            _joinCriteria.Remove(criteria);
         }
 
         /// <summary>
@@ -247,6 +285,79 @@ namespace FdoToolbox.Core.Feature
             _GroupFilter = groupFilter;
             _GroupByProperties.Clear();
             _GroupByProperties.AddRange(groupByProperties);
+        }
+    }
+
+    public class FdoJoinCriteriaInfo
+    {
+        /// <summary>
+        /// Gets or sets the join type
+        /// </summary>
+        public OSGeo.FDO.Expression.JoinType JoinType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class to join on
+        /// </summary>
+        public string JoinClass { get; set; }
+
+        /// <summary>
+        /// Gets or sets the alias for the class to join on
+        /// </summary>
+        public string JoinClassAlias { get; set; }
+
+        /// <summary>
+        /// Gets or sets the join filter
+        /// </summary>
+        public string JoinFilter { get; set; }
+
+        public OSGeo.FDO.Expression.JoinCriteria AsJoinCriteria()
+        {
+            var criteria = new OSGeo.FDO.Expression.JoinCriteria();
+            criteria.JoinType = this.JoinType;
+            criteria.JoinClass = new OSGeo.FDO.Expression.Identifier(this.JoinClass);
+            if (!string.IsNullOrEmpty(this.JoinClassAlias))
+                criteria.Alias = this.JoinClassAlias;
+            criteria.Filter = OSGeo.FDO.Filter.Filter.Parse(this.JoinFilter);
+            return criteria;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            if (this.JoinType == OSGeo.FDO.Expression.JoinType.JoinType_None)
+                return "NO JOIN";
+            else
+            {
+                StringBuilder sb = new StringBuilder();
+                switch (this.JoinType)
+                {
+                    case OSGeo.FDO.Expression.JoinType.JoinType_Cross:
+                        sb.Append("CROSS JOIN ");
+                        break;
+                    case OSGeo.FDO.Expression.JoinType.JoinType_FullOuter:
+                        sb.Append("FULL OUTER JOIN ");
+                        break;
+                    case OSGeo.FDO.Expression.JoinType.JoinType_Inner:
+                        sb.Append("INNER JOIN ");
+                        break;
+                    case OSGeo.FDO.Expression.JoinType.JoinType_LeftOuter:
+                        sb.Append("LEFT OUTER JOIN ");
+                        break;
+                    case OSGeo.FDO.Expression.JoinType.JoinType_RightOuter:
+                        sb.Append("RIGHT OUTER JOIN ");
+                        break;
+                }
+                sb.Append(this.JoinClass + " ");
+                if (!string.IsNullOrEmpty(this.JoinClassAlias))
+                    sb.Append(this.JoinClassAlias + " ON ");
+                sb.Append(this.JoinFilter);
+                return sb.ToString();
+            }
         }
     }
 }

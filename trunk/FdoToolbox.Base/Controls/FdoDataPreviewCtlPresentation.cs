@@ -628,6 +628,7 @@ namespace FdoToolbox.Base.Controls
             ClassDefinition classDef = qv.SelectedClass;
             string filter = qv.Filter;
 
+            //TODO: This number could be inaccurate if joins are involved
             return _service.GetFeatureCount(classDef, filter, false);
         }
 

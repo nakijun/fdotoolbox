@@ -177,6 +177,12 @@
     <Compile Include="Commands\TextEditorCommands.cs" />
     <Compile Include="Commands\ToolCommands.cs" />
     <Compile Include="Conditions\ConditionEvaluators.cs" />
+    <Compile Include="Controls\FdoJoinDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\FdoJoinDialog.Designer.cs">
+      <DependentUpon>FdoJoinDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PreferenceSheets\BasePreferencesCtl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -577,6 +583,9 @@
     <None Include="Resources\accept.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\FdoJoinDialog.resx">
+      <DependentUpon>FdoJoinDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\PreferenceSheets\BasePreferencesCtl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BasePreferencesCtl.cs</DependentUpon>

@@ -1757,11 +1757,31 @@ namespace FdoToolbox.Core.Feature
         public FdoFeatureReader SelectFeatures(FeatureQueryOptions options, int limit)
         {
             IFeatureReader reader = null;
-            ISelect select = CreateCommand<ISelect>(OSGeo.FDO.Commands.CommandType.CommandType_Select);
-            using (select)
+            var joins = options.JoinCriteria;
+            if (joins.Count > 0)
             {
-                SetSelectOptions(options, select);
-                reader = select.Execute();
+                IExtendedSelect extSelect = CreateCommand<IExtendedSelect>(CommandType.CommandType_ExtendedSelect);
+                using (extSelect)
+                {
+                    SetSelectOptions(options, extSelect);
+                    if (!string.IsNullOrEmpty(options.ClassAlias))
+                        extSelect.Alias = options.ClassAlias;
+                    var joinCriteria = extSelect.JoinCriteria;
+                    foreach (var join in joins)
+                    {
+                        joinCriteria.Add(join.AsJoinCriteria());
+                    }
+                    reader = extSelect.Execute();
+                }
+            }
+            else
+            {
+                ISelect select = CreateCommand<ISelect>(CommandType.CommandType_Select);
+                using (select)
+                {
+                    SetSelectOptions(options, select);
+                    reader = select.Execute();
+                }
             }
             if(limit > 0)
                 return new FdoFeatureReader(reader, limit);
