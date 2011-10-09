@@ -78,11 +78,19 @@ namespace FdoToolbox.Core.Feature
         /// <summary>
         /// 
         /// </summary>
+        FdoCapabilityType_JoinTypes,
+        /// <summary>
+        /// 
+        /// </summary>
         FdoCapabilityType_LockTypes,
         /// <summary>
         /// 
         /// </summary>
         FdoCapabilityType_SupportsConnectionTimeout,
+        /// <summary>
+        /// 
+        /// </summary>
+        FdoCapabilityType_SupportsJoins,
         /// <summary>
         /// 
         /// </summary>

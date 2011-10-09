@@ -171,13 +171,15 @@ namespace FdoToolbox.Core.Feature
                     return schemaCaps.SupportsDefaultValue;
                 case CapabilityType.FdoCapabilityType_SupportsExclusiveValueRangeConstraints:
                     return schemaCaps.SupportsExclusiveValueRangeConstraints;
-                case  CapabilityType.FdoCapabilityType_SupportsFlush:
+                case CapabilityType.FdoCapabilityType_SupportsFlush:
                     return connCaps.SupportsFlush();
                 //case CapabilityType.FdoCapabilityType_SupportsGeodesicDistance:
                 case CapabilityType.FdoCapabilityType_SupportsInclusiveValueRangeConstraints:
                     return schemaCaps.SupportsInclusiveValueRangeConstraints;
                 case CapabilityType.FdoCapabilityType_SupportsInheritance:
                     return schemaCaps.SupportsInheritance;
+                case CapabilityType.FdoCapabilityType_SupportsJoins:
+                    return connCaps.SupportsJoins();
                 case CapabilityType.FdoCapabilityType_SupportsLocking:
                     return connCaps.SupportsLocking();
                 case CapabilityType.FdoCapabilityType_SupportsLongTransactions:
@@ -370,6 +372,17 @@ namespace FdoToolbox.Core.Feature
                 case CapabilityType.FdoCapabilityType_GeometryTypes:
                     //return Array.ConvertAll<GeometryType, int>(geomCaps.GeometryTypes, delegate(GeometryType g) { return (int)g; });
                     return geomCaps.GeometryTypes;
+                case CapabilityType.FdoCapabilityType_JoinTypes:
+                    {
+                        var jtypes = new List<JoinType>();
+                        int val = connCaps.JoinTypes;
+                        foreach (JoinType jt in Enum.GetValues(typeof(JoinType)))
+                        {
+                            if ((val & (int)jt) == (int)jt)
+                                jtypes.Add(jt);
+                        }
+                        return jtypes.ToArray();
+                    }
                 case CapabilityType.FdoCapabilityType_LockTypes:
                     //return Array.ConvertAll<LockType, int>(connCaps.LockTypes, delegate(LockType l) { return (int)l; });
                     return connCaps.LockTypes;

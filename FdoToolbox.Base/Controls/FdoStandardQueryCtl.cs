@@ -80,6 +80,8 @@ namespace FdoToolbox.Base.Controls
                         cmbClass.SelectedIndex = idx;
                 }
             }
+            if (!_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsJoins))
+                tabQueryOptions.TabPages.Remove(TAB_JOINS);
             base.OnLoad(e);
         }
 
@@ -255,6 +257,15 @@ namespace FdoToolbox.Base.Controls
                     options.SetOrderingOption(op, this.Ordering);
                 }
 
+                if (tabQueryOptions.Contains(TAB_JOINS))
+                {
+                    options.ClassAlias = txtClassAlias.Text;
+                    foreach (FdoJoinCriteriaInfo join in lstJoins.Items)
+                    {
+                        options.AddJoinCriteria(join);
+                    }
+                }
+
                 return options;
             }
         }
@@ -423,6 +434,27 @@ namespace FdoToolbox.Base.Controls
         {
             if (!cap.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSelectOrdering))
                 tabQueryOptions.TabPages.Remove(TAB_ORDERING);
+        }
+
+        private void btnRemoveJoin_Click(object sender, EventArgs e)
+        {
+            lstJoins.Items.RemoveAt(lstJoins.SelectedIndex);
+        }
+
+        private void btnAddJoin_Click(object sender, EventArgs e)
+        {
+            using (var diag = new FdoJoinDialog(_conn))
+            {
+                if (diag.ShowDialog() == DialogResult.OK)
+                {
+                    lstJoins.Items.Add(diag.Criteria);
+                }
+            }
+        }
+
+        private void lstJoins_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnRemoveJoin.Enabled = lstJoins.SelectedIndex >= 0;
         }
     }
 }

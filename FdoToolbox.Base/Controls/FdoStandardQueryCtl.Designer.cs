@@ -59,12 +59,21 @@ namespace FdoToolbox.Base.Controls
             this.btnRemoveOrderBy = new System.Windows.Forms.Button();
             this.lstOrderBy = new System.Windows.Forms.ListBox();
             this.lstOrderableProperties = new System.Windows.Forms.ListBox();
+            this.TAB_JOINS = new System.Windows.Forms.TabPage();
+            this.btnAddJoin = new System.Windows.Forms.Button();
+            this.btnRemoveJoin = new System.Windows.Forms.Button();
+            this.grpJoins = new System.Windows.Forms.GroupBox();
+            this.lstJoins = new System.Windows.Forms.ListBox();
+            this.txtClassAlias = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.ctxProperties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numLimit)).BeginInit();
             this.tabQueryOptions.SuspendLayout();
             this.TAB_PROPERTIES.SuspendLayout();
             this.TAB_COMPUTED.SuspendLayout();
             this.TAB_ORDERING.SuspendLayout();
+            this.TAB_JOINS.SuspendLayout();
+            this.grpJoins.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -162,7 +171,7 @@ namespace FdoToolbox.Base.Controls
             this.chkProperties.FormattingEnabled = true;
             this.chkProperties.Location = new System.Drawing.Point(3, 2);
             this.chkProperties.Name = "chkProperties";
-            this.chkProperties.Size = new System.Drawing.Size(332, 109);
+            this.chkProperties.Size = new System.Drawing.Size(332, 94);
             this.chkProperties.TabIndex = 9;
             // 
             // ctxProperties
@@ -171,18 +180,18 @@ namespace FdoToolbox.Base.Controls
             this.selectAllToolStripMenuItem,
             this.unSelectAllToolStripMenuItem});
             this.ctxProperties.Name = "ctxProperties";
-            this.ctxProperties.Size = new System.Drawing.Size(146, 48);
+            this.ctxProperties.Size = new System.Drawing.Size(143, 48);
             // 
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.selectAllToolStripMenuItem.Text = "Select All";
             // 
             // unSelectAllToolStripMenuItem
             // 
             this.unSelectAllToolStripMenuItem.Name = "unSelectAllToolStripMenuItem";
-            this.unSelectAllToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.unSelectAllToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.unSelectAllToolStripMenuItem.Text = "Un-Select All";
             // 
             // label6
@@ -206,7 +215,7 @@ namespace FdoToolbox.Base.Controls
             this.numLimit.Size = new System.Drawing.Size(73, 20);
             this.numLimit.TabIndex = 16;
             // 
-            // tabControl1
+            // tabQueryOptions
             // 
             this.tabQueryOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -214,9 +223,10 @@ namespace FdoToolbox.Base.Controls
             this.tabQueryOptions.Controls.Add(this.TAB_PROPERTIES);
             this.tabQueryOptions.Controls.Add(this.TAB_COMPUTED);
             this.tabQueryOptions.Controls.Add(this.TAB_ORDERING);
+            this.tabQueryOptions.Controls.Add(this.TAB_JOINS);
             this.tabQueryOptions.Location = new System.Drawing.Point(274, 13);
             this.tabQueryOptions.Multiline = true;
-            this.tabQueryOptions.Name = "tabControl1";
+            this.tabQueryOptions.Name = "tabQueryOptions";
             this.tabQueryOptions.SelectedIndex = 0;
             this.tabQueryOptions.ShowToolTips = true;
             this.tabQueryOptions.Size = new System.Drawing.Size(346, 172);
@@ -376,6 +386,86 @@ namespace FdoToolbox.Base.Controls
             this.lstOrderableProperties.Size = new System.Drawing.Size(120, 95);
             this.lstOrderableProperties.TabIndex = 0;
             // 
+            // TAB_JOINS
+            // 
+            this.TAB_JOINS.Controls.Add(this.btnAddJoin);
+            this.TAB_JOINS.Controls.Add(this.btnRemoveJoin);
+            this.TAB_JOINS.Controls.Add(this.grpJoins);
+            this.TAB_JOINS.Controls.Add(this.txtClassAlias);
+            this.TAB_JOINS.Controls.Add(this.label5);
+            this.TAB_JOINS.Location = new System.Drawing.Point(4, 25);
+            this.TAB_JOINS.Name = "TAB_JOINS";
+            this.TAB_JOINS.Padding = new System.Windows.Forms.Padding(3);
+            this.TAB_JOINS.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.TAB_JOINS.Size = new System.Drawing.Size(338, 143);
+            this.TAB_JOINS.TabIndex = 3;
+            this.TAB_JOINS.Text = "Joins";
+            this.TAB_JOINS.UseVisualStyleBackColor = true;
+            // 
+            // btnAddJoin
+            // 
+            this.btnAddJoin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddJoin.Location = new System.Drawing.Point(250, 76);
+            this.btnAddJoin.Name = "btnAddJoin";
+            this.btnAddJoin.Size = new System.Drawing.Size(75, 23);
+            this.btnAddJoin.TabIndex = 4;
+            this.btnAddJoin.Text = "Add";
+            this.btnAddJoin.UseVisualStyleBackColor = true;
+            this.btnAddJoin.Click += new System.EventHandler(this.btnAddJoin_Click);
+            // 
+            // btnRemoveJoin
+            // 
+            this.btnRemoveJoin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRemoveJoin.Enabled = false;
+            this.btnRemoveJoin.Location = new System.Drawing.Point(250, 105);
+            this.btnRemoveJoin.Name = "btnRemoveJoin";
+            this.btnRemoveJoin.Size = new System.Drawing.Size(75, 23);
+            this.btnRemoveJoin.TabIndex = 3;
+            this.btnRemoveJoin.Text = "Remove";
+            this.btnRemoveJoin.UseVisualStyleBackColor = true;
+            this.btnRemoveJoin.Click += new System.EventHandler(this.btnRemoveJoin_Click);
+            // 
+            // grpJoins
+            // 
+            this.grpJoins.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpJoins.Controls.Add(this.lstJoins);
+            this.grpJoins.Location = new System.Drawing.Point(15, 43);
+            this.grpJoins.Name = "grpJoins";
+            this.grpJoins.Size = new System.Drawing.Size(229, 90);
+            this.grpJoins.TabIndex = 2;
+            this.grpJoins.TabStop = false;
+            this.grpJoins.Text = "Joins";
+            // 
+            // lstJoins
+            // 
+            this.lstJoins.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstJoins.FormattingEnabled = true;
+            this.lstJoins.Location = new System.Drawing.Point(3, 16);
+            this.lstJoins.Name = "lstJoins";
+            this.lstJoins.Size = new System.Drawing.Size(223, 69);
+            this.lstJoins.TabIndex = 0;
+            this.lstJoins.SelectedIndexChanged += new System.EventHandler(this.lstJoins_SelectedIndexChanged);
+            // 
+            // txtClassAlias
+            // 
+            this.txtClassAlias.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtClassAlias.Location = new System.Drawing.Point(123, 16);
+            this.txtClassAlias.Name = "txtClassAlias";
+            this.txtClassAlias.Size = new System.Drawing.Size(118, 20);
+            this.txtClassAlias.TabIndex = 1;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 19);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(96, 13);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Feature Class Alias";
+            // 
             // FdoStandardQueryCtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -399,6 +489,9 @@ namespace FdoToolbox.Base.Controls
             this.TAB_COMPUTED.PerformLayout();
             this.TAB_ORDERING.ResumeLayout(false);
             this.TAB_ORDERING.PerformLayout();
+            this.TAB_JOINS.ResumeLayout(false);
+            this.TAB_JOINS.PerformLayout();
+            this.grpJoins.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -436,5 +529,12 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.ListBox lstOrderBy;
         private System.Windows.Forms.ListBox lstOrderableProperties;
         private System.Windows.Forms.Label lblComputedHint;
+        private System.Windows.Forms.TabPage TAB_JOINS;
+        private System.Windows.Forms.Button btnAddJoin;
+        private System.Windows.Forms.Button btnRemoveJoin;
+        private System.Windows.Forms.GroupBox grpJoins;
+        private System.Windows.Forms.ListBox lstJoins;
+        private System.Windows.Forms.TextBox txtClassAlias;
+        private System.Windows.Forms.Label label5;
     }
 }
