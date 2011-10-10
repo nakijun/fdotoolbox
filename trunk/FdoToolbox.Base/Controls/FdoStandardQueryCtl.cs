@@ -254,6 +254,9 @@ namespace FdoToolbox.Base.Controls
                 IList<ComputedProperty> cp = this.ComputedProperties;
                 bool joinVisible = tabQueryOptions.Contains(TAB_JOINS);
 
+                if (joinVisible)
+                    options.ClassAlias = txtClassAlias.Text;
+
                 if (sp.Count > 0)
                 {
                     foreach (var prop in sp)
@@ -293,7 +296,6 @@ namespace FdoToolbox.Base.Controls
                 {
                     using (var svc = _conn.CreateFeatureService())
                     {
-                        options.ClassAlias = txtClassAlias.Text;
                         foreach (FdoJoinCriteriaInfo join in lstJoins.Items)
                         {
                             options.AddJoinCriteria(join);
@@ -303,7 +305,10 @@ namespace FdoToolbox.Base.Controls
                                 if (prop.PropertyType == PropertyType.PropertyType_DataProperty ||
                                     prop.PropertyType == PropertyType.PropertyType_GeometricProperty)
                                 {
-                                    options.AddFeatureProperty(join.JoinClassAlias + "." + prop.Name);
+                                    if (string.IsNullOrEmpty(join.JoinPrefix))
+                                        options.AddFeatureProperty(join.JoinClassAlias + "." + prop.Name);
+                                    else
+                                        options.AddComputedProperty(join.JoinPrefix + prop.Name, join.JoinClassAlias + "." + prop.Name);
                                 }
                             }
                         }
