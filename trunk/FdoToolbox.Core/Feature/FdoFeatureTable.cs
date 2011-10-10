@@ -349,7 +349,8 @@ namespace FdoToolbox.Core.Feature
         /// Initializes the table from a reader
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public void InitTable(IFdoReader reader)
+        /// <param name="origClass">The original class definition</param>
+        public void InitTable(IFdoReader reader, ClassDefinition origClass)
         {
             this.Columns.Clear();
             this.TableName = reader.GetClassName();
@@ -474,9 +475,22 @@ namespace FdoToolbox.Core.Feature
                     }
                     DataColumn dc = this.Columns.Add(name, type);
 
-                    if (ptype != FdoPropertyType.Geometry && reader.IsIdentity(name))
+                    if (origClass != null)
                     {
-                        pk.Add(dc);
+                        //HACK: If this query is the result of the join, the returned Class Definition may have some
+                        //fubar constraints applied to it. So use the original Class Definition
+                        var idProps = origClass.IdentityProperties;
+                        if (ptype != FdoPropertyType.Geometry && idProps.Contains(name))
+                        {
+                            pk.Add(dc);
+                        }
+                    }
+                    else
+                    {
+                        if (ptype != FdoPropertyType.Geometry && reader.IsIdentity(name))
+                        {
+                            pk.Add(dc);
+                        }
                     }
                 }
             }

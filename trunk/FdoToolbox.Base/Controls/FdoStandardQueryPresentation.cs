@@ -67,7 +67,7 @@ namespace FdoToolbox.Base.Controls
             _view = view;
             _conn = conn;
             _service = _conn.CreateFeatureService();
-            _view.OrderingEnabled = false;
+            _view.OrderingEnabled = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSelectOrdering);
         }
 
         public void GetSchemas()

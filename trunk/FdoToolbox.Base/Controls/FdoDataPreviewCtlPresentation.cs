@@ -212,7 +212,13 @@ namespace FdoToolbox.Base.Controls
                             table.AddSpatialContext(c);
                     };
 
-                    table.InitTable(reader);
+                    ClassDefinition clsDef = null;
+                    if (e.Argument is StandardQuery)
+                    {
+                        var qry = ((StandardQuery)e.Argument).query;
+                        clsDef = service.GetClassByName(qry.ClassName); //TODO: Should really qualify this, but our input parameters do not specify a schema
+                    }
+                    table.InitTable(reader, clsDef);
 
 					// need to store object class defn outside loop
 					ClassDefinition classDefObject = null;
@@ -626,10 +632,13 @@ namespace FdoToolbox.Base.Controls
                 return 0;
 
             ClassDefinition classDef = qv.SelectedClass;
-            string filter = qv.Filter;
+            var query = qv.QueryObject;
 
-            //TODO: This number could be inaccurate if joins are involved
-            return _service.GetFeatureCount(classDef, filter, false);
+            //Can't count joins (yet)
+            if (query.JoinCriteria.Count > 0)
+                return 0;
+
+            return _service.GetFeatureCount(classDef, query.Filter, false);
         }
 
         public void Clear()

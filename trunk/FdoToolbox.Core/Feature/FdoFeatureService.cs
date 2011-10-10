@@ -804,6 +804,11 @@ namespace FdoToolbox.Core.Feature
             if (string.IsNullOrEmpty(className))
                 return null;
 
+            //See if it is qualified
+            var tokens = className.Split(':');
+            if (tokens.Length == 2)
+                return GetClassByName(tokens[0], tokens[1]);
+
             FeatureSchemaCollection schemas = this.DescribeSchema();
             if (schemas != null && schemas.Count > 0)
             {
@@ -1831,7 +1836,8 @@ namespace FdoToolbox.Core.Feature
                 select.PropertyNames.Clear();
                 foreach (string propName in options.PropertyList)
                 {
-                    select.PropertyNames.Add(new Identifier(propName));
+                    var id = new Identifier(propName);
+                    select.PropertyNames.Add(id);
                 }
             }
 

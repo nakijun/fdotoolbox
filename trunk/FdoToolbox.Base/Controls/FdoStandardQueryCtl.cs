@@ -30,6 +30,7 @@ using System.Linq;
 using System.Windows.Forms;
 using FdoToolbox.Core.Feature;
 using FdoToolbox.Base.Forms;
+using OSGeo.FDO.Schema;
 
 namespace FdoToolbox.Base.Controls
 {
@@ -139,6 +140,19 @@ namespace FdoToolbox.Base.Controls
             }
         }
 
+        public IList<string> AllClassProperties
+        {
+            get
+            {
+                IList<string> p = new List<string>();
+                foreach (object o in chkProperties.Items)
+                {
+                    p.Add(o.ToString());
+                }
+                return p;
+            }
+        }
+
         public IList<string> OrderByList
         {
             get
@@ -238,10 +252,28 @@ namespace FdoToolbox.Base.Controls
                 IList<string> sp = this.SelectPropertyList;
                 IList<string> op = this.OrderByList;
                 IList<ComputedProperty> cp = this.ComputedProperties;
+                bool joinVisible = tabQueryOptions.Contains(TAB_JOINS);
 
                 if (sp.Count > 0)
                 {
-                    options.AddFeatureProperty(sp);
+                    foreach (var prop in sp)
+                    {
+                        if (joinVisible && !string.IsNullOrEmpty(txtClassAlias.Text))
+                            options.AddFeatureProperty(txtClassAlias.Text + "." + prop);
+                        else
+                            options.AddFeatureProperty(prop);
+                    }
+                }
+                else
+                {
+                    if (joinVisible && !string.IsNullOrEmpty(txtClassAlias.Text))
+                    {
+                        foreach (var prop in this.AllClassProperties)
+                        {
+                            //[alias].[propertyName]
+                            options.AddFeatureProperty(txtClassAlias.Text + "." + prop);
+                        }
+                    }
                 }
 
                 if (cp.Count > 0)
@@ -257,12 +289,24 @@ namespace FdoToolbox.Base.Controls
                     options.SetOrderingOption(op, this.Ordering);
                 }
 
-                if (tabQueryOptions.Contains(TAB_JOINS))
+                if (joinVisible)
                 {
-                    options.ClassAlias = txtClassAlias.Text;
-                    foreach (FdoJoinCriteriaInfo join in lstJoins.Items)
+                    using (var svc = _conn.CreateFeatureService())
                     {
-                        options.AddJoinCriteria(join);
+                        options.ClassAlias = txtClassAlias.Text;
+                        foreach (FdoJoinCriteriaInfo join in lstJoins.Items)
+                        {
+                            options.AddJoinCriteria(join);
+                            ClassDefinition clsDef = svc.GetClassByName(join.JoinSchema, join.JoinClass);
+                            foreach (PropertyDefinition prop in clsDef.Properties)
+                            {
+                                if (prop.PropertyType == PropertyType.PropertyType_DataProperty ||
+                                    prop.PropertyType == PropertyType.PropertyType_GeometricProperty)
+                                {
+                                    options.AddFeatureProperty(join.JoinClassAlias + "." + prop.Name);
+                                }
+                            }
+                        }
                     }
                 }
 
