@@ -444,6 +444,8 @@ namespace FdoToolbox.Core.Feature
                     return schemaCaps.SupportsInclusiveValueRangeConstraints;
                 case CapabilityType.FdoCapabilityType_SupportsInheritance:
                     return schemaCaps.SupportsInheritance;
+                case CapabilityType.FdoCapabilityType_SupportsJoins:
+                    return GetBooleanCapability(cap);
                 case CapabilityType.FdoCapabilityType_SupportsLocking:
                     return connCaps.SupportsLocking();
                 case CapabilityType.FdoCapabilityType_SupportsLongTransactions:
@@ -560,6 +562,8 @@ namespace FdoToolbox.Core.Feature
                     return geomCaps.GeometryTypes;
                 case CapabilityType.FdoCapabilityType_LockTypes:
                     return connCaps.LockTypes;
+                case CapabilityType.FdoCapabilityType_JoinTypes:
+                    return GetArrayCapability(cap);
                 case CapabilityType.FdoCapabilityType_SpatialContextTypes:
                     return connCaps.SpatialContextTypes;
                 case CapabilityType.FdoCapabilityType_SpatialOperations:

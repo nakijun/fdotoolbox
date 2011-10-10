@@ -296,6 +296,11 @@ namespace FdoToolbox.Core.Feature
         public OSGeo.FDO.Expression.JoinType JoinType { get; set; }
 
         /// <summary>
+        /// Gets or sets the schema of the class to join on
+        /// </summary>
+        public string JoinSchema { get; set; }
+
+        /// <summary>
         /// Gets or sets the class to join on
         /// </summary>
         public string JoinClass { get; set; }
