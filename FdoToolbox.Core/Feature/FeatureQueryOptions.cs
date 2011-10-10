@@ -223,8 +223,22 @@ namespace FdoToolbox.Core.Feature
         /// <param name="option"></param>
         public void SetOrderingOption(IEnumerable<string> propertyNames, OrderingOption option)
         {
+            SetOrderingOption(propertyNames, option, !string.IsNullOrEmpty(this.ClassAlias));
+        }
+
+        /// <summary>
+        /// Sets the ordering options for this query. Note that most providers do not support ordering.
+        /// </summary>
+        /// <param name="propertyNames"></param>
+        /// <param name="option"></param>
+        /// <param name="useAlias"></param>
+        public void SetOrderingOption(IEnumerable<string> propertyNames, OrderingOption option, bool useAlias)
+        {
             _OrderBy.Clear();
-            _OrderBy.AddRange(propertyNames);
+            foreach (var p in propertyNames)
+            {
+                _OrderBy.Add((useAlias) ? this.ClassAlias + "." + p : p);
+            }
             _OrderingOption = option;
         }
     }
@@ -294,6 +308,11 @@ namespace FdoToolbox.Core.Feature
         /// Gets or sets the join type
         /// </summary>
         public OSGeo.FDO.Expression.JoinType JoinType { get; set; }
+
+        /// <summary>
+        /// The prefix to use to disambiguate property names
+        /// </summary>
+        public string JoinPrefix { get; set; }
 
         /// <summary>
         /// Gets or sets the schema of the class to join on

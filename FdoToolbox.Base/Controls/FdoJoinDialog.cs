@@ -70,6 +70,7 @@ namespace FdoToolbox.Base.Controls
 
             this.Criteria = new FdoJoinCriteriaInfo()
             {
+                JoinPrefix = txtPrefix.Text,
                 JoinSchema = ((FeatureSchema)cmbSchema.SelectedItem).Name,
                 JoinClass = ((ClassDefinition)cmbClass.SelectedItem).Name,
                 JoinClassAlias = txtJoinClassAlias.Text,

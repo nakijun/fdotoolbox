@@ -42,6 +42,8 @@
             this.btnFilter = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.txtPrefix = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -127,7 +129,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 140);
+            this.label4.Location = new System.Drawing.Point(13, 170);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(79, 13);
             this.label4.TabIndex = 5;
@@ -137,7 +139,7 @@
             // 
             this.txtJoinClassAlias.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtJoinClassAlias.Location = new System.Drawing.Point(101, 137);
+            this.txtJoinClassAlias.Location = new System.Drawing.Point(101, 167);
             this.txtJoinClassAlias.Name = "txtJoinClassAlias";
             this.txtJoinClassAlias.Size = new System.Drawing.Size(148, 20);
             this.txtJoinClassAlias.TabIndex = 6;
@@ -145,7 +147,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 165);
+            this.label5.Location = new System.Drawing.Point(13, 196);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(51, 13);
             this.label5.TabIndex = 7;
@@ -156,16 +158,16 @@
             this.txtJoinFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtJoinFilter.Location = new System.Drawing.Point(101, 162);
+            this.txtJoinFilter.Location = new System.Drawing.Point(101, 193);
             this.txtJoinFilter.Multiline = true;
             this.txtJoinFilter.Name = "txtJoinFilter";
-            this.txtJoinFilter.Size = new System.Drawing.Size(148, 59);
+            this.txtJoinFilter.Size = new System.Drawing.Size(148, 87);
             this.txtJoinFilter.TabIndex = 8;
             // 
             // btnFilter
             // 
             this.btnFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFilter.Location = new System.Drawing.Point(255, 160);
+            this.btnFilter.Location = new System.Drawing.Point(255, 193);
             this.btnFilter.Name = "btnFilter";
             this.btnFilter.Size = new System.Drawing.Size(25, 23);
             this.btnFilter.TabIndex = 9;
@@ -177,7 +179,7 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOk.Enabled = false;
-            this.btnOk.Location = new System.Drawing.Point(93, 227);
+            this.btnOk.Location = new System.Drawing.Point(93, 286);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 10;
@@ -189,7 +191,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(174, 227);
+            this.btnCancel.Location = new System.Drawing.Point(174, 286);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 11;
@@ -197,14 +199,34 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // txtPrefix
+            // 
+            this.txtPrefix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPrefix.Location = new System.Drawing.Point(101, 141);
+            this.txtPrefix.Name = "txtPrefix";
+            this.txtPrefix.Size = new System.Drawing.Size(148, 20);
+            this.txtPrefix.TabIndex = 13;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 144);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(55, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Join Prefix";
+            // 
             // FdoJoinDialog
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(288, 262);
+            this.ClientSize = new System.Drawing.Size(288, 321);
             this.ControlBox = false;
+            this.Controls.Add(this.txtPrefix);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnFilter);
@@ -240,5 +262,7 @@
         private System.Windows.Forms.Button btnFilter;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.TextBox txtPrefix;
+        private System.Windows.Forms.Label label6;
     }
 }
