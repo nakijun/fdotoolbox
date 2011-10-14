@@ -422,8 +422,14 @@ namespace FdoToolbox.Tasks.Controls
                 {
                     string dstProp = task.GetTargetProperty(srcProp);
                     bool createIfNotExists = checkProps.Contains(srcProp);
-                    dec.PropertyMappings.MapProperty(srcProp, dstProp, createIfNotExists);
-
+                    try
+                    {
+                        dec.PropertyMappings.MapProperty(srcProp, dstProp, createIfNotExists);
+                    }
+                    catch (MappingException ex)
+                    {
+                        LoggingService.Info("Skipping mapping: " + srcProp + " => " + dstProp + " (" + ex.Message + ")");
+                    }
                     FdoDataPropertyConversionRule rule = task.GetDataConversionRule(srcProp);
                     PropertyConversionNodeDecorator cd = dec.PropertyMappings.GetConversionRule(srcProp);
                     if (rule != null)
