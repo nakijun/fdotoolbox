@@ -213,12 +213,14 @@ namespace FdoToolbox.Base.Controls
                     };
 
                     ClassDefinition clsDef = null;
+                    bool hasJoins = false;
                     if (e.Argument is StandardQuery)
                     {
                         var qry = ((StandardQuery)e.Argument).query;
                         clsDef = service.GetClassByName(qry.ClassName); //TODO: Should really qualify this, but our input parameters do not specify a schema
+                        hasJoins = qry.JoinCriteria.Count > 0;
                     }
-                    table.InitTable(reader, clsDef);
+                    table.InitTable(reader, clsDef, hasJoins);
 
 					// need to store object class defn outside loop
 					ClassDefinition classDefObject = null;
