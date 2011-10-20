@@ -350,7 +350,8 @@ namespace FdoToolbox.Core.Feature
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="origClass">The original class definition</param>
-        public void InitTable(IFdoReader reader, ClassDefinition origClass)
+        /// <param name="ignorePk">If true, will not convert the identity properties of the class definition to primary keys</param>
+        public void InitTable(IFdoReader reader, ClassDefinition origClass, bool ignorePk)
         {
             this.Columns.Clear();
             this.TableName = reader.GetClassName();
@@ -494,7 +495,7 @@ namespace FdoToolbox.Core.Feature
                     }
                 }
             }
-            if (pk.Count > 0)
+            if (pk.Count > 0 && !ignorePk)
             {
                 this.PrimaryKey = pk.ToArray();
             }

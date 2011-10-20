@@ -119,7 +119,7 @@ namespace FdoToolbox.Base.Controls
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(66, 22);
+            this.toolStripLabel1.Size = new System.Drawing.Size(73, 22);
             this.toolStripLabel1.Text = "Query Mode";
             // 
             // cmbQueryMode
@@ -134,7 +134,7 @@ namespace FdoToolbox.Base.Controls
             this.btnQuery.Image = global::FdoToolbox.Base.Images.table_go;
             this.btnQuery.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnQuery.Name = "btnQuery";
-            this.btnQuery.Size = new System.Drawing.Size(66, 22);
+            this.btnQuery.Size = new System.Drawing.Size(67, 22);
             this.btnQuery.Text = "Execute";
             this.btnQuery.ToolTipText = "Execute the query";
             this.btnQuery.Click += new System.EventHandler(this.btnQuery_Click);
@@ -144,7 +144,7 @@ namespace FdoToolbox.Base.Controls
             this.btnCancel.Image = global::FdoToolbox.Base.Images.cross;
             this.btnCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(59, 22);
+            this.btnCancel.Size = new System.Drawing.Size(63, 22);
             this.btnCancel.Text = "Cancel";
             this.btnCancel.ToolTipText = "Cancel the running query";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -159,7 +159,7 @@ namespace FdoToolbox.Base.Controls
             this.btnClear.Image = global::FdoToolbox.Base.Images.table_delete;
             this.btnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(90, 22);
+            this.btnClear.Size = new System.Drawing.Size(94, 22);
             this.btnClear.Text = "Clear Results";
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
@@ -178,7 +178,7 @@ namespace FdoToolbox.Base.Controls
             // 
             this.sDFToolStripMenuItem.Image = global::FdoToolbox.Base.Images.database;
             this.sDFToolStripMenuItem.Name = "sDFToolStripMenuItem";
-            this.sDFToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
+            this.sDFToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.sDFToolStripMenuItem.Text = "SDF";
             this.sDFToolStripMenuItem.Click += new System.EventHandler(this.saveSdf_Click);
             // 
@@ -186,7 +186,7 @@ namespace FdoToolbox.Base.Controls
             // 
             this.sQLiteToolStripMenuItem.Image = global::FdoToolbox.Base.Images.database;
             this.sQLiteToolStripMenuItem.Name = "sQLiteToolStripMenuItem";
-            this.sQLiteToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
+            this.sQLiteToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.sQLiteToolStripMenuItem.Text = "SQLite";
             this.sQLiteToolStripMenuItem.Click += new System.EventHandler(this.saveSQLite_Click);
             // 
@@ -200,7 +200,7 @@ namespace FdoToolbox.Base.Controls
             this.btnInsert.Image = global::FdoToolbox.Base.Images.application_form_edit;
             this.btnInsert.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnInsert.Name = "btnInsert";
-            this.btnInsert.Size = new System.Drawing.Size(89, 22);
+            this.btnInsert.Size = new System.Drawing.Size(93, 22);
             this.btnInsert.Text = "New Feature";
             this.btnInsert.Click += new System.EventHandler(this.btnInsert_Click);
             // 
@@ -230,6 +230,7 @@ namespace FdoToolbox.Base.Controls
             // 
             this.grdResults.AllowUserToAddRows = false;
             this.grdResults.AllowUserToDeleteRows = false;
+            this.grdResults.AllowUserToOrderColumns = true;
             this.grdResults.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.grdResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdResults.ContextMenuStrip = this.ctxGridView;
@@ -258,13 +259,13 @@ namespace FdoToolbox.Base.Controls
             this.updateThisFeatureToolStripMenuItem,
             this.deleteThisFeatureToolStripMenuItem});
             this.ctxGridView.Name = "ctxGridView";
-            this.ctxGridView.Size = new System.Drawing.Size(164, 70);
+            this.ctxGridView.Size = new System.Drawing.Size(168, 48);
             // 
             // updateThisFeatureToolStripMenuItem
             // 
             this.updateThisFeatureToolStripMenuItem.Image = global::FdoToolbox.Base.Images.application_form_edit;
             this.updateThisFeatureToolStripMenuItem.Name = "updateThisFeatureToolStripMenuItem";
-            this.updateThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.updateThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.updateThisFeatureToolStripMenuItem.Text = "Update Feature(s)";
             this.updateThisFeatureToolStripMenuItem.Click += new System.EventHandler(this.updateThisFeatureToolStripMenuItem_Click);
             // 
@@ -272,7 +273,7 @@ namespace FdoToolbox.Base.Controls
             // 
             this.deleteThisFeatureToolStripMenuItem.Image = global::FdoToolbox.Base.Images.cross;
             this.deleteThisFeatureToolStripMenuItem.Name = "deleteThisFeatureToolStripMenuItem";
-            this.deleteThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.deleteThisFeatureToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.deleteThisFeatureToolStripMenuItem.Text = "Delete Feature(s)";
             this.deleteThisFeatureToolStripMenuItem.Click += new System.EventHandler(this.deleteThisFeatureToolStripMenuItem_Click);
             // 
