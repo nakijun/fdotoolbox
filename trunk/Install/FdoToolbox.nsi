@@ -74,7 +74,7 @@ RequestExecutionLevel admin
 !if ${RELEASE_VERSION} != "Trunk"
 	VIProductVersion "${RELEASE_VERSION}"
 	VIAddVersionKey "ProductName" "${INST_PRODUCT_NAME}"
-	VIAddVersionKey "LegalCopyright" "© 2010 Jackie Ng"
+	VIAddVersionKey "LegalCopyright" "© 2011 Jackie Ng"
 	VIAddVersionKey "FileDescription" "Installer package for FDO Toolbox"
 	VIAddVersionKey "FileVersion" "${RELEASE_VERSION}"
 !endif
