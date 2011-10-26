@@ -69,6 +69,9 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             cmbSrcConnection.SelectedIndex = 0;
             cmbDstConnection.SelectedIndex = 0;
 
+            cmbSrcConnection_SelectionChangeCommitted(this, EventArgs.Empty);
+            cmbDstConnection_SelectionChangeCommitted(this, EventArgs.Empty);
+
             base.OnLoad(e);
         }
 
@@ -105,6 +108,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             using (FdoFeatureService svc = CreateTargetService())
             {
                 cmbDstSchema.DataSource = svc.GetSchemaNames();
+                cmbDstSchema.SelectedIndex = 0;
                 UpdateTargetClasses();
             }
         }
@@ -120,6 +124,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             using (FdoFeatureService svc = CreateSourceService())
             {
                 cmbSrcSchema.DataSource = svc.GetSchemaNames();
+                cmbSrcSchema.SelectedIndex = 0;
                 UpdateSourceClasses();
             }
         }
@@ -135,7 +140,10 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             using (FdoFeatureService svc = CreateSourceService())
             {
                 string schema = cmbSrcSchema.SelectedItem.ToString();
-                cmbSrcClass.DataSource = svc.GetClassNames(schema);
+                var classes = svc.GetClassNames(schema);
+                cmbSrcClass.DataSource = classes;
+                if (classes.Count > 0)
+                    cmbSrcClass.SelectedIndex = 0;
                 CheckEmptyName();
             }
         }
@@ -159,6 +167,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
                     chkCreate.Enabled = !classes.Contains(srcClass);
                 }
                 cmbDstClass.DataSource = classes;
+                if (classes.Count > 0)
+                    cmbDstClass.SelectedIndex = 0;
                 CheckEmptyName();
             }
         }
@@ -238,6 +248,11 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         }
 
         private void chkCreate_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckButtonStates();
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
         {
             CheckButtonStates();
         }

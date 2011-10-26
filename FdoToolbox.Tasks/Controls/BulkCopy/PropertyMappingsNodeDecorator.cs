@@ -72,7 +72,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             item.ToolTipText = "Maps each un-mapped property to a property of the same name (will be created if doesn't exist)";
         }
 
-        private void OnAutoMap(object sender, EventArgs e)
+        internal void OnAutoMap(object sender, EventArgs e)
         {
             foreach (TreeNode node in _node.Nodes)
             {
