@@ -60,6 +60,7 @@ namespace FdoToolbox.Base.Controls
             this.lstOrderBy = new System.Windows.Forms.ListBox();
             this.lstOrderableProperties = new System.Windows.Forms.ListBox();
             this.TAB_JOINS = new System.Windows.Forms.TabPage();
+            this.btnEdit = new System.Windows.Forms.Button();
             this.btnAddJoin = new System.Windows.Forms.Button();
             this.btnRemoveJoin = new System.Windows.Forms.Button();
             this.grpJoins = new System.Windows.Forms.GroupBox();
@@ -388,6 +389,7 @@ namespace FdoToolbox.Base.Controls
             // 
             // TAB_JOINS
             // 
+            this.TAB_JOINS.Controls.Add(this.btnEdit);
             this.TAB_JOINS.Controls.Add(this.btnAddJoin);
             this.TAB_JOINS.Controls.Add(this.btnRemoveJoin);
             this.TAB_JOINS.Controls.Add(this.grpJoins);
@@ -402,10 +404,22 @@ namespace FdoToolbox.Base.Controls
             this.TAB_JOINS.Text = "Joins";
             this.TAB_JOINS.UseVisualStyleBackColor = true;
             // 
+            // btnEdit
+            // 
+            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEdit.Enabled = false;
+            this.btnEdit.Location = new System.Drawing.Point(250, 76);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(75, 23);
+            this.btnEdit.TabIndex = 5;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
             // btnAddJoin
             // 
             this.btnAddJoin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddJoin.Location = new System.Drawing.Point(250, 76);
+            this.btnAddJoin.Location = new System.Drawing.Point(250, 47);
             this.btnAddJoin.Name = "btnAddJoin";
             this.btnAddJoin.Size = new System.Drawing.Size(75, 23);
             this.btnAddJoin.TabIndex = 4;
@@ -536,5 +550,6 @@ namespace FdoToolbox.Base.Controls
         private System.Windows.Forms.ListBox lstJoins;
         private System.Windows.Forms.TextBox txtClassAlias;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnEdit;
     }
 }

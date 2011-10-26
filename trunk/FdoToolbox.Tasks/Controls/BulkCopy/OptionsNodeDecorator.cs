@@ -123,7 +123,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             //Source Filter
             ctxSourceFilter.Items.Add("Set Filter", null, delegate {
                 string filter = this.SourceFilter;
-                string newFilter = ExpressionEditor.EditExpression(Parent.GetSourceConnection(), Parent.SourceClass, filter, ExpressionMode.Filter);
+                string newFilter = ExpressionEditor.EditExpression(Parent.GetSourceConnection(), Parent.SourceClass, null, filter, ExpressionMode.Filter);
                 if (filter != newFilter)
                 {
                     this.SourceFilter = newFilter;

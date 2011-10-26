@@ -230,13 +230,13 @@ namespace FdoToolbox.Base.Controls
         {
             if (!string.IsNullOrEmpty(this.Filter))
             {
-                string filter = ExpressionEditor.EditExpression(_conn, this.SelectedClass, this.Filter, ExpressionMode.Filter);
+                string filter = ExpressionEditor.EditExpression(_conn, this.SelectedClass, null, this.Filter, ExpressionMode.Filter);
                 if (filter != null)
                     this.Filter = filter;
             }
             else
             {
-                this.Filter = ExpressionEditor.NewExpression(_conn, this.SelectedClass, ExpressionMode.Filter);
+                this.Filter = ExpressionEditor.NewExpression(_conn, this.SelectedClass, null, ExpressionMode.Filter);
             }
         }
 
@@ -377,7 +377,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnAddComputed_Click(object sender, EventArgs e)
         {
-            string expr = ExpressionEditor.NewExpression(_conn, this.SelectedClass, ExpressionMode.Normal);
+            string expr = ExpressionEditor.NewExpression(_conn, this.SelectedClass, null, ExpressionMode.Normal);
             if (expr != null)
             {
                 string name = "Expr" + lstComputed.Items.Count;
@@ -389,7 +389,7 @@ namespace FdoToolbox.Base.Controls
         {
             ListViewItem item = lstComputed.SelectedItems[0];
             string expr = item.SubItems[1].Text;
-            expr = ExpressionEditor.EditExpression(_conn, this.SelectedClass, expr, ExpressionMode.Normal);
+            expr = ExpressionEditor.EditExpression(_conn, this.SelectedClass, null, expr, ExpressionMode.Normal);
             if (expr != null)
             {
                 item.SubItems[1].Text = expr;
@@ -429,7 +429,7 @@ namespace FdoToolbox.Base.Controls
         private void btnGroupFilter_Click(object sender, EventArgs e)
         {
             string expr = txtGroupFilter.Text;
-            expr = ExpressionEditor.EditExpression(_conn, this.SelectedClass, expr, ExpressionMode.Filter);
+            expr = ExpressionEditor.EditExpression(_conn, this.SelectedClass, null, expr, ExpressionMode.Filter);
             if (expr != null)
             {
                 txtGroupFilter.Text = expr;

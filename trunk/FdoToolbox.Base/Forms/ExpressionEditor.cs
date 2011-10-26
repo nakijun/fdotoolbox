@@ -343,14 +343,16 @@ namespace FdoToolbox.Base.Forms
         /// <param name="conn">The conn.</param>
         /// <param name="classDef">The class def.</param>
         /// <param name="mode">The mode.</param>
-        internal ExpressionEditor(FdoConnection conn, ClassDefinition classDef, ExpressionMode mode)
+        internal ExpressionEditor(FdoConnection conn, ClassDefinition classDef, Dictionary<string, ClassDefinition> aliasedClasses, ExpressionMode mode)
             : this()
         {
             _conn = conn;
             _ClassDef = classDef;
+            _aliasedClasses = aliasedClasses ?? new Dictionary<string, ClassDefinition>();
             _ExprMode = mode;
         }
 
+        private Dictionary<string, ClassDefinition> _aliasedClasses;
         private Dictionary<FunctionCategoryType, ToolStripMenuItem> _FunctionMenuItems;
 
         /// <summary>
@@ -759,9 +761,9 @@ namespace FdoToolbox.Base.Forms
         /// <param name="expr">The expr.</param>
         /// <param name="mode">The mode.</param>
         /// <returns></returns>
-        public static string EditExpression(FdoConnection conn, ClassDefinition classDef, string expr, ExpressionMode mode)
+        public static string EditExpression(FdoConnection conn, ClassDefinition classDef, Dictionary<string, ClassDefinition> aliasedClasses, string expr, ExpressionMode mode)
         {
-            ExpressionEditor dlg = new ExpressionEditor(conn, classDef, mode);
+            ExpressionEditor dlg = new ExpressionEditor(conn, classDef, aliasedClasses, mode);
             dlg.txtExpression.Text = expr;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
@@ -777,9 +779,9 @@ namespace FdoToolbox.Base.Forms
         /// <param name="classDef">The class def.</param>
         /// <param name="mode">The mode.</param>
         /// <returns></returns>
-        public static string NewExpression(FdoConnection conn, ClassDefinition classDef, ExpressionMode mode)
+        public static string NewExpression(FdoConnection conn, ClassDefinition classDef, Dictionary<string, ClassDefinition> aliasedClasses, ExpressionMode mode)
         {
-            ExpressionEditor dlg = new ExpressionEditor(conn, classDef, mode);
+            ExpressionEditor dlg = new ExpressionEditor(conn, classDef, aliasedClasses, mode);
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 return dlg.txtExpression.Text.Trim();
@@ -900,7 +902,7 @@ namespace FdoToolbox.Base.Forms
                     }
                 }
             }
-            else if (code == Keys.Back)
+            else if (code == Keys.Back || code == Keys.Space)
             {
                 string context;
                 char? c = GetContextBuffer(out context);
@@ -929,7 +931,7 @@ namespace FdoToolbox.Base.Forms
                 {
                     bool alpha = (code >= Keys.A && code <= Keys.Z);
                     bool numeric = (code >= Keys.D0 && code <= Keys.D9) || (code >= Keys.NumPad0 && code <= Keys.NumPad9);
-                    if (alpha || numeric)
+                    if (alpha || numeric || e.KeyValue == 190) //190 = .
                     {
                         string context;
                         char? c = GetContextBuffer(out context);
@@ -1003,11 +1005,27 @@ namespace FdoToolbox.Base.Forms
         private List<AutoCompleteItem> GetItemsStartingWith(string text)
         {
             List<AutoCompleteItem> ati = new List<AutoCompleteItem>();
-            foreach (string key in _autoCompleteItems.Keys)
+            if (text.Length > 1 && text[text.Length - 1] == '.')
             {
-                if (key.ToLower().StartsWith(text.Trim().ToLower()))
+                string alias = text.Substring(0, text.Length - 1);
+                if (_aliasedClasses.ContainsKey(alias))
                 {
-                    ati.Add(_autoCompleteItems[key]);
+                    var cls = _aliasedClasses[alias];
+                    foreach (PropertyDefinition prop in cls.Properties)
+                    {
+                        var pi = new PropertyItem(prop);
+                        ati.Add(pi);
+                    }
+                }
+            }
+            else
+            {
+                foreach (string key in _autoCompleteItems.Keys)
+                {
+                    if (key.ToLower().StartsWith(text.Trim().ToLower()))
+                    {
+                        ati.Add(_autoCompleteItems[key]);
+                    }
                 }
             }
             return ati;
@@ -1062,6 +1080,8 @@ namespace FdoToolbox.Base.Forms
                 string fullText = aci.AutoCompleteText;
 
                 int start = pos - context.Length;
+                if (context.EndsWith("."))
+                    start = pos;
                 int newPos = start + fullText.Length;
                 int selLength = -1;
                 
@@ -1144,7 +1164,7 @@ namespace FdoToolbox.Base.Forms
                 //Walk backwards
                 caretPos--;
                 char c = txtExpression.Text[caretPos];
-                while(Char.IsLetterOrDigit(c))
+                while(Char.IsLetterOrDigit(c) || c == '.')
                 {
                     caretPos--;
                     if (caretPos < 0)

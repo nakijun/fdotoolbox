@@ -120,7 +120,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
 
         private void OnAddExpression(object sender, EventArgs e)
         {
-            string expr = ExpressionEditor.NewExpression(Parent.GetSourceConnection(), Parent.SourceClass, ExpressionMode.Normal);
+            string expr = ExpressionEditor.NewExpression(Parent.GetSourceConnection(), Parent.SourceClass, null, ExpressionMode.Normal);
             if (expr != null)
             {
                 string alias = string.Empty;
@@ -178,7 +178,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             ExpressionMappingInfo expr = exprNode.Tag as ExpressionMappingInfo;
             if (expr != null)
             {
-                string newExpr = ExpressionEditor.EditExpression(Parent.GetSourceConnection(), Parent.SourceClass, expr.Expression, ExpressionMode.Normal);
+                string newExpr = ExpressionEditor.EditExpression(Parent.GetSourceConnection(), Parent.SourceClass, null, expr.Expression, ExpressionMode.Normal);
                 if (newExpr != null) //null = cancel
                 {
                     exprNode.ToolTipText = "Expression: " + newExpr;

@@ -638,7 +638,7 @@ namespace FdoToolbox.Tasks.Controls
             {
                 using (ClassDefinition cd = svc.GetClassByName(this.SelectedLeftSchema, this.SelectedLeftClass))
                 {
-                    var expr = ExpressionEditor.EditExpression(conn, cd, txtLeftFilter.Text, ExpressionMode.Filter);
+                    var expr = ExpressionEditor.EditExpression(conn, cd, null, txtLeftFilter.Text, ExpressionMode.Filter);
                     if (expr != null)
                         txtLeftFilter.Text = expr;
                 }
@@ -654,7 +654,7 @@ namespace FdoToolbox.Tasks.Controls
             {
                 using (ClassDefinition cd = svc.GetClassByName(this.SelectedRightSchema, this.SelectedRightClass))
                 {
-                    var expr = ExpressionEditor.EditExpression(conn, cd, txtRightFilter.Text, ExpressionMode.Filter);
+                    var expr = ExpressionEditor.EditExpression(conn, cd, null, txtRightFilter.Text, ExpressionMode.Filter);
                     if (expr != null)
                         txtRightFilter.Text = expr;
                 }
