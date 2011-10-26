@@ -47,7 +47,6 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             this.btnCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.chkCreate = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -266,17 +265,8 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(264, 20);
             this.txtName.TabIndex = 5;
+            this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             this.txtName.Leave += new System.EventHandler(this.txtName_Leave);
-            // 
-            // chkCreate
-            // 
-            this.chkCreate.AutoSize = true;
-            this.chkCreate.Location = new System.Drawing.Point(102, 100);
-            this.chkCreate.Name = "chkCreate";
-            this.chkCreate.Size = new System.Drawing.Size(171, 17);
-            this.chkCreate.TabIndex = 12;
-            this.chkCreate.Text = "Create class of the same name";
-            this.chkCreate.UseVisualStyleBackColor = true;
             // 
             // NewTaskDialog
             // 

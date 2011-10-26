@@ -91,7 +91,7 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 52);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(589, 175);
+            this.groupBox1.Size = new System.Drawing.Size(589, 128);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Participating Connections";
@@ -111,7 +111,7 @@ namespace FdoToolbox.Tasks.Controls
             this.grdConnections.Name = "grdConnections";
             this.grdConnections.ReadOnly = true;
             this.grdConnections.RowHeadersVisible = false;
-            this.grdConnections.Size = new System.Drawing.Size(583, 131);
+            this.grdConnections.Size = new System.Drawing.Size(583, 84);
             this.grdConnections.TabIndex = 1;
             // 
             // COL_NAME
@@ -193,7 +193,7 @@ namespace FdoToolbox.Tasks.Controls
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(589, 224);
+            this.groupBox3.Size = new System.Drawing.Size(589, 271);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Classes To Copy";
@@ -208,7 +208,7 @@ namespace FdoToolbox.Tasks.Controls
             this.mTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
             this.mTreeView.ShowNodeToolTips = true;
-            this.mTreeView.Size = new System.Drawing.Size(583, 180);
+            this.mTreeView.Size = new System.Drawing.Size(583, 227);
             this.mTreeView.TabIndex = 2;
             this.mTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.mTreeView_AfterSelect);
             this.mTreeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mTreeView_MouseDown);
@@ -280,6 +280,7 @@ namespace FdoToolbox.Tasks.Controls
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(3, 3);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -293,7 +294,7 @@ namespace FdoToolbox.Tasks.Controls
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer1.Size = new System.Drawing.Size(589, 455);
-            this.splitContainer1.SplitterDistance = 227;
+            this.splitContainer1.SplitterDistance = 180;
             this.splitContainer1.TabIndex = 6;
             // 
             // FdoBulkCopyCtl

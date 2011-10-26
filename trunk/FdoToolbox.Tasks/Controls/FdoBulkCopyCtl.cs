@@ -189,6 +189,9 @@ namespace FdoToolbox.Tasks.Controls
                                                dlg.TaskName,
                                                dlg.CreateIfNotExist);
 
+                if (dlg.CreateIfNotExist)
+                    task.PropertyMappings.OnAutoMap(this, EventArgs.Empty);
+
                 _tasks[task.DecoratedNode.Index] = task;
                 root.Expand();
 
