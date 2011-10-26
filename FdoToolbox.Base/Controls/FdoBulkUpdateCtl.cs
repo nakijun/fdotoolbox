@@ -494,13 +494,13 @@ namespace FdoToolbox.Base.Controls
             }
             if (!string.IsNullOrEmpty(this.Filter))
             {
-                string filter = ExpressionEditor.EditExpression(_conn, _classDef, this.Filter, ExpressionMode.Filter);
+                string filter = ExpressionEditor.EditExpression(_conn, _classDef, null, this.Filter, ExpressionMode.Filter);
                 if (filter != null)
                     this.Filter = filter;
             }
             else
             {
-                this.Filter = ExpressionEditor.NewExpression(_conn, _classDef, ExpressionMode.Filter);
+                this.Filter = ExpressionEditor.NewExpression(_conn, _classDef, null, ExpressionMode.Filter);
             }
         }
     }

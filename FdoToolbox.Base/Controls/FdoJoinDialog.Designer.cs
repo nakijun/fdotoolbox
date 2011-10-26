@@ -65,7 +65,7 @@
             this.cmbJoinType.Location = new System.Drawing.Point(87, 10);
             this.cmbJoinType.Name = "cmbJoinType";
             this.cmbJoinType.Size = new System.Drawing.Size(185, 21);
-            this.cmbJoinType.TabIndex = 1;
+            this.cmbJoinType.TabIndex = 0;
             // 
             // label2
             // 
@@ -110,7 +110,7 @@
             this.cmbClass.Location = new System.Drawing.Point(89, 43);
             this.cmbClass.Name = "cmbClass";
             this.cmbClass.Size = new System.Drawing.Size(148, 21);
-            this.cmbClass.TabIndex = 5;
+            this.cmbClass.TabIndex = 1;
             this.cmbClass.SelectedIndexChanged += new System.EventHandler(this.cmbClass_SelectedIndexChanged);
             // 
             // cmbSchema
@@ -123,7 +123,7 @@
             this.cmbSchema.Location = new System.Drawing.Point(89, 19);
             this.cmbSchema.Name = "cmbSchema";
             this.cmbSchema.Size = new System.Drawing.Size(148, 21);
-            this.cmbSchema.TabIndex = 4;
+            this.cmbSchema.TabIndex = 0;
             this.cmbSchema.SelectedIndexChanged += new System.EventHandler(this.cmbSchema_SelectedIndexChanged);
             // 
             // label4
@@ -142,7 +142,7 @@
             this.txtJoinClassAlias.Location = new System.Drawing.Point(101, 167);
             this.txtJoinClassAlias.Name = "txtJoinClassAlias";
             this.txtJoinClassAlias.Size = new System.Drawing.Size(148, 20);
-            this.txtJoinClassAlias.TabIndex = 6;
+            this.txtJoinClassAlias.TabIndex = 2;
             // 
             // label5
             // 
@@ -162,7 +162,7 @@
             this.txtJoinFilter.Multiline = true;
             this.txtJoinFilter.Name = "txtJoinFilter";
             this.txtJoinFilter.Size = new System.Drawing.Size(148, 87);
-            this.txtJoinFilter.TabIndex = 8;
+            this.txtJoinFilter.TabIndex = 3;
             // 
             // btnFilter
             // 
@@ -170,7 +170,7 @@
             this.btnFilter.Location = new System.Drawing.Point(255, 193);
             this.btnFilter.Name = "btnFilter";
             this.btnFilter.Size = new System.Drawing.Size(25, 23);
-            this.btnFilter.TabIndex = 9;
+            this.btnFilter.TabIndex = 4;
             this.btnFilter.Text = "...";
             this.btnFilter.UseVisualStyleBackColor = true;
             this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
@@ -182,7 +182,7 @@
             this.btnOk.Location = new System.Drawing.Point(93, 286);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 10;
+            this.btnOk.TabIndex = 5;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
@@ -194,7 +194,7 @@
             this.btnCancel.Location = new System.Drawing.Point(174, 286);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 11;
+            this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -206,7 +206,7 @@
             this.txtPrefix.Location = new System.Drawing.Point(101, 141);
             this.txtPrefix.Name = "txtPrefix";
             this.txtPrefix.Size = new System.Drawing.Size(148, 20);
-            this.txtPrefix.TabIndex = 13;
+            this.txtPrefix.TabIndex = 1;
             // 
             // label6
             // 

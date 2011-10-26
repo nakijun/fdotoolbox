@@ -221,13 +221,13 @@ namespace FdoToolbox.Base.Controls
         {
             if (!string.IsNullOrEmpty(this.Filter))
             {
-                string filter = ExpressionEditor.EditExpression(_conn, this.SelectedClass, this.Filter, ExpressionMode.Filter);
+                string filter = ExpressionEditor.EditExpression(_conn, this.SelectedClass, null, this.Filter, ExpressionMode.Filter);
                 if (filter != null)
                     this.Filter = filter;
             }
             else
             {
-                this.Filter = ExpressionEditor.NewExpression(_conn, this.SelectedClass, ExpressionMode.Filter);
+                this.Filter = ExpressionEditor.NewExpression(_conn, this.SelectedClass, null, ExpressionMode.Filter);
             }
         }
 
@@ -379,7 +379,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnAddComputed_Click(object sender, EventArgs e)
         {
-            string expr = ExpressionEditor.NewExpression(_conn, this.SelectedClass, ExpressionMode.Normal);
+            string expr = ExpressionEditor.NewExpression(_conn, this.SelectedClass, null, ExpressionMode.Normal);
             if (expr != null)
             {
                 string name = "";
@@ -413,7 +413,7 @@ namespace FdoToolbox.Base.Controls
                     exprText = comp.ToString();
                 }
             }
-            exprText = ExpressionEditor.EditExpression(_conn, this.SelectedClass, exprText, ExpressionMode.Normal);
+            exprText = ExpressionEditor.EditExpression(_conn, this.SelectedClass, null, exprText, ExpressionMode.Normal);
             if (exprText != null)
             {
                 //Test to see if it is a computed identifier
@@ -492,7 +492,9 @@ namespace FdoToolbox.Base.Controls
 
         private void btnAddJoin_Click(object sender, EventArgs e)
         {
-            using (var diag = new FdoJoinDialog(_conn))
+            var cls = this.SelectedClass;
+            var schema = (FeatureSchema)cls.Parent;
+            using (var diag = new FdoJoinDialog(_conn, schema.Name, cls.Name, txtClassAlias.Text))
             {
                 if (diag.ShowDialog() == DialogResult.OK)
                 {
@@ -503,7 +505,24 @@ namespace FdoToolbox.Base.Controls
 
         private void lstJoins_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnRemoveJoin.Enabled = lstJoins.SelectedIndex >= 0;
+            btnEdit.Enabled = btnRemoveJoin.Enabled = lstJoins.SelectedIndex >= 0;
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            var criteria = (FdoJoinCriteriaInfo)lstJoins.SelectedItem;
+            var cls = this.SelectedClass;
+            var schema = (FeatureSchema)cls.Parent;
+            using (var diag = new FdoJoinDialog(_conn, schema.Name, cls.Name, txtClassAlias.Text, criteria))
+            {
+                if (diag.ShowDialog() == DialogResult.OK)
+                {
+                    var items = new System.Collections.ArrayList(lstJoins.Items);
+                    lstJoins.Items.Clear();
+                    lstJoins.Items.AddRange(items.ToArray());
+                    btnEdit.Enabled = btnRemoveJoin.Enabled = false;
+                }
+            }
         }
     }
 }
