@@ -1,3 +1,23 @@
+v1.0 RC1
+--------
+- Enhancements:
+    - Using FDO 3.6.0 final
+    - Data Query now supports the new FDO join APIs
+    - Expression Editor now supports [alias].[property] syntax for building FDO Join filters.
+    - Added support for dumping contents of a selected feature class in the Object Explorer to SDF/SQLite
+- Fixes: 
+    - Data Query grid view supports re-ordering of columns
+    - CopyFile command of FdoUtil.exe now discards source schema element states when applying them
+    - Bulk Copy Editor no longer trips up when loading a Bulk Copy file with invalid property mappings (these mappings are now ignored)
+    - Bulk Copy Editor now supports re-aliasing source properties
+    - Bulk Copy Editor now prevents auto-mapping to auto-generated properties
+    - Bulk Copy Editor now auto-maps properties for a new task if the "create if not exists" option is checked.
+    - Bulk Copy UI fixes
+    - Sequential Process tasks will no longer be allowed to be removed if an editor is open for it
+    - Duplicate geometry types no longer being added to geometry property editor
+    - Express data store creation UIs now check for empty connection names
+    - Failed bulk copy reads are now logged
+
 v1.0 beta 4
 -----------
 - Enhancements:
