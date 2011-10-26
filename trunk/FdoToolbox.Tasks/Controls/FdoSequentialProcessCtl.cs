@@ -40,26 +40,55 @@ namespace FdoToolbox.Tasks.Controls
         public FdoSequentialProcessCtl()
         {
             InitializeComponent();
+            _taskMgr = ServiceManager.Instance.GetService<TaskManager>();
+            if (_taskMgr != null)
+            {
+                this.Disposed += new EventHandler(OnDisposed);
+                _taskMgr.BeforeTaskRemoved += OnBeforeTaskRemoved;
+            }
         }
 
         private SequentialProcessDefinition _def;
+
+        private string _taskName;
 
         public FdoSequentialProcessCtl(string name, SequentialProcessDefinition def)
             : this()
         {
             _def = def;
+            _taskName = name;
             txtName.Text = name;
             txtName.ReadOnly = true;
         }
 
+        private TaskManager _taskMgr;
+
         protected override void OnLoad(EventArgs e)
         {
-            if (_def != null)
+            
+            if (_def != null && _def.Operations != null)
             {
                 foreach (var op in _def.Operations)
                 {
                     lstProcesses.Items.Add(op);
                 }
+            }
+        }
+
+        void OnDisposed(object sender, EventArgs e)
+        {
+            if (_taskMgr != null)
+            {
+                _taskMgr.BeforeTaskRemoved -= OnBeforeTaskRemoved;
+            }
+        }
+
+        void OnBeforeTaskRemoved(object sender, TaskBeforeRemoveEventArgs e)
+        {
+            if (e.TaskName == _taskName && _taskMgr.GetTask(e.TaskName) != null)
+            {
+                MessageService.ShowMessage("This editor for this task is still open. Close that editor first");
+                e.Cancel = true;
             }
         }
 

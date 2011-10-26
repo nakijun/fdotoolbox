@@ -29,6 +29,7 @@ using FdoToolbox.Core.ETL.Specialized;
 using FdoToolbox.Base;
 using System.IO;
 using FdoToolbox.Core.Configuration;
+using System.ComponentModel;
 
 namespace FdoToolbox.Tasks.Services
 {
@@ -141,6 +142,8 @@ namespace FdoToolbox.Tasks.Services
             }
         }
 
+        public event TaskBeforeRemoveEventHandler BeforeTaskRemoved = delegate { };
+
         public event TaskRenameEventHandler TaskRenamed = delegate { };
 
         public event TaskEventHandler TaskAdded = delegate { };
@@ -166,6 +169,11 @@ namespace FdoToolbox.Tasks.Services
         {
             if (_taskDict.ContainsKey(name))
             {
+                var e = new TaskBeforeRemoveEventArgs(name);
+                this.BeforeTaskRemoved(this, e);
+                if (e.Cancel)
+                    return;
+
                 EtlProcess proc = _taskDict[name];
                 _taskDict.Remove(name);
                 proc.Dispose();
@@ -230,6 +238,35 @@ namespace FdoToolbox.Tasks.Services
     public delegate void TaskEventHandler(object sender, EventArgs<string> e);
 
     public delegate void TaskRenameEventHandler(object sender, TaskRenameEventArgs e);
+
+    public delegate void TaskBeforeRemoveEventHandler(object sender, TaskBeforeRemoveEventArgs e);
+
+    /// <summary>
+    /// An event argument object passed when a connection is about to be renamed
+    /// </summary>
+    public class TaskBeforeRemoveEventArgs : CancelEventArgs
+    {
+        private readonly string _TaskName;
+
+        /// <summary>
+        /// Gets the name of the task to be renamed
+        /// </summary>
+        /// <value>The name of the task.</value>
+        public string TaskName
+        {
+            get { return _TaskName; }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionBeforeRemoveEventArgs"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        public TaskBeforeRemoveEventArgs(string name)
+        {
+            _TaskName = name;
+            this.Cancel = false;
+        }
+    }
 
     public class TaskRenameEventArgs : EventArgs
     {
