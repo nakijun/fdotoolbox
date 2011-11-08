@@ -53,6 +53,7 @@ namespace FdoToolbox.Base.Controls
         {
             _conn = conn;
             _presenter = new FdoStandardQueryPresenter(this, conn);
+            joinCriteriaCtrl.Connection = conn;
         }
 
         private string _initSchema;
@@ -81,8 +82,6 @@ namespace FdoToolbox.Base.Controls
                         cmbClass.SelectedIndex = idx;
                 }
             }
-            if (!_conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsJoins))
-                tabQueryOptions.TabPages.Remove(TAB_JOINS);
             base.OnLoad(e);
         }
 
@@ -215,6 +214,7 @@ namespace FdoToolbox.Base.Controls
         private void cmbClass_SelectionChangeCommitted(object sender, EventArgs e)
         {
             _presenter.ClassChanged();
+            joinCriteriaCtrl.SelectedClass = this.SelectedClass;
         }
 
         private void txtFilter_Enter(object sender, EventArgs e)
@@ -254,27 +254,31 @@ namespace FdoToolbox.Base.Controls
                 IList<ComputedProperty> cp = this.ComputedProperties;
                 bool joinVisible = tabQueryOptions.Contains(TAB_JOINS);
 
+                string classAlias = "";
                 if (joinVisible)
-                    options.ClassAlias = txtClassAlias.Text;
+                {
+                    classAlias = joinCriteriaCtrl.ClassAlias;
+                    options.ClassAlias = classAlias;
+                }
 
                 if (sp.Count > 0)
                 {
                     foreach (var prop in sp)
                     {
-                        if (joinVisible && !string.IsNullOrEmpty(txtClassAlias.Text))
-                            options.AddFeatureProperty(txtClassAlias.Text + "." + prop);
+                        if (joinVisible && !string.IsNullOrEmpty(classAlias))
+                            options.AddFeatureProperty(classAlias + "." + prop);
                         else
                             options.AddFeatureProperty(prop);
                     }
                 }
                 else
                 {
-                    if (joinVisible && !string.IsNullOrEmpty(txtClassAlias.Text))
+                    if (joinVisible && !string.IsNullOrEmpty(classAlias))
                     {
                         foreach (var prop in this.AllClassProperties)
                         {
                             //[alias].[propertyName]
-                            options.AddFeatureProperty(txtClassAlias.Text + "." + prop);
+                            options.AddFeatureProperty(classAlias + "." + prop);
                         }
                     }
                 }
@@ -296,7 +300,7 @@ namespace FdoToolbox.Base.Controls
                 {
                     using (var svc = _conn.CreateFeatureService())
                     {
-                        foreach (FdoJoinCriteriaInfo join in lstJoins.Items)
+                        foreach (FdoJoinCriteriaInfo join in joinCriteriaCtrl.JoinCriteria)
                         {
                             options.AddJoinCriteria(join);
                             ClassDefinition clsDef = svc.GetClassByName(join.JoinSchema, join.JoinClass);
@@ -483,46 +487,9 @@ namespace FdoToolbox.Base.Controls
         {
             if (!cap.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSelectOrdering))
                 tabQueryOptions.TabPages.Remove(TAB_ORDERING);
-        }
 
-        private void btnRemoveJoin_Click(object sender, EventArgs e)
-        {
-            lstJoins.Items.RemoveAt(lstJoins.SelectedIndex);
-        }
-
-        private void btnAddJoin_Click(object sender, EventArgs e)
-        {
-            var cls = this.SelectedClass;
-            var schema = (FeatureSchema)cls.Parent;
-            using (var diag = new FdoJoinDialog(_conn, schema.Name, cls.Name, txtClassAlias.Text))
-            {
-                if (diag.ShowDialog() == DialogResult.OK)
-                {
-                    lstJoins.Items.Add(diag.Criteria);
-                }
-            }
-        }
-
-        private void lstJoins_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            btnEdit.Enabled = btnRemoveJoin.Enabled = lstJoins.SelectedIndex >= 0;
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            var criteria = (FdoJoinCriteriaInfo)lstJoins.SelectedItem;
-            var cls = this.SelectedClass;
-            var schema = (FeatureSchema)cls.Parent;
-            using (var diag = new FdoJoinDialog(_conn, schema.Name, cls.Name, txtClassAlias.Text, criteria))
-            {
-                if (diag.ShowDialog() == DialogResult.OK)
-                {
-                    var items = new System.Collections.ArrayList(lstJoins.Items);
-                    lstJoins.Items.Clear();
-                    lstJoins.Items.AddRange(items.ToArray());
-                    btnEdit.Enabled = btnRemoveJoin.Enabled = false;
-                }
-            }
+            if (!cap.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsJoins))
+                tabQueryOptions.TabPages.Remove(TAB_JOINS);
         }
     }
 }
