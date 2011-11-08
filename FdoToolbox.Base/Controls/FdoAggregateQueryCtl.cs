@@ -51,6 +51,7 @@ namespace FdoToolbox.Base.Controls
         {
             _conn = conn;
             _presenter = new FdoAggregateQueryPresenter(this, conn);
+            joinCriteriaCtrl.Connection = conn;
         }
 
         private string _initSchema;
@@ -224,6 +225,7 @@ namespace FdoToolbox.Base.Controls
         private void cmbClass_SelectionChangeCommitted(object sender, EventArgs e)
         {
             _presenter.ClassChanged();
+            joinCriteriaCtrl.SelectedClass = this.SelectedClass;
         }
 
         private void txtFilter_Enter(object sender, EventArgs e)
@@ -250,6 +252,19 @@ namespace FdoToolbox.Base.Controls
             get { return (OSGeo.FDO.Commands.OrderingOption)cmbOrderingOption.SelectedItem; }
         }
 
+        public IList<string> AllClassProperties
+        {
+            get
+            {
+                IList<string> p = new List<string>();
+                foreach (object o in chkProperties.Items)
+                {
+                    p.Add(o.ToString());
+                }
+                return p;
+            }
+        }
+
         public FeatureAggregateOptions QueryObject
         {
             get 
@@ -263,10 +278,36 @@ namespace FdoToolbox.Base.Controls
                 IList<ComputedProperty> cp = this.ComputedProperties;
                 IList<string> gp = this.GroupByList;
 
+                bool joinVisible = tabQueryOptions.Contains(TAB_JOINS);
+
+                string classAlias = "";
+                if (joinVisible)
+                {
+                    classAlias = joinCriteriaCtrl.ClassAlias;
+                    options.ClassAlias = classAlias;
+                }
+
                 if (sp.Count > 0)
                 {
-                    options.AddFeatureProperty(sp);
+                    foreach (var prop in sp)
+                    {
+                        if (joinVisible && !string.IsNullOrEmpty(classAlias))
+                            options.AddFeatureProperty(classAlias + "." + prop);
+                        else
+                            options.AddFeatureProperty(prop);
+                    }
                 }
+                //else
+                //{
+                //    if (joinVisible && !string.IsNullOrEmpty(classAlias))
+                //    {
+                //        foreach (var prop in this.AllClassProperties)
+                //        {
+                //            //[alias].[propertyName]
+                //            options.AddFeatureProperty(classAlias + "." + prop);
+                //        }
+                //    }
+                //}
 
                 if (cp.Count > 0)
                 {
@@ -287,6 +328,14 @@ namespace FdoToolbox.Base.Controls
                 }
 
                 options.Distinct = this.Distinct;
+
+                if (joinVisible)
+                {
+                    foreach (FdoJoinCriteriaInfo join in joinCriteriaCtrl.JoinCriteria)
+                    {
+                        options.AddJoinCriteria(join);
+                    }
+                }
 
                 return options;
             }
@@ -473,6 +522,9 @@ namespace FdoToolbox.Base.Controls
 
             if (!cap.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSelectDistinct))
                 chkDistinct.Enabled = false;
+
+            if (!cap.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsJoins))
+                tabQueryOptions.TabPages.Remove(TAB_JOINS);
         }
     }
 }

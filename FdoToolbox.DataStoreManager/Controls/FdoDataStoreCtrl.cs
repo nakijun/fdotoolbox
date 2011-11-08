@@ -264,7 +264,7 @@ namespace FdoToolbox.DataStoreManager.Controls
                 ResetApplyButton();
                 if (_context.SaveSpatialContexts())
                 {
-                    MessageService.ShowMessage("Spatial Context changse have been saved");
+                    MessageService.ShowMessage("Spatial Context changes have been saved");
                     EvaluateCommandStates();
                 }
             }

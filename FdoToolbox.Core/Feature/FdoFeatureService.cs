@@ -937,8 +937,11 @@ namespace FdoToolbox.Core.Feature
                 create.CoordinateSystemWkt = ctx.CoordinateSystemWkt;
                 create.Description = ctx.Description;
                 create.ExtentType = ctx.ExtentType;
-                if (create.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static || !string.IsNullOrEmpty(ctx.ExtentGeometryText))
+                if (create.ExtentType == SpatialContextExtentType.SpatialContextExtentType_Static)
                 {
+                    if (string.IsNullOrEmpty(ctx.ExtentGeometryText))
+                        throw new FeatureServiceException("Creating a spatial context with static extents requires an extent geometry to be specified");
+
                     geom = _GeomFactory.CreateGeometry(ctx.ExtentGeometryText);
                     create.Extent = _GeomFactory.GetFgf(geom);
                 }
@@ -1818,6 +1821,16 @@ namespace FdoToolbox.Core.Feature
                 foreach (string propName in options.GroupByProperties)
                 {
                     select.Grouping.Add((Identifier)Identifier.Parse(propName));
+                }
+                if (options.JoinCriteria.Count > 0)
+                {
+                    select.Alias = options.ClassAlias;
+                    var joinCriteria = select.JoinCriteria;
+                    foreach (var criteria in options.JoinCriteria)
+                    {
+                        var fjc = criteria.AsJoinCriteria();
+                        joinCriteria.Add(fjc);
+                    }
                 }
                 reader = select.Execute();
             }
