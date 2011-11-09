@@ -237,6 +237,13 @@ namespace FdoToolbox.Base.Services
         /// </summary>
         public void UnloadService()
         {
+            var conns = new List<FdoConnection>(_ConnectionDict.Values);
+            foreach (var c in conns)
+            {
+                c.Close();
+                c.Dispose();
+            }
+            _ConnectionDict.Clear();
             Unload(this, EventArgs.Empty);
         }
 
