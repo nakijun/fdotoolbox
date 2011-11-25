@@ -347,6 +347,7 @@
     <Compile Include="Controls\PreferenceSheets\ScriptPreferencesCtl.Designer.cs">
       <DependentUpon>ScriptPreferencesCtl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SchemaWalker.cs" />
     <Compile Include="Controls\TempCursor.cs" />
     <Compile Include="Controls\TextBoxAppender.cs" />
     <Compile Include="Controls\TextEditor.cs">

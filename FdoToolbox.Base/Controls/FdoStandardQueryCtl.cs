@@ -85,24 +85,24 @@ namespace FdoToolbox.Base.Controls
             base.OnLoad(e);
         }
 
-        public OSGeo.FDO.Schema.FeatureSchemaCollection SchemaList
+        public string[] SchemaList
         {
-            set { cmbSchema.DisplayMember = "Name"; cmbSchema.DataSource = value; }
+            set { cmbSchema.DataSource = value; }
         }
 
-        public OSGeo.FDO.Schema.ClassCollection ClassList
+        public ClassDescriptor[] ClassList
         {
-            set { cmbClass.DisplayMember = "Name"; cmbClass.DataSource = value; }
+            set { cmbClass.DisplayMember = "ClassName"; cmbClass.DataSource = value; }
         }
 
-        public OSGeo.FDO.Schema.FeatureSchema SelectedSchema
+        public string SelectedSchema
         {
-            get { return cmbSchema.SelectedItem as OSGeo.FDO.Schema.FeatureSchema; }
+            get { return cmbSchema.SelectedItem != null ? cmbSchema.SelectedItem.ToString() : null; }
         }
 
-        public OSGeo.FDO.Schema.ClassDefinition SelectedClass
+        public ClassDescriptor SelectedClass
         {
-            get { return cmbClass.SelectedItem as OSGeo.FDO.Schema.ClassDefinition; }
+            get { return cmbClass.SelectedItem as ClassDescriptor; }
         }
 
         public IList<string> PropertyList
@@ -214,20 +214,20 @@ namespace FdoToolbox.Base.Controls
         private void cmbClass_SelectionChangeCommitted(object sender, EventArgs e)
         {
             _presenter.ClassChanged();
-            joinCriteriaCtrl.SelectedClass = this.SelectedClass;
+            joinCriteriaCtrl.SelectedClass = _presenter.SelectedClass;
         }
 
         private void txtFilter_Enter(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(this.Filter))
             {
-                string filter = ExpressionEditor.EditExpression(_conn, this.SelectedClass, null, this.Filter, ExpressionMode.Filter);
+                string filter = ExpressionEditor.EditExpression(_conn, _presenter.SelectedClass, null, this.Filter, ExpressionMode.Filter);
                 if (filter != null)
                     this.Filter = filter;
             }
             else
             {
-                this.Filter = ExpressionEditor.NewExpression(_conn, this.SelectedClass, null, ExpressionMode.Filter);
+                this.Filter = ExpressionEditor.NewExpression(_conn, _presenter.SelectedClass, null, ExpressionMode.Filter);
             }
         }
 
@@ -383,7 +383,7 @@ namespace FdoToolbox.Base.Controls
 
         private void btnAddComputed_Click(object sender, EventArgs e)
         {
-            string expr = ExpressionEditor.NewExpression(_conn, this.SelectedClass, null, ExpressionMode.Normal);
+            string expr = ExpressionEditor.NewExpression(_conn, _presenter.SelectedClass, null, ExpressionMode.Normal);
             if (expr != null)
             {
                 string name = "";
@@ -417,7 +417,7 @@ namespace FdoToolbox.Base.Controls
                     exprText = comp.ToString();
                 }
             }
-            exprText = ExpressionEditor.EditExpression(_conn, this.SelectedClass, null, exprText, ExpressionMode.Normal);
+            exprText = ExpressionEditor.EditExpression(_conn, _presenter.SelectedClass, null, exprText, ExpressionMode.Normal);
             if (exprText != null)
             {
                 //Test to see if it is a computed identifier
@@ -490,6 +490,11 @@ namespace FdoToolbox.Base.Controls
 
             if (!cap.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsJoins))
                 tabQueryOptions.TabPages.Remove(TAB_JOINS);
+        }
+
+        public ClassDefinition SelectedClassDefinition
+        {
+            get { return _presenter.SelectedClass; }
         }
     }
 }

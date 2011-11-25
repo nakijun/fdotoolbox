@@ -30,11 +30,13 @@ namespace FdoToolbox.Base.Controls
 {
     internal interface IFdoStandardQueryView : IQuerySubView
     {
-        FeatureSchemaCollection SchemaList { set; }
-        ClassCollection ClassList { set; }
+        string[] SchemaList { set; }
+        ClassDescriptor[] ClassList { set; }
 
-        FeatureSchema SelectedSchema { get; }
-        ClassDefinition SelectedClass { get; }
+        string SelectedSchema { get; }
+        ClassDescriptor SelectedClass { get; }
+
+        ClassDefinition SelectedClassDefinition { get; }
 
         IList<string> PropertyList { set; }
         
@@ -61,6 +63,7 @@ namespace FdoToolbox.Base.Controls
         private IFdoStandardQueryView _view;
         private FdoConnection _conn;
         private FdoFeatureService _service;
+        private SchemaWalker _walker;
 
         public FdoStandardQueryPresenter(IFdoStandardQueryView view, FdoConnection conn)
         {
@@ -68,27 +71,32 @@ namespace FdoToolbox.Base.Controls
             _conn = conn;
             _service = _conn.CreateFeatureService();
             _view.OrderingEnabled = conn.Capability.GetBooleanCapability(CapabilityType.FdoCapabilityType_SupportsSelectOrdering);
+            _walker = SchemaWalker.GetWalker(conn);
         }
 
         public void GetSchemas()
         {
-            _view.SchemaList = _service.DescribeSchema();
+            _view.SchemaList = _walker.GetSchemaNames();
         }
 
         public void SchemaChanged()
         {
             if (_view.SelectedSchema != null)
             {
-                _view.ClassList = _view.SelectedSchema.Classes;
+                _view.ClassList = _walker.GetClassNames(_view.SelectedSchema);
             }
         }
+
+        public ClassDefinition SelectedClass { get; private set; }
 
         public void ClassChanged()
         {
             if (_view.SelectedClass != null)
             {
+                var cls = _walker.GetClassDefinition(_view.SelectedSchema, _view.SelectedClass.ClassName);
+                this.SelectedClass = cls;
                 List<string> p = new List<string>();
-                foreach (PropertyDefinition pd in _view.SelectedClass.Properties)
+                foreach (PropertyDefinition pd in cls.Properties)
                 {
                     if (pd.PropertyType == PropertyType.PropertyType_DataProperty || pd.PropertyType == PropertyType.PropertyType_GeometricProperty)
 						p.Add(pd.Name);
@@ -124,7 +132,7 @@ namespace FdoToolbox.Base.Controls
 					}
                 }
                 _view.PropertyList = p;
-                _view.FireMapPreviewStateChanged(_view.SelectedClass.ClassType == ClassType.ClassType_FeatureClass);
+                _view.FireMapPreviewStateChanged(cls.ClassType == ClassType.ClassType_FeatureClass);
             }
         }
 
