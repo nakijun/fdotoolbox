@@ -98,7 +98,7 @@ namespace FdoToolbox.Base.Controls
                 IFdoStandardQueryView qv = _view.QueryView as IFdoStandardQueryView;
                 if(qv == null)
                     return string.Empty;
-                return qv.SelectedClass.Name;
+                return qv.SelectedClass.ClassName;
             }
         }
 
@@ -633,7 +633,7 @@ namespace FdoToolbox.Base.Controls
             if(qv == null)
                 return 0;
 
-            ClassDefinition classDef = qv.SelectedClass;
+            ClassDefinition classDef = qv.SelectedClassDefinition;
             var query = qv.QueryObject;
 
             //Can't count joins (yet)

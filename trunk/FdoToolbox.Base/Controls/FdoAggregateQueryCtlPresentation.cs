@@ -30,11 +30,11 @@ namespace FdoToolbox.Base.Controls
 {
     internal interface IFdoAggregateQueryView : IQuerySubView
     {
-        FeatureSchemaCollection SchemaList { set; }
-        ClassCollection ClassList { set; }
+        string[] SchemaList { set; }
+        ClassDescriptor[] ClassList { set; }
 
-        FeatureSchema SelectedSchema { get; }
-        ClassDefinition SelectedClass { get; }
+        string SelectedSchema { get; }
+        ClassDescriptor SelectedClass { get; }
 
         IList<string> PropertyList { set; }
 
@@ -69,6 +69,7 @@ namespace FdoToolbox.Base.Controls
         private readonly IFdoAggregateQueryView _view;
         private FdoConnection _conn;
         private FdoFeatureService _service;
+        private SchemaWalker _walker;
 
         public FdoAggregateQueryPresenter(IFdoAggregateQueryView view, FdoConnection conn)
         {
@@ -76,20 +77,23 @@ namespace FdoToolbox.Base.Controls
             _conn = conn;
             _service = _conn.CreateFeatureService();
             _view.OrderingEnabled = false;
+            _walker = SchemaWalker.GetWalker(conn);
         }
 
         public void GetSchemas()
         {
-            _view.SchemaList = _service.DescribeSchema();
+            _view.SchemaList = _walker.GetSchemaNames();
         }
 
         public void SchemaChanged()
         {
             if (_view.SelectedSchema != null)
             {
-                _view.ClassList = _view.SelectedSchema.Classes;
+                _view.ClassList = _walker.GetClassNames(_view.SelectedSchema);
             }
         }
+
+        public ClassDefinition SelectedClass { get; private set; }
 
         public void ClassChanged()
         {
@@ -97,7 +101,9 @@ namespace FdoToolbox.Base.Controls
             {
                 List<string> p = new List<string>();
                 List<string> pg = new List<string>();
-                foreach (PropertyDefinition pd in _view.SelectedClass.Properties)
+                var cls = _walker.GetClassDefinition(_view.SelectedSchema, _view.SelectedClass.ClassName);
+                this.SelectedClass = cls;
+                foreach (PropertyDefinition pd in cls.Properties)
                 {
                     if (pd.PropertyType != PropertyType.PropertyType_RasterProperty)
                     {
