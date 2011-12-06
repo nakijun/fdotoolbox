@@ -39,6 +39,10 @@ This specifies the FDO expression that filters the query results. Selecting the 
 
 Allows you to order the query result.
 
+**Joins**
+
+This allows you merge this result set with related results from another Class Definition from the same connection
+
 .. index::
    single: Previewing Data; Aggregate Query
 

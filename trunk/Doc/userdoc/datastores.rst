@@ -50,7 +50,7 @@ When using the express method you will be presented with the following dialog
 To create your data store, specify the following information:
 
  * The path where the file will be created. This can be any of the supported file formats as stated above.
- * The path to a serialized feature schema definition. If this is specified, after the data store is created the specified feature schema definition will be deserialized and applied to the newly created data store. Feature Schema Definitions can be created from the :ref:`schema-editor` or by saving the schema of an existing connection.
+ * The path to a serialized feature schema definition. If this is specified, after the data store is created the specified feature schema definition will be deserialized and applied to the newly created data store. Feature Schema Definitions can be created from the :ref:`datastore-editor` or by saving the schema of an existing connection.
  * The name of the connection. If this is specified, once the data store is created a connection of the specified name will be created to it.
 
 For SHP, the feature schema **is required**. Creating a SHP file will fail if a feature schema definition is not specified.

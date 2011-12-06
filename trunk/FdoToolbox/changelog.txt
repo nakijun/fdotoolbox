@@ -1,3 +1,9 @@
+v1.0 Final
+----------
+- FDO Join support for aggregate queries. Note that provider support is very basic at the moment, but the UI support is now here.
+- Data Preview UI now uses partial schema walking if supported
+- When exiting, all connections are now properly cleaned up, avoiding "pure virtual function call" errors for certain providers.
+
 v1.0 RC1
 --------
 - Enhancements:

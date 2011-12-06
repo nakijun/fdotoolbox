@@ -7,14 +7,6 @@ and to perform certain tasks or operations on them. The Object Explorer handles 
  * FDO Connections
  * ETL Tasks
  
-The Object Explorer can be extended to support additional types of objects and any commands and operations associated with these objects.
-
-Customisation
--------------
-
-[TODO]
-
-Extending the Object Explorer
------------------------------
-
-[TODO]
+Most contextual commands in the Object Explorer are aware of capabilities of the connection currently in focus in the Object Explorer. Any commands
+disabled under the Object Explorer context menu are because such commands are not supported by the current connection. Thus, this enabling/disabling of 
+context menu commands based on capabilities ensures that any illegal actions cannot be performed.
