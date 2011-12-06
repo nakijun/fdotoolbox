@@ -51,14 +51,6 @@ An important note about bulk copying to SQL Server. If the geometric property re
  
 Note that this only applies to polygon geometries. Other geometry types are unaffected.
 
-.. index::
-   single: Join
-
-Joins
------
-
-[TODO]
-
 Custom Operations
 -----------------
 

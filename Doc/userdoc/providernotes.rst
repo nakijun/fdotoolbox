@@ -9,13 +9,6 @@ SHP Provider
  * Geometric Properties can only support one particular Geometric Type. You cannot combine multiple Geometric Types. Eg. You can only have Point, Curve or Surface. You cannot have combinations of the 3.
  * SHP supports a limited set of data types. Take note of this when copying data to SHP.
 
-.. _ogr-constraints:
-
-OGR Provider
-------------
-
-[TODO]
-
 .. _kgora-constraints:
 
 King Oracle Provider
@@ -24,11 +17,6 @@ King Oracle Provider
  * If applying a new schema, you will have to remove and rebuild the connection to see the changes.
 
 .. _slt-constraints:
-
-SQLite Provider
----------------
-
- * Although the SQLite provider supports multiple spatial contexts, spatial contexts beyond the first are unusable. This is due to a defect in the current provider.
 
 .. _postgis-constraints:
 

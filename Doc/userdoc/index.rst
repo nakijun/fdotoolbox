@@ -15,17 +15,14 @@ Contents:
    fdo
    connectdata
    objectexplorer
-   schemamgmt
    datastores
-   spatialcontexts
+   datastoremgmt
    datapreview
    crud
    expreditor
    etl
    express
    customisation
-   addins
-   cmdref
    cmdline
    providernotes
    faq

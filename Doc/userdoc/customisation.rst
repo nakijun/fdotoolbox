@@ -29,11 +29,6 @@ Example::
 
  <Condition action="Disable" name="CommandSupported" command="ApplySchema"> ... </Condition>
 
-Add-Ins
--------
-
-[TODO]
-
 Scripting
 ---------
 
