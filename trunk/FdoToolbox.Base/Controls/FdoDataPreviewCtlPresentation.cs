@@ -354,7 +354,10 @@ namespace FdoToolbox.Base.Controls
                                             {
                                                 byte[] fgf = reader.GetGeometry(name);
                                                 OSGeo.FDO.Geometry.IGeometry geom = service.GeometryFactory.CreateGeometryFromFgf(fgf);
-                                                feat[name] = new FdoGeometry(geom);
+                                                var fg = new FdoGeometry(geom); 
+                                                //OGR geometry trap
+                                                using (var env = fg.Envelope) { }
+                                                feat[name] = fg;
                                             }
                                             catch
                                             {
