@@ -29,7 +29,6 @@ using System.Text;
 using FdoToolbox.Core.Connections;
 using FdoToolbox.Core.Feature.Overrides;
 using FdoToolbox.Core.Utility;
-using Iesi.Collections.Generic;
 using OSGeo.FDO.ClientServices;
 using OSGeo.FDO.Commands;
 using OSGeo.FDO.Commands.DataStore;

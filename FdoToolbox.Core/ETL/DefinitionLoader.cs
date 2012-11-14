@@ -31,7 +31,6 @@ using OSGeo.FDO.Filter;
 using System.Xml;
 using System.Collections.Specialized;
 using OSGeo.FDO.Schema;
-using Iesi.Collections.Generic;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -127,10 +126,10 @@ namespace FdoToolbox.Core.ETL
         public SchemaQuery(string schemaName)
         {
             this.SchemaName = schemaName;
-            _classes = new HashedSet<string>();
+            _classes = new HashSet<string>();
         }
 
-        private HashedSet<string> _classes;
+        private HashSet<string> _classes;
 
         public string SchemaName { get; set; }
 
@@ -430,7 +429,7 @@ namespace FdoToolbox.Core.ETL
 
         private static string GetSourceSchemaForMapping(FdoBulkCopyTaskDefinition def, string targetSchema, string[] classNames)
         {
-            ISet<string> matches = new HashedSet<string>();
+            ISet<string> matches = new HashSet<string>();
             List<string> classes = new List<string>(classNames);
             foreach (var task in def.CopyTasks)
             {

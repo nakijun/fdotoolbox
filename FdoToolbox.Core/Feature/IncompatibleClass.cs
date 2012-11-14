@@ -22,7 +22,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Iesi.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace FdoToolbox.Core.Feature
@@ -88,7 +87,7 @@ namespace FdoToolbox.Core.Feature
             _Properties = new List<IncompatibleProperty>();
             _Reasons = new List<string>();
             _Reasons.Add(reason);
-            _ReasonCodes = new HashedSet<IncompatibleClassReason>();
+            _ReasonCodes = new HashSet<IncompatibleClassReason>();
         }
 
         /// <summary>

@@ -29,7 +29,6 @@ using OSGeo.FDO.Commands.Feature;
 using OSGeo.FDO.Schema;
 using OSGeo.FDO.Expression;
 using OSGeo.FDO.Geometry;
-using Iesi.Collections.Generic;
 
 namespace FdoToolbox.Core.ETL.Operations
 {
@@ -89,7 +88,7 @@ namespace FdoToolbox.Core.ETL.Operations
             _BatchSize = batchSize;
         }
 
-        private HashedSet<string> _unWritableProperties = new HashedSet<string>();
+        private HashSet<string> _unWritableProperties = new HashSet<string>();
 
         /// <summary>
         /// Initializes this instance

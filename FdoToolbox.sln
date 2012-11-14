@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Base", "FdoToolbox.Base\FdoToolbox.Base.csproj", "{9A3DA959-2B7E-4407-9DF8-DA56178D211A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Core", "FdoToolbox.Core\FdoToolbox.Core.csproj", "{6AAE821C-D27F-47D2-8F1B-D748AF145B0A}"
