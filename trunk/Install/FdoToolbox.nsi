@@ -191,9 +191,7 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.Core.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.Core.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\ICSharpCode.TextEditor.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\Iesi.Collections.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\log4net.dll"
-	File "${INST_OUTPUT_FDOTOOLBOX}\LinqBridge.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\SharpMap.UI.dll"
 	File "${INST_OUTPUT_FDOTOOLBOX}\WeifenLuo.WinFormsUI.Docking.dll"
@@ -211,6 +209,9 @@ Section
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoUtil.exe"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoInfo.exe"
 	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.exe"
+    File "${INST_OUTPUT_FDOTOOLBOX}\FdoUtil.exe.config"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoInfo.exe.config"
+	File "${INST_OUTPUT_FDOTOOLBOX}\FdoToolbox.exe.config"
 	
 	# create uninstaller
 	WriteUninstaller "$INSTDIR\uninstall.exe"

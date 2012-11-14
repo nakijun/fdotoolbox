@@ -26,7 +26,6 @@ using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Filter;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using Iesi.Collections.Generic;
 using OSGeo.FDO.Schema;
 using FdoToolbox.Core.Configuration;
 using System.Xml.Serialization;
@@ -294,9 +293,11 @@ namespace FdoToolbox.Core.ETL.Specialized
 
             if (string.IsNullOrEmpty(_LeftPrefix) && string.IsNullOrEmpty(_RightPrefix))
             {
-                ISet<string> set = new HashedSet<string>();
-                set.AddAll(this.LeftProperties);
-                set.AddAll(this.RightProperties);
+                ISet<string> set = new HashSet<string>();
+                foreach (var prop in this.LeftProperties)
+                    set.Add(prop);
+                foreach (var prop in this.RightProperties)
+                    set.Add(prop);
 
                 //If all properties are unique then the counts should be the same
                 if (set.Count < count)

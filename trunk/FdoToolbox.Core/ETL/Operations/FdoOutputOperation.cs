@@ -28,7 +28,6 @@ using System.Collections.Specialized;
 using OSGeo.FDO.Commands;
 using OSGeo.FDO.Expression;
 using OSGeo.FDO.Schema;
-using Iesi.Collections.Generic;
 using OSGeo.FDO.Geometry;
 using OSGeo.FDO.Spatial;
 

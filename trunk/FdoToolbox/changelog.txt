@@ -1,3 +1,11 @@
+v1.1
+----
+- General:
+	- Using FDO 3.7.0 final
+	- Targets .net Framework 4.0
+- Fixes:
+	- Gracefully handle some invalid OGR provider geometries in Data Preview
+
 v1.0 Final
 ----------
 - FDO Join support for aggregate queries. Note that provider support is very basic at the moment, but the UI support is now here.

@@ -27,8 +27,6 @@ using OSGeo.FDO.Expression;
 using OSGeo.FDO.Connections.Capabilities;
 using OSGeo.FDO.Common.Io;
 using Res = FdoToolbox.Core.ResourceUtil;
-using Iesi.Collections;
-using Iesi.Collections.Generic;
 using System.Diagnostics;
 
 namespace FdoToolbox.Core.Utility
@@ -160,7 +158,7 @@ namespace FdoToolbox.Core.Utility
 
         private static ICollection<string> GetReferencedClasses(ClassDefinition clsDef)
         {
-            HashedSet<string> clsNames = new HashedSet<string>();
+            HashSet<string> clsNames = new HashSet<string>();
 
             foreach (PropertyDefinition propDef in clsDef.Properties)
             {

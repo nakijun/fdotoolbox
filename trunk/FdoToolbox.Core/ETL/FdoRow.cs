@@ -31,7 +31,6 @@ using OSGeo.FDO.Commands;
 using FdoToolbox.Core.Feature;
 using OSGeo.FDO.Geometry;
 using System.Collections.Specialized;
-using Iesi.Collections.Generic;
 
 namespace FdoToolbox.Core.ETL
 {
@@ -48,7 +47,7 @@ namespace FdoToolbox.Core.ETL
         static readonly Dictionary<Type, List<PropertyInfo>> propertiesCache = new Dictionary<Type, List<PropertyInfo>>();
         static readonly Dictionary<Type, List<FieldInfo>> fieldsCache = new Dictionary<Type, List<FieldInfo>>();
 
-        private HashedSet<string> readOnlyProperties = new HashedSet<string>();
+        private HashSet<string> readOnlyProperties = new HashSet<string>();
 
         internal static readonly IEqualityComparer DefaultComparer = StringComparer.InvariantCulture;
 

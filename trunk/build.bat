@@ -3,7 +3,7 @@
 rem Note: 
 rem 
 rem The following needs to be installed
-rem  - Microsoft .net Framework 3.5
+rem  - Microsoft .net Framework 4.0
 rem  - Microsoft HTML Workshop
 rem  - Sandcastle May 2008 release (http://sandcastle.codeplex.com)
 rem  - Sandcastle Help File Builder (http://shfb.codeplex.com)
@@ -39,7 +39,7 @@ SET TESTMODULE=%CD%\TestModule
 SET MGMODULE=%CD%\MGModule
 SET RELEASE_VERSION=Trunk
 
-SET PATH=%PATH%;%systemroot%\Microsoft.NET\Framework\v3.5;%THIRDPARTY%\NDoc;%THIRDPARTY%\NSIS;%HTMLHELP%
+SET PATH=%PATH%;%systemroot%\Microsoft.NET\Framework\v4.0.30319;%THIRDPARTY%\NDoc;%THIRDPARTY%\NSIS;%HTMLHELP%
 SET VERBOSITY=/v:q
 
 :study_params
@@ -118,6 +118,9 @@ echo Configuration is: %TYPEBUILD%
 echo Platform is: %PLATFORM%
 echo Release Version is: %RELEASE_VERSION%
 echo Release Label is: %RELEASE_LABEL%
+
+echo Stamping: %RELEASE_VERSION%
+SetAssemblyVersion.exe -set:%RELEASE_VERSION% Properties\GlobalAssemblyInfo.cs
 
 echo Building FdoToolbox
 msbuild.exe /p:Configuration=%TYPEBUILD%;Platform=%PLATFORM% %VERBOSITY% FdoToolbox.sln
