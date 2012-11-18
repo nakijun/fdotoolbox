@@ -52,6 +52,12 @@ namespace FdoToolbox
         const uint SEM_NOGPFAULTERRORBOX = 0x0002;
         const uint SEM_NOOPENFILEERRORBOX = 0x8000;
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void PureCallHandler();
+
+        [DllImport("msvcr100", CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr _set_purecall_handler([MarshalAs(UnmanagedType.FunctionPtr)] PureCallHandler handler);
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -63,6 +69,10 @@ namespace FdoToolbox
                 //Yes, we know that FDO providers like King.Oracle/MySQL/PostgreSQL require
                 //additional dlls. No need to spam this error at the user everytime they launch
                 SetErrorMode(SEM_FAILCRITICALERRORS);
+                
+                //Blah blah blah. I don't care that your FDO provider does not implement reference counting correctly
+                //especially when you throw this as I'm exiting!
+                _set_purecall_handler(IDontCare);
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(true);
@@ -205,6 +215,11 @@ namespace FdoToolbox
                     IntPtr.Zero,
                     IntPtr.Zero);
             }
+        }
+
+        private static void IDontCare() 
+        {
+            System.Diagnostics.Debug.WriteLine("Pure virtual function call you say? I can't hear you");
         }
 
         static void CurrentDomain_AssemblyLoad(object sender, AssemblyLoadEventArgs args)

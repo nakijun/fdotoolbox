@@ -2268,8 +2268,11 @@ namespace FdoToolbox.Core.Feature
             int[] cmds = this.Connection.CommandCapabilities.Commands;
             bool supportedCmds = (Array.IndexOf<int>(cmds, (int)CommandType.CommandType_GetClassNames) >= 0
                                && Array.IndexOf<int>(cmds, (int)CommandType.CommandType_GetSchemaNames) >= 0);
-
-            return supportedCmds;
+            using (IDescribeSchema describe = Connection.CreateCommand(CommandType.CommandType_DescribeSchema) as IDescribeSchema)
+            {
+                bool supportsHint = (describe.ClassNames != null);
+                return supportedCmds && supportsHint;
+            }
         }
 
         /// <summary>
