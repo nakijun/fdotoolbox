@@ -5,6 +5,8 @@ v1.1
 	- Targets .net Framework 4.0
 - Fixes:
 	- Gracefully handle some invalid OGR provider geometries in Data Preview
+	- Suppress missing dlls errors for providers that require additional dll setup. If you got these messages, the provide in question is already un-usable anyways.
+	- FdoConnection.SetConfiguration() should also work for connections in a pending state
 
 v1.0 Final
 ----------
