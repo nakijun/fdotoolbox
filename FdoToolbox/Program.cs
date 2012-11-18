@@ -109,6 +109,16 @@ namespace FdoToolbox
                 // It is also used as default storage location for the application settings:
                 // "%Application Data%\%Application Name%", but you can override that by setting c.ConfigDirectory
 
+                var asmName = Assembly.GetExecutingAssembly().GetName();
+                coreStartup.ConfigDirectory = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    string.Format("{0} {1}.{2}.{3}",
+                                  title,
+                                  asmName.Version.Major,
+                                  asmName.Version.Minor,
+                                  asmName.Version.Build));
+
+
                 // Specify the name of the application settings file (.xml is automatically appended)
                 coreStartup.PropertiesName = "AppProperties";
 
