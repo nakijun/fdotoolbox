@@ -166,15 +166,17 @@ namespace FdoToolbox.Core.Feature
             return conn;
         }
 
+        private string _connStr;
+
         /// <summary>
         /// Gets or sets the connection string of the underlying connection
         /// </summary>
         public string ConnectionString
         {
-            get { return this.InternalConnection.ConnectionString; }
+            get { return _connStr ?? this.InternalConnection.ConnectionString; }
             set 
             { 
-                this.InternalConnection.ConnectionString = value;
+                this.InternalConnection.ConnectionString = _connStr = value;
                 if (!string.IsNullOrEmpty(value))
                 {
                     //HACK: ODBC doesn't want to play nice
