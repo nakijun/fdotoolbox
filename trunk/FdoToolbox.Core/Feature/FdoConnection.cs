@@ -396,8 +396,8 @@ namespace FdoToolbox.Core.Feature
         /// <param name="file">The configuration file</param>
         public void SetConfiguration(string file)
         {
-            if (this.State != FdoConnectionState.Closed)
-                throw new InvalidOperationException("Cannot set configuration when connection is not in a closed state");
+            if (this.State != FdoConnectionState.Closed && this.State != FdoConnectionState.Pending)
+                throw new InvalidOperationException("Cannot set configuration when connection is not in a closed or pending state");
 
             CapabilityType cap = CapabilityType.FdoCapabilityType_SupportsConfiguration;
             if (!this.Capability.GetBooleanCapability(cap))
