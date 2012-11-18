@@ -30,6 +30,7 @@ using System.Resources;
 using FdoToolbox.Base.Services;
 using FdoToolbox.Core;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace FdoToolbox
 {
@@ -43,6 +44,14 @@ namespace FdoToolbox
         static Mutex appMutex = new Mutex(true, "{E6C2B9BD-6614-409a-9845-BBB23C9539B7}");
 #endif
 
+        [DllImport("kernel32")]
+        static extern uint SetErrorMode(uint uMode);
+
+        const uint SEM_FAILCRITICALERRORS = 0x0001;
+        const uint SEM_NOALIGNMENTFAULTEXCEPT = 0x0004;
+        const uint SEM_NOGPFAULTERRORBOX = 0x0002;
+        const uint SEM_NOOPENFILEERRORBOX = 0x8000;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -51,6 +60,10 @@ namespace FdoToolbox
         {
             if (appMutex.WaitOne(TimeSpan.Zero, true))
             {
+                //Yes, we know that FDO providers like King.Oracle/MySQL/PostgreSQL require
+                //additional dlls. No need to spam this error at the user everytime they launch
+                SetErrorMode(SEM_FAILCRITICALERRORS);
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(true);
                 Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
