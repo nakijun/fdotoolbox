@@ -100,11 +100,11 @@ namespace FdoToolbox.Core.ETL.Specialized
                 _opts = opts;
             }
 
-            private int counter = 0;
+            private int _counter = 0;
 
             public override IEnumerable<FdoRow> Execute(IEnumerable<FdoRow> rows)
             {
-                if (counter < 1) //Shouldn't be reentrant, but just play it safe.
+                if (_counter < 1) //Shouldn't be reentrant, but just play it safe.
                 {
                     /*
                      * Check and apply the following rules for all geometry properties to be created
@@ -291,7 +291,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                         }
                     }
 
-                    counter++;
+                    _counter++;
                 }
                 return rows;
             }
@@ -361,7 +361,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                                     int scc = 0;
                                     while (SpatialContextExistsByName(targetSpatialContexts, name))
                                     {
-                                        counter++;
+                                        _counter++;
                                         name = prefix + scc;
                                     }
                                     sc.Name = name;
@@ -389,11 +389,10 @@ namespace FdoToolbox.Core.ETL.Specialized
                                     //
                                     string prefix = "SC" + geom.SpatialContextAssociation;
                                     string name = prefix;
-                                    int scc = 0;
                                     while (SpatialContextExistsByName(targetSpatialContexts, name))
                                     {
-                                        counter++;
-                                        name = prefix + scc;
+                                        _counter++;
+                                        name = prefix + _counter;
                                     }
                                     sc.Name = name;
                                     //Add to list of ones to create
@@ -461,7 +460,7 @@ namespace FdoToolbox.Core.ETL.Specialized
                             int scc = 0;
                             while (SpatialContextExistsByName(targetSpatialContexts, name))
                             {
-                                counter++;
+                                _counter++;
                                 name = prefix + scc;
                             }
                             sc.Name = name;
