@@ -177,6 +177,7 @@ namespace FdoToolbox.Tasks.Controls.BulkCopy
         {
             CheckEmptyName();
             CheckButtonStates();
+            chkCreate.Enabled = cmbDstClass.FindString(this.SourceClass) < 0;
         }
 
         private void CheckEmptyName()
