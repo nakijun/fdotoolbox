@@ -1,3 +1,12 @@
+v1.2
+----
+- General:
+	- Update to FDO 3.8.0 final
+	- Includes post-3.8 PostgreSQL providers (FDO r6796), that supports creating PostGIS 2.0 data stores
+- Fixes:
+	- Fix Infinite loop in spatial context creation/updating during Bulk Copy due to faulty name generation logic
+	- New Copy Task Dialog: Fix "Create class if not exists" checkbox is not enabled if both source and target class dropdowns are populated.
+
 v1.1
 ----
 - General:
