@@ -300,6 +300,16 @@ namespace FdoToolbox.Core.ETL.Specialized
             {
                 if (targetSupportsMultipleSpatialContexts)
                 {
+                    // NOTE:
+                    //
+                    // There's a defect in the PostgreSQL provider regarding spatial context creation.
+                    //  - WKT is disregarded
+                    //  - Extents are disregarded when creating
+                    //
+                    // What this means is that when the PostgreSQL provider is the target connection, multiple
+                    // copies of the same spatial context will be created because the WKT comparison check will fail
+                    // because of the above point.
+
                     if (!string.IsNullOrEmpty(geom.SpatialContextAssociation))
                     {
                         //See if the source spatial context has a matching target (by name)
@@ -358,11 +368,10 @@ namespace FdoToolbox.Core.ETL.Specialized
                                     //
                                     string prefix = "SC" + geom.Name;
                                     string name = prefix;
-                                    int scc = 0;
                                     while (SpatialContextExistsByName(targetSpatialContexts, name))
                                     {
                                         _counter++;
-                                        name = prefix + scc;
+                                        name = prefix + _counter;
                                     }
                                     sc.Name = name;
                                     //Add to list of ones to create
