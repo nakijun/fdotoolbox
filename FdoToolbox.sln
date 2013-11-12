@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMap.UI", "Thirdparty\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Core.Tests", "FdoToolbox.Core.Tests\FdoToolbox.Core.Tests.csproj", "{A4AEC2DB-276F-4814-8D5D-E8101187E9D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Base.Tests", "FdoToolbox.Base.Tests\FdoToolbox.Base.Tests.csproj", "{5E033A7E-77C1-4877-A4E1-8F4164601481}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoInfo", "FdoInfo\FdoInfo.csproj", "{526C4924-9EAB-4B54-9CC5-E376E315EDA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoUtil", "FdoUtil\FdoUtil.csproj", "{9FF292F9-0836-4AE1-960E-981EFEDB9699}"
@@ -32,6 +30,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.Raster", "FdoToolbox.Raster\FdoToolbox.Raster.csproj", "{C6D1F465-958B-4C6A-8514-1E413B81A18E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FdoToolbox.DataStoreManager", "FdoToolbox.DataStoreManager\FdoToolbox.DataStoreManager.csproj", "{9EE614F6-AE3F-499D-8A5F-7C87C62654AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F93CE40A-228A-433D-BA03-B84909E9CBFD}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,14 +134,6 @@ Global
 		{A4AEC2DB-276F-4814-8D5D-E8101187E9D1}.Release|x64.Build.0 = Release|x64
 		{A4AEC2DB-276F-4814-8D5D-E8101187E9D1}.Release|x86.ActiveCfg = Release|x86
 		{A4AEC2DB-276F-4814-8D5D-E8101187E9D1}.Release|x86.Build.0 = Release|x86
-		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Debug|x64.ActiveCfg = Debug|x64
-		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Debug|x64.Build.0 = Debug|x64
-		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Debug|x86.ActiveCfg = Debug|x86
-		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Debug|x86.Build.0 = Debug|x86
-		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Release|x64.ActiveCfg = Release|x64
-		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Release|x64.Build.0 = Release|x64
-		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Release|x86.ActiveCfg = Release|x86
-		{5E033A7E-77C1-4877-A4E1-8F4164601481}.Release|x86.Build.0 = Release|x86
 		{526C4924-9EAB-4B54-9CC5-E376E315EDA8}.Debug|x64.ActiveCfg = Debug|x64
 		{526C4924-9EAB-4B54-9CC5-E376E315EDA8}.Debug|x64.Build.0 = Debug|x64
 		{526C4924-9EAB-4B54-9CC5-E376E315EDA8}.Debug|x86.ActiveCfg = Debug|x86
